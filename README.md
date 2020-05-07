@@ -1,6 +1,6 @@
 # webman是什么
 
-webman是一款基于[workerman](https://www.workerman.net)开发的开源免费高性能HTTP服务框架。用于替代传统的php-fpm架构的框架，提供超高性能可扩展的HTTP服务。你可以用webman开发网站，也可以开发HTTP接口。
+webman是一款基于[workerman](https://www.workerman.net)开发的高性能HTTP服务框架。webman用于替代传统的php-fpm架构，提供超高性能可扩展的HTTP服务。你可以用webman开发网站，也可以开发HTTP接口。
 
 webman具有以下特点。
 
