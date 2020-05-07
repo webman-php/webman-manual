@@ -15,4 +15,4 @@ webman具有以下特点。
 5、使用最为宽松的MIT开源协议。
 
 # 项目地址
-https://github.com/walkor/webman
+https://github.com/walkor/webman 不要吝啬你的小星星哦
