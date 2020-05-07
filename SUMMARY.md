@@ -1,6 +1,6 @@
 - 入门指引
 
-  - [webman是什么](what-is.md)
+  - [webman是什么](README.md)
   - [webman能做什么](what-can-do.md)
   - [编程须知](attention.md)
   
