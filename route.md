@@ -43,6 +43,8 @@ Route::patch($uri, $callback);
 Route::delete($uri, $callback);
 // 设置$uri的head请求的路由
 Route::head($uri, $callback);
+// 回退路由，设置默认的路由兜底
+Route::fallback($callback);
 ```
 
-如果uri没有对应方法的路由，并且默认路由也不存在，则会返回404。
+如果uri没有对应方法的路由，并且默认路由也不存在，且回退路由也未设置，则会返回404。
