@@ -33,7 +33,7 @@ daemon方式运行(用于正式环境)
 
 浏览器访问 `http://ip地址:8787`
 
-**6、Docker环境**
+## Docker环境
 
 首先确保你安装了Docker和Docker compose
 

@@ -18,8 +18,9 @@ class User
 ```
 
 ## 获取指定列
+```php
 $users = Db::table('user')->select('name', 'email as user_email')->get();
-
+```
 
 ## 获取一行
 ```php

@@ -1,9 +1,6 @@
 # 快速开始
 
-webman数据库采用的[illuminate/database](https://github.com/illuminate/database)。
-
-## 安装
-`composer require illuminate/database`
+webman数据库采用的是 [illuminate/database](https://github.com/illuminate/database)。
 
 ## 数据库配置
 `config/database.php`
@@ -32,6 +29,15 @@ return [
     ],
 ];
 ```
+在`.env`文件中配置好
+```
+DB_HOST
+DB_PORT
+DB_DATABASE
+DB_USERNAME
+DB_PASSWORD
+```
+等参数并重启webman。
 
 ## 使用
 ```php
