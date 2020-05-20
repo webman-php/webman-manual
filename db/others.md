@@ -6,8 +6,7 @@
 - 安装ThinkORM
   `composer require topthink/think-orm`
   
-- 建立配置文件
-  新建`config/thinorm.php` 内容如下：
+- 新建配置文件 `config/thinorm.php` 内容如下：
     ```php
   <?php
   return [
