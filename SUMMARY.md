@@ -32,7 +32,8 @@
  - [redis](redis.md)
  - [其它数据库](db/others.md)
  
- 
+- 常用组件
+ - [验证码](components/captcha.md)
  
  
 
