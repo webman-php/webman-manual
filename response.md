@@ -27,6 +27,35 @@ function response($body = '', $status = 200, $headers = array())
 }
 ```
 
+你也可以先创建一个空的`response`对象，然后在适当的位置利用`$response->cookie()` `$response->header()` `$response->withHeaders()` `$response->withBody()`设置返回内容。
+```php
+public function index(Request $request)
+{
+    // 创建一个对象
+    $response = response();
+    
+    // .... 业务逻辑省略
+    
+    // 设置cookie
+    $response->cookie('foo', 'value');
+    
+    // .... 业务逻辑省略
+    
+    // 设置http头
+    $response->header('Content-Type', 'application/json');
+    $response->withHeaders([
+                'X-Header-One' => 'Header Value 1',
+                'X-Header-Tow' => 'Header Value 2',
+            ]);
+
+    // .... 业务逻辑省略
+
+    // 设置要返回的数据
+    $response->withBody('返回的数据');
+    return $response;
+}
+```
+
 ## 返回json
 **例子**
 ```php
@@ -186,6 +215,29 @@ class Foo
     }
 }
 ```
+你也可以提前设置header，最后设置将要返回的数据。
+```php
+public function index(Request $request)
+{
+    // 创建一个对象
+    $response = response();
+    
+    // .... 业务逻辑省略
+  
+    // 设置http头
+    $response->header('Content-Type', 'application/json');
+    $response->withHeaders([
+                'X-Header-One' => 'Header Value 1',
+                'X-Header-Tow' => 'Header Value 2',
+            ]);
+
+    // .... 业务逻辑省略
+
+    // 设置要返回的数据
+    $response->withBody('返回的数据');
+    return $response;
+}
+```
 
 ## 设置cookie
 ```php
@@ -201,6 +253,26 @@ class Foo
         return response('hello webman')
         ->cookie('foo', 'value');
     }
+}
+```
+
+你也可以提前设置cookie，最后设置要返回的数据。
+```php
+public function index(Request $request)
+{
+    // 创建一个对象
+    $response = response();
+    
+    // .... 业务逻辑省略
+    
+    // 设置cookie
+    $response->cookie('foo', 'value');
+    
+    // .... 业务逻辑省略
+
+    // 设置要返回的数据
+    $response->withBody('返回的数据');
+    return $response;
 }
 ```
 
