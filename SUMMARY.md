@@ -25,15 +25,16 @@
 
 - 数据库
 
- - [快速开始](db/tutorial.md)
- - [配置数据库](db/config.md)
- - [查询构造器](db/queries.md)
- - [模型](db/model.md)
- - [redis](redis.md)
- - [其它数据库](db/others.md)
+  - [快速开始](db/tutorial.md)
+  - [配置数据库](db/config.md)
+  - [查询构造器](db/queries.md)
+  - [模型](db/model.md)
+  - [redis](redis.md)
+  - [其它数据库](db/others.md)
  
 - 常用组件
- - [验证码](components/captcha.md)
+  - [验证码](components/captcha.md)
+  - [分页组件](components/paginator.md)
  
  
 
