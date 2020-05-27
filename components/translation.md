@@ -45,7 +45,7 @@ return [
 
 ## 翻译
 
-翻译使用`trans(string $id, array $parameters = [], string $domain = null, string $locale = null)`方法。
+翻译使用`trans()`方法。
 
 创建语言文件 `resource/translations/zh_CN/messages.php` 如下：
 ```php
@@ -162,7 +162,7 @@ return [
     // ...
     'apple_count' => '{0} There are no apples|{1} There is one apple|]1,19] There are %count% apples|[20,Inf[ There are many apples'
 ];
-
+```
 
 ```php
 trans('apple_count', ['%count%' => 20]); // There are many apples
