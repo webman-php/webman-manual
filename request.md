@@ -9,11 +9,11 @@ webman会自动将请求对象注入到controller的每个action方法第一个�
 <?php
 namespace app\controller;
 
-use support\Request;
+use support\request;
 
 class User
 {
-    public function hello(Request $request)
+    public function hello(request $request)
     {
         $default_name = 'webman';
         // 从get请求里获得name参数，如果没有传递name参数则返回$default_name
@@ -30,86 +30,86 @@ class User
 
 **获取整个get数组**
 ```php
-$requset->get();
+$request->get();
 ```
 如果请求没有get参数则返回一个空的数组。
 
 **获取get数组的某一个值**
 ```php
-$requset->get('name');
+$request->get('name');
 ```
 如果get数组中不包含这个值则返回null。
 
 你也可以给get方法第二个参数传递一个默认值，如果get数组中没找到对应值则返回默认值。例如：
 ```php
-$requset->get('name', 'tom');
+$request->get('name', 'tom');
 ```
 
 ## 获得请求参数post
 **获取整个post数组**
 ```php
-$requset->post();
+$request->post();
 ```
 如果请求没有post参数则返回一个空的数组。
 
 **获取post数组的某一个值**
 ```php
-$requset->post('name');
+$request->post('name');
 ```
 如果post数组中不包含这个值则返回null。
 
 与get方法一样，你也可以给post方法第二个参数传递一个默认值，如果post数组中没找到对应值则返回默认值。例如：
 ```php
-$requset->post('name', 'tom');
+$request->post('name', 'tom');
 ```
 
 
 ## 获取header
 **获取整个header数组**
 ```php
-$requset->header();
+$request->header();
 ```
 如果请求没有header参数则返回一个空的数组。注意所有key均为小写。
 
 **获取header数组的某一个值**
 ```php
-$requset->header('host');
+$request->header('host');
 ```
 如果header数组中不包含这个值则返回null。注意所有key均为小写。
 
 与get方法一样，你也可以给header方法第二个参数传递一个默认值，如果header数组中没找到对应值则返回默认值。例如：
 ```php
-$requset->header('host', 'localhost');
+$request->header('host', 'localhost');
 ```
 
 ## 获取cookie
 **获取整个cookie数组**
 ```php
-$requset->cookie();
+$request->cookie();
 ```
 如果请求没有cookie参数则返回一个空的数组。
 
 **获取cookie数组的某一个值**
 ```php
-$requset->cookie('name');
+$request->cookie('name');
 ```
 如果cookie数组中不包含这个值则返回null。
 
 与get方法一样，你也可以给cookie方法第二个参数传递一个默认值，如果cookie数组中没找到对应值则返回默认值。例如：
 ```php
-$requset->cookie('name', 'tom');
+$request->cookie('name', 'tom');
 ```
 
 ## 获得所有输入
-获得`post` `get` 和 `cookie`的集合，类似php原生`$_REQUEST`。
+获得`post` `get` 和 `cookie`的集合，类似php原生`$_request`。
 ```php
-$requset->all();
+$request->all();
 ```
 
 ## 获取指定输入值
 从`post` `get` 和 `cookie`的集合中获取某个值。
 ```php
-$requset->input('name', $default_value);
+$request->input('name', $default_value);
 ```
 
 ## 获取部分输入数据
@@ -124,7 +124,7 @@ $except = $request->except(['avatar', 'age']);
 ## 获取上传文件
 **获取整个上传文件数组**
 ```php
-$requset->file();
+$request->file();
 ```
 返回的文件格式类似:
 ```php
@@ -146,7 +146,7 @@ array (
 
 ### 获取特定上传文件
 ```php
-$requset->file('avatar');
+$request->file('avatar');
 ```
 如果文件存在的话则返回对应文件的`webman\Http\UploadFile`实例，否则返回null。
 
@@ -156,11 +156,11 @@ $requset->file('avatar');
 <?php
 namespace app\controller;
 
-use support\Request;
+use support\request;
 
 class User
 {
-    public function file(Request $request)
+    public function file(request $request)
     {
         $file = $request->file('upload');
         if ($file && $file->isValid()) {
