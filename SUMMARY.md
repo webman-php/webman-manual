@@ -35,6 +35,7 @@
 - 常用组件
   - [验证码](components/captcha.md)
   - [分页组件](components/paginator.md)
+  - [多语言](components/translation.md)
  
  
 
