@@ -6,7 +6,12 @@ webman的redis组件基于[illuminate/redis](https://github.com/illuminate/redis
 
 > 使用命令`php -m | grep redis`查看是否安给`php-cli`装了redis扩展。注意：即使你在`php-fpm`安装了redis扩展，不代表你在`php-cli`可以使用它，因为`php-cli`和`php-fpm`是不同的应用程序，可能使用的是不同的`php.ini`配置。使用命令`php --ini`来查看你的`php-cli`使用的是哪个`php.ini`配置文件。
 
-# 配置
+## 安装
+```php
+composer require illuminate/redis
+```
+
+## 配置
 redis配置文件在`config/redis.php`
 ```php
 return [

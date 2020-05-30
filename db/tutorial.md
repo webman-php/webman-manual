@@ -2,6 +2,11 @@
 
 webman数据库采用的是 [illuminate/database](https://github.com/illuminate/database)。
 
+## 安装
+```php
+composer require illuminate/database
+```
+
 ## 数据库配置
 `config/database.php`
 ```php
