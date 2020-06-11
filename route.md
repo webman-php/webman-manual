@@ -28,13 +28,22 @@ Route::any('/testclass', 'app\controller\Index@test');
 当访问地址为 `http://127.0.0.1:8787/testclass` 时，将返回`app\controller\Index`类的`test`方法的返回值。
 
 ## 路由参数
+如果路由中存在参数，通过`{key}`来匹配，匹配结果将传递到对应的控制器方法参数中(从第二个参数开始依次传递)，例如：
 ```php
 // 匹配 /user/123 /user/abc
-Route::any('/user/{id}', function ($request, $id) {
-    return response($id);
-});
+Route::any('/user/{id}', 'app\controller\User@get');
+```
+```php
+class User
+{
+    public function get($request, $id)
+    {
+        return response('接收到参数'.$id);
+    }
+}
 ```
 
+更多例子：
 ```php
 // 匹配 /user/123, 不匹配 /user/abc
 Route::any('/user/{id:\d+}', function ($request, $id) {
@@ -48,7 +57,7 @@ Route::any('/user/{name}', function ($request, $name) {
 
 // 匹配 /user /user/123 和 /user/abc
 Route::any('/user[/{name}]', function ($request, $name = null) {
-   return response($name ?? 'tome');
+   return response($name ?? 'tom');
 });
 ```
 
