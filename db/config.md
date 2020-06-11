@@ -119,7 +119,10 @@ illuminate/database 数据库及版本支持情况如下：
  ];
 ```
 
+像这样切换数据库。
 ```php
+// 使用默认数据库，等价于DB::connection('mysql')->select(...);
+$users = DB::select(...); 
 // 使用mysql2
 $users = DB::connection('mysql2')->select(...);
 // 使用pgsql
