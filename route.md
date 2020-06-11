@@ -27,6 +27,32 @@ Route::any('/testclass', 'app\controller\Index@test');
 
 当访问地址为 `http://127.0.0.1:8787/testclass` 时，将返回`app\controller\Index`类的`test`方法的返回值。
 
+## 路由参数
+```php
+// 匹配 /user/123 /user/abc
+Route::any('/user/{id}', function ($request, $id) {
+    return response($id);
+});
+```
+
+```php
+// 匹配 /user/123, 不匹配 /user/abc
+Route::any('/user/{id:\d+}', function ($request, $id) {
+    return response($id);
+});
+
+// 匹配 /user/foobar, 不匹配 /user/foo/bar
+Route::any('/user/{name}', function ($request, $name) {
+   return response($name);
+});
+
+// 匹配 /user /user/123 和 /user/abc
+Route::any('/user[/{name}]', function ($request, $name = null) {
+   return response($name ?? 'tome');
+});
+```
+
+
 ## 路由接口
 ```php
 // 设置$uri的任意方法请求的路由
