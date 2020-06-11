@@ -34,6 +34,7 @@ Route::any('/testclass', 'app\controller\Index@test');
 Route::any('/user/{id}', 'app\controller\User@get');
 ```
 ```php
+namespace app\controller;
 class User
 {
     public function get($request, $id)
