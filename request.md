@@ -101,21 +101,21 @@ $request->cookie('name', 'tom');
 ```
 
 ## 获得所有输入
-获得`post` `get` 和 `cookie`的集合，类似php原生`$_request`。
+包含了`post` `get` 的集合。
 ```php
 $request->all();
 ```
 
 ## 获取指定输入值
-从`post` `get` 和 `cookie`的集合中获取某个值。
+从`post` `get` 的集合中获取某个值。
 ```php
 $request->input('name', $default_value);
 ```
 
 ## 获取部分输入数据
-从`post` `get` 和 `cookie`的集合中获取部分数据。
+从`post` `get`的集合中获取部分数据。
 ```php
-// 获取 username 和 password 组成的数组
+// 获取 username 和 password 组成的数组，如果对应的key没有则忽略
 $only = $request->only(['username', 'password']);
 // 获得除了avatar 和 age 以外的所有输入
 $except = $request->except(['avatar', 'age']);

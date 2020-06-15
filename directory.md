@@ -20,6 +20,7 @@
 │   ├── view.php                  视图配置
 │   └── session.php               session配置
 ├── public                        静态资源目录
+├── process                       自定义进程目录
 ├── runtime                       应用的运行时目录，需要可写权限
 ├── start.php                     服务启动文件
 ├── vendor                        composer安装的第三方类库目录

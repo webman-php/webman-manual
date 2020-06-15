@@ -32,7 +32,7 @@ class User
 
 **访问**
 
-在浏览器里放嗯 `http://ip:8787/user/hello?name=tom`
+在浏览器里访问 `http://127.0.0.1:8787/user/hello?name=tom`
 
 浏览器将返回 `hello tom`
 
@@ -62,7 +62,7 @@ class User
 
 **访问**
 
-在浏览器里放嗯 `http://ip:8787/user/hello?name=tom`
+在浏览器里放嗯 `http://127.0.0.1:8787/user/hello?name=tom`
 
 浏览器将返回 `{"code":0,"msg":"ok","data":"tom""}`
 
@@ -111,7 +111,7 @@ hello <?=htmlspecialchars($name)?>
 </html>
 ```
 
-在浏览器里访问 `http://ip:8787/user/hello?name=tom`
+在浏览器里访问 `http://127.0.0.1:8787/user/hello?name=tom`
 将返回一个内容为 `hello tom` 的html页面。
 
 注意：webman默认使用的是php原生语法作为模版。如果想使用其它视图参见[视图](view.md)。
