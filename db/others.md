@@ -3,7 +3,7 @@
 
 ## ThinkORM
 
-- 安装ThinkORM
+- 安装ThinkORM  
   `composer require topthink/think-orm`
   
 - 新建配置文件 `config/thinkorm.php` 内容如下：
@@ -61,7 +61,7 @@
   打开`config/bootstrap.php`，加入如下配置：
   ```php
   return [
-     省略...
+      // 这里省略了其它配置 ...
       support\bootstrap\db\Thinkphp::class,
   ];
   ```

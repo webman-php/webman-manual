@@ -39,7 +39,7 @@ REDIS_DB
 namespace app\controller;
 
 use support\Request;
-use support\Redis;
+use support\bootstrap\Redis;
 
 class User
 {
@@ -93,6 +93,32 @@ $redis->getBit($key, $offset)
 ...
 ```
 
+## 使用多个 Redis 连接
+例如配置文件`config/redis.php`
+```php
+return [
+    'default' => [
+        'host' => env('REDIS_HOST', '127.0.0.1'),
+        'password' => env('REDIS_PASSWORD', null),
+        'port' => env('REDIS_PORT', 6379),
+        'database' => env('REDIS_DB', 0),
+    ],
+
+    'cache' => [
+        'host' => env('REDIS_HOST', '127.0.0.1'),
+        'password' => env('REDIS_PASSWORD', null),
+        'port' => env('REDIS_PORT', 6379),
+        'database' => env('REDIS_CACHE_DB', 1),
+    ],
+
+]
+```
+默认使用的是`default`下配置的连接，你可以用`Redis::connection()`方法选择使用哪个redis连接。
+```php
+$redis = Redis::connection('cache');
+$redis->get('test_key');
+```
+
 ## 集群配置
 如果你的应用使用 Redis 服务器集群，你应该在 Redis 配置文件中使用 clusters 键来定义这些集群：
 ```php
@@ -123,34 +149,6 @@ return[
         // ...
     ],
 ];
-```
-
-
-
-## 使用多个 Redis 连接
-例如配置文件`config/redis.php`
-```php
-return [
-    'default' => [
-        'host' => env('REDIS_HOST', '127.0.0.1'),
-        'password' => env('REDIS_PASSWORD', null),
-        'port' => env('REDIS_PORT', 6379),
-        'database' => env('REDIS_DB', 0),
-    ],
-
-    'cache' => [
-        'host' => env('REDIS_HOST', '127.0.0.1'),
-        'password' => env('REDIS_PASSWORD', null),
-        'port' => env('REDIS_PORT', 6379),
-        'database' => env('REDIS_CACHE_DB', 1),
-    ],
-
-]
-```
-默认使用的是`default`下配置的连接，你可以用`Redis::connection()`方法选择使用哪个redis连接。
-```php
-$redis = Redis::connection('cache');
-$redis->get('test_key');
 ```
 
 ## 管道命令
