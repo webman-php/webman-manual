@@ -29,7 +29,7 @@ function response($body = '', $status = 200, $headers = array())
 
 你也可以先创建一个空的`response`对象，然后在适当的位置利用`$response->cookie()` `$response->header()` `$response->withHeaders()` `$response->withBody()`设置返回内容。
 ```php
-public function index(Request $request)
+public function hello(Request $request)
 {
     // 创建一个对象
     $response = response();
@@ -217,7 +217,7 @@ class Foo
 ```
 你也可以提前设置header，最后设置将要返回的数据。
 ```php
-public function index(Request $request)
+public function hello(Request $request)
 {
     // 创建一个对象
     $response = response();
@@ -258,7 +258,7 @@ class Foo
 
 你也可以提前设置cookie，最后设置要返回的数据。
 ```php
-public function index(Request $request)
+public function hello(Request $request)
 {
     // 创建一个对象
     $response = response();
@@ -287,7 +287,7 @@ class Foo
 {
     public function hello(Request $request)
     {
-        return response()->file(public_path() . '/icon.ico');
+        return response()->file(public_path() . '/favicon.ico');
     }
 }
 ```
@@ -305,7 +305,7 @@ class Foo
 {
     public function hello(Request $request)
     {
-        return response()->download(public_path() . '/icon.ico', '可选的文件名.ico');
+        return response()->download(public_path() . '/favicon.ico', '可选的文件名.ico');
     }
 }
 ```

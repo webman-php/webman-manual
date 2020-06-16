@@ -13,35 +13,14 @@ interface MiddlewareInterface
      * If unable to produce the response itself, it may delegate to the provided
      * request handler to do so.
      */
-    public function process(Request $request, callable $handler): Response;
+    public function process(Request $request, callable $next): Response;
 }
 ```
-也就是必须实现`process`方法，`process`方法必须返回一个`support\Response`对象，这个对象可以使用`response()` `json()` `xml()` `redirect()`等助手函数生成，也可以自行创建。
+也就是必须实现`process`方法，`process`方法必须返回一个`support\Response`对象，默认这个对象由`$next($request)`生成，也可以可以使用`response()` `json()` `xml()` `redirect()`等助手函数生成响应，实现响应拦截。
 
-## 说明
-  
-
- - 中间件分为全局中间件和应用中间件(应用中间件仅在多应用模式下有效，参见[多应用](multiapp.md))
- - 目前不支持单个控制器的中间件
- - 中间件配置文件位置在 `config/middleware.php`
- - 全局中间件配置在key `''` 下
- - 应用中间件配置在具体的应用名下，例如
-```php
-return [
-    // 全局中间件
-    '' => [
-        support\middleware\AuthCheck::class,
-        support\middleware\AccessControl::class,
-    ],
-    // api应用中间件(应用中间件仅在多应用模式下有效)
-    'api' => [
-        support\middleware\ApiOnly::class,
-    ]
-];
-```
  
 ## 示例：用户身份验证中间件
-创建文件`support/middleware/AuthCheck.php`如下：
+创建文件`support/middleware/AuthCheckTest.php`如下：
 ```php
 <?php
 namespace support\middleware;
@@ -50,7 +29,7 @@ use Webman\MiddlewareInterface;
 use Webman\Http\Response;
 use Webman\Http\Request;
 
-class AuthCheck implements MiddlewareInterface
+class AuthCheckTest implements MiddlewareInterface
 {
     public function process(Request $request, callable $next) : Response
     {
@@ -68,19 +47,18 @@ class AuthCheck implements MiddlewareInterface
 return [
     // 全局中间件
     '' => [
-        ...
-        support\middleware\AuthCheck::class,
-        ...
+        // ... 这里省略其它中间件
+        support\middleware\AuthCheckTest::class,
     ]
 ];
 ```
 
 这个示例中判断当前请求的session中是否有userinfo数据，如果没有则跳转到登录页面，有的话则调用`$next($request)`继续正常流程。
 
-注意：调用`$next($request)`将继续执行正常的业务流程，也就是继续调用下一个中间件(有的话)，直到调用到最终处理业务的`controller`控制器或函数。
+> 注意：调用`$next($request)`将继续执行正常的业务流程，也就是继续调用下一个中间件(有的话)，直到调用到最终处理业务的控制器方法或函数。
 
 ## 示例：跨域请求中间件
-创建文件`support/middleware/AccessControl.php`如下：
+创建文件`support/middleware/AccessControlTest.php`如下：
 ```php
 <?php
 namespace support\middleware;
@@ -89,7 +67,7 @@ use Webman\MiddlewareInterface;
 use Webman\Http\Response;
 use Webman\Http\Request;
 
-class AccessControl implements MiddlewareInterface
+class AccessControlTest implements MiddlewareInterface
 {
     public function process(Request $request, callable $next) : Response
     {
@@ -111,14 +89,34 @@ class AccessControl implements MiddlewareInterface
 return [
     // 全局中间件
     '' => [
-        ...
-        support\middleware\AccessControl::class,
-        ...
+        // ... 这里省略其它中间件
+        support\middleware\AccessControlTest::class,
     ]
 ];
 ```
 
 这样就允许在其它域名下调用当前站点 `/api` 开头的地址，不会报跨域错误。
+
+## 说明
+  
+ - 中间件分为全局中间件和应用中间件(应用中间件仅在多应用模式下有效，参见[多应用](multiapp.md))
+ - 目前不支持单个控制器的中间件
+ - 中间件配置文件位置在 `config/middleware.php`
+ - 全局中间件配置在key `''` 下
+ - 应用中间件配置在具体的应用名下，例如
+```php
+return [
+    // 全局中间件
+    '' => [
+        support\middleware\AuthCheckTest::class,
+        support\middleware\AccessControlTest::class,
+    ],
+    // api应用中间件(应用中间件仅在多应用模式下有效)
+    'api' => [
+        support\middleware\ApiOnly::class,
+    ]
+];
+```
 
 ## 中间件执行顺序
  - 中间件执行顺序为`全局中间件`->`应用中间件(有的话)`。

@@ -4,7 +4,11 @@ webman默认路由规则是 `http://127.0.0.1:8787/{控制器}/{动作}`。
 
 默认控制器为`app\controller\Index`，默认动作为`index`。
 
-例如访问`http://127.0.0.1:8787/foo/test` 将默认访问`app\controller\Foo`类的`test`方法。 
+例如访问：
+- `http://127.0.0.1:8787` 将默认访问`app\controller\Index`类的`index`方法
+- `http://127.0.0.1:8787/foo` 将默认访问`app\controller\Foo`类的`index`方法
+- `http://127.0.0.1:8787/foo/test` 将默认访问`app\controller\Foo`类的`test`方法
+- `http://127.0.0.1:8787/admin/foo/test` 将默认访问`app\admin\controller\Foo`类的`test`方法 (参考[多应用](multiapp.md))
 
 当您想改变某个请求路由时请更改配置文件 `config/route.php`。
 

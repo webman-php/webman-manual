@@ -138,9 +138,9 @@ array (
 
 **注意：**
 
- - 上传文件大小受到[defaultMaxPackageSize](../tcp-connection/default-max-package-size.md)限制，默认10M，可修改。
+ - 上传文件大小受到[defaultMaxPackageSize](http://doc.workerman.net/tcp-connection/default-max-package-size.html)限制，默认10M，可在`config/server.php`文件中修改`max_package_size`更改默认值。
 
- - 请求结束后文件将被自动清除。
+ - 请求结束后临时文件将被自动清除。
 
  - 如果请求没有上传文件则返回一个空的数组。
 
@@ -164,7 +164,7 @@ class User
     {
         $file = $request->file('upload');
         if ($file && $file->isValid()) {
-            $file->move(public_path().'/files/myfile.'.$file->getExtension());
+            $file->move(public_path().'/files/myfile.'.$file->getUploadExtension());
             return json(['code' => 0, 'msg' => 'upload success']);
         }
         return json(['code' => 1, 'msg' => 'file not found']);
@@ -217,13 +217,13 @@ $request->url();
 ```
 返回类似`//www.workerman.net/workerman-chat`
 
-`full()`方法返回带有`Query` 参数 的 URL。
+`fullUrl()`方法返回带有`Query` 参数 的 URL。
 ```php
 $request->fullUrl();
 ```
 返回类似`//www.workerman.net/workerman-chat?type=download`
 
-注意：`url()` 和 `full()` 没有返回协议部分(没有返回http或者https)
+> 注意：`url()` 和 `fullUrl()` 没有返回协议部分(没有返回http或者https)
 
 ## 获取请求HTTP版本
 
@@ -251,12 +251,12 @@ $request->getRemoteIp();
 $request->getRemotePort();
 ```
 
-## 获取请求的ip
+## 获取服务端ip
 ```php
 $request->getLocalIp();
 ```
 
-## 获取请求的端口
+## 获取服务端端口
 ```php
 $request->getLocalPort();
 ```
@@ -282,22 +282,22 @@ $request->acceptJson();
 ```
 
 ## 获得请求的应用名
-单应用的时候始终返回空字符串`''`，多应用的时候返回应用名
+单应用的时候始终返回空字符串`''`，[多应用](multiapp.md)的时候返回应用名
 ```php
-$request->app();
+$request->app;
 ```
 
 ## 获得请求的控制器类名
 获得控制器对应的类名
 ```php
-$request->controller();
+$request->controller;
 ```
 返回类似 `app\controller\Index`
 
 ## 获得请求的方法名
 获得请求对应的控制器方法名
 ```php
-$request->action();
+$request->action;
 ```
 返回类似 `Index`
 
