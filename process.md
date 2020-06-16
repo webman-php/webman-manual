@@ -44,9 +44,9 @@ return [
     // websocket_test 为进程名称
     'websocket_test' => [
         // 这里指定进程类，就是上面定义的Pusher类
-        'class'  => process\Pusher::class,
-        'listen' => 'websocket://0.0.0.0:8888',
-        'count'  => 1,
+        'handler' => process\Pusher::class,
+        'listen'  => 'websocket://0.0.0.0:8888',
+        'count'   => 1,
     ],
 ];
 ```
@@ -79,7 +79,7 @@ return [
     // ... 其它进程配置省略
     
     'task' => [
-        'class'  => process\TaskTest::class
+        'handler'  => process\TaskTest::class
     ],
 ];
 ```
@@ -96,23 +96,23 @@ return [
     // websocket_test 为进程名称
     'websocket_test' => [
         // 这里指定进程类
-        'class'  => process\Pusher::class,
+        'handler' => process\Pusher::class,
         // 监听的协议 ip 及端口 （可选）
-        'listen' => 'websocket://0.0.0.0:8888',
+        'listen'  => 'websocket://0.0.0.0:8888',
         // 进程数 （可选，默认1）
-        'count'  => 2,
+        'count'   => 2,
         // 进程运行用户 （可选，默认当前用户）
-        'user'   => '',
+        'user'    => '',
         // 进程运行用户组 （可选，默认当前用户组）
-        'group'  => '',
+        'group'   => '',
         // 当前进程是否支持reload （可选，默认true）
         'reloadable' => true,
         // 是否开启reusePort （可选，此选项需要php>=7.0，默认为true）
-        'reusePort' => true,
+        'reusePort'  => true,
         // transport (可选，当需要开启ssl时设置为ssl，默认为tcp)
-        'transport' => 'tcp',
+        'transport'  => 'tcp',
         // context （可选，当transport为是ssl时，需要传递证书路径）
-        'transport' => [], 
+        'transport'  => [], 
         // 进程类构造函数参数，这里为 process\Pusher::class 类的构造函数参数 （可选）
         'constructor' => [],
     ],
@@ -120,4 +120,4 @@ return [
 ```
 
 ## 总结
-webman的自定义进程实际上就是workerman的一个简单封装，它将配置与业务分离，并且将workerman的onXXX回调通过类的方法来实现，其它用法与workerman完全相同。
+webman的自定义进程实际上就是workerman的一个简单封装，它将配置与业务分离，并且将workerman的`onXXX`回调通过类的方法来实现，其它用法与workerman完全相同。
