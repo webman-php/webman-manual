@@ -38,8 +38,9 @@
   - [多语言](components/translation.md)
   
 - 高级进阶
+  - [依赖注入](di.md)
   - [自定义进程](process.md)
- 
+  
  
 
 
