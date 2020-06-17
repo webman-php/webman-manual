@@ -64,7 +64,7 @@ $user = new User($mailer);
 ```
 当使用`php-di`后，开发者无需手动实例化`Mailer`，`php-di`会自动帮你完成。如果在实例化`Mailer`过程中有其它类的依赖，`php-di`也会自动实例化并注入。
 
-> 注意：必须是由`php-di`创建的实例才能完成自动依赖注入，手动`new`的实例无法完成自动依赖注入。`controller`是由webman通过`php-di`实例化的，所以直接支持自动依赖注入。如果其它类想使用自动依赖注入，可以调用`Container::get(类名)`或者`Container::make(类名, [构造函数])`来创建对应类的实例。
+> 注意：必须是由`php-di`创建的实例才能完成自动依赖注入，手动`new`的实例无法完成自动依赖注入。`controller`是由webman通过`php-di`实例化的，所以直接支持自动依赖注入。如果其它类想使用自动依赖注入，可以调用`Container::get(类名)`或者`Container::make(类名, [构造函数参数])`来创建对应类的实例。
 
 ## 注解注入
 除了自动依赖注入，我们还可以使用注解注入。继续上面的例子，`app\controller\User`更改成如下：
