@@ -15,7 +15,7 @@ $builder->useAnnotations(true);
 return $builder->build();
 ```
 
-> `config/container.php`里最终目的是返回一个依赖注入容器实例，webman支持`PSR-11`规范的容器接口。如果你不想使用 `php-di` ，可以在这里返回一个其它符合`PSR-11`规范的容器实例。
+> `config/container.php`里最终返回一个符合`PSR-11`规范的容器实例。如果你不想使用 `php-di` ，可以在这里创建并返回一个其它符合`PSR-11`规范的容器实例。
 
 ## 构造函数注入
 新建`app/service/Mailer.php`(如目录不存在请自行创建)内容如下：
@@ -166,7 +166,7 @@ interface MailerInterface
 }
 ```
 
-定义MailerInterface`接口的实现。
+定义`MailerInterface`接口的实现。
 ```php
 <?php
 namespace app\service;
