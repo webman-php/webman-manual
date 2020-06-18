@@ -1,5 +1,5 @@
-# 依赖注入
-webman默认没开启自动依赖注入。如果你需要自动依赖注入，推荐使用[php-di](https://php-di.org/doc/getting-started.html)，以下是webman结合`php-di`的用法。
+# 依赖自动注入
+在webman里依赖自动注入是可选功能，此功能默认关闭。如果你需要依赖自动注入，推荐使用[php-di](https://php-di.org/doc/getting-started.html)，以下是webman结合`php-di`的用法。
 
 ## 安装
 ```
@@ -17,7 +17,7 @@ return $builder->build();
 
 > `config/container.php`里最终目的是返回一个依赖注入容器实例，webman支持`PSR-11`规范的容器接口。如果你不想使用 `php-di` ，可以在这里返回一个其它符合`PSR-11`规范的容器实例。
 
-## 构造方法注入
+## 构造函数注入
 新建`app/service/Mailer.php`(如目录不存在请自行创建)内容如下：
 ```php
 <?php
@@ -27,7 +27,7 @@ class Mailer
 {
     public function mail($email, $content)
     {
-        // 发送邮件省略
+        // 发送邮件代码省略
     }
 }
 ```
@@ -62,12 +62,21 @@ class User
 $mailer = new Mailer;
 $user = new User($mailer);
 ```
-当使用`php-di`后，开发者无需手动实例化`Mailer`，`php-di`会自动帮你完成。如果在实例化`Mailer`过程中有其它类的依赖，`php-di`也会自动实例化并注入。
+当使用`php-di`后，开发者无需手动实例化`Mailer`，webman会自动帮你完成。如果在实例化`Mailer`过程中有其它类的依赖，webman也会自动实例化并注入。开发者不需要任何的初始化工作。
 
-> 注意：必须是由`php-di`创建的实例才能完成自动依赖注入，手动`new`的实例无法完成自动依赖注入。`controller`是由webman通过`php-di`实例化的，所以直接支持自动依赖注入。如果其它类想使用自动依赖注入，可以调用`Container::get(类名)`或者`Container::make(类名, [构造函数参数])`来创建对应类的实例。
+> 注意：必须是由`php-di`创建的实例才能完成依赖自动注入，手动`new`的实例无法完成依赖自动注入。`controller`是由webman通过`php-di`实例化的，所以直接支持依赖自动注入。如果其它类想使用依赖自动注入，可以调用`\support\bootstrap\Container::get(类名)`或者`\support\bootstrap\Container::make(类名, [构造函数参数])`来创建对应类的实例。例如：
+
+```php
+use app\service\UserService;
+use app\service\LogService;
+use support\bootstrap\Container;
+
+$user_service = Container::get(UserService::class);
+$log_service = Container::make(LogService::class, [$path, $name]);
+```
 
 ## 注解注入
-除了自动依赖注入，我们还可以使用注解注入。继续上面的例子，`app\controller\User`更改成如下：
+除了构造函数依赖自动注入，我们还可以使用注解注入。继续上面的例子，`app\controller\User`更改成如下：
 ```php
 <?php
 namespace app\controller;
@@ -113,14 +122,12 @@ class Mailer
 
     public function mail($email, $content)
     {
-        echo "mail $email send $content\n";
-        echo "{$this->smtpHost} {$this->smtpPort}\n";
-        // 发送邮件省略
+        // 发送邮件代码省略
     }
 }
 ```
 
-这种情况无法直接使用构造函数自动注入，因为`php-di`无法确定`$smtp_host` `$smtp_port`的值是什么。这时候可以尝试自定义注入。
+这种情况无法直接使用前面介绍的构造函数自动注入，因为`php-di`无法确定`$smtp_host` `$smtp_port`的值是什么。这时候可以尝试自定义注入。
 
 在`config/dependence.php`(文件不存在请自行创建)中加入如下代码：
 ```php
@@ -131,6 +138,94 @@ return [
 ];
 ```
 这样当依赖注入需要获取`app\service\Mailer`实例时将自动使用这个配置中创建的`app\service\Mailer`实例。
+
+我们注意到，`config/dependence.php` 中使用了`new`来实例化`Mailer`类，这个在本示例没有任何问题，但是想象下如果`Mailer`类依赖了其它类的话或者`Mailer`类内部使用了注解注入，使用`new`初始化将不会依赖自动注入。解决办法是通过`Container::get(类名)` 或者 `Container::make(类名, [构造函数参数])`方法来初始化类，类似下面这样。
+
+`config/dependence.php`：
+```php
+return [
+    // ... 这里忽略了其它配置
+    
+    app\service\Mailer::class =>  function(ContainerInterface $container) {
+        return $container->make(app\service\Mailer::class, ['192.168.1.11', 25]);
+    }
+];
+```
+
+## 自定义接口注入
+在现实项目中，我们更希望面向接口编程，而不是具体的类。比如`app\controller\User`里应该引入`app\service\MailerInterface`而不是`app\service\Mailer`。
+
+定义`MailerInterface`接口。
+```php
+<?php
+namespace app\service;
+
+interface MailerInterface
+{
+    public function mail($email, $content);
+}
+```
+
+定义MailerInterface`接口的实现。
+```php
+<?php
+namespace app\service;
+
+class Mailer implements MailerInterface
+{
+    private $smtpHost;
+
+    private $smtpPort;
+
+    public function __construct($smtp_host, $smtp_port)
+    {
+        $this->smtpHost = $smtp_host;
+        $this->smtpPort = $smtp_port;
+    }
+
+    public function mail($email, $content)
+    {
+        // 发送邮件代码省略
+    }
+}
+```
+
+引入`MailerInterface`接口而非具体实现。
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+use app\service\MailerInterface;
+
+class User
+{
+    /**
+     * @Inject
+     * @var MailerInterface
+     */
+    private $mailer;
+    
+    public function register(Request $request)
+    {
+        $this->mailer->mail($request->post('email'), 'Hello and welcome!');
+        return response('ok');
+    }
+}
+```
+
+`config/dependence.php` 将 `MailerInterface` 接口定义如下实现。
+```php
+return [
+    app\service\MailerInterface::class => function(ContainerInterface $container) {
+        return $container->make(app\service\Mailer::class, ['192.168.1.11', 25]);
+    }
+];
+```
+
+这样当业务需要使用`MailerInterface`接口时，将自动使用`Mailer`实现。
+
+> 面向接口编程的好处是，当我们需要更换某个组件时，不需要更改业务代码，只需要更改`config/dependence.php`中的具体实现即可。这在做单元测试也非常有用。
 
 ## 其它自定义注入
 `config/dependence.php`除了能定义类的依赖，也能定义其它值，例如字符串、数字、数组等。
@@ -162,11 +257,14 @@ class Mailer
 
     public function mail($email, $content)
     {
-        // 发送邮件省略
+        // 发送邮件代码省略
         echo "{$this->smtpHost}:{$this->smtpPort}\n"; // 将输出 192.168.1.11:25
     }
 }
 ```
+
+> 注意：`@Inject("key")` 里面是双引号
+
 
 ## 更多内容
 请参考[php-di手册](https://php-di.org/doc/getting-started.html)
