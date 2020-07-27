@@ -62,7 +62,7 @@ class User
 
 **访问**
 
-在浏览器里放嗯 `http://127.0.0.1:8787/user/hello?name=tom`
+在浏览器里访问 `http://127.0.0.1:8787/user/hello?name=tom`
 
 浏览器将返回 `{"code":0,"msg":"ok","data":"tom""}`
 
