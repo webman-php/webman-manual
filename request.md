@@ -63,6 +63,12 @@ $request->post('name');
 $request->post('name', 'tom');
 ```
 
+## 获得原始请求post包体
+```php
+$post = $request->rawBody();
+```
+这个功能类似与 `php-fpm`里的 `file_get_contents("php://input");`操作。用于获得http原始请求包体。这在获取非`application/x-www-form-urlencoded`格式的post请求数据时很有用。 
+
 
 ## 获取header
 **获取整个header数组**
