@@ -36,6 +36,7 @@
   - [验证码](components/captcha.md)
   - [分页组件](components/paginator.md)
   - [多语言](components/translation.md)
+  - [图像处理](components/image.md)
   
 - 高级进阶
   - [依赖注入](di.md)
