@@ -38,6 +38,7 @@
   - [多语言](components/translation.md)
   - [图像处理](components/image.md)
   - [微信SDK](components/wechat.md)
+  - [支付SDK](components/pay.md)
   
 - 高级进阶
   - [依赖注入](di.md)
