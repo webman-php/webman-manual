@@ -71,14 +71,13 @@ class AccessControlTest implements MiddlewareInterface
 {
     public function process(Request $request, callable $next) : Response
     {
-        $response = $next($request);
-        // 允许 /api 开头的地址跨域访问
-        if (strpos($request->path(), '/api') === 0) {
-            $response->withHeaders([
-                'Access-Control-Allow-Origin'      => '*',
-                'Access-Control-Allow-Credentials' => 'true',
-            ]);
-        }
+        $response = $request->method() == 'OPTIONS' ? response('') : $next($request);
+        $response->withHeaders([
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'GET,POST,PUT,DELETE,OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type,Authorization,X-Requested-With,Accept,Origin'
+        ]);
+        
         return $response;
     }
 }

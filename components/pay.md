@@ -15,9 +15,9 @@ composer require yansongda/pay -vvv
 - 使用 
 
  支付宝
+ 
 ```php
 <?php
-
 namespace App\Http\Controllers;
 
 use Yansongda\Pay\Pay;
@@ -96,6 +96,7 @@ class PayController
 ```
 
 微信
+
 ```php
 <?php
 
