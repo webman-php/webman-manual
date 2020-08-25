@@ -112,7 +112,7 @@
   try {
       $usernameValidator->setName('用户名')->check('alg  anet');
   } catch (ValidationException $exception) {
-      echo $exception->getFullMessage(); 
+      echo $exception->getFullMessage(); // $exception->getMessages() will return array
       // -  用户名 必须符合以下规则
       //     - 用户名 只能包含字母（a-z）和数字（0-9）
       //     - 用户名 不能包含空格
