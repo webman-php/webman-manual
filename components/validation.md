@@ -61,7 +61,7 @@
   
   `v::input(array $input, array $rules)` 用来验证并收集数据，如果数据验证失败，则抛出`Respect\Validation\Exceptions\ValidationException`异常，验证成功则将返回验证后的数据(数组)。
   
-  如果业务代码未捕获验证异常，则webman框架将自动捕获并根据HTTP请求头选择返回类似`{"code":500, "msg":"xxx"}`json格式的数据还是普通的异常页面。如返回格式不符合业务需求，开发者可自行捕获`ValidationException`异常并返回需要的数据，类似下面的例子：
+  如果业务代码未捕获验证异常，则webman框架将自动捕获并根据HTTP请求头选择返回json数据(类似`{"code":500, "msg":"xxx"}`)或者普通的异常页面。如返回格式不符合业务需求，开发者可自行捕获`ValidationException`异常并返回需要的数据，类似下面的例子：
   
   ```php
   <?php
@@ -118,7 +118,16 @@
       //     - 用户名 不能包含空格
   }
 
-
+  // 自定义错误提示信息
+  try {
+      $usernameValidator->setName('用户名')->assert('alg  anet');
+  } catch (ValidationException $exception) {
+      var_export($exception->getMessages([
+          'alnum' => '用户名只能包含字母和数字',
+          'noWhitespace' => '用户名不能有空格',
+      ]);
+      // array('alnum' => '用户名只能包含字母和数字','noWhitespace' => '用户名不能有空格')
+  }
 
   // 验证对象
   $user = new stdClass;
