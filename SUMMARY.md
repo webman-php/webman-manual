@@ -33,10 +33,11 @@
   - [其它数据库](db/others.md)
  
 - 常用组件
-  - [验证码](components/captcha.md)
+  - [验证器](components/validation.md)
   - [分页组件](components/paginator.md)
   - [多语言](components/translation.md)
   - [图像处理](components/image.md)
+  - [验证码](components/captcha.md)
   - [微信SDK](components/wechat.md)
   - [支付SDK](components/pay.md)
   
