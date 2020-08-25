@@ -55,15 +55,13 @@
   
   得到结果：
   
-  {"code":500,"msg":"用户名 只能包含字母（a-z）和数字（0-9）"}`
+  `{"code":500,"msg":"用户名 只能包含字母（a-z）和数字（0-9）"}`
   
   说明：
   
-  `v::input(array $input, array $rules)` 用来验证并收集数据，如果数据验证失败，则抛出`Respect\Validation\Exceptions\ValidationException`异常，否则将返回验证后的数据(数组)。
+  `v::input(array $input, array $rules)` 用来验证并收集数据，如果数据验证失败，则抛出`Respect\Validation\Exceptions\ValidationException`异常，验证成功则将返回验证后的数据(数组)。
   
-  上面的代码业务并未捕获异常，则webman框架捕获并自动判断是否期待返回json数据，是则返回固定格式的'{"code":500, "msg":"xxx"}'的数据(如格式不符合需求，可自行捕获`ValidationException`异常)。否则返回异常页面。
-
-  自行捕获验证异常的例子：
+  如果业务代码未捕获验证异常，则webman框架将自动捕获异常并根据HTTP请求头选择返回类似'{"code":500, "msg":"xxx"}'json格式的数据或普通的异常页面。如返回格式不符合业务需求，开发者可自行捕获`ValidationException`异常并返回需要的数据，类似下面的例子：
   
   ```php
   <?php
