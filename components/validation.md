@@ -61,7 +61,7 @@
   
   `v::input(array $input, array $rules)` 用来验证并收集数据，如果数据验证失败，则抛出`Respect\Validation\Exceptions\ValidationException`异常，验证成功则将返回验证后的数据(数组)。
   
-  如果业务代码未捕获验证异常，则webman框架将自动捕获异常并根据HTTP请求头选择返回类似'{"code":500, "msg":"xxx"}'json格式的数据或普通的异常页面。如返回格式不符合业务需求，开发者可自行捕获`ValidationException`异常并返回需要的数据，类似下面的例子：
+  如果业务代码未捕获验证异常，则webman框架将自动捕获并根据HTTP请求头选择返回类似`{"code":500, "msg":"xxx"}`json格式的数据还是普通的异常页面。如返回格式不符合业务需求，开发者可自行捕获`ValidationException`异常并返回需要的数据，类似下面的例子：
   
   ```php
   <?php
@@ -100,6 +100,25 @@
   // 多个规则链式验证
   $usernameValidator = v::alnum()->noWhitespace()->length(1, 15);
   $usernameValidator->validate('alganet'); // true
+
+  // 获得第一个验证失败原因
+  try {
+      $usernameValidator->setName('用户名')->check('alg  anet');
+  } catch (ValidationException $exception) {
+      echo $exception->getMessage(); // 用户名 只能包含字母（a-z）和数字（0-9）
+  }
+
+  // 获得所有验证失败的原因
+  try {
+      $usernameValidator->setName('用户名')->check('alg  anet');
+  } catch (ValidationException $exception) {
+      echo $exception->getFullMessage(); 
+      // -  用户名 必须符合以下规则
+      //     - 用户名 只能包含字母（a-z）和数字（0-9）
+      //     - 用户名 不能包含空格
+  }
+
+
 
   // 验证对象
   $user = new stdClass;
