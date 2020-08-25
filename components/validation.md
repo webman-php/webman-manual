@@ -110,12 +110,20 @@
 
   // 获得所有验证失败的原因
   try {
-      $usernameValidator->setName('用户名')->check('alg  anet');
+      $usernameValidator->setName('用户名')->assert('alg  anet');
   } catch (ValidationException $exception) {
-      echo $exception->getFullMessage(); // $exception->getMessages() will return array
+      echo $exception->getFullMessage();
+      // 将会打印
       // -  用户名 必须符合以下规则
       //     - 用户名 只能包含字母（a-z）和数字（0-9）
       //     - 用户名 不能包含空格
+    
+      var_export($exception->getMessages());
+      // 将会打印
+      // array (
+      //   'alnum' => '用户名 只能包含字母（a-z）和数字（0-9）',
+      //   'noWhitespace' => '用户名 不能包含空格',
+      // )
   }
 
   // 自定义错误提示信息
@@ -125,8 +133,13 @@
       var_export($exception->getMessages([
           'alnum' => '用户名只能包含字母和数字',
           'noWhitespace' => '用户名不能有空格',
+          'length' => 'length符合规则，所以这条将不会显示'
       ]);
-      // array('alnum' => '用户名只能包含字母和数字','noWhitespace' => '用户名不能有空格')
+      // 将会打印 
+      // array(
+      //    'alnum' => '用户名只能包含字母和数字',
+      //    'noWhitespace' => '用户名不能有空格'
+      // )
   }
 
   // 验证对象
