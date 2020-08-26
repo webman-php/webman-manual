@@ -20,7 +20,7 @@ app
 
 当访问地址 `http://127.0.0.1:8787/api/{控制器}/{方法}` 时访问`app/api/controller`下的控制器与方法。
 
-当访问地址 `http://127.0.0.1:8787/admin/{控制器}/{方法}` 时访问`app/shop/controller`下的控制器与方法。
+当访问地址 `http://127.0.0.1:8787/admin/{控制器}/{方法}` 时访问`app/admin/controller`下的控制器与方法。
 
 在webman中，甚至可以这样规划app目录。
 ```
