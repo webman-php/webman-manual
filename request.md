@@ -247,7 +247,7 @@ $request->sessionId();
 返回字符串，由字母和数字组成
 
 
-## 获取请求客户端ip
+## 获取请求客户端IP
 ```php
 $request->getRemoteIp();
 ```
@@ -257,7 +257,20 @@ $request->getRemoteIp();
 $request->getRemotePort();
 ```
 
-## 获取服务端ip
+## 获取请求客户端真实IP
+```php
+$request->getRealIp($safe_mode=true);
+```
+> 此方法要求 webman-framework >= 1.0.2
+
+当项目使用代理(例如nginx)时，使用`$request->getRemoteIp()`得到的往往是代理服务器IP(类似`127.0.0.1` `192.168.x.x`)并非客户端真实IP。这时候可以尝试使用`$request->getRealIp()`获得客户端真实IP。
+
+`$request->getRealIp();`原理是：如果发现客户端IP是内网IP，则尝试从`Client-Ip`、`X-Forwarded-For`、`X-Real-Ip`、`Client-Ip`、`Via` HTTP头中获取真实IP。如果`$safe_mode`为false，则不判断客户端IP是否为内网IP(不安全)，直接尝试从以上HTTP头中读取客户端IP数据。如果HTTP头没有以上字段，则使用`$request->getRemoteIp()`的返回值作为结果返回。
+
+> 由于HTTP头很容伪造，所以此方法获得的客户端IP并非100%可信，尤其是`$safe_mode`为false时。透过代理获得客户端真实IP的最可靠的方法是，已知安全的代理服务器IP，并且明确知道携带真实IP是哪个HTTP头，如果`$request->getRemoteIp()`返回的IP确认为已知的安全的代理服务器，然后通过`$request->header('携带真实IP的HTTP头')`获取真实IP。
+
+
+## 获取服务端IP
 ```php
 $request->getLocalIp();
 ```
