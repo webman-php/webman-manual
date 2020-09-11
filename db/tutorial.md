@@ -4,7 +4,8 @@ webman数据库采用的是 [illuminate/database](https://github.com/illuminate/
 
 ## 安装
 ```php
-composer require illuminate/database
+composer require vlucas/phpdotenv ^5.1.0
+composer require illuminate/database ^8.0
 ```
 
 ## 数据库配置
