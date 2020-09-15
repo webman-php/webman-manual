@@ -8,7 +8,8 @@ webman的redis组件基于[illuminate/redis](https://github.com/illuminate/redis
 
 ## 安装
 ```php
-composer require illuminate/redis
+composer require vlucas/phpdotenv ^5.1.0
+composer require illuminate/redis ^8.2.0
 ```
 
 ## 配置
