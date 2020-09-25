@@ -114,11 +114,12 @@ $has = $session->exists('name');
 session配置文件在`config/session.php`，内容类似如下：
 ```php
 return [
-    // Webman\FileSessionHandler::class 或者 Webman\RedisSessionHandler::class
+    // Webman\FileSessionHandler::class 或者 Webman\RedisSessionHandler::class 或者 Webman\RedisClusterSessionHandler::class 
     'handler' => Webman\FileSessionHandler::class,
     
     // handler为Webman\FileSessionHandler::class时值为file，
     // handler为Webman\RedisSessionHandler::class时值为redis
+    // handler为Webman\RedisClusterSessionHandler::class时值为redis_cluster 既redis集群
     'type'    => 'file',
 
     // 不同的handler使用不同的配置
@@ -136,9 +137,16 @@ return [
             'database'  => '',
             'prefix'    => 'redis_session_',
         ],
+        'redis_cluster' => [
+            'host'    => ['127.0.0.1:7000', '127.0.0.1:7001', '127.0.0.1:7001'],
+            'timeout' => 2,
+            'auth'    => '',
+        ]
+        
     ],
 
     'session_name' => 'PHPSID',
 ];
 ```
 
+> 注意：`Webman\RedisClusterSessionHandler::class` 需要 webman-framework >= 1.0.4
