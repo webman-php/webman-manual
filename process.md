@@ -112,7 +112,7 @@ return [
         // transport (可选，当需要开启ssl时设置为ssl，默认为tcp)
         'transport'  => 'tcp',
         // context （可选，当transport为是ssl时，需要传递证书路径）
-        'transport'  => [], 
+        'context'    => [], 
         // 进程类构造函数参数，这里为 process\Pusher::class 类的构造函数参数 （可选）
         'constructor' => [],
     ],
