@@ -54,7 +54,7 @@ return [
     
     'stomp_consumer'  => [
         'handler'     => process\StompConsumer::class,
-        'count'       => 1, // 进程数
+        'count'       => 2, // 进程数
         'constructor' => [
             // 消费者类目录
             'consumer_dir' => app_path() . '/stomp'
