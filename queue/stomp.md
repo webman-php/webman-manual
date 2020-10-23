@@ -39,7 +39,8 @@ return [
 ```php
 use support\bootstrap\Stomp;
 
-Stomp::send('/email/send', json_encode(['to' => 'tom@gmail.com', 'content' => 'hello']));
+$queue = '/topic/send_mail';
+Stomp::send($queue, json_encode(['to' => 'tom@gmail.com', 'content' => 'hello']));
 ```
   
 ## 消费消息
@@ -73,7 +74,7 @@ use Workerman\Stomp\AckResolver;
 class MyMailSend
 {
     // 队列名
-    public $queue = '/mail/send';
+    public $queue = '/topic/send_mail';
 
     // 连接名，对应 config/stomp.php 里的连接`
     public $connection = 'default';
