@@ -44,6 +44,28 @@ Client::send($queue, $data);
 // 投递延迟消息，消息会在60秒后处理
 Client::send($queue, $data, 60);
 ```
+
+有时候你需要在其它项目中投递消息并且无法使用`Webman\RedisQueue`，则可以参考以下函数向队列投递消息。
+
+```php
+function redis_queue_send($redis, $queue, $data, $delay = 0) {
+    $queue_waiting = 'redis-queue-waiting';
+    $queue_delay = 'redis-queue-delayed';
+    $now = time();
+    $package_str = json_encode([
+        'id'       => rand(),
+        'time'     => $now,
+        'delay'    => 0,
+        'attempts' => 0,
+        'queue'    => $queue,
+        'data'     => $data
+    ]);
+    if ($delay) {
+        return $redis->zAdd($queue_delay, $now + $delay, $package_str);
+    }
+    return $redis->lPush($queue_waiting.$queue, $package_str);
+};
+```
   
 ## 消费消息
 
@@ -89,5 +111,6 @@ class MailSend implements Consumer
     }
 }
 ```
+
   
 
