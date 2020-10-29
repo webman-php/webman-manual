@@ -1,8 +1,8 @@
-# redis-queue redis消息队列组件
+# Redis消息队列组件 redis-queue
 
 ## 说明
 
-  基于redis的消息队列，支持消息延迟处理。
+  基于Redis的消息队列，支持消息延迟处理。
   
 ## 项目地址
 
