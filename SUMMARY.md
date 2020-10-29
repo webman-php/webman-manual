@@ -34,6 +34,7 @@
   
 - 消息队列
 
+  - [Redis队列](queue/redis.md)
   - [Stomp](queue/stomp.md)
  
 - 常用组件
@@ -42,7 +43,7 @@
   - [多语言](components/translation.md)
   - [图像处理](components/image.md)
   - [验证码](components/captcha.md)
-  - [Crontab](components/crontab.md)
+  - [Crontab定时任务](components/crontab.md)
   - [微信SDK](components/wechat.md)
   - [支付SDK](components/pay.md)
   

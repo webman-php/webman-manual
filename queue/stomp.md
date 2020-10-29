@@ -12,7 +12,7 @@
 ## 安装
  
   ```php
-  composer require workerman/stomp
+  composer require webman/stomp
   ```
   
 ## 配置
@@ -28,7 +28,7 @@ return [
             'vhost'    => '/',
             'login'    => 'guest',
             'passcode' => 'guest',
-            'debug'    => false,
+            'debug'    => true,
         ]
     ]
 ];
@@ -37,11 +37,16 @@ return [
 ## 投递消息
 
 ```php
-use support\bootstrap\Stomp;
-
+use Webman\Stomp\Client;
+// 队列
 $queue = '/topic/send_mail';
-Stomp::send($queue, json_encode(['to' => 'tom@gmail.com', 'content' => 'hello']));
+// 数据（传递数组时需要自行序列化，比如使用json_encode，serialize等）
+$data = json_encode(['to' => 'tom@gmail.com', 'content' => 'hello']);
+// 执行投递
+Client::send($queue, $data);
 ```
+
+> 为了兼容其它项目，Stomp组件没有提供自动序列化反序列化功能，如果投递的是数组数据，需要自行序列化，消费的时候自行反序列化
   
 ## 消费消息
 
@@ -53,25 +58,25 @@ return [
     ...这里省略了其它配置...
     
     'stomp_consumer'  => [
-        'handler'     => process\StompConsumer::class,
+        'handler'     => Webman\Stomp\Process\Consumer::class,
         'count'       => 2, // 进程数
         'constructor' => [
             // 消费者类目录
-            'consumer_dir' => app_path() . '/stomp'
+            'consumer_dir' => app_path() . '/queue/stomp'
         ]
     ]
 ];
 ```
 
-新建 `app/stomp/MyMailSend.php` (类名任意)。
+新建 `app/queue/stomp/MyMailSend.php` (类名任意)。
 ```php
 <?php
-
-namespace app\stomp;
+namespace app\queue\stomp;
 
 use Workerman\Stomp\AckResolver;
+use Webman\Stomp\Consumer;
 
-class MyMailSend
+class MailSend implements Consumer
 {
     // 队列名
     public $queue = '/topic/send_mail';
@@ -80,13 +85,15 @@ class MyMailSend
     public $connection = 'default';
 
     // 值为 client 时需要调用$ack_resolver->ack()告诉服务端已经成功消费
-    // 值为 auto 时无需调用$ack_resolver->ack()
+    // 值为 auto   时无需调用$ack_resolver->ack()
     public $ack = 'auto';
 
     // 消费
-    public function consume($data, AckResolver $ack_resolver)
+    public function consume($data, AckResolver $ack_resolver = null)
     {
-        var_export(json_decode($data, true));
+        // 如果是数据是数组，需要自行反序列化
+        var_export(json_decode($data, true)); // 输出 ['to' => 'tom@gmail.com', 'content' => 'hello']
+        // 告诉服务端，已经成功消费
         $ack_resolver->ack(); // ack为 auto时可以省略此调用
     }
 }
