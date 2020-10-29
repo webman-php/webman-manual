@@ -6,7 +6,7 @@
   
 ## 项目地址
 
-  https://github.com/walkor/redis-queue
+  https://github.com/webman-php/redis-queue
   
 ## 安装
  
@@ -24,12 +24,17 @@ return [
     'default' => [
         'host' => 'redis://127.0.0.1:6379',
         'options' => [
-            'auth'     => '',
-            'database' => 0,
+            'auth'     => '',     // 密码，可选参数
+            'database' => 0,      // 数据库
+            'max_attempts'  => 5, // 消费失败后，重试次数
+            'retry_seconds' => 5, // 重试间隔，单位秒
          ]
     ],
 ];
 ```
+
+> 如果消费失败(发生了异常)，则消息会放入延迟队列，等待下次重试。重试次数通过参数 `max_attempts` 控制，重试间隔由
+`retry_seconds` 和 `max_attempts`共同控制。比如`max_attempts`为5，`retry_seconds`为10，第1次重试间隔为`1*10`秒，第2次重试时间间隔为 `2*10秒`，第3次重试时间间隔为`3*10秒`，以此类推直到重试5次。如果超过了'max_attempts'设置测重试次数，则消息放入失败队列(key为`redis-queue-failed`)。
 
 ## 投递消息
 
