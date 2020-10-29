@@ -29,7 +29,7 @@
   - [配置数据库](db/config.md)
   - [查询构造器](db/queries.md)
   - [模型](db/model.md)
-  - [redis](redis.md)
+  - [Redis](redis.md)
   - [其它数据库](db/others.md)
   
 - 消息队列
