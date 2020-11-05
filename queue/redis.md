@@ -2,17 +2,17 @@
 
 ## 说明
 
-  基于Redis的消息队列，支持消息延迟处理。
+基于Redis的消息队列，支持消息延迟处理。
   
 ## 项目地址
 
-  https://github.com/webman-php/redis-queue
+https://github.com/webman-php/redis-queue
   
 ## 安装
  
-  ```php
-  composer require webman/redis-queue
-  ```
+```php
+composer require webman/redis-queue
+```
   
 ## 配置
 
