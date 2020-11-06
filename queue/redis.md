@@ -71,6 +71,15 @@ function redis_queue_send($redis, $queue, $data, $delay = 0) {
     return $redis->lPush($queue_waiting.$queue, $package_str);
 }
 ```
+
+其中，参数`$redis`为redis实例。例如redis扩展用法类似如下：
+```php
+$redis = new Redis;
+$redis->connect('127.0.0.1', 6379);
+$queue = 'user-1';
+$data= ['some', 'data'];
+redis_queue_send($redis, $queue, $data);
+````
   
 ## 消费消息
 
