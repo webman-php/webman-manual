@@ -69,7 +69,7 @@ function redis_queue_send($redis, $queue, $data, $delay = 0) {
         return $redis->zAdd($queue_delay, $now + $delay, $package_str);
     }
     return $redis->lPush($queue_waiting.$queue, $package_str);
-};
+}
 ```
   
 ## 消费消息
