@@ -83,7 +83,7 @@ redis_queue_send($redis, $queue, $data);
   
 ## 消费消息
 
-打开`config/process.php`添加以下配置，增加消费进程
+打开`config/process.php`添加以下配置，增加消费进程。
 
 ```php
 <?php
@@ -92,7 +92,7 @@ return [
     
     'redis_consumer'  => [
         'handler'     => Webman\RedisQueue\Process\Consumer::class,
-        'count'       => 2, // 进程数
+        'count'       => 8, // 可以设置多进程
         'constructor' => [
             // 消费者类目录
             'consumer_dir' => app_path() . '/queue/redis'
@@ -100,6 +100,8 @@ return [
     ]
 ];
 ```
+
+消费进程可以同时消费多种不同的队列，也就是消费进程在`config/process.php`配置一次即可，新增队列消费者时只需要在`app/queue/redis`下新增对应的`Consumer`类即可，并用类属性`$queue`指定要消费的队列名，类似如下：
 
 新建 `app/queue/redis/MyMailSend.php` (类名任意)。
 ```php
@@ -111,7 +113,7 @@ use Webman\RedisQueue\Consumer;
 
 class MailSend implements Consumer
 {
-    // 队列名
+    // 要消费的队列名
     public $queue = '/topic/send_mail';
 
     // 连接名，对应 config/redis_queue.php 里的连接`
