@@ -45,6 +45,7 @@
   - [图像处理](components/image.md)
   - [验证码](components/captcha.md)
   - [Crontab定时任务](components/crontab.md)
+  - [Excel表格](components/excel.md)
   - [微信SDK](components/wechat.md)
   - [支付SDK](components/pay.md)
   
