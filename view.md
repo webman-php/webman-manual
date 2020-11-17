@@ -6,10 +6,11 @@ webman默认使用的是php原生语法作为模版，在打开`opcache`后具�
 
 
 ## 安装Twig
+1、composer安装
 
 `composer require twig/twig`
 
-修改配置`config/view.php`为
+2、修改配置`config/view.php`为
 ```php
 <?php
 use support\view\Twig;
@@ -20,10 +21,11 @@ return [
 ```
 
 ## 安装Blade
+1、composer安装
 
 `composer require jenssegers/blade`
 
-修改配置`config/view.php`为
+2、修改配置`config/view.php`为
 ```php
 <?php
 use support\view\Blade;
@@ -34,10 +36,10 @@ return [
 ```
 
 ## 安装think-template
-
+1、composer安装
 `composer require topthink/think-template`
 
-修改配置`config/view.php`为
+2、修改配置`config/view.php`为
 ```php
 <?php
 use support\view\ThinkPHP;
