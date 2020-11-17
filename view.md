@@ -37,6 +37,7 @@ return [
 
 ## 安装think-template
 1、composer安装
+
 `composer require topthink/think-template`
 
 2、修改配置`config/view.php`为
