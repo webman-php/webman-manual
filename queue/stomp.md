@@ -39,7 +39,7 @@ return [
 ```php
 use Webman\Stomp\Client;
 // 队列
-$queue = '/topic/send_mail';
+$queue = 'examples';
 // 数据（传递数组时需要自行序列化，比如使用json_encode，serialize等）
 $data = json_encode(['to' => 'tom@gmail.com', 'content' => 'hello']);
 // 执行投递
@@ -79,7 +79,7 @@ use Webman\Stomp\Consumer;
 class MailSend implements Consumer
 {
     // 队列名
-    public $queue = '/topic/send_mail';
+    public $queue = 'examples';
 
     // 连接名，对应 config/stomp.php 里的连接`
     public $connection = 'default';
