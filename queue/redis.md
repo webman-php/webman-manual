@@ -41,7 +41,7 @@ return [
 ```php
 use Webman\RedisQueue\Client;
 // 队列名
-$queue = '/topic/send_mail';
+$queue = 'send_mail';
 // 数据，可以直接传数组，无需序列化
 $data = ['to' => 'tom@gmail.com', 'content' => 'hello'];
 // 投递消息
@@ -114,7 +114,7 @@ use Webman\RedisQueue\Consumer;
 class MailSend implements Consumer
 {
     // 要消费的队列名
-    public $queue = '/topic/send_mail';
+    public $queue = 'send_mail';
 
     // 连接名，对应 config/redis_queue.php 里的连接`
     public $connection = 'default';
