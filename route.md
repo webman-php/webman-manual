@@ -66,6 +66,25 @@ Route::any('/user[/{name}]', function ($request, $name = null) {
 });
 ```
 
+## 路由分组
+> 注意：分组路由需要 webman-framework版本 >= 1.0.9
+
+有时候路由包含了大量相同的前缀，这时候我们可以用路由分组来简化定义。例如：
+
+```php
+Route::group('/blog', function () {
+   Route::any('/create', function ($rquest) {return response('create');});
+   Route::any('/edit', function ($rquest) {return response('edit');});
+   Route::any('/view/{id}', function ($rquest, $id) {return response("view $id");});
+});
+```
+等价与
+```php
+Route::any('/blog/create', function ($rquest) {return response('create');});
+Route::any('/blog/edit', function ($rquest) {return response('edit');});
+Route::any('/blog/view/{id}', function ($rquest, $id) {return response("view $id");});
+```
+
 
 ## 路由接口
 ```php
@@ -83,6 +102,8 @@ Route::patch($uri, $callback);
 Route::delete($uri, $callback);
 // 设置$uri的head请求的路由
 Route::head($uri, $callback);
+// 分组路由
+Route::group($path, $callback);
 // 回退路由，设置默认的路由兜底
 Route::fallback($callback);
 ```
