@@ -111,7 +111,7 @@ namespace app\queue\redis;
 
 use Webman\RedisQueue\Consumer;
 
-class MailSend implements Consumer
+class MyMailSend implements Consumer
 {
     // 要消费的队列名
     public $queue = 'send_mail';

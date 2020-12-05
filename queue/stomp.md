@@ -76,7 +76,7 @@ namespace app\queue\stomp;
 use Workerman\Stomp\AckResolver;
 use Webman\Stomp\Consumer;
 
-class MailSend implements Consumer
+class MyMailSend implements Consumer
 {
     // 队列名
     public $queue = 'examples';

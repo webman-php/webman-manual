@@ -67,7 +67,7 @@ Route::any('/user[/{name}]', function ($request, $name = null) {
 ```
 
 ## 路由分组
-> 注意：分组路由需要 webman-framework版本 >= 1.0.9
+> 注意：分组路由需要 `workerman/webman-framework` 版本 >= 1.0.9
 
 有时候路由包含了大量相同的前缀，这时候我们可以用路由分组来简化定义。例如：
 
