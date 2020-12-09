@@ -112,6 +112,32 @@ $has = $session->exists('name');
 ```
 以上代码也是用来判断session数据是否存在，区别时当对应的session项值为null时，也返回true。
 
+## 助手函数session()
+> 2020-12-09 新增
+
+webman提供了助手函数`session()`完成相同的功能。
+```php
+// 获取session实例
+$session = session();
+// 等价于
+$session = $request->session();
+
+// 获取某个值
+$value = session('key', 'default');
+// 等价与
+$value = session()->get('key', 'default');
+// 等价于
+$value = $request->session()->get('key', 'default');
+
+// 给session赋值
+session(['key1'=>'value1', 'key2' => 'value2']);
+// 相当于
+session()->put(['key1'=>'value1', 'key2' => 'value2']);
+// 相当于
+$request->session()->put(['key1'=>'value1', 'key2' => 'value2']);
+
+```
+
 ## 配置文件
 session配置文件在`config/session.php`，内容类似如下：
 ```php

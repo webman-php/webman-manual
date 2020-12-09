@@ -85,6 +85,20 @@ Route::any('/blog/edit', function ($rquest) {return response('edit');});
 Route::any('/blog/view/{id}', function ($rquest, $id) {return response("view $id");});
 ```
 
+## url生成
+> 注意：需要 `workerman/webman-framework` 版本 >= 1.0.10
+
+例如路由：
+```php
+Route::any('/blog/{id}', '\app\controller\Blog@view')->name('blog.view');
+```
+我们可以使用如下方法生成这个路由的url。
+```php
+route('blog.view', ['id' => 100]); // 结果为 /blog/100
+```
+
+视图里使用路由的url时可以使用此方法，这样不管路由规则如何变化，url都会自动生成，避免因路由地址调整导致大面积更改视图文件的情况。
+
 
 ## 路由接口
 ```php
