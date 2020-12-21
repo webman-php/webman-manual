@@ -7,14 +7,14 @@
 - 安装 aop-integration
 
 ```shell
-composer require limingxinleo/aop-integration
+composer require hyperf/aop-integration
 ```
 
 - 配置 PSR-4
 
 因为 Hyperf AOP 只能 Hook Composer Autoload，故我们只能切入可以被 Composer 自动加载的类
 
->> 以下省略其他配置
+> 以下省略其他配置
 
 ```
   "autoload": {
@@ -57,7 +57,7 @@ return [
 
 ### 配置入口文件 start.php
 
->> 我们将初始化方法，放到 timezone 下方，以下省略其他代码
+> 我们将初始化方法，放到 timezone 下方，以下省略其他代码
 
 ```
 if ($timezone = config('app.default_timezone')) {
