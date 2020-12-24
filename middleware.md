@@ -107,12 +107,12 @@ return [
 return [
     // 全局中间件
     '' => [
-        support\middleware\AuthCheckTest::class,
-        support\middleware\AccessControlTest::class,
+        app\middleware\AuthCheckTest::class,
+        app\middleware\AccessControlTest::class,
     ],
     // api应用中间件(应用中间件仅在多应用模式下有效)
     'api' => [
-        support\middleware\ApiOnly::class,
+        app\middleware\ApiOnly::class,
     ]
 ];
 ```
@@ -123,7 +123,7 @@ return [
 我们可以给某个一个或某一组路由设置中间键。
 例如在`config/route.php`中添加如下配置：
 ```php
-Route::any('/admin', 'app\admin\controller\Index@index')->middleware([
+Route::any('/admin', [app\admin\controller\Index::class, 'index')->middleware([
     app\middleware\MiddlewareA::class,
     app\middleware\MiddlewareB::class,
 ]);
@@ -139,7 +139,7 @@ Route::group('/blog', function () {
 ```
 
 ## 中间件执行顺序
- - 中间件执行顺序为`全局中间件`->`应用中间件(有的话)`->`路由中间键(有的话)`。
+ - 中间件执行顺序为`全局中间件`->`应用中间件`->`路由中间键`。
  - 有多个全局中间件时，按照中间件实际配置顺序执行。
  - 某应用中有多个应用中间件时，按照对应应用中间件实际配置顺序执行。
  - 某路由有多个应用中间件时，按照对应路由中间件实际配置顺序执行。

@@ -26,7 +26,7 @@ Route::any('/test', function ($request) {
 ## 类路由
 `config/route.php`里添加如下路由代码
 ```php
-Route::any('/testclass', 'app\controller\Index@test');
+Route::any('/testclass', [app\controller\Index::class, 'test']);
 ```
 
 当访问地址为 `http://127.0.0.1:8787/testclass` 时，将返回`app\controller\Index`类的`test`方法的返回值。
@@ -35,7 +35,7 @@ Route::any('/testclass', 'app\controller\Index@test');
 如果路由中存在参数，通过`{key}`来匹配，匹配结果将传递到对应的控制器方法参数中(从第二个参数开始依次传递)，例如：
 ```php
 // 匹配 /user/123 /user/abc
-Route::any('/user/{id}', 'app\controller\User@get');
+Route::any('/user/{id}', [app\controller\User:class, 'get']);
 ```
 ```php
 namespace app\controller;
@@ -91,7 +91,7 @@ Route::any('/blog/view/{id}', function ($rquest, $id) {return response("view $id
 我们可以给某个一个或某一组路由设置中间键。
 例如：
 ```php
-Route::any('/admin', 'app\admin\controller\Index@index')->middleware([
+Route::any('/admin', [app\admin\controller\Index::class, 'index'])->middleware([
     app\middleware\MiddlewareA::class,
     app\middleware\MiddlewareB::class,
 ]);
@@ -111,7 +111,7 @@ Route::group('/blog', function () {
 
 例如路由：
 ```php
-Route::any('/blog/{id}', '\app\controller\Blog@view')->name('blog.view');
+Route::any('/blog/{id}', [app\controller\Blog::class, 'view')->name('blog.view');
 ```
 我们可以使用如下方法生成这个路由的url。
 ```php
