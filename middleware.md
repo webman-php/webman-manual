@@ -58,10 +58,10 @@ return [
 > 注意：调用`$next($request)`将继续执行正常的业务流程，也就是继续调用下一个中间件(有的话)，直到调用到最终处理业务的控制器方法或函数。
 
 ## 示例：跨域请求中间件
-创建文件`support/middleware/AccessControlTest.php`如下：
+创建文件`app/middleware/AccessControlTest.php` (如目录不存在请自行创建) 如下：
 ```php
 <?php
-namespace support\middleware;
+namespace app\middleware;
 
 use Webman\MiddlewareInterface;
 use Webman\Http\Response;
@@ -89,7 +89,7 @@ return [
     // 全局中间件
     '' => [
         // ... 这里省略其它中间件
-        support\middleware\AccessControlTest::class,
+        app\middleware\AccessControlTest::class,
     ]
 ];
 ```
@@ -142,3 +142,4 @@ Route::group('/blog', function () {
  - 中间件执行顺序为`全局中间件`->`应用中间件(有的话)`->`路由中间键(有的话)`。
  - 有多个全局中间件时，按照中间件实际配置顺序执行。
  - 某应用中有多个应用中间件时，按照对应应用中间件实际配置顺序执行。
+ - 某路由有多个应用中间件时，按照对应路由中间件实际配置顺序执行。
