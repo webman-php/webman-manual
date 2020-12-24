@@ -20,10 +20,10 @@ interface MiddlewareInterface
 
  
 ## 示例：用户身份验证中间件
-创建文件`support/middleware/AuthCheckTest.php`如下：
+创建文件`app/middleware/AuthCheckTest.php` (如目录不存在请自行创建) 如下：
 ```php
 <?php
-namespace support\middleware;
+namespace app\middleware;
 
 use Webman\MiddlewareInterface;
 use Webman\Http\Response;
@@ -48,7 +48,7 @@ return [
     // 全局中间件
     '' => [
         // ... 这里省略其它中间件
-        support\middleware\AuthCheckTest::class,
+        app\middleware\AuthCheckTest::class,
     ]
 ];
 ```
@@ -98,7 +98,7 @@ return [
 
 ## 说明
   
- - 中间件分为全局中间件和应用中间件(应用中间件仅在多应用模式下有效，参见[多应用](multiapp.md))
+ - 中间件分为全局中间件、应用中间件(应用中间件仅在多应用模式下有效，参见[多应用](multiapp.md))、路由中间键
  - 目前不支持单个控制器的中间件(但可以在中间键中通过判断`$request->controller`来实现类似控制器中间键功能)
  - 中间件配置文件位置在 `config/middleware.php`
  - 全局中间件配置在key `''` 下
@@ -117,7 +117,28 @@ return [
 ];
 ```
 
+## 路由中间键
+> 注意：需要 `workerman/webman-framework` 版本 >= 1.0.12
+
+我们可以给某个一个或某一组路由设置中间键。
+例如在`config/route.php`中添加如下配置：
+```php
+Route::any('/admin', 'app\admin\controller\Index@index')->middleware([
+    app\middleware\MiddlewareA::class,
+    app\middleware\MiddlewareB::class,
+]);
+
+Route::group('/blog', function () {
+   Route::any('/create', function () {return response('create');});
+   Route::any('/edit', function () {return response('edit');});
+   Route::any('/view/{id}', function ($r, $id) {response("view $id");});
+})->middleware([
+    app\middleware\MiddlewareA::class,
+    app\middleware\MiddlewareB::class,
+]);
+```
+
 ## 中间件执行顺序
- - 中间件执行顺序为`全局中间件`->`应用中间件(有的话)`。
+ - 中间件执行顺序为`全局中间件`->`应用中间件(有的话)`->`路由中间键(有的话)`。
  - 有多个全局中间件时，按照中间件实际配置顺序执行。
  - 某应用中有多个应用中间件时，按照对应应用中间件实际配置顺序执行。

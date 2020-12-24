@@ -85,6 +85,27 @@ Route::any('/blog/edit', function ($rquest) {return response('edit');});
 Route::any('/blog/view/{id}', function ($rquest, $id) {return response("view $id");});
 ```
 
+## 路由中间键
+> 注意：需要 `workerman/webman-framework` 版本 >= 1.0.12
+
+我们可以给某个一个或某一组路由设置中间键。
+例如：
+```php
+Route::any('/admin', 'app\admin\controller\Index@index')->middleware([
+    app\middleware\MiddlewareA::class,
+    app\middleware\MiddlewareB::class,
+]);
+
+Route::group('/blog', function () {
+   Route::any('/create', function () {return response('create');});
+   Route::any('/edit', function () {return response('edit');});
+   Route::any('/view/{id}', function ($r, $id) {response("view $id");});
+})->middleware([
+    app\middleware\MiddlewareA::class,
+    app\middleware\MiddlewareB::class,
+]);
+```
+
 ## url生成
 > 注意：需要 `workerman/webman-framework` 版本 >= 1.0.10
 
