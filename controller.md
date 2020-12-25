@@ -42,7 +42,7 @@ class Foo
  - 请求不会触发控制器`__construct()`方法，因为在框架启动时就实例化了。
  - 进程退出时实例化的控制器才会被释放。
  
-## 控制器钩子 beforeAction afterAction
+## 控制器钩子 `beforeAction()` `afterAction()`
 在传统框架中，每个请求都会重复实例化控制器，每个请求都会触发控制器的`__construct()`方法，很多开发者`__construct()`方法中做一些请求前的准备工作。webman也提供了类似的解决方案，让开发者可以介入请求前以及请求后的处理流程中。
 
 为了介入请求流程，我们可以使用[中间键](middleware.md)
@@ -94,7 +94,7 @@ return [
 ];
 ```
 
-3、这样如果 controller包含了 beforeAction 或者 afterAction方法会在请求发生时自动被调用。
+3、这样如果 controller包含了 `beforeAction` 或者 `afterAction`方法会在请求发生时自动被调用。
 例如：
 ```php
 <?php
@@ -102,6 +102,9 @@ namespace app\controller;
 use support\Request;
 class Index
 {
+    /**
+     * 该方法会在请求前调用 
+     */
     public function beforeAction(Request $request)
     {
         echo 'beforeAction';
@@ -109,6 +112,9 @@ class Index
         // return response('终止执行Action');
     }
 
+    /**
+     * 该方法会在请求后调用
+     */
     public function afterAction(Request $request, $response)
     {
         echo 'afterAction';
