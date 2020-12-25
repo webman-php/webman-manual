@@ -2,7 +2,7 @@
 webman默认使用的是php原生语法作为模版，在打开`opcache`后具有最好的性能。除了php原生模版，webman还提供了[Twig](https://twig.symfony.com/doc/3.x/)、 [Blade](https://learnku.com/docs/laravel/8.x/blade/9377)、 [think-template](https://www.kancloud.cn/manual/think-template/content) 模版引擎，其中推荐`Twig`，在易用性、扩展性及性能上是比较优秀的一款视图模版引擎。
 
 ## 开启opcache
-使用视图时，强烈建议开启`opcache.enable`和`opcache.enable_cli` 两个选项，以便模版引擎达到最好性能。
+使用视图时，强烈建议开启php.ini中`opcache.enable`和`opcache.enable_cli` 两个选项，以便模版引擎达到最好性能。
 
 
 ## 安装Twig
@@ -231,3 +231,28 @@ hello {$name}
 ```
 
 更多文档参考 [think-template](https://www.kancloud.cn/manual/think-template/content)
+
+## 模版赋值
+除了使用`view(模版, 变量数组)`给模版赋值，我们还可以在任意位置通过调用`View::assign()`给模版赋值。例如：
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+use support\View;
+
+class User
+{
+    public function hello(Request $request)
+    {
+        View::assign([
+            'name1' => 'value1',
+            'name2'=> 'value2',
+        ]);
+        View::assign('name3', 'value3');
+        return view('user/test', ['name' => 'webman']);
+    }
+}
+```
+
+`View::assign()`在某些场景下非常有用，例如某系统每个页面首部都要显示当前登录者信息，如果每个页面都将此信息通过 `view('模版', ['user_info' => '用户信息']);` 赋值将非常麻烦。解决办法就是在中间键中获得用户信息，然后通过`View::assign()`将用户信息赋值给模版，
