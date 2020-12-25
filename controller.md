@@ -118,7 +118,7 @@ class Index
     public function afterAction(Request $request, $response)
     {
         echo 'afterAction';
-        // 如果想串改结果，可以直接返回Response对象，不想串改则无需return
+        // 如果想串改请求结果，可以直接返回Response对象，不想串改则无需return
         // return response('afterAction'); 
     }
 
