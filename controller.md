@@ -63,6 +63,10 @@ class ActionHook implements MiddlewareInterface
     public function process(Request $request, callable $next) : Response
     {
         if ($request->controller) {
+            // 禁止直接访问beforeAction afterAction
+            if ($request->action === 'beforeAction' || $request->action === 'afterAction') {
+                return response('<h1>404 Not Found</h1>', 404);
+            }
             $controller = Container::get($request->controller);
             if (method_exists($controller, 'beforeAction')) {
                 $before_response = call_user_func([$controller, 'beforeAction'], $request);
@@ -132,7 +136,7 @@ class Index
 **`beforeAction`说明：**
  - 在当前控制器被执行前调用
  - 框架会传递一个`Request`对象给`beforeAction`，开发者可以从中获得用户输入
- - 如需终止执行当前控制器，则只需要在`beforeAction`里返回一个`Response`对象，比如`return redirect('/user/login')`
+ - 如需终止执行当前控制器，则只需要在`beforeAction`里返回一个`Response`对象，比如`return redirect('/user/login');`
  - 无需终止执行当前控制器时，不要返回任何数据
  
 **`afterAction`说明：**
