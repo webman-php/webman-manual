@@ -110,7 +110,7 @@ $has = $session->has('name');
 $session = $request->session();
 $has = $session->exists('name');
 ```
-以上代码也是用来判断session数据是否存在，区别时当对应的session项值为null时，也返回true。
+以上代码也是用来判断session数据是否存在，区别是当对应的session项值为null时，也返回true。
 
 ## 助手函数session()
 > 2020-12-09 新增
