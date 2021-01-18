@@ -7,9 +7,17 @@ webman默认使用 [jenssegers/mongodb](https://github.com/jenssegers/laravel-mo
 > 使用命令`php -m | grep mongodb`查看`php-cli`是否装了mongodb扩展。注意：即使你在`php-fpm`安装了mongodb扩展，不代表你在`php-cli`可以使用它，因为`php-cli`和`php-fpm`是不同的应用程序，可能使用的是不同的`php.ini`配置。使用命令`php --ini`来查看你的`php-cli`使用的是哪个`php.ini`配置文件。
 
 ## 安装
+**适合php>=7.3**
 ```php
 composer require vlucas/phpdotenv ^5.1.0
 composer require illuminate/database ^8.0
+composer require jenssegers/mongodb
+```
+
+**适合php>=7.2**
+```php
+composer require vlucas/phpdotenv ^4.0
+composer require illuminate/database ^7.0
 composer require jenssegers/mongodb
 ```
 
