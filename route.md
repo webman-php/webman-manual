@@ -14,10 +14,9 @@ webman默认路由规则是 `http://127.0.0.1:8787/{控制器}/{动作}`。
 
 如果你想关闭默认路由，在配置文件 `config/route.php`里最后一行加上如下配置：
 ```php
-Route::any('/[{a}[/[{b}[/[{c}[/]]]]]]', function () {
-    return response('<h1>404 Not Found</h1>', 404);
-});
+Route::disableDefaultRoute();
 ```
+> Route::disableDefaultRoute() 需要workerman/webman-framework 版本>=1.0.13
 
 ## 闭包路由
 `config/route.php`里添加如下路由代码
