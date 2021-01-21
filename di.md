@@ -83,6 +83,7 @@ namespace app\controller;
 
 use support\Request;
 use app\service\Mailer;
+use DI\Annotation\Inject;
 
 class User
 {
@@ -197,6 +198,7 @@ namespace app\controller;
 
 use support\Request;
 use app\service\MailerInterface;
+use DI\Annotation\Inject;
 
 class User
 {
@@ -242,6 +244,8 @@ return [
 ```php
 <?php
 namespace app\service;
+
+use DI\Annotation\Inject;
 
 class Mailer
 {
