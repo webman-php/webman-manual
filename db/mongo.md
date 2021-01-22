@@ -1,6 +1,6 @@
 # MongoDB
 
-webman默认使用 [jenssegers/mongodb](https://github.com/jenssegers/laravel-mongodb) 作为mongodb组件。
+webman默认使用 [jenssegers/mongodb](https://github.com/jenssegers/laravel-mongodb) 作为mongodb组件，它是从laravel项目中抽离出来的，用法与laravel相同。
 
 使用`jenssegers/mongodb`之前必须先给`php-cli`安装mongodb扩展。
 

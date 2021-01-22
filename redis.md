@@ -1,6 +1,6 @@
 # Redis
 
-webman的redis组件基于[illuminate/redis](https://github.com/illuminate/redis).
+webman的redis组件基于[illuminate/redis](https://github.com/illuminate/redis)，也就是laravel的redis库，用法与laravel相同。
 
 使用`illuminate/redis`之前必须先给`php-cli`安装redis扩展。
 

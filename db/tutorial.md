@@ -1,6 +1,6 @@
 # 快速开始
 
-webman数据库采用的是 [illuminate/database](https://github.com/illuminate/database)。
+webman数据库采用的是 [illuminate/database](https://github.com/illuminate/database)，也就是laravel的数据库，用法与laravel相同。
 
 ## 安装
 
