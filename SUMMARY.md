@@ -29,6 +29,7 @@
   - [配置数据库](db/config.md)
   - [查询构造器](db/queries.md)
   - [模型](db/model.md)
+  - [模型关联](db/relationships.md)
   - [Redis](redis.md)
   - [MongoDB](db/mongo.md)
   - [其它数据库](db/others.md)
