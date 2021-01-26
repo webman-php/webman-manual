@@ -1,6 +1,6 @@
 # 快速开始
 
-webman数据库默认采用的是 [illuminate/database](https://github.com/illuminate/database)，也就是laravel的数据库，用法与laravel相同。
+webman数据库默认采用的是 [illuminate/database](https://github.com/illuminate/database)，也就是[laravel的数据库](https://learnku.com/docs/laravel/8.x/database/9400)，用法与laravel相同。
 
 > 除了 `illuminate/database`，你还可以使用其它数据库组件，例如 ThinkPHP 的 [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998) (使用方法参考[使用其它数据库组件](/db/others)章节)、[Medoo](https://github.com/catfan/Medoo) 等等。
 
