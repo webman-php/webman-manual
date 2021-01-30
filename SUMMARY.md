@@ -30,6 +30,7 @@
   - [查询构造器](db/queries.md)
   - [模型](db/model.md)
   - [模型关联](db/relationships.md)
+  - [数据库迁移](db/migration.md)
   - [Redis](redis.md)
   - [MongoDB](db/mongo.md)
   - [其它数据库](db/others.md)
