@@ -179,3 +179,21 @@ return [
 ```
 
 > 注意：`Webman\RedisClusterSessionHandler::class` 需要 webman-framework >= 1.0.4
+
+## 有效期配置
+和php-fpm一样，webman中session过期时间由 php.ini 中一下参数决定。
+```
+session.gc_maxlifetime = x
+session.cookie_lifetime = x
+session.gc_probability = 1
+session.gc_divisor = 1000
+```
+
+
+假设设定有效期为1440秒，则配置如下
+```
+session.gc_maxlifetime = 1440
+session.cookie_lifetime = 1440
+session.gc_probability = 1
+session.gc_divisor = 1000
+```
