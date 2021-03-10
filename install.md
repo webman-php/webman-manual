@@ -39,7 +39,7 @@ daemon方式运行(用于正式环境)
 
 克隆 [webman-dock](https://github.com/yasarluo/webman-dock) 代码：
 
-`git clone git@github.com:yasarluo/webman-dock.git`
+`git clone https://github.com/yasarluo/webman-dock.git`
 
 进入webman-dock目录，配置.env文件，将**HOST_APP_DIR**变量配置为你的webman路径
 
