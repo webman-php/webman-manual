@@ -91,10 +91,10 @@ Route::any('/blog/edit', function ($rquest) {return response('edit');});
 Route::any('/blog/view/{id}', function ($rquest, $id) {return response("view $id");});
 ```
 
-## 路由中间键
+## 路由中间件
 > 注意：需要 `workerman/webman-framework` 版本 >= 1.0.12
 
-我们可以给某个一个或某一组路由设置中间键。
+我们可以给某个一个或某一组路由设置中间件。
 例如：
 ```php
 Route::any('/admin', [app\admin\controller\Index::class, 'index'])->middleware([
