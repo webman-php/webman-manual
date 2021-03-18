@@ -31,6 +31,8 @@
               'charset'     => 'utf8',
               // 数据库表前缀
               'prefix'      => '',
+              // 断线重连
+              'break_reconnect' => true,
           ],
       ],
   ];
