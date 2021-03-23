@@ -143,3 +143,43 @@ Route::group('/blog', function () {
  - 有多个全局中间件时，按照中间件实际配置顺序执行。
  - 某应用中有多个应用中间件时，按照对应应用中间件实际配置顺序执行。
  - 某路由有多个应用中间件时，按照对应路由中间件实际配置顺序执行。
+ 
+## 中间件向控制器传参
+
+有时候控制器需要使用中间件里产生的数据，这时我们可以通过给`$request`对象添加属性的方式向控制器传参。例如：
+
+**中间件：**
+```php
+<?php
+namespace app\middleware;
+
+use Webman\MiddlewareInterface;
+use Webman\Http\Response;
+use Webman\Http\Request;
+
+class Hello implements MiddlewareInterface
+{
+    public function process(Request $request, callable $next) : Response
+    {
+        $request->data = 'some value';
+        return $next($request);
+    }
+}
+```
+
+**控制器：**
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+
+class Foo
+{
+    public function index(Request $request)
+    {
+        return response($request->data);
+    }
+}
+```
+
