@@ -8,7 +8,7 @@ webman是一款基于[workerman](https://www.workerman.net)开发的高性能HTT
 
 1、高稳定性。webman基于workerman开发，workerman一直是业界bug极少的高稳定性socket框架。
 
-2、超高性能。借助与workerman高性能以及对HTTP服务深入优化，webman性能高于传统php-fpm框架10-20倍左右，同时也远高于其它同类型的常驻内存的mvc框架。
+2、超高性能。借助与workerman高性能以及对HTTP服务深入优化，webman性能高于传统php-fpm框架10-20倍左右，同时也远高于其它同类型的常驻内存的mvc框架。第三方权威压测数据参见下面。
 
 3、高复用。无需修改，可以复用绝大部分composer组件及类库。webman复用了大量laravel组件。
 
@@ -20,3 +20,12 @@ webman是一款基于[workerman](https://www.workerman.net)开发的高性能HTT
 
 # 项目地址
 https://github.com/walkor/webman 不要吝啬你的小星星哦
+
+
+# 第三方压测数据
+
+![](/img/benchmark1.png)
+**来自[techempower.com](https://www.techempower.com/benchmarks/#section=data-r20&hw=ph&test=db&l=zik073-sf)**
+
+**![](/img/benchmark2.png)
+来自[the-benchmarker](https://github.com/the-benchmarker/web-frameworks)**
