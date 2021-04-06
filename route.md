@@ -91,6 +91,8 @@ Route::any('/blog/edit', function ($rquest) {return response('edit');});
 Route::any('/blog/view/{id}', function ($rquest, $id) {return response("view $id");});
 ```
 
+> 注意：目前group暂不支持嵌套使用。
+
 ## 路由中间件
 > 注意：需要 `workerman/webman-framework` 版本 >= 1.0.12
 
