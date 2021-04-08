@@ -24,12 +24,6 @@ class User
 }
 ```
 
-**reload服务**
-
-如果webman已经启动，需要执行 `php start.php reload` 或者 `php start.php restart`来重新加载文件。
-
-如果webman未启动，执行 `php start.php start` 启动webman。
-
 **访问**
 
 在浏览器里访问 `http://127.0.0.1:8787/user/hello?name=tom`
