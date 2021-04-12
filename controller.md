@@ -45,7 +45,7 @@ class Foo
 
 而webman由于控制器常驻内存，无法在`__construct()`里做这些工作，不过webman提供了更好的解决方案`beforeAction()` `afterAction()`，它不仅让开发者可以介入到请求前的流程中，而且还可以介入到请求后的处理流程中。
 
-为了介入请求流程，我们需要使用[中间键](middleware.md)
+为了介入请求流程，我们需要使用[中间件](middleware.md)
 
 
 1、创建文件 `app\middleware\ActionHook.php`(middleware目录不存在请自行创建)

@@ -129,6 +129,22 @@ route('blog.view', ['id' => 100]); // 结果为 /blog/100
 视图里使用路由的url时可以使用此方法，这样不管路由规则如何变化，url都会自动生成，避免因路由地址调整导致大量更改视图文件的情况。
 
 
+## 处理404
+当路由找不到时系统默认返回404状态吗，并返回`public/404.html`文件内容。
+
+如果开发者想介入路由未找到时的业务流程，可以使用webman提供的回退路由`Route::fallback($callback)`方法。比如下面的代码逻辑是当路由未找到时重定向到首页。
+```php
+Route::fallback(function(){
+    return redirect('/');
+);
+```
+再比如当路由不存在时返回一个json数据，这在webman作为api接口时非常实用。
+```php
+Route::fallback(function(){
+    return json(['code' => 404, 'msg' => '404 not found']);
+);
+```
+
 ## 路由接口
 ```php
 // 设置$uri的任意方法请求的路由
