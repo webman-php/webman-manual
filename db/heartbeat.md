@@ -4,7 +4,9 @@
 
 解决办法是定时发送心跳，维持数据库连接活跃避免断开。
 
-## Laravel illuminate/database 开启心跳方法
+> 注意：redis扩展有自动重连机制，所以通过redis扩展访问redis时无需心跳维持。
+
+## Laravel的 illuminate/database 开启心跳方法
 
 打开 `config/bootstrap.php` 添加如下配置。
 
