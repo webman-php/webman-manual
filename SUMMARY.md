@@ -28,6 +28,7 @@
 
   - [快速开始](db/tutorial.md)
   - [配置数据库](db/config.md)
+  - [数据库心跳](db/heartbeat.md)
   - [查询构造器](db/queries.md)
   - [模型](db/model.md)
   - [模型关联](db/relationships.md)
