@@ -119,7 +119,7 @@ Route::group('/blog', function () {
 
 例如路由：
 ```php
-Route::any('/blog/{id}', [app\controller\Blog::class, 'view')->name('blog.view');
+Route::any('/blog/{id}', [app\controller\Blog::class, 'view'])->name('blog.view');
 ```
 我们可以使用如下方法生成这个路由的url。
 ```php
