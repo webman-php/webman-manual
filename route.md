@@ -100,12 +100,13 @@ Route::group('/blog', function () {
    Route::group('/v1', function () {
       Route::any('/create', function ($rquest) {return response('create');});
       Route::any('/edit', function ($rquest) {return response('edit');});
-     Route::any('/view/{id}', function ($rquest, $id) {return response("view $id");});
+      Route::any('/view/{id}', function ($rquest, $id) {return response("view $id");});
    });  
 });
 ```
 
 ## 路由中间件
+
 > 注意：需要 `workerman/webman-framework` 版本 >= 1.0.12
 
 我们可以给某个一个或某一组路由设置中间件。
@@ -124,6 +125,38 @@ Route::group('/blog', function () {
     app\middleware\MiddlewareA::class,
     app\middleware\MiddlewareB::class,
 ]);
+```
+
+> 使用提示: ->middleware() 路由中间件作用于 group 分组之后时候，当前路由必须在处于当前分组之下
+
+```php
+# 错误使用例子
+
+Route::group('/blog', function () {
+   Route::group('/v1', function () {
+      Route::any('/create', function ($rquest) {return response('create');});
+      Route::any('/edit', function ($rquest) {return response('edit');});
+      Route::any('/view/{id}', function ($rquest, $id) {return response("view $id");});
+   });  
+})->middleware([
+    app\middleware\MiddlewareA::class,
+    app\middleware\MiddlewareB::class,
+]);
+
+```
+
+```php
+# 正确使用例子
+Route::group('/blog', function () {
+   Route::group('/v1', function () {
+      Route::any('/create', function ($rquest) {return response('create');});
+      Route::any('/edit', function ($rquest) {return response('edit');});
+      Route::any('/view/{id}', function ($rquest, $id) {return response("view $id");});
+   })->middleware([
+    app\middleware\MiddlewareA::class,
+    app\middleware\MiddlewareB::class,
+    ]);  
+});
 ```
 
 ## url生成
