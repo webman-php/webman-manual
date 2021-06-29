@@ -88,6 +88,7 @@ Redis::del(...$keys)
 Redis::exists(...$keys)
 Redis::expire($key, $ttl)
 Redis::expireAt($key, $timestamp)
+Redis::select($dbIndex)
 ```
 等价于
 ```php
