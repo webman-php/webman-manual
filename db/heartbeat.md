@@ -40,7 +40,7 @@ class ThinkHeartbeat implements Bootstrap
     {
         \Workerman\Timer::add(55, function (){
             // 定时发送select 1 语句作为心跳
-            Db::select('select 1 limit 1');
+            Db::query('select 1 limit 1');
         });
     }
 }
