@@ -144,6 +144,7 @@ return [
 
 `config/dependence.php`：
 ```php
+use Psr\Container\ContainerInterface;
 return [
     // ... 这里忽略了其它配置
     
@@ -218,6 +219,7 @@ class User
 
 `config/dependence.php` 将 `MailerInterface` 接口定义如下实现。
 ```php
+use Psr\Container\ContainerInterface;
 return [
     app\service\MailerInterface::class => function(ContainerInterface $container) {
         return $container->make(app\service\Mailer::class, ['192.168.1.11', 25]);
