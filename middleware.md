@@ -123,7 +123,7 @@ return [
 我们可以给某个一个或某一组路由设置中间件。
 例如在`config/route.php`中添加如下配置：
 ```php
-Route::any('/admin', [app\admin\controller\Index::class, 'index')->middleware([
+Route::any('/admin', [app\admin\controller\Index::class, 'index'])->middleware([
     app\middleware\MiddlewareA::class,
     app\middleware\MiddlewareB::class,
 ]);
