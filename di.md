@@ -149,7 +149,7 @@ return [
     // ... 这里忽略了其它配置
     
     app\service\Mailer::class =>  function(ContainerInterface $container) {
-        return $container->make(app\service\Mailer::class, ['192.168.1.11', 25]);
+        return $container->make(app\service\Mailer::class, ['smtp_host' => '192.168.1.11', 'smtp_port' => 25]);
     }
 ];
 ```
@@ -222,7 +222,7 @@ class User
 use Psr\Container\ContainerInterface;
 return [
     app\service\MailerInterface::class => function(ContainerInterface $container) {
-        return $container->make(app\service\Mailer::class, ['192.168.1.11', 25]);
+        return $container->make(app\service\Mailer::class, ['smtp_host' => '192.168.1.11', 'smtp_port' => 25]);
     }
 ];
 ```
