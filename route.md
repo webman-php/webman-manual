@@ -94,6 +94,7 @@ Route::any('/blog/view/{id}', function ($rquest, $id) {return response("view $id
 group嵌套使用
 
 > 注意：需要 `workerman/webman-framework` 版本 >= 1.0.12
+> 注意：暂时不支持group嵌套的路由生成url
 
 ```php
 Route::group('/blog', function () {
@@ -161,6 +162,7 @@ Route::group('/blog', function () {
 
 ## url生成
 > 注意：需要 `workerman/webman-framework` 版本 >= 1.0.10
+> 注意：暂时不支持group嵌套的路由生成url
 
 例如路由：
 ```php
@@ -181,13 +183,13 @@ route('blog.view', ['id' => 100]); // 结果为 /blog/100
 ```php
 Route::fallback(function(){
     return redirect('/');
-);
+});
 ```
 再比如当路由不存在时返回一个json数据，这在webman作为api接口时非常实用。
 ```php
 Route::fallback(function(){
     return json(['code' => 404, 'msg' => '404 not found']);
-);
+});
 ```
 
 ## 路由接口
