@@ -93,8 +93,8 @@ Route::any('/blog/view/{id}', function ($rquest, $id) {return response("view $id
 
 group嵌套使用
 
-> 注意：需要 `workerman/webman-framework` 版本 >= 1.0.12
-> 注意：暂时不支持group嵌套的路由生成url
+> 注意：需要 `workerman/webman-framework` 版本 >= 1.0.12  
+> 注意：暂时不支持group嵌套的路由生成url  
 
 ```php
 Route::group('/blog', function () {
@@ -161,8 +161,8 @@ Route::group('/blog', function () {
 ```
 
 ## url生成
-> 注意：需要 `workerman/webman-framework` 版本 >= 1.0.10
-> 注意：暂时不支持group嵌套的路由生成url
+> 注意：需要 `workerman/webman-framework` 版本 >= 1.0.10  
+> 注意：暂时不支持group嵌套的路由生成url  
 
 例如路由：
 ```php
