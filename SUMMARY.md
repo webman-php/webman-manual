@@ -52,6 +52,7 @@
   - [Crontab定时任务](components/crontab.md)
   - [Excel表格](components/excel.md)
   - [微信SDK](components/wechat.md)
+  - [Casbin SDK](components/casbin.md)
   
 - 高级进阶
   - [依赖注入](di.md)
