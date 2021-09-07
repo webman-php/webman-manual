@@ -44,6 +44,7 @@ e = some(where (p.eft == allow))
 m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
 ```
 ### Policy 配置文件
+
 新建配置文件 `config/permission.php` 内容类似如下：
 ```php
 <?php
@@ -55,9 +56,7 @@ return [
     'default' => 'basic',
 
     'log' => [
-        // changes whether Lauthz will log messages to the Logger.
         'enabled' => false,
-        // Casbin Logger, Supported: \Psr\Log\LoggerInterface|string
         'logger' => 'log',
     ],
 
@@ -67,7 +66,6 @@ return [
             * Model 设置
             */
             'model' => [
-                // 可选值: "file", "text"
                 'config_type' => 'file',
                 'config_file_path' => config_path() . '/casbin-basic-model.conf',
                 'config_text' => '',
@@ -113,6 +111,59 @@ if (Permission::enforce("eve", "articles", "edit")) {
     // deny the request, show an error
 }
 ````
+
+## 授权中间件
+
+创建文件 `app/middleware/AuthorizationMiddleware.php` (如目录不存在请自行创建) 如下：
+```php
+<?php
+
+/**
+ * 授权中间件
+ * @author ShaoBo Wan (Tinywan)
+ * @datetime 2021/09/07 14:15
+ */
+
+declare(strict_types=1);
+
+namespace app\middleware;
+
+use Webman\MiddlewareInterface;
+use Webman\Http\Response;
+use Webman\Http\Request;
+use Casbin\Exceptions\CasbinException;
+use webman\permission\Permission;
+
+class AuthorizationMiddleware implements MiddlewareInterface
+{
+	public function process(Request $request, callable $next): Response
+	{
+		$uri = $request->path();
+		try {
+			$userId = 10086;
+			$action = $request->method();
+			if (!Permission::enforce((string) $userId, $uri, strtoupper($action))) {
+				throw new \Exception('对不起，您没有该接口访问权限');
+			}
+		} catch (CasbinException $exception) {
+			throw new \Exception('授权异常' . $exception->getMessage());
+		}
+		return $next($request);
+	}
+}
+```
+
+在 `config/middleware.php` 中添加全局中间件如下：
+
+```php
+return [
+    // 全局中间件
+    '' => [
+        // ... 这里省略其它中间件
+        app\middleware\AuthorizationMiddleware::class,
+    ]
+];
+```
 
 ## 感谢
 
