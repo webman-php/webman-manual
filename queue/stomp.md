@@ -98,5 +98,102 @@ class MyMailSend implements Consumer
     }
 }
 ```
-  
+
+# Stomp Pro 组件
+
+在 **Stomp** 组件基础上增加了延迟队列支持，使用官方插件 **rabbitmq_delayed_message_exchange**
+
+## 原理说明
+
+因为 **Stomp** 协议无法创建交换机，使用交换机模式创建的队列默认是随机 **auto-delete=ture** 类型非持久化队列。
+
+### 创建自定义交换机和队列
+
+使用 **php-amqplib/ph**p-amqplib 通过 **AMQP** 协议，来创建自定义交换机和队列。
+
+> 注意因为交换机和队列都是持久化创建的，如果同名要改动参数则会报错，解决办法 1、删除交换机和队列，2、改变命名空间名称
+
+#### 交换机命名规范
+
+{namespace}.{connection_name}.{exchange_name}
+
+#### 队列命名规范
+
+**routing_key** 等于队列名
+
+{namespace}.{connection_name}.{queue_name}
+
+### 使用 /amq/queue/[queuename] 模式客户端订阅
+
+> 注意 queuename 里面不能包含 / 符号
+
+这时候队列不由stomp自动进行创建，队列需要自定义且队列不存在失败，这种情况下无论是发送者还是接收者都不会产生队列。 但如果该队列不存在，接收者会报错。
+
+### 使用 /exchange/[exchangename]/[routing_key] 模式客户端发送消息
+
+> 注意 exchangename 里面不能包含 / 符号
+
+通过发布消息，交换机需要手动创建，使用我们前面自己定义的交换机来发送消息。
+
+## 项目地址
+
+https://github.com/teamones-open/stomp-queue
+
+## 安装
+
+  ```php
+  composer require teamones/stomp-queue
+  ```
+## 配置
+
+配置在 Stomp 队列基础组件上面增加了amqp相关配置。
+
+新建配置文件 `config/stomp.php` 内容类似如下：
+
+```php
+<?php
+
+return [
+    'default' => [
+        'host' => 'stomp://' . env("rabbitmq_host", '127.0.0.1') . ':' . env("rabbitmq_stomp_port", 61613),
+        'options' => [
+            'vhost' => env("rabbitmq_vhost", '/'),
+            'login' => env("rabbitmq_user", 'guest'),
+            'passcode' => env("rabbitmq_password", 'guest'),
+            'debug' => (bool)env("app_debug", false),
+        ],
+        'amqp' => [
+            'host' => env("rabbitmq_host", '127.0.0.1'),
+            'port' => env("rabbitmq_amqp_port", 5672),
+            'namespace' => env("belong_system", ''),
+            'exchange_name' => env("rabbitmq_exchange_name", 'exchange'),
+            'exchange_delay' => (bool)env("rabbitmq_exchange_delay", true)
+        ]
+    ]
+];
+```
+
+## 使用
+
+创建消费者，进程等配置与Stomp 队列基础组件完全一致。
+
+投递消息改动了第三个参数
+
+```php
+// $queue 队列名
+// $data  发送的消息数据，一样需要自行序列化
+// $delay 延迟时间单位是秒
+// $headers 更多的参数
+Client::send(string $queue, string $data, int $delay, array $headers=[]);
+```
+
+```php
+use Webman\Stomp\Client;
+// 队列
+$queue = 'examples';
+// 数据（传递数组时需要自行序列化，比如使用json_encode，serialize等）
+$data = json_encode(['to' => 'tom@gmail.com', 'content' => 'hello']);
+// 执行投递
+Client::send($queue, $data, 10);
+```
 
