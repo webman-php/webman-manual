@@ -123,9 +123,13 @@ class MyMailSend implements Consumer
 
 ### 使用 /amq/queue/[queuename] 模式客户端订阅
 
+> 注意 queuename 里面不能包含 / 符号
+
 这时候队列不由stomp自动进行创建，队列需要自定义且队列不存在失败，这种情况下无论是发送者还是接收者都不会产生队列。 但如果该队列不存在，接收者会报错。
 
 ### 使用 /exchange/[exchangename]/[routing_key] 模式客户端发送消息
+
+> 注意 exchangename 里面不能包含 / 符号
 
 通过发布消息，交换机需要手动创建，使用我们前面自己定义的交换机来发送消息。
 
