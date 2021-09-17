@@ -155,19 +155,19 @@ https://github.com/teamones-open/stomp-queue
 
 return [
     'default' => [
-        'host' => 'stomp://' . get_formatted_env("rabbitmq_host", '127.0.0.1') . ':' . get_formatted_env("rabbitmq_stomp_port", 61613),
+        'host' => 'stomp://' . env("rabbitmq_host", '127.0.0.1') . ':' . env("rabbitmq_stomp_port", 61613),
         'options' => [
-            'vhost' => get_formatted_env("rabbitmq_vhost", '/'),
-            'login' => get_formatted_env("rabbitmq_user", 'guest'),
-            'passcode' => get_formatted_env("rabbitmq_password", 'guest'),
-            'debug' => (bool)get_formatted_env("app_debug", false),
+            'vhost' => env("rabbitmq_vhost", '/'),
+            'login' => env("rabbitmq_user", 'guest'),
+            'passcode' => env("rabbitmq_password", 'guest'),
+            'debug' => (bool)env("app_debug", false),
         ],
         'amqp' => [
-            'host' => get_formatted_env("rabbitmq_host", '127.0.0.1'),
-            'port' => get_formatted_env("rabbitmq_amqp_port", 5672),
-            'namespace' => get_formatted_env("belong_system", ''),
-            'exchange_name' => get_formatted_env("rabbitmq_exchange_name", 'exchange'),
-            'exchange_delay' => (bool)get_formatted_env("rabbitmq_exchange_delay", true)
+            'host' => env("rabbitmq_host", '127.0.0.1'),
+            'port' => env("rabbitmq_amqp_port", 5672),
+            'namespace' => env("belong_system", ''),
+            'exchange_name' => env("rabbitmq_exchange_name", 'exchange'),
+            'exchange_delay' => (bool)env("rabbitmq_exchange_delay", true)
         ]
     ]
 ];
