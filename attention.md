@@ -3,7 +3,7 @@
 
 ## 操作系统
 
-webman同时支持linux系统和windows系统下运行。但是由于workerman在windows下无法支持多进程设置以及守护进程，因此windows系统仅仅建议用于开发环境开发调试使用，正式环境请使用linux系统。
+webman同时支持linux系统和windows系统下运行(windows下暂不支持自定义进程)。但是由于workerman在windows下无法支持多进程设置以及守护进程，因此windows系统仅仅建议用于开发环境开发调试使用，正式环境请使用linux系统。
 
 ## 常驻内存
 
