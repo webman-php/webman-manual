@@ -8,18 +8,13 @@
 
 `composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/`
 
-**2、下载webman**
+**2、创建项目**
 
-`git clone https://github.com/walkor/webman`
+`composer create-project workerman/webman`
 
+**3、运行**  
 
-**3、执行安装**
-
-进入webman目录，运行
-
-`composer install`
-
-**4、运行**
+进入webman目录   
 
 debug方式运行(用于开发环境)
  
@@ -29,7 +24,7 @@ daemon方式运行(用于正式环境)
 
 `php start.php start -d`
 
-**5、访问**
+**4、访问**
 
 浏览器访问 `http://ip地址:8787`
 

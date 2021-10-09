@@ -240,6 +240,7 @@ public function hello(Request $request)
 ```
 
 ## 设置cookie
+
 ```php
 <?php
 namespace app\controller;
@@ -275,6 +276,10 @@ public function hello(Request $request)
     return $response;
 }
 ```
+
+cookie方法完整参数如下：
+
+`cookie($name, $value = '', $max_age = 0, $path = '', $domain = '', $secure = false, $http_only = false)`
 
 ## 返回文件流
 ```php
