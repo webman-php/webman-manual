@@ -27,9 +27,10 @@ https://github.com/walkor/webman **不要吝啬你的小星星哦**
 
 ## [techempower.com](https://www.techempower.com/benchmarks/#section=data-r20&hw=ph&test=db&l=zik073-sf) (带数据库业务)
 
-带数据库查询业务，webman单机吞吐量达到39万QPS，比传统php-fpm架构的laravel框架高出近80倍。
 
 ![](img/benchmark1.png)
+
+带数据库查询业务，webman单机吞吐量达到39万QPS，比传统php-fpm架构的laravel框架高出近80倍。
 
 
 ## [the-benchmarker](https://github.com/the-benchmarker/web-frameworks) (纯文本输出，不带业务)
