@@ -26,6 +26,7 @@ Route::any('/test', function ($request) {
 });
 
 ```
+> 由于闭包函数不属于任何控制器，所以`$request->app` `$request->controller` `$request->action` 全部为空字符串。
 
 当访问地址为 `http://127.0.0.1:8787/test` 时，将返回`test`字符串。
 

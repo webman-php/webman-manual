@@ -9,11 +9,11 @@ webman会自动将请求对象注入到controller的每个action方法第一个�
 <?php
 namespace app\controller;
 
-use support\request;
+use support\Request;
 
 class User
 {
-    public function hello(request $request)
+    public function hello(Request $request)
     {
         $default_name = 'webman';
         // 从get请求里获得name参数，如果没有传递name参数则返回$default_name
@@ -164,11 +164,11 @@ $request->file('avatar');
 <?php
 namespace app\controller;
 
-use support\request;
+use support\Request;
 
 class User
 {
-    public function file(request $request)
+    public function file(Request $request)
     {
         $file = $request->file('upload');
         if ($file && $file->isValid()) {
@@ -308,6 +308,9 @@ $request->acceptJson();
 $request->app;
 ```
 
+> 因为闭包函数不属于任何应用，所以来自闭包路由的请求`$request->app`始终返回空字符串`''`
+> 闭包路由参见 [路由](route.md)
+
 ## 获得请求的控制器类名
 获得控制器对应的类名
 ```php
@@ -315,12 +318,18 @@ $request->controller;
 ```
 返回类似 `app\controller\Index`
 
+> 因为闭包函数不属于任何控制器，所以来自闭包路由的请求`$request->controller`始终返回空字符串`''`
+> 闭包路由参见 [路由](route.md)
+
 ## 获得请求的方法名
 获得请求对应的控制器方法名
 ```php
 $request->action;
 ```
 返回类似 `Index`
+
+> 因为闭包函数不属于任何控制器，所以来自闭包路由的请求`$request->action`始终返回空字符串`''`
+> 闭包路由参见 [路由](route.md)
 
 
 
