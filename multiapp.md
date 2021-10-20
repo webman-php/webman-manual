@@ -139,11 +139,11 @@ return [
         support\middleware\AuthCheck::class,
     ],
     // api应用中间件
-    'api' => => [
+    'api' => [
          support\middleware\AccessControl::class,
      ],
     // admin应用中间件
-    'admin' => => [
+    'admin' => [
          support\middleware\AdminAuthCheck::class,
          support\middleware\SomeOtherClass::class,
     ],
