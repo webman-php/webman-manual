@@ -65,6 +65,3 @@ class User
     }
 }
 ```
-
-## 数据库心跳
-MySQL会关闭长时间不活跃的连接，这可能会导致`mysql server gone away`错误，所以我们需要给数据库连接加个心跳维持连接，参考 [数据库心跳](/db/heartbeat.md)

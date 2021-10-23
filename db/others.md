@@ -46,18 +46,28 @@
   ```php
   <?php
   namespace support\bootstrap\db;
-    
+  
   use Webman\Bootstrap;
+  use Workerman\Timer;
   use think\facade\Db;
-    
+  
   class Thinkphp implements Bootstrap
   {
       // 进程启动时调用
       public static function start($worker)
       {
-            Db::setConfig(config('thinkorm'));
+          // 配置
+          Db::setConfig(config('thinkorm'));
+          // 维持mysql心跳
+          Timer::add(55, function () {
+              $connections = config('thinkorm.connections', []);
+              foreach ($connections as $key => $item) {
+                  Db::connect($key)->query('select 1 limit 1');
+              }
+          });
       }
   }
+
   ```
 
 - 进程启动配置
