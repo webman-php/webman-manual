@@ -6,7 +6,7 @@
 - 安装ThinkORM  
   `composer require topthink/think-orm`
   
-- 配置文件 `config/database.php` 内容如下：
+- 配置文件 `config/thinkorm.php` 内容如下：
     ```php
   <?php
   return [
@@ -55,7 +55,7 @@
       // 进程启动时调用
       public static function start($worker)
       {
-            Db::setConfig(config('database'));
+            Db::setConfig(config('thinkorm'));
       }
   }
   ```

@@ -39,7 +39,7 @@ class ThinkHeartbeat implements Bootstrap
      */
     public static function start($worker)
     {
-        $connections = config('database.connections');
+        $connections = config('thinkorm.connections');
         if (!$connections) {
             return;
         }
