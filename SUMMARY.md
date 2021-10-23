@@ -32,7 +32,8 @@
   - [模型](db/model.md)
   - [模型关联](db/relationships.md)
   - [数据库迁移](db/migration.md)
-  - [Redis](redis.md)
+  - [Redis](db/redis.md)
+  - [Cache](db/cache.md)
   - [MongoDB](db/mongo.md)
   - [其它数据库](db/others.md)
   
@@ -51,11 +52,13 @@
   - [Excel表格](components/excel.md)
   - [微信SDK](components/wechat.md)
   - [Casbin SDK](components/casbin.md)
-  
+  - [命令行](components/console.md)
 - 高级进阶
   - [依赖注入](di.md)
   - [自定义进程](process.md)
   - [AOP](aop.md)
+  
+- 致谢(thanks.md)
   
  
 

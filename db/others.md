@@ -1,5 +1,5 @@
 # 使用其它数据库
-除了[illuminate/database](https://github.com/illuminate/database)，在webman中你可以使用其它数据库组件。比如 [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998)
+除了[illuminate/database](https://github.com/illuminate/database)，在webman中你可以使用其它数据库组件。比如ThinkPHP的 [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998)
 
 ## ThinkORM
 
