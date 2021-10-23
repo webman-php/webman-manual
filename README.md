@@ -4,13 +4,18 @@ webman是一款基于[workerman](https://www.workerman.net)开发的高性能HTT
 
 除此之外，webman还支持自定义进程，可以做workerman能做的任何事情，例如websocket服务、物联网、游戏、TCP服务、UDP服务、unix socket服务等等。
 
+# webman理念
+**以最小内核提供最大的扩展性与最强的性能。**
+
+webman仅提供最核心的功能(路由、中间件、session、自定义进程接口)。其余功能全部复用composer生态，这意味着你可以在webman里使用最熟悉的功能组件，例如在数据库方面开发者可以选择使用Laravel的`illuminate/database`，也可以是ThinkPHP的`ThinkORM`，还可以是其它组件如`Medoo`。在webman里集成他们是非常容易的事情。
+
 # webman具有以下特点
 
 1、高稳定性。webman基于workerman开发，workerman一直是业界bug极少的高稳定性socket框架。
 
 2、超高性能。借助于workerman高性能以及对HTTP服务深入优化，webman性能高于传统php-fpm框架10-100倍左右，同时也远高于其它同类型常驻内存的web框架。
 
-3、高复用。无需修改，可以复用绝大部分composer组件及类库。webman复用了大量laravel组件，也可以选择复用thinkphp等其它框架的组件。
+3、高复用。无需修改，可以复用绝大部分composer组件及类库。
 
 4、高扩展性。支持自定义进程，可以做workerman能做的任何事情。
 
@@ -19,8 +24,9 @@ webman是一款基于[workerman](https://www.workerman.net)开发的高性能HTT
 6、使用最为宽松友好的MIT开源协议。
 
 # 项目地址
-https://github.com/walkor/webman **不要吝啬你的小星星哦**
+GitHub: https://github.com/walkor/webman **不要吝啬你的小星星哦**
 <br>
+码云: https://gitee.com/walkor/webman **不要吝啬你的小星星哦**
 <br>
 <br>
 # 第三方权威压测数据

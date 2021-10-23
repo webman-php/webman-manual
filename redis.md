@@ -24,22 +24,13 @@ redis配置文件在`config/redis.php`
 ```php
 return [
     'default' => [
-        'host' => env('REDIS_HOST', '127.0.0.1'),
-        'password' => env('REDIS_PASSWORD', null),
-        'port' => env('REDIS_PORT', 6379),
-        'database' => env('REDIS_DB', 0),
+        'host'     => '127.0.0.1',
+        'password' => null,
+        'port'     => 6379,
+        'database' => 0,
     ]
 ];
 ```
-
-在`.env`文件中配置好
-```
-REDIS_HOST
-REDIS_PASSWORD
-REDIS_PORT
-REDIS_DB
-```
-等参数并重启webman。
 
 ## 示例
 ```php
@@ -107,17 +98,17 @@ $redis->getBit($key, $offset)
 ```php
 return [
     'default' => [
-        'host' => env('REDIS_HOST', '127.0.0.1'),
-        'password' => env('REDIS_PASSWORD', null),
-        'port' => env('REDIS_PORT', 6379),
-        'database' => env('REDIS_DB', 0),
+        'host'     => '127.0.0.1',
+        'password' => null,
+        'port'     => 6379,
+        'database' => 0,
     ],
 
     'cache' => [
-        'host' => env('REDIS_HOST', '127.0.0.1'),
-        'password' => env('REDIS_PASSWORD', null),
-        'port' => env('REDIS_PORT', 6379),
-        'database' => env('REDIS_CACHE_DB', 1),
+        'host'     => '127.0.0.1',
+        'password' => null,
+        'port'     => 6379,
+        'database' => 1,
     ],
 
 ]
@@ -135,9 +126,9 @@ return [
     'clusters' => [
         'default' => [
             [
-                'host' => env('REDIS_HOST', 'localhost'),
-                'password' => env('REDIS_PASSWORD', null),
-                'port' => env('REDIS_PORT', 6379),
+                'host'     => 'localhost',
+                'password' => null,
+                'port'     => 6379,
                 'database' => 0,
             ],
         ],
@@ -151,7 +142,7 @@ return [
 ```php
 return[
     'options' => [
-        'cluster' => env('REDIS_CLUSTER', 'redis'),
+        'cluster' => 'redis',
     ],
 
     'clusters' => [

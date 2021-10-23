@@ -43,25 +43,22 @@ https://tsy12321.gitbooks.io/phinx-doc/content/
 
 ```php
 <?php
-//读取当前系统设置
-$env = parse_ini_file('.env', true);
-
 return [
     "paths" => [
         "migrations" => "database/migrations",
-        "seeds" => "database/seeds"
+        "seeds"      => "database/seeds"
     ],
     "environments" => [
         "default_migration_table" => "phinxlog",
-        "default_database" => "dev",
-        "default_environment" => "dev",
+        "default_database"        => "dev",
+        "default_environment"     => "dev",
         "dev" => [
-            "adapter" => $env["DB_CONNECTION"],
-            "host" => $env["DB_HOST"],
-            "name" => $env["DB_DATABASE"],
-            "user" => $env["DB_USERNAME"],
-            "pass" => $env["DB_PASSWORD"],
-            "port" => $env["DB_PORT"],
+            "adapter" => "DB_CONNECTION",
+            "host"    => "DB_HOST",
+            "name"    => "DB_DATABASE",
+            "user"    => "DB_USERNAME",
+            "pass"    => "DB_PASSWORD",
+            "port"    => "DB_PORT",
             "charset" => "utf8"
         ]
     ]

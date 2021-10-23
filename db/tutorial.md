@@ -2,7 +2,7 @@
 
 webman数据库默认采用的是 [illuminate/database](https://github.com/illuminate/database)，也就是[laravel的数据库](https://learnku.com/docs/laravel/8.x/database/9400)，用法与laravel相同。
 
-> 除了 `illuminate/database`，你还可以使用其它数据库组件，例如 ThinkPHP 的 [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998) (使用方法参考[使用其它数据库组件](/db/others)章节)、[Medoo](https://github.com/catfan/Medoo) 等等。
+当然你可以参考[使用其它数据库组件](/db/others)章节使用ThinkPHP或者其它数据库。
 
 ## 安装
 
@@ -22,38 +22,29 @@ composer require illuminate/database ^7.0
 `config/database.php`
 ```php
 return [
-
     // 默认数据库
     'default' => 'mysql',
 
     // 各种数据库配置
     'connections' => [
         'mysql' => [
-            'driver' => 'mysql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'port' => env('DB_PORT', '3306'),
-            'database' => env('DB_DATABASE', 'test'),
-            'username' => env('DB_USERNAME', 'root'),
-            'password' => env('DB_PASSWORD', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix' => '',
-            'strict' => true,
-            'engine' => null,
+            'driver'      => 'mysql',
+            'host'        => '127.0.0.1',
+            'port'        => 3306,
+            'database'    => 'test',
+            'username'    => 'root',
+            'password'    => '',
+            'unix_socket' => '',
+            'charset'     => 'utf8',
+            'collation'   => 'utf8_unicode_ci',
+            'prefix'      => '',
+            'strict'      => true,
+            'engine'      => null,
         ],
     ],
 ];
 ```
-在`.env`文件中配置好
-```
-DB_HOST
-DB_PORT
-DB_DATABASE
-DB_USERNAME
-DB_PASSWORD
-```
-等参数并重启webman。
+
 
 ## 使用
 ```php
@@ -74,3 +65,6 @@ class User
     }
 }
 ```
+
+## 数据库心跳
+MySQL会关闭长时间不活跃的连接，这可能会导致`mysql server gone away`错误，所以我们需要给数据库连接加个心跳维持连接，参考 [数据库心跳](heartbeat.md)

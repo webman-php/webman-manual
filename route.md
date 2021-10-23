@@ -236,7 +236,7 @@ route('blog.view', ['id' => 100]); // 结果为 /blog/100
 
 
 ## 处理404
-当路由找不到时系统默认返回404状态码并返回`public/404.html`文件内容。
+当路由找不到时默认返回404状态码并输出`public/404.html`文件内容。
 
 如果开发者想介入路由未找到时的业务流程，可以使用webman提供的回退路由`Route::fallback($callback)`方法。比如下面的代码逻辑是当路由未找到时重定向到首页。
 ```php
@@ -267,10 +267,11 @@ Route::patch($uri, $callback);
 Route::delete($uri, $callback);
 // 设置$uri的head请求的路由
 Route::head($uri, $callback);
+// 同时设置多种请求类型的路由
+Route::add(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'], $uri, $callback);
 // 分组路由
 Route::group($path, $callback);
 // 回退路由，设置默认的路由兜底
 Route::fallback($callback);
 ```
-
-如果uri没有对应方法的路由，并且默认路由也不存在，且回退路由也未设置，则会返回404。
+如果uri没有对应的路由(包括默认路由)，且回退路由也未设置，则会返回404。

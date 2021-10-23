@@ -109,7 +109,7 @@ class MyMailSend implements Consumer
 
 ### 创建自定义交换机和队列
 
-使用 **php-amqplib/ph**p-amqplib 通过 **AMQP** 协议，来创建自定义交换机和队列。
+使用 **php-amqplib/php-amqplib 通过 **AMQP** 协议，来创建自定义交换机和队列。
 
 > 注意因为交换机和队列都是持久化创建的，如果同名要改动参数则会报错，解决办法 1、删除交换机和队列，2、改变命名空间名称
 
@@ -155,19 +155,19 @@ https://github.com/teamones-open/stomp-queue
 
 return [
     'default' => [
-        'host' => 'stomp://' . env("rabbitmq_host", '127.0.0.1') . ':' . env("rabbitmq_stomp_port", 61613),
+        'host' => 'stomp://127.0.0.1:61613',
         'options' => [
-            'vhost' => env("rabbitmq_vhost", '/'),
-            'login' => env("rabbitmq_user", 'guest'),
-            'passcode' => env("rabbitmq_password", 'guest'),
-            'debug' => (bool)env("app_debug", false),
+            'vhost'    => '/',
+            'login'    => 'guest',
+            'passcode' =>  'guest',
+            'debug'    => false,
         ],
         'amqp' => [
-            'host' => env("rabbitmq_host", '127.0.0.1'),
-            'port' => env("rabbitmq_amqp_port", 5672),
-            'namespace' => env("belong_system", ''),
-            'exchange_name' => env("rabbitmq_exchange_name", 'exchange'),
-            'exchange_delay' => (bool)env("rabbitmq_exchange_delay", true)
+            'host'           => '127.0.0.1',
+            'port'           => 5672,
+            'namespace'      => '',
+            'exchange_name'  => 'exchange',
+            'exchange_delay' => true
         ]
     ]
 ];

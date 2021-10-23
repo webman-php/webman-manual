@@ -1,7 +1,7 @@
 # 说明
 
 ##  获得请求对象
-webman会自动将请求对象注入到controller的每个action方法第一个参数中，例如
+webman会自动将请求对象注入到action方法第一个参数中，例如
 
 
 **例子**
