@@ -13,7 +13,6 @@ composer require --dev phpunit/phpunit
 
 ```php
 <?php
-
 use Dotenv\Dotenv;
 use Webman\Bootstrap;
 use Webman\Config;
