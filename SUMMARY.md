@@ -58,7 +58,7 @@
   - [自定义进程](process.md)
   - [AOP](aop.md)
   
-- 致谢[thanks.md]
+- [致谢](thanks.md)
   
  
 

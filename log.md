@@ -7,7 +7,7 @@ webman使用 [monolog/monolog](https://github.com/Seldaek/monolog) 处理日志�
 namespace app\controller;
 
 use support\Request;
-use support\bootstrap\Log;
+use support\Log;
 
 class Foo
 {
@@ -130,7 +130,7 @@ return [
 namespace app\controller;
 
 use support\Request;
-use support\bootstrap\Log;
+use support\Log;
 
 class Foo
 {

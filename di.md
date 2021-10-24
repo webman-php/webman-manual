@@ -64,12 +64,12 @@ $user = new User($mailer);
 ```
 当使用`php-di`后，开发者无需手动实例化`Mailer`，webman会自动帮你完成。如果在实例化`Mailer`过程中有其它类的依赖，webman也会自动实例化并注入。开发者不需要任何的初始化工作。
 
-> 注意：必须是由`php-di`创建的实例才能完成依赖自动注入，手动`new`的实例无法完成依赖自动注入。`controller`是由webman通过`php-di`实例化的，所以直接支持依赖自动注入。如果其它类想使用依赖自动注入，可以调用`\support\bootstrap\Container::get(类名)`或者`\support\bootstrap\Container::make(类名, [构造函数参数])`来创建对应类的实例。例如：
+> 注意：必须是由`php-di`创建的实例才能完成依赖自动注入，手动`new`的实例无法完成依赖自动注入。`controller`是由webman通过`php-di`实例化的，所以直接支持依赖自动注入。如果其它类想使用依赖自动注入，可以调用`\support\Container::get(类名)`或者`\support\Container::make(类名, [构造函数参数])`来创建对应类的实例。例如：
 
 ```php
 use app\service\UserService;
 use app\service\LogService;
-use support\bootstrap\Container;
+use support\Container;
 
 $user_service = Container::get(UserService::class);
 $log_service = Container::make(LogService::class, [$path, $name]);

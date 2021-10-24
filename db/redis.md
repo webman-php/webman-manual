@@ -38,7 +38,7 @@ return [
 namespace app\controller;
 
 use support\Request;
-use support\bootstrap\Redis;
+use support\Redis;
 
 class User
 {

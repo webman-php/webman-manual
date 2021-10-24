@@ -32,20 +32,20 @@
 ├── vendor                        composer安装的第三方类库目录
 └── support                       类库适配(包括第三方类库)
     ├── Db.php                    数据库适配
+    ├── Redis.php                 redis类
+    ├── Cache.php                 缓存类
+    ├── Log.php                   日志类
+    ├── Translation.php           多语言类
+    ├── View.php                  视图类
+    ├── Container.php             容器类
     ├── Request.php               请求类
     ├── Response.php              响应类
+    ├── helpers.php               助手函数
     ├── bootstrap                 进程启动onWorkerStart时调用的类目录
-    │   ├── Log.php               进程启动时初始化日志类
-    │   ├── Redis.php             进程启动时初始化redis类
-    │   ├── Session.php           进程启动时初始化session类
-    │   └── db                    进程启动时数据库相关初始化
-    │       └── Laravel.php       进程启动时初始化laravel的数据库类
+    │   └── Session.php           进程启动时初始化session类
     ├── exception                 异常相关
     │   ├── BusinessException.php 业务异常类
     │   └── Handler.php           业务异常捕获处理类
-    ├── helpers.php               助手函数
-    ├── middleware                中间件目录
-    │   └── Test.php              一个测试中间件
     └── view                      视图类目录，支持多个模板引擎
         ├── Blade.php             Blade视图类
         ├── Raw.php               原生视图类

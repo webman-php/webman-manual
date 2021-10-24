@@ -41,17 +41,17 @@
     ```
 - 建立数据库初始化文件
   
-  新建`support/bootstrap/db/Thinkphp.php`，内容如下：
+  新建`support/bootstrap/Thinkorm.php`，内容如下：
   
   ```php
   <?php
-  namespace support\bootstrap\db;
+  namespace support\bootstrap;
   
   use Webman\Bootstrap;
   use Workerman\Timer;
   use think\facade\Db;
   
-  class Thinkphp implements Bootstrap
+  class Thinkorm implements Bootstrap
   {
       // 进程启动时调用
       public static function start($worker)
@@ -62,7 +62,7 @@
           Timer::add(55, function () {
               $connections = config('thinkorm.connections', []);
               foreach ($connections as $key => $item) {
-                  Db::connect($key)->query('select 1 limit 1');
+                  Db::connect($key)->query('select 1');
               }
           });
       }
@@ -76,10 +76,10 @@
   ```php
   return [
       // 这里省略了其它配置 ...
-      support\bootstrap\db\Thinkphp::class,
+      support\bootstrap\Thinkorm::class,
   ];
   ```
-  > 进程启动时会执行一遍`config/bootstrap.php`里配置的所有类的start方法。我们利用start方法来初始化ThinkORM的配置，业务就直接可以使用ThinkORM了。
+  > 进程启动时会执行一遍`config/bootstrap.php`里配置的类的start方法。我们利用start方法来初始化ThinkORM的配置，业务就直接可以使用ThinkORM了。
 
 - 使用
 
