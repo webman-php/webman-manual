@@ -1,8 +1,8 @@
 # Cache
 
-在webman中使用 [symfony/cache](https://github.com/symfony/cache)
+在webman默认使用 [symfony/cache](https://github.com/symfony/cache)作为cache组件。
 
-使用`symfony/cache`之前必须先给`php-cli`安装redis扩展。
+> 使用`symfony/cache`之前必须先给`php-cli`安装redis扩展。
 
 ## 安装
 ```php

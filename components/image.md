@@ -14,7 +14,7 @@
   
 -  使用
 
-  页面
+  新建上传页面
   
   ```html
     <form method="post" action="/user/img" enctype="multipart/form-data">
