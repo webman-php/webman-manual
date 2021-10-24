@@ -53,9 +53,10 @@
   - [微信SDK](components/wechat.md)
   - [Casbin SDK](components/casbin.md)
   - [命令行](components/console.md)
+  
 - 高级进阶
-  - [依赖注入](di.md)
   - [自定义进程](process.md)
+  - [依赖注入](di.md)
   - [AOP](aop.md)
   
 - [致谢](thanks.md)

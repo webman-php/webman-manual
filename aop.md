@@ -1,6 +1,6 @@
 # AOP
 
-## AOP by Hyperf
+> 感谢 Hyperf 作者的提交
 
 ### 安装
 
@@ -8,23 +8,6 @@
 
 ```shell
 composer require hyperf/aop-integration
-```
-
-- 配置 PSR-4
-
-因为 Hyperf AOP 只能 Hook Composer Autoload，故我们只能切入可以被 Composer 自动加载的类
-
-> 以下省略其他配置
-
-```
-  "autoload": {
-    "psr-4": {
-      "app\\": "app/"
-    },
-    "files": [
-      "./support/helpers.php"
-    ]
-  },
 ```
 
 ### 增加 AOP 相关配置
@@ -135,7 +118,7 @@ class Index
 <?php
 use Webman\Route;
 
-Route::any('/json', 'app\controller\Index@json');
+Route::any('/json', [app\controller\Index::class, 'json']);
 ```
 
 最后启动服务，并测试。
