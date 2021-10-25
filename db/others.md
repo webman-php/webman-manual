@@ -102,3 +102,90 @@
 - ThinkORM使用文档
 
   [ThinkORM文档地址](https://www.kancloud.cn/manual/think-orm/1257998)
+  
+## ThinkCache
+
+- 安装ThinkCache  
+  `composer require topthink/think-cache`
+  
+- 配置文件 `config/thinkcache.php` 内容如下：
+  ```php
+  <?php
+  return [
+      'default'	=>	'file',
+      'stores'	=>	[
+          'file'	=>	[
+              'type'   => 'File',
+              // 缓存保存目录
+              'path'   => runtime_path().'/cache/',
+              // 缓存前缀
+              'prefix' => '',
+              // 缓存有效期 0表示永久缓存
+              'expire' => 0,
+          ],
+          'redis'	=>	[
+              'type'   => 'redis',
+              'host'   => '127.0.0.1',
+              'port'   => 6379,
+              'prefix' => '',
+              'expire' => 0,
+          ],
+      ],
+  ];
+  ```
+- 建立ThinkCache初始化文件
+  
+  新建`support/bootstrap/ThinkCache.php`，内容如下：
+  
+  ```php
+  <?php
+  namespace support\bootstrap;
+  
+  use Webman\Bootstrap;
+  use Workerman\Timer;
+  use think\facade\Cache;
+  
+  class ThinkCache implements Bootstrap
+  {
+      // 进程启动时调用
+      public static function start($worker)
+      {
+          // 配置
+          Cache::config(config('thinkcache'));
+      }
+  }
+
+  ```
+
+- 进程启动配置
+
+  打开`config/bootstrap.php`，加入如下配置：
+  ```php
+  return [
+      // 这里省略了其它配置 ...
+      support\bootstrap\ThinkCache::class,
+  ];
+  ```
+
+- 使用
+
+  ```php
+  <?php
+  namespace app\controller;
+    
+  use support\Request;
+  use think\facade\Cache;
+  
+  class User
+  {
+      public function db(Request $request)
+      {
+          $key = 'test_key';
+          Cache::set($key, rand());
+          return response(Cache::get($key));
+      }
+  }
+  ```
+Think-Cache使用文档
+
+  [ThinkCache文档地址](https://github.com/top-think/think-cache)
