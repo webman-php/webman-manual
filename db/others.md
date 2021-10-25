@@ -41,7 +41,7 @@
     ```
 - 建立数据库初始化文件
   
-  新建`support/bootstrap/Thinkorm.php`，内容如下：
+  新建`support/bootstrap/ThinkOrm.php`，内容如下：
   
   ```php
   <?php
@@ -51,7 +51,7 @@
   use Workerman\Timer;
   use think\facade\Db;
   
-  class Thinkorm implements Bootstrap
+  class ThinkOrm implements Bootstrap
   {
       // 进程启动时调用
       public static function start($worker)
@@ -76,7 +76,7 @@
   ```php
   return [
       // 这里省略了其它配置 ...
-      support\bootstrap\Thinkorm::class,
+      support\bootstrap\ThinkOrm::class,
   ];
   ```
   > 进程启动时会执行一遍`config/bootstrap.php`里配置的类的start方法。我们利用start方法来初始化ThinkORM的配置，业务就直接可以使用ThinkORM了。

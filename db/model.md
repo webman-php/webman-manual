@@ -541,6 +541,9 @@ if ($post->is($anotherPost)) {
 ## 模型观察者
 使用参考[Laravel 中的模型事件与 Observer
 ](https://learnku.com/articles/6657/model-events-and-observer-in-laravel)
+
+注意：Eloquent ORM 要支持模型观察者需要额外导入composer require "illuminate/events"
+
 ```php
 <?php
 namespace app\model;

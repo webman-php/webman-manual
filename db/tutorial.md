@@ -21,6 +21,7 @@ composer require illuminate/database ^7.0
 ## 数据库配置
 `config/database.php`
 ```php
+
 return [
     // 默认数据库
     'default' => 'mysql',
