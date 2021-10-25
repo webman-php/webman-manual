@@ -62,7 +62,9 @@
           Timer::add(55, function () {
               $connections = config('thinkorm.connections', []);
               foreach ($connections as $key => $item) {
-                  Db::connect($key)->query('select 1');
+                  if ($item['type'] == 'mysql') {
+                      Db::connect($key)->query('select 1');
+                  }
               }
           });
       }
