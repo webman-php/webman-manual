@@ -141,8 +141,7 @@
   <?php
   namespace support\bootstrap;
   
-  use Webman\Bootstrap;
-  use Workerman\Timer;
+  use Webman\Bootstrap;  
   use think\facade\Cache;
   
   class ThinkCache implements Bootstrap
