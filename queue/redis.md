@@ -33,8 +33,10 @@ return [
 ];
 ```
 
-> 如果消费失败(发生了异常)，则消息会放入延迟队列，等待下次重试。重试次数通过参数 `max_attempts` 控制，重试间隔由
-`retry_seconds` 和 `max_attempts`共同控制。比如`max_attempts`为5，`retry_seconds`为10，第1次重试间隔为`1*10`秒，第2次重试时间间隔为 `2*10秒`，第3次重试时间间隔为`3*10秒`，以此类推直到重试5次。如果超过了`max_attempts`设置测重试次数，则消息放入失败队列(key为`redis-queue-failed`)。
+ 如果消费失败(发生了异常)，则消息会放入延迟队列，等待下次重试。重试次数通过参数 `max_attempts` 控制，重试间隔由
+`retry_seconds` 和 `max_attempts`共同控制。比如`max_attempts`为5，`retry_seconds`为10，第1次重试间隔为`1*10`秒，第2次重试时间间隔为 `2*10秒`，第3次重试时间间隔为`3*10秒`，以此类推直到重试5次。如果超过了`max_attempts`设置测重试次数，则消息放入key为`{redis-queue}-failed`的失败队列。
+
+> 如果 `workerman/redis-queue` 版本<=1.0.4(使用composer info可以查看版本)，则失败队列的key为 `redis-queue-failed`
 
 ## 投递消息
 
@@ -54,8 +56,8 @@ Client::send($queue, $data, 60);
 
 ```php
 function redis_queue_send($redis, $queue, $data, $delay = 0) {
-    $queue_waiting = 'redis-queue-waiting';
-    $queue_delay = 'redis-queue-delayed';
+    $queue_waiting = '{redis-queue}-waiting';
+    $queue_delay = '{redis-queue}-delayed';
     $now = time();
     $package_str = json_encode([
         'id'       => rand(),
