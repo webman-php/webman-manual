@@ -56,6 +56,9 @@ Client::send($queue, $data, 60);
 
 ```php
 function redis_queue_send($redis, $queue, $data, $delay = 0) {
+    // workerman/redis-queue版本<=1.0.4时
+    // $queue_waiting = 'redis-queue-waiting';
+    // $queue_delay = 'redis-queue-delayed';
     $queue_waiting = '{redis-queue}-waiting';
     $queue_delay = '{redis-queue}-delayed';
     $now = time();
