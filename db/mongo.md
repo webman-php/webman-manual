@@ -9,14 +9,12 @@ webman默认使用 [jenssegers/mongodb](https://github.com/jenssegers/laravel-mo
 ## 安装
 **适合php>=7.3**
 ```php
-composer require vlucas/phpdotenv ^5.1.0
 composer require illuminate/database ^8.0
 composer require jenssegers/mongodb
 ```
 
 **适合php>=7.2**
 ```php
-composer require vlucas/phpdotenv ^4.0
 composer require illuminate/database ^7.0
 composer require jenssegers/mongodb
 ```

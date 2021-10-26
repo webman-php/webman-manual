@@ -6,7 +6,6 @@
 
 ## 安装
 ```php
-composer require vlucas/phpdotenv ^5.1.0
 composer require illuminate/redis ^8.2.0
 composer require symfony/cache ^5.2
 ```

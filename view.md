@@ -25,15 +25,9 @@ return [
 
 ```
 composer remove jenssegers/blade
-composer require vlucas/phpdotenv ^5.0
 composer require jenssegers/blade ~1.4.0
 ```
-或者
-```
-composer remove jenssegers/blade
-composer require vlucas/phpdotenv ^4.0
-composer require jenssegers/blade ~1.3.0
-```
+
 
 2、修改配置`config/view.php`为
 ```php
