@@ -59,14 +59,16 @@
           // 配置
           Db::setConfig(config('thinkorm'));
           // 维持mysql心跳
-          Timer::add(55, function () {
-              $connections = config('thinkorm.connections', []);
-              foreach ($connections as $key => $item) {
-                  if ($item['type'] == 'mysql') {
-                      Db::connect($key)->query('select 1');
+          if ($worker) {
+              Timer::add(55, function () {
+                  $connections = config('thinkorm.connections', []);
+                  foreach ($connections as $key => $item) {
+                      if ($item['type'] == 'mysql') {
+                          Db::connect($key)->query('select 1');
+                      }
                   }
-              }
-          });
+              });
+          }
       }
   }
 
