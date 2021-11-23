@@ -2,7 +2,7 @@
 
 webman数据库默认采用的是 [illuminate/database](https://github.com/illuminate/database)，也就是[laravel的数据库](https://learnku.com/docs/laravel/8.x/database/9400)，用法与laravel相同。
 
-当然你可以参考[使用其它数据库组件](/db/others)章节使用ThinkPHP或者其它数据库。
+当然你可以参考[使用其它数据库组件](db/others)章节使用ThinkPHP或者其它数据库。
 
 ## 安装
 
