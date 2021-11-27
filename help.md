@@ -2,7 +2,7 @@
 
 ## 问答社区
 
-https://wenda.workerman.net
+https://www.workerman.net/questions
 
 ## 技术交流群
 
