@@ -37,6 +37,11 @@
         <img src="https://avatars.githubusercontent.com/u/931459?v=4" width="100px;" alt=""/><h5>dlsimple</h3>
       </a>
     </td>
+    <td align="center">
+      <a href="https://github.com/weijer">
+        <img src="https://avatars.githubusercontent.com/u/12838756?v=4" width="100px;" alt=""/><h5>weijer</h3>
+      </a>
+    </td>
   </tr>
   <tr>
     <td align="center">
@@ -74,6 +79,11 @@
         <img src="https://avatars.githubusercontent.com/u/16648551?v=4" width="100px;" alt=""/><h5>limingxinleo</h3>
       </a>
     </td>
+    <td align="center">
+      <a href="https://github.com/xscan">
+        <img src="https://avatars.githubusercontent.com/u/8383395?v=4" width="100px;" alt=""/><h5>xscan</h3>
+      </a>
+    </td>
   </tr>
   <tr>
     <td align="center">
@@ -84,16 +94,6 @@
     <td align="center">
       <a href="https://github.com/edenleung">
         <img src="https://avatars.githubusercontent.com/u/31346973?v=4" width="100px;" alt=""/><h5>edenleung</h3>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/xscan">
-        <img src="https://avatars.githubusercontent.com/u/8383395?v=4" width="100px;" alt=""/><h5>xscan</h3>
-      </a>
-    </td>
-    <td align="center">
-      <a href="https://github.com/weijer">
-        <img src="https://avatars.githubusercontent.com/u/12838756?v=4" width="100px;" alt=""/><h5>weijer</h3>
       </a>
     </td>
   </tr>
