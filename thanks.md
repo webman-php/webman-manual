@@ -82,11 +82,6 @@
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/ChuckWe">
-        <img src="https://avatars.githubusercontent.com/u/32729062?v=4" width="100px;" alt=""/><h5>ChuckWe</h3>
-      </a>
-    </td>
-    <td align="center">
       <a href="https://github.com/edenleung">
         <img src="https://avatars.githubusercontent.com/u/31346973?v=4" width="100px;" alt=""/><h5>edenleung</h3>
       </a>
