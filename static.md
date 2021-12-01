@@ -1,45 +1,17 @@
 ## 处理静态文件
 
-webman底层当路由匹配不上时候会自动尝试匹配处理了静态文件访问问题。
+webman支持静态文件访问。
 
-### 1. 首先我们确定静态文件夹
+### 关闭静态文件支持
+如果不需要静态文件支持，打开`config/static.php`将`enable`选项改成false。
 
-官方案例默认是应用根目录 **public** 文件夹，自定义请修改 **helpers.php** 文件内 **public_path()** 助手函数
+### 更改静态文件目录
+webman默认使用public目录为静态文件目录。如需修改请更改`support/helpers.php`的中的`public_path()`助手函数。
 
-### 2. 配置 static.php
+### 静态文件中间件
+webman自带一个静态文件中间件，位置``
+有时我们需要对静态文件做一些处理，例如给静态文件增加跨域http头，禁止访问以点(`.`)开头的文件等等。
 
-**enable** 选项必须设置为 **true** 才会起作用，可以在 **middleware** 选项中配置静态文件处理中间件对请求和响应做更多自定义的处理。
-
-## 目录
-
-```
-.
-├── app                           应用目录
-│   └── view                      视图目录
-│       └── index                 子目录，一般与控制器对应
-│           └── view.html         视图文件
-├── config                        配置目录
-│   └── static.php                static配置
-├── public                        静态资源目录
-│   └── css                       css文件
-│           └── main.css          main.css
-│   └── js                        js文件
-│           └── jquery.min.js     jquery.js
-```
-
-## static.php 配置
-
-```php
-<?php
-return [
-    'enable'     => true, // 是否支持静态文件
-    'middleware' => [     // 静态文件中间件
-        support\middleware\StaticFile::class,
-    ],
-];
-```
-
-## StaticFile 中间件
 
 ```php
 <?php
