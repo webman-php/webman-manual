@@ -33,6 +33,7 @@ use Zipkin\TracingBuilder;
 use Zipkin\Samplers\BinarySampler;
 use Zipkin\Endpoint;
 use Workerman\Timer;
+use support\Db;
 
 
 class Arms implements MiddlewareInterface
@@ -61,6 +62,10 @@ class Arms implements MiddlewareInterface
             register_shutdown_function(function () use ($tracer) {
                 $tracer->flush();
             });
+            // Laravel 使用以下方式统计sql，需要安装 composer require "illuminate/events"
+            Db::listen(function(\Illuminate\Database\Events\QueryExecuted $query) {
+                request()->rootSpan->tag('db.statement', $query->sql. " /*{$query->time}ms*/");
+            });
         }
 
         $rootSpan = $tracer->newTrace();
@@ -87,6 +92,7 @@ class Arms implements MiddlewareInterface
 
 注意代码中`endpoint_url`设置成步骤2获得的接入点url。
 如果使用的是thinkorm，请将config/thinkorm.php的trigger_sql开启，这样ARMS可以监控SQL。
+如果是使用的Laravel的数据库，需要安装 `composer require "illuminate/events"`，这样ARMS可以监控SQL。
 
 ## 5、配置中间件
 打开 `config/middleware.php`，在全局中间件位置(key为`''`的位置)添加类似如下配置
