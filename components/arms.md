@@ -93,7 +93,10 @@ return [
 > 为了减少上报对应用的影响，中间件中设置的是30秒统一上报数据，所以阿里云看到结果会有30秒延迟。
 
 ![](../img/arms-result.png)
+
+
 ![](../img/arms-result2.png)
+
 
 ## 8、更多内容参考文档
 https://help.aliyun.com/document_detail/96187.html
