@@ -28,28 +28,4 @@ daemon方式运行(用于正式环境)
 
 浏览器访问 `http://ip地址:8787`
 
-## Docker环境
 
-首先确保你安装了Docker和Docker compose
-
-克隆 [webman-dock](https://github.com/yasarluo/webman-dock) 代码：
-
-`git clone https://github.com/yasarluo/webman-dock.git`
-
-进入webman-dock目录，配置.env文件，将**HOST_APP_DIR**变量配置为你的webman路径
-
-接着启动环境：
-
-`docker-compose up -d webman`
-
-然后进入容器：
-
-`docker-compose exec webman bash`
-
-debug方式运行(用于开发环境)
- 
-`php start.php start`
-
-daemon方式运行(用于正式环境)
-
-`php start.php start -d`
