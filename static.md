@@ -1,18 +1,19 @@
 ## 处理静态文件
-
 webman支持静态文件访问。
 
+> 注意：为了安全考虑，webman禁止客户端访问public目录以外的静态文件。例如public下的文件是外部目录的软链，则会返回404。
+
 ### 关闭静态文件支持
-如果不需要静态文件支持，打开`config/static.php`将`enable`选项改成false。
+如果不需要静态文件支持，打开`config/static.php`将`enable`选项改成false。关闭后所有静态文件的访问会返回404。
 
 ### 更改静态文件目录
 webman默认使用public目录为静态文件目录。如需修改请更改`support/helpers.php`的中的`public_path()`助手函数。
 
 ### 静态文件中间件
-webman自带一个静态文件中间件，位置``
-有时我们需要对静态文件做一些处理，例如给静态文件增加跨域http头，禁止访问以点(`.`)开头的文件等等。
+webman自带一个静态文件中间件，位置`app/middleware/StaticFile.php`。
+有时我们需要对静态文件做一些处理，例如给静态文件增加跨域http头，禁止访问以点(`.`)开头的文件可以使用这个中间件
 
-
+`app/middleware/StaticFile.php` 内容类似如下：
 ```php
 <?php
 namespace support\middleware;
@@ -40,25 +41,4 @@ class StaticFile implements MiddlewareInterface
     }
 }
 ```
-
-## 示例
-
-```html
-<!doctype html>
-<html>
-<head>
- <meta charset="utf-8">
- <meta http-equiv="X-UA-Compatible" content="IE=edge">
- <meta name="viewport" content="width=device-width, initial-scale=1">
- <link rel="shortcut icon" href="/favicon.ico" />
- <title>webman</title>
-    <!--js文件示例-->
- <script type="text/javascript" src="/js/jquery.min.js"></script>
-    <!--css文件示例-->
- <link rel="stylesheet" href="/css/main.css">
-</head>
-<body>
-hello {$name}
-</body>
-</html>
-```
+如果需要此中间件时，需要到`config/static.php`中`middleware`选项中开启。
