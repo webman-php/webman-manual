@@ -42,7 +42,7 @@ class Arms implements MiddlewareInterface
     {
         static $tracing = null, $tracer = null;
         if (!$tracing) {
-            $endpoint = Endpoint::create('workerman.net', $request->getRealIp(), null, 2555);
+            $endpoint = Endpoint::create('<你的应用名称>', $request->getRealIp(), null, 2555);
             $logger = new \Monolog\Logger('log');
             $logger->pushHandler(new \Monolog\Handler\ErrorLogHandler());
             $reporter = new \Zipkin\Reporters\Http([
