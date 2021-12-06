@@ -5,11 +5,11 @@
 
 ## 1、开通ARMS
 
-地址 https://arms.console.aliyun.com/ (一般有14天试用)
+地址 https://arms.console.aliyun.com/ (一般有15天试用)
 
 ## 2、获得数据上报接入点url
 进入 https://tracing.console.aliyun.com/#/globalSetting/cn-hangzhou/process 按照图示获得接入点url地址，留作步骤4使用。
-> 如果服务器在阿里云上可以用`阿里云vpc网络接入点，本示例用的是阿里云公网接入点
+> 如果你的服务器在阿里云上可以用阿里云vpc网络接入点，本示例用的是阿里云公网接入点
 
 ![](../img/arms-endpoint.png)
 
