@@ -34,6 +34,7 @@ use Zipkin\Samplers\BinarySampler;
 use Zipkin\Endpoint;
 use Workerman\Timer;
 
+
 class Arms implements MiddlewareInterface
 {
     public function process(Request $request, callable $next) : Response
@@ -66,6 +67,17 @@ class Arms implements MiddlewareInterface
         $rootSpan->setName($request->controller."::".$request->action);
         $rootSpan->start();
         $result = $next($request);
+        
+        // thinkorm使用以下方式统计sql，需要在config/thinkorm.php中将trigger_sql开启
+        if (class_exists(\think\facade\Db::class)) {
+            $logs = \think\facade\Db::getDbLog(true);
+            if (!empty($logs['sql'])) {
+                foreach ($logs['sql'] as $sql) {
+                    $rootSpan->tag('db.statement', $sql);
+                }
+            }
+        }
+        
         $rootSpan->finish();
 
         return $result;
@@ -74,6 +86,7 @@ class Arms implements MiddlewareInterface
 ```
 
 注意代码中`endpoint_url`设置成步骤2获得的接入点url。
+如果使用的是thinkorm，请将config/thinkorm.php的trigger_sql开启，这样ARMS可以监控SQL。
 
 ## 5、配置中间件
 打开 `config/middleware.php`，在全局中间件位置(key为`''`的位置)添加类似如下配置
