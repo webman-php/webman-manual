@@ -44,4 +44,4 @@ class User
 
 ## 使用其它Cache组件
 
-[ThinkCache](https://github.com/top-think/think-cache)组件使用参考 [其它数据库](db/others.md#ThinkCache)
+[ThinkCache](https://github.com/top-think/think-cache)组件使用参考 [其它数据库](others.md#ThinkCache)
