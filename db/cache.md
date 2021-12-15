@@ -42,6 +42,9 @@ class User
 }
 ```
 
+> **注意**
+> key尽量加一个前缀，避免与其它使用redis的业务冲突
+
 ## 使用其它Cache组件
 
 [ThinkCache](https://github.com/top-think/think-cache)组件使用参考 [其它数据库](others.md#ThinkCache)
