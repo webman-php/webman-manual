@@ -105,21 +105,6 @@ Route::options('[{path:.+}]', function (){
     return response('');
 });
 ```
-```php
-// 给所有 /api/ 开头请求设置跨域
-Route::options('/api/[{path:.+}]', function (){
-    return response('');
-});
-```
-> **Tip**
-> 如果你的跨域中间件不是全局中间件，可能需要给`OPTIONS`请求手动设置跨域中间件，类似这样
-
-```php
-// 给所有 /api/ 开头请求设置跨域
-Route::options('/api/[{path:.+}]', function (){
-    return response('');
-})->middleware([\app\middleware\跨域中间件类名::class]);
-```
 
 > **注意**
 > 如果ajax请求自定义了header头，需要在中间件里 `Access-Control-Allow-Headers` 字段加入这个自定义header头，否则会报` Request header field XXXX is not allowed by Access-Control-Allow-Headers in preflight response.`
