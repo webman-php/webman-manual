@@ -98,6 +98,7 @@ return [
 
 > **注意**
 > 跨域请求可能包含`OPTIONS`请求，如果你的跨域接口需要设置路由，请使用`Route::any(..)` 或者 `Route::add(['POST', 'OPTIONS'], ..)`设置，或者统一给所有OPTIONS请求设置跨域，例如路由里设置类似如下配置
+
 ```php
 // 给所有请求设置跨域
 Route::options('[{path:.+}]', function (){
@@ -112,6 +113,7 @@ Route::options('/api/[{path:.+}]', function (){
 ```
 > **Tip**
 > 如果你的跨域中间件不是全局中间件，可能需要给`OPTIONS`请求手动设置跨域中间件，类似这样
+
 ```php
 // 给所有 /api/ 开头请求设置跨域
 Route::options('/api/[{path:.+}]', function (){
@@ -121,6 +123,7 @@ Route::options('/api/[{path:.+}]', function (){
 
 > **注意**
 > 如果ajax请求自定义了header头，需要在中间件里 `Access-Control-Allow-Headers` 字段加入这个自定义header头，否则会报` Request header field XXXX is not allowed by Access-Control-Allow-Headers in preflight response.`
+
 > **注意**
 > 如果业务发生了500错误，跨域中间件不会运行，所以500请求一定会产生跨域错误。
 
