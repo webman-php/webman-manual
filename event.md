@@ -46,7 +46,7 @@ return [
 ```
 ## 快速开始
 
-### 监听事件
+### 定义事件
 
 事件类 `LogErrorWriteEvent.php`
 
@@ -76,7 +76,7 @@ class LogErrorWriteEvent extends Event
 }
 ```
 
-事件监听
+### 监听事件
 ```php
 return [
     // 事件监听
@@ -86,7 +86,7 @@ return [
 ];
 ```
 
-### 事件订阅
+### 订阅事件
 
 订阅类 `LoggerSubscriber.php`
 
