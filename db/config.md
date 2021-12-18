@@ -64,7 +64,7 @@ illuminate/database 数据库及版本支持情况如下：
  ```
  
  ## 使用多个数据库
-通过`DB::connection('配置名')`来选择使用哪个数据库，其中`配置名`为配置文件`config/database.php`中的对应配置的`key`。
+通过`Db::connection('配置名')`来选择使用哪个数据库，其中`配置名`为配置文件`config/database.php`中的对应配置的`key`。
  
  例如如下数据库配置：
 
@@ -121,10 +121,10 @@ illuminate/database 数据库及版本支持情况如下：
 
 像这样切换数据库。
 ```php
-// 使用默认数据库，等价于DB::connection('mysql')->select(...);
-$users = DB::select(...); 
+// 使用默认数据库，等价于Db::connection('mysql')->select(...);
+$users = Db::select(...); 
 // 使用mysql2
-$users = DB::connection('mysql2')->select(...);
+$users = Db::connection('mysql2')->select(...);
 // 使用pgsql
-$users = DB::connection('pgsql')->select(...);
+$users = Db::connection('pgsql')->select(...);
 ```
