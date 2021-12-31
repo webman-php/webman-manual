@@ -60,7 +60,7 @@ class TestConfig extends TestCase
   
 ## 运行
 
-项目更目录里运行 `./vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/TestConfig.php`
+项目根目录里运行 `./vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/TestConfig.php`
 
 结果类似如下：
 ```
