@@ -56,6 +56,8 @@
   - [单元测试](components/unitest.md)
   - [错误码生成](components/generate_error_code.md)
   - [ARMS链路追踪](components/arms.md)
+- 插件
+  - 创建插件(plugin.md)
 - 高级进阶
   - [自定义进程](process.md)
   - [依赖注入](di.md)
