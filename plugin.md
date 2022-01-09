@@ -34,6 +34,7 @@ webman从1.2开始支持插件功能，并支持插件的自动安装和卸载�
 > 导出后会将config/plugin/foo/admin目录拷贝到vendor/foo/admin/src下，并在这个目录下自动生成一个Install.php，Install.php用于自动安装和自动卸载时执行一些操作。
 > 安装默认操作是将 vendor/foo/admin/src 下的配置拷贝到当前项目config/plugin下
 > 移除时默认操作是将 当前项目config/plugin 下的配置文件删除
+> 你可以修改Install.php以便在安装和卸载插件时做一些自定义操作。
 
 
 ## 其它说明待补充...
