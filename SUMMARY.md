@@ -55,6 +55,7 @@
   - [单元测试](components/unitest.md)
   - [错误码生成](components/generate_error_code.md)
 - 插件
+  - [push推送](plugin/push.md)
   - [命令行](plugin/console.md)
   - [ARMS链路追踪](plugin/arms.md)
 - 高级进阶
