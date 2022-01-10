@@ -19,22 +19,22 @@ composer require webman/console
 ### version
 **打印webman版本号**
 
-### route:list*
+### route:list
 **打印当前路由配置**
 
 ### make:controller
 **创建一个控制器文件** 
-例如 `./webman make:controller admin` 将创建一个 `app\controller\Admin.php`
-例如 `./webman make:controller api/user` 将创建一个 `app\api\controller\User.php`
+例如 `./webman make:controller admin` 将创建一个 `app/controller/Admin.php`
+例如 `./webman make:controller api/user` 将创建一个 `app/api/controller/User.php`
 
 ### make:model
 **创建一个model文件**
-例如 `./webman make:model admin` 将创建一个 `app\model\Admin.php`
-例如 `./webman make:model api/user` 将创建一个 `app\api\model\User.php`
+例如 `./webman make:model admin` 将创建一个 `app/model/Admin.php`
+例如 `./webman make:model api/user` 将创建一个 `app/api/model/User.php`
 
 ### make:middleware
 **创建一个中间件文件**
-例如 `./webman make:middleware Auth` 将创建一个 `app\middleware\Auth.php`
+例如 `./webman make:middleware Auth` 将创建一个 `app/middleware/Auth.php`
 
 ### make:command
 **创建自定义命令文件**
@@ -51,6 +51,8 @@ composer require webman/console
 参见[创建插件](/others/plugin.md)
 
 ## 自定义命令
+用户可以定义自己的命令，例如以下是打印数据库配置的命令
+
 * 执行 `./webman make:command config:mysql`
 * 打开 `app/command/ConfigMySQLCommand.php` 修改成如下
 
