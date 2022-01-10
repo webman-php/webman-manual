@@ -55,14 +55,16 @@
   - [命令行](components/console.md)
   - [单元测试](components/unitest.md)
   - [错误码生成](components/generate_error_code.md)
-  - [ARMS链路追踪](components/arms.md)
 - 插件
-  - [创建插件](plugin.md)
+  - [ARMS链路追踪](plugin/arms.md)
 - 高级进阶
   - [自定义进程](process.md)
   - [依赖注入](di.md)
   - [AOP](aop.md)
   
+- 其它
+  - [升级方法](others/upgrade.md)
+  - [创建插件](others/plugin.md)
 - [致谢](thanks.md)
   
  
