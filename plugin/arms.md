@@ -1,6 +1,8 @@
 # ARMS 阿里云应用监控(链路追踪)
 应用实时监控服务ARMS（Application Real-Time Monitoring Service）是一款阿里云应用性能管理（APM）类监控产品。借助ARMS可以监控webman相关指标如接口请求量、接口耗时、慢调用分析、调用链等。
 
+> 插件需要webman>=1.2.0 webman-framework>=1.2.0
+
 # 使用方法
 
 ## 1、开通ARMS
@@ -13,101 +15,20 @@
 
 ![](../img/arms-endpoint.png)
 
-## 3、安装zipkin
+## 3、安装插件
+`composer require webman/arms`
 
-```sh
-composer require openzipkin/zipkin
-```
+## 4、配置
+打开 `config/plugin/webman/app.php`，配置应用名称以及`endpoint_url`(步骤2获得的接入点url)。
 
-## 4、创建中间件文件
-创建文件 `app/middleware/Arms.php`
+> **注意：**
+> 如果使用的是thinkorm，请将config/thinkorm.php的trigger_sql开启，这样ARMS可以监控SQL。
+> 如果是使用的Laravel的数据库，需要安装 `composer require "illuminate/events"`，这样ARMS可以监控SQL。
 
-```php
-<?php
-namespace app\middleware;
-
-use Webman\MiddlewareInterface;
-use Webman\Http\Response;
-use Webman\Http\Request;
-use Zipkin\TracingBuilder;
-use Zipkin\Samplers\BinarySampler;
-use Zipkin\Endpoint;
-use Workerman\Timer;
-use support\Db;
-
-
-class Arms implements MiddlewareInterface
-{
-    public function process(Request $request, callable $next) : Response
-    {
-        static $tracing = null, $tracer = null;
-        if (!$tracing) {
-            $endpoint = Endpoint::create('<你的应用名称>', $request->getRealIp(), null, 2555);
-            $logger = new \Monolog\Logger('log');
-            $logger->pushHandler(new \Monolog\Handler\ErrorLogHandler());
-            $reporter = new \Zipkin\Reporters\Http([
-                'endpoint_url' => '<这里写入步骤2获得的接入点url>'
-            ]);
-            $sampler = BinarySampler::createAsAlwaysSample();
-            $tracing = TracingBuilder::create()
-                ->havingLocalEndpoint($endpoint)
-                ->havingSampler($sampler)
-                ->havingReporter($reporter)
-                ->build();
-            $tracer = $tracing->getTracer();
-            // 30秒上报一次，尽量将上报对业务的影响减少到最低
-            Timer::add(30, function () use ($tracer) {
-                $tracer->flush();
-            });
-            register_shutdown_function(function () use ($tracer) {
-                $tracer->flush();
-            });
-            // Laravel 使用以下方式统计sql，需要安装 composer require "illuminate/events"
-            Db::listen(function(\Illuminate\Database\Events\QueryExecuted $query) {
-                request()->rootSpan->tag('db.statement', $query->sql. " /*{$query->time}ms*/");
-            });
-        }
-
-        $rootSpan = $tracer->newTrace();
-        $rootSpan->setName($request->controller."::".$request->action);
-        $rootSpan->start();
-        $result = $next($request);
-        
-        // thinkorm使用以下方式统计sql，需要在config/thinkorm.php中将trigger_sql开启
-        if (class_exists(\think\facade\Db::class)) {
-            $logs = \think\facade\Db::getDbLog(true);
-            if (!empty($logs['sql'])) {
-                foreach ($logs['sql'] as $sql) {
-                    $rootSpan->tag('db.statement', $sql);
-                }
-            }
-        }
-        
-        $rootSpan->finish();
-
-        return $result;
-    }
-}
-```
-
-注意代码中`endpoint_url`设置成步骤2获得的接入点url。
-如果使用的是thinkorm，请将config/thinkorm.php的trigger_sql开启，这样ARMS可以监控SQL。
-如果是使用的Laravel的数据库，需要安装 `composer require "illuminate/events"`，这样ARMS可以监控SQL。
-
-## 5、配置中间件
-打开 `config/middleware.php`，在全局中间件位置(key为`''`的位置)添加类似如下配置
-```php
-return [
-    '' => [
-        app\middleware\Arms::class,
-    ],
-];
-```
-
-## 6、重启webman
+## 5、重启webman
 `php start.php restart` 或者 `php start.php restart -d` 。并访问站点。
 
-## 7、查看
+## 6、查看
 访问地址 https://tracing.console.aliyun.com/ ,效果类似如下。
 > 为了减少上报对应用的影响，中间件中设置的是每30秒统一上报一次数据，所以阿里云看到结果会有30秒延迟。
 
@@ -117,5 +38,5 @@ return [
 ![](../img/arms-result2.png)
 
 
-## 8、更多内容参考文档
+## 7、更多内容参考文档
 https://help.aliyun.com/document_detail/96187.html
