@@ -11,7 +11,7 @@ webman从1.2开始支持插件功能，并支持插件的自动安装和卸载�
 
 **安装`webman/console`命令行工具**
 
-`comoser require webman/console`
+`composer require webman/console`
 
 **创建插件**
 
