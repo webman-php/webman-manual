@@ -119,3 +119,5 @@ class ConfigMySQLCommand extends Command
 +-------+---------+--------+-----------+------+----------+----------+----------+-------------+---------+-----------------+--------+--------+--------+--------+---------+
 ```
 
+## 更多资料参考
+http://www.symfonychina.com/doc/current/components/console.html
