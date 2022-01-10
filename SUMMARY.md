@@ -52,7 +52,6 @@
   - [Excel表格](components/excel.md)
   - [微信SDK](components/wechat.md)
   - [Casbin SDK](components/casbin.md)
-  - [命令行](components/console.md)
   - [单元测试](components/unitest.md)
   - [错误码生成](components/generate_error_code.md)
 - 插件
