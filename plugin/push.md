@@ -19,13 +19,12 @@ composer require webman/push
 
 **客户端使用(公有频道)**
 ```js
-// app_key与pop-socket/config.php里的$app_key一致
+// 建立连接
 var connection = new Push({
     url: 'ws://127.0.0.1:3131', // websocket地址
     app_key: '<app_key，在config/plugin/webman/push/app.php里获取>',
     auth: '/plugin/webman/push/auth' // 订阅鉴权(仅限于私有频道)
 });
-
 // 假设用户uid为1
 var uid = 1;
 // 浏览器监听user-1频道的消息，也就是用户uid为1的用户消息
@@ -33,11 +32,13 @@ var user_channel = connection.subscribe('user-' + uid);
 
 // 当user-1频道有message事件的消息时
 user_channel.on('message', function(data) {
-  // data里是消息内容
+    // data里是消息内容
+    console.log(data);
 });
 // 当user-1频道有friendApply事件时消息时
 user_channel.on('friendApply', function (data) {
-  // data里是好友申请相关信息
+    // data里是好友申请相关信息
+    console.log(data);
 });
 
 // 假设群组id为2
@@ -46,7 +47,8 @@ var group_id = 2;
 var group_channel = connection.subscribe('group-' + group_id);
 // 当群组2有message消息事件时
 group_channel.on('message', function(data) {
-  // data里是消息内容
+    // data里是消息内容
+    console.log(data);
 });
 ```
 
@@ -60,7 +62,7 @@ $api = new Api(
     // webman下可以直接使用config获取配置，非webman环境需要手动写入相应配置
     config('plugin.webman.push.app.api'),
     config('plugin.webman.push.app.app_key'),
-    config('plugin.webman.push.app_secret')
+    config('plugin.webman.push.app.app_secret')
 );
 // 给订阅 user-1 的所有客户端推送 message 事件的消息
 $api->trigger('user-1', 'message', [
