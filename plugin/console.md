@@ -43,12 +43,12 @@ composer require webman/console
 ### plugin:create
 **创建一个插件项目**
 例如 `./webman plugin:create foo/admin` 将创建`config/plugin/foo/admin` 和 `vendor/foo/admin` 两个目录
-参见[创建插件](others/plugin.md)
+参见[创建插件](../others/plugin.md)
 
 ### plugin:export
 **导出插件项目**
 例如 `./webman plugin:export foo/admin` 
-参见[创建插件](others/plugin.md)
+参见[创建插件](../others/plugin.md)
 
 ## 自定义命令
 用户可以定义自己的命令，例如以下是打印数据库配置的命令
