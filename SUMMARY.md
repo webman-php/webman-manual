@@ -38,7 +38,6 @@
   - [其它数据库](db/others.md)
   
 - 消息队列
-
   - [Redis队列](queue/redis.md)
   - [Stomp](queue/stomp.md)
  
@@ -55,9 +54,12 @@
   - [单元测试](components/unitest.md)
   - [错误码生成](components/generate_error_code.md)
 - 插件
-  - [push推送](plugin/push.md)
+  - [关于插件](plugin.md) 
   - [命令行](plugin/console.md)
+  - [push推送](plugin/push.md)
   - [ARMS链路追踪](plugin/arms.md)
+  - [更多插件](plugin/market.md)
+  - [提交插件](plugin/create.md)
 - 高级进阶
   - [自定义进程](process.md)
   - [依赖注入](di.md)
