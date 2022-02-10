@@ -67,7 +67,7 @@
   
 - 其它
   - [升级方法](others/upgrade.md)
-  - [nginx代理](others/nginx.md)
+  - [nginx代理](others/nginx-proxy.md)
 - [致谢](thanks.md)
   
  
