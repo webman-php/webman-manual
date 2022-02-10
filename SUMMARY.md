@@ -67,7 +67,7 @@
   
 - 其它
   - [升级方法](others/upgrade.md)
-  - [创建插件](others/plugin.md)
+  - [nginx代理](others/nginx.md)
 - [致谢](thanks.md)
   
  
