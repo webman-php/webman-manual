@@ -1,6 +1,6 @@
 # phar打包
 
-phar (“Php ARchive”) 是PHP里类似于JAR的一种打包文件，你可以利用phar将你的webman项目打包成一个phar文件，方便部署。
+phar是PHP里类似于JAR的一种打包文件，你可以利用phar将你的webman项目打包成单个phar文件，方便部署。
 
 **这里非常感谢 [fuzqing](https://github.com/fuzqing) 的PR.**
 
@@ -12,7 +12,7 @@ phar (“Php ARchive”) 是PHP里类似于JAR的一种打包文件，你可以�
 `composer require webman/console`
 
 ## 打包
-`./webman phar:pack`
+在webman项目根目录执行命令 `./webman phar:pack`
 会在bulid目录生成一个`webman.phar`文件。
 
 > 打包相关配置在 `config/plugin/webman/console/app.php` 中
