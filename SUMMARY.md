@@ -68,6 +68,7 @@
 - 其它
   - [升级方法](others/upgrade.md)
   - [nginx代理](others/nginx-proxy.md)
+  - [phar打包](others/phar.md)
 - [致谢](thanks.md)
   
  

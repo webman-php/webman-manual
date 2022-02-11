@@ -50,6 +50,11 @@ composer require webman/console
 例如 `./webman plugin:export foo/admin` 
 参见[创建插件](/doc/webman/others/plugin.html)
 
+### phar:pack
+**将webman项目打包成phar文件**
+参见[phar打包](/doc/webman/others/phar.html)
+> 此特性需要 
+
 ## 自定义命令
 用户可以定义自己的命令，例如以下是打印数据库配置的命令
 
