@@ -56,7 +56,7 @@ foreach ($iterator as $file) {
     }
 
     // 根据文件路径计算uri
-    $uri_path = strtolower(str_replace('controller/', '',substr(substr($file_path, strlen(base_path())), 0, -4)));
+    $uri_path = strtolower(str_replace('controller/', '',substr(substr($file_path, strlen(app_path())), 0, -4)));
     // 根据文件路径是被类名
     $class_name = str_replace('/', '\\',substr(substr($file_path, strlen(base_path())), 0, -4));
 
