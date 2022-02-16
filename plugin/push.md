@@ -130,4 +130,34 @@ webhook用来接收频道的一些事件。
 > 接收处理webhook事件的代码参考 `config/plugin/webman/push/route.php` 里面的逻辑
 > 由于刷新页面导致用户短暂离线不应该算作离线，webman/push会做延迟判断，所以在线/离线事件会有1-3秒的延迟。
 
-## 未完，待续。。。
+## nginx代理wss
+https需要使用wss才能正常通讯，nginx请参考以下配置设置ssl代理(需要重启nginx)
+```
+server {
+    listen 443 ssl;
+        
+    # 这里省略其他配置 . . .
+        
+    location /app
+    {
+        proxy_pass http://127.0.0.1:3131;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+    
+}
+```
+
+配置好nginx代理后， 前端使用wss连接，并省略端口号，例如
+```js
+var connection = new Push({
+    url: 'wss://域名.com', // 使用wss，省略端口号
+    app_key: '<app_key>',
+    auth: '/plugin/webman/push/auth' // 订阅鉴权(仅限于私有频道)
+});
+```
+
+> **注意**
+> ssl证书一般是与域名绑定的，所以wss请使用证书所对应的域名，不要使用ip或者其它域名。
