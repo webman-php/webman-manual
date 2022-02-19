@@ -135,4 +135,4 @@ class User
 ```
 
 效果如下：
-![](img/paginator.png)
+![](../components/img/paginator.png)
