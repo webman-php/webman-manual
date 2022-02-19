@@ -9,7 +9,7 @@
 - 安装
  
   ```php
-  composer require "jasongrimes/paginator:~1.0"
+  composer require "jasongrimes/paginator:^1.0.3"
   ```
   
 -  使用
@@ -39,8 +39,58 @@
       
   }
   ```
+  **模板(php原生)**
+  新建模版 app/view/user/get.html
+  ```html
+  <html>
+  <head>
+    <!-- 内置支持 Bootstrap 分页样式 -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  </head>
+  <body>
   
-  新建模版 `app/view/user/get.html`
+  <?= $paginator;?>
+  
+  </body>
+  </html>
+  ```
+  
+  **模板(twig)**
+  新建模版 app/view/user/get.html
+  ```html
+  <html>
+  <head>
+    <!-- 内置支持 Bootstrap 分页样式 -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  </head>
+  <body>
+  
+  {% autoescape false %}
+  {{paginator}}
+  {% endautoescape %}
+  
+  </body>
+  </html>
+  ```
+  
+  **模板(blade)**
+  新建模版 app/view/user/get.blade.php
+  ```html
+  <html>
+  <head>
+    <!-- 内置支持 Bootstrap 分页样式 -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  </head>
+  <body>
+  
+  {!! $paginator !!}
+  
+  </body>
+  </html>
+  ```
+  
+  **模板(thinkphp)**
+  新建模版 app/view/user/get.blade.php
   ```html
   <html>
   <head>
@@ -49,7 +99,7 @@
   </head>
   <body>
   
-  <?= $paginator;?>
+  <?=$paginator?>
   
   </body>
   </html>

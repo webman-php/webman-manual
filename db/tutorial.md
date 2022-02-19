@@ -6,14 +6,10 @@ webman数据库默认采用的是 [illuminate/database](https://github.com/illum
 
 ## 安装
 
-**适合php>=7.3**
 ```php
-composer require illuminate/database ^8.0
-```
-
-**适合php>=7.2**
-```php
-composer require illuminate/database ^7.0
+composer require illuminate/database
+composer require illuminate/pagination
+composer require illuminate/events
 ```
 
 ## 数据库配置
