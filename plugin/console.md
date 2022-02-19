@@ -42,7 +42,7 @@ composer require webman/console
 
 ### plugin:create
 **创建一个插件项目**
-例如 `./webman plugin:create foo/admin` 将创建`config/plugin/foo/admin` 和 `vendor/foo/admin` 两个目录
+例如 `./webman plugin:create --name=foo/admin` 将创建`config/plugin/foo/admin` 和 `vendor/foo/admin` 两个目录
 参见[创建插件](/doc/webman/others/plugin.html)
 
 ### plugin:export
