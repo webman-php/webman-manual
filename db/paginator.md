@@ -1,5 +1,5 @@
 # 分页
-Laravel 的分页器与 查询构造器 和 Eloquent ORM 集成，提供了方便、易用的数据库结果分页。
+Laravel的`illuminate/database`提供了方便的分页功能。
 
 ## 安装
 `composer require illuminate/pagination`
@@ -47,7 +47,6 @@ webman中无法使用 `$paginator->links()` 方法渲染分页按钮，不过我
 
 
 **后端**
-分页组件用户渲染分页按钮，具体参见[分页组件](../components/paginator.md)
 ```php
 <?php
 namespace app\controller;
