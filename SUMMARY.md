@@ -58,8 +58,7 @@
   - [关于插件](plugin.md) 
   - [命令行](plugin/console.md)
   - [push推送](plugin/push.md)
-  - [ARMS链路追踪](plugin/arms.md)
-  - [更多插件](plugin/market.md)
+  - [插件市场](plugin/market.md)
   - [提交插件](plugin/create.md)
 - 高级进阶
   - [自定义进程](process.md)
