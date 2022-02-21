@@ -20,6 +20,7 @@ server {
 
   location / {
       proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header Host $host;
       if (!-f $request_filename){
           proxy_pass http://webman;
       }
