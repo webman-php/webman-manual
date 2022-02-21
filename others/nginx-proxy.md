@@ -3,7 +3,7 @@
 
  - 静态资源由nginx处理，让webman专注业务逻辑处理
  - 让多个webman共用80、443端口，通过域名区分不同站点，实现单台服务器部署多个站点
- - 能够实现php-fpm于webman架构共存
+ - 能够实现php-fpm与webman架构共存
  - nginx代理ssl实现https，更加简单高效
  - 能够严格过滤外网一些不合法请求
 
