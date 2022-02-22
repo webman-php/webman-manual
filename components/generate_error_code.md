@@ -12,15 +12,16 @@ https://github.com/teamones-open/response-code-msg
 
 ## 安装
 
-  ```php
-  composer require teamones/response-code-msg
-  ```
+```php
+composer require teamones/response-code-msg
+```
 
 ## 使用
 
 ### 空 ErrorCode 类文件
 
 - 文件路径 ./support/ErrorCode.php
+
 ```php
 <?php
 /**
@@ -39,6 +40,7 @@ class ErrorCode
 错误码会自动按照下面配置的参数自增生成，例如当前 system_number = 201，start_min_number = 10000，那么生成的第一个错误码就是 -20110001。
 
 - 文件路径 ./config/error_code.php
+
 ```php
 <?php
 
