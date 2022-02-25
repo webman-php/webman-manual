@@ -48,7 +48,7 @@ class Foo
 为了介入请求流程，我们需要使用[中间件](middleware.md)
 
 
-1、创建文件 `app\middleware\ActionHook.php`(middleware目录不存在请自行创建)
+1、创建文件 `app/middleware/ActionHook.php`(middleware目录不存在请自行创建)
 
 ```php
 <?php
