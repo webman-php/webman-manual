@@ -7,6 +7,7 @@ phar是PHP里类似于JAR的一种打包文件，你可以利用phar将你的web
 > **注意**
 > 此特性只支持linux系统
 > 此特性需要webman>=1.2.4 webman-framework>=1.2.4 webman/console>=1.0.5
+> 需要关闭`php.ini` Phar配置选项 `phar.readonly = 0`
 
 ## 安装命令行工具
 `composer require webman/console`
