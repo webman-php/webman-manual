@@ -67,6 +67,7 @@ foreach ($iterator as $file) {
 
     // 通过反射找到这个类的所有共有方法作为action
     $class = new ReflectionClass($class_name);
+    $class_name = $class->name;
     $methods = $class->getMethods(ReflectionMethod::IS_PUBLIC);
 
     $route = function ($uri, $cb) {
