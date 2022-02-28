@@ -1,1 +1,5 @@
-.idea
+/.idea
+/.vscode
+webman
+runtime
+*Thumbs.db*
