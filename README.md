@@ -5,4 +5,4 @@ Manual for webman
 `./webman.phar start` or `php ./webman.phar start`
 
 # Visit
-http://127.0.0.1:8282
+http://127.0.0.1:8282/doc/en
