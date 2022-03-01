@@ -43,12 +43,12 @@ composer require webman/console
 ### plugin:create
 **创建一个插件项目**
 例如 `./webman plugin:create --name=foo/admin` 将创建`config/plugin/foo/admin` 和 `vendor/foo/admin` 两个目录
-参见[创建插件](/doc/webman/others/plugin.html)
+参见[创建插件](/doc/webman/plugin/create.html)
 
 ### plugin:export
 **导出插件项目**
 例如 `./webman plugin:export foo/admin` 
-参见[创建插件](/doc/webman/others/plugin.html)
+参见[创建插件](/doc/webman/plugin/create.html)
 
 ### phar:pack
 **将webman项目打包成phar文件**
