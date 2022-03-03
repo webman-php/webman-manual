@@ -12,6 +12,7 @@
 - 根据实际情况修改配置文件 `config/thinkorm.php` 
 
 - 使用
+
   ```php
   <?php
   namespace app\controller;
@@ -21,13 +22,14 @@
   
   class Foo
   {
-    public function get(Request $request)
-    {
-        $user = Db::table('user')->where('uid', '>', 1)->find();
-        return json($user);
-    }
+      public function get(Request $request)
+      {
+          $user = Db::table('user')->where('uid', '>', 1)->find();
+          return json($user);
+      }
   }
   ```
+  
   更多请参考[topthink/think-orm文档](https://www.kancloud.cn/manual/think-orm/1257998)
 
   
@@ -37,6 +39,7 @@
   `composer require topthink/think-cache`
   
 - 配置文件 `config/thinkcache.php` 内容如下：
+
   ```php
   <?php
   return [
