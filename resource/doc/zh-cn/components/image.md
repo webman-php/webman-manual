@@ -2,52 +2,53 @@
 
 ## intervention/image
 
-- 项目地址
+### 项目地址
 
-  https://github.com/Intervention/image
+https://github.com/Intervention/image
   
-- 安装
+### 安装
  
-  ```php
-  composer require intervention/image
-  ```
+```php
+composer require intervention/image
+```
   
--  使用
+### 使用
 
-  新建上传页面
-  
-  ```html
-    <form method="post" action="/user/img" enctype="multipart/form-data">
-        <input type="file" name="file">
-        <input type="submit" value="提交">
-    </form>
-  ```
+**上传页面片段**
 
-  新建 `app/controller/User.php`
-  ```php
-  <?php
-  namespace app\controller;
-  use support\Request;
-  use Intervention\Image\ImageManagerStatic as Image;
-  
-  class User
-  {
-      public function img(Request $request)
-      {
-          $file = $request->file('file');
-          if ($file && $file->isValid()) {
-              $image = Image::make($file)->resize(100, 100);
-              return response($image->encode('png'), 200, ['Content-Type' => 'image/png']);
-          }
-          return response('file not found');
-      }
-      
-  }
-  ```
-  
-  
-- 更多内容
+```html
+  <form method="post" action="/user/img" enctype="multipart/form-data">
+      <input type="file" name="file">
+      <input type="submit" value="提交">
+  </form>
+```
 
-  访问 http://image.intervention.io/getting_started/introduction
+**新建 `app/controller/User.php`**
+
+```php
+<?php
+namespace app\controller;
+use support\Request;
+use Intervention\Image\ImageManagerStatic as Image;
+
+class User
+{
+    public function img(Request $request)
+    {
+        $file = $request->file('file');
+        if ($file && $file->isValid()) {
+            $image = Image::make($file)->resize(100, 100);
+            return response($image->encode('png'), 200, ['Content-Type' => 'image/png']);
+        }
+        return response('file not found');
+    }
+    
+}
+```
+  
+  
+### 更多内容
+
+访问 http://image.intervention.io/getting_started/introduction
   
 
