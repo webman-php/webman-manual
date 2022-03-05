@@ -1,7 +1,7 @@
 # 验证器
 composer有很多验证器可以直接在使用，例如：
-### <a href="#think-validate">top-think/think-validate</a>
-### <a href="#respect-validation">respect/validation</a>
+#### <a href="#think-validate">1. top-think/think-validate</a>
+#### <a href="#respect-validation">2. respect/validation</a>
 
 <a name="think-validate"></a>
 ## 验证器 top-think/think-validate
