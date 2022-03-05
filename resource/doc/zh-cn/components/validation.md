@@ -1,6 +1,10 @@
 # 验证器
+composer有很多验证器可以直接在使用，例如：
+### <a href="#think-validate">top-think/think-validate</a>
+### <a href="#respect-validation">respect/validation</a>
 
-## top-think/think-validate
+<a name="think-validate"></a>
+## 验证器 top-think/think-validate
 
 ### 说明
 ThinkPHP官方验证器
@@ -53,9 +57,9 @@ if (!$validate->check($data)) {
     var_dump($validate->getError());
 }
 ```
-  
 
-## workerman/validation
+<a name="respect-validation"></a>
+# 验证器 workerman/validation
 
 ### 说明
 
