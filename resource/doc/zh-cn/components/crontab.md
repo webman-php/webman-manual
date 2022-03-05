@@ -31,7 +31,7 @@ composer require workerman/crontab
   
 ### 使用
 
-步骤一：新建进程文件 `process/Task.php`
+**步骤一：新建进程文件 `process/Task.php`**
 
 ```php
 <?php
@@ -61,7 +61,7 @@ class Task
 }
 ```
   
-### 步骤二：配置进程文件随webman启动
+**步骤二：配置进程文件随webman启动**
   
 打开配置文件 `config/process.php`，新增如下配置
 
@@ -75,7 +75,7 @@ return [
 ];
 ```
   
-步骤三：重启webman
+**步骤三：重启webman**
 
 > 注意：定时任务不会马上执行，所有定时任务进入下一分钟才会开始计时执行。
 
