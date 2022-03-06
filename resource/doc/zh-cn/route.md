@@ -46,7 +46,7 @@ Route::any('/testclass', [app\controller\Index::class, 'test']);
 `composer require webman/auto-route`
 
 > **提示**
-> 你仍然可以在`config/route.php`中手动设置某些路由，自动路由组件会优先使用`config/route.php` 里的配置。
+> 你仍然可以在`config/route.php`中手动设置某些路由，自动路由插件会优先使用`config/route.php` 里的配置。
 
 ## 路由参数
 如果路由中存在参数，通过`{key}`来匹配，匹配结果将传递到对应的控制器方法参数中(从第二个参数开始依次传递)，例如：
