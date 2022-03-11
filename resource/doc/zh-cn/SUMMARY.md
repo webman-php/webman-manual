@@ -51,6 +51,7 @@
   - [Crontab定时任务](components/crontab.md)
   - [Excel表格](components/excel.md)
   - [微信SDK](components/wechat.md)
+  - [支付SDK](components/payment.md)
   - [Casbin SDK](components/casbin.md)
   - [单元测试](components/unitest.md)
   - [错误码生成](components/generate_error_code.md)
