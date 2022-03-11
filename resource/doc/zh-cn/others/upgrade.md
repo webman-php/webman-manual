@@ -1,3 +1,3 @@
 # 升级方法
 
-`composer update workerman/webman-framework && composer update webman/console && ./webman install`
+`composer require workerman/webman-framework ^1.3.0 && composer require webman/console ^1.0.16 && ./webman install`
