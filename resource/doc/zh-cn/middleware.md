@@ -73,9 +73,10 @@ class AccessControlTest implements MiddlewareInterface
     {
         $response = $request->method() == 'OPTIONS' ? response('') : $next($request);
         $response->withHeaders([
-            'Access-Control-Allow-Origin' => '*',
-            'Access-Control-Allow-Methods' => 'GET,POST,PUT,DELETE,OPTIONS',
-            'Access-Control-Allow-Headers' => 'Content-Type,Authorization,X-Requested-With,Accept,Origin'
+            'Access-Control-Allow-Credentials' => 'true',
+            'Access-Control-Allow-Origin' => $request->header('Origin', '*'),
+            'Access-Control-Allow-Methods' => '*',
+            'Access-Control-Allow-Headers' => '*',
         ]);
         
         return $response;
