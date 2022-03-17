@@ -36,8 +36,8 @@
   - [Redis](db/redis.md)
   - [Cache](db/cache.md)
   - [MongoDB](db/mongo.md)
-  - [TinkORM](db/thinkorm.md)
-  - [TinkCache](db/thinkcache.md)
+  - [ThinkORM](db/thinkorm.md)
+  - [ThinkCache](db/thinkcache.md)
   - [Medoo](db/medoo.md)
   
 - 消息队列
