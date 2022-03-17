@@ -69,3 +69,7 @@ class Foo
 ### Think-Cache使用文档
 
 [ThinkCache文档地址](https://github.com/top-think/think-cache)
+
+## Medoo数据库插件
+
+参考 
