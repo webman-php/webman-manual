@@ -36,7 +36,9 @@
   - [Redis](db/redis.md)
   - [Cache](db/cache.md)
   - [MongoDB](db/mongo.md)
-  - [其它数据库](db/others.md)
+  - [TinkORM](db/thinkorm.md)
+  - [TinkCache](db/thinkcache.md)
+  - [Medoo](db/medoo.md)
   
 - 消息队列
   - [Redis队列](queue/redis.md)
