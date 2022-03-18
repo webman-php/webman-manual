@@ -45,61 +45,13 @@ class Foo
 
 而webman由于控制器常驻内存，无法在`__construct()`里做这些工作，不过webman提供了更好的解决方案`beforeAction()` `afterAction()`，它不仅让开发者可以介入到请求前的流程中，而且还可以介入到请求后的处理流程中。
 
-为了介入请求流程，我们需要使用[中间件](middleware.md)
+### 安装action-hook插件
+`composer require webman/action-hook`
 
+> **注意**
+> 插件需要webman>=1.2，如果你的版本低于1.2可以参考这里[手动配置action-hook](workerman.net/a/1303)
 
-1、创建文件 `app/middleware/ActionHook.php`(middleware目录不存在请自行创建)
-
-```php
-<?php
-namespace app\middleware;
-
-use support\Container;
-use Webman\MiddlewareInterface;
-use Webman\Http\Response;
-use Webman\Http\Request;
-class ActionHook implements MiddlewareInterface
-{
-    public function process(Request $request, callable $next) : Response
-    {
-        if ($request->controller) {
-            // 禁止直接访问beforeAction afterAction
-            if ($request->action === 'beforeAction' || $request->action === 'afterAction') {
-                return response('<h1>404 Not Found</h1>', 404);
-            }
-            $controller = Container::get($request->controller);
-            if (method_exists($controller, 'beforeAction')) {
-                $before_response = call_user_func([$controller, 'beforeAction'], $request);
-                if ($before_response instanceof Response) {
-                    return $before_response;
-                }
-            }
-            $response = $next($request);
-            if (method_exists($controller, 'afterAction')) {
-                $after_response = call_user_func([$controller, 'afterAction'], $request, $response);
-                if ($after_response instanceof Response) {
-                    return $after_response;
-                }
-            }
-            return $response;
-        }
-        return $next($request);
-    }
-}
-```
-
-2、在 config/middleware.php 中添加如下配置
-```php
-return [
-    '' => [
-	    // .... 这里省略了其它配置 ....
-        app\middleware\ActionHook::class,
-    ]
-];
-```
-
-3、这样如果 controller包含了 `beforeAction` 或者 `afterAction`方法会在请求发生时自动被调用。
-例如：
+### 使用 `beforeAction()` `afterAction()`
 ```php
 <?php
 namespace app\controller;
@@ -147,6 +99,7 @@ class Index
  - 开发者可以通过`$response->getStatusCode()`获得响应的http状态码
  - 开发者可利用`$response->withBody()` `$response->header()` `$response->withStatus()`串改响应，也可以创建并返回一个新的`Response`对象替代原响应
  
- 
+> **提示**
+> 你可以创建一个控制器基类，这个基类实现`beforeAction()` `afterAction()`方法。其他控制器继承这个基类，这样就不必每个控制器都实现一遍beforeAction()` `afterAction()`方法。
  
 
