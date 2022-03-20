@@ -41,5 +41,5 @@ class Wechat
   
 ### 更多内容
 
-访问 https://www.easywechat.com/docs
+访问 https://www.easywechat.com/4.x/
 
