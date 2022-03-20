@@ -19,6 +19,18 @@ return [
     'handler' => Twig::class
 ];
 ```
+> **提示**
+> 其它配置选项通过options传入，例如
+```php
+return [
+    'handler' => Twig::class,
+    'options' => [
+        'debug' => false,
+        'charset' => 'utf-8'
+    ]
+];
+```
+
 
 ## 安装Blade
 1、composer安装
@@ -38,6 +50,17 @@ return [
     'handler' => Blade::class
 ];
 ```
+> **提示**
+> 其它配置选项通过options传入，例如
+```php
+return [
+    'handler' => Blade::class,
+    'options' => [
+        'debug' => false,
+        'charset' => 'utf-8'
+    ]
+];
+```
 
 ## 安装think-template
 1、composer安装
@@ -50,7 +73,19 @@ return [
 use support\view\ThinkPHP;
 
 return [
-    'handler' => ThinkPHP::class
+    'handler' => ThinkPHP::class,
+];
+```
+> **提示**
+> think-template的其它配置选项通过options传入，例如
+```php
+return [
+    'handler' => ThinkPHP::class,
+    'options' => [
+        'view_suffix' => 'html',
+        'tpl_begin' => '{',
+        'tpl_end' => '}'
+    ]
 ];
 ```
 
