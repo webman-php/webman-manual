@@ -34,7 +34,34 @@ class Foo
  - 控制器里可以返回数字、字符串或者`support\Response` 对象，但是不能返回其它类型的数据。
  - `support\Response` 对象可以通过`response()` `json()` `xml()` `jsonp()` `redirect()`等助手函数创建。
  
- 
+## 控制器后缀
+webman支持设置控制器后缀，这可以避免控制器和模型命名会冲突。例如在config/app.php中设置`controller_suffix`为`Controller`时Foo控制器文件及内容类似如下(key `controller_suffix`不存在时请自行创建)。
+
+**控制器文件 `app\controller\FooController.php`。**
+
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+
+class FooController
+{
+    public function index(Request $request)
+    {
+        return response('hello index');
+    }
+    
+    public function hello(Request $request)
+    {
+        return response('hello webman');
+    }
+}
+```
+
+> **注意**
+> 此特性需要webman>=1.3
+
 ## 生命周期
  - 控制器仅在被需要的时候才会被实例化。
  - 控制器一旦实例化后遍会常驻内存直到进程销毁。
