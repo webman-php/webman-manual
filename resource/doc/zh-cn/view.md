@@ -20,7 +20,8 @@ return [
 ];
 ```
 > **提示**
-> 其它配置选项通过options传入，例如
+> 其它配置选项通过options传入，例如  
+
 ```php
 return [
     'handler' => Twig::class,
@@ -40,7 +41,6 @@ composer remove jenssegers/blade
 composer require jenssegers/blade ~1.4.0
 ```
 
-
 2、修改配置`config/view.php`为
 ```php
 <?php
@@ -48,17 +48,6 @@ use support\view\Blade;
 
 return [
     'handler' => Blade::class
-];
-```
-> **提示**
-> 其它配置选项通过options传入，例如
-```php
-return [
-    'handler' => Blade::class,
-    'options' => [
-        'debug' => false,
-        'charset' => 'utf-8'
-    ]
 ];
 ```
 
@@ -77,7 +66,8 @@ return [
 ];
 ```
 > **提示**
-> think-template的其它配置选项通过options传入，例如
+> 其它配置选项通过options传入，例如
+
 ```php
 return [
     'handler' => ThinkPHP::class,
