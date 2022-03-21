@@ -11,7 +11,7 @@
 2、插件配置文件统一放在 `config/plugin/厂商/插件名/` 下(console命令会自动创建配置目录)。如果插件不需要配置，则需要删除自动创建的配置目录。
 3、插件配置目录仅支持 app.php插件主配置，bootstrap.php 进程启动配置，route.php 路由配置，middleware.php 中间件配置，process.php 自定义进程配置，database.php数据库配置，redis.php redis配置，thinkorm.php thinkorm配置。这些配置会自动被webman识别。
 4、插件使用以下方法获取配置`config('plugin.厂商.插件名.配置文件.具体配置项');`，例如`config('plugin.webman.push.app.app_key')`
-5、插件如果有自己的数据库配置，则通过以下方式访问。`illuminate/database`为`Db::connection('plugin.厂商.插件名.具体的连接')`，`think-rom`为`Db::connct('plugin.厂商.插件名.具体的连接')`
+5、插件如果有自己的数据库配置，则通过以下方式访问。`illuminate/database`为`Db::connection('plugin.厂商.插件名.具体的连接')`，`thinkrom`为`Db::connct('plugin.厂商.插件名.具体的连接')`
 6、如果插件需要在`app/`目录下放置业务文件，需要确保不与用户项目以及其它插件冲突。
 7、插件应该尽量避免向主项目拷贝文件或目录，例如跨域插件除了配置文件需要拷贝到主项目，中间件文件应该放在`vendor/webman/cros/src`下，不必拷贝到主项目。
 8、插件命名空间建议使用大写，例如 Webman/Console。
@@ -32,7 +32,7 @@
 
 > 注意
 > `config/plugin/foo/admin` 支持以下配置，app.php插件主配置，bootstrap.php 进程启动配置，route.php 路由配置，middleware.php 中间件配置，process.php 自定义进程配置，database.php数据库配置，redis.php redis配置，thinkorm.php thinkorm配置。配置格式与webman相同，这些配置会自动被webman识别合并到配置当中。
-使用时以 `plugin` 为前缀访问，例如 config('plugin.foo.adming.app');
+使用时以 `plugin` 为前缀访问，例如 config('plugin.foo.admin.app');
 
 
 **导出插件**
@@ -42,7 +42,7 @@
 导出
 
 > 说明
-> 导出后会将config/plugin/foo/admin目录拷贝到vendor/foo/admin/src下，并在这个目录下自动生成一个Install.php，Install.php用于自动安装和自动卸载时执行一些操作。
+> 导出后会将config/plugin/foo/admin目录拷贝到vendor/foo/admin/src下，同时自动生成一个Install.php，Install.php用于自动安装和自动卸载时执行一些操作。
 > 安装默认操作是将 vendor/foo/admin/src 下的配置拷贝到当前项目config/plugin下
 > 移除时默认操作是将 当前项目config/plugin 下的配置文件删除
 > 你可以修改Install.php以便在安装和卸载插件时做一些自定义操作。
