@@ -1,11 +1,11 @@
-# webman/push 推送插件
+##简介
 
 `webman/push` 是一个推送插件，客户端基于订阅模式，兼容 **pusher**，拥有众多客户端如JS、安卓(java)、IOS(swift)、IOS(Obj-C)、uniapp。后端推送SDK支持PHP、Node、Ruby、Asp、Java、Python、Go等。使用起来非常简单稳定。适用于消息推送、聊天等诸多即时通讯场景。
 
 > 插件需要webman>=1.2.0 webman-framework>=1.2.0
 
 ## 安装
- 
+
 ```sh
 composer require webman/push
 ```
@@ -60,7 +60,7 @@ group_channel.on('message', function(data) {
 use Webman\Push\Api;
 $api = new Api(
     // webman下可以直接使用config获取配置，非webman环境需要手动写入相应配置
-    config('plugin.webman.push.app.api'),
+    'http://127.0.0.1:3232',
     config('plugin.webman.push.app.app_key'),
     config('plugin.webman.push.app.app_secret')
 );
@@ -117,10 +117,10 @@ webhook用来接收频道的一些事件。
 **目前主要有2个事件：**
 
 - 1、channel_added
-当某个频道从没有客户端在线到有客户端在线时触发的事件，或者说是在线事件
+  当某个频道从没有客户端在线到有客户端在线时触发的事件，或者说是在线事件
 
 - 2、channel_removed
-当某个频道的所有客户端都下线时触发的事件，或者说是离线事件
+  当某个频道的所有客户端都下线时触发的事件，或者说是离线事件
 
 > **Tips**
 > 这些事件在维护用户在线状态非常有用。
@@ -130,14 +130,12 @@ webhook用来接收频道的一些事件。
 > 接收处理webhook事件的代码参考 `config/plugin/webman/push/route.php` 里面的逻辑
 > 由于刷新页面导致用户短暂离线不应该算作离线，webman/push会做延迟判断，所以在线/离线事件会有1-3秒的延迟。
 
-## nginx代理wss
-https需要使用wss才能正常通讯，nginx请参考以下配置设置ssl代理(需要重启nginx)
+## wss代理(SSL)
+https下无法使用ws连接，需要使用wss连接。这种情况可以使用nginx代理wss，配置类似如下：
 ```
 server {
-    listen 443 ssl;
-        
-    # 这里省略其他配置 . . .
-        
+    # .... 这里省略了其它配置 ...
+
     location /app
     {
         proxy_pass http://127.0.0.1:3131;
@@ -146,18 +144,21 @@ server {
         proxy_set_header Connection "Upgrade";
         proxy_set_header X-Real-IP $remote_addr;
     }
-    
 }
 ```
-
-配置好nginx代理后， 前端使用wss连接，并省略端口号，例如
-```js
+重启nginx后，使用以下方式连接服务端
+```
 var connection = new Push({
-    url: 'wss://域名.com', // 使用wss，省略端口号
-    app_key: '<app_key>',
+    url: 'wss://example.com',
+    app_key: '<app_key，在config/plugin/webman/push/app.php里获取>',
     auth: '/plugin/webman/push/auth' // 订阅鉴权(仅限于私有频道)
 });
 ```
-
 > **注意**
-> ssl证书一般是与域名绑定的，所以wss请使用证书所对应的域名，不要使用ip或者其它域名。
+> 1. wss开头
+> 2. 不写端口
+> 3. 必须使用**ssl证书对应的域名**连接
+
+## 其他客户端地址
+`webman/push` 兼容pusher，其他语言(Java Swift .NET Objective-C Unity Flutter Android  IOS AngularJS等)客户端地址下载地址：
+https://pusher.com/docs/channels/channels_libraries/libraries/
