@@ -76,7 +76,7 @@ class FooController
 `composer require webman/action-hook`
 
 > **注意**
-> 插件需要webman>=1.2，如果你的版本低于1.2可以参考这里[手动配置action-hook](workerman.net/a/1303)
+> 插件需要webman>=1.2，如果你的版本低于1.2可以参考这里[手动配置action-hook](https://www.workerman.net/a/1303)
 
 ### 使用 `beforeAction()` `afterAction()`
 ```php
