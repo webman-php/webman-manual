@@ -9,7 +9,7 @@ https://github.com/overtrue/wechat
 ### 安装
  
 ```php
-composer require overtrue/wechat:~4.0
+composer require overtrue/wechat
 ```
   
 ### 使用
