@@ -31,6 +31,8 @@
 ├── start.php                     服务启动文件
 ├── vendor                        composer安装的第三方类库目录
 └── support                       类库适配(包括第三方类库)
+    ├── Request.php               请求类
+    ├── Response.php              响应类
     ├── Plugin.php                插件安装卸载脚本
     ├── helpers.php               助手函数
     └── bootstrap.php             进程启动后初始化脚本
