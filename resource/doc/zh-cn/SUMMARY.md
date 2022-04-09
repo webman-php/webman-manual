@@ -72,6 +72,9 @@
   - [升级方法](others/upgrade.md)
   - [nginx代理](others/nginx-proxy.md)
   - [phar打包](others/phar.md)
+  - [启动流程](others/process.md)
+  - [生命周期](others/lifecycle.md)
+  - [业务初始化](others/bootstrap.md)
 - [致谢](thanks.md)
   
  
