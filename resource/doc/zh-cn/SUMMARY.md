@@ -75,6 +75,7 @@
   - [启动流程](others/process.md)
   - [生命周期](others/lifecycle.md)
   - [业务初始化](others/bootstrap.md)
+  - [自动加载](others/autoload.md)
 - [致谢](thanks.md)
   
  
