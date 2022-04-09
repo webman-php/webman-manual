@@ -86,6 +86,11 @@
   </tr>
   <tr>
     <td align="center">
+      <a href="https://github.com/qiqizjl">
+        <img src="https://avatars.githubusercontent.com/u/7540584?v=4" width="100px;"/><h5>qiqizjl</h3>
+      </a>
+    </td>
+    <td align="center">
       <a href="https://github.com/ruixs520">
         <img src="https://avatars.githubusercontent.com/u/33084036?v=4" width="100px;"/><h5>ruixs520</h3>
       </a>
