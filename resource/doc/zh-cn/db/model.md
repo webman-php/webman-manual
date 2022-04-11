@@ -197,7 +197,7 @@ $user->name; // "tom"
 ```
 
 ## 集合
-Eloquent 的 all 和 get 方法可以查询到多个结果，返回一个 `Illuminate\Database\Eloquent\Collection `实例。`Collection` 类提供了 [大量的辅助函数](available-methods.md) 来处理 Eloquent 结果：
+Eloquent 的 all 和 get 方法可以查询到多个结果，返回一个 `Illuminate\Database\Eloquent\Collection `实例。`Collection` 类提供了大量的辅助函数来处理 Eloquent 结果：
 ```php
 $users = $users->reject(function ($user) {
     return $user->disabled;

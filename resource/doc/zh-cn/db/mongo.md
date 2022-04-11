@@ -9,7 +9,7 @@ webman默认使用 [jenssegers/mongodb](https://github.com/jenssegers/laravel-mo
 ## 安装
 
 ```php
-composer require illuminate/database
+composer require illuminate/database -W
 composer require jenssegers/mongodb
 ```
 
