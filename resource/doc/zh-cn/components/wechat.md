@@ -9,7 +9,7 @@ https://github.com/overtrue/wechat
 ### 安装
  
 ```php
-composer require overtrue/wechat
+composer require overtrue/wechat ^5.0
 ```
   
 ### 使用
@@ -41,5 +41,5 @@ class Wechat
   
 ### 更多内容
 
-访问 https://www.easywechat.com/docs
+访问 https://www.easywechat.com/5.x/
 
