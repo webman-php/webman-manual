@@ -2,7 +2,7 @@
 
 ### 安装ThinkORM
 
-`composer require webman/think-orm -W`
+`composer -W require webman/think-orm`
 
 > [webman/think-orm](https://www.workerman.net/plugin/14) 实际上是一个自动化安装`toptink/think-orm` 的插件，如果你的webman版本低于`1.2`无法使用插件请参考文章[手动安装并配置think-orm](https://www.workerman.net/a/1289)。
 

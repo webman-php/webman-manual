@@ -37,7 +37,7 @@ return [
 1、composer安装
 
 ```
-composer require jenssegers/blade ~1.4.0 -W
+composer require -W jenssegers/blade ~1.4.0
 ```
 
 2、修改配置`config/view.php`为
