@@ -76,6 +76,7 @@
   - [生命周期](others/lifecycle.md)
   - [业务初始化](others/bootstrap.md)
   - [自动加载](others/autoload.md)
+  - [性能](others/performance.md)
 - [致谢](thanks.md)
   
  
