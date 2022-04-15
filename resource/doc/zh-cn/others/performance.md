@@ -3,21 +3,21 @@
 
 ###传统框架请求处理流程
 
-0. nginx/apache接收请求
-1. nginx/apache将请求传递给php-fpm
-2. php-fpm初始化环境，如创建变量列表
-3. php-fpm调用各个扩展/模块的RINIT
-4. php-fpm磁盘读取php文件
-5. php-fpm词法分析、语法分析、编译成opcde
-6. php-fpm执行opcode 包括
-7. 框架例化各种类，包括框架相关的类、如容器、控制器、路由、中间键等。
-8. 框架连接数据库、redis
-9. 框架执行业务逻辑
-10. 框架关闭数据库、redis
-11. php-fpm释放资源、销毁所有类定义、实例、销毁符号表等
-12. php-fpm顺序调用各个扩展/模块的RSHUTDOWN方法
-13. php-fpm将结果转发给nginx/apache
-14. nginx/apache将结果返回给客户端
+1. nginx/apache接收请求
+2. nginx/apache将请求传递给php-fpm
+3. php-fpm初始化环境，如创建变量列表
+4. php-fpm调用各个扩展/模块的RINIT
+5. php-fpm磁盘读取php文件
+6. php-fpm词法分析、语法分析、编译成opcde
+7. php-fpm执行opcode 包括
+8. 框架例化各种类，包括框架相关的类、如容器、控制器、路由、中间键等。
+9. 框架连接数据库、redis
+10. 框架执行业务逻辑
+11. 框架关闭数据库、redis
+12. php-fpm释放资源、销毁所有类定义、实例、销毁符号表等
+13. php-fpm顺序调用各个扩展/模块的RSHUTDOWN方法
+14. php-fpm将结果转发给nginx/apache
+15. nginx/apache将结果返回给客户端
 
 **传统框架性能差主要有5个原因**
 1. php-fpm请求开始初始化一切，请求结束销毁一切的开销
