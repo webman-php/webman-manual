@@ -137,7 +137,7 @@ public function payment(Request $request)
     $config = Config::get('payment');
 
     // 2. 初始化配置
-    Pay::config(config);
+    Pay::config($config);
 
     // 3. 网页支付
     $order = [
@@ -207,6 +207,9 @@ public function alipayReturn(Request $request)
     return 'success';
 }
 ```
+## 案例完整代码
+
+https://github.com/Tinywan/webman-admin/blob/main/app/controller/Test.php
 
 ## 更多内容
  
