@@ -34,6 +34,109 @@ class Foo
  - 控制器里可以返回数字、字符串或者`support\Response` 对象，但是不能返回其它类型的数据。
  - `support\Response` 对象可以通过`response()` `json()` `xml()` `jsonp()` `redirect()`等助手函数创建。
  
+ 
+## 生命周期
+ - 控制器仅在被需要的时候才会被实例化。
+ - 控制器一旦实例化后遍会常驻内存直到进程销毁。
+ - 由于控制器实例常驻内存，所以不会每个请求都会初始化一次控制器。
+
+## 资源型控制器
+资源型路由规则，参见[路由](route.md)。
+ ```php
+<?php
+namespace app\controller;
+
+use support\Request;
+
+class Foo
+{
+    /**
+    * 首页/列表页只支持get访问 /foo
+    * @param Request $request
+    * @return \support\Response
+    */
+    public function index(Request $request)
+    {
+        return response('hello index');
+    }
+    /**
+    * 新增只支持get访问 /foo/create
+    * @param Request $request
+    * @return \support\Response
+    */
+    public function create(Request $request)
+    {
+        return response('hello webman');
+    }
+    /**
+    * 新增提交只支持post提交 /foo
+    * @param Request $request
+    * @return \support\Response
+    */
+    public function store(Request $request)
+    {
+        $params = $request->all();
+        return response('hello webman');
+    }
+    /**
+    * 获取详情只支持get访问 /foo/{id}
+    * @param Request $request
+    * @return \support\Response
+    */
+    public function show(Request $request,$id)
+    {
+        return response('hello webman');
+    }
+    /**
+    * 编辑获取数据只支持get访问 /foo/{id}/edit
+    * @param Request $request
+    * @return \support\Response
+    */
+    public function edit(Request $request,$id)
+    {
+        return response('hello webman');
+    }
+    /**
+    * 编辑提交只支持PUT提交 /foo/{id}
+    * @param Request $request
+    * @return \support\Response
+    */
+    public function update(Request $request,$id)
+    {
+        $params = $request->all();
+        return response('hello webman');
+    }
+    /**
+    * 删除只支持DELETE /foo/{id}
+    * @param Request $request
+    * @return \support\Response
+    */
+    public function destroy(Request $request,$id)
+    {
+         //获取id数组 
+        $ids = is_array($id) ? $id : (is_string($id) ? explode(',', $id) : func_get_args());
+        return response('hello webman');
+    }
+    /**
+    * 恢复软删除只支持PUT /foo/{id}/recovery
+    * @param Request $request
+    * @return \support\Response
+    */
+    public function recovery(Request $request,$id)
+    {
+        //获取id数组 
+        $ids = is_array($id) ? $id : (is_string($id) ? explode(',', $id) : func_get_args());
+        $params = $request->all();
+        return response('hello webman');
+    }
+}
+```
+ 
+## 控制器钩子 `beforeAction()` `afterAction()`
+在传统框架中，每个请求都会实例化一次控制器，所以很多开发者`__construct()`方法中做一些请求前的准备工作。
+
+而webman由于控制器常驻内存，无法在`__construct()`里做这些工作，不过webman提供了更好的解决方案`beforeAction()` `afterAction()`，它不仅让开发者可以介入到请求前的流程中，而且还可以介入到请求后的处理流程中。
+
 ## 控制器后缀
 webman支持设置控制器后缀，这可以避免控制器和模型命名会冲突。例如在config/app.php中设置`controller_suffix`为`Controller`时Foo控制器文件及内容类似如下(key `controller_suffix`不存在时请自行创建)。
 

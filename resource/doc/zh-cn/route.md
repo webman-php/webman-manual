@@ -35,8 +35,31 @@ Route::any('/test', function ($request) {
 ```php
 Route::any('/testclass', [app\controller\Index::class, 'test']);
 ```
-
 当访问地址为 `http://127.0.0.1:8787/testclass` 时，将返回`app\controller\Index`类的`test`方法的返回值。
+
+## 资源型路由
+```php
+Route::resource('/test', app\controller\Index::class);
+
+//指定资源路由
+Route::resource('/test', app\controller\Index::class,['index','create']);
+
+//非定义性资源路由
+// 如 notify 访问地址则为any型路由 /text/notify或/text/notify/{id} 都可 routeName为 test.notify
+Route::resource('/test', app\controller\Index::class,['index','create','notify']);
+```
+| Verb   | URI                 | Action   | Route Name    |
+|--------|---------------------|----------|---------------|
+| GET    | /test               | index    | test.index    |
+| GET    | /test/create        | create   | test.create   |
+| POST   | /test               | store    | test.store    |
+| GET    | /test/{id}          | show     | test.show     |
+| GET    | /test/{id}/edit     | edit     | test.edit     |
+| PUT    | /test/{id}          | update   | test.update   |
+| DELETE | /test/{id}          | destroy  | test.destroy  |
+| PUT    | /test/{id}/recovery | recovery | test.recovery |
+
+
 
 ## 路由自动解析
 当app目录结构非常复杂，webman无法自动解析时可以安装webman的[自动路由插件](https://www.workerman.net/plugin/17)，它会自动检索所有的控制器并为其自动配置对应的路由，让其通过url可以访问。
