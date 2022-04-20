@@ -36,7 +36,9 @@
   - [Redis](db/redis.md)
   - [Cache](db/cache.md)
   - [MongoDB](db/mongo.md)
-  - [其它数据库](db/others.md)
+  - [ThinkORM](db/thinkorm.md)
+  - [ThinkCache](db/thinkcache.md)
+  - [Medoo](db/medoo.md)
   
 - 消息队列
   - [Redis队列](queue/redis.md)
@@ -70,6 +72,11 @@
   - [升级方法](others/upgrade.md)
   - [nginx代理](others/nginx-proxy.md)
   - [phar打包](others/phar.md)
+  - [启动流程](others/process.md)
+  - [生命周期](others/lifecycle.md)
+  - [业务初始化](others/bootstrap.md)
+  - [自动加载](others/autoload.md)
+  - [性能](others/performance.md)
 - [致谢](thanks.md)
   
  

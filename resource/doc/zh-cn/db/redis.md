@@ -9,7 +9,7 @@ webman的redis组件默认使用的是[illuminate/redis](https://github.com/illu
 ## 安装
 
 ```php
-composer require illuminate/redis
+composer require -W illuminate/redis
 ```
 
 ```

@@ -31,24 +31,9 @@
 ├── start.php                     服务启动文件
 ├── vendor                        composer安装的第三方类库目录
 └── support                       类库适配(包括第三方类库)
-    ├── Db.php                    数据库适配
-    ├── Redis.php                 redis类
-    ├── Cache.php                 缓存类
-    ├── Log.php                   日志类
-    ├── Translation.php           多语言类
-    ├── View.php                  视图类
-    ├── Container.php             容器类
     ├── Request.php               请求类
     ├── Response.php              响应类
+    ├── Plugin.php                插件安装卸载脚本
     ├── helpers.php               助手函数
-    ├── bootstrap                 进程启动onWorkerStart时调用的类目录
-    │   └── Session.php           进程启动时初始化session类
-    ├── exception                 异常相关
-    │   ├── BusinessException.php 业务异常类
-    │   └── Handler.php           业务异常捕获处理类
-    └── view                      视图类目录，支持多个模板引擎
-        ├── Blade.php             Blade视图类
-        ├── Raw.php               原生视图类
-        ├── ThinkPHP.php          ThinkPHP视图类
-        └── Twig.php              Twig视图类
+    └── bootstrap.php             进程启动后初始化脚本
 ```

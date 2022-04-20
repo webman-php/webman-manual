@@ -19,15 +19,26 @@ return [
     'handler' => Twig::class
 ];
 ```
+> **提示**
+> 其它配置选项通过options传入，例如  
+
+```php
+return [
+    'handler' => Twig::class,
+    'options' => [
+        'debug' => false,
+        'charset' => 'utf-8'
+    ]
+];
+```
+
 
 ## 安装Blade
 1、composer安装
 
 ```
-composer remove jenssegers/blade
-composer require jenssegers/blade ~1.4.0
+composer require -W jenssegers/blade ~1.4.0
 ```
-
 
 2、修改配置`config/view.php`为
 ```php
@@ -50,7 +61,20 @@ return [
 use support\view\ThinkPHP;
 
 return [
-    'handler' => ThinkPHP::class
+    'handler' => ThinkPHP::class,
+];
+```
+> **提示**
+> 其它配置选项通过options传入，例如
+
+```php
+return [
+    'handler' => ThinkPHP::class,
+    'options' => [
+        'view_suffix' => 'html',
+        'tpl_begin' => '{',
+        'tpl_end' => '}'
+    ]
 ];
 ```
 

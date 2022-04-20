@@ -1,4 +1,4 @@
-#感谢以下贡献者对webman及文档的贡献
+#Thank the following contributors for their contributions to webman and the document
 <table>
   <tr>
     <td align="center">

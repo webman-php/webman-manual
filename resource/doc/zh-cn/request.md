@@ -28,6 +28,58 @@ class User
 
 **有时候我们想在其它类中获取当前请求的`$request`对象，这时候我们只要使用助手函数`request()`即可**;
 
+## 自定义请求对象
+> **注意**
+> 此特性需要webman>=1.2.5
+
+有时候我们需要自定义请求对象，比如我们想重写`$request->get()` `$request->post()`方法，对用户传入的数据进行转义，避免XSS注入。
+
+**新建 `app/Request.php`**
+```php
+<?php
+namespace app;
+
+class Request extends \support\Request
+{
+    public function get($name = null, $default = null)
+    {
+        return $this->filter(parent::get($name, $default));
+    }
+
+    public function post($name = null, $default = null)
+    {
+        return $this->filter(parent::post($name, $default));
+    }
+
+    public function filter($value)
+    {
+        if (!$value) {
+            return $value;
+        }
+        if (is_array($value)) {
+            array_walk_recursive($value, function(&$item){
+                if (is_string($item)) {
+                    $item = htmlspecialchars($item);
+                }
+            });
+        } else {
+            $value = htmlspecialchars($value);
+        }
+        return $value;
+    }
+}
+```
+在 `config/server.php` 中增加配置，
+```php
+return [
+    // ... 这里省略了其它配置 ...
+
+    'request_class' => app\Request::class,
+];
+```
+
+这样我们就可以使用自己的Request类来处理用户的请求了。
+
 ## 获得请求参数get
 
 **获取整个get数组**
