@@ -6,7 +6,7 @@
 
 ## 安装
 ```php
-composer require -W illuminate/redis ^8.2.0 symfony/cache ^5.2
+composer require psr/container ~v1 illuminate/redis ^8.2.0 symfony/cache ^5.2
 ```
 
 ## Redis配置

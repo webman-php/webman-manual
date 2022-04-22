@@ -3,7 +3,7 @@
 
 ## 安装
 ```
-composer require -W php-di/php-di doctrine/annotations 
+composer require psr/container ~v1 php-di/php-di doctrine/annotations 
 ```
 
 修改配置`config/container.php`，其最终内容如下：
