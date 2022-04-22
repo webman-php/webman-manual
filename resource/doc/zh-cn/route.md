@@ -39,14 +39,14 @@ Route::any('/testclass', [app\controller\Index::class, 'test']);
 
 ## 资源型路由
 ```php
-Route::resource('/test', app\controller\Index::class);
+Route::resource('test', app\controller\Index::class);
 
 //指定资源路由
-Route::resource('/test', app\controller\Index::class,['index','create']);
+Route::resource('test', app\controller\Index::class,['index','create']);
 
 //非定义性资源路由
 // 如 notify 访问地址则为any型路由 /text/notify或/text/notify/{id} 都可 routeName为 test.notify
-Route::resource('/test', app\controller\Index::class,['index','create','notify']);
+Route::resource('test', app\controller\Index::class,['index','create','notify']);
 ```
 | Verb   | URI                 | Action   | Route Name    |
 |--------|---------------------|----------|---------------|
