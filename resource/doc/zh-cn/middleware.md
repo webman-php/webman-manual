@@ -13,7 +13,7 @@ interface MiddlewareInterface
      * If unable to produce the response itself, it may delegate to the provided
      * request handler to do so.
      */
-    public function process(Request $request, callable $next): Response;
+    public function process(Request $request, callable $handler): Response;
 }
 ```
 也就是必须实现`process`方法，`process`方法必须返回一个`support\Response`对象，默认这个对象由`$next($request)`生成，也可以可以使用`response()` `json()` `xml()` `redirect()`等助手函数生成响应，实现响应拦截。
@@ -31,13 +31,13 @@ use Webman\Http\Request;
 
 class AuthCheckTest implements MiddlewareInterface
 {
-    public function process(Request $request, callable $next) : Response
+    public function process(Request $request, callable $handler) : Response
     {
         $session = $request->session();
         if (!$session->get('userinfo')) {
             return redirect('/user/login');
         }
-        return $next($request);
+        return $handler($request);
     }
 }
 ```
@@ -69,9 +69,9 @@ use Webman\Http\Request;
 
 class AccessControlTest implements MiddlewareInterface
 {
-    public function process(Request $request, callable $next) : Response
+    public function process(Request $request, callable $handler) : Response
     {
-        $response = $request->method() == 'OPTIONS' ? response('') : $next($request);
+        $response = $request->method() == 'OPTIONS' ? response('') : $handler($request);
         $response->withHeaders([
             'Access-Control-Allow-Credentials' => 'true',
             'Access-Control-Allow-Origin' => $request->header('Origin', '*'),
@@ -178,10 +178,10 @@ use Webman\Http\Request;
 
 class Hello implements MiddlewareInterface
 {
-    public function process(Request $request, callable $next) : Response
+    public function process(Request $request, callable $handler) : Response
     {
         $request->data = 'some value';
-        return $next($request);
+        return $handler($request);
     }
 }
 ```
