@@ -102,7 +102,7 @@ return [
     
     'redis_consumer'  => [
         'handler'     => Webman\RedisQueue\Process\Consumer::class,
-        'count'       => 8, // 可以设置多进程
+        'count'       => 8, // 这里设置了8个进程共同消费
         'constructor' => [
             // 消费者类目录
             'consumer_dir' => app_path() . '/queue/redis'
@@ -139,4 +139,29 @@ class MyMailSend implements Consumer
 ```
 
   
+## 为不同的队列设置不同的消费进程
+默认情况下，所有的消费者共用相同的消费进程。但有时我们需要将一些队列的消费独立出来，例如消费慢的业务放到一组进程中消费，消费快的业务放到另外一组进程消费。为此我们可以将消费者分为两个目录，例如 `app_path() . '/queue/redis/fast'` 和 `app_path() . '/queue/redis/slow'` （注意消费类的命名空间需要做相应的更改），则配置如下：
+```php
+return [
+    ...这里省略了其它配置...
+    
+    'redis_consumer_fast'  => [
+        'handler'     => Webman\RedisQueue\Process\Consumer::class,
+        'count'       => 8,
+        'constructor' => [
+            // 消费者类目录
+            'consumer_dir' => app_path() . '/queue/redis/fast'
+        ]
+    ],
+    'redis_consumer_slow'  => [
+        'handler'     => Webman\RedisQueue\Process\Consumer::class,
+        'count'       => 8,
+        'constructor' => [
+            // 消费者类目录
+            'consumer_dir' => app_path() . '/queue/redis/slow'
+        ]
+    ]
+];
+```
 
+通过目录分类以及相应的配置，我们就可以轻松的为不同的消费者设置不同的消费进程。
