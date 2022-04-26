@@ -10,7 +10,7 @@
 ## nginx代理示例
 ```
 upstream webman {
-    server 127.0.0.1:8877;
+    server 127.0.0.1:8787;
 }
 
 server {
