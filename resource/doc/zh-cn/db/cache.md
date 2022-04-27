@@ -5,9 +5,15 @@
 > 使用`symfony/cache`之前必须先给`php-cli`安装redis扩展。
 
 ## 安装
+**php 7.x**
 ```php
 composer require psr/container ~v1 illuminate/redis ^8.2.0 symfony/cache ^5.2
 ```
+**php 8.x**
+```php
+composer require psr/container ~v1 illuminate/redis symfony/cache
+```
+
 
 ## Redis配置
 redis配置文件在`config/redis.php`
