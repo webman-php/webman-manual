@@ -47,7 +47,7 @@ composer require webman/console
 
 ### plugin:export
 **导出插件项目**
-例如 `./webman plugin:export foo/admin` 
+例如 `./webman plugin:export --name=foo/admin` 
 参见[创建插件](/doc/webman/plugin/create.html)
 
 ### phar:pack
