@@ -121,6 +121,40 @@ class User
 }
 ```
 
+## 为每个请求明确的设置语言
+translation是一个单例，这意味着所有请求共享这个实例，如果某个请求使用`locale()`设置了默认语言，则它会影响这个进程的后续所有请求。所以我们应该为每个请求明确的设置语言。例如使用以下中间件
+
+创建文件`app/middleware/Lang.php` (如目录不存在请自行创建) 如下：
+```php
+<?php
+namespace app\middleware;
+
+use Webman\MiddlewareInterface;
+use Webman\Http\Response;
+use Webman\Http\Request;
+
+class Lang implements MiddlewareInterface
+{
+    public function process(Request $request, callable $handler) : Response
+    {
+        locale(session('lang', 'zh_CN'));
+        return $handler($request);
+    }
+}
+```
+
+在 `config/middleware.php` 中添加全局中间件如下：
+```php
+return [
+    // 全局中间件
+    '' => [
+        // ... 这里省略其它中间件
+        app\middleware\Lang::class,
+    ]
+];
+```
+
+
 ## 使用占位符
 有时，一条信息包含着需要被翻译的变量，例如
 ```php
