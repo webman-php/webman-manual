@@ -75,6 +75,7 @@
   - [phar打包](others/phar.md)
   - [启动流程](others/process.md)
   - [生命周期](others/lifecycle.md)
+  - [内存泄漏](others/memory-leak.md)
   - [业务初始化](others/bootstrap.md)
   - [自动加载](others/autoload.md)
   - [性能](others/performance.md)
