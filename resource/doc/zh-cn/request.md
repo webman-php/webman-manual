@@ -30,7 +30,7 @@ class User
 
 ## 自定义请求对象
 > **注意**
-> 此特性需要webman>=1.2.5
+> 此特性需要webman>=1.3.1
 
 有时候我们需要自定义请求对象，比如我们想重写`$request->get()` `$request->post()`方法，对用户传入的数据进行转义，避免XSS注入。
 
@@ -69,7 +69,7 @@ class Request extends \support\Request
     }
 }
 ```
-在 `config/server.php` 中增加配置，
+在 `config/app.php` 中增加配置，
 ```php
 return [
     // ... 这里省略了其它配置 ...
@@ -78,7 +78,23 @@ return [
 ];
 ```
 
-这样我们就可以使用自己的Request类来处理用户的请求了。
+这样我们就可以使用自己的Request类来处理用户的请求了，用法类似。
+
+```php
+<?php
+namespace app\controller;
+
+use app\Request;
+
+class Foo
+{
+    public function index(Request $request)
+    {
+        return response('hello webman');
+    }
+}
+```
+
 
 ## 获得请求参数get
 
