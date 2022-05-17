@@ -174,21 +174,31 @@ return [
         
     ],
 
-    'session_name' => 'PHPSID',
+    'session_name' => 'PHPSID', // 存储session_id的cookie名
+    
+    // === 以下配置需要 webman-framework>=1.3.14 workerman>=4.0.37 ===
+    'auto_update_timestamp' => false,  // 是否自动刷新session，默认关闭
+    'lifetime' => 7*24*60*60,          // session过期时间
+    'cookie_lifetime' => 365*24*60*60, // 存储session_id的cookie过期时间
+    'cookie_path' => '/',              // 存储session_id的cookie路径
+    'domain' => '',                    // 存储session_id的cookie域名
+    'http_only' => true,               // 是否开启httpOnly，默认开启
+    'secure' => false,                 // 仅在https下开启session，默认关闭
+    'same_site' => '',                 // 用于防止CSRF攻击和用户追踪，可选值strict/lax/none
+    'gc_probability' => [1, 1000],     // 回收session的几率
 ];
 ```
 
-> 注意：`Webman\RedisClusterSessionHandler::class` 需要 webman-framework >= 1.0.4
 
 ## 有效期配置
-和php-fpm一样，webman中session过期时间由 php.ini 中以下参数决定。
+当webman-framework < 1.3.14时，webman中session过期时间需要在`php.ini`配置。
+
 ```
 session.gc_maxlifetime = x
 session.cookie_lifetime = x
 session.gc_probability = 1
 session.gc_divisor = 1000
 ```
-
 
 假设设定有效期为1440秒，则配置如下
 ```
@@ -197,3 +207,6 @@ session.cookie_lifetime = 1440
 session.gc_probability = 1
 session.gc_divisor = 1000
 ```
+
+> **提示**
+> 可使用命令 `php --ini` 来查找`php.ini`的位置
