@@ -7,7 +7,7 @@ webman从1.2开始支持插件功能，并支持插件的自动安装和卸载�
 插件可以看作是webman项目中的通用的程序片段，它可以是一个中间件，可能是app目录下一个具体应用，也可能是一个自定义进程，甚至是一个静态文件模版。webman提供插件接口让这些通用的程序片段自动复制到我们项目特定位置，自动生成配置文件，从而实现某些功能的快速实现。
 
 ##webman插件市场
-插件发布地址 http://new.workerman.net/plugin/create
+插件发布地址 http://www.workerman.net/plugin/create
 创建插件文档 https://www.workerman.net/doc/webman/plugin/create.html
 
 这里罗列一些webman可能用到的插件，开发者可以自发开发并发布。
