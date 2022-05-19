@@ -410,6 +410,9 @@ Db::table('users')->where('votes', '>', 100)->dd();
 Db::table('users')->where('votes', '>', 100)->dump();
 ```
 
+> **注意**
+> 调试需要安装`symfony/var-dumper`,命令为`composer require symfony/var-dumper`
+
 
 
 
