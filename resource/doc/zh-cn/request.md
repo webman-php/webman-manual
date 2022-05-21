@@ -212,7 +212,7 @@ $request->file();
 </form>
 ```
 
-返回的文件格式类似:
+`$request->file()`返回的格式类似:
 ```php
 array (
     'file1' => object(webman\Http\UploadFile),
@@ -251,7 +251,7 @@ class Upload
 - 文件被上传后会被命名为一个临时文件，类似 `/tmp/workerman.upload.SRliMu`
 - 上传文件大小受到[defaultMaxPackageSize](http://doc.workerman.net/tcp-connection/default-max-package-size.html)限制，默认10M，可在`config/server.php`文件中修改`max_package_size`更改默认值。
 - 请求结束后临时文件将被自动清除
-- 如果请求没有上传文件则返回一个空的数组
+- 如果请求没有上传文件则`$request->file()`返回一个空的数组
 - 上传的文件不支持 `move_uploaded_file()` 方法，请使用 `$file->move()`方法代替，参见下面的例子
 
 ### 获取特定上传文件

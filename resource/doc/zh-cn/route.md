@@ -229,6 +229,8 @@ Route::fallback(function(){
 });
 ```
 
+相关连接 [自定义404 500页面](others/custom-error-page.md)
+
 ## 路由接口
 ```php
 // 设置$uri的任意方法请求的路由
