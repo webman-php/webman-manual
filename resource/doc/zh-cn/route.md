@@ -42,11 +42,11 @@ Route::any('/testclass', [app\controller\Index::class, 'test']);
 Route::resource('/test', app\controller\Index::class);
 
 //指定资源路由
-Route::resource('/test', app\controller\Index::class,['index','create']);
+Route::resource('/test', app\controller\Index::class, ['index','create']);
 
 //非定义性资源路由
 // 如 notify 访问地址则为any型路由 /text/notify或/text/notify/{id} 都可 routeName为 test.notify
-Route::resource('/test', app\controller\Index::class,['index','create','notify']);
+Route::resource('/test', app\controller\Index::class, ['index','create','notify']);
 ```
 | Verb   | URI                 | Action   | Route Name    |
 |--------|---------------------|----------|---------------|
@@ -75,7 +75,7 @@ Route::resource('/test', app\controller\Index::class,['index','create','notify']
 如果路由中存在参数，通过`{key}`来匹配，匹配结果将传递到对应的控制器方法参数中(从第二个参数开始依次传递)，例如：
 ```php
 // 匹配 /user/123 /user/abc
-Route::any('/user/{id}', [app\controller\User:class, 'get']);
+Route::any('/user/{id}', [app\controller\User::class, 'get']);
 ```
 ```php
 namespace app\controller;
@@ -249,6 +249,8 @@ Route::head($uri, $callback);
 Route::add(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'], $uri, $callback);
 // 分组路由
 Route::group($path, $callback);
+// 资源路由
+Route::resource($path, $callback, [$options]);
 // 回退路由，设置默认的路由兜底
 Route::fallback($callback);
 ```

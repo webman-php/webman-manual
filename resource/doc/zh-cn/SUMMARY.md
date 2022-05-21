@@ -70,6 +70,8 @@
   - [AOP](aop.md)
   
 - 其它
+  - [安全](others/security.md)
+  - [自定义404 500](others/custom-error-page.md)
   - [升级方法](others/upgrade.md)
   - [nginx代理](others/nginx-proxy.md)
   - [phar打包](others/phar.md)

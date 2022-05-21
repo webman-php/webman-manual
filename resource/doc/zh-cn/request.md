@@ -202,6 +202,16 @@ $except = $request->except(['avatar', 'age']);
 ```php
 $request->file();
 ```
+
+表单类似:
+```html
+<form method="post" action="http://127.0.0.1:8787/upload/files" enctype="multipart/form-data" />
+<input name="file1" multiple="multiple" type="file">
+<input name="file2" multiple="multiple" type="file">
+<input type="submit">
+</form>
+```
+
 返回的文件格式类似:
 ```php
 array (
@@ -209,23 +219,46 @@ array (
     'file2' => object(webman\Http\UploadFile)
 )
 ```
-他是一个`webman\Http\UploadFile`实例的数组。`webman\Http\UploadFile`类继承了 PHP 的 SplFileInfo 类的同时也提供了各种与文件交互的方法。
- 
+他是一个`webman\Http\UploadFile`实例的数组。`webman\Http\UploadFile`类继承了 PHP 内置的 [`SplFileInfo`](https://www.php.net/manual/zh/class.splfileinfo.php) 类，并且提供了一些实用的方法。
+
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+
+class Upload
+{
+    public function files(Request $request)
+    {
+        foreach ($request->file() as $key => $spl_file) {
+            var_export($spl_file->isValid()); // 文件是否有效，例如ture|false
+            var_export($spl_file->getUploadExtension()); // 上传文件后缀名，例如'jpg'
+            var_export($spl_file->getUploadMineType()); // 上传文件mine类型，例如 'image/jpeg'
+            var_export($spl_file->getUploadErrorCode()); // 获取上传错误码，例如 UPLOAD_ERR_NO_TMP_DIR UPLOAD_ERR_NO_FILE UPLOAD_ERR_CANT_WRITE
+            var_export($spl_file->getUploadName()); // 上传文件名，例如 'my-test.jpg'
+            var_export($spl_file->getSize()); // 获得文件大小，例如 13364，单位字节
+            var_export($spl_file->getPath()); // 获得上传的目录，例如 '/tmp'
+            var_export($spl_file->getRealPath()); // 获得临时文件路径，例如 `/tmp/workerman.upload.SRliMu`
+        }
+        return response('ok');
+    }
+}
+```
 
 **注意：**
 
- - 上传文件大小受到[defaultMaxPackageSize](http://doc.workerman.net/tcp-connection/default-max-package-size.html)限制，默认10M，可在`config/server.php`文件中修改`max_package_size`更改默认值。
-
- - 请求结束后临时文件将被自动清除。
-
- - 如果请求没有上传文件则返回一个空的数组。
+- 文件被上传后会被命名为一个临时文件，类似 `/tmp/workerman.upload.SRliMu`
+- 上传文件大小受到[defaultMaxPackageSize](http://doc.workerman.net/tcp-connection/default-max-package-size.html)限制，默认10M，可在`config/server.php`文件中修改`max_package_size`更改默认值。
+- 请求结束后临时文件将被自动清除
+- 如果请求没有上传文件则返回一个空的数组
+- 上传的文件不支持 `move_uploaded_file()` 方法，请使用 `$file->move()`方法代替，参见下面的例子
 
 ### 获取特定上传文件
 ```php
 $request->file('avatar');
 ```
 如果文件存在的话则返回对应文件的`webman\Http\UploadFile`实例，否则返回null。
-
 
 **例子**
 ```php
@@ -234,11 +267,11 @@ namespace app\controller;
 
 use support\Request;
 
-class User
+class Upload
 {
     public function file(Request $request)
     {
-        $file = $request->file('upload');
+        $file = $request->file('avatar');
         if ($file && $file->isValid()) {
             $file->move(public_path().'/files/myfile.'.$file->getUploadExtension());
             return json(['code' => 0, 'msg' => 'upload success']);
