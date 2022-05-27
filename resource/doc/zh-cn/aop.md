@@ -7,7 +7,7 @@
 - 安装 aop-integration
 
 ```shell
-composer require hyperf/aop-integration
+composer require "hyperf/aop-integration: ^1.1"
 ```
 
 ### 增加 AOP 相关配置
@@ -16,6 +16,8 @@ composer require hyperf/aop-integration
 
 ```php
 <?php
+
+use Hyperf\Di\Annotation\AspectCollector;
 
 return [
     'annotations' => [
@@ -27,6 +29,9 @@ return [
                 'mixin',
             ],
             'class_map' => [
+            ],
+            'collectors' => [
+                AspectCollector::class
             ],
         ],
     ],
