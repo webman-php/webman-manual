@@ -26,7 +26,7 @@
 
 假设创建的插件名字叫 `foo/admin` (名称也就是后面composer要发布的项目名，名称需要小写)
 运行命令
-`./webman plugin:create --name=foo/admin`
+`php webman plugin:create --name=foo/admin`
 
 创建插件后会生成目录 `vendor/foo/admin` 用于存放插件相关文件 和 `config/plugin/foo/admin` 用于存放插件相关配置。
 
@@ -38,7 +38,7 @@
 **导出插件**
 
 当我们开发完插件后，执行以下命令导出插件
-`./webman plugin:export --name=foo/admin`
+`php webman plugin:export --name=foo/admin`
 导出
 
 > 说明

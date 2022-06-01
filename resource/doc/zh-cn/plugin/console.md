@@ -12,8 +12,8 @@ composer require webman/console
 
 ## 支持的命令
 **使用方法**  
-`./webman 命令` 或者 `php webman 命令`。
-例如 `./webman version` 或者 `php webman version`
+`php webman 命令` 或者 `php webman 命令`。
+例如 `php webman version` 或者 `php webman version`
 
 ## 支持的命令
 ### version
@@ -24,30 +24,30 @@ composer require webman/console
 
 ### make:controller
 **创建一个控制器文件** 
-例如 `./webman make:controller admin` 将创建一个 `app/controller/Admin.php`
-例如 `./webman make:controller api/user` 将创建一个 `app/api/controller/User.php`
+例如 `php webman make:controller admin` 将创建一个 `app/controller/Admin.php`
+例如 `php webman make:controller api/user` 将创建一个 `app/api/controller/User.php`
 
 ### make:model
 **创建一个model文件**
-例如 `./webman make:model admin` 将创建一个 `app/model/Admin.php`
-例如 `./webman make:model api/user` 将创建一个 `app/api/model/User.php`
+例如 `php webman make:model admin` 将创建一个 `app/model/Admin.php`
+例如 `php webman make:model api/user` 将创建一个 `app/api/model/User.php`
 
 ### make:middleware
 **创建一个中间件文件**
-例如 `./webman make:middleware Auth` 将创建一个 `app/middleware/Auth.php`
+例如 `php webman make:middleware Auth` 将创建一个 `app/middleware/Auth.php`
 
 ### make:command
 **创建自定义命令文件**
-例如 `./webman make:command db:config` 将创建一个 `app\command\DbConfigCommand.php`
+例如 `php webman make:command db:config` 将创建一个 `app\command\DbConfigCommand.php`
 
 ### plugin:create
 **创建一个插件项目**
-例如 `./webman plugin:create --name=foo/admin` 将创建`config/plugin/foo/admin` 和 `vendor/foo/admin` 两个目录
+例如 `php webman plugin:create --name=foo/admin` 将创建`config/plugin/foo/admin` 和 `vendor/foo/admin` 两个目录
 参见[创建插件](/doc/webman/plugin/create.html)
 
 ### plugin:export
 **导出插件项目**
-例如 `./webman plugin:export --name=foo/admin` 
+例如 `php webman plugin:export --name=foo/admin` 
 参见[创建插件](/doc/webman/plugin/create.html)
 
 ### phar:pack
@@ -58,7 +58,7 @@ composer require webman/console
 ## 自定义命令
 用户可以定义自己的命令，例如以下是打印数据库配置的命令
 
-* 执行 `./webman make:command config:mysql`
+* 执行 `php webman make:command config:mysql`
 * 打开 `app/command/ConfigMySQLCommand.php` 修改成如下
 
 ```php

@@ -10,7 +10,7 @@
 
 #### 执行命令
 
-执行命令 `./webman make:bootstrap MemReport` 生成初始化文件 `app/bootstrap/MemReport.php`
+执行命令 `php webman make:bootstrap MemReport` 生成初始化文件 `app/bootstrap/MemReport.php`
 
 > **提示**
 > 如果你的webman没有安装 `webman/console`，执行命令 `composer require webman/console` 安装
