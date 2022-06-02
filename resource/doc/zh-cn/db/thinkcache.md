@@ -2,7 +2,7 @@
 ## ThinkCache
 
 ### 安装ThinkCache  
-`composer require psr/container ^v1 webman/think-cache`
+`composer require psr/container ^1.1.1 webman/think-cache`
 
 > [webman/think-cache](https://www.workerman.net/plugin/15) 实际上是一个自动化安装`toptink/think-cache` 的插件。
   

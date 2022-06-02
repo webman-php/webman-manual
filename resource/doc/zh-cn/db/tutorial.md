@@ -12,7 +12,7 @@ composer require -W psr/container ^1.1.1 illuminate/database illuminate/paginati
 
 > **提示**
 > 如果不需要分页、数据库事件、打印SQL，则只需要执行
-> `composer require -W psr/container ^v1 illuminate/database`
+> `composer require -W psr/container ^1.1.1 illuminate/database`
 
 ## 数据库配置
 `config/database.php`

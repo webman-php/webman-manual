@@ -7,11 +7,11 @@
 ## 安装
 **php 7.x**
 ```php
-composer require psr/container ^v1 illuminate/redis ^8.2.0 symfony/cache ^5.2
+composer require psr/container ^1.1.1 illuminate/redis ^8.2.0 symfony/cache ^5.2
 ```
 **php 8.x**
 ```php
-composer require psr/container ^v1 illuminate/redis symfony/cache
+composer require psr/container ^1.1.1 illuminate/redis symfony/cache
 ```
 
 
