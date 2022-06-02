@@ -2,7 +2,7 @@
 
 ### 安装ThinkORM
 
-`composer config -g --unset repos.packagist && composer -W require psr/container ^1.1.1 webman/think-orm`
+`composer -W require psr/container ^1.1.1 webman/think-orm`
 
 > **提示**
 > 如果安装失败，可能是因为你使用了composer代理，尝试运行 `composer config -g --unset repos.packagist` 取消composer代理试下
