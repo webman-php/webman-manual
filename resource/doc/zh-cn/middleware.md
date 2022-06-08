@@ -250,6 +250,8 @@ class Foo
 > **注意**
 > 需要 webman-framework >= 1.3.15
 
+我们可以使用 `$request->route` 获取路由对象，通过调用对应的方法获取相应信息。
+
 **路由配置**
 ```php
 <?php
@@ -275,7 +277,7 @@ class Hello implements MiddlewareInterface
         $route = $request->route;
         // 如果请求没有匹配任何路由(默认路由除外)，则 $request->route 为 null
         if ($route) {
-            var_export($route->getPath());       //  /user/{uid}
+            var_export($route->getPath());       // /user/{uid}
             var_export($route->getMethods());    // ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD','OPTIONS']
             var_export($route->getName());       // user_view
             var_export($route->getMiddleware()); // []

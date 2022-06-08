@@ -213,6 +213,26 @@ route('blog.view', ['id' => 100]); // 结果为 /blog/100
 视图里使用路由的url时可以使用此方法，这样不管路由规则如何变化，url都会自动生成，避免因路由地址调整导致大量更改视图文件的情况。
 
 
+## 获取路由信息
+通过`$request->route`对象我们可以获取当前请求路由信息，例如
+
+```php
+$route = $request->route; // 等价与 request()->route
+if ($route) {
+    var_export($route->getPath());       // /user/{uid}
+    var_export($route->getMethods());    // ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD','OPTIONS']
+    var_export($route->getName());       // user_view
+    var_export($route->getMiddleware()); // []
+    var_export($route->getCallback());   // ['app\\controller\\User', 'view']
+    var_export($route->param());         // ['uid' => 111]
+    var_export($route->param('uid'));    // 111
+}
+```
+
+> **注意**
+> 如果请求没有匹配任何路由(默认路由除外)，则`$request->route`为null
+
+
 ## 处理404
 当路由找不到时默认返回404状态码并输出`public/404.html`文件内容。
 
