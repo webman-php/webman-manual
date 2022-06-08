@@ -12,7 +12,7 @@ webman在404时会自动返回`public/404.html`里面的内容，所以开发者
     <title>404 not found</title>
 </head>
 <body>
-here <?=htmlspecialchars($some)?>
+<?=htmlspecialchars($error)?>
 </body>
 </html>
 ```
@@ -28,7 +28,7 @@ Route::fallback(function(Request $request){
         return json(['code' => 404, 'msg' => '404 not found']);
     }
     // 页面请求返回404.html模版
-    return view('404', ['some' => 'data']);
+    return view('404', ['error' => 'some error']);
 });
 ```
 
@@ -40,11 +40,11 @@ Route::fallback(function(Request $request){
 <html>
 <head>
     <meta charset="utf-8">
-    <title>webman</title>
+    <title>500 Internal Server Error</title>
 </head>
 <body>
 自定义错误模版：
-<?=$some?>
+<?=htmlspecialchars($exception)?>
 </body>
 </html>
 ```

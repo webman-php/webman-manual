@@ -246,3 +246,84 @@ class Foo
 }
 ```
 
+## 中间件获取路由及参数
+> **注意**
+> 需要 webman-framework >= 1.3.15
+
+**路由配置**
+```php
+<?php
+use support\Request;
+use Webman\Route;
+
+Route::any('/user/{uid}', [app\controller\User::class, 'view']);
+```
+
+**中间件：**
+```php
+<?php
+namespace app\middleware;
+
+use Webman\MiddlewareInterface;
+use Webman\Http\Response;
+use Webman\Http\Request;
+
+class Hello implements MiddlewareInterface
+{
+    public function process(Request $request, callable $handler) : Response
+    {
+        $route = $request->route;
+        // 如果请求没有匹配任何路由(默认路由除外)，则 $request->route 为 null
+        if ($route) {
+            var_export($route->getPath());       //  /user/{uid}
+            var_export($route->getMethods());    // ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD','OPTIONS']
+            var_export($route->getName());       // user_view
+            var_export($route->getMiddleware()); // []
+            var_export($route->getCallback());   // ['app\\controller\\User', 'view']
+            var_export($route->param());         // ['uid' => 111]
+            var_export($route->param('uid'));    // 111
+        }
+        return $handler($request);
+    }
+}
+```
+
+## 中间件获取异常
+> **注意**
+> 需要 webman-framework >= 1.3.15
+
+业务处理过程中可能会产生异常，在中间件里使用 `$response->excption()` 获取异常。
+
+**路由配置**
+```php
+<?php
+use support\Request;
+use Webman\Route;
+
+Route::any('/user/{uid}', function (Request $request, $uid) {
+    throw new \Exception('exception test');
+});
+```
+
+**中间件：**
+```php
+<?php
+namespace app\middleware;
+
+use Webman\MiddlewareInterface;
+use Webman\Http\Response;
+use Webman\Http\Request;
+
+class Hello implements MiddlewareInterface
+{
+    public function process(Request $request, callable $handler) : Response
+    {
+        $response = $handler($request);
+        $excption = $response->excption();
+        if ($excption) {
+            echo $excption->getMessage();
+        }
+        return $response;
+    }
+}
+```
