@@ -276,17 +276,24 @@ class Hello implements MiddlewareInterface
     {
         $route = $request->route;
         // 如果请求没有匹配任何路由(默认路由除外)，则 $request->route 为 null
+        // 假设浏览器访问地址 /user/111，则会打印如下信息
         if ($route) {
             var_export($route->getPath());       // /user/{uid}
             var_export($route->getMethods());    // ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD','OPTIONS']
             var_export($route->getName());       // user_view
             var_export($route->getMiddleware()); // []
             var_export($route->getCallback());   // ['app\\controller\\User', 'view']
+            var_export($route->param());         // ['uid'=>111]
+            var_export($route->param('uid'));    // 111 
         }
         return $handler($request);
     }
 }
 ```
+
+> **注意**
+> `$route->param()`方法需要 webman-framework >= 1.3.16
+
 
 ## 中间件获取异常
 > **注意**
