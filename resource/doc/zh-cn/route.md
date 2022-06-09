@@ -214,6 +214,9 @@ route('blog.view', ['id' => 100]); // 结果为 /blog/100
 
 
 ## 获取路由信息
+> **注意**
+> 需要 webman-framework >= 1.3.2
+
 通过`$request->route`对象我们可以获取当前请求路由信息，例如
 
 ```php
