@@ -246,9 +246,9 @@ class Foo
 }
 ```
 
-## 中间件获取路由及参数
+## 中间件获取当前请求路由信息
 > **注意**
-> 需要 webman-framework >= 1.3.15
+> 需要 webman-framework >= 1.3.2
 
 我们可以使用 `$request->route` 获取路由对象，通过调用对应的方法获取相应信息。
 
@@ -282,8 +282,6 @@ class Hello implements MiddlewareInterface
             var_export($route->getName());       // user_view
             var_export($route->getMiddleware()); // []
             var_export($route->getCallback());   // ['app\\controller\\User', 'view']
-            var_export($route->param());         // ['uid' => 111]
-            var_export($route->param('uid'));    // 111
         }
         return $handler($request);
     }
