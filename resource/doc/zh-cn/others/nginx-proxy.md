@@ -11,16 +11,20 @@
 ```
 upstream webman {
     server 127.0.0.1:8787;
+    keepalive 10240;
 }
 
 server {
   server_name 站点域名;
   listen 80;
+  access_log off;
   root /your/webman/public;
 
   location / {
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header Host $host;
+      proxy_http_version 1.1;
+      proxy_set_header Connection "";
       if (!-f $request_filename){
           proxy_pass http://webman;
       }
