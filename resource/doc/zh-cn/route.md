@@ -217,15 +217,14 @@ route('blog.view', ['id' => 100]); // 结果为 /blog/100
 通过`$request->route`对象我们可以获取当前请求路由信息，例如
 
 ```php
-$route = $request->route; // 等价与 request()->route
+$route = $request->route; // 等价与 $route = request()->route;
 if ($route) {
-    var_export($route->getPath());       // /user/{uid}
-    var_export($route->getMethods());    // ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD','OPTIONS']
-    var_export($route->getName());       // user_view
-    var_export($route->getMiddleware()); // []
-    var_export($route->getCallback());   // ['app\\controller\\User', 'view']
-    var_export($route->param());         // ['uid' => 111]
-    var_export($route->param('uid'));    // 111
+    var_export($route->getPath());
+    var_export($route->getMethods());
+    var_export($route->getName());
+    var_export($route->getMiddleware());
+    var_export($route->getCallback());
+    var_export($route->param());
 }
 ```
 
