@@ -140,19 +140,8 @@ return [
 ```
 这样当依赖注入需要获取`app\service\Mailer`实例时将自动使用这个配置中创建的`app\service\Mailer`实例。
 
-我们注意到，`config/dependence.php` 中使用了`new`来实例化`Mailer`类，这个在本示例没有任何问题，但是想象下如果`Mailer`类依赖了其它类的话或者`Mailer`类内部使用了注解注入，使用`new`初始化将不会依赖自动注入。解决办法是通过`Container::get(类名)` 或者 `Container::make(类名, [构造函数参数])`方法来初始化类，类似下面这样。
+我们注意到，`config/dependence.php` 中使用了`new`来实例化`Mailer`类，这个在本示例没有任何问题，但是想象下如果`Mailer`类依赖了其它类的话或者`Mailer`类内部使用了注解注入，使用`new`初始化将不会依赖自动注入。解决办法是利用自定义接口注入，通过`Container::get(类名)` 或者 `Container::make(类名, [构造函数参数])`方法来初始化类。
 
-`config/dependence.php`：
-```php
-use Psr\Container\ContainerInterface;
-return [
-    // ... 这里忽略了其它配置
-    
-    app\service\Mailer::class =>  function(ContainerInterface $container) {
-        return $container->make(app\service\Mailer::class, ['smtp_host' => '192.168.1.11', 'smtp_port' => 25]);
-    }
-];
-```
 
 ## 自定义接口注入
 在现实项目中，我们更希望面向接口编程，而不是具体的类。比如`app\controller\User`里应该引入`app\service\MailerInterface`而不是`app\service\Mailer`。

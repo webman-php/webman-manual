@@ -37,7 +37,7 @@ return [
 1、composer安装
 
 ```
-composer require psr/container ^1.1.1 jenssegers/blade ~1.4.0
+composer require psr/container ^1.1.1 jenssegers/blade:~1.4.0
 ```
 
 2、修改配置`config/view.php`为
@@ -273,4 +273,26 @@ class User
 }
 ```
 
-`View::assign()`在某些场景下非常有用，例如某系统每个页面首部都要显示当前登录者信息，如果每个页面都将此信息通过 `view('模版', ['user_info' => '用户信息']);` 赋值将非常麻烦。解决办法就是在中间件中获得用户信息，然后通过`View::assign()`将用户信息赋值给模版，
+`View::assign()`在某些场景下非常有用，例如某系统每个页面首部都要显示当前登录者信息，如果每个页面都将此信息通过 `view('模版', ['user_info' => '用户信息']);` 赋值将非常麻烦。解决办法就是在中间件中获得用户信息，然后通过`View::assign()`将用户信息赋值给模版。
+
+## 关于视图文件路径
+
+#### 控制器
+当控制器调用`view('模版名',[]);`时，视图文件按照如下规则查找：
+
+1. 非多应用时，使用 `app/view/` 下对应的视图文件
+2. [多应用](multiapp.md)时，使用 `app/应用名/view/` 下对应的视图文件
+
+总结来说就是如果 `$request->app` 为空，则使用 `app/view/`下的视图文件，否则使用 `app/{$request->app}/view/` 下的视图文件。
+
+#### 闭包函数
+闭包函数`$request->app` 为空，不属于任何应用，所以闭包函数使用`app/view/`下的视图文件，例如 `config/route.php` 里定义路由
+```php
+Route::any('/admin/user/get', function (Reqeust $reqeust) {
+    return view('user', []);
+});
+```
+会使用`app/view/user.html`作为模版文件(当使用blade模版时模版文件为`app/view/user.blade.php`)。
+
+#### 指定应用
+为了多应用模式下模版可以复用，view($template, $data, $app = null) 提供了第三个参数 `$app`，可以用来指定使用哪个应用目录下的模版。例如 `view('user', [], 'admin');` 会强制使用 `app/admin/view/` 下的视图文件。
