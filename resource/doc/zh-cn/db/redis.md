@@ -9,10 +9,9 @@ webman的redis组件默认使用的是[illuminate/redis](https://github.com/illu
 ## 安装
 
 ```php
-composer require psr/container ^1.1.1 illuminate/redis
+composer require psr/container ^1.1.1 illuminate/redis illuminate/events
 ```
 
-```
 
 ## 配置
 redis配置文件在`config/redis.php`
@@ -87,6 +86,9 @@ $redis->get($key)
 $redis->getBit($key, $offset)
 ...
 ```
+
+> **注意**
+> 慎用`Redis::select($db)`接口，由于webman是常驻内存的框架，如果某一个请求使用`Redis::select($db)`切换数据库后将会影响后续其他请求。多数据库建议将不同的`$db`配置成不同的Redis连接配置。
 
 ## 使用多个 Redis 连接
 例如配置文件`config/redis.php`
