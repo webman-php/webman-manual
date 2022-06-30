@@ -4,9 +4,11 @@
 ├── app                           应用目录
 │   ├── controller                控制器目录
 │   ├── model                     模型目录
-│   ├── view
-│   └── middleware                中间件目录
-│       └── StaticFile.php        自带静态文件中间件
+│   ├── view                      视图目录
+│   └── middleware                中间件目录
+│   |   └── StaticFile.php        自带静态文件中间件
+|   |—— functions.php             自定义函数
+|
 ├── config                        配置目录
 │   ├── app.php                   应用配置
 │   ├── autoload.php              这里配置的文件会被自动加载
