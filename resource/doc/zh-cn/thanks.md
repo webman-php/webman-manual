@@ -79,12 +79,32 @@
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/liming-1996">
-        <img src="https://avatars.githubusercontent.com/u/38864787?v=4" width="100px;"/><h5>liming-1996</h3>
+      <a href="https://github.com/hzjoyous">
+        <img src="https://avatars.githubusercontent.com/u/28970107?v=4" width="100px;"/><h5>hzjoyous</h3>
       </a>
     </td>
   </tr>
   <tr>
+    <td align="center">
+      <a href="https://github.com/imnotprogrammer">
+        <img src="https://avatars.githubusercontent.com/u/10719753?v=4" width="100px;"/><h5>imnotprogrammer</h3>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/krissss">
+        <img src="https://avatars.githubusercontent.com/u/10680903?v=4" width="100px;"/><h5>krissss</h3>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/liming-1996">
+        <img src="https://avatars.githubusercontent.com/u/38864787?v=4" width="100px;"/><h5>liming-1996</h3>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/phcent">
+        <img src="https://avatars.githubusercontent.com/u/70010565?v=4" width="100px;"/><h5>phcent</h3>
+      </a>
+    </td>
     <td align="center">
       <a href="https://github.com/qiqizjl">
         <img src="https://avatars.githubusercontent.com/u/7540584?v=4" width="100px;"/><h5>qiqizjl</h3>
@@ -105,6 +125,8 @@
         <img src="https://avatars.githubusercontent.com/u/12838756?v=4" width="100px;"/><h5>weijer</h3>
       </a>
     </td>
+  </tr>
+  <tr>
     <td align="center">
       <a href="https://github.com/woodongwong">
         <img src="https://avatars.githubusercontent.com/u/9292647?v=4" width="100px;"/><h5>woodongwong</h3>

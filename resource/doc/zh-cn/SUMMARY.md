@@ -71,6 +71,7 @@
   
 - 其它
   - [安全](others/security.md)
+  - [自定义脚本](others/scripts.md)
   - [自定义404 500](others/custom-error-page.md)
   - [升级方法](others/upgrade.md)
   - [nginx代理](others/nginx-proxy.md)
