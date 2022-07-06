@@ -326,9 +326,9 @@ class Hello implements MiddlewareInterface
     public function process(Request $request, callable $handler) : Response
     {
         $response = $handler($request);
-        $excption = $response->excption();
-        if ($excption) {
-            echo $excption->getMessage();
+        $exception = $response->exception();
+        if ($exception) {
+            echo $exception->getMessage();
         }
         return $response;
     }
