@@ -299,7 +299,7 @@ class Hello implements MiddlewareInterface
 > **注意**
 > 需要 webman-framework >= 1.3.15
 
-业务处理过程中可能会产生异常，在中间件里使用 `$response->excption()` 获取异常。
+业务处理过程中可能会产生异常，在中间件里使用 `$response->exception()` 获取异常。
 
 **路由配置**
 ```php

@@ -297,7 +297,14 @@ class Foo
 }
 ```
 
-file方法会自动添加`if-modified-since`头并在下一个请求时检测`if-modified-since`头，如果文件未修改则直接返回304以便节省带宽。
+- webman支持发送超大文件
+- 对于大文件(超过2M)，webman不会将整个文件一次性读入内存，而是在合适的时机分段读取文件并发送
+- webman会根据客户端接收速度来优化文件读取发送速度，保证最快速发送文件的同时将内存占用减少到最低
+- 数据发送是非阻塞的，不会影响其它请求处理
+- file方法会自动添加`if-modified-since`头并在下一个请求时检测`if-modified-since`头，如果文件未修改则直接返回304以便节省带宽
+- 发送的文件会自动使用合适的`Content-Type`头发送给浏览器
+- 如果文件不存在，会自动转为404响应
+
 
 ## 下载文件
 ```php
@@ -314,4 +321,4 @@ class Foo
     }
 }
 ```
-download方法与file方法的区别是download方法一般用于下载并保存文件，并且可以设置下载的文件名。download方法不会检查`if-modified-since`头。
+download方法与file方法的区别是download方法一般用于下载并保存文件，并且可以设置下载的文件名。download方法不会检查`if-modified-since`头。其它与file方法行为一致。

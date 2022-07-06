@@ -47,19 +47,19 @@
 > 移除时默认操作是将 当前项目config/plugin 下的配置文件删除
 > 你可以修改Install.php以便在安装和卸载插件时做一些自定义操作。
 
-## 提交插件
+#### 提交插件
 * 假设你已经有 [github](https://github.com) 和 [packagist](https://packagist.org) 账号
 * 在[github](https://github.com)上创建一个admin项目并将代码上传，项目地址假设是 `https://github.com/你的用户名/admin`
 * 进入地址`https://github.com/你的用户名/admin/releases/new`发布一个release如 `v1.0.0`
 * 进入[packagist](https://packagist.org)点击导航里`Submit`，将你的github项目地址`https://github.com/你的用户名/admin`提交上去这样就完成了一个插件的发布
 
 > **提示**
-> 在 `packagist` 里提交插件如果显示字冲突，可以重新娶一个厂商的名字，比如`foo/admin`改成`myfoo/admin`
+> 如果在 `packagist` 里提交插件显示字冲突，可以重新取一个厂商的名字，比如`foo/admin`改成`myfoo/admin`
 
 后续当你的插件项目代码有更新时，需要将代码同步到github，并再次进入地址`https://github.com/你的用户名/admin/releases/new`重新发布一个release，然后到 `https://packagist.org/packages/foo/admin` 页面点击 `Update` 按钮更新版本
 
 ## 给插件添加命令
-有时候我们的插件需要一些自定义命令来做一些辅助功能，例如安装 `webman/redis-queue`插件后，项目将会增加一个`redis-queue:consumer`命令，用户只要运行 `php webman redis-queue:consumer send-mail` 就会在项目里生成一个SendMail.php的消费者类，这样有助于快速开发。
+有时候我们的插件需要一些自定义命令来提供一些辅助功能，例如安装 `webman/redis-queue`插件后，项目将会自动增加一个`redis-queue:consumer`命令，用户只要运行 `php webman redis-queue:consumer send-mail` 就会在项目里生成一个SendMail.php的消费者类，这样有助于快速开发。
 
 假设`foo/admin`插件需要添加`foo-admin:add`命令，参考如下步骤。 
 
