@@ -34,14 +34,6 @@ class Foo
  - 控制器里可以返回数字、字符串或者`support\Response` 对象，但是不能返回其它类型的数据。
  - `support\Response` 对象可以通过`response()` `json()` `xml()` `jsonp()` `redirect()`等助手函数创建。
  
- 
-## 生命周期
- - 多个进程会初始化多次控制器，但是每个进程只会初始化一次控制器。
- - 控制器一旦初始化后便常驻内存，在以后的请求中复用这些控制器实例。
-
-> **提示**
-> 更多内容请参考[生命周期](./others/lifecycle.md)
-
 ## 资源型控制器
 资源型路由规则，参见[路由](route.md)。
  ```php
@@ -133,11 +125,7 @@ class Foo
     }
 }
 ```
- 
-## 控制器钩子 `beforeAction()` `afterAction()`
-在传统框架中，每个请求都会实例化一次控制器，所以很多开发者`__construct()`方法中做一些请求前的准备工作。
 
-而webman由于控制器常驻内存，无法在`__construct()`里做这些工作，不过webman提供了更好的解决方案`beforeAction()` `afterAction()`，它不仅让开发者可以介入到请求前的流程中，而且还可以介入到请求后的处理流程中。
 
 ## 控制器后缀
 webman支持设置控制器后缀，这可以避免控制器和模型命名会冲突。例如在config/app.php中设置`controller_suffix`为`Controller`时Foo控制器文件及内容类似如下(key `controller_suffix`不存在时请自行创建)。
@@ -168,22 +156,24 @@ class FooController
 > 此特性需要webman>=1.3
 
 ## 生命周期
- - 控制器仅在被需要的时候才会被实例化。
- - 控制器一旦实例化后遍会常驻内存直到进程销毁。
- - 由于控制器实例常驻内存，所以不会每个请求都会初始化一次控制器。
+ - 多个进程会初始化多次控制器，但是每个进程只会初始化一次控制器。
+ - 控制器一旦初始化后便常驻内存，在以后的请求中复用这些控制器实例。
+
+> **提示**
+> 更多内容请参考[生命周期](./others/lifecycle.md)
  
 ## 控制器钩子 `beforeAction()` `afterAction()`
 在传统框架中，每个请求都会实例化一次控制器，所以很多开发者`__construct()`方法中做一些请求前的准备工作。
 
 而webman由于控制器常驻内存，无法在`__construct()`里做这些工作，不过webman提供了更好的解决方案`beforeAction()` `afterAction()`，它不仅让开发者可以介入到请求前的流程中，而且还可以介入到请求后的处理流程中。
 
-### 安装action-hook插件
+#### 安装action-hook插件
 `composer require webman/action-hook`
 
 > **注意**
 > 插件需要webman>=1.2，如果你的版本低于1.2可以参考这里[手动配置action-hook](https://www.workerman.net/a/1303)
 
-### 使用 `beforeAction()` `afterAction()`
+#### 使用 `beforeAction()` `afterAction()`
 ```php
 <?php
 namespace app\controller;
