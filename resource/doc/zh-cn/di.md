@@ -52,7 +52,7 @@ class User
 
     public function register(Request $request)
     {
-        $this->mailer->mail($request->post('email'), 'Hello and welcome!');
+        $this->mailer->mail('hello@webman.com', 'Hello and welcome!');
         return response('ok');
     }
 }
@@ -95,7 +95,7 @@ class User
 
     public function register(Request $request)
     {
-        $this->mailer->mail($request->post('email'), 'Hello and welcome!');
+        $this->mailer->mail('hello@webman.com', 'Hello and welcome!');
         return response('ok');
     }
 }
@@ -114,9 +114,10 @@ use app\service\Mailer;
 
 class User
 {
+    // 不支持控制器参数注入
     public function register(Request $request, Mailer $mailer)
     {
-        $mailer->mail($request->post('email'), 'Hello and welcome!');
+        $this->mailer->mail('hello@webman.com', 'Hello and welcome!');
         return response('ok');
     }
 }
@@ -220,7 +221,7 @@ class User
     
     public function register(Request $request)
     {
-        $this->mailer->mail($request->post('email'), 'Hello and welcome!');
+        $this->mailer->mail('hello@webman.com', 'Hello and welcome!');
         return response('ok');
     }
 }
