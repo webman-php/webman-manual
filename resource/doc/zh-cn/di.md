@@ -102,6 +102,26 @@ class User
 ```
 这个例子通过 `@Inject` 注解注入，并且由 `@var` 注解声明对象类型。这个例子和构造函数注入效果一样，但是代码更精简。
 
+> **注意**
+> webman目前暂不支持控制器参数注入，例如以下代码是不支持的
+
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+use app\service\Mailer;
+
+class User
+{
+    public function register(Request $request, Mailer $mailer)
+    {
+        $mailer->mail($request->post('email'), 'Hello and welcome!');
+        return response('ok');
+    }
+}
+```
+
 ## 自定义构造函数注入
 
 有时候构造函数传入的参数可能不是类的实例，而是字符串、数字、数组等数据。例如Mailer构造函数需要传递smtp服务器ip和端口：
