@@ -121,10 +121,10 @@ illuminate/database 数据库及版本支持情况如下：
 
 像这样切换数据库。
 ```php
-// 使用默认数据库，等价于Db::connection('mysql')->select(...);
-$users = Db::select(...); 
+// 使用默认数据库，等价于Db::connection('mysql')->table('users')->where('name', 'John')->first();
+$users = Db::table('users')->where('name', 'John')->first();; 
 // 使用mysql2
-$users = Db::connection('mysql2')->select(...);
+$users = Db::connection('mysql2')->table('users')->where('name', 'John')->first();
 // 使用pgsql
-$users = Db::connection('pgsql')->select(...);
+$users = Db::connection('pgsql')->table('users')->where('name', 'John')->first();
 ```
