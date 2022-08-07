@@ -26,9 +26,26 @@ Route::any('/test', function ($request) {
 });
 
 ```
+> **注意**
 > 由于闭包函数不属于任何控制器，所以`$request->app` `$request->controller` `$request->action` 全部为空字符串。
 
 当访问地址为 `http://127.0.0.1:8787/test` 时，将返回`test`字符串。
+
+> **注意**
+> 路由路径必须以`/`开头，例如
+
+```php
+// 错误的用法
+Route::any('test', function ($request) {
+    return response('test');
+});
+
+// 正确的用法
+Route::any('/test', function ($request) {
+    return response('test');
+});
+```
+
 
 ## 类路由
 `config/route.php`里添加如下路由代码
