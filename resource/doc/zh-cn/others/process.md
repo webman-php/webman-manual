@@ -12,7 +12,7 @@
   ① 加载 `config/autoload.php` 里设置的文件，如 `app/functions.php`
   ② 加载 `config/middleware.php` (包括`config/plugin/*/*/middleware.php`)里设置的中间件
   ③ 执行 `config/bootstrap.php` (包括`config/plugin/*/*/bootstrap.php`)里设置类的start方法，用于初始化一些模块，比如Laravel数据库初始化连接
-  ④ 载入 `config/roue.php` (包括`config/plugin/*/*/route.php`)里定义的路由
+  ④ 载入 `config/route.php` (包括`config/plugin/*/*/route.php`)里定义的路由
 
 ## 处理请求流程
 1. 判断请求url是否对应public下的静态文件，是的话返回文件(结束请求)，不是的话进入2
