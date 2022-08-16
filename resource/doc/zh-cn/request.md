@@ -403,6 +403,13 @@ $request->expectsJson();
 $request->acceptJson();
 ```
 
+## 获得请求的插件名
+非插件请求返回空字符串`''`。
+```php
+$request->plugin;
+```
+> 此特性需要webman>=1.4.0
+
 ## 获得请求的应用名
 单应用的时候始终返回空字符串`''`，[多应用](multiapp.md)的时候返回应用名
 ```php
