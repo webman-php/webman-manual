@@ -141,13 +141,17 @@ $request->session()->put(['key1'=>'value1', 'key2' => 'value2']);
 ## 配置文件
 session配置文件在`config/session.php`，内容类似如下：
 ```php
+use Webman\Session\FileSessionHandler;
+use Webman\Session\RedisSessionHandler;
+use Webman\Session\RedisClusterSessionHandler;
+
 return [
-    // Webman\FileSessionHandler::class 或者 Webman\RedisSessionHandler::class 或者 Webman\RedisClusterSessionHandler::class 
-    'handler' => Webman\FileSessionHandler::class,
+    // FileSessionHandler::class 或者 RedisSessionHandler::class 或者 RedisClusterSessionHandler::class 
+    'handler' => FileSessionHandler::class,
     
-    // handler为Webman\FileSessionHandler::class时值为file，
-    // handler为Webman\RedisSessionHandler::class时值为redis
-    // handler为Webman\RedisClusterSessionHandler::class时值为redis_cluster 既redis集群
+    // handler为FileSessionHandler::class时值为file，
+    // handler为RedisSessionHandler::class时值为redis
+    // handler为RedisClusterSessionHandler::class时值为redis_cluster 既redis集群
     'type'    => 'file',
 
     // 不同的handler使用不同的配置
@@ -188,6 +192,17 @@ return [
     'gc_probability' => [1, 1000],     // 回收session的几率
 ];
 ```
+
+> **注意** 
+> webman从1.4.0起更改了SessionHandler的命名空间，由原来的
+> use Webman\FileSessionHandler;  
+> use Webman\RedisSessionHandler;  
+> use Webman\RedisClusterSessionHandler;  
+> 改为  
+> use Webman\Session\FileSessionHandler;  
+> use Webman\Session\RedisSessionHandler;  
+> use Webman\Session\RedisClusterSessionHandler;  
+
 
 
 ## 有效期配置
