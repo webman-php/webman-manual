@@ -18,7 +18,7 @@ Route::disableDefaultRoute();
 ```
 > Route::disableDefaultRoute() 需要workerman/webman-framework 版本>=1.0.13
 
-## 路由自动解析
+#### 路由自动解析
 **当webman-framework < 1.4.0时**，webman无法自动解析更复杂的控制器结构，这时可以安装webman的[自动路由插件](https://www.workerman.net/plugin/17)，它会自动检索所有的控制器并为其自动配置对应的路由，让其通过url可以访问。
 
 > **注意**
