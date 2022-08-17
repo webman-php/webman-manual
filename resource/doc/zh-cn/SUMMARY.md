@@ -59,9 +59,9 @@
   - [单元测试](components/unitest.md)
   - [错误码生成](components/generate_error_code.md)
 - 插件
-  - [关于插件](plugin.md) 
+  - [关于插件](plugin.md)
+  - [基础插件](plugin/base.md)
   - [应用插件](plugin/app.md)
-  - [应用插件](plugin/base.md)
   - [命令行](plugin/console.md)
   - [插件市场](plugin/market.md)
   - [提交基础插件](plugin/create.md)
