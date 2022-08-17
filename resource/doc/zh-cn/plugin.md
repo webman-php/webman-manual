@@ -5,8 +5,7 @@
 基础插件可以理解为一些webman的基础组件，它可能是一个通用的类库(例如webman/think-orm)，可能是一个通用的中间件(例如webman/cors)，或者一组路由配置(如webman/auto-route)，或是一个自定义进程(例如webman/redis-queue)等等。
 
 
-
-更多请参考[应用插件](plugin/base.md)
+更多请参考[基础插件](plugin/base.md)
 
 > **注意**
 > 基础插件需要webman>=1.2.0
