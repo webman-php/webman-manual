@@ -60,10 +60,11 @@
   - [错误码生成](components/generate_error_code.md)
 - 插件
   - [关于插件](plugin.md) 
+  - [应用插件](plugin/app.md)
+  - [应用插件](plugin/base.md)
   - [命令行](plugin/console.md)
-  - [push推送](plugin/push.md)
   - [插件市场](plugin/market.md)
-  - [提交插件](plugin/create.md)
+  - [提交基础插件](plugin/create.md)
 - 高级进阶
   - [自定义进程](process.md)
   - [依赖注入](di.md)
@@ -82,6 +83,9 @@
   - [业务初始化](others/bootstrap.md)
   - [自动加载](others/autoload.md)
   - [性能](others/performance.md)
+
+- 升级
+  - [1.4](upgrade/1-4.md)
 - [致谢](thanks.md)
   
  
