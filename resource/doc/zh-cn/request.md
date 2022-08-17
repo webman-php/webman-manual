@@ -434,7 +434,7 @@ $request->controller;
 ```php
 $request->action;
 ```
-返回类似 `Index`
+返回类似 `index`
 
 > 因为闭包函数不属于任何控制器，所以来自闭包路由的请求`$request->action`始终返回空字符串`''`
 > 闭包路由参见 [路由](route.md)
