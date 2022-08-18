@@ -50,6 +50,7 @@
   - [多语言](components/translation.md)
   - [图像处理](components/image.md)
   - [验证码](components/captcha.md)
+  - [Event事件](components/event.md)
   - [env环境变量组件](components/env.md)
   - [Crontab定时任务](components/crontab.md)
   - [Excel表格](components/excel.md)
