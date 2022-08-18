@@ -322,3 +322,36 @@ class Foo
 }
 ```
 download方法与file方法的区别是download方法一般用于下载并保存文件，并且可以设置下载的文件名。download方法不会检查`if-modified-since`头。其它与file方法行为一致。
+
+
+## 获取输出
+有些类库是将文件内容直接打印到标准输出的，也就是数据会打印在命令行终端里，并不会发送给浏览器，这时候我们需要通过`ob_start();` `ob_get_clean();` 将数据捕获到一个变量中，再将数据发送给浏览器，例如：
+
+```php
+<?php
+
+namespace app\controller;
+
+use support\Request;
+
+class Image
+{
+    public function get(Request $request)
+    {
+        // 创建图像
+        $im = imagecreatetruecolor(120, 20);
+        $text_color = imagecolorallocate($im, 233, 14, 91);
+        imagestring($im, 1, 5, 5,  'A Simple Text String', $text_color);
+
+        // 开始获取输出
+        ob_start();
+        // 输出图像
+        imagejpeg($im);
+        // 获得图像内容
+        $image = ob_get_clean();
+        
+        // 发送图像
+        return response($image)->header('Content-Type', 'image/jpeg');
+    }
+}
+```
