@@ -1,5 +1,8 @@
 # 应用插件
-每个应用插件是一个完整的应用，源码放置于`{主项目}/plugin`目录下，例如 cms 插件
+每个应用插件是一个完整的应用，源码放置于`{主项目}/plugin`目录下
+
+> **提示**
+> 使用命令`php webman app-plugin:create {插件名}` 可以在本地创建一个应用插件，例如 `php webman app-plugin:create cms` 将创建如下目录。
 
 ```
 /plugin/
@@ -22,7 +25,6 @@
     │   ├── container.php
     │   ├── database.php
     │   ├── dependence.php
-    │   ├── event.php
     │   ├── exception.php
     │   ├── log.php
     │   ├── middleware.php
