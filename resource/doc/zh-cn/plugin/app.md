@@ -5,26 +5,24 @@
 > 使用命令`php webman app-plugin:create {插件名}` 可以在本地创建一个应用插件，例如 `php webman app-plugin:create cms` 将创建如下目录。
 
 ```
-/plugin/
+plugin/
 └── cms
     ├── app
     │   ├── controller
-    │   │   ├── IndexController.php
-    │   │   └── UserController.php
+    │   │   └── IndexController.php
     │   ├── exception
     │   │   └── Handler.php
     │   ├── functions.php
     │   ├── middleware
-    │   │   └── AccessControl.php
-    │   └── model
-    │       └── User.php
+    │   ├── model
+    │   └── view
+    │       └── index
+    │           └── index.html
     ├── config
     │   ├── app.php
     │   ├── autoload.php
-    │   ├── bootstrap.php
     │   ├── container.php
     │   ├── database.php
-    │   ├── dependence.php
     │   ├── exception.php
     │   ├── log.php
     │   ├── middleware.php
@@ -36,9 +34,6 @@
     │   ├── translation.php
     │   └── view.php
     └── public
-        ├── img
-        ├── js
-        └── css
 ```
 
 我们看到一个应用插件有着与webman相同的目录结构及配置文件。实际上开发一个应用插件与开发一个webman项目体验基本一致，只需要注意以下几个方面。
