@@ -76,8 +76,23 @@ webman控制器一旦初始化便常驻内存，后面的请求会复用它。
 > 当 webman-framework < 1.4.0时，可以选择安装 [action-hook插件](https://www.workerman.net/plugin/30)，使用`beforeAction()`钩子做请求处理前初始化工作。
 
 > **提示**
-> 更多内容请参考[生命周期](./others/lifecycle.md)
+> 在控制器`__construct()`构造函数中return数据不会有任何效果，例如
 
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+
+class FooController
+{
+    public function __construct()
+    {
+        // 构造函数中return数据没有任何效果，浏览器不会收到此响应
+        return response('hello'); 
+    }
+}
+```
 
 ## 资源型控制器
 资源型路由规则，参见[路由](route.md)。
