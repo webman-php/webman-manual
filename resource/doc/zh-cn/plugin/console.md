@@ -41,14 +41,19 @@ composer require webman/console
 例如 `php webman make:command db:config` 将创建一个 `app\command\DbConfigCommand.php`
 
 ### plugin:create
-**创建一个插件项目**
+**创建一个基础插件**
 例如 `php webman plugin:create --name=foo/admin` 将创建`config/plugin/foo/admin` 和 `vendor/foo/admin` 两个目录
-参见[创建插件](/doc/webman/plugin/create.html)
+参见[创建基础插件](/doc/webman/plugin/create.html)
 
 ### plugin:export
-**导出插件项目**
+**导出基础插件**
 例如 `php webman plugin:export --name=foo/admin` 
-参见[创建插件](/doc/webman/plugin/create.html)
+参见[创建基础插件](/doc/webman/plugin/create.html)
+
+### plugin:create
+**导出应用插件**
+例如 `php webman plugin:export shop`
+参见[应用插件](/doc/webman/plugin/app.html)
 
 ### phar:pack
 **将webman项目打包成phar文件**
