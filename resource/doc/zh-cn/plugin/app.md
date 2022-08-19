@@ -3,7 +3,7 @@
 
 > **提示**
 > 使用命令`php webman app-plugin:create {插件名}` 可以在本地创建一个应用插件，
-> 例如 `php webman app-plugin:create cms` 将创建如下目录。
+> 例如 `php webman app-plugin:create cms` 将创建如下目录结构。
 
 ```
 plugin/
