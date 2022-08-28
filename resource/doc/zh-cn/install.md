@@ -1,5 +1,7 @@
 # 安装
 
+webman 要求PHP >= 7.2
+
 ## composer安装
 
 **1、去掉composer代理**
