@@ -74,7 +74,7 @@ interface MiddlewareInterface
 2. 控制器处理请求阶段，也就是请求处理阶段  
 3. 响应穿出阶段，也就是请求处理后的阶段  
 
-三个阶段在中间件里对应的位置如下
+三个阶段在中间件里的体现如下
 ```php
 <?php
 namespace app\middleware;
