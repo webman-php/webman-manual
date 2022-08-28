@@ -1,5 +1,5 @@
 # 中间件
-中间件一般用于拦截请求或者响应。例如执行控制器前统一验证用户身份，如用户未登录时跳转到登录页面。例如响应中增加某个header头。例如统计某个uri请求占比等等。
+中间件一般用于拦截请求或者响应。例如执行控制器前统一验证用户身份，如用户未登录时跳转到登录页面，例如响应中增加某个header头。例如统计某个uri请求占比等等。
 
 ## 中间件洋葱模型
 
@@ -23,7 +23,7 @@
             │                                                      │
             └──────────────────────────────────────────────────────┘
 ```
-中间件和控制器组成了一个经典的洋葱模型，中间件类似一层一层的洋葱表皮，控制器是洋葱芯。如果所示请求像箭一样穿越中间件1、2、3到达控制器，控制器返回了一个响应，然后响应又以3、2、1的顺序穿出中间件最终返回给客户端。也就是说在每个中间件里我们既可以拿到请求，也可以获得响应，这样我们就可以在中间件里做很多事情，例如拦截请求或者响应。
+中间件和控制器组成了一个经典的洋葱模型，中间件类似一层一层的洋葱表皮，控制器是洋葱芯。如果所示请求像箭一样穿越中间件1、2、3到达控制器，控制器返回了一个响应，然后响应又以3、2、1的顺序穿出中间件最终返回给客户端。也就是说在每个中间件里我们既可以拿到请求，也可以获得响应。
 
 ## 请求拦截
 有时候我们不想某个请求到达控制器层，例如我们在某个身份验证中间件发现当前用户并没有登录，则我们可以直接拦截请求并返回一个登录响应。那么这个流程类似下面这样
@@ -68,6 +68,35 @@ interface MiddlewareInterface
 ```
 也就是必须实现`process`方法，`process`方法必须返回一个`support\Response`对象，默认这个对象由`$handler($request)`生成(请求将继续向洋葱芯穿越)，也可以可以是`response()` `json()` `xml()` `redirect()`等助手函数生成的响应(请求停止继续向洋葱芯穿越)。
 
+## 中间件中获取请求及响应
+在中间件中我们可以获得请求，也可以获得执行控制器后的响应，所以中间件内部分为三个部分。
+1. 请求穿越阶段，也就是请求处理前的阶段  
+2. 控制器处理请求阶段，也就是请求处理阶段  
+3. 响应穿出阶段，也就是请求处理后的阶段  
+
+三个阶段在中间件里对应的位置如下
+```php
+<?php
+namespace app\middleware;
+
+use Webman\MiddlewareInterface;
+use Webman\Http\Response;
+use Webman\Http\Request;
+
+class Test implements MiddlewareInterface
+{
+    public function process(Request $request, callable $handler) : Response
+    {
+        echo '请求穿越阶段，也就是请求处理前';
+        
+        $response = $handler($request); // 继续向洋葱芯穿越，直至执行控制器得到响应
+        
+        echo '响应穿出阶段，也就是请求处理后';
+        
+        return $response;
+    }
+}
+```
  
 ## 示例：身份验证中间件
 创建文件`app/middleware/AuthCheckTest.php` (如目录不存在请自行创建) 如下：
@@ -89,7 +118,7 @@ class AuthCheckTest implements MiddlewareInterface
             // 拦截请求，返回一个重定向响应，请求停止向洋葱芯穿越
             return redirect('/user/login');
         }
-        // 请求继续穿越
+        // 请求继续向洋葱芯穿越
         return $handler($request);
     }
 }
@@ -122,7 +151,10 @@ class AccessControlTest implements MiddlewareInterface
 {
     public function process(Request $request, callable $handler) : Response
     {
+        // 如果是opitons请求则返回一个空的响应，否则继续向洋葱芯穿越，并得到一个响应
         $response = $request->method() == 'OPTIONS' ? response('') : $handler($request);
+        
+        // 给响应添加跨域相关的http头
         $response->withHeaders([
             'Access-Control-Allow-Credentials' => 'true',
             'Access-Control-Allow-Origin' => $request->header('Origin', '*'),
@@ -134,10 +166,10 @@ class AccessControlTest implements MiddlewareInterface
     }
 }
 ```
-根据洋葱模型，中间件里可以得到响应对象，我们直接调用响应对象的`withHeaders`方法给响应添加跨域的http头实现跨域。
 
 > **提示**
 > 跨域可能会产生OPTIONS请求，我们不想OPTIONS请求进入到控制器，所以我们为OPTIONS请求直接返回了一个空的响应(`response('')`)实现请求拦截。
+> 如果你的接口需要设置路由，请使用`Route::any(..)` 或者 `Route::add(['POST', 'OPTIONS'], ..)`设置。
 
 在 `config/middleware.php` 中添加全局中间件如下：
 ```php
@@ -151,13 +183,8 @@ return [
 ```
 
 > **注意**
-> 跨域请求可能包含`OPTIONS`请求，如果你的跨域接口需要设置路由，请使用`Route::any(..)` 或者 `Route::add(['POST', 'OPTIONS'], ..)`设置。
-
-> **注意**
 > 如果ajax请求自定义了header头，需要在中间件里 `Access-Control-Allow-Headers` 字段加入这个自定义header头，否则会报` Request header field XXXX is not allowed by Access-Control-Allow-Headers in preflight response.`
 
-> **注意**
-> 如果业务发生了500则会产生跨域错误。
 
 ## 说明
   
