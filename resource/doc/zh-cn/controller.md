@@ -69,7 +69,7 @@ webman控制器一旦初始化便常驻内存，后面的请求会复用它。
 
 当然我们可以选择不复用控制器，这时候我们需要给`config/app.php`增加一个`'controller_reuse' => false`的配置。
 
-不复用控制器时，每个请求都会重新初始化一个新的控制器实例，开发和可以在控制器`__construct()`构造函数中做一些请求处理前的初始化工作。
+不复用控制器时，每个请求都会重新初始化一个新的控制器实例，开发可以在控制器`__construct()`构造函数中做一些请求处理前的初始化工作。
 
 > **注意**
 > controller_reuse 配置需要 webman-framework >= 1.4.0
@@ -90,6 +90,44 @@ class FooController
     {
         // 构造函数中return数据没有任何效果，浏览器不会收到此响应
         return response('hello'); 
+    }
+}
+```
+
+> **注意**
+> 复用控制器时，控制器中的成员变量也同样会被保存在内容中，因此需要避免以下使用形式，例如
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+
+class FooController
+{
+    protected $model;
+    
+    public function update(Request $request, $id)
+    {
+        $model = $this->getModel($id);
+        $model->update();
+        return response('ok');
+    }
+    
+    public function delete(Request $request, $id)
+    {
+        $model = $this->getModel($id);
+        $model->delete();
+        return response('ok');
+    }
+    
+    protected function getModel($id)
+    {
+        // 该方法将在第一次请求 update?id=1 后会保留下 model
+        // 如果再次请求 delete?id=2 时，会删除 1 的数据
+        if (!$this->model) {
+            $this->model = Model::find($id);
+        }
+        return $this->model;
     }
 }
 ```
