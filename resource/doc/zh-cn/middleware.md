@@ -233,6 +233,36 @@ Route::group('/blog', function () {
  - 中间件执行顺序为`全局中间件`->`应用中间件`->`路由中间件`。
  - 有多个全局中间件时，按照中间件实际配置顺序执行(应用中间件、路由中间件同理)。
  - 404请求不会触发任何中间件，包括全局中间件
+
+## 路由向中间件传参
+
+**路由配置 `config/route.php`**
+```php
+Route::any('/test', [app\controller\Index::class, 'index'])->setParams(['some_key' =>'some value']);
+```
+
+**中间件(假设为全局中间件)**
+```php
+<?php
+namespace app\middleware;
+
+use Webman\MiddlewareInterface;
+use Webman\Http\Response;
+use Webman\Http\Request;
+
+class Hello implements MiddlewareInterface
+{
+    public function process(Request $request, callable $handler) : Response
+    {
+        // 默认路由 $request->route 为null，所以需要判断 $request->route 是否为空
+        if ($route = $request->route) {
+            $value = $route->param('some_key');
+            var_export($value);
+        }
+        return $handler($request);
+    }
+}
+```
  
 ## 中间件向控制器传参
 
