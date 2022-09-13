@@ -214,6 +214,10 @@ return [
 我们可以给某个一个或某一组路由设置中间件。
 例如在`config/route.php`中添加如下配置：
 ```php
+<?php
+use support\Request;
+use Webman\Route;
+
 Route::any('/admin', [app\admin\controller\Index::class, 'index'])->middleware([
     app\middleware\MiddlewareA::class,
     app\middleware\MiddlewareB::class,
@@ -238,6 +242,10 @@ Route::group('/blog', function () {
 
 **路由配置 `config/route.php`**
 ```php
+<?php
+use support\Request;
+use Webman\Route;
+
 Route::any('/test', [app\controller\Index::class, 'index'])->setParams(['some_key' =>'some value']);
 ```
 
@@ -268,7 +276,7 @@ class Hello implements MiddlewareInterface
 
 有时候控制器需要使用中间件里产生的数据，这时我们可以通过给`$request`对象添加属性的方式向控制器传参。例如：
 
-**中间件：**
+**中间件**
 ```php
 <?php
 namespace app\middleware;
@@ -318,7 +326,7 @@ use Webman\Route;
 Route::any('/user/{uid}', [app\controller\User::class, 'view']);
 ```
 
-**中间件：**
+**中间件**
 ```php
 <?php
 namespace app\middleware;
