@@ -87,11 +87,11 @@ class Test implements MiddlewareInterface
 {
     public function process(Request $request, callable $handler) : Response
     {
-        echo '请求穿越阶段，也就是请求处理前';
+        echo '这里是请求穿越阶段，也就是请求处理前';
         
         $response = $handler($request); // 继续向洋葱芯穿越，直至执行控制器得到响应
         
-        echo '响应穿出阶段，也就是请求处理后';
+        echo '这里是响应穿出阶段，也就是请求处理后';
         
         return $response;
     }
