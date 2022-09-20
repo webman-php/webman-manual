@@ -38,6 +38,9 @@ class Foo
 ## 控制器后缀
 webman支持设置控制器后缀，这可以避免控制器和模型命名会冲突。例如在config/app.php中设置`controller_suffix`为`Controller`时Foo控制器文件及内容类似如下(key `controller_suffix`不存在时请自行创建)。
 
+> **注意**
+> 此特性需要webman>=1.3
+
 **控制器文件 `app\controller\FooController.php`。**
 
 ```php
@@ -59,9 +62,6 @@ class FooController
     }
 }
 ```
-
-> **注意**
-> 此特性需要webman>=1.3
 
 ## 控制器生命周期
 
