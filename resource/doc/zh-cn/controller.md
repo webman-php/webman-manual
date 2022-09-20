@@ -65,37 +65,16 @@ class FooController
 
 ## 控制器生命周期
 
-webman控制器一旦初始化便常驻内存，后面的请求会复用它。
+当`config/app.php`里`controller_reuse`为`false`时，每个请求都会初始化一次对应的控制器实例，请求结束后控制器实例销毁，这与传统框架运行机制相同。
 
-当然我们可以选择不复用控制器，这时候我们需要给`config/app.php`增加一个`'controller_reuse' => false`的配置。
-
-不复用控制器时，每个请求都会重新初始化一个新的控制器实例，开发可以在控制器`__construct()`构造函数中做一些请求处理前的初始化工作。
+当`config/app.php`里`controller_reuse`为`true`时，所有请求将复用控制器实例，也就是控制器实例一旦创建遍常驻内存，所有请求复用。
 
 > **注意**
-> controller_reuse 配置需要 webman-framework >= 1.4.0
-> 当 webman-framework < 1.4.0时，可以选择安装 [action-hook插件](https://www.workerman.net/plugin/30)，使用`beforeAction()`钩子做请求处理前初始化工作。
-
-> **提示**
-> 在控制器`__construct()`构造函数中return数据不会有任何效果，例如
-
-```php
-<?php
-namespace app\controller;
-
-use support\Request;
-
-class FooController
-{
-    public function __construct()
-    {
-        // 构造函数中return数据没有任何效果，浏览器不会收到此响应
-        return response('hello'); 
-    }
-}
-```
+> 关闭控制器复用需要webman>=1.4.0，也即是说在1.4.0之前控制器默认是所有请求复用的，切无法更改。
 
 > **注意**
-> 复用控制器时，控制器中的成员变量也同样会被保存在内容中，因此需要避免以下使用形式，例如
+> 开启控制器复用时，请求不应该更改控制器的任何属性，因为这些更改将影响后续请求，例如
+
 ```php
 <?php
 namespace app\controller;
@@ -132,9 +111,29 @@ class FooController
 }
 ```
 
+> **提示**
+> 在控制器`__construct()`构造函数中return数据不会有任何效果，例如
+
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+
+class FooController
+{
+    public function __construct()
+    {
+        // 构造函数中return数据没有任何效果，浏览器不会收到此响应
+        return response('hello'); 
+    }
+}
+```
+
 ## 资源型控制器
 资源型路由规则，参见[路由](route.md)。
- ```php
+
+```php
 <?php
 namespace app\controller;
 
