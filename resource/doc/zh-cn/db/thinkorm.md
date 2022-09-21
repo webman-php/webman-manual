@@ -38,8 +38,10 @@ class Foo
 php webman make:model 表名
 ```
 
-> **注意**
-> make:model 命令如果检测到主项目使用了`illuminate/database`，会创建基于`illuminate/database`的模型文件，而不是thinkorm的
-
 > **提示**
-> 如果提示webman文件不存在，请使用`composer require webman/console` 安装
+> 此命令需要安装`webman/console`，安装命令为`composer require webman/console ^1.2.13`
+
+> **注意**
+> make:model 命令如果检测到主项目使用了`illuminate/database`，会创建基于`illuminate/database`的模型文件，而不是thinkorm的，这时可以通过附加一个参数tp来强制生成think-orm的模型，命令类似 `php webman make:model 表名 tp` (如果不生效请升级`webman/console`)
+
+
