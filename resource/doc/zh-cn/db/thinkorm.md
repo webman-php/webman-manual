@@ -30,3 +30,16 @@ class Foo
     }
 }
 ```
+
+### 创建模型
+
+使用以下命令创建基于thinkorm的模型
+```
+php webman make:model 表名
+```
+
+> **注意**
+> make:model 命令如果检测到主项目使用了`illuminate/database`，会创建基于`illuminate/database`的模型文件，而不是thinkorm的
+
+> **提示**
+> 如果提示webman文件不存在，请使用`composer require webman/console` 安装
