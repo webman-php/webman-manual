@@ -1,6 +1,6 @@
 # 自动加载
 
-## PSR-0
+## 利用composer加载PSR-0规范的文件
 webman遵循`PSR-4`自动加载规范。如果你的业务需要加载`PSR-0`规范的代码库，参考以下操作。
 
 - 新建 `extend` 目录用户存放`PSR-0`规范的代码库
@@ -17,7 +17,7 @@ webman遵循`PSR-4`自动加载规范。如果你的业务需要加载`PSR-0`规
 - 执行 `composer dumpautoload`
 - 执行 `php start.php restart` 重启webman (注意，必须重启才能生效) 
 
-## composer加载某些文件
+## 利用composer加载某些文件
 
 - 编辑`composer.json`，在`autoload.files`下添加要加载的文件
 ```
@@ -35,7 +35,7 @@ webman遵循`PSR-4`自动加载规范。如果你的业务需要加载`PSR-0`规
 > composer.json里`autoload.files`加载的文件更改后必须restart才能生效，reload不生效。而利用框架`config/autoload.php`加载的文件支持热加载，更改后reload即可生效。
 
 
-## 框架加载某些文件
+## 利用框架加载某些文件
 有些文件可能不符合SPR规范，无法自动加载，我们可以通过配置`config/autoload.php`加载这些文件，例如：
 ```php
 return [
