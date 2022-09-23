@@ -112,6 +112,7 @@ class User
 
 > **注意**
 > webman在1.4.6版本之前不支持控制器参数注入，例如以下代码当webman<=1.4.6时是不支持的**
+
 ```php
 <?php
 namespace app\controller;
@@ -121,10 +122,10 @@ use app\service\Mailer;
 
 class User
 {
-    // 不支持控制器参数注入
+    // 1.4.6版本之前不支持控制器参数注入
     public function register(Request $request, Mailer $mailer)
     {
-        $this->mailer->mail('hello@webman.com', 'Hello and welcome!');
+        $mailer->mail('hello@webman.com', 'Hello and welcome!');
         return response('ok');
     }
 }
