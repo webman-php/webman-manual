@@ -13,7 +13,7 @@ webman仅提供最核心的功能(路由、中间件、session、自定义进程
 
 1、高稳定性。webman基于workerman开发，workerman一直是业界bug极少的高稳定性socket框架。
 
-2、超高性能。借助于workerman高性能以及对HTTP服务深入优化，webman性能高于传统php-fpm框架10-100倍左右，同时也远高于其它同类型常驻内存的web框架。
+2、超高性能。借助于workerman高性能以及对HTTP服务深入优化，webman性能高于传统php-fpm框架10-100倍左右，比go的gin echo等框架性能高一倍左右。
 
 3、高复用。无需修改，可以复用绝大部分composer组件及类库。
 
@@ -36,6 +36,11 @@ GitHub: https://github.com/walkor/webman **不要吝啬你的小星星哦**
 ![](../assets/img/benchmark1.png)
 
 带数据库查询业务，webman单机吞吐量达到39万QPS，比传统php-fpm架构的laravel框架高出近80倍。
+
+
+![](../assets/img/benchmarks-go.png)
+
+带数据库查询业务，webman比同类型go语言的的web框架性能高一倍左右。
 
 
 
