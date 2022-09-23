@@ -40,7 +40,7 @@ GitHub: https://github.com/walkor/webman **不要吝啬你的小星星哦**
 
 ![](../assets/img/benchmarks-go.png)
 
-带数据库查询业务，webman比同类型go语言的的web框架性能高一倍左右。
+带数据库查询业务，webman比同类型go语言的web框架性能高一倍左右。
 
 
 
