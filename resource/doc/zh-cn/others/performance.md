@@ -8,7 +8,7 @@
 3. php-fpm初始化环境，如创建变量列表
 4. php-fpm调用各个扩展/模块的RINIT
 5. php-fpm磁盘读取php文件
-6. php-fpm词法分析、语法分析、编译成opcde
+6. php-fpm词法分析、语法分析、编译成opcode
 7. php-fpm执行opcode 包括8.9.10.11
 8. 框架初始化，如实例化各种类，包括如容器、控制器、路由、中间键等。
 9. 框架连接数据库、redis
