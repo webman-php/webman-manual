@@ -1,12 +1,12 @@
 # 验证码相关组件
 
 
-## gregwar/captcha
-项目地址 https://github.com/Gregwar/Captcha
+## webman/captcha
+项目地址 https://github.com/webman-php/captcha
 
 ### 安装
 ```
-composer require gregwar/captcha 1.*
+composer require webman/captcha
 ```
 
 ### 使用
@@ -18,7 +18,7 @@ composer require gregwar/captcha 1.*
 namespace app\controller;
 
 use support\Request;
-use Gregwar\Captcha\CaptchaBuilder;
+use Webman\Captcha\CaptchaBuilder;
 
 class Login
 {
