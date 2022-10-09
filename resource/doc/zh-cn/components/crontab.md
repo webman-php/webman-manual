@@ -50,7 +50,7 @@ class Task
         });
         
         // 每5秒执行一次
-        new Crontab('* */5 * * * *', function(){
+        new Crontab('*/5 * * * * *', function(){
             echo date('Y-m-d H:i:s')."\n";
         });
         
