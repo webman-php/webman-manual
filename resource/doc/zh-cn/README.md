@@ -13,7 +13,7 @@ webman仅提供最核心的功能(路由、中间件、session、自定义进程
 
 1、高稳定性。webman基于workerman开发，workerman一直是业界bug极少的高稳定性socket框架。
 
-2、超高性能。借助于workerman高性能以及对HTTP服务深入优化，webman性能高于传统php-fpm框架10-100倍左右，比go的gin echo等框架性能高一倍左右。
+2、超高性能。webman性能高于传统php-fpm框架10-100倍左右，比go的gin echo等框架性能高一倍左右。
 
 3、高复用。无需修改，可以复用绝大部分composer组件及类库。
 
