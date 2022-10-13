@@ -33,7 +33,34 @@ class Foo
 
 ### 创建模型
 
-使用以下命令创建基于thinkorm的模型
+ThinkOrm模型继承`think\Model`，类似如下
+```
+<?php
+namespace app\model;
+
+use think\Model;
+
+class User extends Model
+{
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'user';
+
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
+    protected $pk = 'id';
+
+    
+}
+```
+
+你也使用以下命令创建基于thinkorm的模型
 ```
 php webman make:model 表名
 ```
