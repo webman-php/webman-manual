@@ -209,7 +209,6 @@ return [
 ```
 
 ## 路由中间件
-> 注意：需要 `workerman/webman-framework` 版本 >= 1.0.12
 
 我们可以给某个一个或某一组路由设置中间件。
 例如在`config/route.php`中添加如下配置：
@@ -233,12 +232,45 @@ Route::group('/blog', function () {
 ]);
 ```
 
+## 中间件构造函数传参
+
+> **注意**
+> 此特性需要webman-framework >= 1.4.8
+
+1.4.8版本之后，配置文件支持直接实例化中间件或者匿名函数，这样可以方便的通过构造函数向中间件传参。
+例如`config/middleware.php`里也可以这样配置
+```
+return [
+    // 全局中间件
+    '' => [
+        new app\middleware\AuthCheckTest($param1, $param2, ...),
+        function(){
+            return new app\middleware\AccessControlTest($param1, $param2, ...);
+        },
+    ],
+    // api应用中间件(应用中间件仅在多应用模式下有效)
+    'api' => [
+        app\middleware\ApiOnly::class,
+    ]
+];
+```
+
+同理路由中间件也可以通过构造函数向中间件传递参数，例如`config/route.php`里
+```
+Route::any('/admin', [app\admin\controller\Index::class, 'index'])->middleware([
+    new app\middleware\MiddlewareA($param1, $param2, ...),
+    function(){
+        return new app\middleware\MiddlewareB($param1, $param2, ...);
+    },
+]);
+```
+
 ## 中间件执行顺序
  - 中间件执行顺序为`全局中间件`->`应用中间件`->`路由中间件`。
  - 有多个全局中间件时，按照中间件实际配置顺序执行(应用中间件、路由中间件同理)。
  - 404请求不会触发任何中间件，包括全局中间件
 
-## 路由向中间件传参
+## 路由向中间件传参(route->setParams)
 
 **路由配置 `config/route.php`**
 ```php
@@ -271,6 +303,7 @@ class Hello implements MiddlewareInterface
     }
 }
 ```
+
  
 ## 中间件向控制器传参
 
