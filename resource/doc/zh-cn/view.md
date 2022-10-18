@@ -296,3 +296,57 @@ Route::any('/admin/user/get', function (Reqeust $reqeust) {
 
 #### 指定应用
 为了多应用模式下模版可以复用，view($template, $data, $app = null) 提供了第三个参数 `$app`，可以用来指定使用哪个应用目录下的模版。例如 `view('user', [], 'admin');` 会强制使用 `app/admin/view/` 下的视图文件。
+
+## 扩展twig
+
+> **注意**
+> 此特性需要webman-framework>=1.4.8
+
+我们可以通过给配置`view.extension`回调，来扩展twig视图实例，例如`config/view.php`如下
+```php
+<?php
+use support\view\Twig;
+return [
+    'handler' => Twig::class,
+    'extension' => function (Twig\Environment $twig) {
+        $twig->addExtension(new your\namespace\YourExtension()); // 增加Extension
+        $twig->addFilter(new Twig\TwigFilter('rot13', 'str_rot13')); // 增加Filter
+        $twig->addFunction(new Twig\TwigFunction('function_name', function () {})); // 增加函数
+    }
+];
+```
+
+
+## 扩展blade
+> **注意**
+> 此特性需要webman-framework>=1.4.8
+同样的我们可以通过给配置`view.extension`回调，来扩展blade视图实例，例如`config/view.php`如下
+
+```php
+<?php
+use support\view\Blade;
+return [
+    'handler' => Blade::class,
+    'extension' => function (Jenssegers\Blade\Blade $blade) {
+        // 给blade添加指令
+        $blade->directive('mydate', function ($timestamp) {
+            return "<?php echo date('Y-m-d H:i:s', $timestamp); ?>";
+        });
+    }
+];
+```
+
+## 扩展think-template
+think-template 使用`view.options.taglib_pre_load`来扩展标签库，例如
+```php
+<?php
+use support\view\ThinkPHP;
+return [
+    'handler' => ThinkPHP::class,
+    'options' => [
+        'taglib_pre_load' => your\namspace\Taglib::class,
+    ]
+];
+```
+
+详情参考 [think-template标签扩展](https://www.kancloud.cn/manual/think-template/1286424)
