@@ -29,7 +29,7 @@ class FooController
 当然你可以通过路由配置来更改路由规则，参见[路由](route.md)。
 
 > **提示**
-> 如果出现404无法访问，请打开`config/app.php`，并将`controller_suffix`设置为`Controller`，并重启。
+> 如果出现404无法访问，请打开`config/app.php`，将`controller_suffix`设置为`Controller`，并重启。
 
 ## 控制器后缀
 webman从1.3版本开始，支持在`config/app.php`设置控制器后缀，如果`config/app.php`里`controller_suffix`设置为空``，则控制器类似如下
