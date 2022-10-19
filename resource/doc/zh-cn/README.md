@@ -30,8 +30,6 @@ GitHub: https://github.com/walkor/webman **不要吝啬你的小星星哦**
 
 # 第三方权威压测数据
 
-## [techempower.com](https://www.techempower.com/benchmarks/#section=data-r20&hw=ph&test=db&l=zik073-sf) (带数据库业务)
-
 
 ![](../assets/img/benchmark1.png)
 
@@ -43,4 +41,4 @@ GitHub: https://github.com/walkor/webman **不要吝啬你的小星星哦**
 带数据库查询业务，webman比同类型go语言的web框架性能高一倍左右。
 
 
-
+以上数据来自[techempower.com](https://www.techempower.com/benchmarks/#section=data-r20&hw=ph&test=db&l=zik073-sf) (带数据库业务)
