@@ -1,47 +1,6 @@
 # 控制器
 
-
-新建控制器文件 `app\controller\Foo.php`。
-
-```php
-<?php
-namespace app\controller;
-
-use support\Request;
-
-class Foo
-{
-    public function index(Request $request)
-    {
-        return response('hello index');
-    }
-    
-    public function hello(Request $request)
-    {
-        return response('hello webman');
-    }
-}
-```
-
-当访问 `http://127.0.0.1:8787/foo` 时，页面返回 `hello index`。
-
-当访问 `http://127.0.0.1:8787/foo/hello` 时，页面返回 `hello webman`。
-
-当然你可以通过路由配置来更改路由规则，参见[路由](route.md)。
-
-## 说明
- - 框架会自动向控制器传递`support\Request` 对象，通过它可以获取用户输入数据(get post header cookie等数据)，参见[请求](request.md)
- - 控制器里可以返回数字、字符串或者`support\Response` 对象，但是不能返回其它类型的数据。
- - `support\Response` 对象可以通过`response()` `json()` `xml()` `jsonp()` `redirect()`等助手函数创建。
- 
-
-## 控制器后缀
-webman支持设置控制器后缀，这可以避免控制器和模型命名会冲突。例如在config/app.php中设置`controller_suffix`为`Controller`时Foo控制器文件及内容类似如下(key `controller_suffix`不存在时请自行创建)。
-
-> **注意**
-> 此特性需要webman>=1.3
-
-**控制器文件 `app\controller\FooController.php`。**
+新建控制器文件 `app\controller\FooController.php`。
 
 ```php
 <?php
@@ -62,6 +21,23 @@ class FooController
     }
 }
 ```
+
+当访问 `http://127.0.0.1:8787/foo` 时，页面返回 `hello index`。
+
+当访问 `http://127.0.0.1:8787/foo/hello` 时，页面返回 `hello webman`。
+
+当然你可以通过路由配置来更改路由规则，参见[路由](route.md)。
+
+> **提示**
+> 如果出现404无法访问，请打开`config/app.php`，并将`controller_suffix`设置为`Controller`
+
+
+## 说明
+ - 框架会自动向控制器传递`support\Request` 对象，通过它可以获取用户输入数据(get post header cookie等数据)，参见[请求](request.md)
+ - 控制器里可以返回数字、字符串或者`support\Response` 对象，但是不能返回其它类型的数据。
+ - `support\Response` 对象可以通过`response()` `json()` `xml()` `jsonp()` `redirect()`等助手函数创建。
+ 
+
 
 ## 控制器生命周期
 
