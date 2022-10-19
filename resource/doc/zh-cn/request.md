@@ -296,7 +296,6 @@ $request->getRemotePort();
 ```php
 $request->getRealIp($safe_mode=true);
 ```
-> 此方法要求 webman-framework >= 1.0.2
 
 当项目使用代理(例如nginx)时，使用`$request->getRemoteIp()`得到的往往是代理服务器IP(类似`127.0.0.1` `192.168.x.x`)并非客户端真实IP。这时候可以尝试使用`$request->getRealIp()`获得客户端真实IP。
 

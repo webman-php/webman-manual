@@ -90,8 +90,6 @@ Route::any('/user[/{name}]', function ($request, $name = null) {
 ```
 
 ## 路由分组
-> **注意**
-> 分组路由需要 `workerman/webman-framework` 版本 >= 1.0.9
 
 有时候路由包含了大量相同的前缀，这时候我们可以用路由分组来简化定义。例如：
 
@@ -111,9 +109,6 @@ Route::any('/blog/view/{id}', function ($rquest, $id) {return response("view $id
 
 group嵌套使用
 
-> **注意**
-> 需要 `workerman/webman-framework` 版本 >= 1.0.12  
-
 ```php
 Route::group('/blog', function () {
    Route::group('/v1', function () {
@@ -125,8 +120,6 @@ Route::group('/blog', function () {
 ```
 
 ## 路由中间件
-> **注意**
-> 需要 `workerman/webman-framework` 版本 >= 1.0.12
 
 我们可以给某个一个或某一组路由设置中间件。
 例如：
