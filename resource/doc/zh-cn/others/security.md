@@ -6,8 +6,7 @@
 需要注意的是，monitor进程不要设置运行用户，因为它需要高权限才能正常工作。
 
 ## 控制器规范
-`controller`目录或者子目录下只能放置控制器文件，不允许放置其它类文件。
-如果你放置了其它类文件，并且在没开启[控制器后缀](https://www.workerman.net/doc/webman/controller.html#%E6%8E%A7%E5%88%B6%E5%99%A8%E5%90%8E%E7%BC%80)的情况下，有可能会被url非法访问，造成不可预知的后果。
+`controller`目录或者子目录下只能放置控制器文件，禁止放置其它类文件，否则有可能会被url非法访问，造成不可预知的后果。
 例如 `app/controller/model/User.php` 实际是Model类，但是却错误的放到了`controller`目录下，在没开启[控制器后缀](https://www.workerman.net/doc/webman/controller.html#%E6%8E%A7%E5%88%B6%E5%99%A8%E5%90%8E%E7%BC%80)时，会导致用户可以通过类似`/model/user/xxx`访问`User.php`里的任意方法。
 为了彻底杜绝这种情况，强烈建议使用[控制器后缀](https://www.workerman.net/doc/webman/controller.html#%E6%8E%A7%E5%88%B6%E5%99%A8%E5%90%8E%E7%BC%80)明确标记哪些是控制器文件。
 
