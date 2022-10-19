@@ -16,14 +16,6 @@ webman默认路由规则是 `http://127.0.0.1:8787/{控制器}/{动作}`。
 ```php
 Route::disableDefaultRoute();
 ```
-> Route::disableDefaultRoute() 需要workerman/webman-framework 版本>=1.0.13
-
-#### 路由自动解析
-**当webman-framework < 1.4.0时**，webman无法自动解析更复杂的控制器结构，这时可以安装webman的[自动路由插件](https://www.workerman.net/plugin/17)，它会自动检索所有的控制器并为其自动配置对应的路由，让其通过url可以访问。
-
-> **注意**
-> webman-framework >= 1.4.0 无需安装自动路由插件，路由会自动识别
-
 
 ## 闭包路由
 `config/route.php`里添加如下路由代码
@@ -213,8 +205,7 @@ Route::resource('/test', app\controller\IndexController::class, ['index','create
 
 
 ## url生成
-> **注意**
-> 需要 `workerman/webman-framework` 版本 >= 1.0.10  
+> **注意** 
 > 暂时不支持group嵌套的路由生成url  
 
 例如路由：
