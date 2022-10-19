@@ -56,7 +56,7 @@ return [
 > 建议将`.env`文件加入`.gitignore`列表，避免提交到代码库。代码库中增加一个`.env.example`配置样例文件，当项目部署时复制`.env.example`为`.env`，根据当前环境修改`.env`中的配置，这样就可以让项目在不同环境加载不同的配置了。
 
 > **注意**
-> `vlucas/phpdotenv`在PHP TS版本(线程安全版本)可能会有bug，请使用ZTS版本(非线程安全版本)。
+> `vlucas/phpdotenv`在PHP TS版本(线程安全版本)可能会有bug，请使用NTS版本(非线程安全版本)。
 > 当前php是什么版本可以通过执行 `php -v` 查看 
 
 ## 更多内容
