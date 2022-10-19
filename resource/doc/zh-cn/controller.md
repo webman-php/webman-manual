@@ -32,7 +32,7 @@ class FooController
 > 如果出现404无法访问，请打开`config/app.php`，将`controller_suffix`设置为`Controller`，并重启。
 
 ## 控制器后缀
-webman从1.3版本开始，支持在`config/app.php`设置控制器后缀，如果`config/app.php`里`controller_suffix`设置为空``，则控制器类似如下
+webman从1.3版本开始，支持在`config/app.php`设置控制器后缀，如果`config/app.php`里`controller_suffix`设置为空`''`，则控制器类似如下
 
 `app\controller\Foo.php`。
 
@@ -56,7 +56,7 @@ class Foo
 }
 ```
 
-强烈建议将控制器后缀设置为`Controller`，这样能能避免控制器与模型类名冲突。
+强烈建议将控制器后缀设置为`Controller`，这样能能避免控制器与模型类名冲突，同时增加安全性。
 
 ## 说明
  - 框架会自动向控制器传递`support\Request` 对象，通过它可以获取用户输入数据(get post header cookie等数据)，参见[请求](request.md)
