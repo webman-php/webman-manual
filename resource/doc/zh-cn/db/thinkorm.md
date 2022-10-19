@@ -21,7 +21,7 @@ namespace app\controller;
 use support\Request;
 use think\facade\Db;
 
-class Foo
+class FooController
 {
     public function get(Request $request)
     {

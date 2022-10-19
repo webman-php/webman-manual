@@ -86,7 +86,7 @@ use support\Request;
 use Respect\Validation\Validator as v;
 use support\Db;
 
-class Index
+class IndexController
 {
     public function index(Request $request)
     {
@@ -130,7 +130,7 @@ use support\Request;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\ValidationException;
 
-class Index
+class IndexController
 {
     public function index(Request $request)
     {

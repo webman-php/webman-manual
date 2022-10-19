@@ -305,7 +305,7 @@ use app\model\User;
 use support\Request;
 use support\Response;
 
-class Foo
+class FooController
 {
     /**
      * 在用户表中添加一条新的记录

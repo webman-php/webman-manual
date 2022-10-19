@@ -2,13 +2,13 @@
 ## 默认路由规则
 webman默认路由规则是 `http://127.0.0.1:8787/{控制器}/{动作}`。
 
-默认控制器为`app\controller\Index`，默认动作为`index`。
+默认控制器为`app\controller\IndexController`，默认动作为`index`。
 
 例如访问：
-- `http://127.0.0.1:8787` 将默认访问`app\controller\Index`类的`index`方法
-- `http://127.0.0.1:8787/foo` 将默认访问`app\controller\Foo`类的`index`方法
-- `http://127.0.0.1:8787/foo/test` 将默认访问`app\controller\Foo`类的`test`方法
-- `http://127.0.0.1:8787/admin/foo/test` 将默认访问`app\admin\controller\Foo`类的`test`方法 (参考[多应用](multiapp.md))
+- `http://127.0.0.1:8787` 将默认访问`app\controller\IndexController`类的`index`方法
+- `http://127.0.0.1:8787/foo` 将默认访问`app\controller\FooController`类的`index`方法
+- `http://127.0.0.1:8787/foo/test` 将默认访问`app\controller\FooController`类的`test`方法
+- `http://127.0.0.1:8787/admin/foo/test` 将默认访问`app\admin\controller\FooController`类的`test`方法 (参考[多应用](multiapp.md))
 
 当您想改变某个请求路由时请更改配置文件 `config/route.php`。
 
@@ -57,20 +57,20 @@ Route::any('/test', function ($request) {
 ## 类路由
 `config/route.php`里添加如下路由代码
 ```php
-Route::any('/testclass', [app\controller\Index::class, 'test']);
+Route::any('/testclass', [app\controller\IndexController::class, 'test']);
 ```
-当访问地址为 `http://127.0.0.1:8787/testclass` 时，将返回`app\controller\Index`类的`test`方法的返回值。
+当访问地址为 `http://127.0.0.1:8787/testclass` 时，将返回`app\controller\IndexController`类的`test`方法的返回值。
 
 
 ## 路由参数
 如果路由中存在参数，通过`{key}`来匹配，匹配结果将传递到对应的控制器方法参数中(从第二个参数开始依次传递)，例如：
 ```php
 // 匹配 /user/123 /user/abc
-Route::any('/user/{id}', [app\controller\User::class, 'get']);
+Route::any('/user/{id}', [app\controller\UserController::class, 'get']);
 ```
 ```php
 namespace app\controller;
-class User
+class UserController
 {
     public function get($request, $id)
     {
@@ -139,7 +139,7 @@ Route::group('/blog', function () {
 我们可以给某个一个或某一组路由设置中间件。
 例如：
 ```php
-Route::any('/admin', [app\admin\controller\Index::class, 'index'])->middleware([
+Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->middleware([
     app\middleware\MiddlewareA::class,
     app\middleware\MiddlewareB::class,
 ]);
@@ -189,14 +189,14 @@ Route::group('/blog', function () {
 
 ## 资源型路由
 ```php
-Route::resource('/test', app\controller\Index::class);
+Route::resource('/test', app\controller\IndexController::class);
 
 //指定资源路由
-Route::resource('/test', app\controller\Index::class, ['index','create']);
+Route::resource('/test', app\controller\IndexController::class, ['index','create']);
 
 //非定义性资源路由
 // 如 notify 访问地址则为any型路由 /text/notify或/text/notify/{id} 都可 routeName为 test.notify
-Route::resource('/test', app\controller\Index::class, ['index','create','notify']);
+Route::resource('/test', app\controller\IndexController::class, ['index','create','notify']);
 ```
 | Verb   | URI                 | Action   | Route Name    |
 |--------|---------------------|----------|---------------|
@@ -219,7 +219,7 @@ Route::resource('/test', app\controller\Index::class, ['index','create','notify'
 
 例如路由：
 ```php
-Route::any('/blog/{id}', [app\controller\Blog::class, 'view'])->name('blog.view');
+Route::any('/blog/{id}', [app\controller\BlogController::class, 'view'])->name('blog.view');
 ```
 我们可以使用如下方法生成这个路由的url。
 ```php

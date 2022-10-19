@@ -54,14 +54,14 @@ return [
 ];
 ```
 
-创建文件 `app/controller/User.php`
+创建文件 `app/controller/UserController.php`
 ```php
 <?php
 namespace app\controller;
 
 use support\Request;
 
-class User
+class UserController
 {
     public function get(Request $request)
     {
@@ -90,7 +90,7 @@ namespace app\controller;
 
 use support\Request;
 
-class User
+class UserController
 {
     public function get(Request $request)
     {
@@ -110,7 +110,7 @@ namespace app\controller;
 
 use support\Request;
 
-class User
+class UserController
 {
     public function get(Request $request)
     {

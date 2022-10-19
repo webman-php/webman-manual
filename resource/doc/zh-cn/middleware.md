@@ -217,7 +217,7 @@ return [
 use support\Request;
 use Webman\Route;
 
-Route::any('/admin', [app\admin\controller\Index::class, 'index'])->middleware([
+Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->middleware([
     app\middleware\MiddlewareA::class,
     app\middleware\MiddlewareB::class,
 ]);
@@ -257,7 +257,7 @@ return [
 
 同理路由中间件也可以通过构造函数向中间件传递参数，例如`config/route.php`里
 ```
-Route::any('/admin', [app\admin\controller\Index::class, 'index'])->middleware([
+Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->middleware([
     new app\middleware\MiddlewareA($param1, $param2, ...),
     function(){
         return new app\middleware\MiddlewareB($param1, $param2, ...);
@@ -278,7 +278,7 @@ Route::any('/admin', [app\admin\controller\Index::class, 'index'])->middleware([
 use support\Request;
 use Webman\Route;
 
-Route::any('/test', [app\controller\Index::class, 'index'])->setParams(['some_key' =>'some value']);
+Route::any('/test', [app\controller\IndexController::class, 'index'])->setParams(['some_key' =>'some value']);
 ```
 
 **中间件(假设为全局中间件)**
@@ -335,7 +335,7 @@ namespace app\controller;
 
 use support\Request;
 
-class Foo
+class FooController
 {
     public function index(Request $request)
     {
@@ -356,7 +356,7 @@ class Foo
 use support\Request;
 use Webman\Route;
 
-Route::any('/user/{uid}', [app\controller\User::class, 'view']);
+Route::any('/user/{uid}', [app\controller\UserController::class, 'view']);
 ```
 
 **中间件**
@@ -380,7 +380,7 @@ class Hello implements MiddlewareInterface
             var_export($route->getMethods());    // ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD','OPTIONS']
             var_export($route->getName());       // user_view
             var_export($route->getMiddleware()); // []
-            var_export($route->getCallback());   // ['app\\controller\\User', 'view']
+            var_export($route->getCallback());   // ['app\\controller\\UserController', 'view']
             var_export($route->param());         // ['uid'=>111]
             var_export($route->param('uid'));    // 111 
         }

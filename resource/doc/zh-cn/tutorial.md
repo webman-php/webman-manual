@@ -3,7 +3,7 @@
 ## 返回字符串
 **新建控制器**
 
-新建文件 `app/controller/User.php` 如下
+新建文件 `app/controller/UserController.php` 如下
 
 ```php
 <?php
@@ -11,7 +11,7 @@ namespace app\controller;
 
 use support\Request;
 
-class User
+class UserController
 {
     public function hello(Request $request)
     {
@@ -31,7 +31,7 @@ class User
 浏览器将返回 `hello tom`
 
 ## 返回json
-更改文件 `app/controller/User.php` 如下
+更改文件 `app/controller/UserController.php` 如下
 
 ```php
 <?php
@@ -39,7 +39,7 @@ namespace app\controller;
 
 use support\Request;
 
-class User
+class UserController
 {
     public function hello(Request $request)
     {
@@ -71,7 +71,7 @@ class User
 同理，使用助手函数 `jsonp($data, $callback_name = 'callback')` 将返回一个`jsonp`响应。
 
 ## 返回视图
-更改文件 `app/controller/User.php` 如下
+更改文件 `app/controller/UserController.php` 如下
 
 ```php
 <?php
@@ -79,7 +79,7 @@ namespace app\controller;
 
 use support\Request;
 
-class User
+class UserController
 {
     public function hello(Request $request)
     {

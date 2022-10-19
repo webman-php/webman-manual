@@ -32,7 +32,7 @@ class Mailer
 }
 ```
 
-`app\controller\User.php`内容如下：
+`app/controller/UserController.php`内容如下：
 
 ```php
 <?php
@@ -41,7 +41,7 @@ namespace app\controller;
 use support\Request;
 use app\service\Mailer;
 
-class User
+class UserController
 {
     private $mailer;
 
@@ -57,10 +57,10 @@ class User
     }
 }
 ```
-正常情况下，需要以下代码才能完成`app\controller\User`的实例化：
+正常情况下，需要以下代码才能完成`app\controller\UserController`的实例化：
 ```php
 $mailer = new Mailer;
-$user = new User($mailer);
+$user = new UserController($mailer);
 ```
 当使用`php-di`后，开发者无需手动实例化控制器中的`Mailer`，webman会自动帮你完成。如果在实例化`Mailer`过程中有其它类的依赖，webman也会自动实例化并注入。开发者不需要任何的初始化工作。
 
@@ -84,7 +84,7 @@ $log_service = Container::make(LogService::class, [$path, $name]);
 ```
 
 ## 注解注入
-除了构造函数依赖自动注入，我们还可以使用注解注入。继续上面的例子，`app\controller\User`更改成如下：
+除了构造函数依赖自动注入，我们还可以使用注解注入。继续上面的例子，`app\controller\UserController`更改成如下：
 ```php
 <?php
 namespace app\controller;
@@ -93,7 +93,7 @@ use support\Request;
 use app\service\Mailer;
 use DI\Annotation\Inject;
 
-class User
+class UserController
 {
     /**
      * @Inject
@@ -120,7 +120,7 @@ namespace app\controller;
 use support\Request;
 use app\service\Mailer;
 
-class User
+class UserController
 {
     // 1.4.6版本之前不支持控制器参数注入
     public function register(Request $request, Mailer $mailer)
@@ -173,7 +173,7 @@ return [
 
 
 ## 自定义接口注入
-在现实项目中，我们更希望面向接口编程，而不是具体的类。比如`app\controller\User`里应该引入`app\service\MailerInterface`而不是`app\service\Mailer`。
+在现实项目中，我们更希望面向接口编程，而不是具体的类。比如`app\controller\UserController`里应该引入`app\service\MailerInterface`而不是`app\service\Mailer`。
 
 定义`MailerInterface`接口。
 ```php
@@ -219,7 +219,7 @@ use support\Request;
 use app\service\MailerInterface;
 use DI\Annotation\Inject;
 
-class User
+class UserController
 {
     /**
      * @Inject

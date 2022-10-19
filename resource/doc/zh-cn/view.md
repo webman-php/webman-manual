@@ -79,7 +79,7 @@ return [
 ```
 
 ## 原生PHP模版引擎例子
-创建文件 `app/controller/User.php` 如下
+创建文件 `app/controller/UserController.php` 如下
 
 ```php
 <?php
@@ -87,7 +87,7 @@ namespace app\controller;
 
 use support\Request;
 
-class User
+class UserController
 {
     public function hello(Request $request)
     {
@@ -123,7 +123,7 @@ return [
 ];
 ```
 
-`app/controller/User.php` 如下
+`app/controller/UserController.php` 如下
 
 ```php
 <?php
@@ -131,7 +131,7 @@ namespace app\controller;
 
 use support\Request;
 
-class User
+class UserController
 {
     public function hello(Request $request)
     {
@@ -168,7 +168,7 @@ return [
 ];
 ```
 
-`app/controller/User.php` 如下
+`app/controller/UserController.php` 如下
 
 ```php
 <?php
@@ -176,7 +176,7 @@ namespace app\controller;
 
 use support\Request;
 
-class User
+class UserController
 {
     public function hello(Request $request)
     {
@@ -215,7 +215,7 @@ return [
 ];
 ```
 
-`app/controller/User.php` 如下
+`app/controller/UserController.php` 如下
 
 ```php
 <?php
@@ -223,7 +223,7 @@ namespace app\controller;
 
 use support\Request;
 
-class User
+class UserController
 {
     public function hello(Request $request)
     {
@@ -259,7 +259,7 @@ namespace app\controller;
 use support\Request;
 use support\View;
 
-class User
+class UserController
 {
     public function hello(Request $request)
     {

@@ -21,7 +21,7 @@ namespace app\controller;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class Excel
+class ExcelController
 {
     public function index($request)
     {

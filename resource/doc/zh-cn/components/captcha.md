@@ -11,7 +11,7 @@ composer require webman/captcha
 
 ### 使用
 
-**建立文件 `app/controller/Login.php`**
+**建立文件 `app/controller/LoginController.php`**
 
 ```php
 <?php
@@ -20,7 +20,7 @@ namespace app\controller;
 use support\Request;
 use Webman\Captcha\CaptchaBuilder;
 
-class Login
+class LoginController
 {
     /**
      * 测试页面

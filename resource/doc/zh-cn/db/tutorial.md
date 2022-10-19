@@ -49,7 +49,7 @@ namespace app\controller;
 use support\Request;
 use support\Db;
 
-class User
+class UserController
 {
     public function db(Request $request)
     {

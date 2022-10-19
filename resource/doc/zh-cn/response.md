@@ -10,7 +10,7 @@ namespace app\controller;
 
 use support\Request;
 
-class Foo
+class FooController
 {
     public function hello(Request $request)
     {
@@ -64,7 +64,7 @@ namespace app\controller;
 
 use support\Request;
 
-class Foo
+class FooController
 {
     public function hello(Request $request)
     {
@@ -89,7 +89,7 @@ namespace app\controller;
 
 use support\Request;
 
-class Foo
+class FooController
 {
     public function hello(Request $request)
     {
@@ -117,7 +117,7 @@ function xml($xml)
 ```
 
 ## 返回视图
-新建文件 `app/controller/Foo.php` 如下
+新建文件 `app/controller/FooController.php` 如下
 
 ```php
 <?php
@@ -125,7 +125,7 @@ namespace app\controller;
 
 use support\Request;
 
-class Foo
+class FooController
 {
     public function hello(Request $request)
     {
@@ -156,7 +156,7 @@ namespace app\controller;
 
 use support\Request;
 
-class Foo
+class FooController
 {
     public function hello(Request $request)
     {
@@ -184,7 +184,7 @@ namespace app\controller;
 
 use support\Request;
 
-class Foo
+class FooController
 {
     public function hello(Request $request)
     {
@@ -202,7 +202,7 @@ namespace app\controller;
 
 use support\Request;
 
-class Foo
+class FooController
 {
     public function hello(Request $request)
     {
@@ -247,7 +247,7 @@ namespace app\controller;
 
 use support\Request;
 
-class Foo
+class FooController
 {
     public function hello(Request $request)
     {
@@ -288,7 +288,7 @@ namespace app\controller;
 
 use support\Request;
 
-class Foo
+class FooController
 {
     public function hello(Request $request)
     {
@@ -313,7 +313,7 @@ namespace app\controller;
 
 use support\Request;
 
-class Foo
+class FooController
 {
     public function hello(Request $request)
     {
@@ -334,7 +334,7 @@ namespace app\controller;
 
 use support\Request;
 
-class Image
+class ImageController
 {
     public function get(Request $request)
     {

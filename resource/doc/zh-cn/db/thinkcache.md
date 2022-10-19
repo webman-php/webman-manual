@@ -19,7 +19,7 @@
   use support\Request;
   use think\facade\Cache;
   
-  class User
+  class UserController
   {
       public function db(Request $request)
       {

@@ -24,8 +24,8 @@ composer require webman/console
 
 ### make:controller
 **创建一个控制器文件** 
-例如 `php webman make:controller admin` 将创建一个 `app/controller/Admin.php`
-例如 `php webman make:controller api/user` 将创建一个 `app/api/controller/User.php`
+例如 `php webman make:controller admin` 将创建一个 `app/controller/AdminController.php`
+例如 `php webman make:controller api/user` 将创建一个 `app/api/controller/UserController.php`
 
 ### make:model
 **创建一个model文件**

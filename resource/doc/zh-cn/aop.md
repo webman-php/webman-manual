@@ -99,7 +99,7 @@ class DebugAspect extends AbstractAspect
 }
 ```
 
-接下来编辑控制器 `app\controller\Index`
+接下来编辑控制器 `app/controller/IndexController.php`
 
 ```php
 <?php
@@ -108,7 +108,7 @@ namespace app\controller;
 use app\service\UserService;
 use support\Request;
 
-class Index
+class IndexController
 {
     public function json(Request $request)
     {
@@ -123,7 +123,7 @@ class Index
 <?php
 use Webman\Route;
 
-Route::any('/json', [app\controller\Index::class, 'json']);
+Route::any('/json', [app\controller\IndexController::class, 'json']);
 ```
 
 最后启动服务，并测试。

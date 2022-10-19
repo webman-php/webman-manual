@@ -28,7 +28,7 @@ namespace app\controller;
 use app\service\Foo;
 use support\Request;
 
-class Index
+class IndexController
 {
     public function index(Request $request)
     {
@@ -47,7 +47,7 @@ use app\service\Foo;
 use support\Container;
 use support\Request;
 
-class Index
+class IndexController
 {
     public function index(Request $request)
     {
@@ -70,7 +70,7 @@ namespace app\controller;
 
 use support\Request;
 
-class Foo
+class FooController
 {
     // 数组属性
     public $data = [];

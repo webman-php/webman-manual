@@ -34,7 +34,7 @@ namespace app\controller;
 use support\Request;
 use support\Redis;
 
-class User
+class UserController
 {
     public function db(Request $request)
     {

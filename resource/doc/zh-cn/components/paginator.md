@@ -14,7 +14,7 @@ composer require "jasongrimes/paginator:^1.0.3"
   
 ### 使用
 
-新建 `app/controller/User.php`
+新建 `app/controller/UserController.php`
 ```php
 <?php
 namespace app\controller;
@@ -22,7 +22,7 @@ namespace app\controller;
 use support\Request;
 use JasonGrimes\Paginator;
 
-class User
+class UserController
 {
     /**
      * 用户列表

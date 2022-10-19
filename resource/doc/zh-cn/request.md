@@ -11,7 +11,7 @@ namespace app\controller;
 
 use support\Request;
 
-class User
+class UserController
 {
     public function hello(Request $request)
     {
@@ -86,7 +86,7 @@ namespace app\controller;
 
 use app\Request;
 
-class Foo
+class FooController
 {
     public function index(Request $request)
     {
@@ -227,7 +227,7 @@ namespace app\controller;
 
 use support\Request;
 
-class Upload
+class UploadController
 {
     public function files(Request $request)
     {
@@ -267,7 +267,7 @@ namespace app\controller;
 
 use support\Request;
 
-class Upload
+class UploadController
 {
     public function file(Request $request)
     {
@@ -424,7 +424,7 @@ $request->app;
 ```php
 $request->controller;
 ```
-返回类似 `app\controller\Index`
+返回类似 `app\controller\IndexController`
 
 > 因为闭包函数不属于任何控制器，所以来自闭包路由的请求`$request->controller`始终返回空字符串`''`
 > 闭包路由参见 [路由](route.md)

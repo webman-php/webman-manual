@@ -55,7 +55,7 @@ use JasonGrimes\Paginator;
 use support\Request;
 use support\Db;
 
-class User
+class UserController
 {
     public function get(Request $request)
     {

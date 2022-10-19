@@ -7,7 +7,7 @@ namespace app\controller;
 
 use support\Request;
 
-class User
+class UserController
 {
     public function hello(Request $request)
     {

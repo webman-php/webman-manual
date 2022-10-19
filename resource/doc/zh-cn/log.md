@@ -9,7 +9,7 @@ namespace app\controller;
 use support\Request;
 use support\Log;
 
-class Foo
+class FooController
 {
     public function index(Request $request)
     {
@@ -132,7 +132,7 @@ namespace app\controller;
 use support\Request;
 use support\Log;
 
-class Foo
+class FooController
 {
     public function index(Request $request)
     {

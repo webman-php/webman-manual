@@ -40,7 +40,7 @@ app
 
 这样当地址访问 `http://127.0.0.1:8787/{控制器}/{方法}` 时访问的是`app/controller`下的控制器与方法。当路径里以api或者admin开头时访问的是相对应目录里的控制器与方法。
 
-多应用时类的命名空间需符合`psr4`，例如`app/api/controller/Foo.php` 文件类似如下：
+多应用时类的命名空间需符合`psr4`，例如`app/api/controller/FooController.php` 文件类似如下：
 
 ```php
 <?php
@@ -48,7 +48,7 @@ namespace app\api\controller;
 
 use support\Request;
 
-class Foo
+class FooController
 {
     
 }

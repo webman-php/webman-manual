@@ -36,7 +36,7 @@ namespace app\controller;
 use support\Request;
 use support\Cache;
 
-class User
+class UserController
 {
     public function db(Request $request)
     {

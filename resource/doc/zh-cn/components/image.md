@@ -23,7 +23,7 @@ composer require intervention/image
   </form>
 ```
 
-**新建 `app/controller/User.php`**
+**新建 `app/controller/UserController.php`**
 
 ```php
 <?php
@@ -31,7 +31,7 @@ namespace app\controller;
 use support\Request;
 use Intervention\Image\ImageManagerStatic as Image;
 
-class User
+class UserController
 {
     public function img(Request $request)
     {

@@ -1,6 +1,6 @@
 # 控制器
 
-新建控制器文件 `app\controller\FooController.php`。
+新建控制器文件 `app/controller/FooController.php`。
 
 ```php
 <?php

@@ -21,7 +21,7 @@ use support\Request;
 use EasyWeChat\Factory;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
-class Wechat
+class WechatController
 {
     public function index(Request $request)
     {
