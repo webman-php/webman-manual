@@ -5,9 +5,21 @@
 类似的自定义进程的用户是通过`config/process.php`中的`user`和`group`来指定。
 需要注意的是，monitor进程不要设置运行用户，因为它需要高权限才能正常工作。
 
+## 控制器规范
+`controller`目录或者子目录下只能放置控制器文件，不允许放置其它类文件。
+如果你放置了其它类文件，有可能会通过url被非法访问，造成不可预知的后果。
+例如 `app/controller/model/User.php` 是一个实际是Model类，但是由于放到了`controller`目录下，导致可以通过类似`/model/user/xxx`访问`User.php`里的任意方法。
+为了避免不小心放错位置，强烈建议使用[控制器后缀](https://www.workerman.net/doc/webman/controller.html#%E6%8E%A7%E5%88%B6%E5%99%A8%E5%90%8E%E7%BC%80)，这样可以避免非控制器文件被非法访问。
+
+
 ## XSS过滤
-考虑通用性，webman没有对请求进行XSS过滤。开发者需要自己决定XSS过滤时机，例如请求处理前进行XSS过滤，或者在模版里统一进行XSS过滤，建议输出时过滤。
-统一在请求处理前过滤可参考 [请求-自定义请求对象](https://www.workerman.net/doc/webman/request.html#%E8%87%AA%E5%AE%9A%E4%B9%89%E8%AF%B7%E6%B1%82%E5%AF%B9%E8%B1%A1)。(不建议更改`support/Request.php`，因为这可能会影响其它应用插件的行为)
+考虑通用性，webman没有对请求进行XSS转义。
+webman强烈推荐在渲染时进行XSS转义，而不是在入库前进行转义。
+并且twig、plade、think-tmplate等模版会自动执行XSS转义，无需手动转义，非常方便。
+
+> **提示**
+> 如果你在入库前XSS转义，很可能造成一些应用插件的不兼容问题
+
 
 ## 防止SQL注入
 为了防止SQL注入，请尽量使用ORM，如 [illuminate/database](https://www.workerman.net/doc/webman/db/tutorial.html)、[think-orm](https://www.workerman.net/doc/webman/db/thinkorm.html)，使用时尽量不要自己组装SQL。
