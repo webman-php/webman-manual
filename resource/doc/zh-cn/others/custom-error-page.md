@@ -3,6 +3,8 @@ webman在404时会自动返回`public/404.html`里面的内容，所以开发者
 
 如果你想动态控制404的内容时，例如在ajax请求时返回json数据 `{"code:"404", "msg":"404 not found"}`，页面请求时返回`app/view/404.html`模版，请参考如下示例
 
+> 以下以php原生模版为例，其它模版`twig``blade``think-tmplate`原理类似
+
 **创建文件`app/view/404.html`**
 ```html
 <!doctype html>
