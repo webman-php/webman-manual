@@ -77,7 +77,7 @@ class Handler extends \support\exception\Handler
             return json(['code' => $code ? $code : 500, 'msg' => $exception->getMessage()]);
         }
         // 页面请求返回500.html模版
-        return view('500', ['exception' => $exception]);
+        return view('500', ['exception' => $exception], '');
     }
 }
 ```
