@@ -30,7 +30,7 @@ Route::fallback(function(Request $request){
         return json(['code' => 404, 'msg' => '404 not found']);
     }
     // 页面请求返回404.html模版
-    return view('404', ['error' => 'some error']);
+    return view('404', ['error' => 'some error'])->withStatus(404);
 });
 ```
 
@@ -77,7 +77,7 @@ class Handler extends \support\exception\Handler
             return json(['code' => $code ? $code : 500, 'msg' => $exception->getMessage()]);
         }
         // 页面请求返回500.html模版
-        return view('500', ['exception' => $exception], '');
+        return view('500', ['exception' => $exception], '')->withStatus(500);
     }
 }
 ```
