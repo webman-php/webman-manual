@@ -1,4 +1,4 @@
-#Thank the following contributors for their contributions to webman and the document
+#Thanks to the following contributors for their contributions to webman and the documentation
 <table>
   <tr>
     <td align="center">
