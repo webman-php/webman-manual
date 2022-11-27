@@ -37,7 +37,7 @@ return [
 1、composer安装
 
 ```
-composer require psr/container ^1.1.1 jenssegers/blade
+composer require psr/container ^1.1.1 webman/blade
 ```
 
 2、修改配置`config/view.php`为
