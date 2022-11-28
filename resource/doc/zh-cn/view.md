@@ -343,7 +343,7 @@ return [
 
 假设需要添加一个Alert组件
 
-**新建 `app/view/component/Alert.php`**
+**新建 `app/view/components/Alert.php`**
 ```php
 <?php
 
