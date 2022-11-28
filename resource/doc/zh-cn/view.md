@@ -336,7 +336,7 @@ return [
 ];
 ```
 
-##### blade使用component组件
+## blade使用component组件
 
 > **注意
 > 需要webman/blade>=1.5.2**
