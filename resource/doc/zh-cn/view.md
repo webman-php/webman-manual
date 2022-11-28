@@ -347,7 +347,7 @@ return [
 ```php
 <?php
 
-namespace app\view\component;
+namespace app\view\components;
 
 use Illuminate\View\Component;
 
@@ -366,7 +366,7 @@ class Alert extends Component
 }
 ```
 
-**新建 `app/view/component/alert.blade.php`**
+**新建 `app/view/components/alert.blade.php`**
 ```
 <div>
     <b style="color: red">hello blade component</b>
@@ -381,7 +381,7 @@ use support\view\Blade;
 return [
     'handler' => Blade::class,
     'extension' => function (Jenssegers\Blade\Blade $blade) {
-        $blade->component('package-alert', app\view\component\Alert::class);
+        $blade->component('alert', app\view\components\Alert::class);
     }
 ];
 ```
@@ -396,7 +396,7 @@ return [
 </head>
 <body>
 
-<x-package-alert/>
+<x-alert/>
 
 </body>
 </html>
