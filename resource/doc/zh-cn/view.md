@@ -374,7 +374,7 @@ class Alert extends Component
 ```
 
 **`/config/view.php`类似如下代码**
-```
+
 ```php
 <?php
 use support\view\Blade;
@@ -387,7 +387,7 @@ return [
 ```
 
 至此，Blade组件Alert设置完毕，模版里使用时类似如下
-```
+```html
 <!doctype html>
 <html>
 <head>
