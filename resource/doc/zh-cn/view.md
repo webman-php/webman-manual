@@ -361,7 +361,7 @@ class Alert extends Component
     
     public function render()
     {
-        return view('component/alert')->rawBody();
+        return view('components/alert')->rawBody();
     }
 }
 ```
