@@ -65,7 +65,7 @@ $user = new UserController($mailer);
 当使用`php-di`后，开发者无需手动实例化控制器中的`Mailer`，webman会自动帮你完成。如果在实例化`Mailer`过程中有其它类的依赖，webman也会自动实例化并注入。开发者不需要任何的初始化工作。
 
 > **注意**
-> 必须是由框架或者`php-di`创建的实例才能完成依赖自动注入，手动`new`的实例无法完成依赖自动注入，如需注入，需要使用`support\Container`替换`new`语句，例如：
+> 必须是由框架或者`php-di`创建的实例才能完成依赖自动注入，手动`new`的实例无法完成依赖自动注入，如需注入，需要使用`support\Container`接口替换`new`语句，例如：
 
 ```php
 use app\service\UserService;
