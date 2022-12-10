@@ -10,6 +10,23 @@ webman默认路由规则是 `http://127.0.0.1:8787/{控制器}/{动作}`。
 - `http://127.0.0.1:8787/foo/test` 将默认访问`app\controller\FooController`类的`test`方法
 - `http://127.0.0.1:8787/admin/foo/test` 将默认访问`app\admin\controller\FooController`类的`test`方法 (参考[多应用](multiapp.md))
 
+另外webman从1.4开始支持更复杂的默认路由，例如
+```php
+app
+├── admin
+│   └── v1
+│       └── v2
+│           └── v3
+│               └── controller
+│                   └── IndexController.php
+└── controller
+    ├── v1
+    │   └── IndexController.php
+    └── v2
+        └── v3
+            └── IndexController.php
+```
+
 当您想改变某个请求路由时请更改配置文件 `config/route.php`。
 
 如果你想关闭默认路由，在配置文件 `config/route.php`里最后一行加上如下配置：
