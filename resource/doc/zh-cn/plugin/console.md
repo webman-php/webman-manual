@@ -50,7 +50,7 @@ composer require webman/console
 例如 `php webman plugin:export --name=foo/admin` 
 参见[创建基础插件](/doc/webman/plugin/create.html)
 
-### plugin:create
+### plugin:export
 **导出应用插件**
 例如 `php webman plugin:export shop`
 参见[应用插件](/doc/webman/plugin/app.html)
