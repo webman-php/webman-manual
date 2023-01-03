@@ -9,7 +9,7 @@ Laravel的`illuminate/database`提供了方便的分页功能。
 public function index(Request $request)
 {
     $per_page = 10;
-    $users = Db::table('user')->paginate($per_page, '*', 'page', $request->input('page'));
+    $users = Db::table('user')->paginate($per_page);
     return view('index/index', ['users' => $users]);
 }
 ```
