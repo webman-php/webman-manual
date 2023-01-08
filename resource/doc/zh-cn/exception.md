@@ -42,7 +42,10 @@ interface ExceptionHandlerInterface
 
 如果请求期待是json返回，则返回的异常信息将以json格式返回，类似
 ```json
-{"code" : "500", "msg" : "异常信息"}
+{
+    "code": "500",
+    "msg": "异常信息"
+}
 ```
 如果`app.debug=true`，json数据里会额外增加一个`trace`字段返回详细的调用栈。
 
