@@ -22,8 +22,8 @@ webman遵循`PSR-4`自动加载规范。如果你的业务需要加载`PSR-0`规
 - 编辑`composer.json`，在`autoload.files`下添加要加载的文件
 ```
 "files": [
-  "./support/helpers.php",
-  "./app/helpers.php"
+    "./support/helpers.php",
+    "./app/helpers.php"
 ]
 ```
 
