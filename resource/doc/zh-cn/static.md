@@ -1,5 +1,5 @@
 ## 处理静态文件
-webman支持静态文件访问，静态文件都放置于`public`目录下，例如访问 `http://127.0.0.8787/upload/avatar.png`实际上是访问`{主项目目录}/public/upload/avatar.php`。
+webman支持静态文件访问，静态文件都放置于`public`目录下，例如访问 `http://127.0.0.8787/upload/avatar.png`实际上是访问`{主项目目录}/public/upload/avatar.png`。
 
 > **注意**
 > webman 从1.4开始支持应用插件，以`/app/xx/文件名`开头的静态文件访问实际是访问应用插件的`public`目录，也就是说 webman >=1.4.0 时不支持 `{主项目目录}/public/app/`下的目录访问。
