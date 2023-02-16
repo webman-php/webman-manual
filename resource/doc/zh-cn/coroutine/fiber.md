@@ -1,15 +1,9 @@
-# 1.5升级指南
+# 协程
 
-**升级前请做好备份，执行以下命令升级**
-`composer require workerman/webman-framework ^1.5 -W && composer require webman/console ^1.2.12 && php webman install`
-
-# 功能特性及变更
-
-支持workerman v5[协程](https://www.workerman.net/doc/workerman/fiber.html)
-
-> **提示**
-> workerman v5要求 PHP>=8.1
-> workerman升级命令 `composer require workerman/workerman ^5.0.0 -W`
+> **协程要求**
+> PHP>=8.1workerman>=5.0 webman-framework>=1.5 revolt/event-loop>1.0.0
+> webman升级命令 `composer require workerman/webman-framework ^1.5.0`
+> workerman升级命令 `composer require workerman/workerman ^5.0.0`
 > Fiber协程需要安装 `composer require revolt/event-loop ^1.0.0`
 
 # 示例
@@ -60,13 +54,23 @@ class TestController
     }
 }
 ```
-同样的`$client->get()`请求是非阻塞的，这可用于在webman中非阻塞处理http请求，提高性能。
+同样的`$client->get('http://example.com')`请求是非阻塞的，这可用于在webman中非阻塞发起http请求，提高应用性能。
 
 更多参考[workerman/http-client](https://www.workerman.net/doc/workerman/components/workerman-http-client.html)
 
 ### 增加 support\Context 类
 
-support\Context类用于存储请求相关的数据，当请求完成时，相应的context数据会自动删除。也就是说context数据生命周期是跟随请求生命周期的。
+`support\Context`类用于存储请求上下文数据，当请求完成时，相应的context数据会自动删除。也就是说context数据生命周期是跟随请求生命周期的。`support\Context`支持Fiber、Swoole、Swow协程环境。
+
+
+
+### Swoole协程
+安装swoole扩展(要求swoole>=5.0)后，通过配置config/server.php开启swoole协程
+```php
+'event_loop' => \Workerman\Events\Swoole::class,
+```
+
+更多参考[workerman事件驱动](https://www.workerman.net/doc/workerman/appendices/event.html)
 
 ### 全局变量污染
 
