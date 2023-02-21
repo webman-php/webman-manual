@@ -22,6 +22,7 @@
   - [session管理](session.md)
   - [异常处理](exception.md)
   - [日志](log.md)
+  - [配置文件](config.md)
   - [多应用](multiapp.md)
 
 - 数据库
@@ -59,13 +60,31 @@
   - [Casbin SDK](components/casbin.md)
   - [单元测试](components/unitest.md)
   - [错误码生成](components/generate_error_code.md)
-- 插件
-  - [关于插件](plugin.md)
+
+- 应用插件
+  - [介绍](app/app.md)
+  - [规范](app/standard.md)
+  - [创建应用](app/create.md)
+  - [目录结构](app/directory.md)
+  - [配置文件](app/config.md)
+  - [控制器](app/controller.md)
+  - [视图](app/view.md)
+  - [静态文件](app/static.md)
+  - [数据库](app/database.md)
+  - [Redis](app/redis.md)
+  - [日志](app/log.md)
+  - [接入webman-admin](app/admin.md)
+  - [打包插件](app/pack.md)
+  - [发布插件](app/publish.md)
+  - [安装卸载](app/install.md)
+  - [应用市场](app/market.md)
+
+- 基础插件
   - [基础插件](plugin/base.md)
-  - [应用插件](plugin/app.md)
   - [命令行](plugin/console.md)
-  - [插件市场](plugin/market.md)
+  - [基础插件市场](plugin/market.md)
   - [提交基础插件](plugin/create.md)
+
 - 高级进阶
   - [自定义进程](process.md)
   - [依赖注入](di.md)
