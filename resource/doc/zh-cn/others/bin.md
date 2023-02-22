@@ -30,7 +30,7 @@ php webman build:bin 8.1
 打包后会在bulid目录生成一个`webman.bin`文件
 
 ## 启动
-将webman.bin上传至linux服务器，执行 `./webman.bin start` 或 `./wenman.bin start -d` 即可启动。
+将webman.bin上传至linux服务器，执行 `./webman.bin start` 或 `./webman.bin start -d` 即可启动。
 
 ## 原理
 * 首先将本地webman项目打包成一个phar文件
