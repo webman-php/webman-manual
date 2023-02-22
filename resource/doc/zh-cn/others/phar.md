@@ -5,12 +5,13 @@ phar是PHP里类似于JAR的一种打包文件，你可以利用phar将你的web
 **这里非常感谢 [fuzqing](https://github.com/fuzqing) 的PR.**
 
 > **注意**
-> 此特性只支持linux系统
-> 此特性需要webman>=1.2.4 webman-framework>=1.2.4 webman\console>=1.0.5
-> 需要关闭`php.ini` Phar配置选项 `phar.readonly = 0`
+> 需要关闭`php.ini`的phar配置选项，既设置 `phar.readonly = 0`
 
 ## 安装命令行工具
 `composer require webman/console`
+
+## 配置设置
+打开 `config/plugin/webman/console/app.php` 文件，设置 `'exclude_pattern'   => '#^(?!.*(composer.json|/.github/|/.idea/|/.git/|/.setting/|/runtime/|/vendor-bin/|/build/|vendor/webman/admin))(.*)$#'`，用户打包时排除一些无用的目录及文件，避免打包体积过大
 
 ## 打包
 在webman项目根目录执行命令 `php webman phar:pack`
