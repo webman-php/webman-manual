@@ -4,11 +4,10 @@ webman支持将项目打包成一个二进制文件，这使得webman无需php�
 
 > **注意**
 > 打包后的文件目前只支持运行在x86_64架构的linux系统上，不支持mac系统
-> 此特性需要 webman/console>=1.2.24
 > 需要关闭`php.ini`的phar配置选项，既设置 `phar.readonly = 0`
 
 ## 安装命令行工具
-`composer require webman/console`
+`composer require webman/console ^1.2.24`
 
 ## 配置设置
 打开 `config/plugin/webman/console/app.php` 文件，设置 
