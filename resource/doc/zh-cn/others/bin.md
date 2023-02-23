@@ -40,6 +40,7 @@ php webman build:bin 8.1
 ## 注意事项
 * 本地php版本>=7.2都可以执行打包命令
 * 但是只能打包成php8的二进制文件
+* 强烈建议本地php版本和打包版本一致，也就是如果本地是php8.0，打包也用php8.0，避免出现兼容问题
 * 打包会下载php8的源码，但是并不会本地安装，不会影响本地php环境
 * webman.bin目前只支持在x86_64架构的linux系统运行，不支持在mac系统运行
 * 默认不打包env文件(`config/plugin/webman/console/app.php`中exclude_files控制)，所以启动时env文件应该放置与webman.bin相同目录下
