@@ -96,5 +96,7 @@ xmlwriter
 zip
 zlib
 
-## 相关连接
+## 项目出处
+
+https://github.com/crazywhalecc/static-php-cli
 https://github.com/walkor/static-php-cli
