@@ -103,6 +103,7 @@
   - [内存泄漏](others/memory-leak.md)
   - [业务初始化](others/bootstrap.md)
   - [自动加载](others/autoload.md)
+  - [慢业务处理](others/task.md)
   - [性能](others/performance.md)
 
 - 升级
