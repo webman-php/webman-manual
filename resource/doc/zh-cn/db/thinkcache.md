@@ -4,10 +4,13 @@
 ### 安装ThinkCache  
 `composer require -W webman/think-cache`
 
+安装后需要restart重启(reload无效)
+
+
 > [webman/think-cache](https://www.workerman.net/plugin/15) 实际上是一个自动化安装`toptink/think-cache` 的插件。
 
 > **注意**
-> toptink/think-cache 不支持php8
+> toptink/think-cache 不支持php8.1
   
 ### 配置文件
 
