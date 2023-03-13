@@ -14,6 +14,8 @@ composer require psr/container ^1.1.1 illuminate/redis ^8.2.0 symfony/cache ^5.2
 composer require psr/container ^1.1.1 illuminate/redis symfony/cache
 ```
 
+安装后需要restart重启(reload无效)
+
 
 ## Redis配置
 redis配置文件在`config/redis.php`
