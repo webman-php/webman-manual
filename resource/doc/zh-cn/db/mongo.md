@@ -12,6 +12,8 @@ webman默认使用 [jenssegers/mongodb](https://github.com/jenssegers/laravel-mo
 composer require psr/container ^1.1.1 illuminate/database jenssegers/mongodb ^3.8.0
 ```
 
+安装后需要restart重启(reload无效)
+
 ## 配置
 在 `config/database.php` 里增加 `mongodb` connection， 类似如下：
 ```php
