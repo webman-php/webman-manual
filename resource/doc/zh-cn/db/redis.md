@@ -12,6 +12,8 @@ webman的redis组件默认使用的是[illuminate/redis](https://github.com/illu
 composer require psr/container ^1.1.1 illuminate/redis illuminate/events
 ```
 
+安装后需要restart重启(reload无效)
+
 
 ## 配置
 redis配置文件在`config/redis.php`
