@@ -6,6 +6,9 @@
 检测地址[应用标识检测](https://www.workerman.net/app/check)
 
 ## 创建
+
+执行`composer require webman/console` 安装webman命令行
+
 使用命令`php webman app-plugin:create {插件标识}`可以在本地创建一个应用插件
 
 例如 `php webman app-plugin:create foo`
