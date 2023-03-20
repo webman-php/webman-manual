@@ -19,6 +19,7 @@ phar是PHP里类似于JAR的一种打包文件，你可以利用phar将你的web
 
 > 打包相关配置在 `config/plugin/webman/console/app.php` 中
 
+
 ## 启动停止相关命令
 **启动**
 `php webman.phar start` 或 `php webman.phar start -d`
@@ -34,4 +35,9 @@ phar是PHP里类似于JAR的一种打包文件，你可以利用phar将你的web
 
 **重启**
 `php webman.phar restart` 或 `php webman.phar restart -d`
+
+## 说明
+运行webman.phar后会在webman.phar所在目录生成runtime目录，用于存放日志等临时文件
+
+如果你的项目里使用了.env文件，需要将.env文件放在webman.phar所在目录。
 
