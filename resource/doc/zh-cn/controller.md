@@ -69,7 +69,7 @@ class Foo
 
 当`config/app.php`里`controller_reuse`为`false`时，每个请求都会初始化一次对应的控制器实例，请求结束后控制器实例销毁，这与传统框架运行机制相同。
 
-当`config/app.php`里`controller_reuse`为`true`时，所有请求将复用控制器实例，也就是控制器实例一旦创建遍常驻内存，所有请求复用。
+当`config/app.php`里`controller_reuse`为`true`时，所有请求将复用控制器实例，也就是控制器实例一旦创建便常驻内存，所有请求复用。
 
 > **注意**
 > 关闭控制器复用需要webman>=1.4.0，也即是说在1.4.0之前控制器默认是所有请求复用的，无法更改。
