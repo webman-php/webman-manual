@@ -34,6 +34,9 @@ return [
         'handler' => \Webman\App::class,
         'listen' => 'http://0.0.0.0:8686',
         'count' => 8, // 进程数
+        'user' => '',
+        'group' => '',
+        'reusePort' => true,
         'constructor' => [
             'request_class' => \support\Request::class, // request类设置
             'logger' => \support\Log::channel('default'), // 日志实例
