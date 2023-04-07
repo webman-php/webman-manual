@@ -66,6 +66,7 @@
   - [规范](app/standard.md)
   - [创建应用](app/create.md)
   - [目录结构](app/directory.md)
+  - [路由](app/route.md)
   - [配置文件](app/config.md)
   - [控制器](app/controller.md)
   - [视图](app/view.md)
