@@ -2,6 +2,9 @@
 
 在webman中你可以像workerman那样自定义监听或者进程。
 
+> **注意**
+> windows用户需要使用 `php windows.php` 启动webman才能启动自定义进程。
+
 ## 自定义监听例子
 
 新建 `process/Pusher.php`
