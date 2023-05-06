@@ -21,7 +21,7 @@
 * 表主键应该id为索引
 * 存储引擎统一使用innodb引擎
 * 字符集统一使用utf8mb4_general_ci
-* 数据库ORM使用laravel或者think-orm都可
+* 数据库ORM使用laravel或者think-orm都可以
 * 时间字段建议使用DateTime
 
 ## 代码规范
