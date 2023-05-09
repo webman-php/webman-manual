@@ -5,9 +5,9 @@
 │   ├── controller                控制器目录
 │   ├── model                     模型目录
 │   ├── view                      视图目录
-│   └── middleware                中间件目录
-│   |   └── StaticFile.php        自带静态文件中间件
-|   |—— functions.php             自定义函数
+│   ├── middleware                中间件目录
+│   │   └── StaticFile.php        自带静态文件中间件
+|   └── functions.php             业务自定义函数写到这个文件里
 |
 ├── config                        配置目录
 │   ├── app.php                   应用配置
@@ -36,6 +36,6 @@
     ├── Request.php               请求类
     ├── Response.php              响应类
     ├── Plugin.php                插件安装卸载脚本
-    ├── helpers.php               助手函数
+    ├── helpers.php               助手函数(业务自定义函数请写到app/functions.php)
     └── bootstrap.php             进程启动后初始化脚本
 ```
