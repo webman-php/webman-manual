@@ -93,6 +93,7 @@
   
 - 其它
   - [安全](others/security.md)
+  - [函数禁用检查](others/disable-function-check.md)
   - [自定义脚本](others/scripts.md)
   - [自定义404 500](others/custom-error-page.md)
   - [升级方法](others/upgrade.md)
