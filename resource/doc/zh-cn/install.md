@@ -37,6 +37,9 @@ php start.php start -d
 
 **windows用户用 双击windows.bat 或者运行 `php windows.php` 启动**
 
+> **提示**
+> 如果有报错，很可能是有函数被禁用，参考[函数禁用检查](others/disable-function-check.md)解除禁用
+
 **4、访问**
 
 浏览器访问 `http://ip地址:8787`
