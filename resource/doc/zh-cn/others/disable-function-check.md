@@ -8,7 +8,7 @@
 ## 方法一
 安装`webman/console` 
 ```
-composer require webman/console
+composer require webman/console ^v1.2.35
 ```
 
 执行命令
