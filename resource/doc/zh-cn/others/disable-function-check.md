@@ -5,20 +5,26 @@
 如果有提示```Functions 函数名 has be disabled. Please check disable_functions in php.ini```说明workerman依赖的函数被禁用，需要在php.ini中解除禁用才能正常使用workerman。
 解除禁用参考如下两种方法任选其一即可。
 
-## 方法一：脚本解除
+## 方法一
+安装`webman/console` 
+```
+composer require webman/console
+```
 
-执行脚本 `curl -Ss https://www.workerman.net/webman/fix | php` 以解除禁用
+执行命令
+```
+php webman fix-disable-functions
+```
 
-## 方法二：手动解除
+## 方法二
 
-**步骤如下：**
+执行脚本 `curl -Ss https://www.workerman.net/webman/fix-disable-functions | php` 以解除禁用
 
-1、运行`php --ini` 找到php cli所使用的php.ini文件位置
+## 方法三
 
-2、打开php.ini，找到`disable_functions`一项解除对应函数的禁用
+运行`php --ini` 找到php cli所使用的php.ini文件位置
 
-**依赖的函数**
-使用webman需要解除以下函数的禁用
+打开php.ini，找到`disable_functions`，解除以下函数的调用
 ```
 stream_socket_server
 stream_socket_client
