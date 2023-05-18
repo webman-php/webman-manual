@@ -61,6 +61,13 @@
   - [单元测试](components/unitest.md)
   - [错误码生成](components/generate_error_code.md)
 
+- 基础插件
+  - [基础插件](plugin/base.md)
+  - [命令行](plugin/console.md)
+  - [推送](plugin/push.md)
+  - [基础插件市场](plugin/market.md)
+  - [提交基础插件](plugin/create.md)
+
 - 应用插件
   - [介绍](app/app.md)
   - [规范](app/standard.md)
@@ -79,12 +86,6 @@
   - [发布插件](app/publish.md)
   - [安装卸载](app/install.md)
   - [应用市场](app/market.md)
-
-- 基础插件
-  - [基础插件](plugin/base.md)
-  - [命令行](plugin/console.md)
-  - [基础插件市场](plugin/market.md)
-  - [提交基础插件](plugin/create.md)
 
 - 高级进阶
   - [自定义进程](process.md)
