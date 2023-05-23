@@ -5,7 +5,7 @@ webman同时支持linux系统和windows系统下运行。但是由于workerman�
 
 ## 启动方式
 **linux系统**用命令 `php start.php start`(debug调试模式) `php start.php start -d`(守护进程模式) 启动
-**windows系统**执行`windows.bat`或者使用命令 `php windows.php` 启动
+**windows系统**执行`windows.bat`或者使用命令 `php windows.php` 启动，按ctrl c 停止。windows系统不支持stop reload status reload connections等命令。
 
 ## 常驻内存
 webman是常驻内存的框架，一般来说，php文件载入内存后便会被复用，不会再次从磁盘读取(模版文件除外)。所以正式环境业务代码或配置变更后需要执行`php start.php reload`才能生效。如果是更改进程相关配置或者安装了新的composer包需要重启`php start.php restart`。
