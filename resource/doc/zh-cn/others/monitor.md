@@ -36,8 +36,8 @@ return [
 ```
 `monitorDir`用来配置监控哪些目录的更新(监控目录的文件不宜过多)。
 `monitorExtensions`用来配置`monitorDir`目录里哪些文件后缀应该被监控。
-当`options.enable_file_monitor`值为`true`时，则开启文件更新监控(linux系统下以debug方式运行默认开启文件监控)。
-当`options.enable_memory_monitor`值为`true`时，则开启内存占用监控(内存占用监控不支持windows系统)。
+`options.enable_file_monitor`值为`true`时，则开启文件更新监控(linux系统下以debug方式运行默认开启文件监控)。
+`options.enable_memory_monitor`值为`true`时，则开启内存占用监控(内存占用监控不支持windows系统)。
 
 > **提示**
 > windows系统下当需要运行`windows.bat` 或者 `php windows.php` 时才能开启文件更新监控。
