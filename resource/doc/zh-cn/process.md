@@ -51,7 +51,7 @@ return [
 > **提示**
 > 如果想关闭webman自带的http进程，只需要在 config/server.php 里设置 `listen=>''`
 
-## 自定义监听例子
+## 自定义websocket监听例子
 
 新建 `app/Pusher.php`
 ```php
