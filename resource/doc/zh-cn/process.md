@@ -5,12 +5,58 @@
 > **注意**
 > windows用户需要使用 `php windows.php` 启动webman才能启动自定义进程。
 
-## 自定义监听例子
+## 自定义http服务
+有时候你可能有某种特殊的需求，需要更改webman http服务的内核代码，这时可以采用自定义进程来实现。
 
-新建 `process/Pusher.php`
+例如新建 app\Server.php
+
 ```php
 <?php
-namespace process;
+
+namespace app;
+
+use Webman\App;
+
+class Server extends App
+{
+    // 这里重写 Webman\App 里的方法
+}
+```
+
+在`config/process.php`中添加如下配置
+
+```php
+use Workerman\Worker;
+
+return [
+    // ... 这里省略了其它配置...
+    
+    'my-http' => [
+        'handler' => app\Server::class,
+        'listen' => 'http://0.0.0.0:8686',
+        'count' => 8, // 进程数
+        'user' => '',
+        'group' => '',
+        'reusePort' => true,
+        'constructor' => [
+            'request_class' => \support\Request::class, // request类设置
+            'logger' => \support\Log::channel('default'), // 日志实例
+            'app_path' => app_path(), // app目录位置
+            'public_path' => public_path() // public目录位置
+        ]
+    ]
+];
+```
+
+> **提示**
+> 如果想关闭webman自带的http进程，只需要在 config/server.php 里设置 `listen=>''`
+
+## 自定义监听例子
+
+新建 `app/Pusher.php`
+```php
+<?php
+namespace app;
 
 use Workerman\Connection\TcpConnection;
 
@@ -42,12 +88,12 @@ class Pusher
 在`config/process.php`中添加如下配置
 ```php
 return [
-    // ... 其它进程配置省略
+    // ... 其它进程配置省略 ...
     
     // websocket_test 为进程名称
     'websocket_test' => [
         // 这里指定进程类，就是上面定义的Pusher类
-        'handler' => process\Pusher::class,
+        'handler' => app\Pusher::class,
         'listen'  => 'websocket://0.0.0.0:8888',
         'count'   => 1,
     ],
@@ -55,10 +101,10 @@ return [
 ```
 
 ## 自定义非监听进程例子
-新建 `process/TaskTest.php`
+新建 `app/TaskTest.php`
 ```php
 <?php
-namespace process;
+namespace app;
 
 use Workerman\Timer;
 use support\Db;
@@ -82,7 +128,7 @@ return [
     // ... 其它进程配置省略
     
     'task' => [
-        'handler'  => process\TaskTest::class
+        'handler'  => app\TaskTest::class
     ],
 ];
 ```
@@ -99,7 +145,7 @@ return [
     // websocket_test 为进程名称
     'websocket_test' => [
         // 这里指定进程类
-        'handler' => process\Pusher::class,
+        'handler' => app\Pusher::class,
         // 监听的协议 ip 及端口 （可选）
         'listen'  => 'websocket://0.0.0.0:8888',
         // 进程数 （可选，默认1）
