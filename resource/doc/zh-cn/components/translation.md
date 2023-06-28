@@ -204,7 +204,7 @@ trans('apple_count', ['%count%' => 20]); // There are many apples
 
 ## 指定语言文件
 
-语言文件默认名字为`message.php`，实际上你可以创建其它名称的语言文件。
+语言文件默认名字为`messages.php`，实际上你可以创建其它名称的语言文件。
 
 创建语言文件 `resource/translations/zh_CN/admin.php` 如下：
 ```php

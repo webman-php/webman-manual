@@ -104,6 +104,11 @@ Route::any('/user/{name}', function ($request, $name) {
 Route::any('/user[/{name}]', function ($request, $name = null) {
    return response($name ?? 'tom');
 });
+
+// 匹配所有options请求
+Route::options('[{path:.+}]', function () {
+    return response('');
+});
 ```
 
 ## 路由分组
