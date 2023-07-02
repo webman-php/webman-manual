@@ -1,4 +1,4 @@
-# 验证码相关组件
+·# 验证码相关组件
 
 
 ## webman/captcha
@@ -98,7 +98,7 @@ class LoginController
         // 验证码长度
         $length = 4;
         // 包含哪些字符
-        $chars = '0123456789abcefghigklmnopqrstuvwxyz';
+        $chars = '0123456789abcefghijklmnopqrstuvwxyz';
         $builder = new PhraseBuilder($length, $chars);
         $captcha = new CaptchaBuilder(null, $builder);
         // 生成验证码
