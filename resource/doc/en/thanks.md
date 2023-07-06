@@ -54,6 +54,16 @@
       </a>
     </td>
     <td align="center">
+      <a href="https://github.com/ichynul">
+        <img src="https://avatars.githubusercontent.com/u/10061650?v=4" width="100px;"/><h5>ichynul</h3>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/jetlong">
+        <img src="https://avatars.githubusercontent.com/u/6326231?v=4" width="100px;"/><h5>jetlong</h3>
+      </a>
+    </td>
+    <td align="center">
       <a href="https://github.com/leekung">
         <img src="https://avatars.githubusercontent.com/u/3615383?v=4" width="100px;"/><h5>leekung</h3>
       </a>
@@ -73,6 +83,8 @@
         <img src="https://avatars.githubusercontent.com/u/27796058?v=4" width="100px;"/><h5>teg1c</h3>
       </a>
     </td>
+  </tr>
+  <tr>
     <td align="center">
       <a href="https://github.com/try-to">
         <img src="https://avatars.githubusercontent.com/u/28919584?v=4" width="100px;"/><h5>try-to</h3>
@@ -83,8 +95,11 @@
         <img src="https://avatars.githubusercontent.com/u/55395892?v=4" width="100px;"/><h5>2861527131</h3>
       </a>
     </td>
-  </tr>
-  <tr>
+    <td align="center">
+      <a href="https://github.com/Chance-fyi">
+        <img src="https://avatars.githubusercontent.com/u/37658940?v=4" width="100px;"/><h5>Chance-fyi</h3>
+      </a>
+    </td>
     <td align="center">
       <a href="https://github.com/ChuckWe">
         <img src="https://avatars.githubusercontent.com/u/32729062?v=4" width="100px;"/><h5>ChuckWe</h3>
@@ -93,6 +108,11 @@
     <td align="center">
       <a href="https://github.com/JenkingWang">
         <img src="https://avatars.githubusercontent.com/u/86818420?v=4" width="100px;"/><h5>JenkingWang</h3>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/Rango965">
+        <img src="https://avatars.githubusercontent.com/u/91578172?v=4" width="100px;"/><h5>Rango965</h3>
       </a>
     </td>
     <td align="center">
@@ -105,6 +125,8 @@
         <img src="https://avatars.githubusercontent.com/u/49902313?v=4" width="100px;"/><h5>codinglist</h3>
       </a>
     </td>
+  </tr>
+  <tr>
     <td align="center">
       <a href="https://github.com/daweism">
         <img src="https://avatars.githubusercontent.com/u/15864429?v=4" width="100px;"/><h5>daweism</h3>
@@ -125,8 +147,6 @@
         <img src="https://avatars.githubusercontent.com/u/31346973?v=4" width="100px;"/><h5>edenleung</h3>
       </a>
     </td>
-  </tr>
-  <tr>
     <td align="center">
       <a href="https://github.com/fplun">
         <img src="https://avatars.githubusercontent.com/u/38807395?v=4" width="100px;"/><h5>fplun</h3>
@@ -138,13 +158,20 @@
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/imnotprogrammer">
-        <img src="https://avatars.githubusercontent.com/u/10719753?v=4" width="100px;"/><h5>imnotprogrammer</h3>
+      <a href="https://github.com/liming-1996">
+        <img src="https://avatars.githubusercontent.com/u/38864787?v=4" width="100px;"/><h5>liming-1996</h3>
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/liming-1996">
-        <img src="https://avatars.githubusercontent.com/u/38864787?v=4" width="100px;"/><h5>liming-1996</h3>
+      <a href="https://github.com/oladoyinbov">
+        <img src="https://avatars.githubusercontent.com/u/73993087?v=4" width="100px;"/><h5>oladoyinbov</h3>
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/ooing">
+        <img src="https://avatars.githubusercontent.com/u/5188151?v=4" width="100px;"/><h5>ooing</h3>
       </a>
     </td>
     <td align="center">
@@ -167,8 +194,6 @@
         <img src="https://avatars.githubusercontent.com/u/3119555?v=4" width="100px;"/><h5>santalex</h3>
       </a>
     </td>
-  </tr>
-  <tr>
     <td align="center">
       <a href="https://github.com/tingfeng-key">
         <img src="https://avatars.githubusercontent.com/u/13976521?v=4" width="100px;"/><h5>tingfeng-key</h3>
@@ -184,6 +209,8 @@
         <img src="https://avatars.githubusercontent.com/u/12838756?v=4" width="100px;"/><h5>weijer</h3>
       </a>
     </td>
+  </tr>
+  <tr>
     <td align="center">
       <a href="https://github.com/woodongwong">
         <img src="https://avatars.githubusercontent.com/u/9292647?v=4" width="100px;"/><h5>woodongwong</h3>
