@@ -108,7 +108,7 @@
   - [自动加载](others/autoload.md)
   - [慢业务处理](others/task.md)
   - [性能](others/performance.md)
-  - [性能](others/benchmarks.md)
+  - [压力测试](others/benchmarks.md)
   - [文件监控](others/monitor.md)
 
 - 升级
