@@ -119,7 +119,7 @@ class UserController
 ```
 
 **模板(thinkphp)**
-新建模版 app/view/user/get.blade.php
+新建模版 app/view/user/get.html
 ```html
 <html>
 <head>

@@ -1,4 +1,4 @@
-# 验证码相关组件
+·# 验证码相关组件
 
 
 ## webman/captcha
@@ -85,3 +85,31 @@ class LoginController
 
 进入页面`http://127.0.0.1:8787/login` 界面类似如下：
   ![](img/captcha.png)
+
+### 常见参数设置
+```php
+    /**
+     * 输出验证码图像
+     */
+    public function captcha(Request $request)
+    {
+        // 初始化验证码类
+        $builder = new CaptchaBuilder;
+        // 验证码长度
+        $length = 4;
+        // 包含哪些字符
+        $chars = '0123456789abcefghijklmnopqrstuvwxyz';
+        $builder = new PhraseBuilder($length, $chars);
+        $captcha = new CaptchaBuilder(null, $builder);
+        // 生成验证码
+        $builder->build();
+        // 将验证码的值存储到session中
+        $request->session()->set('captcha', strtolower($builder->getPhrase()));
+        // 获得验证码图片二进制数据
+        $img_content = $builder->get();
+        // 输出验证码二进制数据
+        return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
+    }
+```
+
+更多接口及参数参考 https://github.com/webman-php/captcha
