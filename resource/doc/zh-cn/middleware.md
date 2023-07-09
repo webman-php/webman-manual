@@ -112,17 +112,55 @@ class AuthCheckTest implements MiddlewareInterface
 {
     public function process(Request $request, callable $handler) : Response
     {
-        $session = $request->session();
-        // 用户未登录
-        if (!$session->get('userinfo')) {
+        if (session('user')) {
+            // 已经登录，请求继续向洋葱芯穿越
+            return $handler($request);
+        }
+
+        // 通过反射获取控制器哪些方法不需要登录
+        $controller = new ReflectionClass($request->controller);
+        $noNeedLogin = $controller->getDefaultProperties()['noNeedLogin'] ?? [];
+
+        // 访问的方法需要登录
+        if (!in_array($request->action, $noNeedLogin)) {
             // 拦截请求，返回一个重定向响应，请求停止向洋葱芯穿越
             return redirect('/user/login');
         }
-        // 请求继续向洋葱芯穿越
+
+        // 不需要登录，请求继续向洋葱芯穿越
         return $handler($request);
     }
 }
 ```
+
+新建控制器 `app/controller/UserController.php`
+```php
+<?php
+namespace app\controller;
+use support\Request;
+
+class UserController
+{
+    /**
+     * 不需要登录的方法
+     */
+    protected $noNeedLogin = ['login'];
+
+    public function login(Request $request)
+    {
+        $request->session()->set('user', ['id' => 10, 'name' => 'webman']);
+        return json(['code' => 0, 'msg' => 'login ok']);
+    }
+
+    public function info()
+    {
+        return json(['code' => 0, 'msg' => 'ok', 'data' => session('user')]);
+    }
+}
+```
+
+> **注意**
+> `$noNeedLogin`里记录了当前控制器不需要登录就可以访问的方法
 
 在 `config/middleware.php` 中添加全局中间件如下：
 ```php
