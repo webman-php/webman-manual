@@ -104,6 +104,7 @@ class Test implements MiddlewareInterface
 <?php
 namespace app\middleware;
 
+use ReflectionClass;
 use Webman\MiddlewareInterface;
 use Webman\Http\Response;
 use Webman\Http\Request;
