@@ -264,7 +264,15 @@ $request->fullUrl();
 ```
 返回类似`//www.workerman.net/workerman-chat?type=download`
 
-> 注意：`url()` 和 `fullUrl()` 没有返回协议部分(没有返回http或者https)
+> **注意**
+> `url()` 和 `fullUrl()` 没有返回协议部分(没有返回http或者https)。
+> 因为浏览器里使用 `//example.com` 这样以`//`开头的地址会自动识别当前站点的协议，自动以http或https发起请求。
+
+如果你使用了nginx代理，请将 `proxy_set_header X-Forwarded-Proto $scheme;` 加入到nginx配置中([参考nginx代理](others/nginx-proxy.md))，
+这样就可以用`$request->header('x-forwarded-proto');`来判断是http还是https，例如：
+```php
+echo $request->header('x-forwarded-proto'); 输出 http 或 https
+```
 
 ## 获取请求HTTP版本
 
