@@ -166,7 +166,7 @@ class UploadController
         foreach ($request->file() as $key => $spl_file) {
             var_export($spl_file->isValid()); // 文件是否有效，例如ture|false
             var_export($spl_file->getUploadExtension()); // 上传文件后缀名，例如'jpg'
-            var_export($spl_file->getUploadMineType()); // 上传文件mine类型，例如 'image/jpeg'
+            var_export($spl_file->getUploadMimeType()); // 上传文件mine类型，例如 'image/jpeg'
             var_export($spl_file->getUploadErrorCode()); // 获取上传错误码，例如 UPLOAD_ERR_NO_TMP_DIR UPLOAD_ERR_NO_FILE UPLOAD_ERR_CANT_WRITE
             var_export($spl_file->getUploadName()); // 上传文件名，例如 'my-test.jpg'
             var_export($spl_file->getSize()); // 获得文件大小，例如 13364，单位字节
