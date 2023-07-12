@@ -1,4 +1,6 @@
 # 分页
+
+# 1. 基于Laravel的ORM的分页方式
 Laravel的`illuminate/database`提供了方便的分页功能。
 
 ## 安装
@@ -136,3 +138,30 @@ class UserController
 
 效果如下：
 ![](../components/img/paginator.png)
+
+# 2. 基于Thinkphp的ORM的分页方式
+无须额外安装类库,只要安装过think-orm即可
+## 使用
+```php
+public function index(Request $request)
+{
+    $per_page = 10;
+    $users = Db::table('user')->paginate(['list_rows' => $per_page, 'page' => $request->get('page', 1), 'path' => $request->path()]);
+    return view('index/index', ['users' => $users]);
+}
+```
+
+**模板(thinkphp)**
+```html
+<html>
+<head>
+    <!-- 内置支持 Bootstrap 分页样式 -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+</head>
+<body>
+
+{$user|raw}
+
+</body>
+</html>
+```
