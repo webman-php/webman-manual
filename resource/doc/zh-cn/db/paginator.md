@@ -160,7 +160,7 @@ public function index(Request $request)
 </head>
 <body>
 
-{$user|raw}
+{$users|raw}
 
 </body>
 </html>
