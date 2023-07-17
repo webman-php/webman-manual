@@ -162,11 +162,10 @@ Route::group('/blog', function () {
 ```
 
 > **注意**: 
-> `->middleware()` 路由中间件作用于 group 分组之后时候，当前路由必须在处于当前分组之下
+> 在 webman-framework <= 1.5.6 时 `->middleware()` 路由中间件作用于 group 分组之后时候，当前路由必须在处于当前分组之下
 
 ```php
-# 错误使用例子
-
+# 错误使用例子 (webman-framework >= 1.5.7 时此用法有效)
 Route::group('/blog', function () {
    Route::group('/v1', function () {
       Route::any('/create', function ($request) {return response('create');});
@@ -177,7 +176,6 @@ Route::group('/blog', function () {
     app\middleware\MiddlewareA::class,
     app\middleware\MiddlewareB::class,
 ]);
-
 ```
 
 ```php
@@ -188,8 +186,8 @@ Route::group('/blog', function () {
       Route::any('/edit', function ($rquest) {return response('edit');});
       Route::any('/view/{id}', function ($rquest, $id) {return response("view $id");});
    })->middleware([
-    app\middleware\MiddlewareA::class,
-    app\middleware\MiddlewareB::class,
+        app\middleware\MiddlewareA::class,
+        app\middleware\MiddlewareB::class,
     ]);  
 });
 ```
