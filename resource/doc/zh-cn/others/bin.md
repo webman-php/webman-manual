@@ -34,7 +34,7 @@ php webman build:bin 8.1
 ## 原理
 * 首先将本地webman项目打包成一个phar文件
 * 然后远程下载php8.x.micro.sfx到本地
-* 将php8.x.micro.sfx和phar文件合并为一个二进制文件
+* 将php8.x.micro.sfx和phar文件拼接为一个二进制文件
 
 ## 注意事项
 * 本地php版本>=7.2都可以执行打包命令
