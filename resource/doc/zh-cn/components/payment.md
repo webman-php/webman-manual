@@ -34,11 +34,11 @@ return [
             // 必填-应用私钥 字符串或路径
             'app_secret_cert' => 'MIIEpAIBAAKCxxxxxxxxxxxxxxP4r3m4OUmD/+XDgCg==',
             // 必填-应用公钥证书 路径
-            'app_public_cert_path' => public_path().'/appCertPublicKey_2016090900470841.crt',
+            'app_public_cert_path' => base_path().'/payment/appCertPublicKey_2016090900470841.crt',
             // 必填-支付宝公钥证书 路径
-            'alipay_public_cert_path' => public_path().'/alipayCertPublicKey_RSA2.crt',
+            'alipay_public_cert_path' => base_path().'/payment/alipayCertPublicKey_RSA2.crt',
             // 必填-支付宝根证书 路径
-            'alipay_root_cert_path' => public_path().'/alipayRootCert.crt',
+            'alipay_root_cert_path' => base_path().'/payment/alipayRootCert.crt',
             // 选填-同步回调地址
             'return_url' => 'https://webman.tinywan.cn/payment/alipay-return',
             // 选填-异步回调地址
@@ -101,10 +101,10 @@ return [
     ]
 ];
 ```
-> 注意：所有支付证书统一放在的框架 `public`目录下
+> 注意：证书目录没有规定，以上示例是放在的框架的 `payment`目录下
 
 ```php
-├── public
+├── payment
 │   ├── alipayCertPublicKey_RSA2.crt
 │   ├── alipayRootCert.crt
 │   └── appCertPublicKey_2016090900470841.crt
