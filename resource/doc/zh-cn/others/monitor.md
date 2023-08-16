@@ -7,6 +7,8 @@ webman自带一个monitor监控进程，它支持两个功能
 配置文件 `config/process.php` 中`monitor`配置
 ```php
 
+global $argv;
+
 return [
     // File update detection and automatic reload
     'monitor' => [
@@ -27,7 +29,7 @@ return [
                 'php', 'html', 'htm', 'env'
             ],
             'options' => [
-                'enable_file_monitor' => !Worker::$daemonize && DIRECTORY_SEPARATOR === '/', // 是否开启文件监控
+                'enable_file_monitor' => !in_array('-d', $argv) && DIRECTORY_SEPARATOR === '/', // 是否开启文件监控
                 'enable_memory_monitor' => DIRECTORY_SEPARATOR === '/',                      // 是否开启内存监控
             ]
         ]
