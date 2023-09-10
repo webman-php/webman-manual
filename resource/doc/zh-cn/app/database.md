@@ -85,3 +85,26 @@ class Base extends Model
 
 }
 ```
+
+## 数据库表导入  
+如果插件用到了自己的数据库表, 需要自行实现导入, 可参考以下方法, 也可以自行实现:  
+1. 导入Composer包
+   ```bash
+   composer require zjkal/mysql-helper
+   ```
+   **需要提示用户, 插件依赖此包, 引到用户在安装插件之前安装.**
+2. 在`plugin/foo/api/Install.php`的install方法中处理, 完整的install方法如下:
+   ```php
+   public static function install($version)
+    {
+        // 导入菜单
+        if ($menus = static::getMenus()) {
+            Menu::import($menus);
+        }
+        //导入数据库表
+        $mysqlHelper = new MysqlHelper();
+        $mysqlHelper->setConfig(config('database.connections.mysql'));
+        $mysqlHelper->importSqlFile(base_path() . '/plugin/foo/install.sql');
+    }
+   ```
+   **install.sql文件放在`plugin/foo`根目录**
