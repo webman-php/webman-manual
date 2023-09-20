@@ -317,11 +317,13 @@ class FooController
 {
     public function hello(Request $request)
     {
-        return response()->download(public_path() . '/favicon.ico', '可选的文件名.ico');
+        return response()->download(public_path() . '/favicon.ico', '文件名.ico');
     }
 }
 ```
-download方法与file方法的区别是download方法一般用于下载并保存文件，并且可以设置下载的文件名。download方法不会检查`if-modified-since`头。其它与file方法行为一致。
+download方法与file方法基本一致，的区别是
+1、设置下载的文件名后文件会被下载下来，而不是显示在浏览器里
+2、download方法不会检查`if-modified-since`头
 
 
 ## 获取输出
