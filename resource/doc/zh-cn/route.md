@@ -117,16 +117,16 @@ Route::options('[{path:.+}]', function () {
 
 ```php
 Route::group('/blog', function () {
-   Route::any('/create', function ($rquest) {return response('create');});
-   Route::any('/edit', function ($rquest) {return response('edit');});
-   Route::any('/view/{id}', function ($rquest, $id) {return response("view $id");});
+   Route::any('/create', function ($request) {return response('create');});
+   Route::any('/edit', function ($request) {return response('edit');});
+   Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
 });
 ```
 等价与
 ```php
-Route::any('/blog/create', function ($rquest) {return response('create');});
-Route::any('/blog/edit', function ($rquest) {return response('edit');});
-Route::any('/blog/view/{id}', function ($rquest, $id) {return response("view $id");});
+Route::any('/blog/create', function ($request) {return response('create');});
+Route::any('/blog/edit', function ($request) {return response('edit');});
+Route::any('/blog/view/{id}', function ($request, $id) {return response("view $id");});
 ```
 
 group嵌套使用
@@ -134,9 +134,9 @@ group嵌套使用
 ```php
 Route::group('/blog', function () {
    Route::group('/v1', function () {
-      Route::any('/create', function ($rquest) {return response('create');});
-      Route::any('/edit', function ($rquest) {return response('edit');});
-      Route::any('/view/{id}', function ($rquest, $id) {return response("view $id");});
+      Route::any('/create', function ($request) {return response('create');});
+      Route::any('/edit', function ($request) {return response('edit');});
+      Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
    });  
 });
 ```
@@ -182,9 +182,9 @@ Route::group('/blog', function () {
 # 正确使用例子
 Route::group('/blog', function () {
    Route::group('/v1', function () {
-      Route::any('/create', function ($rquest) {return response('create');});
-      Route::any('/edit', function ($rquest) {return response('edit');});
-      Route::any('/view/{id}', function ($rquest, $id) {return response("view $id");});
+      Route::any('/create', function ($request) {return response('create');});
+      Route::any('/edit', function ($request) {return response('edit');});
+      Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
    })->middleware([
         app\middleware\MiddlewareA::class,
         app\middleware\MiddlewareB::class,
