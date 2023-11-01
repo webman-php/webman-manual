@@ -221,5 +221,10 @@
         <img src="https://avatars.githubusercontent.com/u/8383395?v=4" width="100px;"/><h5>xscan</h3>
       </a>
     </td>
+    <td align="center">
+      <a href="https://github.com/chaz6chez">
+        <img src="https://avatars.githubusercontent.com/u/22535862?v=4" width="100px;"/><h5>chaz6chez</h3>
+      </a>
+    </td>
   </tr>
 </table>
