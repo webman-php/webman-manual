@@ -68,7 +68,7 @@ server {
   access_log off;
   root /path/webman/public;
 
-  # 以/pay开头的请求走8686端口，请按实际情况将/pay更改为你需要的前缀
+  # 以/tast开头的请求走8686端口，请按实际情况将/tast更改为你需要的前缀
   location /tast {
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header Host $host;
