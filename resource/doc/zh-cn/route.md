@@ -252,7 +252,7 @@ if ($route) {
 ```
 
 > **注意**
-> 如果请求没有匹配任何路由(默认路由除外)，则`$request->route`为null
+> 如果当前请求没有匹配到config/route.php中配置的任何路由，则`$request->route`为null，也就是说走默认路由时`$request->route`为null
 
 
 ## 处理404
