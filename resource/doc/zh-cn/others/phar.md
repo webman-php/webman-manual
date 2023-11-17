@@ -37,7 +37,15 @@ phar是PHP里类似于JAR的一种打包文件，你可以利用phar将你的web
 `php webman.phar restart` 或 `php webman.phar restart -d`
 
 ## 说明
-运行webman.phar后会在webman.phar所在目录生成runtime目录，用于存放日志等临时文件
+* 运行webman.phar后会在webman.phar所在目录生成runtime目录，用于存放日志等临时文件。
 
-如果你的项目里使用了.env文件，需要将.env文件放在webman.phar所在目录。
+* 如果你的项目里使用了.env文件，需要将.env文件放在webman.phar所在目录。
+
+* 如果你的业务需要上传文件到public目录，也需要将public目录独立出来放在webman.phar所在目录，这时候需要配置`config/app.php`。
+```
+'public_path' => base_path(false) . DIRECTORY_SEPARATOR . 'public',
+```
+业务可以使用助手函数`public_path()`找到实际的public目录位置。
+
+* webman.phar不支持在windows下开启自定义进程
 

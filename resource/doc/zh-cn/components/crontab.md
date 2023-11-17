@@ -94,6 +94,25 @@ return [
   
 **步骤三：重启webman**
 
-> 注意：定时任务不会马上执行，所有定时任务进入下一分钟才会开始计时执行。
+> 注意：定时任务不会马上执行，所有定时任务进入下一分钟才会开始计时执行
 
+### 说明
+crontab并不是异步的，例如一个task进程里设置了A和B两个定时器，都是每秒执行一次任务，但是A任务耗时10秒，那么B需要等待A执行完才能被执行，导致B执行会有延迟。
+如果业务对于时间间隔很敏感，需要将敏感的定时任务放到单独的进程去运行，防止被其它定时任务影响。例如 `config/process.php` 做如下配置
 
+```php
+return [
+    ....其它配置，这里省略....
+  
+    'task1'  => [
+        'handler'  => process\Task1::class
+    ],
+    'task2'  => [
+        'handler'  => process\Task2::class
+    ],
+];
+```
+将时间敏感的定时任务放在 `process/Task1.php` 里，其它定时任务放在 `process/Task2.php` 里
+
+### 更多
+更多`config/process.php`配置说明，请参考 [自定义进程](../process.md)
