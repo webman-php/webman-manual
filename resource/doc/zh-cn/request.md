@@ -129,6 +129,22 @@ $only = $request->only(['username', 'password']);
 $except = $request->except(['avatar', 'age']);
 ```
 
+## 助手函数input()
+> 2023-07-19 新增
+
+webman提供了助手函数`input()`完成相同的功能。
+```php
+// 从post和get的集合中获取某个值。
+$param = input('name', $default_value);
+// 等价于
+$param = $request->input('name', $default_value);
+
+// 包含了post和get的集合。
+$all_params = input();
+// 等价于
+$all_params = $request->all();
+```
+
 ## 获取上传文件
 **获取整个上传文件数组**
 ```php
