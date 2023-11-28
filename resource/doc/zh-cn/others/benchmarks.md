@@ -76,7 +76,7 @@ class IndexController
     }
 }
 ```
-除此之外，apipost一些情况下无法打出满意的压力，这表现为同样的并发，使用apipost要比ab低50%足有的QPS。
+除此之外，apipost一些情况下无法打出满意的压力，这表现为同样的并发，使用apipost要比ab低50%左右的QPS。
 压测建议用ab、wrk或其它专业的压测软件而不是apipost。
 
 ### 设置合适的进程数
