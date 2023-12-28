@@ -13,4 +13,6 @@
 
 例如 `php webman app-plugin:create foo`
 
-创建完毕后访问 `http://127.0.0.1:8787/app/foo` 如果有返回内容说明创建成功。
+重启webman
+
+访问 `http://127.0.0.1:8787/app/foo` 如果有返回内容说明创建成功。
