@@ -12,7 +12,7 @@ webman支持将项目打包成一个二进制文件，这使得webman无需php�
 ## 配置设置
 打开 `config/plugin/webman/console/app.php` 文件，设置 
 ```php
-'exclude_pattern'   => '#^(?!.*(composer.json|/.github/|/.idea/|/.git/|/.setting/|/runtime/|/vendor-bin/|/build/|vendor/webman/admin))(.*)$#'
+'exclude_pattern'   => '#^(?!.*(composer.json|/.github/|/.idea/|/.git/|/.setting/|/runtime/|/vendor-bin/|vendor/webman/admin))(.*)$#',
 ```
 用于打包时排除一些无用的目录及文件，避免打包体积过大
 
