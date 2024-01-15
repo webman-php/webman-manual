@@ -471,3 +471,41 @@ class Hello implements MiddlewareInterface
     }
 }
 ```
+
+## 超全局中间件
+
+> **注意**
+> 此特性要求 webman-framework >= 1.5.16
+
+主项目的全局中间件只影响主项目，不会对[应用插件](app/app.md)产生影响。有时候我们想要加一个影响全局包括所有插件的中间件，则可以使用超全局中间件。
+
+在`config/middleware.php`中配置如下：
+```php
+return [
+    '@' => [ // 给主项目及所有插件增加全局中间件
+        app\middleware\MiddlewareGlobl::class,
+    ], 
+    '' => [], // 只给主项目增加全局中间件
+];
+```
+
+> **提示**
+> `@`超全局中间件不仅可以在主项目配置，也可以在某个插件里配置，例如`plugin/ai/config/middleware.php`里配置`@`超全局中间件，则也会影响主项目及所有插件。
+
+## 给某个插件增加中间件
+
+> **注意**
+> 此特性要求 webman-framework >= 1.5.16
+
+有时候我们想给某个[应用插件](app/app.md)增加一个中间件，又不想改插件的代码(因为升级会被覆盖)，这时候我们可以在主项目中给它配置中间件。
+
+在`config/middleware.php`中配置如下：
+```php
+return [
+    'plugin.ai' => [], // 给ai插件增加中间件
+    'plugin.ai.admin' => [], // 给ai插件的admin模块增加中间件
+];
+```
+
+> **提示**
+> 当然也可以在某个插件中加类似的配置去影响其它插件，例如`plugin/foo/config/middleware.php`里加入如上配置，则会影响ai插件。
