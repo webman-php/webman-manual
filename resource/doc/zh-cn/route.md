@@ -200,7 +200,7 @@ Route::resource('/test', app\controller\IndexController::class);
 Route::resource('/test', app\controller\IndexController::class, ['index','create']);
 
 //非定义性资源路由
-// 如 notify 访问地址则为any型路由 /text/notify或/text/notify/{id} 都可 routeName为 test.notify
+// 如 notify 访问地址则为any型路由 /test/notify或/test/notify/{id} 都可 routeName为 test.notify
 Route::resource('/test', app\controller\IndexController::class, ['index','create','notify']);
 ```
 | Verb   | URI                 | Action   | Route Name    |
