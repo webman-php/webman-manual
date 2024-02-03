@@ -81,7 +81,7 @@ class LoginController
 ```
 
 Access the page `http://127.0.0.1:8787/login`, the interface is similar to the following:
-  ![](img/captcha.png)
+  ![](../../assets/img/captcha.png)
 
 
 ### Common parameter settings

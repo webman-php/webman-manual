@@ -84,7 +84,7 @@ class LoginController
 ```
 
 進入頁面`http://127.0.0.1:8787/login` 界面類似如下：
-  ![](img/captcha.png)
+  ![](../../assets/img/captcha.png)
 
 ### 常見參數設置
 ```php

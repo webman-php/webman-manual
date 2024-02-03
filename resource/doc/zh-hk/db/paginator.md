@@ -137,7 +137,7 @@ class UserController
 ```
 
 效果如下：
-![](../components/img/paginator.png)
+![](../../assets/img/paginator.png)
 
 # 2. 基於Thinkphp的ORM的分頁方式
 無須額外安裝類庫,只要安裝過think-orm即可

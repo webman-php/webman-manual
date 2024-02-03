@@ -106,7 +106,7 @@ Create template `app/view/user/get.blade.php`
 ```
 
 The effect is as follows:
-![](img/paginator.png)
+![](../../assets/img/paginator.png)
   
 ### More Information
 

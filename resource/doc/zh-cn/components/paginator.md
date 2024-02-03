@@ -106,7 +106,7 @@ class UserController
 ```
 
 效果如下：
-![](img/paginator.png)
+![](../../assets/img/paginator.png)
   
 ### 更多内容
 

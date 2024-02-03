@@ -141,7 +141,7 @@ Create a new template at app/view/user/get.html
 ```
 
 Here is the effect:
-![Pagination](../components/img/paginator.png)
+![Pagination](../../assets/img/paginator.png)
 
 # 2. Pagination using ThinkPHP's ORM
 
