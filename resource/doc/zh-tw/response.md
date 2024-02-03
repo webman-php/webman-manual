@@ -1,0 +1,353 @@
+# 回應
+實際上，回應是一個 `support\Response` 物件。為了方便建立這個物件，webman 提供了一些輔助函式。
+
+## 回傳任意回應
+
+**範例**
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+
+class FooController
+{
+    public function hello(Request $request)
+    {
+        return response('hello webman');
+    }
+}
+```
+
+`response` 函式的實現如下：
+```php
+function response($body = '', $status = 200, $headers = array())
+{
+    return new Response($status, $headers, $body);
+}
+```
+
+你也可以先建立一個空的 `response` 物件，然後在適當的位置利用 `$response->cookie()`、`$response->header()`、`$response->withHeaders()`、`$response->withBody()` 設置返回內容。
+```php
+public function hello(Request $request)
+{
+    // 建立一個物件
+    $response = response();
+    
+    // .... 業務邏輯省略
+    
+    // 設置 Cookie
+    $response->cookie('foo', 'value');
+    
+    // .... 業務邏輯省略
+    
+    // 設置 HTTP 頭
+    $response->header('Content-Type', 'application/json');
+    $response->withHeaders([
+                'X-Header-One' => 'Header Value 1',
+                'X-Header-Tow' => 'Header Value 2',
+            ]);
+
+    // .... 業務邏輯省略
+
+    // 設置要返回的資料
+    $response->withBody('返回的資料');
+    return $response;
+}
+```
+
+## 回傳 JSON
+**範例**
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+
+class FooController
+{
+    public function hello(Request $request)
+    {
+        return json(['code' => 0, 'msg' => 'ok']);
+    }
+}
+```
+`json` 函式的實現如下：
+```php
+function json($data, $options = JSON_UNESCAPED_UNICODE)
+{
+    return new Response(200, ['Content-Type' => 'application/json'], json_encode($data, $options));
+}
+```
+
+## 回傳 XML
+**範例**
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+
+class FooController
+{
+    public function hello(Request $request)
+    {
+        $xml = <<<XML
+               <?xml version='1.0' standalone='yes'?>
+               <values>
+                   <truevalue>1</truevalue>
+                   <falsevalue>0</falsevalue>
+               </values>
+               XML;
+        return xml($xml);
+    }
+}
+```
+`xml` 函式的實現如下：
+```php
+function xml($xml)
+{
+    if ($xml instanceof SimpleXMLElement) {
+        $xml = $xml->asXML();
+    }
+    return new Response(200, ['Content-Type' => 'text/xml'], $xml);
+}
+```
+
+## 回傳視圖
+新建檔案 `app/controller/FooController.php` 如下
+
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+
+class FooController
+{
+    public function hello(Request $request)
+    {
+        return view('foo/hello', ['name' => 'webman']);
+    }
+}
+```
+
+新建檔案 `app/view/foo/hello.html` 如下
+
+```html
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>webman</title>
+</head>
+<body>
+hello <?=htmlspecialchars($name)?>
+</body>
+</html>
+```
+
+## 重新導向
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+
+class FooController
+{
+    public function hello(Request $request)
+    {
+        return redirect('/user');
+    }
+}
+```
+
+`redirect` 函式的實現如下：
+```php
+function redirect($location, $status = 302, $headers = [])
+{
+    $response = new Response($status, ['Location' => $location]);
+    if (!empty($headers)) {
+        $response->withHeaders($headers);
+    }
+    return $response;
+}
+```
+
+## 設定頭部資訊
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+
+class FooController
+{
+    public function hello(Request $request)
+    {
+        return response('hello webman', 200, [
+            'Content-Type' => 'application/json',
+            'X-Header-One' => 'Header Value' 
+        ]);
+    }
+}
+```
+也可以利用 `header` 和 `withHeaders` 方法來單個或者批量設定 header。
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+
+class FooController
+{
+    public function hello(Request $request)
+    {
+        return response('hello webman')
+        ->header('Content-Type', 'application/json')
+        ->withHeaders([
+            'X-Header-One' => 'Header Value 1',
+            'X-Header-Tow' => 'Header Value 2',
+        ]);
+    }
+}
+```
+你也可以提前設定 header，最後設定將要返回的資料。
+```php
+public function hello(Request $request)
+{
+    // 建立一個物件
+    $response = response();
+    
+    // .... 業務邏輯省略
+  
+    // 設置 HTTP 頭
+    $response->header('Content-Type', 'application/json');
+    $response->withHeaders([
+                'X-Header-One' => 'Header Value 1',
+                'X-Header-Tow' => 'Header Value 2',
+            ]);
+
+    // .... 業務邏輯省略
+
+    // 設置要返回的資料
+    $response->withBody('返回的資料');
+    return $response;
+}
+```
+
+## 設定 Cookie
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+
+class FooController
+{
+    public function hello(Request $request)
+    {
+        return response('hello webman')
+        ->cookie('foo', 'value');
+    }
+}
+```
+你也可以提前設定 cookie，最後設定要返回的資料。
+```php
+public function hello(Request $request)
+{
+    // 建立一個物件
+    $response = response();
+    
+    // .... 業務邏輯省略
+    
+    // 設置 Cookie
+    $response->cookie('foo', 'value');
+    
+    // .... 業務邏輯省略
+
+    // 設置要返回的資料
+    $response->withBody('返回的資料');
+    return $response;
+}
+```
+
+`cookie` 方法完整參數如下：
+
+`cookie($name, $value = '', $max_age = 0, $path = '', $domain = '', $secure = false, $http_only = false)`
+
+## 返回檔案串流
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+
+class FooController
+{
+    public function hello(Request $request)
+    {
+        return response()->file(public_path() . '/favicon.ico');
+    }
+}
+```
+
+- webman 支援傳送超大檔案
+- 對於大檔案（超過2M），webman 不會將整個檔案一次性讀入內存，而是在適當的時機分段讀取檔案並傳送
+- webman 會根據客戶端接收速度來優化檔案讀取傳送速度，保證最快速傳送檔案的同時將內存佔用減少到最低
+- 資料傳送是非阻塞的，不會影響其他請求處理
+- `file` 方法會自動添加 `if-modified-since` 頭並在下一個請求時檢測 `if-modified-since` 頭，如果檔案未修改則直接返回 304 以節省頻寬
+- 傳送的檔案會自動使用合適的 `Content-Type` 頭傳送給瀏覽器
+- 如果檔案不存在，會自動轉為 404 回應
+
+## 下載檔案
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+
+class FooController
+{
+    public function hello(Request $request)
+    {
+        return response()->download(public_path() . '/favicon.ico', '檔名.ico');
+    }
+}
+```
+`download` 方法與 `file` 方法基本一致，的區別是
+1、設置下載的檔名後檔案會被下載下來，而不是顯示在瀏覽器裡
+2、`download` 方法不會檢查 `if-modified-since` 頭
+
+## 獲取輸出
+有些類庫是將檔案內容直接打印到標準輸出的，也就是資料會打印在命令行終端裡，並不會傳送給瀏覽器，這時候我們需要通過 `ob_start();`、`ob_get_clean();` 將資料捕獲到一個變數中，再將資料傳送給瀏覽器，例如：
+
+```php
+<?php
+
+namespace app\controller;
+
+use support\Request;
+
+class ImageController
+{
+    public function get(Request $request)
+    {
+        // 建立圖像
+        $im = imagecreatetruecolor(120, 20);
+        $text_color = imagecolorallocate($im, 233, 14, 91);
+        imagestring($im, 1, 5, 5,  'A Simple Text String', $text_color);
+
+        // 開始獲取輸出
+        ob_start();
+        // 輸出圖像
+        imagejpeg($im);
+        // 獲得圖像內容
+        $image = ob_get_clean();
+        
+        // 傳送圖像
+        return response($image)->header('Content-Type', 'image/jpeg');
+    }
+}
+```
