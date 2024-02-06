@@ -3,7 +3,7 @@
 有时候我们需要处理慢业务，为了避免慢业务影响webman的其它请求处理，这些业务根据情况不同可以使用不同的处理方案。
 
 ## 使用消息队列
-参考[redis队列](https://www.workerman.net/plugin/12) [stomp队列](https://www.workerman.net/plugin/13)
+参考[redis队列](../queue/redis.md) [stomp队列](../queue/stomp.md)
 
 ### 优点
 可以应对突发海量业务处理请求
