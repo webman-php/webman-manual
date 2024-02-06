@@ -30,23 +30,23 @@ Manchmal möchten wir nicht, dass eine bestimmte Anfrage den Controller erreicht
 
 ```
                               
-            ┌───────────────────────────────────────────────────────┐
-            │                     middleware1                       │ 
-            │     ┌───────────────────────────────────────────┐     │
-            │     │          　 　 Authentifizierungsmiddleware        │     │
-            │     │      ┌──────────────────────────────┐     │     │
-            │     │      │         middleware3          │     │     │       
-            │     │      │     ┌──────────────────┐     │     │     │
-            │     │      │     │                  │     │     │     │
- 　── Anfrage ───────────┐   │     │       Controller      │     │     │
-            │     │ Antwort │     │                  │     │     │     │
-   <─────────────────┘   │     └──────────────────┘     │     │     │
-            │     │      │                              │     │     │
-            │     │      └──────────────────────────────┘     │     │
-            │     │                                           │     │
-            │     └───────────────────────────────────────────┘     │
-            │                                                       │
-            └───────────────────────────────────────────────────────┘
+            ┌───────────────────────────────────────────────────────────┐
+            │                     middleware1                           │ 
+            │     ┌───────────────────────────────────────────────┐     │
+            │     │               Authentifizierungsmiddleware    │     │
+            │     │          ┌──────────────────────────────┐     │     │
+            │     │          │         middleware3          │     │     │       
+            │     │          │     ┌──────────────────┐     │     │     │
+            │     │          │     │                  │     │     │     │
+   ── Anfrage ───────┐       │     │     Controller   │     │     │     │
+            │     │ Antwort  │     │                  │     │     │     │
+   <─────────────────┘       │     └──────────────────┘     │     │     │
+            │     │          │                              │     │     │
+            │     │          └──────────────────────────────┘     │     │
+            │     │                                               │     │
+            │     └───────────────────────────────────────────────┘     │
+            │                                                           │
+            └───────────────────────────────────────────────────────────┘
 ```
 
 Wie in der Abbildung gezeigt, wird die Anfrage nach dem Erreichen der Authentifizierungsmiddleware abgefangen und eine Anmeldeantwort wird von der Authentifizierungsmiddleware wieder durch Middleware 1 an den Browser zurückgegeben.
