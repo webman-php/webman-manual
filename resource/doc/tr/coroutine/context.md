@@ -1,0 +1,48 @@
+# Context Sınıfı
+
+`support\Context` sınıfı, istek bağlam verilerini depolamak için kullanılır, istek tamamlandığında ilgili bağlam verileri otomatik olarak silinir. Yani bağlam verilerinin yaşam döngüsü talep yaşam döngüsünü takip eder. `support\Context`, Fiber, Swoole, Swow koşullu ortamlarını destekler.
+
+Daha fazla bilgi için [webman fiber](./fiber.md)'a bakın.
+
+# Arayüz
+Bağlam aşağıdaki arayüzleri sağlar.
+
+## Bağlam verisi ayarlama
+```php
+Context::set(string $name, mixed $value);
+```
+
+## Bağlam verisi alıma
+```php
+Context::get(string $name = null);
+```
+
+## Bağlam verisi silme
+```php
+Context::delete(string $name);
+```
+
+> **Not**
+> Çerçeve, istek sona erdikten sonra bağlam verilerini otomatik olarak yok etmek için Context::destroy() arayüzünü otomatik olarak çağırır, iş mantığı kullanıcı tarafından Context::destroy() arayüzünü manuel olarak çağıramaz.
+
+# Örnek
+```php
+<?php
+
+namespace app\controller;
+
+use support\Request;
+use support\Context;
+
+class TestController
+{
+    public function index(Request $request)
+    {
+        Context::set('name', $request->get('name'));
+        return Context::get('name');
+    }
+}
+```
+
+# Dikkat
+**Koşullu olarak kullanılırken**, **istekle ilgili durum verilerini** global değişkenlere veya statik değişkenlere depolamamalısınız, bu durum genel veri kirliliğine yol açabilir, doğru kullanımı bunları saklamak ve almak için Context'tir.

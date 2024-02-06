@@ -1,0 +1,1 @@
+Maalesef, Webman belgelerinde Medoo veritabanı eklentisi için resmi bir rehber bulunmamaktadır. Ancak, Medoo eklentisi hakkında daha fazla bilgiye erişmek için [bu bağlantıya](https://www.workerman.net/plugin/29) tıklayarak ilgili kaynağa gidebilirsiniz. Bu kaynak, Medoo eklentisinin kullanımı hakkında size yardımcı olabilir.
