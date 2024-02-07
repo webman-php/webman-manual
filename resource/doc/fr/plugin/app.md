@@ -1,94 +1,91 @@
-# Les plugins d'application
-Chaque plugin d'application est une application complète, dont le code source est situé dans le répertoire `{projet principal}/plugin`
+# Plugins d'application
+Chaque plugin d'application est une application complète dont le code source est placé dans le répertoire `{projet principal}/plugin`
 
-> **Remarque**
-> En utilisant la commande `php webman app-plugin:create {nom du plugin}` (nécessite webman/console>=1.2.16), vous pouvez créer localement un plugin d'application,
-> par exemple, `php webman app-plugin:create cms` créera la structure de répertoires suivante :
+> **Astuce**
+> En utilisant la commande `php webman app-plugin:create {nom du plugin}` (nécessite webman/console>=1.2.16), vous pouvez créer localement un plugin d'application.
+> Par exemple, `php webman app-plugin:create cms` créera la structure de répertoire suivante
 
-```
+```plaintext
 plugin/
 └── cms
     ├── app
-    │   ├── controller
-    │   │   └── IndexController.php
-    │   ├── exception
-    │   │   └── Handler.php
-    │   ├── functions.php
-    │   ├── middleware
-    │   ├── model
-    │   └── view
-    │       └── index
-    │           └── index.html
+    │   ├── controller
+    │   │   └── IndexController.php
+    │   ├── exception
+    │   │   └── Handler.php
+    │   ├── functions.php
+    │   ├── middleware
+    │   ├── model
+    │   └── view
+    │       └── index
+    │           └── index.html
     ├── config
-    │   ├── app.php
-    │   ├── autoload.php
-    │   ├── container.php
-    │   ├── database.php
-    │   ├── exception.php
-    │   ├── log.php
-    │   ├── middleware.php
-    │   ├── process.php
-    │   ├── redis.php
-    │   ├── route.php
-    │   ├── static.php
-    │   ├── thinkorm.php
-    │   ├── translation.php
-    │   └── view.php
+    │   ├── app.php
+    │   ├── autoload.php
+    │   ├── container.php
+    │   ├── database.php
+    │   ├── exception.php
+    │   ├── log.php
+    │   ├── middleware.php
+    │   ├── process.php
+    │   ├── redis.php
+    │   ├── route.php
+    │   ├── static.php
+    │   ├── thinkorm.php
+    │   ├── translation.php
+    │   └── view.php
     └── public
 ```
 
-Nous observons qu'un plugin d'application possède la même structure de répertoires et les mêmes fichiers de configuration que webman. En réalité, développer un plugin d'application est similaire au développement d'un projet webman, à quelques petites différences près.
+Nous voyons qu'un plugin d'application a la même structure de répertoire et les mêmes fichiers de configuration que webman. En réalité, le développement d'un plugin d'application est pratiquement identique au développement d'un projet webman, il suffit de faire attention à quelques aspects.
 
 ## Espace de noms
-Le répertoire du plugin et son nom suivent la spécification PSR4. Puisque les plugins sont tous situés dans le répertoire plugin, les espaces de noms commencent tous par `plugin`, par exemple `plugin\cms\app\controller\UserController`, où cms est le répertoire principal du code source du plugin.
+Les répertoires et noms des plugins suivent la spécification PSR4. Comme tous les plugins sont placés dans le répertoire plugin, les espaces de noms commencent tous par plugin, par exemple `plugin\cms\app\controller\UserController`, où cms est le répertoire principal du code source du plugin.
 
-## Accès à l'URL
-Les adresses URL des plugins d'application commencent toutes par `/app`, par exemple, l'URL de `plugin\cms\app\controller\UserController` est `http://127.0.0.1:8787/app/cms/user`.
+## Accès URL
+Les adresses URL des plugins d'application commencent toutes par `/app`, par exemple pour le contrôleur `plugin\cms\app\controller\UserController`, l'URL est `http://127.0.0.1:8787/app/cms/user`.
 
 ## Fichiers statiques
-Les fichiers statiques sont situés dans `plugin/{plugin}/public`, par exemple, pour accéder à `http://127.0.0.1:8787/app/cms/avatar.png`, il s'agit en réalité du fichier `plugin/cms/public/avatar.png`.
+Les fichiers statiques sont placés dans `plugin/{plugin}/public`. Par exemple, accéder à `http://127.0.0.1:8787/app/cms/avatar.png` revient en réalité à récupérer le fichier `plugin/cms/public/avatar.png`.
 
 ## Fichiers de configuration
-La configuration des plugins est similaire à celle des projets webman normaux, mais la configuration des plugins est généralement spécifique au plugin actuel et n'a généralement aucun impact sur le projet principal.
-Par exemple, la valeur de `plugin.cms.app.controller_suffix` n'affecte que le suffixe du contrôleur du plugin et n'a aucun impact sur le projet principal.
-Par exemple, la valeur de `plugin.cms.app.controller_reuse` n'affecte que la réutilisation du contrôleur du plugin et n'a aucun impact sur le projet principal.
-Par exemple, la valeur de `plugin.cms.middleware` n'affecte que les middlewares du plugin et n'a aucun impact sur le projet principal.
-Par exemple, la valeur de `plugin.cms.view` n'affecte que la vue utilisée par le plugin et n'a aucun impact sur le projet principal.
-Par exemple, la valeur de `plugin.cms.container` n'affecte que le conteneur utilisé par le plugin et n'a aucun impact sur le projet principal.
-Par exemple, la valeur de `plugin.cms.exception` n'affecte que la classe de gestion des exceptions du plugin et n'a aucun impact sur le projet principal.
+La configuration des plugins est identique à celle des projets webman, mais généralement la configuration d'un plugin n'a d'impact que sur ce plugin et non sur le projet principal.
+Par exemple, la valeur de `plugin.cms.app.controller_suffix` n'a d'impact que sur le suffixe des contrôleurs du plugin et n'a aucun impact sur le projet principal.
+De même, la valeur de `plugin.cms.app.controller_reuse` n'a d'impact que sur la réutilisation des contrôleurs du plugin et non sur le projet principal.
+Il en va de même pour les autres configurations telles que `middleware` ou `view` qui n'ont d'effet que sur le plugin auquel elles sont associées.
 
-Cependant, étant donné que les routes sont globales, la configuration des routes des plugins affecte également globalement.
+Cependant, comme les routes sont globales, la configuration des routes du plugin affecte également l'ensemble du système.
 
 ## Obtenir la configuration
-Pour obtenir la configuration d'un plugin spécifique, utilisez `config('plugin.{plugin}.{configuration spécifique}')`, par exemple, pour obtenir toutes les configurations de `plugin/cms/config/app.php`, utilisez `config('plugin.cms.app')`
-De même, le projet principal ou d'autres plugins peuvent utiliser `config('plugin.cms.xxx')` pour obtenir la configuration du plugin cms.
+Pour obtenir la configuration d'un plugin spécifique, utilisez la méthode suivante : `config('plugin.{plugin}.{configuration spécifique}');`, par exemple pour obtenir toutes les configurations de `plugin/cms/config/app.php`, utilisez `config('plugin.cms.app')`.
+De la même manière, le projet principal ou d'autres plugins peuvent utiliser `config('plugin.cms.xxx')` pour obtenir la configuration du plugin cms.
 
 ## Configurations non prises en charge
-Les plugins d'application ne prennent pas en charge les configurations server.php, session.php, `app.request_class`, `app.public_path`, et `app.runtime_path`.
+Les plugins d'application ne prennent pas en charge les configurations `server.php`, `session.php`, `app.request_class`, `app.public_path` et `app.runtime_path`.
 
 ## Base de données
-Les plugins peuvent configurer leur propre base de données, par exemple le contenu de `plugin/cms/config/database.php` est le suivant :
+Les plugins peuvent avoir leur propre configuration de base de données, par exemple le contenu de `plugin/cms/config/database.php` est le suivant :
 ```php
-return [
+return  [
     'default' => 'mysql',
     'connections' => [
-        'mysql' => [ // mysql est le nom de connexion
+        'mysql' => [ // mysql est le nom de la connexion
             'driver'      => 'mysql',
             'host'        => '127.0.0.1',
             'port'        => 3306,
             'database'    => 'database',
-            'username'    => 'username',
-            'password'    => 'password',
+            'username'    => 'nom d'utilisateur',
+            'password'    => 'mot de passe',
             'charset'     => 'utf8mb4',
             'collation'   => 'utf8mb4_general_ci',
         ],
-        'admin' => [ // admin est le nom de connexion
+        'admin' => [ // admin est le nom de la connexion
             'driver'      => 'mysql',
             'host'        => '127.0.0.1',
             'port'        => 3306,
             'database'    => 'database',
-            'username'    => 'username',
-            'password'    => 'password',
+            'username'    => 'nom d'utilisateur',
+            'password'    => 'mot de passe',
             'charset'     => 'utf8mb4',
             'collation'   => 'utf8mb4_general_ci',
         ],
@@ -96,25 +93,27 @@ return [
 ];
 ```
 Pour l'utiliser, utilisez `Db::connection('plugin.{plugin}.{nom de connexion}');`, par exemple
+
 ```php
 use support\Db;
 Db::connection('plugin.cms.mysql')->table('user')->first();
 Db::connection('plugin.cms.admin')->table('admin')->first();
 ```
 
-Si vous souhaitez utiliser la base de données du projet principal, vous pouvez l'utiliser directement, par exemple
+Si vous souhaitez utiliser la base de données du projet principal, utilisez-la directement, par exemple
+
 ```php
 use support\Db;
 Db::table('user')->first();
-// Supposons que le projet principal a également configuré une connexion admin
+// Supposons que le projet principal dispose également d'une connexion admin
 Db::connection('admin')->table('admin')->first();
 ```
-
-> **Remarque**
-> thinkorm fonctionne de la même manière
+> **Astuce**
+> thinkorm fonctionne de manière similaire
 
 ## Redis
-L'utilisation de Redis est similaire à celle des bases de données, par exemple dans `plugin/cms/config/redis.php`
+L'utilisation de Redis est similaire à celle de la base de données. Par exemple, pour `plugin/cms/config/redis.php` :
+
 ```php
 return [
     'default' => [
@@ -131,36 +130,40 @@ return [
     ],
 ];
 ```
-Pour l'utiliser :
+L'utilisation se fait ainsi :
+
 ```php
 use support\Redis;
 Redis::connection('plugin.cms.default')->get('key');
 Redis::connection('plugin.cms.cache')->get('key');
 ```
 
-De même, si vous souhaitez réutiliser la configuration Redis du projet principal, vous pouvez l'utiliser directement, par exemple
+De même, si vous souhaitez réutiliser la configuration Redis du projet principal :
+
 ```php
 use support\Redis;
 Redis::get('key');
-// Supposons que le projet principal ait également configuré une connexion cache
+// Supposons que le projet principal a également configuré une connexion cache
 Redis::connection('cache')->get('key');
 ```
 
 ## Journalisation
-La manipulation des journaux est similaire à celle des bases de données, par exemple
+L'utilisation de la journalisation est similaire à celle de la base de données :
+
 ```php
 use support\Log;
 Log::channel('plugin.admin.default')->info('test');
 ```
 
-Si vous souhaitez réutiliser la configuration des journaux du projet principal, vous pouvez l'utiliser directement, par exemple
+Si vous souhaitez réutiliser la configuration de journalisation du projet principal, utilisez simplement :
+
 ```php
 use support\Log;
 Log::info('Contenu du journal');
-// Supposons que le projet principal possède une configuration de journal test
+// Supposons que le projet principal a configuré un journal test
 Log::channel('test')->info('Contenu du journal');
 ```
 
 # Installation et désinstallation des plugins d'application
-Lors de l'installation des plugins d'application, il suffit de copier le répertoire du plugin dans le répertoire `{projet principal}/plugin`, puis de recharger ou redémarrer pour que cela prenne effet.
-Pour désinstaller, supprimez simplement le répertoire du plugin correspondant dans le répertoire `{projet principal}/plugin`.
+Lors de l'installation d'un plugin d'application, il suffit de copier le répertoire du plugin dans le répertoire `{projet principal}/plugin`, puis de recharger ou redémarrer pour que les modifications prennent effet.
+Pour désinstaller un plugin, il suffit de supprimer le répertoire du plugin correspondant dans `{projet principal}/plugin`.

@@ -1,4 +1,5 @@
-# Dank an die folgenden Contributor für ihre Beiträge zu Webman und der Dokumentation
+Sure, please go ahead and provide the document for translation.
+# Dank an die folgenden Beitragenden für ihren Beitrag zu Webman und der Dokumentation
 <table>
   <tr>
     <td align="center">

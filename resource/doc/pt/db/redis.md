@@ -1,11 +1,11 @@
 # Redis
 
-O componente Redis do webman usa por padrão [illuminate/redis](https://github.com/illuminate/redis), que é a biblioteca Redis do Laravel, e é usado da mesma forma que no Laravel.
+O componente redis do webman usa por padrão o [illuminate/redis](https://github.com/illuminate/redis), que é a biblioteca redis do Laravel, e é usado da mesma maneira que no Laravel.
 
-Antes de usar o `illuminate/redis`, é necessário instalar a extensão do Redis para o `php-cli`.
+Antes de usar o `illuminate/redis`, é necessário instalar a extensão redis para o `php-cli`.
 
-> **Observação**
-> Use o comando `php -m | grep redis` para verificar se a extensão do Redis está instalada para o `php-cli`. Observe que mesmo que a extensão do Redis esteja instalada para o `php-fpm`, isso não significa que ela está disponível para o `php-cli`, pois são aplicativos diferentes e podem usar diferentes arquivos de configuração `php.ini`. Use o comando `php --ini` para verificar qual arquivo de configuração `php.ini` está sendo usado pelo seu `php-cli`.
+> **Atenção**
+> Verifique se a extensão redis está instalada para o `php-cli` usando o comando `php -m | grep redis`. Note que mesmo que você tenha instalado a extensão redis para o `php-fpm`, isso não significa que você poderá usá-la no `php-cli`, já que o `php-cli` e o `php-fpm` são aplicativos diferentes e podem usar diferentes arquivos de configuração `php.ini`. Use o comando `php --ini` para verificar qual arquivo de configuração `php.ini` está sendo usado pelo seu `php-cli`.
 
 ## Instalação
 
@@ -13,10 +13,11 @@ Antes de usar o `illuminate/redis`, é necessário instalar a extensão do Redis
 composer require -W illuminate/redis illuminate/events
 ```
 
-Após a instalação, é necessário reiniciar (não será eficaz apenas recarregar).
+Após a instalação, é necessário reiniciar (reload não funciona).
 
 ## Configuração
-O arquivo de configuração do Redis está em `config/redis.php`
+O arquivo de configuração do redis está em `config/redis.php`.
+
 ```php
 return [
     'default' => [
@@ -47,7 +48,7 @@ class UserController
 }
 ```
 
-## Interface do Redis
+## Interface Redis
 ```php
 Redis::append($key, $value)
 Redis::bitCount($key)
@@ -77,7 +78,7 @@ Redis::expire($key, $ttl)
 Redis::expireAt($key, $timestamp)
 Redis::select($dbIndex)
 ```
-Equivalente a
+Equivalente a:
 ```php
 $redis = Redis::connection('default');
 $redis->append($key, $value)
@@ -89,11 +90,12 @@ $redis->getBit($key, $offset)
 ...
 ```
 
-> **Observação**
-> Use com cuidado a interface `Redis::select($db)`, pois o webman é um framework de memória residencial e, se uma solicitação usar `Redis::select($db)` para mudar de banco de dados, isso afetará outras solicitações subsequentes. Para bancos de dados múltiplos, é recomendável configurar diferentes conexões Redis para diferentes `$db`.
+> **Atenção**
+> Tenha cuidado com a interface `Redis::select($db)`, pois o webman é um framework residente em memória e alterar o banco de dados em uma solicitação afetará solicitações futuras. Para múltiplos bancos de dados, é recomendável configurar diferentes conexões Redis para diferentes configurações de `$db`.
 
-## Usando Múltiplas Conexões Redis
-Por exemplo, no arquivo de configuração `config/redis.php`
+## Usando várias conexões Redis
+Por exemplo, no arquivo de configuração `config/redis.php`.
+
 ```php
 return [
     'default' => [
@@ -109,17 +111,18 @@ return [
         'port'     => 6379,
         'database' => 1,
     ],
-
 ]
 ```
-Por padrão, é usada a conexão configurada em `default`, mas é possível selecionar qual conexão Redis usar usando o método `Redis::connection()`.
+Por padrão, é usada a conexão configurada em `default`, mas você pode usar o método `Redis::connection()` para selecionar a conexão redis a ser usada.
+
 ```php
 $redis = Redis::connection('cache');
 $redis->get('test_key');
 ```
 
-## Configuração de Clusters
-Se sua aplicação usa um cluster de servidores Redis, você deve definir esses clusters no arquivo de configuração do Redis usando a chave clusters:
+## Configuração de Cluster
+Se sua aplicação usar um cluster de servidores Redis, você deve definir esses clusters no arquivo de configuração do Redis:
+
 ```php
 return [
     'clusters' => [
@@ -136,7 +139,7 @@ return [
 ];
 ```
 
-Por padrão, o cluster pode fazer a fragmentação do cliente em nós, permitindo a criação de um pool de nós e alocar grandes quantidades de memória. No entanto, observe que o cliente compartilhado não lida com falhas, sendo útil principalmente para armazenamento em cache que é recuperado de forma redundante de outra base de dados principal. Se deseja usar o cluster nativo do Redis, é necessário especificar o seguinte no arquivo de configuração sob a chave options:
+Por padrão, o cluster pode fazer shard no nó do cliente, permitindo pools de nós e criando uma grande quantidade de memória disponível. No entanto, observe que compartilhamentos de clientes não tratam falhas, portanto, essa funcionalidade é principalmente indicada para dados em cache obtidos de outro banco de dados principal. Se deseja usar o cluster nativo do Redis, é necessário fazer a seguinte especificação no arquivo de configuração em `options`:
 
 ```php
 return[
@@ -150,8 +153,9 @@ return[
 ];
 ```
 
-## Comandos em Pipeline
-Quando precisar enviar muitos comandos para o servidor em uma única operação, é recomendável usar comandos de pipeline. O método pipeline aceita um closure de uma instância do Redis. Todos os comandos enviados para a instância do Redis serão executados em uma única operação:
+## Comandos Pipeline
+Quando precisa enviar muitos comandos para o servidor em uma única operação, é recomendável usar comandos pipeline. O método pipeline aceita um fechamento de instância Redis. Todos os comandos enviados para a instância Redis serão executados em uma única operação:
+
 ```php
 Redis::pipeline(function ($pipe) {
     for ($i = 0; $i < 1000; $i++) {

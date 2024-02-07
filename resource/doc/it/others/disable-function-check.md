@@ -1,12 +1,12 @@
-# Disabilità del controllo delle funzioni
+# Disabilita il controllo delle funzioni
 
-Utilizza questo script per verificare se alcune funzioni sono state disabilitate. Esegui il comando da riga di comando ```curl -Ss https://www.workerman.net/webman/check | php```.
+Utilizza questo script per verificare se ci sono funzioni disabilitate. Esegui il comando da riga di comando ```curl -Ss https://www.workerman.net/webman/check | php```
 
-Se viene visualizzato il messaggio ```La funzione Functions nome_funzione è stata disabilitata. Controlla le disable_functions nel file php.ini```, significa che le funzioni dipendenti da webman sono state disabilitate e è necessario rimuovere la disabilitazione dal file php.ini per poter utilizzare webman correttamente.
-Per rimuovere la disabilitazione, segui uno dei metodi riportati di seguito.
+Se ricevi il messaggio ```La funzione Functions nome_funzione è stata disabilitata. Si prega di controllare disable_functions in php.ini```, significa che le funzioni dipendenti da webman sono state disabilitate e devono essere abilitate nel file php.ini per poter utilizzare webman in modo corretto.
+Segui una delle seguenti modalità per abilitarle.
 
-## Metodo Uno
-Installa `webman/console` 
+## Modalità 1
+Installa `webman/console`
 ```
 composer require webman/console ^v1.2.35
 ```
@@ -16,13 +16,15 @@ Esegui il comando
 php webman fix-disable-functions
 ```
 
-## Metodo Due
+## Modalità 2
+
 Esegui lo script `curl -Ss https://www.workerman.net/webman/fix-disable-functions | php` per rimuovere la disabilitazione
 
-## Metodo Tre
-Esegui `php --ini` per trovare la posizione del file php.ini utilizzato da PHP CLI
+## Modalità 3
 
-Apri il file php.ini, individua `disable_functions` e rimuovi i seguenti nomi di funzioni
+Esegui `php --ini` per trovare la posizione del file php.ini utilizzato da php cli
+
+Apri php.ini, trova `disable_functions` e rimuovi la chiamata alle seguenti funzioni
 ```
 stream_socket_server
 stream_socket_client

@@ -1,9 +1,9 @@
 # シンプルな例
 
 ## 文字列を返す
-**コントローラーを作成**
+**コントローラーの作成**
 
-次のように `app/controller/UserController.php` ファイルを作成します。
+以下のようにファイル `app/controller/UserController.php` を新規作成します。
 
 ```php
 <?php
@@ -16,9 +16,9 @@ class UserController
     public function hello(Request $request)
     {
         $default_name = 'webman';
-        // GETリクエストからnameパラメータを取得し、nameパラメータが渡されていない場合は$default_nameを返します
+        // nameパラメーターをGETリクエストから取得し、パラメーターが指定されていない場合は$default_nameを返します
         $name = $request->get('name', $default_name);
-        // 文字列をブラウザに返します
+        // 文字列をブラウザに返す
         return response('hello ' . $name);
     }
 }
@@ -26,12 +26,10 @@ class UserController
 
 **アクセス**
 
-ブラウザで `http://127.0.0.1:8787/user/hello?name=tom` にアクセスします。
-
-ブラウザは `hello tom` と返します。
+ブラウザで `http://127.0.0.1:8787/user/hello?name=tom` にアクセスすると、ブラウザは `hello tom` と返します。
 
 ## JSONを返す
-`app/controller/UserController.php` ファイルを以下のように変更します。
+ファイル `app/controller/UserController.php` を以下のように変更します。
 
 ```php
 <?php
@@ -56,22 +54,20 @@ class UserController
 
 **アクセス**
 
-ブラウザで `http://127.0.0.1:8787/user/hello?name=tom` にアクセスします。
+ブラウザで `http://127.0.0.1:8787/user/hello?name=tom` にアクセスすると、ブラウザは `{"code":0,"msg":"ok","data":"tom""}` と返します。
 
-ブラウザは `{"code":0,"msg":"ok","data":"tom"}` と返します。
-
-データを返す際に`json`ヘルパー関数を使用すると、自動的に`Content-Type: application/json`ヘッダーが付加されます。
+データをJSONヘルパー関数で返すと、自動的に `Content-Type: application/json` ヘッダーが追加されます。
 
 ## XMLを返す
-同様に、`xml($xml)` ヘルパー関数を使用すると、`Content-Type: text/xml` ヘッダーが付加される`xml`応答が返されます。
+同様に、ヘルパー関数 `xml($xml)` を使用すると、`text/xml` ヘッダーのついた `XML` レスポンスが返ります。
 
-ここで、`$xml`パラメータは`xml`文字列または`SimpleXMLElement`オブジェクトであることができます。
+ここでの `$xml` パラメータは`XML`文字列または`SimpleXMLElement`オブジェクトとなります。
 
 ## JSONPを返す
-同様に、`jsonp($data, $callback_name = 'callback')` ヘルパー関数を使用すると、`jsonp`応答を返します。
+同様に、ヘルパー関数 `jsonp($data, $callback_name = 'callback')` を使用すると、`JSONP` レスポンスが返ります。
 
 ## ビューを返す
-`app/controller/UserController.php` ファイルを以下のように変更します。
+ファイル `app/controller/UserController.php` を以下のように変更します。
 
 ```php
 <?php
@@ -90,7 +86,7 @@ class UserController
 }
 ```
 
-次のように `app/view/user/hello.html` ファイルを作成します。
+ファイル `app/view/user/hello.html` を以下のように新規作成します。
 
 ```html
 <!doctype html>
@@ -105,6 +101,6 @@ hello <?=htmlspecialchars($name)?>
 </html>
 ```
 
-ブラウザで `http://127.0.0.1:8787/user/hello?name=tom` にアクセスすると、`hello tom` という内容のHTMLページが返されます。
+ブラウザで `http://127.0.0.1:8787/user/hello?name=tom` にアクセスすると、`hello tom` という内容のHTMLページが返ります。
 
-注意：webmanはデフォルトでPHPのネイティブ構文をテンプレートとして使用します。他のビューを使用したい場合は[ビュー](view.md)を参照してください。
+注意：webmanはデフォルトでPHPのネイティブ構文を使用するためのテンプレートエンジンです。他のビューを使用する場合は、[ビュー](view.md) を参照してください。

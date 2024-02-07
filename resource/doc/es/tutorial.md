@@ -1,9 +1,9 @@
 # Ejemplo simple
 
-## Devolver una cadena
+## Devolución de una cadena
 **Crear un controlador**
 
-Crear el archivo `app/controller/UserController.php` de la siguiente manera:
+Crear un archivo `app/controller/UserController.php` con el siguiente contenido:
 
 ```php
 <?php
@@ -16,7 +16,7 @@ class UserController
     public function hello(Request $request)
     {
         $default_name = 'webman';
-        // Obtener el parámetro $name de la solicitud GET, si no se proporciona, devolverá $default_name
+        // Obtener el parámetro 'name' de la solicitud GET, si no se pasa el parámetro, devolver $default_name
         $name = $request->get('name', $default_name);
         // Devolver una cadena al navegador
         return response('hello ' . $name);
@@ -30,7 +30,7 @@ Acceder a `http://127.0.0.1:8787/user/hello?name=tom` en el navegador
 
 El navegador devolverá `hello tom`
 
-## Devolver JSON
+## Devolución de JSON
 Modificar el archivo `app/controller/UserController.php` de la siguiente manera:
 
 ```php
@@ -60,17 +60,17 @@ Acceder a `http://127.0.0.1:8787/user/hello?name=tom` en el navegador
 
 El navegador devolverá `{"code":0,"msg":"ok","data":"tom""}`
 
-Al devolver datos usando la función auxiliar json, se añadirá automáticamente el encabezado `Content-Type: application/json`
+El uso de la función de ayuda json para devolver datos automáticamente agrega la cabecera `Content-Type: application/json`
 
-## Devolver XML
-Del mismo modo, al utilizar la función auxiliar `xml($xml)` se devolverá una respuesta XML con el encabezado `Content-Type: text/xml`.
+## Devolución de XML
+Del mismo modo, el uso de la función de ayuda `xml($xml)` devolverá una respuesta `xml` con la cabecera `Content-Type: text/xml`.
 
-El parámetro `$xml` puede ser una cadena XML o un objeto `SimpleXMLElement`.
+El parámetro `$xml` puede ser una cadena `xml` o un objeto `SimpleXMLElement`.
 
-## Devolver JSONP
-Del mismo modo, al utilizar la función auxiliar `jsonp($data, $callback_name = 'callback')` se devolverá una respuesta JSONP.
+## Devolución de JSONP
+Del mismo modo, el uso de la función de ayuda `jsonp($data, $callback_name = 'callback')` devolverá una respuesta `jsonp`.
 
-## Devolver una vista
+## Devolución de una vista
 Modificar el archivo `app/controller/UserController.php` de la siguiente manera:
 
 ```php
@@ -90,7 +90,7 @@ class UserController
 }
 ```
 
-Crear el archivo `app/view/user/hello.html` de la siguiente manera:
+Crear el archivo `app/view/user/hello.html` con el siguiente contenido:
 
 ```html
 <!doctype html>
@@ -106,6 +106,7 @@ hello <?=htmlspecialchars($name)?>
 ```
 
 Acceder a `http://127.0.0.1:8787/user/hello?name=tom`
-Devolverá una página HTML con el contenido `hello tom`.
 
-Nota: webman utiliza por defecto la sintaxis nativa de PHP como plantilla. Para utilizar otras vistas, consulte [Vistas](view.md).
+Se devolverá una página HTML con el contenido `hello tom`.
+
+Nota: Por defecto, webman utiliza la sintaxis original de PHP como plantilla. Consultar [Vistas](view.md) para utilizar otras vistas.

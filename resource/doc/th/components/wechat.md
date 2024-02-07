@@ -1,8 +1,8 @@
-# ไลบรารี SDK ของ Wechat
+# ไลบรารี WeChat SDK
 
 ## overtrue/wechat
 
-### ที่อยู่โปรเจ็กต์
+### ที่อยู่โปรเจกต์
 
 https://github.com/overtrue/wechat
 
@@ -21,7 +21,6 @@ use support\Request;
 use EasyWeChat\Factory;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
-
 class WechatController
 {
     public function index(Request $request)
@@ -35,9 +34,10 @@ class WechatController
         $response = $app->server->serve();
         return $response->getContent();
       }
+
 }
 ```
 
-### รายละเอียดเพิ่มเติม
+### เนื้อหาเพิ่มเติม
 
 เข้าชม https://www.easywechat.com/5.x/

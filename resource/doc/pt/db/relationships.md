@@ -1,3 +1,3 @@
-# Associações de Modelos
+# Relacionamentos de Modelos
 
-Consulte https://learnku.com/docs/laravel/8.x/eloquent-relationships/9407
+Referência: https://learnku.com/docs/laravel/8.x/eloquent-relationships/9407

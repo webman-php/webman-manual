@@ -1,19 +1,18 @@
 ## ThinkCache
 
-### ThinkCacheのインストール  
+### ThinkCacheのインストール
 `composer require -W webman/think-cache`
 
-インストール後は、再起動が必要です（reloadでは無効）
+インストール後、再起動（reloadは無効）
 
-
-> [webman/think-cache](https://www.workerman.net/plugin/15) は実際には、`toptink/think-cache`を自動的にインストールするプラグインです。
+>[webman/think-cache](https://www.workerman.net/plugin/15) は実際には自動的に`toptink/think-cache`をインストールするプラグインです。
 
 > **注意**
-> toptink/think-cache はPHP8.1をサポートしていません。
+> toptink/think-cacheはPHP8.1をサポートしていません
 
 ### 設定ファイル
 
-設定ファイルは `config/thinkcache.php` です。
+設定ファイルは`config/thinkcache.php`です
 
 ### 使用方法
 
@@ -34,6 +33,7 @@ class UserController
     }
 }
 ```
-### Think-Cacheの使用方法
+
+### Think-Cache使用ドキュメント
 
 [ThinkCacheのドキュメント](https://github.com/top-think/think-cache)

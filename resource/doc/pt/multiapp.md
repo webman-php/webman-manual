@@ -1,47 +1,45 @@
 # Múltiplos Aplicativos
+Às vezes, um projeto pode ser dividido em vários subprojetos, como por exemplo, uma loja pode ser dividida em um projeto principal da loja, uma interface de API da loja e um painel de administração da loja, todos eles usando a mesma configuração de banco de dados.
 
-Às vezes, um projeto pode ser dividido em vários subprojetos, por exemplo, uma loja online pode ser dividida em três subprojetos: o projeto principal da loja, a interface de API da loja e o painel de administração da loja, todos eles usando a mesma configuração de banco de dados.
-
-O webman permite que você planeje o diretório de aplicativos da seguinte maneira:
-```plaintext
+O webman permite planejar o diretório do aplicativo da seguinte forma:
+```
 app
 ├── shop
-│   ├── controller
-│   ├── model
-│   └── view
+│   ├── controller
+│   ├── model
+│   └── view
 ├── api
-│   ├── controller
-│   └── model
+│   ├── controller
+│   └── model
 └── admin
     ├── controller
     ├── model
     └── view
 ```
-Ao visitar o endereço `http://127.0.0.1:8787/shop/{controller}/{método}`, você estará acessando os controladores e métodos em `app/shop/controller`.
+Quando você acessa o endereço `http://127.0.0.1:8787/shop/{controller}/{action}`, você está acessando o controlador e a ação no diretório `app/shop/controller`.
 
-Ao visitar o endereço `http://127.0.0.1:8787/api/{controller}/{método}`, você estará acessando os controladores e métodos em `app/api/controller`.
+Quando você acessa o endereço `http://127.0.0.1:8787/api/{controller}/{action}`, você está acessando o controlador e a ação no diretório `app/api/controller`.
 
-Ao visitar o endereço `http://127.0.0.1:8787/admin/{controller}/{método}`, você estará acessando os controladores e métodos em `app/admin/controller`.
+Quando você acessa o endereço `http://127.0.0.1:8787/admin/{controller}/{action}`, você está acessando o controlador e a ação no diretório `app/admin/controller`.
 
-No webman, você pode até planejar o diretório do aplicativo da seguinte maneira:
-```plaintext
+No webman, você até pode planejar o diretório do aplicativo da seguinte forma.
+```
 app
 ├── controller
 ├── model
 ├── view
 │
 ├── api
-│   ├── controller
-│   └── model
+│   ├── controller
+│   └── model
 └── admin
     ├── controller
     ├── model
     └── view
 ```
-Dessa forma, quando o endereço for acessado em `http://127.0.0.1:8787/{controller}/{método}`, você estará acessando os controladores e métodos em `app/controller`. Ao iniciar com api ou admin no caminho, será acessado o controlador e os métodos no diretório correspondente.
+Assim, quando você acessa o endereço `http://127.0.0.1:8787/{controller}/{action}`, você está acessando o controlador e a ação no diretório `app/controller`. Quando o caminho começa com api ou admin, você está acessando o controlador e a ação nos diretórios correspondentes.
 
-Para aplicativos múltiplos, os namespaces das classes devem seguir o padrão `psr4`, por exemplo, o arquivo `app/api/controller/FooController.php` terá uma classe semelhante a esta:
-
+Para aplicativos múltiplos, os namespaces das classes devem seguir o `PSR-4`. Por exemplo, o arquivo `app/api/controller/FooController.php` seria semelhante ao seguinte:
 ```php
 <?php
 namespace app\api\controller;
@@ -55,10 +53,8 @@ class FooController
 
 ```
 
-## Configuração de middleware de vários aplicativos
-
-Às vezes, você pode desejar configurar diferentes middlewares para aplicativos diferentes, por exemplo, o aplicativo `api` pode precisar de um middleware para lidar com solicitações de domínio cruzado, enquanto o aplicativo `admin` pode precisar de um middleware para verificar o login do administrador. Nesse caso, a configuração de `config/midlleware.php` pode se parecer com o exemplo a seguir:
-
+## Configuração de Middleware para Múltiplos Aplicativos
+Às vezes, você pode querer configurar middleware diferentes para aplicativos diferentes, por exemplo, o aplicativo `api` pode precisar de um middleware de controle de acesso cruzado, e `admin` pode precisar de um middleware para verificar o login do administrador. Nesse caso, a configuração do arquivo `config/midlleware.php` pode se parecer com o exemplo a seguir:
 ```php
 return [
     // Middleware global
@@ -76,24 +72,22 @@ return [
     ],
 ];
 ```
-> Os middlewares acima podem não existir, este é apenas um exemplo de como configurar middlewares por aplicativo.
+> Os middlewares mencionados acima podem não existir, este é apenas um exemplo de como configurar middleware para aplicativos diferentes.
 
-A ordem de execução dos middlewares é `middlewares globais` -> `middlewares do aplicativo`.
+A ordem de execução do middleware é `middleware global` -> `middleware do aplicativo`.
 
-Para desenvolvimento de middlewares, consulte o capítulo [middlewares](middleware.md).
+Para desenvolvimento de middlewares, consulte o [capítulo de middlewares](middleware.md).
 
-## Configuração de tratamento de exceções de vários aplicativos
-
-Da mesma forma, você pode querer configurar classes de tratamento de exceções diferentes para diferentes aplicativos. Por exemplo, se ocorrer uma exceção no aplicativo `shop`, talvez você queira fornecer uma página de erro amigável, enquanto no aplicativo `api`, a exceção resultante não seria uma página, mas sim uma string JSON. A configuração do arquivo `config/exception.php` para configurar classes de tratamento de exceções diferentes para diferentes aplicativos pode se parecer com o exemplo a seguir:
-
+## Configuração de Tratamento de Exceção para Múltiplos Aplicativos
+Da mesma forma, você pode querer configurar classes de tratamento de exceção diferentes para aplicativos diferentes, por exemplo, quando ocorrer uma exceção no aplicativo `shop`, talvez você queira fornecer uma página amigável de aviso; quando ocorrer uma exceção no aplicativo `api`, talvez você queira retornar não uma página, mas uma string JSON. A configuração do arquivo `config/exception.php` para configurar classes de tratamento de exceção diferentes para diferentes aplicativos pode se parecer com o exemplo a seguir:
 ```php
 return [
     'shop' => support\exception\Handler::class,
     'api' => support\exception\ApiHandler::class,
 ];
 ```
-> Ao contrário dos middlewares, cada aplicativo pode ter apenas uma classe de tratamento de exceção configurada.
+> Ao contrário dos middlewares, cada aplicativo pode configurar apenas uma classe de tratamento de exceção.
 
-> As classes de tratamento de exceções acima podem não existir, este é apenas um exemplo de como configurar o tratamento de exceções por aplicativo.
+> As classes de tratamento de exceção mencionadas acima podem não existir, este é apenas um exemplo de como configurar o tratamento de exceção para diferentes aplicativos.
 
-Para desenvolvimento de tratamento de exceções, consulte o capítulo [tratamento de exceções](exception.md).
+Para o desenvolvimento de tratamento de exceção, consulte o [capítulo de tratamento de exceções](exception.md).

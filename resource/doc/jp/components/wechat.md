@@ -1,18 +1,18 @@
-# Webmanドキュメント
+# Wechat SDK
 
 ## overtrue/wechat
 
-### プロジェクトのアドレス
+### プロジェクトのリンク
 
 https://github.com/overtrue/wechat
-  
+
 ### インストール
- 
+
 ```php
 composer require overtrue/wechat ^5.0
 ```
-  
-### 使用法
+
+### 使用方法
 
 ```php
 <?php
@@ -37,8 +37,7 @@ class WechatController
 
 }
 ```
-  
-  
-### その他のコンテンツ
+
+### その他の情報
 
 https://www.easywechat.com/5.x/ をご覧ください。

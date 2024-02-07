@@ -2,7 +2,7 @@
 
 ## overtrue/wechat
 
-### Ссылка на проект
+### Адрес проекта
 
 https://github.com/overtrue/wechat
 
@@ -21,7 +21,6 @@ use support\Request;
 use EasyWeChat\Factory;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
-
 class WechatController
 {
     public function index(Request $request)
@@ -34,7 +33,8 @@ class WechatController
 
         $response = $app->server->serve();
         return $response->getContent();
-    }
+      }
+
 }
 ```
 

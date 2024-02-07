@@ -1,4 +1,4 @@
-# वीचैट एसडीके
+# वेबसैम
 
 ## overtrue/wechat
 
@@ -6,7 +6,7 @@
 
 https://github.com/overtrue/wechat
   
-### स्थापना
+### इंस्टॉल करें
  
 ```php
 composer require overtrue/wechat ^5.0
@@ -39,6 +39,6 @@ class WechatController
 ```
   
   
-### और जानकारी
+### अधिक सामग्री
 
 https://www.easywechat.com/5.x/

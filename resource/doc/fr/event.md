@@ -1,4 +1,4 @@
-# webman Bibliothèque d'événements webman-event
+# Bibliothèque d'événements webman webman-event
 
 [![license](https://img.shields.io/github/license/Tinywan/webman-event)]()
 [![webman-event](https://img.shields.io/github/v/release/tinywan/webman-event?include_prereleases)]()
@@ -6,13 +6,13 @@
 [![webman-event](https://img.shields.io/github/last-commit/tinywan/webman-event/main)]()
 [![webman-event](https://img.shields.io/github/v/tag/tinywan/webman-event?color=ff69b4)]()
 
-Les événements ont l'avantage par rapport aux middlewares d'être plus précisément positionnés (ou d'avoir une granularité plus fine) et conviennent mieux à certaines extensions de scénarios commerciaux. Par exemple, nous rencontrons souvent des situations où un certain nombre d'opérations doivent être effectuées après l'inscription ou la connexion de l'utilisateur. Le système d'événements permet de réaliser l'extension de l'opération de connexion sans affecter le code existant, ce qui réduit la couplage du système et diminue la probabilité d'erreurs.
+Les avantages des événements par rapport aux middlewares sont que les événements permettent un ciblage plus précis (ou une granularité plus fine) que les middlewares, et conviennent mieux à certaines extensions de scénarios métier. Par exemple, nous rencontrons souvent des opérations à effectuer après l'inscription ou la connexion de l'utilisateur. Grâce au système d'événements, il est possible d'étendre les opérations de connexion sans altérer le code existant, ce qui réduit le couplage du système et diminue la probabilité de bugs.
 
 ## Adresse du projet
 
 [https://github.com/Tinywan/webman-permission](https://github.com/Tinywan/webman-permission)
 
-## Dépendances
+## Dépendance
 
 - [symfony/event-dispatcher](https://github.com/symfony/event-dispatcher)
 
@@ -23,30 +23,30 @@ composer require tinywan/webman-event
 ```
 ## Configuration
 
-Le fichier de configuration des événements `config/event.php` contient le contenu suivant :
+Le fichier de configuration des événements `config/event.php` contient le contenu suivant:
 
 ```php
 return [
-    // Écouteur d'événements
+    // Écouteurs d'événements
     'listener'    => [],
 
-    // Abonné d'événements
+    // Abonnés aux événements
     'subscriber' => [],
 ];
 ```
-### Configuration du démarrage du processus
+### Configuration du démarrage des processus
 
-Ouvrez le fichier `config/bootstrap.php` et ajoutez la configuration suivante :
+Ouvrez `config/bootstrap.php` et ajoutez la configuration suivante:
 
 ```php
 return [
-    // Les autres configurations sont omises ici ...
+    // Other configurations here...
     webman\event\EventManager::class,
 ];
 ```
 ## Démarrage rapide
 
-### Définition de l'événement
+### Définition des événements
 
 Classe d'événement `LogErrorWriteEvent.php`
 
@@ -76,19 +76,17 @@ class LogErrorWriteEvent extends Event
 }
 ```
 
-### Écouter l'événement
-
+### Ecoute de l'événement
 ```php
 return [
-    // Écouteur d'événements
+    // Écouteurs d'événements
     'listener'    => [
         \extend\event\LogErrorWriteEvent::NAME  => \extend\event\LogErrorWriteEvent::class,
     ],
 ];
 ```
 
-### Abonner à l'événement
-
+### Abonnement à l'événement
 Classe d'abonnement `LoggerSubscriber.php`
 
 ```php
@@ -111,12 +109,12 @@ class LoggerSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @desc: Déclencher l'événement
+     * @desc: Déclenchement de l'événement
      * @param LogErrorWriteEvent $event
      */
     public function onLogErrorWrite(LogErrorWriteEvent $event)
     {
-        // Quelques logiques commerciales spécifiques
+        // Quelques logiques métier spécifiques
         var_dump($event->handle());
     }
 }
@@ -125,14 +123,14 @@ class LoggerSubscriber implements EventSubscriberInterface
 Abonnement à l'événement
 ```php
 return [
-    // Abonné à l'événement
+    // Abonnés aux événements
     'subscriber' => [
         \extend\event\subscriber\LoggerSubscriber::class,
     ],
 ];
 ```
 
-### Déclencheur d'événements
+### Déclencheur d'événement
 
 Déclencher l'événement `LogErrorWriteEvent`.
 
@@ -146,7 +144,7 @@ EventManager::trigger(new LogErrorWriteEvent($error),LogErrorWriteEvent::NAME);
 
 Résultat de l'exécution
 
-![Résultat de l'impression](./trigger.png)
+![Résultat d'impression](./trigger.png)
 
 ## Licence
 

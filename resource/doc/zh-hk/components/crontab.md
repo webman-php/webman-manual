@@ -11,27 +11,27 @@
 ```
 0   1   2   3   4   5
 |   |   |   |   |   |
-|   |   |   |   |   +------ 每周的某一天 (0 - 6) (星期日=0)
+|   |   |   |   |   +------ 週幾 (0 - 6) (星期日=0)
 |   |   |   |   +------ 月份 (1 - 12)
-|   |   |   +-------- 每月的某一天 (1 - 31)
+|   |   |   +-------- 日期 (1 - 31)
 |   |   +---------- 小時 (0 - 23)
 |   +------------ 分鐘 (0 - 59)
 +-------------- 秒 (0-59)[可省略，如果沒有0位,則最小時間粒度是分鐘]
-```
+``` 
 
 ### 專案地址
 
 https://github.com/walkor/crontab
-  
+
 ### 安裝
 
 ```php
 composer require workerman/crontab
 ```
-  
+
 ### 使用
 
-**步驟一：新建進程文件 `process/Task.php`**
+**步驟一：新建進程檔 `process/Task.php`**
 
 ```php
 <?php
@@ -69,7 +69,7 @@ class Task
             echo date('Y-m-d H:i:s')."\n";
         });
       
-        // 每天的7點50分執行，注意這裡省略了秒位
+        // 每天的7點50執行，注意這裡省略了秒位
         new Crontab('50 7 * * *', function(){
             echo date('Y-m-d H:i:s')."\n";
         });
@@ -77,10 +77,10 @@ class Task
     }
 }
 ```
-  
-**步驟二：配置進程文件隨webman啟動**
-  
-打開配置文件 `config/process.php`，新增如下配置
+
+**步驟二：配置進程檔隨webman啟動**
+ 
+打開配置檔 `config/process.php`，新增如下配置
 
 ```php
 return [
@@ -91,7 +91,7 @@ return [
     ],
 ];
 ```
-  
+
 **步驟三：重啟webman**
 
 > 注意：定時任務不會馬上執行，所有定時任務進入下一分鐘才會開始計時執行
@@ -115,4 +115,4 @@ return [
 將時間敏感的定時任務放在 `process/Task1.php` 裡，其它定時任務放在 `process/Task2.php` 裡
 
 ### 更多
-更多`config/process.php`配置說明，請參考 [自定义进程](../process.md)
+更多`config/process.php`配置說明，請參考 [自定義進程](../process.md)

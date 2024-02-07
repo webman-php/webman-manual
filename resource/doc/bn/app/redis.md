@@ -1,5 +1,5 @@
 # রেডিস
-রেডিস ব্যবহারকারীরা ডাটাবেইসের মতো ব্যবহার করা যায়, উদাহরণস্বরূপ `plugin/foo/config/redis.php`
+রেডিস ব্যবহার ডাটাবেসের মতো। উদাহরণস্বরূপ `plugin/foo/config/redis.php`
 ```php
 return [
     'default' => [
@@ -16,17 +16,17 @@ return [
     ],
 ];
 ```
-ব্যবহার করার সময়
+ব্যবহার করুন
 ```php
 use support\Redis;
 Redis::connection('plugin.foo.default')->get('key');
 Redis::connection('plugin.foo.cache')->get('key');
 ```
 
-একইভাবে, যদি প্রধান প্রকল্পের রেডিস কনফিগারেশন পুনর্ব্যবহার করতে চান
+একই রকমভাবে, যদি প্রধান প্রযুক্তিতে রেডিস কনফিগার পুনরাবৃত্তি করতে চান
 ```php
 use support\Redis;
 Redis::get('key');
-// মনে করুন প্রধান প্রকল্পে "cache" নামে একটি সংযোগ কনফিগার করা আছে
+// মনে করুন প্রধান প্রকল্প আরো একটি ক্যাশ কানেকশন কনফিগার করেছে
 Redis::connection('cache')->get('key');
 ```

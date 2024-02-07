@@ -1,24 +1,23 @@
-# वैधानिकरण
-कंपोजर में बहुत सारे वैधाताओं को सीधे उपयोग की जा सकती है, उदाहरण के लिए:
+# वैधानिककरणकर्ता
+कॉम्पोज़र में कई वैधानिककर्ता होते हैं जिन्हें सीधे इस्तेमाल किया जा सकता है, जैसे:
 #### <a href="#think-validate"> top-think/think-validate</a>
 #### <a href="#respect-validation"> respect/validation</a>
 
 <a name="think-validate"></a>
-## वैधाता top-think/think-validate
+## वैधीकरणकर्ता top-think/think-validate
 
-### विवरण
-थिंकPHP अधिकारी वैधाता
+### ब्यान
+ThinkPHP आधिकारिक वैधीकरणकर्ता
 
 ### परियोजना पता
 https://github.com/top-think/think-validate
 
 ### स्थापना
-`कंपोजर डिमांड topthink/think-validate`
+`composer require topthink/think-validate`
 
 ### त्वरित प्रारंभ
 
 **नया `app/index/validate/User.php` बनाएं**
-
 ```php
 <?php
 namespace app\index\validate;
@@ -28,15 +27,15 @@ use think\Validate;
 class User extends Validate
 {
     protected $rule =   [
-        'name'  => 'आवश्यक|अधिकतम:25',
-        'age'   => 'आंकड़ा|1,120 के बीच',
-        'email' => 'ईमेल',    
+        'name'  => 'require|max:25',
+        'age'   => 'number|between:1,120',
+        'email' => 'email',    
     ];
 
     protected $message  =   [
         'name.require' => 'नाम आवश्यक है',
         'name.max'     => 'नाम 25 अक्षरों से अधिक नहीं हो सकता',
-        'age.number'   => 'आयु कोई आंकड़ा होना चाहिए',
+        'age.number'   => 'आयु को नंबर होना चाहिए',
         'age.between'  => 'आयु केवल 1-120 के बीच हो सकती है',
         'email'        => 'ईमेल प्रारूप गलत है',    
     ];
@@ -47,7 +46,7 @@ class User extends Validate
 **उपयोग**
 ```php
 $data = [
-    'name'  => 'थिंकपीएचपी',
+    'name'  => 'thinkphp',
     'email' => 'thinkphp@qq.com',
 ];
 
@@ -59,21 +58,18 @@ if (!$validate->check($data)) {
 ```
 
 <a name="respect-validation"></a>
-# वैधाता workerman/validation
+# वैधीकरणकर्ता workerman/validation
 
-### विवरण
-
-परियोजना https://github.com/Respect/Validation का हिंदी अनुवाद संस्करण
+### ब्यान
+परियोजना: https://github.com/Respect/Validation का हिंदी उपनयस्त संस्करण
 
 ### परियोजना पता
-
 https://github.com/walkor/validation
-  
-  
+  
 ### स्थापना
  
 ```php
-कंपोजर डिमांड workerman/validation
+composer require workerman/validation
 ```
 
 ### त्वरित प्रारंभ
@@ -91,7 +87,7 @@ class IndexController
     public function index(Request $request)
     {
         $data = v::input($request->post(), [
-            'nickname' => v::length(1, 64)->setName('नामक'),
+            'nickname' => v::length(1, 64)->setName('उपनाम'),
             'username' => v::alnum()->length(5, 64)->setName('उपयोक्ता नाम'),
             'password' => v::length(5, 64)->setName('पासवर्ड')
         ]);
@@ -99,28 +95,25 @@ class IndexController
         return json(['code' => 0, 'msg' => 'ठीक है']);
     }
 }  
-```
+```  
+**jquery के माध्यम से पहुंचें**
   
-**जावास्क्रिप्ट के माध्यम से पहुँचें**
-  
-  ```js
-  $.ajax({
-      url : 'http://127.0.0.1:8787',
-      type : "post",
-      dataType:'json',
-      data : {nickname:'टॉम', username:'टॉम कैट', password: '123456'}
-  });
-  ```
-  
+```js
+$.ajax({
+    url : 'http://127.0.0.1:8787',
+    type : "post",
+    dataType:'json',
+    data : {nickname:'टॉम', username:'टॉम कैट', password: '123456'}
+});
+```  
 परिणाम प्राप्त करें:
 
-`{"code":500,"msg":"उपयोक्ता नाम ज्ञातियों में केवल अक्षर (a-z) और संख्या (0-9) हो सकता है"}`
+`{"code":500,"msg":"उपयोक्ता नाम में केवल अक्षर (a-z) और संख्या (0-9) हो सकती है"}`
 
-व्याख्या:
+ब्यान:
+`v::input(array $input, array $rules)` डेटा को जांचने और संग्रह उद्देश्य से है, अगर डेटा की प्रमाणिकता विफल होती है, तो यह `Respect\Validation\Exceptions\ValidationException` को फेंकेगा, अगर वैधता सफल होती है तो विफलता के बाद के डेटा (एरे) को वापस करेगा।
 
-`v::input(array $input, array $rules)` डेटा का जांच और संग्रहण के लिए है, यदि डेटा की जांच विफल होती है, तो `Respect\Validation\Exceptions\ValidationException` अनुप्रयोग फेंकेगा, जांच सफल होने पर जांच के बाद का डेटा (एरे) लौटा जाएगा।
-
-यदि व्यावसायिक कोड ने वैधाता अनुप्रयोग को नहीं पकड़ा है, तो webman फ़्रेमवर्क स्वचालित रूप से वैधाता अनुप्रयोग को पकड़ेगा और HTTP अनुरोध शीर्ष द्वारा जेसन डेटा (जैसे `{"कोड":500, "संदेश":"xxx"}`) या साधारण अनुप्रयोग पृष्ठ। यदि प्रत्यावश्य की आवश्यकता के अनुसार चित्र नहीं है, तो डेवलपर विचार वह अपने आप `ValidationException` अनुप्रयोग पकड़ सकता है और आवश्यक डेटा लौटा सकता है, जैसे नीचे के उदाहरण की तरह:
+यदि व्यावसायिक कोड वैधता की अप्राप्ति को नहीं पकड़ता है, तो वेबमैन की ढांचा स्वचालित रूप से वैधता अप्राप्ति को पकड़ लेगा और इसके अनुसार HTTP अनुरोध शीर्षक को चयन करेगा, जिससे जैसे json डेटा (समान `{"code":500, "msg":"xxx"}`) या सामान्य अप्राप्ति पृष्ठ। जैसे कि प्रतिस्थापन प्रारूप व्यावसायिक आवश्यकताओं को अनुसार नहीं है तो उपयोगकर्ता स्वयं `ValidationException` अप्राप्ति को पकड़ और उसे आवश्यिक डेटा को समर्थन करने के लिए वापस कर सकते हैं, नीचे के उदाहरण की तरह:
 
 ```php
 <?php
@@ -145,91 +138,141 @@ class IndexController
         return json(['code' => 0, 'msg' => 'ठीक है', 'data' => $data]);
     }
 }
-```
+```  
 
-### वैधाता फ़़ंक्शन गाइड
+### वैदकर्ता सुविधा गाइड
 
 ```php
 use Respect\Validation\Validator as v;
 
-// एकल नियम वैधाता
+// एकल नियम की जांच
 $number = 123;
-v::numericVal()->validate($number); // सत्य
+v::numericVal()->validate($number); // true
 
-// कई नियमों का चेन वैधाता
+// बहुत से नियमों की श्रृंखला जांच
 $usernameValidator = v::alnum()->noWhitespace()->length(1, 15);
-$usernameValidator->validate('alganet'); // सत्य
+$usernameValidator->validate('alganet'); // true
 
-// पहली वैधाता विफलता की वजह प्राप्त करें
+// पहले अप्राप्ति के कारण को प्राप्त करें
 try {
     $usernameValidator->setName('उपयोक्ता नाम')->check('alg  anet');
 } catch (ValidationException $exception) {
-    echo $exception->getMessage(); // उपयोक्ता नाम में केवल अक्षर (a-z) और संख्या (0-9) हो सकता है
+    echo $exception->getMessage(); // उपयोक्ता नाम में केवल अक्षर (a-z) और संख्या (0-9) हो सकती है
 }
 
-```
-   ### वैधाता 3 विधियां `जांच()` `ऑसर्ट()` विभिन्नता `जांच()` मान लौटाती है, अनुप्रयोग को नहीं फेंकती
+// सभी अप्राप्ति के कारण प्राप्त करें
+try {
+    $usernameValidator->setName('उपयोक्ता नाम')->assert('alg  anet');
+} catch (ValidationException $exception) {
+    echo $exception->getFullMessage();
+    // यह प्रिंट करेगा
+    // -  उपयोक्ता नाम को निम्नलिखित नियम को फिला होना चाहिए
+    //     - उपयोक्ता नाम में केवल अक्षर (a-z) और संख्या (0-9) हो सकती है
+    //     - उपयोक्ता नाम में कोई भी रिक्तियां नहीं होनी चाहिए
+  
+    var_export($exception->getMessages());
+    // यह प्रिंट करेगा
+    // array (
+    //   'alnum' => 'उपयोक्ता नाम में केवल अक्षर (a-z) और संख्या (0-9) हो सकती है',
+    //   'noWhitespace' => 'उपयोक्ता नाम नहीं हो सकती है संख्या (0-9)'
+    // )
+}
 
-`validate()` बूलियन मान लौटाती है, अनुप्रयोग नहीं फेंकती
+// व्यक्ति जांच
+$user = new stdClass;
+$user->name = 'अलेक्जांडर';
+$user->birthdate = '1987-07-01';
+$userValidator = v::attribute('name', v::stringType()->length(1, 32))
+                ->attribute('birthdate', v::date()->minAge(18));
+$userValidator->validate($user); // true
 
-`check()` वैधाता विफलता पर अनुप्रयोग फेंकती है, `$exception->getMessage()` पहली वैधाता विफलता की वजह
+// सरणी जांच
+$data = [
+    'parentKey' => [
+        'field1' => 'मान1',
+        'field2' => 'मान2'
+        'field3' => true,
+    ]
+];
+v::key(
+    'parentKey',
+    v::key('field1', v::stringType())
+        ->key('field2', v::stringType())
+        ->key('field3', v::boolType())
+    )
+    ->assert($data); // check() या validate() भी किया जा सकता है
+  
+// वैकल्पिक वैधन
+v::alpha()->validate(''); // false 
+v::alpha()->validate(null); // false 
+v::optional(v::alpha())->validate(''); // true
+v::optional(v::alpha())->validate(null); // true
 
-`assert()` वैधाता विफलता पर अनुप्रयोग फेंकती है, `$exception->getFullMessage()` सभी वैधाता विफलता की वजह प्राप्त कर सकते हैं
+// नकारात्मक नियम
+v::not(v::intVal())->validate(10); // false
+```  
+### वैदकर्ता के तीन तरीके `validate()` `check()` `assert()` का अंतर
 
-### सामान्य वैधाता नियमों की सूची
+`validate()` बूलीयन विश्वकोश वापस करता है, यह कोई अप्राप्ति नहीं फेंकेगा
 
-`Alnum()` केवल वर्ण और संख्याएँ प्रमाणित करती है
+`check()` अप्राप्ति होने पर अप्राप्ति फेंकेगा, `$exception->getMessage()` बताएगा पहली वैधता के अप्राप्ति का कारण
 
-`Alpha()` केवल वर्ण प्रमाणित करती है
+`assert()` अप्राप्ति होने पर अप्राप्ति फेंकेगा, `$exception->getFullMessage()` से हम सभी वैधता के अप्राप्ति के कारणों को प्राप्त कर सकते हैं
+
+### सामान्य वैधन सूची
+
+`Alnum()` केवल अक्षर और संख्या
+
+`Alpha()` केवल अक्षर
 
 `ArrayType()` सरणी प्रकार
 
-`Between(mixed $minimum, mixed $maximum)` विभिन्न दो मानों के बीच इनपुट की जाँच करती है।
+`Between(mixed $minimum, mixed $maximum)` विचर के बीच मानों की जांच
 
-`BoolType()` बूलियन प्रकार प्रमाणित करती है
+`BoolType()` बूलियन प्रकार का वैधन
 
-`Contains(mixed $expectedValue)` इनपुट में कुछ मानों की जाँच करती है
+`Contains(mixed $expectedValue)` इनपुट में कुछ मान शामिल होने की जांच
 
-`ContainsAny(array $needles)` इनपुट में कम से कम एक परिभाषित मान को प्रमाणित करती है
+`ContainsAny(array $needles)` इनपुट में कम से कम एक परिभाषित मान शामिल होने की जांच
 
-`Digit()` इनपुट में केवल अंक होने की जाँच करती है
+`Digit()` इनपुट में केवल अंक होने की जांच
 
-`Domain()` क्या वैध डोमेन है या नहीं की जाँच करती है
+`Domain()` वैध डोमेन की जांच
 
-`Email()` क्या इसका वैध ईमेल पता है या नहीं की जाँच करती है
+`Email()` वैध ईमेल पता की जांच
 
-`Extension(string $extension)` विस्तार की जाँच करती है
+`Extension(string $extension)` फ़ाइल एक्सटेंशन की जांच
 
-`FloatType()` क्या यह फ़्लोट है या नहीं की जाँच करती है
+`FloatType()` वैध संख्यात्मक प्रकार की जांच
 
-`IntType()` क्या यह पूर्णांक है या नहीं की जाँच करती है
+`IntType()` पूर्णांक प्रकार की जांच
 
-`Ip()` क्या यह आईपी पता है या नहीं की जाँच करती है
+`Ip()` वैध ip पता की जांच
 
-`Json()` क्या यह जेसन डेटा है या नहीं की जाँच करती है
+`Json()` वैध json डेटा की जांच
 
-`Length(int $min, int $max)` इनवेक्शन के बीच लंबाई की जाँच करती है
+`Length(int $min, int $max)` दिए गए सीमा में लंबाई की जांच
 
-`LessThan(mixed $compareTo)` इनवेक्शन का मान न्यूनतम बीतते है की जाँच करती है
+`LessThan(mixed $compareTo)` दिए गए मान से छोटी लंबाई की जांच
 
-`Lowercase()` क्या यह छोटा वर्ण है की जाँच करती है
+`Lowercase()` छोटे अक्षर की जांच
 
-`MacAddress()` क्या यह मैक पता है या नहीं की जाँच करती है
+`MacAddress()` वैध mac पता की जांच
 
-`NotEmpty()` क्या खाली है या नहीं की जाँच करती है
+`NotEmpty()` खाली नहीं है की जांच
 
-`NullType()` क्या यह नल मान है या नहीं की जाँच करती है
+`NullType()` null की जांच
 
-`Number()` क्या यह संख्या है या नहीं की जाँच करती है
+`Number()` संख्या की जांच
 
-`ObjectType()` क्या यह ऑब्जेक्ट है या नहीं की जाँच करती है
+`ObjectType()` वस्तु की जांच
 
-`StringType()` क्या यह स्ट्रिंग प्रकार है या नहीं की जाँच करती है
+`StringType()` स्ट्रिंग प्रकार की जांच
 
-`Url()` क्या यह यूआरएल है या नहीं की जाँच करती है
+`Url()` url की जांच
+  
+अधिक वैधन नियम सूची के लिए देखें https://respect-validation.readthedocs.io/en/2.0/list-of-rules/
 
-अधिक वैधाता नियमों के लिए देखें https://respect-validation.readthedocs.io/en/2.0/list-of-rules/
-
-### और अधिक सामग्री
+### अधिक सामग्री
 
 https://respect-validation.readthedocs.io/en/2.0/ पर जाएं

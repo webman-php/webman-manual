@@ -2,7 +2,7 @@
 
 ## Descrizione
 
-Phinx consente agli sviluppatori di modificare e mantenere facilmente il database. Evita la scrittura manuale di istruzioni SQL utilizzando una potente API PHP per gestire le migrazioni del database. Gli sviluppatori possono gestire le proprie migrazioni del database utilizzando il controllo di versione. Phinx consente di migrare facilmente i dati tra database diversi. È inoltre possibile tracciare quali script di migrazione sono stati eseguiti, consentendo agli sviluppatori di concentrarsi di più sulla scrittura di sistemi migliori anziché preoccuparsi dello stato del database.
+Phinx consente agli sviluppatori di apportare modifiche e mantenere il database in modo efficiente. Evita la scrittura manuale di istruzioni SQL, utilizzando invece un potente API PHP per gestire le migrazioni del database. Gli sviluppatori possono gestire le proprie migrazioni del database utilizzando il controllo della versione. Phinx facilita il trasferimento dei dati tra database diversi e tiene traccia degli script di migrazione eseguiti, consentendo agli sviluppatori di concentrarsi sulla scrittura di sistemi migliori anziché preoccuparsi dello stato del database.
 
 ## Indirizzo del progetto
 
@@ -14,32 +14,32 @@ https://github.com/cakephp/phinx
 composer require robmorgan/phinx
 ```
 
-## Documentazione ufficiale in cinese
+## Indirizzo della documentazione ufficiale in cinese
 
-Per un utilizzo dettagliato, consultare la documentazione ufficiale in cinese. Qui verrà spiegato solo come configurarlo e utilizzarlo in webman.
+Per un utilizzo dettagliato, è possibile consultare la documentazione ufficiale in cinese. Qui si spiega solo come configurare e utilizzare in webman.
 
 https://tsy12321.gitbooks.io/phinx-doc/content/
 
 ## Struttura della directory dei file di migrazione
 
-```
+```plaintext
 .
-├── app                           Cartella dell'applicazione
-│   ├── controller                Directory dei controller
-│   │   └── Index.php             Controller
-│   ├── model                     Directory dei modelli
+├── app                           Directory dell'applicazione
+│   ├── controller                Directory dei controller
+│   │   └── Index.php             Controller
+│   ├── model                     Directory dei modelli
 ......
-├── database                      File del database
-│   ├── migrations                File di migrazione
-│   │   └── 20180426073606_create_user_table.php
-│   ├── seeds                     Dati di test
-│   │   └── UserSeeder.php
+├── database                      File di database
+│   ├── migrations                File di migrazione
+│   │   └── 20180426073606_create_user_table.php
+│   ├── seeds                     Dati di test
+│   │   └── UserSeeder.php
 ......
 ```
 
 ## Configurazione phinx.php
 
-Creare il file phinx.php nella directory radice del progetto
+Creare un file phinx.php nella directory radice del progetto
 
 ```php
 <?php
@@ -67,20 +67,20 @@ return [
 
 ## Suggerimenti per l'uso
 
-Una volta che i file di migrazione sono stati uniti, non è consentito modificarli di nuovo. In caso di problemi, è necessario creare o eliminare file di operazioni di modifica.
+Una volta uniti i file di migrazione, non è consentito modificarli nuovamente. In caso di problemi, è necessario creare un nuovo file di modifica o eliminazione per gestirli.
 
-#### Regole di denominazione dei file di creazione della tabella
+#### Regole di denominazione dei file di operazioni di creazione delle tabelle
 
-`{time(creato automaticamente)}_create_{nome tabella in minuscolo}`
+`{time(auto create)}_create_{nome tabella in minuscolo}`
 
-#### Regole di denominazione dei file di modifica della tabella
+#### Regole di denominazione dei file di operazioni di modifica delle tabelle
 
-`{time(creato automaticamente)}_modify_{nome tabella in minuscolo+elemento specifico della modifica in minuscolo}`
+`{time(auto create)}_modify_{nome tabella in minuscolo + elemento di modifica in minuscolo}`
 
-#### Regole di denominazione dei file di eliminazione della tabella
+#### Regole di denominazione dei file di operazioni di eliminazione delle tabelle
 
-`{time(creato automaticamente)}_delete_{nome tabella in minuscolo+elemento specifico della modifica in minuscolo}`
+`{time(auto create)}_delete_{nome tabella in minuscolo + elemento di modifica in minuscolo}`
 
-#### Regole di denominazione dei file di riempimento dei dati
+#### Regole di denominazione dei file di popolamento dei dati
 
-`{time(creato automaticamente)}_fill_{nome tabella in minuscolo+elemento specifico della modifica in minuscolo}`
+`{time(auto create)}_fill_{nome tabella in minuscolo + elemento di modifica in minuscolo}`

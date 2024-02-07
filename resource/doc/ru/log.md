@@ -1,5 +1,6 @@
 # Журнал
-Webman использует [monolog/monolog](https://github.com/Seldaek/monolog) для обработки журнала.
+
+webman использует [monolog/monolog](https://github.com/Seldaek/monolog) для обработки журналов.
 
 ## Использование
 ```php
@@ -13,13 +14,13 @@ class FooController
 {
     public function index(Request $request)
     {
-        Log::info('тест журнала');
+        Log::info('тестирование журнала');
         return response('привет, index');
     }
 }
 ```
 
-## Предоставляемые методы
+## Доступные методы
 ```php
 Log::log($level, $message, array $context = [])
 Log::debug($message, array $context = [])
@@ -31,7 +32,7 @@ Log::critical($message, array $context = [])
 Log::alert($message, array $context = [])
 Log::emergency($message, array $context = [])
 ```
-эквивалентно
+Эквивалентно
 ```php
 $log = Log::channel('default');
 $log->log($level, $message, array $context = [])
@@ -48,24 +49,24 @@ $log->emergency($message, array $context = [])
 ## Конфигурация
 ```php
 return [
-    // Журнал по умолчанию
+    // По умолчанию канал журнала
     'default' => [
-        // Обработчики для журнала по умолчанию, можно установить несколько
+        // Обработчики канала по умолчанию, можно установить несколько
         'handlers' => [
-            [   
-                // имя класса обработчика
+            [
+                // Название класса обработчика
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // параметры конструктора класса обработчика
+                // Параметры конструктора класса обработчика
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // Связанная информация о формате
+                // Связано с форматом
                 'formatter' => [
-                    // имя класса форматирования
+                    // Название класса форматирования
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // параметры конструктора класса форматирования
-                    'constructor' => [ null, 'Y-m-d H:i:s', true],
+                    // Параметры конструктора класса форматирования
+                    'constructor' => [null, 'Y-m-d H:i:s', true],
                 ],
             ]
         ],
@@ -73,50 +74,51 @@ return [
 ];
 ```
 
-## Многоканальность
-Monolog поддерживает множественные каналы, по умолчанию используется канал `default`. Если вы хотите добавить канал `log2`, конфигурация будет выглядеть следующим образом:
+## Множественные каналы
+monolog поддерживает множественные каналы, по умолчанию используется канал `default`. Если вы хотите добавить канал `log2`, конфигурация будет следующей:
+
 ```php
 return [
-    // Журнал по умолчанию
+    // По умолчанию канал журнала
     'default' => [
-        // Обработчики для журнала по умолчанию, можно установить несколько
+        // Обработчики канала по умолчанию, можно установить несколько
         'handlers' => [
-            [   
-                // имя класса обработчика
+            [
+                // Название класса обработчика
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // параметры конструктора класса обработчика
+                // Параметры конструктора класса обработчика
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // Связанная информация о формате
+                // Связано с форматом
                 'formatter' => [
-                    // имя класса форматирования
+                    // Название класса форматирования
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // параметры конструктора класса форматирования
-                    'constructor' => [ null, 'Y-m-d H:i:s', true],
+                    // Параметры конструктора класса форматирования
+                    'constructor' => [null, 'Y-m-d H:i:s', true],
                 ],
             ]
         ],
     ],
     // Канал log2
     'log2' => [
-        // Обработчики для канала log2, можно установить несколько
+        // Обработчики канала log2, можно установить несколько
         'handlers' => [
-            [   
-                // имя класса обработчика
+            [
+                // Название класса обработчика
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // параметры конструктора класса обработчика
+                // Параметры конструктора класса обработчика
                 'constructor' => [
                     runtime_path() . '/logs/log2.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // Связанная информация о формате
+                // Связано с форматом
                 'formatter' => [
-                    // имя класса форматирования
+                    // Название класса форматирования
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // параметры конструктора класса форматирования
-                    'constructor' => [ null, 'Y-m-d H:i:s', true],
+                    // Параметры конструктора класса форматирования
+                    'constructor' => [null, 'Y-m-d H:i:s', true],
                 ],
             ]
         ],
@@ -124,7 +126,7 @@ return [
 ];
 ```
 
-Использование канала `log2` будет выглядеть следующим образом:
+Использование канала `log2` выглядит следующим образом:
 ```php
 <?php
 namespace app\controller;
@@ -137,7 +139,7 @@ class FooController
     public function index(Request $request)
     {
         $log = Log::channel('log2');
-        $log->info('тест log2');
+        $log->info('тестирование log2');
         return response('привет, index');
     }
 }

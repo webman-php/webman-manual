@@ -1,28 +1,28 @@
 # Slow Business Processing
 
-Sometimes we need to handle slow business processes. In order to avoid the impact of slow business processes on other request processing in webman, these businesses can use different processing methods depending on the situation.
+Sometimes we need to handle slow business processes. To avoid slow business processes affecting other request handling in webman, different processing methods can be used for these businesses depending on the situation.
 
-## Use Message Queue
-Refer to [Redis Queue](https://www.workerman.net/plugin/12) and [STOMP Queue](https://www.workerman.net/plugin/13)
+## Using Message Queue
+Refer to [Redis Queue](../queue/redis.md) [Stomp Queue](../queue/stomp.md)
 
 ### Advantages
-Can handle sudden massive business processing requests
+Can handle a sudden surge of business processing requests
 
 ### Disadvantages
-Cannot directly return results to the client. If result needs to be pushed, it should be combined with other services, for example, using [webman/push](https://www.workerman.net/plugin/2) to push the processing results.
+Cannot directly return the results to the client. If pushing the results is needed, it needs to be coordinated with other services, such as using [webman/push](https://www.workerman.net/plugin/2) to push the processing results.
 
-## Add HTTP Port
+## Adding a new HTTP port
 
 > **Note**
 > This feature requires webman-framework>=1.4
 
-Adding an HTTP port to handle slow requests, these slow requests enter a specific group of processes through this port for processing, and the results are returned directly to the client after processing.
+Adding an HTTP port to handle slow requests, these slow requests are processed by accessing this port and then directly returning the results to the client.
 
 ### Advantages
 Can directly return data to the client
 
 ### Disadvantages
-Cannot handle sudden massive requests
+Cannot handle a sudden surge of requests
 
 ### Implementation Steps
 Add the following configuration in `config/process.php`.
@@ -39,17 +39,17 @@ return [
         'reusePort' => true,
         'constructor' => [
             'request_class' => \support\Request::class, // Set request class
-            'logger' => \support\Log::channel('default'), // Log instance
-            'app_path' => app_path(), // Location of the app directory
-            'public_path' => public_path() // Location of the public directory
+            'logger' => \support\Log::channel('default'), // Logger instance
+            'app_path' => app_path(), // App directory location
+            'public_path' => public_path() // Public directory location
         ]
     ]
 ];
 ```
 
-In this way, slow interfaces can go through the group of processes at `http://127.0.0.1:8686/`, without affecting the business processing of other processes.
+This way, slow interfaces can go through the group of processes at `http://127.0.0.1:8686/` without affecting the business processing of other processes.
 
-To make the frontend unaware of the difference in ports, you can add a proxy to port 8686 in nginx. Assuming that the paths for slow interface requests all start with `/tast`, the entire nginx configuration would be similar to the following:
+To make the front-end unaware of the difference in ports, you can add a proxy to the 8686 port in nginx. Assuming that the paths for the slow interface requests all start with `/task`, the entire nginx configuration would be similar to the following:
 ```
 upstream webman {
     server 127.0.0.1:8787;
@@ -68,8 +68,8 @@ server {
   access_log off;
   root /path/webman/public;
 
-  # Requests starting with /tast go to port 8686, please change /tast to your desired prefix according to the actual situation
-  location /tast {
+  # Requests starting with /task go to the 8686 port, please change /task to the desired prefix according to the actual situation
+  location /task {
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header Host $host;
       proxy_http_version 1.1;
@@ -90,4 +90,4 @@ server {
 }
 ```
 
-In this way, when clients access `domain.com/tast/xxx`, it will go through a separate port 8686 for processing, without affecting the processing of requests on port 8787.
+This way, when the client accesses `domain.com/task/xxx`, it will go through the separate 8686 port for processing without affecting the processing of requests on port 8787.

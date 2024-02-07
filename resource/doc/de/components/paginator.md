@@ -5,16 +5,16 @@
 ### Projektadresse
 
 https://github.com/jasongrimes/php-paginator
-
+  
 ### Installation
 
 ```php
 composer require "jasongrimes/paginator:^1.0.3"
 ```
-
+  
 ### Verwendung
 
-Neu erstellen `app/controller/UserController.php`
+Erstellen Sie `app/controller/UserController.php` neu
 ```php
 <?php
 namespace app\controller;
@@ -40,11 +40,11 @@ class UserController
 }
 ```
 **Template (reines PHP)**
-Neues Template erstellen app/view/user/get.html
+Neues Template erstellen `app/view/user/get.html`
 ```html
 <html>
 <head>
-  <!-- Integriertes Bootstrap-Paginierungsstil -->
+  <!-- Eingebaute Unterstützung für Bootstrap-Paginierungsstile -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -55,12 +55,12 @@ Neues Template erstellen app/view/user/get.html
 </html>
 ```
 
-**Template (twig)**
-Neues Template erstellen app/view/user/get.html
+**Template (Twig)**
+Neues Template erstellen `app/view/user/get.html`
 ```html
 <html>
 <head>
-  <!-- Integriertes Bootstrap-Paginierungsstil -->
+  <!-- Eingebaute Unterstützung für Bootstrap-Paginierungsstile -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -73,12 +73,12 @@ Neues Template erstellen app/view/user/get.html
 </html>
 ```
 
-**Template (blade)**
-Neues Template erstellen app/view/user/get.blade.php
+**Template (Blade)**
+Neues Template erstellen `app/view/user/get.blade.php`
 ```html
 <html>
 <head>
-  <!-- Integriertes Bootstrap-Paginierungsstil -->
+  <!-- Eingebaute Unterstützung für Bootstrap-Paginierungsstile -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -89,12 +89,12 @@ Neues Template erstellen app/view/user/get.blade.php
 </html>
 ```
 
-**Template (thinkphp)**
-Neues Template erstellen app/view/user/get.blade.php
+**Template (ThinkPHP)**
+Neues Template erstellen `app/view/user/get.blade.php`
 ```html
 <html>
 <head>
-    <!-- Integriertes Bootstrap-Paginierungsstil -->
+    <!-- Eingebaute Unterstützung für Bootstrap-Paginierungsstile -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -105,9 +105,9 @@ Neues Template erstellen app/view/user/get.blade.php
 </html>
 ```
 
-Ergebnis:
+Das Ergebnis sieht wie folgt aus:
 ![](../../assets/img/paginator.png)
-
+  
 ### Mehr erfahren
 
 Besuchen Sie https://github.com/jasongrimes/php-paginator

@@ -1,25 +1,26 @@
 ## ThinkCache
 
-### Installing ThinkCache
-Run the following command to install ThinkCache using Composer:
-```sh
-composer require -W webman/think-cache
-```
-After installation, a restart is required (reload is ineffective).
+### Installing ThinkCache  
+`composer require -W webman/think-cache`
 
-> [webman/think-cache](https://www.workerman.net/plugin/15) is actually a plugin for automating the installation of `toptink/think-cache`.
+After installation, you need to restart (reload is ineffective)
+
+
+> [webman/think-cache](https://www.workerman.net/plugin/15) is actually a plugin for automatically installing `toptink/think-cache`.
 
 > **Note**
-> toptink/think-cache does not support PHP 8.1
-
+> toptink/think-cache does not support php8.1
+  
 ### Configuration File
-The configuration file is located at `config/thinkcache.php`.
+
+The configuration file is `config/thinkcache.php`
 
 ### Usage
+
 ```php
 <?php
 namespace app\controller;
-
+  
 use support\Request;
 use think\facade\Cache;
 
@@ -33,6 +34,6 @@ class UserController
     }
 }
 ```
-
 ### Think-Cache Documentation
-For more information on using ThinkCache, please refer to the [ThinkCache documentation](https://github.com/top-think/think-cache).
+
+[ThinkCache Documentation](https://github.com/top-think/think-cache)

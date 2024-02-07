@@ -1,18 +1,18 @@
-# Библиотека событий Webman webman-event
+# webman событийная библиотека webman-event
 
-[![license](https://img.shields.io/github/license/Tinywan/webman-event)]()
+[![лицензия](https://img.shields.io/github/license/Tinywan/webman-event)]()
 [![webman-event](https://img.shields.io/github/v/release/tinywan/webman-event?include_prereleases)]()
 [![webman-event](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 [![webman-event](https://img.shields.io/github/last-commit/tinywan/webman-event/main)]()
 [![webman-event](https://img.shields.io/github/v/tag/tinywan/webman-event?color=ff69b4)]()
 
-Преимущество событий по сравнению с промежуточным программным обеспечением заключается в том, что события более точно позиционируются (или имеют более мелкую гранулярность) по сравнению с промежуточным программным обеспечением, и они более подходят для расширения некоторых бизнес-сценариев. Например, мы часто сталкиваемся с тем, что после регистрации или входа пользователя требуется выполнить ряд операций. С помощью системы событий можно выполнить операцию входа без нарушения исходного кода, снизить связность системы, а также уменьшить возможность появления ошибок.
+Преимущество событий по сравнению с посредниками заключается в более точной локализации событий (или более тонкой гранулярности) и более подходящем расширении для некоторых бизнес-сценариев. Например, мы часто сталкиваемся с ситуацией, когда после регистрации или входа пользователя необходимо выполнить ряд операций. Через систему событий можно выполнить расширение операции входа без нарушения исходного кода, уменьшив при этом зависимость системы и вероятность ошибок.
 
-## Ссылка на проект
+## Адрес проекта
 
 [https://github.com/Tinywan/webman-permission](https://github.com/Tinywan/webman-permission)
 
-## Зависимость
+## Зависимости
 
 - [symfony/event-dispatcher](https://github.com/symfony/event-dispatcher)
 
@@ -21,26 +21,26 @@
 ```shell script
 composer require tinywan/webman-event
 ```
-## Конфигурация
+## Конфигурация 
 
-Содержимое файла конфигурации событий `config/event.php`:
+Содержание файла конфигурации событий `config/event.php`:
 
 ```php
 return [
-    // Слушатель событий
+    // Слушатели событий
     'listener'    => [],
 
-    // Подписчик событий
+    // Подписчики событий
     'subscriber' => [],
 ];
 ```
-### Настройка запуска процесса
+### Конфигурация запуска процесса
 
 Откройте `config/bootstrap.php` и добавьте следующую конфигурацию:
 
 ```php
 return [
-    // Другие настройки здесь ...
+    // Здесь опущены другие настройки...
     webman\event\EventManager::class,
 ];
 ```
@@ -48,7 +48,7 @@ return [
 
 ### Определение события
 
-Класс событий `LogErrorWriteEvent.php`
+Класс события `LogErrorWriteEvent.php`:
 
 ```php
 declare(strict_types=1);
@@ -76,20 +76,19 @@ class LogErrorWriteEvent extends Event
 }
 ```
 
-### Слушать событие
-
+### Прослушивание события
 ```php
 return [
-    // Слушатель событий
+    // Слушатели событий
     'listener'    => [
         \extend\event\LogErrorWriteEvent::NAME  => \extend\event\LogErrorWriteEvent::class,
     ],
 ];
 ```
 
-### Подписка на события
+### Подписка на событие
 
-Класс подписчика `LoggerSubscriber.php`
+Класс подписчика `LoggerSubscriber.php`:
 
 ```php
 namespace extend\event\subscriber;
@@ -122,19 +121,19 @@ class LoggerSubscriber implements EventSubscriberInterface
 }
 ```
 
-Подписка на события
+Подписка на событие:
 ```php
 return [
-    // Подписчик событий
+    // Подписчики событий
     'subscriber' => [
         \extend\event\subscriber\LoggerSubscriber::class,
     ],
 ];
 ```
 
-### Инициатор событий
+### Инициатор события
 
-Запуск события `LogErrorWriteEvent`.
+Инициировать событие `LogErrorWriteEvent`:
 
 ```php
 $error = [
@@ -146,8 +145,8 @@ EventManager::trigger(new LogErrorWriteEvent($error),LogErrorWriteEvent::NAME);
 
 Результат выполнения
 
-![Результат выполнения](./trigger.png)
+![Результат вывода](./trigger.png)
 
 ## Лицензия
 
-Этот проект лицензирован в соответствии с [лицензией Apache 2.0](LICENSE).
+Этот проект лицензируется в соответствии с лицензией [Apache 2.0 license](LICENSE).

@@ -1,54 +1,57 @@
-# webman 事件库 webman-event
+# webman நிகழ்வு தொகுப்பு webman-event
 
-[![license](https://img.shields.io/github/license/Tinywan/webman-event)]()
+[![உரிமை](https://img.shields.io/github/license/Tinywan/webman-event)]()
 [![webman-event](https://img.shields.io/github/v/release/tinywan/webman-event?include_prereleases)]()
 [![webman-event](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 [![webman-event](https://img.shields.io/github/last-commit/tinywan/webman-event/main)]()
 [![webman-event](https://img.shields.io/github/v/tag/tinywan/webman-event?color=ff69b4)]()
 
-事件相比较中间件的优势是事件比中间件更加精准定位（或者说粒度更细），并且更适合一些业务场景的扩展。例如，我们通常会遇到用户注册或者登录后需要做一系列操作，通过事件系统可以做到不侵入原有代码完成登录的操作扩展，降低系统的耦合性的同时，也降低了BUG的可能性。
+நிகழ்வு மதிப்புரை இடுகைகளும் நடைவேற்றி, மதிப்பு நிகழ்வுகளுக்கு மேலும் அளவு நீண்டவை (அல்லது அளவு சிறியவை) விளைவாக உள்ளது என்பது விண்ணப்பம்களுக்கு சிறப்புபடுவது மற்றும் செயல்பாட்டு உற்பத்திக்கு அதிக பொருட்களுக்கு அனுமதிப்பரை நைனமிக்கும். உதாரணமாக, நாங்கள் பொதுவாக பயனாளர் பதிவு அல்லாத உள்ளமைவுகளை செயல்படுத்த வேண்டுமென்று எந்த படித்தமுக குறித்து முட்டம்செய்வு வழக்குகளைச் செய்துகொள்ளுவது மற்றும் அதை உண்மைப்படுத்துவது மூலத உள் இதயமாக்களின் இயற்கை வளிப்பூர்வமாகக் குறைக்கிறது என்றும் கூறலாம்.
 
-## 项目地址
+## திட்டம் இருப்பு
 
 [https://github.com/Tinywan/webman-permission](https://github.com/Tinywan/webman-permission)
 
-## 依赖
+## ஆதாரம்
 
 - [symfony/event-dispatcher](https://github.com/symfony/event-dispatcher)
 
-## 安装
+## நிறுவுக
 
 ```shell script
 composer require tinywan/webman-event
 ```
-## 配置 
 
-事件配置文件 `config/event.php` 内容如下
+## அமைப்பு
+
+நிகழ்வு அமைப்பு கோப்பு `config/event.php` உள்ளடக்கம் கீழே உள்ளது
 
 ```php
 return [
-    // 事件监听
+    // நிகழ்வு அனுப்பு
     'listener'    => [],
 
-    // 事件订阅器
+    // நிகழ்வு இயக்குபர்
     'subscriber' => [],
 ];
 ```
-### 进程启动配置
 
-打开 `config/bootstrap.php`，加入如下配置：
+### நடைவூட்டி தொடக்கம்
+
+`config/bootstrap.php` ஐ திறக்க, பின்னர் பிடிக்கும் அமைப்பினை சேர்க்கவும்:
 
 ```php
 return [
-    // 这里省略了其它配置 ...
+    // இங்கு மற்றும் விவரங்களை விட மற்றைய அமைப்புகள் ...
     webman\event\EventManager::class,
 ];
 ```
-## 快速开始
 
-### 定义事件
+## விரைவான தொடக்கம்
 
-事件类 `LogErrorWriteEvent.php`
+### நிகழ்வுகளை வொன்றின்
+
+நிகழ்வு வகை `LogErrorWriteEvent.php`
 
 ```php
 declare(strict_types=1);
@@ -59,7 +62,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class LogErrorWriteEvent extends Event
 {
-    const NAME = 'log.error.write';  // 事件名，事件的唯一标识
+    const NAME = 'log.error.write';  // நிகழ்வு பெயர், நிகழ்வு ஒருமிதமான அடையாளம்
 
     /** @var array */
     public array $log;
@@ -76,19 +79,19 @@ class LogErrorWriteEvent extends Event
 }
 ```
 
-### 监听事件
+### நிகழ்வுகளை கவனித்தல்
 ```php
 return [
-    // 事件监听
+    // நிகழ்வு கேள்வி
     'listener'    => [
         \extend\event\LogErrorWriteEvent::NAME  => \extend\event\LogErrorWriteEvent::class,
     ],
 ];
 ```
 
-### 订阅事件
+### நிகழ்வு சந்தேக்கரவூட்டி
 
-订阅类 `LoggerSubscriber.php`
+சந்தேக்குன்னர் `LoggerSubscriber.php`
 
 ```php
 namespace extend\event\subscriber;
@@ -99,7 +102,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class LoggerSubscriber implements EventSubscriberInterface
 {
     /**
-     * @desc: 方法描述
+     * @desc: முறை விவரம்
      * @return array|string[]
      */
     public static function getSubscribedEvents()
@@ -110,44 +113,43 @@ class LoggerSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @desc: 触发事件
+     * @desc: நிகழ்வை இயக்கு
      * @param LogErrorWriteEvent $event
      */
     public function onLogErrorWrite(LogErrorWriteEvent $event)
     {
-        // 一些具体的业务逻辑
+        // சில உச்சித்தன வாழ்வியலை
         var_dump($event->handle());
     }
 }
 ```
 
-事件订阅
+நிகழ்வுகளை சந்தேக்குன்னர்
 ```php
 return [
-    // 事件订阅
+    // நிகழ்வு சந்தேக்குனர்
     'subscriber' => [
         \extend\event\subscriber\LoggerSubscriber::class,
     ],
 ];
 ```
 
-### 事件触发器
+### நிகழ்வு உயர்வெடுத்தருகுவான்
 
-触发 `LogErrorWriteEvent` 事件。
+`LogErrorWriteEvent` நிகழ்வை உயர்வாக்கவும்.
 
 ```php
 $error = [
-    'errorMessage' => '错误消息',
+    'errorMessage' => 'பிழை செய்தி',
     'errorCode' => 500
 ];
 EventManager::trigger(new LogErrorWriteEvent($error),LogErrorWriteEvent::NAME);
 ```
 
-执行结果
+இயக்கம் முடிவு
 
-![打印结果](./trigger.png)
+![அச்சிடில் முடிவு](./trigger.png)
 
-## License
+## உரிமை
 
-This project is licensed under the [Apache 2.0 license](LICENSE).
-
+இந்த திட்டம் [பாசிக் 2.0 உரிமை](LICENSE) க்கு அனுமதி உண்டு.

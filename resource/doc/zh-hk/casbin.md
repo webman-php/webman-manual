@@ -3,13 +3,13 @@
 ## 說明
 
 它基於 [PHP-Casbin](https://github.com/php-casbin/php-casbin)，一個強大的、高效的開源訪問控制框架，支持基於`ACL`、`RBAC`、`ABAC`等訪問控制模型。
-  
-## 項目地址
+
+## 專案地址
 
 https://github.com/Tinywan/webman-permission
-  
+
 ## 安裝
- 
+
 ```php
 composer require tinywan/webman-permission
 ```
@@ -19,11 +19,12 @@ composer require tinywan/webman-permission
 
 ### 註冊服務
 新建配置文件 `config/bootstrap.php` 內容類似如下：
-  
+
 ```php
     // ...
     webman\permission\Permission::class,
 ```
+
 ### Model 配置文件 
 
 新建配置文件 `config/casbin-basic-model.conf` 內容類似如下：
@@ -43,6 +44,7 @@ e = some(where (p.eft == allow))
 [matchers]
 m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
 ```
+
 ### Policy 配置文件
 
 新建配置文件 `config/permission.php` 內容類似如下：
@@ -71,10 +73,10 @@ return [
                 'config_text' => '',
             ],
 
-            // 適配器 .
+            // 适配器 .
             'adapter' => webman\permission\adapter\DatabaseAdapter::class,
 
-            /*
+	    /*
             * 數據庫設置.
             */
             'database' => [
@@ -89,6 +91,7 @@ return [
     ],
 ];
 ```
+
 ## 快速開始
 
 ```php
@@ -102,7 +105,7 @@ Permission::addRoleForUser('eve', 'writer');
 Permission::addPolicy('writer', 'articles','edit');
 ```
 
-您可以檢查用戶是否具有這樣的權限
+您可以檢查用户是否具有這樣的權限
 
 ```php
 if (Permission::enforce("eve", "articles", "edit")) {
@@ -120,7 +123,8 @@ if (Permission::enforce("eve", "articles", "edit")) {
 
 /**
  * 授權中間件
- * @datetime 2021/09/07 14:15
+ * @作者 ShaoBo Wan (Tinywan)
+ * @日期時間 2021/09/07 14:15
  */
 
 declare(strict_types=1);
@@ -158,7 +162,7 @@ class AuthorizationMiddleware implements MiddlewareInterface
 return [
     // 全局中間件
     '' => [
-        // ... 這裡省略其它中間件
+        // ... 這裡省略其他中間件
         app\middleware\AuthorizationMiddleware::class,
     ]
 ];

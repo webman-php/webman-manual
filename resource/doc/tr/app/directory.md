@@ -1,6 +1,6 @@
 # Klasör Yapısı
 
-```
+```plaintext
 plugin/
 └── foo
     ├── app
@@ -33,11 +33,11 @@ plugin/
     └── api
 ```
 
-Biz, bir uygulama eklentisinin, webman ile aynı dizin yapısına ve yapılandırma dosyalarına sahip olduğunu görüyoruz. Aslında, eklenti geliştirme deneyimi, webman normal uygulama geliştirmeyle hemen hemen aynıdır.
-Eklenti dizini ve adlandırma PSR4 standartlarına uygundur. Eklentiler plugin dizini altında bulunduğundan, namespace'ler plugin ile başlar, örneğin `plugin\foo\app\controller\UserController`.
+Görüldüğü gibi, bir uygulama eklentisi webman ile aynı klasör yapısına ve yapılandırma dosyalarına sahiptir. Aslında, bir eklenti geliştirme deneyimi, webman normal bir uygulama geliştirmeden neredeyse hiçbir farklılık göstermez.
+Eklenti klasörleri ve isimlendirme PSR4 standardını takip eder; bu nedenle, eklentiler plugin klasörü içine yerleştirildiği için, namespace'lerin hepsi plugin ile başlar, örneğin `plugin\foo\app\controller\UserController`.
 
-## api Dizini Hakkında
-Her eklentide bir api dizini bulunur. Eğer uygulamanız diğer uygulamaların çağrılmasına izin vermek için içsel arayüzler sağlıyorsa, bu arayüzleri api dizinine koymalısınız.
-Burada bahsedilen arayüzler, ağ aramaları değil, fonksiyon çağrılarıdır.
-Örneğin, `Email eklentisi`, `plugin/email/api/Email.php` içinde diğer uygulamaların e-posta göndermek için çagırabileceği bir `Email::send()` arayüzünü sağlar.
-Ayrıca, `plugin/email/api/Install.php`, webman-admin eklenti pazarının kurulumu veya kaldırılmasını gerçekleştirmek için çağrılabilen otomatik olarak oluşturulmuş bir dosyadır.
+## api Klasörü Hakkında
+Her bir eklentide bir api klasörü bulunur; uygulamanız diğer uygulamaların kullanması için bazı içsel arabirimler sağlıyorsa, bu arabirimleri api klasörüne koymalısınız.
+Burada bahsedilen arabirimler, ağ üzerinden yapılan çağrılar değil, fonksiyon çağrısı arabirimleridir.
+Örneğin `Mail eklentisi`, `plugin/email/api/Email.php` dosyasında diğer uygulamaların kullanması için `Email::send()` arabirimini sağlar.
+Ayrıca, `plugin/email/api/Install.php`, webman-admin eklenti marketinin yükleyici veya kaldırıcı işlemleri çağırması için otomatik olarak oluşturulmuştur.

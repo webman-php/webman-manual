@@ -1,12 +1,10 @@
 # Composant de captcha
 
 ## webman/captcha
-Adresse du projet : https://github.com/webman-php/captcha
+Adresse du projet https://github.com/webman-php/captcha
 
 ### Installation
-```
-composer require webman/captcha
-```
+```composer require webman/captcha```
 
 ### Utilisation
 
@@ -30,19 +28,19 @@ class LoginController
     }
     
     /**
-     * Générer l'image du captcha
+     * Afficher l'image du captcha
      */
     public function captcha(Request $request)
     {
-        // Initialiser la classe du captcha
+        // Initialisation de la classe de captcha
         $builder = new CaptchaBuilder;
         // Générer le captcha
         $builder->build();
-        // Enregistrer la valeur du captcha en session
+        // Stocker la valeur du captcha dans la session
         $request->session()->set('captcha', strtolower($builder->getPhrase()));
         // Obtenir les données binaires de l'image du captcha
         $img_content = $builder->get();
-        // Renvoyer les données binaires de l'image du captcha
+        // Afficher les données binaires du captcha
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
     }
 
@@ -51,9 +49,9 @@ class LoginController
      */
     public function check(Request $request)
     {
-        // Obtenir le champ captcha de la requête POST
+        // Obtenir le champ captcha de la requête post
         $captcha = $request->post('captcha');
-        // Comparer la valeur du captcha en session
+        // Comparer la valeur du captcha dans la session
         if (strtolower($captcha) !== $request->session()->get('captcha')) {
             return json(['code' => 400, 'msg' => 'Le captcha saisi est incorrect']);
         }
@@ -63,7 +61,7 @@ class LoginController
 }
 ```
 
-**Créer le fichier de modèle`app/view/login/index.html`**
+**Créer le fichier de modèle `app/view/login/index.html`**
 
 ```html
 <!doctype html>
@@ -82,18 +80,17 @@ class LoginController
 </html>
 ```
 
-Accéder à la page `http://127.0.0.1:8787/login` affichera une interface similaire à ce qui suit :
+Accédez à la page `http://127.0.0.1:8787/login`, l'interface ressemble à ceci :
   ![](../../assets/img/captcha.png)
 
 ### Paramètres courants
-
 ```php
     /**
-     * Générer l'image du captcha
+     * Afficher l'image du captcha
      */
     public function captcha(Request $request)
     {
-        // Initialiser la classe du captcha
+        // Initialiser la classe de captcha
         $builder = new CaptchaBuilder;
         // Longueur du captcha
         $length = 4;
@@ -103,13 +100,13 @@ Accéder à la page `http://127.0.0.1:8787/login` affichera une interface simila
         $captcha = new CaptchaBuilder(null, $builder);
         // Générer le captcha
         $builder->build();
-        // Enregistrer la valeur du captcha en session
+        // Stocker la valeur du captcha dans la session
         $request->session()->set('captcha', strtolower($builder->getPhrase()));
         // Obtenir les données binaires de l'image du captcha
         $img_content = $builder->get();
-        // Renvoyer les données binaires de l'image du captcha
+        // Afficher les données binaires du captcha
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
     }
 ```
 
-Pour plus d'informations sur les interfaces et les paramètres, veuillez consulter https://github.com/webman-php/captcha
+Pour plus d'interfaces et de paramètres, consultez https://github.com/webman-php/captcha

@@ -1,18 +1,18 @@
 # AOP
 
-> Thank the Hyperf author for the commit
+> Agradecimentos ao autor do Hyperf pela contribuição
 
 ### Instalação
 
-- Instale a integração aop-integration
+- Instale a integração AOP
 
 ```shell
 composer require "hyperf/aop-integration: ^1.1"
 ```
 
-### Adicione a configuração relacionada ao AOP
+### Adicionar configuração relacionada ao AOP
 
-Precisamos adicionar a configuração do arquivo `config.php` no diretório `config`
+Precisamos adicionar a configuração `config.php` no diretório `config`.
 
 ```php
 <?php
@@ -36,18 +36,18 @@ return [
         ],
     ],
     'aspects' => [
-        // Insira os Aspectos correspondentes aqui
+        // Aqui você deve adicionar o Aspect correspondente
         app\aspect\DebugAspect::class,
     ]
 ];
 
 ```
 
-### Configurar o arquivo de entrada start.php
+### Arquivo de entrada de configuração start.php
 
-> Vamos colocar o método de inicialização abaixo do fuso horário, omitindo o restante do código a seguir
+> Colocaremos o método de inicialização abaixo de `timezone`, o restante do código será omitido a seguir
 
-```
+```php
 use Hyperf\AopIntegration\ClassLoader;
 
 if ($timezone = config('app.default_timezone')) {
@@ -60,7 +60,7 @@ ClassLoader::init();
 
 ### Teste
 
-Primeiro, vamos escrever a classe a ser interceptada
+Primeiro, vamos escrever a classe de corte a ser testada
 
 ```php
 <?php
@@ -75,7 +75,7 @@ class UserService
 }
 ```
 
-Em seguida, adicione o correspondente `DebugAspect`
+Em seguida, adicionaremos o `DebugAspect` correspondente
 
 ```php
 <?php
@@ -117,7 +117,7 @@ class IndexController
 }
 ```
 
-Em seguida, configure a rota
+Agora, configure a rota
 
 ```php
 <?php

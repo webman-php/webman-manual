@@ -51,21 +51,21 @@ $log->emergency($messaggio, array $contesto = [])
 return [
     // Canale di log predefinito
     'default' => [
-        // Gestori per il canale predefinito, è possibile configurarne più di uno
+        // Gestori del canale predefinito, è possibile impostarne più di uno
         'handlers' => [
             [   
-                // Nome della classe gestore
+                // Nome della classe del gestore
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // Parametri del costruttore della classe gestore
+                // Parametri del costruttore della classe del gestore
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // Formattazione relativa
+                // Formattazione correlata
                 'formatter' => [
-                    // Nome della classe di formattazione
+                    // Nome della classe del formattatore
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // Parametri del costruttore della classe di formattazione
+                    // Parametri del costruttore della classe del formattatore
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -75,26 +75,26 @@ return [
 ```
 
 ## Canali multipli
-Monolog supporta i canali multipli, di default utilizza il canale `default`. Se si desidera aggiungere un canale `log2`, la configurazione sarà simile a quanto segue:
+Monolog supporta canali multipli, utilizza il canale `default` per impostazione predefinita. Se si vuole aggiungere un canale `log2`, la configurazione è simile a quanto segue:
 ```php
 return [
     // Canale di log predefinito
     'default' => [
-        // Gestori per il canale predefinito, è possibile configurarne più di uno
+        // Gestori del canale predefinito, è possibile impostarne più di uno
         'handlers' => [
             [   
-                // Nome della classe gestore
+                // Nome della classe del gestore
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // Parametri del costruttore della classe gestore
+                // Parametri del costruttore della classe del gestore
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // Formattazione relativa
+                // Formattazione correlata
                 'formatter' => [
-                    // Nome della classe di formattazione
+                    // Nome della classe del formattatore
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // Parametri del costruttore della classe di formattazione
+                    // Parametri del costruttore della classe del formattatore
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -102,21 +102,21 @@ return [
     ],
     // Canale log2
     'log2' => [
-        // Gestori per il canale log2, è possibile configurarne più di uno
+        // Gestori del canale predefinito, è possibile impostarne più di uno
         'handlers' => [
             [   
-                // Nome della classe gestore
+                // Nome della classe del gestore
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // Parametri del costruttore della classe gestore
+                // Parametri del costruttore della classe del gestore
                 'constructor' => [
                     runtime_path() . '/logs/log2.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // Formattazione relativa
+                // Formattazione correlata
                 'formatter' => [
-                    // Nome della classe di formattazione
+                    // Nome della classe del formattatore
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // Parametri del costruttore della classe di formattazione
+                    // Parametri del costruttore della classe del formattatore
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -125,7 +125,7 @@ return [
 ];
 ```
 
-Nel caso si desideri utilizzare il canale `log2`, l'utilizzo sarebbe il seguente:
+Quando si utilizza il canale `log2`, l'uso è il seguente:
 ```php
 <?php
 namespace app\controller;

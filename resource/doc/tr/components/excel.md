@@ -31,15 +31,16 @@ class ExcelController
 
         $writer = new Xlsx($spreadsheet);
         $file_path = public_path().'/hello_world.xlsx';
-        // Dosyayı public klasörüne kaydet
+        // Dosyayı public dizinine kaydet
         $writer->save($file_path);
         // Dosyayı indir
-        return response()->download($file_path, 'dosya_adı.xlsx');
+        return response()->download($file_path, 'dosya_adi.xlsx');
     }
 
 }
 ```
-  
+
+
 ### Daha Fazla İçerik
 
-https://phpspreadsheet.readthedocs.io/en/latest/'a gidin.
+https://phpspreadsheet.readthedocs.io/en/latest/ adresini ziyaret edin.

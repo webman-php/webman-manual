@@ -1,7 +1,7 @@
 # บันทึก
-webman ใช้ [monolog/monolog](https://github.com/Seldaek/monolog) เพื่อจัดการบันทึกข้อมูล
+Webman ใช้ [monolog/monolog](https://github.com/Seldaek/monolog) เพื่อจัดการกับบันทึกข้อมูล.
 
-## การใช้
+## การใช้งาน
 ```php
 <?php
 namespace app\controller;
@@ -14,12 +14,12 @@ class FooController
     public function index(Request $request)
     {
         Log::info('ทดสอบบันทึก');
-        return response('สวัสดี index');
+        return response('สวัสดี ดัชนี');
     }
 }
 ```
 
-## เมธอดที่ใช้งาน
+## เมธอดที่ให้บริการ
 ```php
 Log::log($level, $message, array $context = [])
 Log::debug($message, array $context = [])
@@ -33,7 +33,7 @@ Log::emergency($message, array $context = [])
 ```
 เทียบเท่ากับ
 ```php
-$log = Log::channel('default');
+ $log = Log::channel('default');
 $log->log($level, $message, array $context = [])
 $log->debug($message, array $context = [])
 $log->info($message, array $context = [])
@@ -48,23 +48,23 @@ $log->emergency($message, array $context = [])
 ## การกำหนดค่า
 ```php
 return [
-    // ช่องบันทึกริยาสำหรับยูสตัวเดียว
+    // ช่องเราที่จะใช้บันทึก
     'default' => [
-        // ตัวจัดการช่องค่าเริ่มต้น สามารถกำหนดได้หลายตัว
+        // แฮนเดอร์ที่ใช้จัดการช่องเราที่จะใช้ สามารถกำหนดหลายตัว
         'handlers' => [
             [   
-                // ชื่อคลาสของตัวจัดการ
+                // ชื่อคลาสแฮนเดอร์
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // พารามิเตอร์ที่ใช้ในการสร้างคลาสของตัวจัดการ
+                // ตัวแปรของคอนสตรัคเตอร์ของคลาสแฮนเดอร์
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // รูปแบบที่เกี่ยวข้อง
+                // แบบรูปแบบที่เกี่ยวข้อง
                 'formatter' => [
-                    // ชื่อคลาสของตัวจัดการรูปแบบ
+                    // ชื่อคลาสตัวจัดการการจัดรูปแบบ
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // พารามิเตอร์ที่ใช้ในการสร้างคลาสตัวจัดการรูปแบบ
+                    // ตัวแปรของคอนสตรัคเตอร์ของคลาสตัวจัดการการจัดรูปแบบ
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -73,27 +73,27 @@ return [
 ];
 ```
 
-## ช่องหลายช่อง
-monolog รองรับช่องหลายช่อง โดยค่าเริ่มต้นคือ `default` ถ้าต้องการเพิ่มช่อง `log2` สามารถกำหนดได้ดังนี้:
+## หลายช่อง
+Monolog รองรับหลายช่อง โดยค่าเริ่มต้นคือการใช้ช่อง `default` หากต้องการเพิ่มช่อง `log2` สามารถกำหนดได้ดังนี้:
 ```php
 return [
-    // ช่องบันทึกริยาสำหรับยูสตัวเดียว
+    // ช่องเราที่จะใช้บันทึก
     'default' => [
-        // ตัวจัดการช่องค่าเริ่มต้น สามารถกำหนดได้หลายตัว
+        // แฮนเดอร์ที่ใช้จัดการช่องเราที่จะใช้ สามารถกำหนดหลายตัว
         'handlers' => [
             [   
-                // ชื่อคลาสของตัวจัดการ
+                // ชื่อคลาสแฮนเดอร์
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // พารามิเตอร์ที่ใช้ในการสร้างคลาสของตัวจัดการ
+                // ตัวแปรของคอนสตรัคเตอร์ของคลาสแฮนเดอร์
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // รูปแบบที่เกี่ยวข้อง
+                // แบบรูปแบบที่เกี่ยวข้อง
                 'formatter' => [
-                    // ชื่อคลาสของตัวจัดการรูปแบบ
+                    // ชื่อคลาสตัวจัดการการจัดรูปแบบ
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // พารามิเตอร์ที่ใช้ในการสร้างคลาสตัวจัดการรูปแบบ
+                    // ตัวแปรของคอนสตรัคเตอร์ของคลาสตัวจัดการการจัดรูปแบบ
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -101,21 +101,21 @@ return [
     ],
     // ช่อง log2
     'log2' => [
-        // ตัวจัดการช่องค่าเริ่มต้น สามารถกำหนดได้หลายตัว
+        // แฮนเดอร์ที่ใช้จัดการช่อง log2 สามารถกำหนดหลายตัว
         'handlers' => [
             [   
-                // ชื่อคลาสของตัวจัดการ
+                // ชื่อคลาสแฮนเดอร์
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // พารามิเตอร์ที่ใช้ในการสร้างคลาสของตัวจัดการ
+                // ตัวแปรของคอนสตรัคเตอร์ของคลาสแฮนเดอร์
                 'constructor' => [
                     runtime_path() . '/logs/log2.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // รูปแบบที่เกี่ยวข้อง
+                // แบบรูปแบบที่เกี่ยวข้อง
                 'formatter' => [
-                    // ชื่อคลาสของตัวจัดการรูปแบบ
+                    // ชื่อคลาสตัวจัดการการจัดรูปแบบ
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // พารามิเตอร์ที่ใช้ในการสร้างคลาสตัวจัดการรูปแบบ
+                    // ตัวแปรของคอนสตรัคเตอร์ของคลาสตัวจัดการการจัดรูปแบบ
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -124,7 +124,9 @@ return [
 ];
 ```
 
-การใช้งานช่อง `log2` จะเป็นดังนี้:
+
+
+การใช้งานช่อง `log2` สามารถทำได้โดยวิธีดังนี้:
 ```php
 <?php
 namespace app\controller;
@@ -138,7 +140,7 @@ class FooController
     {
         $log = Log::channel('log2');
         $log->info('ทดสอบ log2');
-        return response('สวัสดี index');
+        return response('สวัสดี ดัชนี');
     }
 }
 ```

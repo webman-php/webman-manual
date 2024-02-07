@@ -1,8 +1,8 @@
 # Кэширование
 
-По умолчанию webman использует компонент кэширования [symfony/cache](https://github.com/symfony/cache).
+По умолчанию webman использует [symfony/cache](https://github.com/symfony/cache) в качестве компонента кэширования.
 
-> Для использования `symfony/cache` необходимо предварительно установить расширение redis для `php-cli`.
+> Перед использованием `symfony/cache` необходимо установить расширение redis для `php-cli`.
 
 ## Установка
 **php 7.x**
@@ -14,10 +14,10 @@ composer require -W illuminate/redis ^8.2.0 symfony/cache ^5.2
 composer require -W illuminate/redis symfony/cache
 ```
 
-После установки необходимо выполнить restart (reload не действует).
+После установки необходимо перезагрузить (перезапустить) сервер.
 
 ## Настройка Redis
-Файл настройки redis находится в `config/redis.php`
+Файл настройки Redis находится в `config/redis.php`
 ```php
 return [
     'default' => [
@@ -49,8 +49,8 @@ class UserController
 ```
 
 > **Примечание**
-> Рекомендуется добавить префикс к ключу, чтобы избежать конфликтов с другими использованиями redis.
+> Рекомендуется добавлять префикс к ключу, чтобы избежать конфликтов с другими использованиями Redis.
 
 ## Использование других компонентов кэширования
 
-Инструкции по использованию компонента [ThinkCache](https://github.com/top-think/think-cache) см. в разделе [Другие базы данных](others.md#ThinkCache).
+Использование компонента кэширования [ThinkCache](https://github.com/top-think/think-cache) описано в разделе [Другие базы данных](others.md#ThinkCache)

@@ -1,10 +1,10 @@
-# Automatisierungskomponente für Fehlercodes
+# Automatische Fehlercode-Komponente
 
 ## Erläuterung
 
-Es kann automatisch Fehlercodes generieren und pflegen, basierend auf den festgelegten Regeln.
+Es ist möglich, Fehlercodes automatisch gemäß der angegebenen Regeln zu generieren.
 
-> In den zurückgegebenen Daten steht der Parameter "code" für alle benutzerdefinierten Codes. Positive Zahlen stehen für normale Dienste und negative Zahlen stehen für Dienstprobleme.
+> Es wird vereinbart, dass der Parameter "code" in den Rückgabedaten alle benutzerdefinierten Codes enthält. Positive Zahlen stehen für einen normalen Service, negative Zahlen für einen fehlerhaften Service.
 
 ## Projektadresse
 
@@ -18,14 +18,14 @@ composer require teamones/response-code-msg
 
 ## Verwendung
 
-### Leere ErrorCode-Klassendatei
+### Leere ErrorCode-Klassen-Datei
 
-- Dateipfad: ./support/ErrorCode.php
+- Dateipfad ./support/ErrorCode.php
 
 ```php
 <?php
 /**
- * Automatisch generierte Datei, bitte nicht manuell bearbeiten.
+ * Automatisch generierte Datei, bitte nicht manuell ändern.
  * @Author:$Id$
  */
 namespace support;
@@ -37,29 +37,29 @@ class ErrorCode
 
 ### Konfigurationsdatei
 
-Fehlercodes werden gemäß den unten konfigurierten Parametern automatisch generiert. Beispiel: Wenn "system_number = 201" und "start_min_number = 10000" ist, wird der erste generierte Fehlercode -20110001 sein.
+Fehlercodes werden automatisch gemäß den konfigurierten Parametern generiert. Zum Beispiel, wenn system_number = 201 und start_min_number = 10000, wird der erste generierte Fehlercode -20110001 sein.
 
-- Dateipfad: ./config/error_code.php
+- Dateipfad ./config/error_code.php
 
 ```php
 <?php
 
 return [
-    "class" => new \support\ErrorCode(), // ErrorCode-Klassendatei
-    "root_path" => app_path(), // Aktuelles Code-Stammverzeichnis
+    "class" => new \support\ErrorCode(), // ErrorCode-Klassen-Datei
+    "root_path" => app_path(), // Aktuelles Stammverzeichnis des Codes
     "system_number" => 201, // Systemkennung
-    "start_min_number" => 10000 // Bereich für die Fehlercodegenerierung, z. B. 10000-99999
+    "start_min_number" => 10000 // Fehlercode-Generierungsbereich, z.B. 10000-99999
 ];
 ```
 
-### Hinzufügen des Codes zur automatischen Generierung der Fehlercodes in start.php
+### Hinzufügen des automatischen Fehlercode-Generierungscode in start.php
 
-- Dateipfad: ./start.php
+- Dateipfad ./start.php
 
 ```php
-// Nach Config::load(config_path(), ['route', 'container']) platzieren
+// Nach Config::load(config_path(), ['route', 'container']) einfügen
 
-// Generierung der Fehlercodes, nur im APP_DEBUG-Modus
+// Fehlercode generieren, nur im APP_DEBUG-Modus generieren
 if (config("app.debug")) {
     $errorCodeConfig = config('error_code');
     (new \teamones\responseCodeMsg\Generate($errorCodeConfig))->run();
@@ -68,21 +68,21 @@ if (config("app.debug")) {
 
 ### Verwendung im Code
 
-Im folgenden Code steht **ErrorCode::ModelAddOptionsError** für den Fehlercode. Dabei sollte "ModelAddOptionsError" entsprechend den aktuellen semantischen Anforderungen in Großbuchstaben verfasst werden.
+Im folgenden Code steht **ErrorCode::ModelAddOptionsError** für einen Fehlercode, wobei **ModelAddOptionsError** vom Benutzer gemäß den aktuellen semantischen Anforderungen in Großbuchstaben geschrieben werden muss.
 
-> Sie werden feststellen, dass Sie ihn nicht verwenden können. Nach dem nächsten Neustart wird der entsprechende Fehlercode automatisch generiert. Bitte beachten: Manchmal sind zwei Neustarts erforderlich.
+> Sie werden feststellen, dass Sie diesen nicht verwenden können. Nach einem Neustarten wird der entsprechende Fehlercode generiert. Beachten Sie, dass Sie manchmal zweimal neu starten müssen.
 
 ```php
 <?php
 /**
- * Serviceklasse für Navigation bezogene Operationen
+ * Navigationsbezogener Service-Klasse
  */
 
 namespace app\service;
 
 use app\model\Demo as DemoModel;
 
-// ErrorCode-Klassendatei einbeziehen
+// ErrorCode-Klassen-Datei einbinden
 use support\ErrorCode;
 
 class Demo
@@ -118,7 +118,7 @@ class Demo
 ```php
 <?php
 /**
- * Automatisch generierte Datei, bitte nicht manuell bearbeiten.
+ * Automatisch generierte Datei, bitte nicht manuell ändern.
  * @Author:$Id$
  */
 namespace support;

@@ -1,19 +1,17 @@
 - Başlangıç Kılavuzu
 
   - [webman Nedir](README.md)
-  - [Programlama Bilgisi](attention.md)
+  - [Programlama İpuçları](attention.md)
   - [Soru Cevap Topluluğu](help.md)
   
 - Hızlı Başlangıç
-  
-  - [Kurulum](install.md)
-  - [Klasör Yapısı](directory.md)
+  - [Yükleme](install.md)
+  - [Dosya Düzeni](directory.md)
   - [Basit Örnek](tutorial.md)
 
 - Temel Fonksiyonlar
-
   - [İstek](request.md)
-  - [Yanıt](response.md)
+  - [Cevap](response.md)
   - [Kontrolcü](controller.md)
   - [Yönlendirme](route.md)
   - [Ara Yazılım](middleware.md)
@@ -26,13 +24,12 @@
   - [Çoklu Uygulama](multiapp.md)
 
 - Veritabanı
-
   - [Hızlı Başlangıç](db/tutorial.md)
-  - [Veritabanı Yapılandırması](db/config.md)
+  - [Veritabanı Yapılandırma](db/config.md)
   - [Sorgu Oluşturucu](db/queries.md)
   - [Model](db/model.md)
   - [Model İlişkileri](db/relationships.md)
-  - [Sayfalama](db/paginator.md)
+  - [Sayfalandırma](db/paginator.md)
   - [Veritabanı Göçü](db/migration.md)
   - [Redis](db/redis.md)
   - [Önbellek](db/cache.md)
@@ -40,20 +37,20 @@
   - [ThinkORM](db/thinkorm.md)
   - [ThinkCache](db/thinkcache.md)
   - [Medoo](db/medoo.md)
-  
+
 - Mesaj Kuyruğu
   - [Redis Kuyruğu](queue/redis.md)
   - [Stomp](queue/stomp.md)
- 
+
 - Yaygın Kullanılan Bileşenler
   - [Doğrulayıcı](components/validation.md)
-  - [Sayfalama Bileşeni](components/paginator.md)
+  - [Sayfalayıcı Bileşen](components/paginator.md)
   - [Çoklu Dil](components/translation.md)
   - [Görüntü İşleme](components/image.md)
   - [Doğrulama Kodu](components/captcha.md)
-  - [Olay Etkinliği](components/event.md)
+  - [Olaylar](components/event.md)
   - [Env Çevresel Değişken Bileşeni](components/env.md)
-  - [Crontab Zamanlayıcı](components/crontab.md)
+  - [Crontab Zamanlanmış Görev](components/crontab.md)
   - [Excel Tablosu](components/excel.md)
   - [WeChat SDK](components/wechat.md)
   - [Ödeme SDK](components/payment.md)
@@ -64,15 +61,15 @@
 - Temel Eklentiler
   - [Temel Eklentiler](plugin/base.md)
   - [Komut Satırı](plugin/console.md)
-  - [Push (Itis)'i](plugin/push.md)
+  - [İtme](plugin/push.md)
   - [Temel Eklenti Pazarı](plugin/market.md)
   - [Temel Eklenti Gönderme](plugin/create.md)
 
 - Uygulama Eklentileri
   - [Tanıtım](app/app.md)
-  - [Standart](app/standard.md)
+  - [Standartlar](app/standard.md)
   - [Uygulama Oluşturma](app/create.md)
-  - [Klasör Yapısı](app/directory.md)
+  - [Dosya Düzeni](app/directory.md)
   - [Yönlendirme](app/route.md)
   - [Yapılandırma Dosyası](app/config.md)
   - [Kontrolcü](app/controller.md)
@@ -81,37 +78,36 @@
   - [Veritabanı](app/database.md)
   - [Redis](app/redis.md)
   - [Günlük](app/log.md)
-  - [webman-admin'e Katılma](app/admin.md)
+  - [webman-admin Entegrasyonu](app/admin.md)
   - [Eklenti Paketleme](app/pack.md)
   - [Eklenti Yayınlama](app/publish.md)
   - [Kurulum Kaldırma](app/install.md)
   - [Uygulama Pazarı](app/market.md)
 
-- İleri Seviye
-  
-  - [Özel İşlem](process.md)
+- Gelişmiş Seviyeler
+  - [Özel İşlemler](process.md)
   - [Bağımlılık Enjeksiyonu](di.md)
   - [AOP](aop.md)
-  
+
 - Diğer
   - [Güvenlik](others/security.md)
-  - [Fonksiyon Devre Dışı Bırakma Kontrolü](others/disable-function-check.md)
+  - [Fonksiyon Engelleme Kontrolü](others/disable-function-check.md)
   - [Özel Komut Dosyaları](others/scripts.md)
   - [Özel 404 500](others/custom-error-page.md)
-  - [Yükseltme Yöntemleri](others/upgrade.md)
+  - [Yükseltme Yöntemi](others/upgrade.md)
   - [nginx Proxy](others/nginx-proxy.md)
   - [phar Paketleme](others/phar.md)
   - [İkili Paketleme](others/bin.md)
   - [Başlatma Süreci](others/process.md)
   - [Yaşam Döngüsü](others/lifecycle.md)
   - [Bellek Sızıntısı](others/memory-leak.md)
-  - [İş Başlangıcı](others/bootstrap.md)
+  - [İşletme Başlatma](others/bootstrap.md)
   - [Otomatik Yükleme](others/autoload.md)
-  - [Yavaş İş Süreci İşleme](others/task.md)
+  - [Yavaş İşlem İşleme](others/task.md)
   - [Performans](others/performance.md)
   - [Yük Testleri](others/benchmarks.md)
   - [Dosya İzleme](others/monitor.md)
 
-- Yükseltme
+- Yükseltmeler
   - [1.4](upgrade/1-4.md)
   - [Teşekkürler](thanks.md)

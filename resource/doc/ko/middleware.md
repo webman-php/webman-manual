@@ -1,19 +1,19 @@
 # 미들웨어
-미들웨어는 일반적으로 요청이나 응답을 가로채는 데 사용됩니다. 예를 들어, 컨트롤러를 실행하기 전에 사용자 신분을 일관되게 확인하거나, 사용자가 로그인하지 않은 경우 로그인 페이지로 리디렉션하거나, 헤더에 특정 헤더를 추가하는 등의 작업을 수행할 수 있습니다. 또한, 특정 URI 요청의 비율을 통계 내는 것과 같은 작업도 가능합니다.
+일반적으로 미들웨어는 요청이나 응답을 가로채는 데 사용됩니다. 예를 들어 컨트롤러를 실행하기 전에 사용자 신원을 일관되게 확인하거나, 사용자가 로그인하지 않은 경우 로그인 페이지로 이동하도록 하는 등의 작업에 사용됩니다. 또한 응답에 헤더를 추가하거나 특정 URI 요청의 비율을 통계하는 등의 작업에도 사용됩니다.
 
-## 미들웨어 오니언 모델
+## 미들웨어 양파 모델
 
 ```
                               
             ┌──────────────────────────────────────────────────────┐
-            │                     미들웨어1                      │ 
+            │                     미들웨어1                       │ 
             │     ┌──────────────────────────────────────────┐     │
-            │     │               미들웨어2                │     │
+            │     │               미들웨어2                 │     │
             │     │     ┌──────────────────────────────┐     │     │
             │     │     │         미들웨어3          │     │     │        
             │     │     │     ┌──────────────────┐     │     │     │
             │     │     │     │                  │     │     │     │
- 　── 요청 ───────────────────────> 컨트롤러 ─ 응답 ───────────────────────────> 클라이언트
+   ── 요청 ───────────────────────> 컨트롤러 ─ 응답 ───────────────────────────> 클라이언트
             │     │     │     │                  │     │     │     │
             │     │     │     └──────────────────┘     │     │     │
             │     │     │                              │     │     │
@@ -23,33 +23,32 @@
             │                                                      │
             └──────────────────────────────────────────────────────┘
 ```
-미들웨어와 컨트롤러는 클래식한 오니언 모델을 구성하며, 미들웨어는 계층적으로 쌓인 오니언의 외부껍질에 해당하고, 컨트롤러는 오니언의 핵심 부분에 해당합니다. 위의 그림에서 요청은 마치 화살처럼 미들웨어 1, 2, 3을 통해 컨트롤러에 도달하고, 컨트롤러는 응답을 반환하며, 마지막에 응답은 3, 2, 1의 순서로 미들웨어를 통과하여 클라이언트에 반환됩니다. 즉, 각 미들웨어에서는 요청과 응답을 모두 얻을 수 있다는 뜻입니다.
+
+미들웨어와 컨트롤러는 클래식한 양파 모델을 구성하며, 미들웨어는 양파 껍질처럼 층층으로 씌워지고, 컨트롤러는 양파 안쪽에 위치합니다. 그림에서 볼 수 있듯이 요청은 화살표처럼 미들웨어 1, 2, 3을 통과하여 컨트롤러에 도달하며, 컨트롤러가 응답을 반환하면 응답은 3, 2, 1의 순서로 다시 미들웨어를 통해 클라이언트에 반환됩니다. 즉, 각 미들웨어에서는 요청과 응답을 모두 얻을 수 있습니다.
 
 ## 요청 가로채기
-가끔씩 특정 요청이 컨트롤러 계층으로 전달되지 않길 원할 때가 있는데, 예를 들어 특정 신분 확인 미들웨어에서 현재 사용자가 로그인하지 않은 것을 발견하면 요청을 직접 가로채고 로그인 응답을 반환할 수 있습니다. 이런 프로세스는 다음과 같이 표현됩니다.
+가끔은 특정 요청이 컨트롤러 계층에 도달하지 않길 원할 때가 있습니다. 예를 들어 미들웨어 2에서 현재 사용자가 로그인되어 있지 않음을 발견했을 때 요청을 직접 가로채고 로그인 응답을 반환할 수 있습니다. 다음과 같이 이 과정이 진행됩니다.
 
 ```
                               
-            ┌───────────────────────────────────────────────────────┐
-            │                     미들웨어1                       │ 
-            │     ┌───────────────────────────────────────────┐     │
-            │     │          　 　 신분 확인 미들웨어              │     │
-            │     │      ┌──────────────────────────────┐     │     │
-            │     │      │         미들웨어3          │     │     │       
-            │     │      │     ┌──────────────────┐     │     │     │
-            │     │      │     │                  │     │     │     │
- 　── 요청 ───────────┐   │     │       컨트롤러      │     │     │     │
-            │     │ 응답　│     │                  │     │     │     │
-   <─────────────────┘   │     └──────────────────┘     │     │     │
-            │     │      │                              │     │     │
-            │     │      └──────────────────────────────┘     │     │
-            │     │                                           │     │
-            │     └───────────────────────────────────────────┘     │
-            │                                                       │
-            └───────────────────────────────────────────────────────┘
+            ┌─────────────────────────────────────────────────┐
+            │                    미들웨어1                   │ 
+            │     ┌─────────────────────────────────┐     │
+            │     │              미들웨어2           │     │
+            │     │     ┌─────────────────────┐     │     │
+            │     │     │       미들웨어3     │     │     │       
+            │     │     │    ┌─────────────┐    │     │     │
+            │     │     │    │             │    │     │     │
+   ── 요청 ───────> 컨트롤러 ─>             <─ 응답 ───────────> 클라이언트
+            │     │            │             │     │     │
+            │     │            └─────────────┘     │     │
+            │     │                                  │     │
+            │     └──────────────────────────────────┘     │
+            │                                                │
+            └────────────────────────────────────────────────┘
 ```
 
-위의 그림에서 요청이 신분 확인 미들웨어에 도달하면 로그인 응답이 생성되고, 응답이 신분 확인 미들웨어를 통해 다시 미들웨어1로 돌아가 브라우저로 반환됩니다.
+그림에서 요청은 미들웨어 2에 도달한 후 로그인 응답이 생성됩니다. 이 응답은 미들웨어 2를 통해 다시 미들웨어 1에 전달되어 클라이언트에 반환됩니다.
 
 ## 미들웨어 인터페이스
 미들웨어는 `Webman\MiddlewareInterface` 인터페이스를 구현해야 합니다.
@@ -57,24 +56,22 @@
 interface MiddlewareInterface
 {
     /**
-     * Process an incoming server request.
+     * 서버 요청 처리
      *
-     * Processes an incoming server request in order to produce a response.
-     * If unable to produce the response itself, it may delegate to the provided
-     * request handler to do so.
+     * 요청을 처리하여 응답을 생성합니다.
+     * 응답을 직접 생성할 수 없는 경우, 제공된 요청 핸들러에 위임합니다.
      */
     public function process(Request $request, callable $handler): Response;
 }
 ```
-즉, `process` 메서드를 반드시 구현해야 하며, 이 메서드는 `support\Response` 객체를 반드시 반환해야 합니다. 기본적으로 이 객체는 `$handler($request)`에 의해 생성됩니다(요청이 계속하여 오니언의 핵심에 도달함), 또한 `response()` `json()` `xml()` `redirect()` 등의 도우미 함수로 생성된 응답(요청이 오니언의 핵심에서 멈춤)이 될 수도 있습니다.
+즉, `process` 메서드를 구현해야 하며, `process` 메서드는 `support\Response` 객체를 반환해야 합니다. 이 객체는 기본적으로 `$handler($request)`에 의해 생성되며(요청이 양파 안으로 계속 진행됨), `response()` `json()` `xml()` `redirect()` 등의 보조 함수에 의해 생성된 응답(요청 중지)일 수도 있습니다.
+중간웨어에서는 요청을 받아들일 수도 있고, 컨트롤러 실행 후 응답을 받아들일 수도 있으므로 중간웨어 내부는 세 부분으로 나뉩니다.
+1. 요청 전달 단계, 즉 요청 처리 전 단계
+2. 컨트롤러 처리 요청 단계, 즉 요청 처리 단계
+3. 응답 발신 단계, 즉 요청 처리 후 단계
 
-## 미들웨어에서 요청 및 응답 가져오기
-미들웨어에서는 요청을 가져오거나, 컨트롤러 이후에 생성된 응답을 가져올 수 있기 때문에, 미들웨어 내부는 세 가지 부분으로 나눌 수 있습니다.
-1. 요청 가로채기 단계, 즉 요청 처리 전 단계
-2. 컨트롤러 요청 처리 단계
-3. 응답 반환 단계, 즉 요청 처리 후 단계
+중간웨어에서 3단계는 다음과 같이 나타납니다.
 
-미들웨어에서의 세 가지 단계의 구현은 다음과 같습니다.
 ```php
 <?php
 namespace app\middleware;
@@ -87,18 +84,20 @@ class Test implements MiddlewareInterface
 {
     public function process(Request $request, callable $handler) : Response
     {
-        echo '여기는 요청 가로채기 단계, 즉 요청 처리 전입니다';
+        echo '여기는 요청 전달 단계입니다. 즉, 요청 처리 전';
         
-        $response = $handler($request); // 요청이 오니언의 핵심에 도달할 때까지 계속하여 진행
+        $response = $handler($request); // 컨트롤러 실행하여 응답 받을 때까지 다음 단계로 전달
         
-        echo '여기는 응답 반환 단계, 즉 요청 처리 후입니다';
+        echo '여기는 응답 발신 단계입니다. 즉, 요청 처리 후';
         
         return $response;
     }
 }
 ```
-## 예시: 인증 미들웨어
-`app/middleware/AuthCheckTest.php` 파일을 생성합니다. (디렉터리가 없는 경우 직접 생성하세요)
+
+## 예: 인증 확인 중간웨어
+파일 `app/middleware/AuthCheckTest.php`를 생성합니다(디렉토리가 없다면 직접 생성하십시오).
+
 ```php
 <?php
 namespace app\middleware;
@@ -113,22 +112,28 @@ class AuthCheckTest implements MiddlewareInterface
     public function process(Request $request, callable $handler) : Response
     {
         if (session('user')) {
+            // 로그인된 상태에서 요청을 계속해서 다음 단계로 전달
             return $handler($request);
         }
 
+        // 리플렉션을 사용하여 컨트롤러 내에서 로그인이 필요하지 않은 메서드를 가져옴
         $controller = new ReflectionClass($request->controller);
         $noNeedLogin = $controller->getDefaultProperties()['noNeedLogin'] ?? [];
 
+        // 요청한 메서드가 로그인이 필요한 경우
         if (!in_array($request->action, $noNeedLogin)) {
+            // 요청을 차단하고 리다이렉션 응답을 반환하여 다음 단계로 전달하지 않음
             return redirect('/user/login');
         }
 
+        // 로그인이 필요하지 않은 경우, 요청을 계속해서 다음 단계로 전달
         return $handler($request);
     }
 }
 ```
 
-`app/controller/UserController.php`에 새로운 컨트롤러를 작성합니다.
+새로운 컨트롤러 `app/controller/UserController.php`를 생성합니다.
+
 ```php
 <?php
 namespace app\controller;
@@ -136,34 +141,44 @@ use support\Request;
 
 class UserController
 {
+    /**
+     * 로그인이 필요하지 않은 메서드
+     */
     protected $noNeedLogin = ['login'];
 
     public function login(Request $request)
     {
         $request->session()->set('user', ['id' => 10, 'name' => 'webman']);
-        return json(['code' => 0, 'msg' => 'login ok']);
+        return json(['code' => 0, 'msg' => '로그인 완료']);
     }
 
     public function info()
     {
-        return json(['code' => 0, 'msg' => 'ok', 'data' => session('user')]);
+        return json(['code' => 0, 'msg' => '성공', 'data' => session('user')]);
     }
 }
 ```
 
-`config/middleware.php`에 전역 미들웨어를 추가합니다.
+> **참고**
+> `$noNeedLogin`에 현재 컨트롤러에서 로그인하지 않고도 액세스할 수 있는 메서드가 기록되어 있습니다.
+
+`config/middleware.php`에 전역 중간웨어를 추가하십시오.
+
 ```php
 return [
-    // 전역 미들웨어
+    // 전역 중간웨어
     '' => [
-        // ... 다른 미들웨어는 생략합니다
+        // ... 기타 중간웨어는 여기에 생략
         app\middleware\AuthCheckTest::class,
     ]
 ];
 ```
 
-## 예시: CORS 요청 미들웨어
-`app/middleware/AccessControlTest.php` 파일을 생성합니다. (디렉터리가 없는 경우 직접 생성하세요)
+인증 확인 중간웨어를 사용하면 컨트롤러 단계에서 사용자 로그인 여부에 대해 걱정하지 않고 비즈니스 코드를 작성할 수 있습니다.
+
+## 예: CORS(교차 출처 리소스 공유) 요청 중간웨어
+파일 `app/middleware/AccessControlTest.php`를 생성합니다(디렉토리가 없다면 직접 생성하십시오).
+
 ```php
 <?php
 namespace app\middleware;
@@ -176,8 +191,10 @@ class AccessControlTest implements MiddlewareInterface
 {
     public function process(Request $request, callable $handler) : Response
     {
+        // 옵션 요청인 경우 빈 응답을 반환하고, 아니면 계속 다음 단계로 전달하여 응답을 얻음
         $response = $request->method() == 'OPTIONS' ? response('') : $handler($request);
         
+        // 응답에 교차 출처 관련 HTTP 헤더 추가
         $response->withHeaders([
             'Access-Control-Allow-Credentials' => 'true',
             'Access-Control-Allow-Origin' => $request->header('origin', '*'),
@@ -190,41 +207,52 @@ class AccessControlTest implements MiddlewareInterface
 }
 ```
 
-`config/middleware.php`에 전역 미들웨어를 추가합니다.
+> **팁**
+> 교차 출처 리소스 공유(CORS)는 옵션 요청을 생성할 수 있습니다. 우리는 옵션 요청을 컨트롤러에 전달하고 싶지 않기 때문에 옵션 요청에 대해 빈 응답으로 처리합니다(`response('')`).
+> 인터페이스를 설정해야 하는 경우 `Route::any(..)` 또는 `Route::add(['POST', 'OPTIONS'], ..)`을 사용하여 설정하십시오.
+
+`config/middleware.php`에 중간웨어를 추가하십시오.
+
 ```php
 return [
-    // 전역 미들웨어
+    // 전역 중간웨어
     '' => [
-        // ... 다른 미들웨어는 생략합니다
+        // ... 기타 중간웨어는 여기에 생략
         app\middleware\AccessControlTest::class,
     ]
 ];
 ```
 
+> **주의**
+> Ajax 요청에서 사용자 지정 헤더를 설정하는 경우 중간웨어에서 `Access-Control-Allow-Headers` 필드에 이 사용자 지정 헤더를 추가해야 하며, 그렇지 않으면 `Request header field XXXX is not allowed by Access-Control-Allow-Headers in preflight response.` 오류가 발생할 수 있습니다.
+
 ## 설명
-- 미들웨어는 전역 미들웨어, 애플리케이션 미들웨어(다중 애플리케이션 모드에서만 유효, [다중 애플리케이션](multiapp.md) 참조), 라우팅 미들웨어로 나눌 수 있습니다.
-- 현재 단일 컨트롤러 미들웨어를 지원하지 않지만, 미들웨어 내에서 `$request->controller`를 확인하여 비슷한 기능을 구현할 수 있습니다.
-- 미들웨어 구성 파일 위치: `config/middleware.php`
-- 전역 미들웨어는 `''` 키 아래에 구성됩니다.
-- 애플리케이션 미들웨어는 해당하는 애플리케이션 이름 아래에 구성됩니다. 예를 들면,
+
+- 중간웨어에는 전역 중간웨어, 응용 프로그램 중간웨어(다중 응용 프로그램 모드에서만 유효, [다중 앱](multiapp.md)참조) 및 라우팅 중간웨어가 있습니다.
+- 현재 단일 컨트롤러의 중간웨어를 지원하지 않지만, 중간웨어 내에서 `$request->controller`를 확인하여 컨트롤러 중간웨어 기능과 유사한 기능을 구현할 수 있습니다.
+- 중간웨어 구성 파일의 위치는 `config/middleware.php`입니다.
+- 전역 중간웨어는 `''` 키 하위에 구성됩니다.
+- 응용 프로그램 중간웨어는 각 응용 프로그램 이름 아래에 구성됩니다. 예시:
 
 ```php
 return [
-    // 전역 미들웨어
+    // 전역 중간웨어
     '' => [
         app\middleware\AuthCheckTest::class,
         app\middleware\AccessControlTest::class,
     ],
-    // api 애플리케이션 미들웨어(다중 애플리케이션 모드에서만 유효)
-    'api' => [
+    // API 응용 프로그램 중간웨어(다중 응용 프로그램 모드에서만 유효)
+    'api' => [
         app\middleware\ApiOnly::class,
     ]
 ];
 ```
 
-## 라우팅 미들웨어
-특정 라우트 또는 그룹 라우트에 미들웨어를 설정할 수 있습니다.
-예를 들어, `config/route.php`에 다음과 같이 설정합니다.
+## 라우팅 중간웨어
+
+특정 라우트 또는 라우트 그룹에 중간웨어를 설정할 수 있습니다.
+예를 들어 `config/route.php`에서 다음 구성을 추가하십시오:
+
 ```php
 <?php
 use support\Request;
@@ -244,14 +272,13 @@ Route::group('/blog', function () {
     app\middleware\MiddlewareB::class,
 ]);
 ```
+## 미들웨어 생성자 매개변수 전달
 
-## 미들웨어 생성자로 인자 전달
+> **주의**
+> 이 기능은 webman-framework >= 1.4.8 이상이 필요합니다.
 
-> **참고**
-> 이 기능은 webman-framework >= 1.4.8을 필요로 합니다.
-
-1.4.8 버전 이후, 구성 파일에서 미들웨어를 직접 인스턴스화하거나 익명 함수를 사용하여 생성자를 통해 매개변수를 미들웨어에 전달할 수 있습니다.
-예를 들어 `config/middleware.php`에서 다음과 같이 구성할 수 있습니다.
+1.4.8 버전 이후, 설정 파일에서 미들웨어를 직접 인스턴스화하거나 익명 함수로 만들어서 생성자를 통해 미들웨어에 매개변수를 전달할 수 있습니다.
+예를 들어 `config/middleware.php`에서 다음과 같이 구성할 수도 있습니다.
 ```php
 return [
     // 전역 미들웨어
@@ -261,15 +288,14 @@ return [
             return new app\middleware\AccessControlTest($param1, $param2, ...);
         },
     ],
-    // api 애플리케이션 미들웨어(다중 애플리케이션 모드에서만 유효)
+    // API 애플리케이션 미들웨어(다중 애플리케이션 모드에서만 유효)
     'api' => [
         app\middleware\ApiOnly::class,
     ]
 ];
 ```
 
-라우팅 미들웨어도 생성자를 통해 매개변수를 전달할 수 있습니다. 예를 들어,
-`config/route.php`에서 다음과 같이 설정할 수 있습니다.
+마찬가지로 라우팅 미들웨어도 생성자를 통해 매개변수를 전달할 수 있습니다. 예를 들어 `config/route.php`에서 다음과 같이 구성할 수도 있습니다.
 ```php
 Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->middleware([
     new app\middleware\MiddlewareA($param1, $param2, ...),
@@ -280,13 +306,13 @@ Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->mi
 ```
 
 ## 미들웨어 실행 순서
-- 미들웨어 실행 순서는 `전역 미들웨어` -> `애플리케이션 미들웨어` -> `라우팅 미들웨어`입니다.
-- 여러 개의 전역 미들웨어가 있는 경우, 실제로 구성된 순서대로 실행됩니다(애플리케이션 미들웨어 및 라우팅 미들웨어도 마찬가지).
-- 404 요청은 미들웨어를 활성화하지 않습니다. 여기에는 전역 미들웨어도 포함됩니다.
+- 미들웨어 실행 순서는 `전역 미들웨어` -> `애플리케이션 미들웨어` -> `라우팅 미들웨어` 순입니다.
+- 여러 개의 전역 미들웨어가있는 경우, 미들웨어의 구성 순서대로 실행됩니다(애플리케이션 미들웨어 및 라우팅 미들웨어도 마찬가지).
+- 404 요청은 전역 미들웨어를 비롯한 어떤 미들웨어도 트리거하지 않습니다.
 
-## 라우트에서 미들웨어로 전달되는 매개변수(route->setParams)
+## 라우팅을 통해 미들웨어에 매개변수 전달(route->setParams)
 
-**라우트 설정 `config/route.php`**
+**라우팅 구성 `config/route.php`**
 ```php
 <?php
 use support\Request;
@@ -308,6 +334,7 @@ class Hello implements MiddlewareInterface
 {
     public function process(Request $request, callable $handler) : Response
     {
+        // 기본 라우팅 $request->route 는 null이므로 $request->route가 비어 있는지 확인해야 합니다.
         if ($route = $request->route) {
             $value = $route->param('some_key');
             var_export($value);
@@ -317,9 +344,9 @@ class Hello implements MiddlewareInterface
 }
 ```
 
-## 미들웨어에서 컨트롤러로 매개변수 전달
+## 미들웨어에서 컨트롤러에 매개변수 전달
 
-가끔 미들웨어에서 생성된 데이터를 컨트롤러에서 사용해야 할 수 있습니다. 이 경우, 컨트롤러로 매개변수를 넘기는 방식으로 `$request` 객체에 속성을 추가할 수 있습니다. 예를 들어:
+가끔 미들웨어에서 생성된 데이터를 컨트롤러에서 사용해야 할 때, `$request` 객체에 속성을 추가하여 컨트롤러에 전달할 수 있습니다. 예를 들어:
 
 **미들웨어**
 ```php
@@ -355,13 +382,14 @@ class FooController
     }
 }
 ```
-## 미들웨어에서 현재 요청 경로 정보 가져오기
+
+## 미들웨어에서 현재 요청 라우팅 정보 가져오기
 > **주의**
-> webman-framework >= 1.3.2 이상이 필요합니다.
+> webman-framework >= 1.3.2가 필요합니다.
 
-우리는 `$request->route`를 사용하여 라우팅 객체를 가져와서 해당 정보를 얻기 위해 해당 메소드를 호출할 수 있습니다.
+`$request->route`를 사용하여 라우팅 객체를 가져와 해당 정보를 가져올 수 있습니다.
 
-**라우트 구성**
+**라우팅 구성**
 ```php
 <?php
 use support\Request;
@@ -384,8 +412,8 @@ class Hello implements MiddlewareInterface
     public function process(Request $request, callable $handler) : Response
     {
         $route = $request->route;
-        // 요청이 어떤 라우트에도 일치하지 않으면(기본 라우트 제외), $request->route 는 null입니다.
-        // 예를 들어 브라우저가 /user/111 주소를 방문하면 다음과 같은 정보가 출력됩니다.
+        // 요청이 어떤 라우팅과 일치하지 않는 경우(기본 라우팅 제외), $request->route는 null입니다
+        // 브라우저가 주소 /user/111을 방문하면 다음과 같은 정보를 출력합니다.
         if ($route) {
             var_export($route->getPath());       // /user/{uid}
             var_export($route->getMethods());    // ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD','OPTIONS']
@@ -401,16 +429,15 @@ class Hello implements MiddlewareInterface
 ```
 
 > **주의**
-> `$route->param()` 메소드는 webman-framework >= 1.3.16 이상이 필요합니다.
+> `$route->param()` 메서드는 webman-framework >= 1.3.16가 필요합니다.
 
-
-## 미들웨어에서 예외 처리 가져오기
+## 미들웨어에서 예외 가져오기
 > **주의**
-> webman-framework >= 1.3.15 이상이 필요합니다.
+> webman-framework >= 1.3.15가 필요합니다.
 
-비즈니스 처리 중 예외가 발생할 수 있으며, 미들웨어에서 `$response->exception()`을 사용하여 예외를 가져올 수 있습니다.
+비즈니스 처리 중에 예외가 발생할 수 있으며, 미들웨어에서 `$response->exception()`을 사용하여 예외를 가져올 수 있습니다.
 
-**라우트 구성**
+**라우팅 구성**
 ```php
 <?php
 use support\Request;
@@ -443,41 +470,3 @@ class Hello implements MiddlewareInterface
     }
 }
 ```
-
-## 슈퍼 글로벌 미들웨어
-
-> **주의**
-> 이 기능은 webman-framework >= 1.5.16 이상이 필요합니다.
-
-주 프로젝트의 전역 미들웨어는 주 프로젝트에만 영향을 미치며, [앱 플러그인](app/app.md)에는 영향을 미치지 않습니다. 때때로 우리는 모든 플러그인을 포함한 전역 미들웨어를 추가하고 싶을 때, 슈퍼 글로벌 미들웨어를 사용할 수 있습니다.
-
-`config/middleware.php`에서 다음과 같이 설정합니다.
-```php
-return [
-    '@' => [ // 주 프로젝트와 모든 플러그인에 전역 미들웨어 추가
-        app\middleware\MiddlewareGlobl::class,
-    ], 
-    '' => [], // 주 프로젝트에만 전역 미들웨어 추가
-];
-```
-
-> **팁**
-> `@` 슈퍼 글로벌 미들웨어는 주 프로젝트뿐 아니라 어떤 플러그인에서도 설정할 수 있으며, 예를 들어 `plugin/ai/config/middleware.php`에서 `@` 슈퍼 글로벌 미들웨어를 설정하면 주 프로젝트와 모든 플러그인에 영향을 미칩니다.
-
-## 특정 플러그인에 미들웨어 추가하기
-
-> **주의**
-> 이 기능은 webman-framework >= 1.5.16 이상이 필요합니다.
-
-때로는 특정 [앱 플러그인](app/app.md)에 미들웨어를 추가하고 싶지만(업데이트가 덮어쓰기될 수 있기 때문에) 플러그인의 코드를 변경하고 싶지 않은 경우, 주 프로젝트에서 해당 플러그인에 미들웨어를 구성할 수 있습니다.
-
-`config/middleware.php`에서 다음과 같이 설정합니다.
-```php
-return [
-    'plugin.ai' => [], // ai 플러그인에 미들웨어 추가
-    'plugin.ai.admin' => [], // ai 플러그인의 admin 모듈에 미들웨어 추가
-];
-```
-
-> **팁**
-> 물론 특정 플러그인에서 이와 유사한 설정을 추가하여 다른 플러그인에도 영향을 미칠 수 있습니다. 예를 들어 `plugin/foo/config/middleware.php`에 위와 같은 설정을 추가하면 ai 플러그인에 영향을 미칠 수 있습니다.

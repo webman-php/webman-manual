@@ -1,7 +1,7 @@
 # Esempio Semplice
 
 ## Ritorno di una stringa
-**Creare un controller**
+**Creare un Controller**
 
 Creare il file `app/controller/UserController.php` come segue
 
@@ -16,21 +16,21 @@ class UserController
     public function hello(Request $request)
     {
         $default_name = 'webman';
-        // Ottieni il parametro 'name' dalla richiesta GET, se non è stato passato, restituisci $default_name
+        // Ottenere il parametro name dalla richiesta get, se il parametro name non è presente, restituire $default_name
         $name = $request->get('name', $default_name);
-        // Restituisci una stringa al browser
-        return response('ciao ' . $name);
+        // Restituire una stringa al browser
+        return response('hello ' . $name);
     }
 }
 ```
 
 **Accesso**
 
-Accedi dall'browser a `http://127.0.0.1:8787/user/hello?name=tom`
+Accedere da un browser a `http://127.0.0.1:8787/user/hello?name=tom`
 
-Il browser restituirà `ciao tom`
+Il browser restituirà `hello tom`
 
-## Ritorno di JSON
+## Ritorno di un json
 Modificare il file `app/controller/UserController.php` come segue
 
 ```php
@@ -56,19 +56,19 @@ class UserController
 
 **Accesso**
 
-Accedi dall'browser a `http://127.0.0.1:8787/user/hello?name=tom`
+Accedere da un browser a `http://127.0.0.1:8787/user/hello?name=tom`
 
 Il browser restituirà `{"code":0,"msg":"ok","data":"tom""}`
 
-L'utilizzo della funzione di supporto json per restituire i dati aggiungerà automaticamente l'header `Content-Type: application/json`.
+Utilizzare la funzione di supporto json per restituire i dati aggiungerà automaticamente un'intestazione `Content-Type: application/json`
 
-## Ritorno di XML
-Analogamente, utilizzando la funzione di supporto `xml($xml)` si otterrà una risposta XML con header `Content-Type: text/xml`.
+## Ritorno di un xml
+Allo stesso modo, utilizzando la funzione di supporto `xml($xml)` si otterrà una risposta `xml` con l'intestazione `Content-Type: text/xml`.
 
-Il parametro `$xml` può essere una stringa XML o un oggetto `SimpleXMLElement`.
+Il parametro `$xml` può essere una stringa `xml` o un oggetto `SimpleXMLElement`.
 
-## Ritorno di JSONP
-Analogamente, utilizzando la funzione di supporto `jsonp($data, $callback_name = 'callback')` si otterrà una risposta JSONP.
+## Ritorno di un jsonp
+Allo stesso modo, utilizzando la funzione di supporto `jsonp($data, $callback_name = 'callback')` si otterrà una risposta `jsonp`.
 
 ## Ritorno di una vista
 Modificare il file `app/controller/UserController.php` come segue
@@ -100,12 +100,12 @@ Creare il file `app/view/user/hello.html` come segue
     <title>webman</title>
 </head>
 <body>
-ciao <?=htmlspecialchars($name)?>
+hello <?=htmlspecialchars($name)?>
 </body>
 </html>
 ```
 
-Accedi dall'browser a `http://127.0.0.1:8787/user/hello?name=tom`
-Verrà restituita una pagina HTML con il contenuto `ciao tom`.
+Accedendo da un browser a `http://127.0.0.1:8787/user/hello?name=tom`
+si otterrà una pagina html con il contenuto `hello tom`.
 
-Nota: Per impostazione predefinita, Webman utilizza la sintassi PHP nativa per i template. Per ulteriori opzioni di visualizzazione, vedere [Viste](view.md).
+Nota: webman utilizza di default la sintassi nativa di PHP come modello. Se si desidera utilizzare altre viste, consultare [Vista](view.md).

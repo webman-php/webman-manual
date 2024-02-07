@@ -1,22 +1,22 @@
 # Redis
 
-webman'ın redis bileşeni varsayılan olarak [illuminate/redis](https://github.com/illuminate/redis) kullanır, yani laravel'in redis kütüphanesini kullanır ve laravel ile aynı şekilde kullanılır.
+webman'ın redis bileşeni varsayılan olarak [illuminate/redis](https://github.com/illuminate/redis) kullanır, yani laravel'in redis kütüphanesini kullanır. Kullanımı laravel ile aynıdır.
 
-`illuminate/redis`'i kullanmadan önce `php-cli`'ye redis eklentisi kurmak gereklidir.
+`illuminate/redis` kullanmadan önce `php-cli`'ye redis eklentisini kurmalısınız.
 
-> **Not**
-> `php-cli`'ye redis eklentisinin kurulu olup olmadığını kontrol etmek için `php -m | grep redis` komutunu kullanabilirsiniz. Lütfen dikkat edin: `php-fpm`'de redis eklentisini kurmanız, `php-cli`'de de kullanabileceğiniz anlamına gelmez çünkü `php-cli` ve `php-fpm` farklı uygulamalardır ve farklı `php.ini` yapılandırmalarını kullanabilir. Kullandığınız `php-cli` için hangi `php.ini` yapılandırma dosyasının kullanıldığını görmek için `php --ini` komutunu kullanabilirsiniz.
+> **Dikkat**
+> `php-cli`'de redis eklentisinin yüklü olup olmadığını kontrol etmek için `php -m | grep redis` komutunu kullanın. Lütfen unutmayın: Eğer `php-fpm`'e redis eklentisi kurduysanız, bu `php-cli`'de de kullanabileceğiniz anlamına gelmez çünkü `php-cli` ve `php-fpm` farklı uygulamalardır ve farklı `php.ini` yapılandırmaları kullanabilir. Kullandığınız `php-cli`'nin hangi `php.ini` yapılandırma dosyasını kullandığını görmek için `php --ini` komutunu kullanın.
 
-## Kurulum
+## Yükleme
 
 ```php
 composer require -W illuminate/redis illuminate/events
 ```
 
-Kurulumdan sonra yeniden başlatılması gerekmektedir (reload işlevsiz olacaktır)
+Yükledikten sonra, reload işlemi yeterli olmayacaktır, restart işlemi yapmalısınız.
 
 ## Yapılandırma
-Redis yapılandırma dosyası `config/redis.php` içinde bulunmaktadır
+redis yapılandırma dosyası `config/redis.php` içinde bulunur.
 ```php
 return [
     'default' => [
@@ -47,7 +47,7 @@ class UserController
 }
 ```
 
-## Redis API'si
+## Redis API
 ```php
 Redis::append($key, $value)
 Redis::bitCount($key)
@@ -77,7 +77,7 @@ Redis::expire($key, $ttl)
 Redis::expireAt($key, $timestamp)
 Redis::select($dbIndex)
 ```
-Eşdeğeri 
+Şu şekilde karşılık gelir:
 ```php
 $redis = Redis::connection('default');
 $redis->append($key, $value)
@@ -89,11 +89,11 @@ $redis->getBit($key, $offset)
 ...
 ```
 
-> **Not**
-> `Redis::select($db)` arayüzünü dikkatli kullanın, webman sürekli bellekte olan bir yapı olduğu için bir istek bir veritabanı seçtikten sonra sonraki diğer istekleri etkileyebilir. Birden fazla veritabanı için farklı `$db`'leri farklı Redis bağlantı yapılandırmalarına ayırmanız önerilir.
+> **Dikkat**
+> `Redis::select($db)` arabirimini dikkatli kullanın, webman sürekli bellekte olan bir çerçeve olduğundan, bir istek belirli bir veritabanını seçtikten sonra diğer istekleri etkileyebilir. Birden fazla veritabanı kullanılması durumunda, farklı `db`'leri farklı Redis bağlantı yapılandırmalarına ayarlamanız önerilir.
 
-## Birden Fazla Redis Bağlantısı Kullanımı
-Örneğin yapılandırma dosyası `config/redis.php` şu şekilde olabilir:
+## Birden Çok Redis Bağlantısının Kullanımı
+Örneğin, yapılandırma dosyası `config/redis.php` şu şekilde olabilir:
 ```php
 return [
     'default' => [
@@ -109,17 +109,16 @@ return [
         'port'     => 6379,
         'database' => 1,
     ],
-
 ]
 ```
-Varsayılan olarak `default` altında yapılandırılan bağlantıyı kullanır, `Redis::connection()` yöntemiyle hangi redis bağlantısının kullanılacağını seçebilirsiniz.
+Varsayılan olarak `default` bağlantısını kullanır, isterseniz `Redis::connection()` yöntemini kullanarak hangi redis bağlantısını kullanmak istediğinizi seçebilirsiniz.
 ```php
 $redis = Redis::connection('cache');
 $redis->get('test_key');
 ```
 
-## Küme Yapılandırma
-Eğer uygulamanız Redis sunucusu kümesi kullanıyorsa, bu kümeleri tanımlamak için Redis yapılandırma dosyasında `clusters` anahtarını kullanmalısınız:
+## Küme Yapılandırması
+Uygulamanız Redis sunucusu kümeleri kullanıyorsa, bu kümeleri tanımlamak için redis yapılandırma dosyasında `clusters` anahtarını kullanmalısınız:
 ```php
 return [
     'clusters' => [
@@ -135,9 +134,7 @@ return [
 
 ];
 ```
-
-Varsayılan olarak, küme, istemci tarafı kesilmiş uygulamalara izin veren bir düğümde çalışır, böylece bir düğüm havuzu oluşturabilir ve büyük miktarda kullanılabilir bellek oluşturabilirsiniz. Burada dikkat edilmesi gereken şey, istemci paylaşımının başarısızlık durumlarıyla başa çıkmayacağıdır; bu nedenle bu özellik genellikle diğer birincil veritabanından önbellek verileri alırken kullanılır. Redis'in asıl kümesini kullanmak istiyorsanız, `options` anahtarında aşağıdaki gibi belirtmelisiniz:
-
+Varsayılan olarak, küme, bir istemci kesmesi sunucusunda gerçekleştirilebilir, böylece bir düğüm havuzu oluşturabilir ve büyük miktarda kullanılabilir bellek oluşturabilirsiniz. Bununla birlikte, müşteri tarafı başarısızlık durumlarıyla başa çıkmaz; bu nedenle, bu özellik genellikle başka bir ana veritabanından önbellek verisi almak için kullanılır. Redis'in doğal kümesini kullanmak istiyorsanız, yapılandırma dosyasındaki `options` anahtarı aşağıdaki gibi belirtilmelidir:
 ```php
 return[
     'options' => [
@@ -151,7 +148,7 @@ return[
 ```
 
 ## Pipeline Komutu
-Sunucuya birçok komut göndermeniz gerektiğinde pipeline komutlarını kullanmanızı öneririz. pipeline yöntemi bir Redis örneği kapanış fonksiyonu alır. Tüm komutlar Redis örneğine gönderilebilir ve bunlar tek bir işlemde tamamlanır:
+Sunucuya birden çok komut göndermeniz gerektiğinde, pipeline komutunu kullanmanızı öneririz. pipeline yöntemi bir Redis örneğinin bir kapanış fonksiyonunu kabul eder. Tüm komutları Redis örneğine gönderebilir ve hepsi bir işlemde tamamlanacaktır:
 ```php
 Redis::pipeline(function ($pipe) {
     for ($i = 0; $i < 1000; $i++) {

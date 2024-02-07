@@ -1,30 +1,30 @@
-# Processamento de solicitações lentas
+# Processamento de Tarefas Lentas
 
-Às vezes, precisamos lidar com solicitações lentas para evitar que elas afetem o processamento de outras solicitações pelo webman. Dependendo da situação, essas solicitações podem ser tratadas usando diferentes abordagens.
+Às vezes, precisamos lidar com tarefas lentas para evitar que afetem o processamento de outras solicitações no webman. Dependendo da situação, essas tarefas podem ser tratadas de diferentes maneiras.
 
-## Utilizando filas de mensagens
-Consulte [Fila Redis](https://www.workerman.net/plugin/12) e [Fila STOMP](https://www.workerman.net/plugin/13).
+## Usando Fila de Mensagens
+Consulte [fila Redis](../queue/redis.md) [fila STOMP](../queue/stomp.md)
 
 ### Vantagens
-Capacidade de lidar com solicitações repentinas de processamento de grande volume.
+Capacidade de lidar com picos de solicitações de processamento de alto volume.
 
 ### Desvantagens
-Incapacidade de retornar diretamente os resultados para o cliente. Se for necessário enviar os resultados, é preciso combinar com outros serviços, como usar [webman/push](https://www.workerman.net/plugin/2) para enviar os resultados do processamento.
+Incapacidade de retornar diretamente resultados para o cliente. Para enviar os resultados, é necessário utilizar outros serviços, como o [webman/push](https://www.workerman.net/plugin/2) para o envio dos resultados do processamento.
 
-## Adicionando uma porta HTTP
+## Adicionando uma Porta HTTP
 
 > **Observação**
-> Essa funcionalidade requer webman-framework>=1.4
+> Este recurso requer webman-framework>=1.4
 
-Adiciona uma porta HTTP para lidar com solicitações lentas. Essas solicitações são encaminhadas para um grupo específico de processos ao acessar essa porta, e os resultados são retornados diretamente para o cliente.
+Adicione uma porta HTTP para lidar com solicitações lentas, de forma que essas solicitações sejam encaminhadas para um grupo específico de processos que as processarão e retornarão diretamente o resultado para o cliente.
 
 ### Vantagens
-Capacidade de retornar diretamente os dados para o cliente.
+Capacidade de retornar os dados diretamente para o cliente.
 
 ### Desvantagens
-Incapacidade de lidar com solicitações repentinas de grande volume.
+Incapacidade de lidar com picos de solicitações de alto volume.
 
-### Procedimento de Implementação
+### Passos para Implementação
 Adicione a seguinte configuração ao arquivo `config/process.php`.
 ```php
 return [
@@ -38,25 +38,25 @@ return [
         'group' => '',
         'reusePort' => true,
         'constructor' => [
-            'request_class' => \support\Request::class, // definir a classe de solicitação
+            'request_class' => \support\Request::class, // configuração da classe de solicitação
             'logger' => \support\Log::channel('default'), // instância de log
-            'app_path' => app_path(), // localização do diretório do aplicativo
-            'public_path' => public_path() // localização do diretório público
+            'app_path' => app_path(), // localização do diretório app
+            'public_path' => public_path() // localização do diretório public
         ]
     ]
 ];
 ```
 
-Dessa forma, as solicitações lentas podem ser processadas por meio do grupo de processos em `http://127.0.0.1:8686/`, sem afetar o processamento de outras solicitações pelos demais processos.
+Dessa forma, as interfaces lentas podem ser acessadas através do conjunto de processos em `http://127.0.0.1:8686/` sem afetar o processamento de outras interfaces.
 
-Para que o cliente não perceba a diferença entre as portas, é possível adicionar um proxy para a porta 8686 no nginx. Supondo que as solicitações de interface lenta comecem com `/tast`, a configuração completa do nginx seria semelhante ao seguinte exemplo:
-```
+Para garantir que o cliente não perceba a diferença entre as portas, pode-se adicionar um proxy para a porta 8686 no nginx. Supondo que o caminho das solicitações de interface lenta comece com `/tast`, a configuração completa do nginx seria semelhante ao seguinte exemplo:
+```nginx
 upstream webman {
     server 127.0.0.1:8787;
     keepalive 10240;
 }
 
-# Adicionar um upstream 8686
+# Adicionar um upstream para 8686
 upstream task {
    server 127.0.0.1:8686;
    keepalive 10240;
@@ -68,7 +68,7 @@ server {
   access_log off;
   root /path/webman/public;
 
-  # As solicitações começando com /tast vão para a porta 8686, ajuste /tast conforme necessário
+  # Solicitações iniciadas com /tast são encaminhadas para a porta 8686. Altere /tast para o prefixo desejado conforme necessário.
   location /tast {
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header Host $host;
@@ -77,7 +77,7 @@ server {
       proxy_pass http://task;
   }
 
-  # As demais solicitações vão para a porta 8787 padrão
+  # Outras solicitações são encaminhadas para a porta 8787 original
   location / {
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header Host $host;
@@ -89,4 +89,5 @@ server {
   }
 }
 ```
-Desse modo, quando o cliente acessar `domínio.com/tast/xxx`, a solicitação será encaminhada para a porta 8686, sem afetar o processamento de solicitações na porta 8787.
+
+Dessa forma, ao acessar `dominio.com/tast/xxx`, o acesso será direcionado para a porta 8686, sem afetar o processamento das solicitações na porta 8787.

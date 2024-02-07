@@ -1,15 +1,15 @@
-# Yayın
+# Yayınlama
 
-Geliştiriciler, kendi telif haklı eklentilerini uygulama mağazasına yükleyerek diğer insanlara yardımcı olabilir ve aynı zamanda fayda sağlayabilirler.
-Yayın adresi https://www.workerman.net/app/create
+Geliştiriciler, kendi telif haklarına sahip eklentilerini uygulama mağazasına yükleyebilirler, diğerlerine yardım ederken aynı zamanda fayda sağlayabilirler.
+Yayınlama adresi: https://www.workerman.net/app/create
 
-Not: Yayın yaparken dikkat edilmesi gereken şey, **sürüm numarasının** `plugin/{eklenti}/config/app.php` içindeki sürüm numarası ile uyumlu olmasıdır.
+Not: **Sürüm numarası** doldurulurken, `plugin/{eklenti}/config/app.php` dosyasındaki sürüm numarası ile aynı olmalıdır.
 
-## Yayın Sınırlamaları
-**Aşağıdaki türde uygulamaların yayına alınması desteklenmemektedir**
+## Yayınlama Sınırlamaları
+**Aşağıdaki türdeki uygulamaların yayınlanması desteklenmemektedir:**
 
-**Finansal uygulamalar** Bu, ancak bunlarla sınırlı olmamak üzere, konsolide ödeme, geri ödeme, kredi, açık arttırma, dijital para birimi, blockchain gibi şeyleri içerir  
-**Kumar uygulamaları** Bu, ancak bunlarla sınırlı olmamak üzere, çekiliş, kapışma, sığır sığırı, fiş gibi şeyleri içerir  
-**Toplama uygulamaları** Bu, ancak bunlarla sınırlı olmamak üzere, roman, çizgi roman, film, kaynak paylaşımı gibi şeyleri içerir  
-**Yurtdışı uygulama ile ilgili olanlar** Bu, ancak bunlarla sınırlı olmamak üzere, bulut sunucu, vpn gibi şeyleri içerir
-**Sohbet ve müşteri hizmetleri uygulamaları**  Geçici olarak yayına alınmamaktadır
+**Finansal türdeki** örnekler: konsolide ödeme, geri ödeme, kredi, açık artırma, dijital para birimi, blok zinciri gibi türlerle sınırlı olmamak üzere  
+**Oyun türündeki** örnekler: çekiliş, çekilişe katılma, poker, satın alma kartları gibi türlerle sınırlı olmamak üzere  
+**Toplama türündeki** örnekler: roman, çizgi roman, film, kaynak paylaşımı gibi türlerle sınırlı olmamak üzere  
+**Yurtdışı uygulama ile ilgili** örnekler: bulut sunucu, vpn gibi türlerle sınırlı olmamak üzere 
+**Sohbet ve müşteri hizmetleri türündeki** geçici olarak yayınlama desteği sunulmamaktadır.

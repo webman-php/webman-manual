@@ -1,6 +1,6 @@
 # AOP
 
-> 感謝 Hyperf 作者的提交
+> 感謝 Hyerpf 作者的貢獻
 
 ### 安裝
 
@@ -47,7 +47,7 @@ return [
 
 > 我們將初始化方法，放到 timezone 下方，以下省略其他代碼
 
-```
+```php
 use Hyperf\AopIntegration\ClassLoader;
 
 if ($timezone = config('app.default_timezone')) {

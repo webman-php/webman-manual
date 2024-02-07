@@ -1,5 +1,6 @@
-# Registos
-O webman usa o [monolog/monolog](https://github.com/Seldaek/monolog) para processar registos.
+# Registo
+
+O webman utiliza o [monolog/monolog](https://github.com/Seldaek/monolog) para gerir registos.
 
 ## Utilização
 ```php
@@ -19,53 +20,53 @@ class FooController
 }
 ```
 
-## Métodos Fornecidos
+## Métodos disponibilizados
 ```php
-Log::log($nível, $mensagem, array $context = [])
-Log::debug($mensagem, array $context = [])
-Log::info($mensagem, array $context = [])
-Log::notice($mensagem, array $context = [])
-Log::warning($mensagem, array $context = [])
-Log::error($mensagem, array $context = [])
-Log::critical($mensagem, array $context = [])
-Log::alert($mensagem, array $context = [])
-Log::emergency($mensagem, array $context = [])
+Log::log($nível, $mensagem, array $contexto = [])
+Log::debug($mensagem, array $contexto = [])
+Log::info($mensagem, array $contexto = [])
+Log::notice($mensagem, array $contexto = [])
+Log::warning($mensagem, array $contexto = [])
+Log::error($mensagem, array $contexto = [])
+Log::critical($mensagem, array $contexto = [])
+Log::alert($mensagem, array $contexto = [])
+Log::emergency($mensagem, array $contexto = [])
 ```
-equivalente a
+Equivalente a
 ```php
 $log = Log::channel('default');
-$log->log($nível, $mensagem, array $context = [])
-$log->debug($mensagem, array $context = [])
-$log->info($mensagem, array $context = [])
-$log->notice($mensagem, array $context = [])
-$log->warning($mensagem, array $context = [])
-$log->error($mensagem, array $context = [])
-$log->critical($mensagem, array $context = [])
-$log->alert($mensagem, array $context = [])
-$log->emergency($mensagem, array $context = [])
+$log->log($nível, $mensagem, array $contexto = [])
+$log->debug($mensagem, array $contexto = [])
+$log->info($mensagem, array $contexto = [])
+$log->notice($mensagem, array $contexto = [])
+$log->warning($mensagem, array $contexto = [])
+$log->error($mensagem, array $contexto = [])
+$log->critical($mensagem, array $contexto = [])
+$log->alert($mensagem, array $contexto = [])
+$log->emergency($mensagem, array $contexto = [])
 ```
 
 ## Configuração
 ```php
 return [
-    // Canal de registo padrão
+    // Canal de registo predefinido
     'default' => [
-        // Manipuladores do canal padrão, pode configurar vários
+        // Manipuladores do canal predefinido, pode configurar vários
         'handlers' => [
             [   
                 // Nome da classe do manipulador
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // Parâmetros de construtor da classe do manipulador
+                // Parâmetros do construtor da classe do manipulador
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
                 ],
                 // Formatação relacionada
                 'formatter' => [
-                    // Nome da classe de formatação
+                    // Nome da classe do processador de formatação
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // Parâmetros de construtor da classe de formatação
-                    'constructor' => [null, 'Y-m-d H:i:s', true],
+                    // Parâmetros do construtor da classe do processador de formatação
+                    'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
         ],
@@ -74,49 +75,49 @@ return [
 ```
 
 ## Múltiplos Canais
-O monolog suporta múltiplos canais, sendo `default` o canal padrão. Se desejar adicionar um canal `log2`, a configuração será semelhante à seguinte:
+O monolog suporta múltiplos canais, sendo `default` o canal predefinido. Se desejar adicionar um canal `log2`, a configuração será semelhante à seguinte:
 ```php
 return [
-    // Canal de registo padrão
+    // Canal de registo predefinido
     'default' => [
-        // Manipuladores do canal padrão, pode configurar vários
+        // Manipuladores do canal predefinido, pode configurar vários
         'handlers' => [
             [   
                 // Nome da classe do manipulador
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // Parâmetros de construtor da classe do manipulador
+                // Parâmetros do construtor da classe do manipulador
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
                 ],
                 // Formatação relacionada
                 'formatter' => [
-                    // Nome da classe de formatação
+                    // Nome da classe do processador de formatação
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // Parâmetros de construtor da classe de formatação
-                    'constructor' => [null, 'Y-m-d H:i:s', true],
+                    // Parâmetros do construtor da classe do processador de formatação
+                    'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
         ],
     ],
     // Canal log2
     'log2' => [
-        // Manipuladores do canal padrão, pode configurar vários
+        // Manipuladores do canal log2, pode configurar vários
         'handlers' => [
             [   
                 // Nome da classe do manipulador
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // Parâmetros de construtor da classe do manipulador
+                // Parâmetros do construtor da classe do manipulador
                 'constructor' => [
                     runtime_path() . '/logs/log2.log',
                     Monolog\Logger::DEBUG,
                 ],
                 // Formatação relacionada
                 'formatter' => [
-                    // Nome da classe de formatação
+                    // Nome da classe do processador de formatação
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // Parâmetros de construtor da classe de formatação
-                    'constructor' => [null, 'Y-m-d H:i:s', true],
+                    // Parâmetros do construtor da classe do processador de formatação
+                    'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
         ],
@@ -124,7 +125,7 @@ return [
 ];
 ```
 
-Para utilizar o canal `log2`, o uso seria como segue:
+Para utilizar o canal `log2`, a utilização é a seguinte:
 ```php
 <?php
 namespace app\controller;

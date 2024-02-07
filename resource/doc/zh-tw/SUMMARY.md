@@ -19,7 +19,7 @@
   - [中間件](middleware.md)
   - [視圖](view.md)
   - [靜態文件](static.md)
-  - [會話管理](session.md)
+  - [session管理](session.md)
   - [異常處理](exception.md)
   - [日誌](log.md)
   - [配置文件](config.md)
@@ -41,7 +41,7 @@
   - [ThinkCache](db/thinkcache.md)
   - [Medoo](db/medoo.md)
   
-- 訊息隊列
+- 消息隊列
   - [Redis隊列](queue/redis.md)
   - [Stomp](queue/stomp.md)
  
@@ -52,7 +52,7 @@
   - [圖像處理](components/image.md)
   - [驗證碼](components/captcha.md)
   - [Event事件](components/event.md)
-  - [Env環境變數組件](components/env.md)
+  - [Env環境變量組件](components/env.md)
   - [Crontab定時任務](components/crontab.md)
   - [Excel表格](components/excel.md)
   - [微信SDK](components/wechat.md)
@@ -83,7 +83,7 @@
   - [日誌](app/log.md)
   - [接入webman-admin](app/admin.md)
   - [打包插件](app/pack.md)
-  - [發布插件](app/publish.md)
+  - [發佈插件](sapp/publish.md)
   - [安裝卸載](app/install.md)
   - [應用市場](app/market.md)
 
@@ -92,7 +92,7 @@
   - [依賴注入](di.md)
   - [AOP](aop.md)
   
-- 其它
+- 其他
   - [安全](others/security.md)
   - [函數禁用檢查](others/disable-function-check.md)
   - [自定義腳本](others/scripts.md)
@@ -109,7 +109,7 @@
   - [慢業務處理](others/task.md)
   - [性能](others/performance.md)
   - [壓力測試](others/benchmarks.md)
-  - [檔案監控](others/monitor.md)
+  - [文件監控](others/monitor.md)
 
 - 升級
   - [1.4](upgrade/1-4.md)

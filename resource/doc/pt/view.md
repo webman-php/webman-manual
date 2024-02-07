@@ -1,87 +1,86 @@
-## Visualizações
-Por padrão, o webman usa a sintaxe nativa do PHP como modelo, e tem o melhor desempenho quando `opcache` está ligado. Além do modelo nativo do PHP, o webman também oferece os motores de modelo [Twig](https://twig.symfony.com/doc/3.x/), [Blade](https://learnku.com/docs/laravel/8.x/blade/9377) e [think-template](https://www.kancloud.cn/manual/think-template/content).
+## Visualização
+Por padrão, o webman utiliza a sintaxe nativa do PHP como modelo, e, ao abrir o `opcache`, tem o melhor desempenho. Além do modelo nativo do PHP, o webman também fornece mecanismos de modelo [Twig](https://twig.symfony.com/doc/3.x/), [Blade](https://learnku.com/docs/laravel/8.x/blade/9377) e [think-template](https://www.kancloud.cn/manual/think-template/content).
 
 ## Habilitando o opcache
-Ao usar visualizações, é altamente recomendável habilitar as opções `opcache.enable` e `opcache.enable_cli` no arquivo php.ini para que o mecanismo de visualização atinja o melhor desempenho. 
+Ao usar a visualização, é altamente recomendável habilitar as opções `opcache.enable` e `opcache.enable_cli` no arquivo `php.ini` para garantir o melhor desempenho do mecanismo de modelo.
 
 ## Instalando o Twig
 1. Instalação via composer
 
-`composer require twig/twig`
+   `composer require twig/twig`
+   
+2. Modifique a configuração em `config/view.php` para:
 
-2. Altere a configuração `config/view.php` para
+   ```php
+   <?php
+   use support\view\Twig;
+   
+   return [
+       'handler' => Twig::class
+   ];
+   ```
 
-```php
-<?php
-use support\view\Twig;
+   > **Dica**
+   > Outras opções de configuração podem ser passadas através de opções, por exemplo:
 
-return [
-    'handler' => Twig::class
-];
-```
-> **Dica**
-> Outras opções de configuração podem ser passadas por meio de options, por exemplo  
-
-```php
-return [
-    'handler' => Twig::class,
-    'options' => [
-        'debug' => false,
-        'charset' => 'utf-8'
-    ]
-];
-```
-
+   ```php
+   return [
+       'handler' => Twig::class,
+       'options' => [
+           'debug' => false,
+           'charset' => 'utf-8'
+       ]
+   ];
+   ```
 
 ## Instalando o Blade
 1. Instalação via composer
 
-```
-composer require psr/container ^1.1.1 webman/blade
-```
+   `composer require psr/container ^1.1.1 webman/blade`
 
-2. Altere a configuração `config/view.php` para
+2. Modifique a configuração em `config/view.php` para:
 
-```php
-<?php
-use support\view\Blade;
-
-return [
-    'handler' => Blade::class
-];
-```
+   ```php
+   <?php
+   use support\view\Blade;
+   
+   return [
+       'handler' => Blade::class
+   ];
+   ```
 
 ## Instalando o think-template
 1. Instalação via composer
 
-`composer require topthink/think-template`
+   `composer require topthink/think-template`
 
-2. Altere a configuração `config/view.php` para
+2. Modifique a configuração em `config/view.php` para:
 
-```php
-<?php
-use support\view\ThinkPHP;
+   ```php
+   <?php
+   use support\view\ThinkPHP;
+   
+   return [
+       'handler' => ThinkPHP::class,
+   ];
+   ```
 
-return [
-    'handler' => ThinkPHP::class,
-];
-```
-> **Dica**
-> Outras opções de configuração podem ser passadas por meio de options, por exemplo
+   > **Dica**
+   > Outras opções de configuração podem ser passadas através de opções, por exemplo:
 
-```php
-return [
-    'handler' => ThinkPHP::class,
-    'options' => [
-        'view_suffix' => 'html',
-        'tpl_begin' => '{',
-        'tpl_end' => '}'
-    ]
-];
-```
+   ```php
+   return [
+       'handler' => ThinkPHP::class,
+       'options' => [
+           'view_suffix' => 'html',
+           'tpl_begin' => '{',
+           'tpl_end' => '}'
+       ]
+   ];
+   ```
 
 ## Exemplo de motor de modelo PHP nativo
-Crie o arquivo `app/controller/UserController.php` como abaixo
+Crie o arquivo `app/controller/UserController.php` com o seguinte conteúdo:
 
 ```php
 <?php
@@ -98,7 +97,7 @@ class UserController
 }
 ```
 
-Crie o arquivo `app/view/user/hello.html` como abaixo
+Crie o arquivo `app/view/user/hello.html` com o seguinte conteúdo:
 
 ```html
 <!doctype html>
@@ -114,8 +113,8 @@ hello <?=htmlspecialchars($name)?>
 ```
 
 ## Exemplo de motor de modelo Twig
+Modifique a configuração em `config/view.php` para:
 
-Altere a configuração `config/view.php` para
 ```php
 <?php
 use support\view\Twig;
@@ -125,7 +124,7 @@ return [
 ];
 ```
 
-`app/controller/UserController.php` como abaixo
+`app/controller/UserController.php` com o seguinte conteúdo:
 
 ```php
 <?php
@@ -142,7 +141,7 @@ class UserController
 }
 ```
 
-O arquivo `app/view/user/hello.html` como abaixo
+O arquivo `app/view/user/hello.html` com o seguinte conteúdo:
 
 ```html
 <!doctype html>
@@ -159,8 +158,9 @@ hello {{name}}
 
 Para mais documentação, consulte [Twig](https://twig.symfony.com/doc/3.x/)
 
-## Exemplo de modelo Blade
-Altere a configuração `config/view.php` para
+## Exemplo de motor de modelo Blade
+Modifique a configuração em `config/view.php` para:
+
 ```php
 <?php
 use support\view\Blade;
@@ -170,7 +170,7 @@ return [
 ];
 ```
 
-`app/controller/UserController.php` como abaixo
+`app/controller/UserController.php` com o seguinte conteúdo:
 
 ```php
 <?php
@@ -187,7 +187,7 @@ class UserController
 }
 ```
 
-O arquivo `app/view/user/hello.blade.php` como abaixo
+O arquivo `app/view/user/hello.blade.php` com o seguinte conteúdo:
 
 > Observe que a extensão do modelo blade é `.blade.php`
 
@@ -206,8 +206,9 @@ hello {{$name}}
 
 Para mais documentação, consulte [Blade](https://learnku.com/docs/laravel/8.x/blade/9377)
 
-## Exemplo de modelo think-template
-Altere a configuração `config/view.php` para
+## Exemplo de motor de modelo ThinkPHP
+Modifique a configuração em `config/view.php` para:
+
 ```php
 <?php
 use support\view\ThinkPHP;
@@ -217,7 +218,7 @@ return [
 ];
 ```
 
-`app/controller/UserController.php` como abaixo
+`app/controller/UserController.php` com o seguinte conteúdo:
 
 ```php
 <?php
@@ -234,7 +235,7 @@ class UserController
 }
 ```
 
-O arquivo `app/view/user/hello.html` como abaixo
+O arquivo `app/view/user/hello.html` com o seguinte conteúdo:
 
 ```html
 <!doctype html>
@@ -252,7 +253,8 @@ hello {$name}
 Para mais documentação, consulte [think-template](https://www.kancloud.cn/manual/think-template/content)
 
 ## Atribuição de modelos
-Além de usar `view(template, data)` para atribuir modelos, também podemos atribuir modelos em qualquer lugar chamando `View::assign()`. Por exemplo:
+Além de usar `view(template, data)` para atribuir modelos, também podemos atribuir modelos em qualquer local chamando `View::assign()`. Por exemplo:
+
 ```php
 <?php
 namespace app\controller;
@@ -274,19 +276,20 @@ class UserController
 }
 ```
 
-`View::assign()` é muito útil em alguns cenários, como em sistemas em que cada página precisa exibir as informações do usuário que fez o login. Nesse caso, em vez de atribuir as informações do usuário a cada página usando `view('template', ['user_info' => 'user info'])`, podemos obter as informações do usuário por meio de um middleware e, em seguida, atribuir as informações do usuário ao modelo usando `View::assign()`.
+`View::assign()` é muito útil em alguns cenários, como em um sistema em que cada página deve exibir informações do usuário conectado. Se todas as páginas tiverem que atribuir estas informações usando `view('template', ['user_info' => 'user info'])`, seria muito trabalhoso. Uma solução seria obter as informações do usuário em um middleware e então atribuí-las ao modelo usando `View::assign()`.
 
 ## Sobre o caminho do arquivo de visualização
-#### Controlador
-Quando o controlador chama `view('nome_do_modelo', [])`, o arquivo de visualização é procurado conforme as regras abaixo:
 
-1. Se não houver vários aplicativos, o arquivo de visualização correspondente é procurado em `app/view/`.
-2. No caso de [vários aplicativos](multiapp.md), o arquivo de visualização correspondente é procurado em `app/nome_do_aplicativo/view/`.
+#### Controladores
+Quando os controladores chamam `view('template',[])`, os arquivos de visualização são pesquisados de acordo com as seguintes regras:
 
-Resumindo, se `$request->app` estiver vazio, o arquivo de visualização será procurado em `app/view/`; caso contrário, será procurado em `app/{$request->app}/view/`.
+1. Se não houver múltiplos aplicativos, utilize os arquivos de visualização em `app/view/`.
+2. Para [múltiplos aplicativos](multiapp.md), utilize os arquivos de visualização em `app/nome_do_aplicativo/view/`.
 
-#### Função de fechamento
-Como `$request->app` está vazio, não pertence a nenhum aplicativo, então a função de fechamento usará o arquivo de visualização em `app/view/`. Por exemplo, se um roteamento estiver definido em `config/route.php` assim:
+Resumindo, se `$request->app` estiver vazio, utilize os arquivos de visualização em `app/view/`; caso contrário, utilize os arquivos de visualização em `app/{$request->app}/view/`.
+
+#### Funções de fechamento
+Como `$request->app` está vazio, não pertence a nenhum aplicativo, então as funções de fechamento utilizam os arquivos de visualização em `app/view/`, por exemplo, a definição de rota em `config/route.php`:
 
 ```php
 Route::any('/admin/user/get', function (Reqeust $reqeust) {
@@ -294,17 +297,17 @@ Route::any('/admin/user/get', function (Reqeust $reqeust) {
 });
 ```
 
-Esse roteamento usará o arquivo de visualização `app/view/user.html` como modelo (se for um modelo blade, será `app/view/user.blade.php`).
+Usará o arquivo `app/view/user.html` como modelo (quando usando o modelo blade, o arquivo de modelo deve ser `app/view/user.blade.php`).
 
-#### Especificando um aplicativo
-Para reutilizar modelos em modo de aplicativo múltiplo, `view($template, $data, $app = null)` fornece um terceiro parâmetro `$app`, que pode ser usado para especificar qual diretório de modelo em um aplicativo deve ser usado. Por exemplo, `view('user', [], 'admin')` forçará o uso do arquivo de visualização em `app/admin/view/`.
+#### Aplicativo especificado
+Para reutilizar modelos em modos de aplicativos múltiplos, a função `view($template, $data, $app = null)` fornece o terceiro parâmetro `$app` para especificar qual aplicativo utilizar para os arquivos de visualização. Por exemplo, `view('user', [], 'admin')` utilizará os arquivos de visualização em `app/admin/view/`.
 
 ## Estendendo o twig
 
 > **Nota**
-> Esta funcionalidade requer webman-framework>=1.4.8
+> Este recurso requer webman-framework >= 1.4.8
 
-Podemos estender a instância de visualização do twig, fornecendo uma chamada de retorno para a configuração `view.extension`, por exemplo, em `config/view.php`:
+Podemos estender a instância de visualização do twig fornecendo o callback `view.extension` nas configurações. Por exemplo, em `config/view.php`:
 
 ```php
 <?php
@@ -312,17 +315,16 @@ use support\view\Twig;
 return [
     'handler' => Twig::class,
     'extension' => function (Twig\Environment $twig) {
-        $twig->addExtension(new seu\namespace\SuaExtensao()); // Adiciona extensão
-        $twig->addFilter(new Twig\TwigFilter('rot13', 'str_rot13')); // Adiciona filtro
-        $twig->addFunction(new Twig\TwigFunction('nome_funcao', function () {})); // Adiciona função
+        $twig->addExtension(new your\namespace\YourExtension()); // Adicionar extensão
+        $twig->addFilter(new Twig\TwigFilter('rot13', 'str_rot13')); // Adicionar filtro
+        $twig->addFunction(new Twig\TwigFunction('function_name', function () {})); // Adicionar função
     }
 ];
 ```
-
-## Estendendo o blade
-> **Nota**
-> Esta funcionalidade requer webman-framework>=1.4.8
-Da mesma forma, podemos estender a instância de visualização do blade fornecendo uma chamada de retorno para a configuração `view.extension`, por exemplo, em `config/view.php`:
+## Extensão Blade
+> **Observação**
+> Este recurso requer webman-framework>=1.4.8
+Da mesma forma, podemos estender a instância de visualização do Blade fornecendo um retorno de chamada para a configuração `view.extension`, como no exemplo abaixo em `config/view.php`:
 
 ```php
 <?php
@@ -330,22 +332,22 @@ use support\view\Blade;
 return [
     'handler' => Blade::class,
     'extension' => function (Jenssegers\Blade\Blade $blade) {
-        // Adiciona diretiva ao blade
-        $blade->directive('minhadatabr', function ($timestamp) {
+        // Adiciona diretivas ao blade
+        $blade->directive('mydate', function ($timestamp) {
             return "<?php echo date('Y-m-d H:i:s', $timestamp); ?>";
         });
     }
 ];
 ```
 
-## Usando componentes de blade
+## Utilização de componentes blade
 
-> **Observação
-> Requer webman/blade>=1.5.2**
+> **Observação**
+> Requer webman/blade>=1.5.2
 
-Suponha que seja necessário adicionar um componente de alerta.
+Suponha que seja necessário adicionar um componente de Alerta.
 
-**Crie um arquivo `app/view/components/Alert.php`**
+**Crie `app/view/components/Alert.php`**
 ```php
 <?php
 
@@ -368,15 +370,14 @@ class Alert extends Component
 }
 ```
 
-**Crie um arquivo `app/view/components/alert.blade.php`**
-```
+**Crie `app/view/components/alert.blade.php`**
+```php
 <div>
     <b style="color: red">hello blade component</b>
 </div>
 ```
 
-**`/config/view.php` será semelhante ao código a seguir**
-
+**`/config/view.php` possuirá um código semelhante ao abaixo**
 ```php
 <?php
 use support\view\Blade;
@@ -388,7 +389,7 @@ return [
 ];
 ```
 
-Com isso, o componente de alerta do Blade está configurado. O uso no modelo é semelhante ao exemplo a seguir:
+Assim, o componente Alerta do Blade está configurado. O uso no template será semelhante ao seguinte
 ```html
 <!doctype html>
 <html>
@@ -404,19 +405,18 @@ Com isso, o componente de alerta do Blade está configurado. O uso no modelo é 
 </html>
 ```
 
-## Estendendo think-template
-O think-template usa `view.options.taglib_pre_load` para estender a biblioteca de tags, por exemplo
 
+## Extensão think-template
+O think-template utiliza `view.options.taglib_pre_load` para estender bibliotecas de tags, por exemplo
 ```php
 <?php
 use support\view\ThinkPHP;
 return [
     'handler' => ThinkPHP::class,
     'options' => [
-        'taglib_pre_load' => seu\nome\espaço\Taglib::class,
+        'taglib_pre_load' => your\namspace\Taglib::class,
     ]
 ];
 ```
 
 Para mais detalhes, consulte [Extensão de tags think-template](https://www.kancloud.cn/manual/think-template/1286424)
-

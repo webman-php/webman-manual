@@ -1,70 +1,68 @@
 # Temel Eklenti Oluşturma ve Yayınlama Süreci
 
-## Prensip
-1. Çapraz geçiş eklentisi örneği olarak, eklenti üç bölüme ayrılır: Birincisi, çapraz geçiş orta yazılım dosyası, ikincisi, middleware.php adlı orta yazılım yapılandırma dosyası ve üçüncüsü, komut kullanılarak otomatik olarak oluşturulan Install.php dosyası.
-2. Üç dosyayı birleştirip ve onları composer'a yayınlamak için bir komut kullanıyoruz.
-3. Kullanıcı, çapraz geçiş eklentisini composer ile yüklediğinde, Install.php dosyası çapraz geçiş orta yazılım dosyasını ve yapılandırma dosyasını `{ana proje}/config/plugin` klasörüne kopyalar ve webman tarafından yüklenmesini sağlar. Bu, çapraz geçiş orta yazılım dosyasının otomatik yapılandırma ile etkin hale gelmesini sağlar.
-4. Kullanıcı, bu eklentiyi composer ile kaldırdığında, Install.php dosyası ilgili çapraz geçiş orta yazılım dosyasını ve yapılandırma dosyasını siler ve eklentinin otomatik olarak kaldırılmasını sağlar.
+## İlke
+1. CORS eklentisi örneği olarak, eklentiler üç bölüme ayrılır: CORS middleware program dosyası, middleware.php adlı middleware yapılandırma dosyası ve komutla otomatik oluşturulan Install.php.
+2. Üç dosyayı bir araya getirip ve composer'a yayınlamak için bir komut kullanırız.
+3. Kullanıcı CORS eklentisini composer ile yüklediğinde, Install.php dosyası, CORS middleware program dosyalarını ve yapılandırma dosyalarını `{ana proje}/config/plugin` altına kopyalar ve webman tarafından yüklenmesini sağlar. Otomatik olarak CORS middleware dosyasının yapılandırılmasını sağlar.
+4. Kullanıcı eklentiyi composer ile kaldırdığında, Install.php ilgili CORS middleware program dosyalarını ve yapılandırma dosyalarını kaldırarak eklentinin otomatik olarak kaldırılmasını sağlar.
 
 ## Standart
-1. Eklenti adı, `Üretici` ve `Eklenti Adı` olmak üzere iki bölümden oluşur, örneğin `webman/push`, bu, composer paket adıyla eşleşir.
-2. Eklenti yapılandırma dosyaları genellikle `config/plugin/Üretici/Eklenti Adı/` klasörüne yerleştirilir (console komutu otomatik olarak yapılandırma dizinini oluşturur). Eğer eklenti yapılandırmaya ihtiyaç duymuyorsa, otomatik olarak oluşturulan yapılandırma klasörünü silmek gerekir.
-3. Eklenti yapılandırma klasörü yalnızca app.php (eklenti ana yapılandırma), bootstrap.php (işlem başlatma yapılandırması), route.php (rota yapılandırması), middleware.php (orta yazılım yapılandırması), process.php (özel işlem yapılandırması), database.php (veritabanı yapılandırması), redis.php (redis yapılandırması) ve thinkorm.php (thinkorm yapılandırması) dosyalarını destekler. Bu yapılandırmalar otomatik olarak webman tarafından tanınır.
-4. Eklenti yapılandırmasına aşağıdaki yöntemlerle erişilir: `config('plugin.Üretici.Eklenti Adı.ayar dosyası.belirli yapılandırma öğesi');` örneğin `config('plugin.webman.push.app.app_key')`
-5. Eklentinin kendi veritabanı yapılandırması varsa, buna aşağıdaki şekilde erişilir: `illuminate/database` `Db::connection('eklenti.Üretici.Eklenti Adı.belirli bağlantı')`, `thinkrom` için `Db::connct('eklenti.Üretici.Eklenti Adı.belirli bağlantı')`
-6. Eğer eklenti, `app/` klasörüne iş dosyası yerleştirmek istiyorsa, bu dosyaların kullanıcı projesi veya diğer eklentilerle çakışmadığından emin olmalıdır.
-7. Eklentiler, ana projeye dosya veya klasör kopyalamaktan kaçınmalıdır. Örneğin, çapraz geçiş eklentisi, yapılandırma dosyasının yanı sıra middleware dosyasının da ana projeye kopyalanmasına gerek olmadan `vendor/webman/cros/src` klasörüne konulmalıdır.
-8. Eklenti ad alanları büyük harf önerilir, örneğin Webman/Console.
+1. Eklenti adı, `üretici` ve `eklenti adı` olmak üzere iki kısımdan oluşur, örneğin `webman/push`, bu, composer paket adıyla eşleşir.
+2. Eklenti yapılandırma dosyaları genellikle `config/plugin/üretici/eklenti adı/` içine yerleştirilir (console komutları otomatik olarak yapılandırma dizini oluşturacaktır). Eğer eklenti yapılandırmaya ihtiyaç duymuyorsa, otomatik oluşturulan yapılandırma dizinini kaldırmanız gerekir.
+3. Eklenti yapılandırma dizini, sadece app.php eklenti ana yapılandırması, bootstrap.php işlem başlatma yapılandırması, route.php yönlendirme yapılandırması, middleware.php middleware yapılandırması, process.php özel işlem yapılandırması, database.php veritabanı yapılandırması, redis.php redis yapılandırması, thinkorm.php thinkorm yapılandırması gibi yapılandırmaları desteklemektedir. Bu yapılandırmalar otomatik olarak webman tarafından tanınır.
+4. Eklenti, yapılandırmaya erişmek için `config('plugin.üretici.eklenti adı. yapılandırma dosyası. belirli yapılandırma öğesi');` gibi bir yöntem kullanır, örneğin `config('plugin.webman.push.app.app_key')`
+5. Eklentinin kendi veritabanı yapılandırması varsa, aşağıdaki yöntemlerle erişilir: `illuminate/database` için `Db::connection('plugin.üretici.eklenti adı. belirli bağlantı')`, `thinkrom` için `Db::connct('plugin.üretici.eklenti adı. belirli bağlantı')`
+6. Eğer eklentinin `app/` dizinine iş dosyaları koyması gerekiyorsa, bu dosyaların ana proje ve diğer eklentilerle çakışmadığından emin olun.
+7. Eklentinin mümkün olduğunca ana projeye dosya veya dizin kopyalamaktan kaçınması önerilir, örneğin, CORS eklentisi yapılandırma dosyalarının yanı sıra, middleware dosyaları da ana projeye kopyalanacaksa, bu dosyaların `vendor/webman/cros/src` altında olması ve ana projeye kopyalanmaması gerekir.
+8. Eklenti ad alanı büyük harf kullanılması önerilir, örneğin Webman/Console.
 
 ## Örnek
 
-**'webman/console' komut satırı kurulumu**
+**`webman/console` komut satırı yükleme**
 
 `composer require webman/console`
 
-#### Eklenti Oluşturma
+#### Eklenti Oluştur
 
-'Eğer oluşturulmak istenen eklentinin adı 'foo/admin' ise (ad ayrıca yayınlama projesi adı olmalıdır, ad küçük harf olmalıdır),
-Aşağıdaki komutu çalıştırın:
+Örneğin, oluşturulan eklenti adı `foo/admin` (ad aynı zamanda sonraki olarak yayımlanacak proje adıdır, ad küçük harfle yazılmalıdır)
+Aşağıdaki komutu çalıştırın
 `php webman plugin:create --name=foo/admin`
 
-Eklenti oluşturulduktan sonra `vendor/foo/admin` klasörü, eklentiye ait dosyaların saklandığı yerdir ve `config/plugin/foo/admin` klasörü de eklenti yapılandırma dosyalarının saklandığı yerdir.
+Eklenti oluşturulduktan sonra `vendor/foo/admin` (eklentiyle ilgili dosyaları depolamak için) ve `config/plugin/foo/admin` (eklentiyle ilgili yapılandırmaları depolamak için) dizinlerini oluşturulur.
 
 > Not
-> `config/plugin/foo/admin` app.php (eklenti ana yapılandırma), bootstrap.php (işlem başlatma yapılandırması), route.php (rota yapılandırması), middleware.php (orta yazılım yapılandırması), process.php (özel işlem yapılandırması), database.php (veritabanı yapılandırması), redis.php (redis yapılandırması) ve thinkorm.php (thinkorm yapılandırması) yapılandırmalarını destekler. Bu yapılandırmalar webman tarafından otomatik olarak tanınır ve genel yapılandırmaya birleştirilir.
+> `config/plugin/foo/admin` şu yapılandırmaları destekler: app.php eklenti ana yapılandırması, bootstrap.php işlem başlatma yapılandırması, route.php yönlendirme yapılandırması, middleware.php middleware yapılandırması, process.php özel işlem yapılandırması, database.php veritabanı yapılandırması, redis.php redis yapılandırması, thinkorm.php thinkorm yapılandırması. Yapılandırma biçimi webman ile aynıdır ve bu yapılandırmalar otomatik olarak webman tarafından tanınarak yapılandırma içine birleştirilir.
+`plugin` önekiyle erişilir, örneğin config('plugin.foo.admin.app');
 
-> Eklenti oluşturulduktan sonra, `config/plugin/foo/admin` klasörüne yukarıdaki yapılandırmalardan birini içeren 'app.php', 'middleware.php' vb. dosyalar eklenmelidir. Bu yapılandırmalar, eklenti yapılandırmasında otomatik olarak görüntülenir ve webman tarafından tanınan yapılandırma dosyalarına dahil edilir; bu da, yapılandırmaların webman içinde otomatik olarak birleşmesini sağlar.
+#### Eklenti Dışa Aktar
 
-#### Eklentiyi İhracat Etme
-
-Eklenti geliştirme tamamlandıktan sonra, aşağıdaki komutu çalıştırarak eklentiyi ihracat edin:
+Eklenti geliştirildikten sonra, aşağıdaki komutla eklenti dışa aktarılır
 `php webman plugin:export --name=foo/admin`
 
 > Açıklama
-> İhracat işlemi sonrasında, config/plugin/foo/admin klasörü vendor/foo/admin/src altına kopyalanır ve otomatik olarak Install.php dosyası oluşturulur. Install.php, eklenti otomatik kurulum ve kaldırma işlemlerinde özel işlemler yürütmek için kullanılır.
-> Kurulumun varsayılan işlemi, vendor/foo/admin/src altındaki yapılandırmaların mevcut projenin config/plugin klasörüne kopyalanmasıdır.
-> Kaldırmak için varsayılan işlem, mevcut projenin config/plugin klasöründeki yapılandırma dosyalarının silinmesidir.
-> Özel işlemler yapmak için Install.php dosyasını özelleştirebilirsiniz.
+Dışa aktarıldıktan sonra, config/plugin/foo/admin dizini vendor/foo/admin/src dizinine kopyalanır ve aynı zamanda otomatik olarak bir Install.php oluşturulur; Install.php, otomatik yükleme ve kaldırma sırasında bazı işlemleri gerçekleştirmek üzere kullanılır.
+Varsayılan yükleme işlemi, vendor/foo/admin/src dizinindeki yapılandırmaları mevcut projenin config/plugin altına kopyalamaktır.
+Kaldırma işlemi varsayılan olarak mevcut projenin config/plugin dizinindeki yapılandırma dosyalarını siler.
+Install.php dosyasını, kurulum ve kaldırma sırasında özelleştirilmiş işlemler yapmak için değiştirebilirsiniz.
 
-#### Eklenti Gönderimi
-* Varsayalım ki, zaten bir [github](https://github.com) ve [packagist](https://packagist.org) hesabınız var
-* [github](https://github.com) üzerinde bir admin projesi oluşturun ve kodları yükleyin, projenin adresini varsayalım `https://github.com/yourusername/admin`
-* `https://github.com/yourusername/admin/releases/new` adresine girin ve `v1.0.0` gibi bir sürüm yayınlayın
-* [packagist](https://packagist.org) üzerinde 'Submit' düğmesine tıklayın, github proje adresinizi `https://github.com/yourusername/admin` adresini gönderin ve bu şekilde eklentinin yayına alım işlemini tamamlamış olacaksınız
+#### Eklenti Gönder
+* Varsayalım ki [github](https://github.com) ve [packagist](https://packagist.org) hesabınız var.
+* [github](https://github.com)'da bir admin projesi oluşturun ve kodları yükleyin, projenin adresi varsayılan olarak `https://github.com/yourusername/admin` olsun.
+* `https://github.com/yourusername/admin/releases/new` adresine giderek `v1.0.0` gibi bir sürüm yayınlayın.
+* [packagist](https://packagist.org)'e gidin ve gezinme çubuğunda `Submit`e tıklayarak github proje adresinizi, `https://github.com/yourusername/admin`, gönderin. Böylece bir eklenti yayınlama işlemi tamamlanmış olur.
 
-> **İpucu**
-> Eğer 'packagist' üzerinde eklenti gönderirken çakışma hatası alırsanız, başka bir üretici adı kullanabilirsiniz, örneğin `foo/admin` yerine `myfoo/admin`.
+> İpucu
+> `Packagist`te eklenti gönderirken çakışma hatası görünürse, başka bir üretici adı seçebilirsiniz. Örneğin, `foo/admin` yerine `myfoo/admin`.
 
-Eklenti projesinin kodları güncellendiğinde, kodları github'e senkronize etmeniz ve tekrar `https://github.com/yourusername/admin/releases/new` adresine girerek yeni bir sürüm yayınlamanız, ardından `https://packagist.org/packages/foo/admin` sayfasına gelerek `Güncelleme` butonuna tıklayarak sürümü güncellemeniz gerekmektedir.
-
+Eklenti proje kodunuzu güncellediğinizde, kodları github'a senkronize etmeniz ve tekrar `https://github.com/yourusername/admin/releases/new` adresine giderek bir sürüm yayınlamanız ve ardından `https://packagist.org/packages/foo/admin` sayfasında `Update` düğmesine tıklamanız gerekecektir.
 ## Eklentiye Komut Ekleme
-Bazı durumlarda, eklentimiz özel işlevler sağlamak için özel komutlara ihtiyaç duyar, örneğin, `webman/redis-queue` eklentisi yükledikten sonra, projeye otomatik olarak `redis-queue:consumer` komutu eklenecektir. Kullanıcı, `php webman redis-queue:consumer send-mail` komutunu çalıştırarak projeye SendMail.php adında bir tüketici sınıfı oluşturabilir, bu hızlı gelişimi destekler.
+Bazı durumlarda eklentilerimiz, bazı yardımcı işlevleri sağlamak için özel komutlara ihtiyaç duyabilir. Örneğin, `webman/redis-queue` eklentisini yükledikten sonra, projeye otomatik olarak `redis-queue:consumer` komutu eklenir. Kullanıcılar sadece `php webman redis-queue:consumer send-mail` komutunu çalıştırdıklarında, projede SendMail.php adında bir tüketici sınıfı oluşturulacaktır. Bu, hızlı bir şekilde geliştirme yapmaya yardımcı olur.
 
-'foo/admin' eklentisinin `foo-admin:add` komutu eklemesi gerektiğini varsayalım, aşağıdaki adımları inceleyin.
+Örneğin `foo/admin` eklentisi, `foo-admin:add` komutunu eklemesi gerektiğini varsayalım. Aşağıdaki adımları takip edin.
 
 #### Komut Oluşturma
 
-**Yeni komut dosyası oluşturma `vendor/foo/admin/src/FooAdminAddCommand.php`**
+**Komut dosyasını oluşturun `vendor/foo/admin/src/FooAdminAddCommand.php`**
 
 ```php
 <?php
@@ -80,7 +78,7 @@ use Symfony\Component\Console\Input\InputArgument;
 class FooAdminAddCommand extends Command
 {
     protected static $defaultName = 'foo-admin:add';
-    protected static $defaultDescription = 'Bu, komut hakkında bir açıklamadır';
+    protected static $defaultDescription = 'Bu komutun tanımı burada yer alır';
 
     /**
      * @return void
@@ -98,7 +96,7 @@ class FooAdminAddCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getArgument('name');
-        $output->writeln("Admin eklendi $name");
+        $output->writeln("Admin ekle $name");
         return self::SUCCESS;
     }
 
@@ -106,10 +104,10 @@ class FooAdminAddCommand extends Command
 ```
 
 > **Not**
-> Eklentiler arası komut çakışmasını önlemek için, komut biçiminin `Üretici-Eklenti Adı:Özel Komut` şeklinde olması önerilir, örneğin, `foo/admin` eklentisinin tüm komutları `foo-admin:` ön ekiyle başlamalıdır, örneğin, `foo-admin:add`.
+> Eklentiler arasında komut çakışmasını önlemek için komut satırı formatı önerilir `üretici-eklentiadı:belirli komut` örneğin `foo/admin` eklentisi için tüm komutlarının öneki olarak `foo-admin:` olmalıdır, örneğin `foo-admin:add`.
 
 #### Yapılandırma Ekleme
-**Yeni yapılandırma ekle `config/plugin/foo/admin/command.php`**
+**Yapılandırma ekleyin `config/plugin/foo/admin/command.php`**
 ```php
 <?php
 
@@ -117,12 +115,12 @@ use Foo\Admin\FooAdminAddCommand;
 
 return [
     FooAdminAddCommand::class,
-    // ....birden fazla yapılandırma eklenebilir....
+    // ....birden fazla yapılandırma eklenebilir...
 ];
 ```
 
 > **İpucu**
-> `command.php` özelleştirilmiş komutlar için eklenti yapılandırmasıdır, her bir öğe bir komut dosyasına karşılık gelir, her bir dosya da bir komuta karşılık gelir. Kullanıcı komut satırı çalıştırdığında, `webman/console` otomatik olarak her eklentinin `command.php` dosyasında tanımlanan özel komutlarını yükler. Daha fazla bilgi için [Command Line](console.md)'a bakabilirsiniz.
+> `command.php` eklentiye özel komutlar eklemek için kullanılır, dizide her bir öğe bir komut dosyasını temsil eder, her bir dosya bir komut ile ilişkilidir. Kullanıcı komut satırını çalıştırdığında, `webman/console` otomatik olarak her eklentinin `command.php` dosyasında belirtilen özel komutları yükler. Daha fazla komut satırıyla ilgili bilgi için [Komut Satırı](console.md) sayfasına bakabilirsiniz.
 
-#### İhracatı Gerçekleştirme
-`php webman plugin:export --name=foo/admin` komutunu çalıştırarak eklentinizi ihracat edin ve packagist'e gönderin. Bu sayede, `foo/admin` eklentisini yükleyen kullanıcılar `foo-admin:add` komutu ekleyecektir. `php webman foo-admin:add jerry` komutunu çalıştırarak `Admin eklendi jerry` yazısının çıktısını alabilirsiniz.
+#### Dışa Aktarma İşlemini Gerçekleştirme
+`php webman plugin:export --name=foo/admin` komutunu çalıştırarak, eklentiyi dışa aktarın ve `packagist`'e gönderin. Kullanıcılar `foo/admin` eklentisini yükledikten sonra, `foo-admin:add` komutu otomatik olarak eklenir. `php webman foo-admin:add jerry` komutunun çalıştırılması durumunda `Admin ekle jerry` yazdırılır.

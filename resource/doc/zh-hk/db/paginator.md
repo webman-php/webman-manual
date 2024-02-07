@@ -23,20 +23,20 @@ public function index(Request $request)
 |$paginator->currentPage()|獲取當前頁碼|
 |$paginator->firstItem()|獲取結果集中第一個數據的編號|
 |$paginator->getOptions()|獲取分頁器選項|
-|$paginator->getUrlRange($start, $end)|創建指定頁數範圍的 URL|
+|$paginator->getUrlRange($start, $end)|創建指定頁數範圍的URL|
 |$paginator->hasPages()|是否有足夠多的數據來創建多個頁面|
 |$paginator->hasMorePages()|是否有更多的頁面可供展示|
 |$paginator->items()|獲取當前頁的數據項|
 |$paginator->lastItem()|獲取結果集中最後一個數據的編號|
 |$paginator->lastPage()|獲取最後一頁的頁碼（在 simplePaginate 中不可用）|
-|$paginator->nextPageUrl()|獲取下一頁的 URL|
+|$paginator->nextPageUrl()|獲取下一頁的URL|
 |$paginator->onFirstPage()|當前頁是否為第一頁|
 |$paginator->perPage()|獲取每一頁顯示的數量總數|
-|$paginator->previousPageUrl()|獲取上一頁的 URL|
+|$paginator->previousPageUrl()|獲取上一頁的URL|
 |$paginator->total()|獲取結果集中的數據總數（在 simplePaginate 中不可用）|
-|$paginator->url($page)|獲取指定頁的 URL|
-|$paginator->getPageName()|獲取用於存儲頁碼的查詢參數名|
-|$paginator->setPageName($name)|設置用於存儲頁碼的查詢參數名|
+|$paginator->url($page)|獲取指定頁的URL|
+|$paginator->getPageName()|獲取用於儲存頁碼的查詢參數名|
+|$paginator->setPageName($name)|設置用於儲存頁碼的查詢參數名|
 
 > **注意**
 > 不支持 `$paginator->links()` 方法
@@ -46,7 +46,6 @@ webman中無法使用 `$paginator->links()` 方法渲染分頁按鈕，不過我
 
 **安裝**
 `composer require "jasongrimes/paginator:~1.0"`
-
 
 **後端**
 ```php
@@ -75,7 +74,7 @@ class UserController
 ```html
 <html>
 <head>
-  <!-- 內置支持 Bootstrap 分頁樣式 -->
+  <!-- 內置支援 Bootstrap 分頁樣式 -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -86,12 +85,12 @@ class UserController
 </html>
 ```
 
-**模板(twig)** 
+**模板(twig)**
 新建模版 app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- 內置支持 Bootstrap 分頁樣式 -->
+  <!-- 內置支援 Bootstrap 分頁樣式 -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -104,12 +103,12 @@ class UserController
 </html>
 ```
 
-**模板(blade)** 
+**模板(blade)**
 新建模版 app/view/user/get.blade.php
 ```html
 <html>
 <head>
-  <!-- 內置支持 Bootstrap 分頁樣式 -->
+  <!-- 內置支援 Bootstrap 分頁樣式 -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -125,7 +124,7 @@ class UserController
 ```html
 <html>
 <head>
-    <!-- 內置支持 Bootstrap 分頁樣式 -->
+    <!-- 內置支援 Bootstrap 分頁樣式 -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -155,7 +154,7 @@ public function index(Request $request)
 ```html
 <html>
 <head>
-    <!-- 內置支持 Bootstrap 分頁樣式 -->
+    <!-- 內置支援 Bootstrap 分頁樣式 -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>

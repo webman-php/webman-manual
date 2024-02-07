@@ -1,9 +1,9 @@
 # সহজ উদাহরণ
 
-## স্ট্রিং রিটার্ণ
+## স্ট্রিং রিটার্ন
 **কন্ট্রোলার তৈরি**
 
-তৈরি করুন ফাইল `app/controller/UserController.php` নিম্নলিখিত মত
+নিচের মত `app/controller/UserController.php` ফাইলটি তৈরি করুন
 
 ```php
 <?php
@@ -16,22 +16,22 @@ class UserController
     public function hello(Request $request)
     {
         $default_name = 'webman';
-        // get রিকোয়েস্ট থেকে নাম প্যারামিটার পেতে, যদি নাম প্যারামিটার না পাওয়া যায়, তবে $default_name রিটার্ণ করুন
+        // গেট রিকুয়েস্ট থেকে 'name' প্যারামিটারটি নিন, যদি 'name' প্যারামিটারটি না থাকে তাহলে $default_name রিটার্ন করুন
         $name = $request->get('name', $default_name);
-        // স্ট্রিং ফিরিয়ে দিন ব্রাউজারকে
+        // ব্রাউজারে স্ট্রিং রিটার্ন করুন
         return response('hello ' . $name);
     }
 }
 ```
 
-**প্রবেশ**
+**ভিজিট**
 
-ব্রাউজারে `http://127.0.0.1:8787/user/hello?name=tom` এ প্রবেশ করুন
+ব্রাউজারে `http://127.0.0.1:8787/user/hello?name=tom` এ ভিজিট করুন
 
-ব্রাউজার হ্যালো টম ফিরিয়ে দিবে
+ব্রাউজার সে `hello tom` রিটার্ন করবে।
 
-## json রিটার্ণ
-ফাইল `app/controller/UserController.php` পরিবর্তন করুন নিম্নলিখিত মত
+## JSON রিটার্ন
+`app/controller/UserController.php` ফাইলটি নিচের মত পরিবর্তন করুন
 
 ```php
 <?php
@@ -54,22 +54,24 @@ class UserController
 }
 ```
 
-**প্রবেশ**
+**ভিজিট**
 
-ব্রাউজারে `http://127.0.0.1:8787/user/hello?name=tom` এ প্রবেশ করুন
+ব্রাউজারে `http://127.0.0.1:8787/user/hello?name=tom` এ ভিজিট করুন
 
-ব্রাউজার এ আসবে `{"code":0,"msg":"ok","data":"tom"}`
+ব্রাউজার সে `{"code":0,"msg":"ok","data":"tom"}` রিটার্ন করবে।
 
-json হেল্পার ফাংশন ব্যবহার করে ডাটা ফিরিয়ে দেওয়ার সময় স্বয়ংক্রিয়ভাবে একটি হেডার যুক্ত করা হয় `Content-Type: application/json`
+তথ্য রিটার্ন করার জন্য json সহায়ক ফাংশন ব্যবহার করা হলে স্বয়ংক্রিয়ভাবে হেডার `Content-Type: application/json` এড করা হয়।
 
-## xml রিটার্ণ
-একইভাবে, হেল্পার ফাংশন `xml($xml)` ব্যবহার করে `xml` রিস্পন্স ফিরিয়ে দিবে যেখানে `$xml` প্যারামিটারটি হতে পারে `xml` স্ট্রিং অথবা `SimpleXMLElement` অবজেক্ট
+## XML রিটার্ন
+আমলে, `xml($xml)` সহায়ক ফাংশন ব্যবহার করে প্রতিক্রিয়া পাঠানো হবে যা `Content-Type: text/xml` হেডার সহ।
 
-## jsonp রিটার্ণ
-একইভাবে, হেল্পার ফাংশন `jsonp($data, $callback_name = 'callback')` ব্যবহার করে `jsonp` রিস্পন্স ফিরিয়ে দিবে.
+এখানে `$xml` প্যারামিটারটি একটি `xml` স্ট্রিং বা `SimpleXMLElement` অবজেক্ট হতে পারে।
 
-## ভিউ রিটার্ণ
-ফাইল `app/controller/UserController.php` পরিবর্তন করুন নিম্নলিখিত মত
+## JSONP রিটার্ন
+সমানভাবে, `jsonp($data, $callback_name = 'callback')` সহায়ক ফাংশন ব্যবহার করে `jsonp` প্রতিক্রিয়া পাঠানো হবে।
+
+## ভিউ রিটার্ন
+`app/controller/UserController.php` ফাইলটি নিচের মত পরিবর্তন করুন
 
 ```php
 <?php
@@ -88,7 +90,7 @@ class UserController
 }
 ```
 
-নিম্নলিখিত মতে তৈরি করুন ফাইল `app/view/user/hello.html`
+নিম্নোক্ত `app/view/user/hello.html` নামে ফাইল তৈরি করুন
 
 ```html
 <!doctype html>
@@ -103,7 +105,6 @@ hello <?=htmlspecialchars($name)?>
 </html>
 ```
 
-ব্রাউজারে `http://127.0.0.1:8787/user/hello?name=tom` এ প্রবেশ করুন
-html পৃষ্ঠার কন্টেন্ট দেখতে পাবেন `hello tom`
+ব্রাউজারে `http://127.0.0.1:8787/user/hello?name=tom` এ ভিজিট করলে একটি পেজ রিটার্ন হবে যেখানে মূলনামা `hello tom` থাকবে।
 
-লক্ষ্য করুন: webman মূলত php প্রাথমিক সিনট্যাক্স ব্যবহার করে টেমপ্লেট হিসেবে ব্যবহার করে। অন্য ভিউ ব্যবহার করতে [ভিউ](view.md) দেখুন।
+লক্ষ্য করুন: webman পূর্বনির্ধারিত ভাবে মূলনামা হিসাবে পিএইচপি নির্ধারিত সিনট্যাক্স ব্যবহার করে। অন্যান্য ভিউ ব্যবহার করতে [ভিউ](view.md) দেখুন।

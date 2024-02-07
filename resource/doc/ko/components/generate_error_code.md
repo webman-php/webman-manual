@@ -1,10 +1,10 @@
-# 오류 코드 컴포넌트 자동 생성
+# 오류 코드 구성 요소 자동 생성
 
 ## 설명
 
-지정된 규칙에 따라 오류 코드를 자동으로 유지보수할 수 있습니다.
+주어진 규칙에 따라 오류 코드를 자동으로 유지할 수 있습니다.
 
-> 반환 데이터의 코드 매개변수가 규정되어 있으며, 모든 사용자 정의 코드는 양수는 서비스 정상을 나타내고, 음수는 서비스 이상을 나타냅니다.
+> 반환 데이터의 코드 매개변수에 대한 약속, 모든 사용자 정의 코드, 양수는 서비스가 정상임을 의미하고, 음수는 서비스 이상을 의미합니다.
 
 ## 프로젝트 주소
 
@@ -18,7 +18,7 @@ composer require teamones/response-code-msg
 
 ## 사용
 
-### Empty ErrorCode class file
+### 빈 ErrorCode 클래스 파일
 
 - 파일 경로 ./support/ErrorCode.php
 
@@ -35,9 +35,9 @@ class ErrorCode
 }
 ```
 
-### 설정 파일
+### 구성 파일
 
-오류 코드는 자동으로 아래의 설정 매개변수에 따라 증분적으로 생성됩니다. 예를 들어, 현재 시스템 번호(system_number)가 201이고, start_min_number가 10000이면, 생성된 첫 번째 오류 코드는 -20110001입니다.
+오류 코드는 자동으로 아래 설정 매개변수에 따라 생성됩니다. 예를 들어 현재 system_number = 201, start_min_number = 10000이면 생성된 첫 번째 오류 코드는 -20110001입니다.
 
 - 파일 경로 ./config/error_code.php
 
@@ -47,19 +47,19 @@ class ErrorCode
 return [
     "class" => new \support\ErrorCode(), // ErrorCode 클래스 파일
     "root_path" => app_path(), // 현재 코드 루트 디렉토리
-    "system_number" => 201, // 시스템 식별자
-    "start_min_number" => 10000 // 오류 코드 생성 범위 예: 10000-99999
+    "system_number" => 201, // 시스템 식별
+    "start_min_number" => 10000 // 오류 코드 생성 범위, 예: 10000-99999
 ];
 ```
 
-### start.php에 자동 오류 코드 생성을 시작하는 코드 추가
+### start.php에 자동 오류 코드 생성 시작 코드 추가
 
 - 파일 경로 ./start.php
 
 ```php
-// Config::load(config_path(), ['route', 'container']) 이후에 배치
+// Config::load(config_path(), ['route', 'container']); 뒤에 배치
 
-// 오류 코드 생성, 오직 APP_DEBUG 모드에서만 생성
+// 오류 코드 생성, APP_DEBUG 모드에서만 생성
 if (config("app.debug")) {
     $errorCodeConfig = config('error_code');
     (new \teamones\responseCodeMsg\Generate($errorCodeConfig))->run();
@@ -68,9 +68,9 @@ if (config("app.debug")) {
 
 ### 코드에서 사용
 
-다음 코드에서 **ErrorCode::ModelAddOptionsError**는 오류 코드이며, **ModelAddOptionsError**는 사용자가 현재 요구에 따라 의미론적으로 대문자로 작성해야 합니다.
+아래 코드에서 **ErrorCode::ModelAddOptionsError**을 오류 코드로 사용하며, **ModelAddOptionsError**는 사용자가 현재 요구 사항에 맞게 의미 있는 이름을 대문자로 작성해야 합니다.
 
-> 작성이 완료되면 사용할 수 없으며, 다음 번 재시작 후에 해당 오류 코드가 자동으로 생성됩니다. 때로는 두 번 재부팅해야 할 수도 있습니다.
+> 작성한 후에는 사용할 수 없음을 알게 되며, 다음 번 재시작 후에 해당 오류 코드가 자동으로 생성됩니다. 때로는 두 번 재시작해야 하는 경우가 있습니다.
 
 ```php
 <?php
@@ -82,7 +82,7 @@ namespace app\service;
 
 use app\model\Demo as DemoModel;
 
-// ErrorCode 클래스 파일 포함
+// ErrorCode 클래스 파일 추가
 use support\ErrorCode;
 
 class Demo
@@ -113,7 +113,7 @@ class Demo
 }
 ```
 
-### 생성 후의 ./support/ErrorCode.php 파일
+### 생성된 ./support/ErrorCode.php 파일
 
 ```php
 <?php

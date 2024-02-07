@@ -4,15 +4,14 @@
 `config/exception.php`
 ```php
 return [
-    // Configura qui la classe di gestione delle eccezioni
+    // Qui è possibile configurare la classe di gestione delle eccezioni
     '' => support\exception\Handler::class,
 ];
 ```
-In modalità multi-applicazione, puoi configurare una classe di gestione delle eccezioni separata per ogni app, vedi [Multiapp](multiapp.md)
-
+In modalità multi-applicazione, è possibile configurare una classe di gestione delle eccezioni separata per ogni applicazione, vedere [Multi-Applicazione](multiapp.md).
 
 ## Classe di gestione delle eccezioni predefinita
-Nel webman, le eccezioni di default sono gestite dalla classe `support\exception\Handler`. È possibile modificare la classe predefinita di gestione delle eccezioni nel file di configurazione `config/exception.php`. La classe di gestione delle eccezioni deve implementare l'interfaccia `Webman\Exception\ExceptionHandlerInterface`.
+Nel webman, le eccezioni sono gestite di default dalla classe `support\exception\Handler`. È possibile modificare la classe predefinita di gestione delle eccezioni modificando il file di configurazione `config/exception.php`. La classe di gestione delle eccezioni deve implementare l'interfaccia `Webman\Exception\ExceptionHandlerInterface`.
 ```php
 interface ExceptionHandlerInterface
 {
@@ -24,7 +23,7 @@ interface ExceptionHandlerInterface
     public function report(Throwable $e);
 
     /**
-     * Rendering della risposta
+     * Reinderizza la risposta
      * @param Request $request
      * @param Throwable $e
      * @return Response
@@ -33,27 +32,25 @@ interface ExceptionHandlerInterface
 }
 ```
 
+## Reindirizzamento della risposta
+Il metodo `render` nella classe di gestione delle eccezioni è utilizzato per reindirizzare la risposta.
 
+Se il valore `debug` nel file di configurazione `config/app.php` è impostato su `true` (di seguito indicato come `app.debug=true`), verranno restituite informazioni dettagliate sull'eccezione, altrimenti verranno restituite informazioni concise sull'eccezione.
 
-## Rendering della risposta
-Il metodo `render` della classe di gestione delle eccezioni viene utilizzato per il rendering della risposta.
-
-Se il valore di `debug` nel file di configurazione `config/app.php` è impostato su `true` (di seguito abbreviato come `app.debug=true`), verranno restituite informazioni dettagliate sull'eccezione, altrimenti verranno restituite informazioni concise sull'eccezione.
-
-Se la richiesta è in formato json, le informazioni sull'eccezione verranno restituite in formato json, ad esempio
+Se la richiesta è in attesa di una risposta in formato json, le informazioni sull'eccezione restituite saranno in formato json, come ad esempio
 ```json
 {
     "code": "500",
-    "msg": "Messaggio dell'eccezione"
+    "msg": "Informazioni sull'eccezione"
 }
 ```
-Se `app.debug=true`, i dati json conterranno un campo aggiuntivo `trace` che restituirà una dettagliata traccia di chiamata.
+Se `app.debug=true`, i dati json includeranno anche un campo `trace` con i dettagli della traccia delle chiamate.
 
 È possibile scrivere una propria classe di gestione delle eccezioni per modificare la logica predefinita di gestione delle eccezioni.
 
-# Eccezione aziendale BusinessException
-A volte potremmo volere interrompere una richiesta all'interno di una funzione innestata e restituire un messaggio di errore al client, in tal caso è possibile farlo lanciando `BusinessException`.
-Per esempio:
+# Eccezione Commerciale BusinessException
+A volte potremmo voler interrompere una richiesta all'interno di una funzione nidificata e restituire un messaggio di errore al client; in questo caso possiamo utilizzare l'eccezione `BusinessException` per farlo.
+Ad esempio:
 
 ```php
 <?php
@@ -73,25 +70,21 @@ class FooController
     protected function chackInpout($input)
     {
         if (!isset($input['token'])) {
-            throw new BusinessException('Errore nei parametri', 3000);
+            throw new BusinessException('Parametro errato', 3000);
         }
     }
 }
 ```
-
 Nell'esempio sopra verrà restituito
 ```json
-{"code": 3000, "msg": "Errore nei parametri"}
+{"code": 3000, "msg": "Parametro errato"}
 ```
-
 > **Nota**
-> L'eccezione aziendale BusinessException non richiede una gestione tramite try-catch, il framework la catturerà automaticamente e restituirà un'uscita appropriata in base al tipo di richiesta.
+> L'eccezione BusinessException non richiede di essere catturata da un blocco try-catch; il framework si occuperà automaticamente di catturare e restituire un output appropriato in base al tipo di richiesta.
 
-## Eccezione aziendale personalizzata
-
-Se la risposta precedente non soddisfa le tue esigenze, per esempio se desideri modificare `msg` in `message`, puoi personalizzare una `MyBusinessException`.
-
-Crea il file `app/exception/MyBusinessException.php` con il seguente contenuto
+## Eccezione Commerciale Personalizzata
+Se la risposta sopra non soddisfa le tue esigenze e ad esempio vuoi cambiare `msg` in `message`, è possibile creare una propria eccezione `MyBusinessException`.
+Creare il file `app/exception/MyBusinessException.php` con il seguente contenuto:
 ```php
 <?php
 
@@ -105,29 +98,28 @@ class MyBusinessException extends BusinessException
 {
     public function render(Request $request): ?Response
     {
-        // Restituisce i dati json in caso di richiesta json
+        // Se la richiesta è in formato json, restituisci i dati in formato json
         if ($request->expectsJson()) {
             return json(['code' => $this->getCode() ?: 500, 'message' => $this->getMessage()]);
         }
-        // Altrimenti restituisce una pagina
+        // Altrimenti, restituisci una pagina
         return new Response(200, [], $this->getMessage());
     }
 }
 ```
 
-In questo modo, chiamando
+In questo modo, quando viene lanciata l'eccezione nella logica di business con
 ```php
 use app\exception\MyBusinessException;
 
-throw new MyBusinessException('Errore nei parametri', 3000);
+throw new MyBusinessException('Parametro errato', 3000);
 ```
-la richiesta in formato json riceverà una risposta simile a questa
+una richiesta in formato json riceverà una risposta in json simile a quella seguente
 ```json
-{"code": 3000, "message": "Errore nei parametri"}
+{"code": 3000, "message": "Parametro errato"}
 ```
-
 > **Nota**
-> Poiché l'eccezione BusinessException è un'eccezione aziendale (ad es. errore nei parametri inseriti dall'utente), è prevedibile, quindi il framework non la considererà un errore fatale e non ne registrerà i log.
+> Poiché l'eccezione BusinessException è relativa ad errori di logica di business (ad esempio errori nei parametri di input dell'utente), è prevedibile; di conseguenza, il framework non la considera un errore fatale e non vi registrerà nessun log.
 
 ## Conclusione
-È possibile utilizzare `BusinessException` ogni volta che si desidera interrompere la richiesta corrente e restituire informazioni al client.
+In qualsiasi situazione in cui si desideri interrompere la richiesta corrente e restituire un messaggio al client, si può considerare l'utilizzo dell'eccezione `BusinessException`.

@@ -1,5 +1,6 @@
+```php
 # Veritabanı
-Eklentiler kendi veritabanlarını yapılandırabilir, örneğin `plugin/foo/config/database.php` dosyasının içeriği aşağıdaki gibidir
+Eklenti kendi veritabanını yapılandırabilir, örneğin `plugin/foo/config/database.php` içeriği aşağıdaki gibi olabilir
 ```php
 return  [
     'default' => 'mysql',
@@ -27,7 +28,7 @@ return  [
     ],
 ];
 ```
-Referans şekli `Db::connection('plugin.{eklenti}.{bağlantı adı}');`, örneğin
+Referans yöntemi `Db::connection('plugin.{eklenti}.{bağlantı_adı}');` şeklindedir, örneğin
 ```php
 use support\Db;
 Db::connection('plugin.foo.mysql')->table('user')->first();
@@ -38,13 +39,13 @@ Ana projenin veritabanını kullanmak istiyorsanız, doğrudan kullanabilirsiniz
 ```php
 use support\Db;
 Db::table('user')->first();
-// Varsayalım ana projenin bir admin bağlantısı da yapılandırıldı
+// Varsayalım ana projede admin bağlantısı da yapılandırıldı
 Db::connection('admin')->table('admin')->first();
 ```
 
-## Model'e Veritabanı Yapılandırma
+## Model için Veritabanı Yapılandırması
 
-Model için bir Base sınıfı oluşturabiliriz, Base sınıfı `$connection` ile eklentinin kendi veritabanını belirtir, örneğin
+Model için bir Base sınıfı oluşturabiliriz, Base sınıfında `$connection` ile eklentin kendi veritabanı bağlantısını belirleyebiliriz, örneğin
 
 ```php
 <?php
@@ -64,10 +65,10 @@ class Base extends Model
 }
 ```
 
-Bu şekilde, eklenti içindeki tüm Modeller, Base sınıfından miras aldığı için otomatik olarak eklentinin kendi veritabanını kullanır.
+Bu şekilde eklentin içindeki tüm Modeller Base'den miras alarak otomatik olarak eklentinin kendi veritabanını kullanacaktır.
 
 ## Veritabanı Yapılandırmasını Tekrar Kullanma
-Tabii ki ana projenin veritabanı yapılandırmasını da tekrar kullanabiliriz, [webman-admin](https://www.workerman.net/plugin/82) entegrasyonu varsa, [webman-admin](https://www.workerman.net/plugin/82) veritabanı yapılandırmasını da tekrar kullanabiliriz, örneğin
+Tabii ki ana projenin veritabanı yapılandırmasını tekrar kullanabiliriz, [webman-admin](https://www.workerman.net/plugin/82) ile entegrasyon yapmışsak, [webman-admin](https://www.workerman.net/plugin/82) veritabanı yapılandırmasını da tekrar kullanabiliriz, örneğin
 ```php
 <?php
 

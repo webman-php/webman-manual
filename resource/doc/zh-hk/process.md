@@ -3,6 +3,7 @@
 在webman中你可以像workerman那樣自定義監聽或者進程。
 
 > **注意**
+
 > windows用戶需要使用 `php windows.php` 啟動webman才能啟動自定義進程。
 
 ## 自定義http服務
@@ -49,7 +50,8 @@ return [
 ```
 
 > **提示**
-> 如果想關閉webman自帶的http進程，只需要在 config/server.php 裡設置 `listen=>''`
+
+> 如果想關閉webman自帶的http進程，只需要在 config/server.php 里設置 `listen=>''`
 
 ## 自定義websocket監聽例子
 
@@ -125,7 +127,7 @@ class TaskTest
 在`config/process.php`中添加如下配置
 ```php
 return [
-    // ... 其他進程配置省略
+    // ... 其他進程配置省略...
     
     'task' => [
         'handler'  => app\TaskTest::class
@@ -148,13 +150,13 @@ return [
         'handler' => app\Pusher::class,
         // 監聽的協議 ip 及端口 （可選）
         'listen'  => 'websocket://0.0.0.0:8888',
-        // 進程數 （可選，默認1）
+        // 進程數 （可選，默认1）
         'count'   => 2,
-        // 進程運行用戶 （可選，默認當前用戶）
+        // 進程運行用戶 （可選，默认當前用戶）
         'user'    => '',
-        // 進程運行用戶組 （可選，默認當前用戶組）
+        // 進程運行用戶組 （可選，默认當前用戶組）
         'group'   => '',
-        // 當前進程是否支持reload （可選，默認true）
+        // 當前進程是否支持reload （可選，默认true）
         'reloadable' => true,
         // 是否開啟reusePort （可選，此選項需要php>=7.0，默認為true）
         'reusePort'  => true,
@@ -169,4 +171,4 @@ return [
 ```
 
 ## 總結
-webman的自定義進程實際上就是workerman的一個簡單封裝，它將配置與業務分離，並且將workerman的`onXXX`回調通過類的方法來實現，其它用法與workerman完全相同。
+webman的自定義進程實際上就是workerman的一個簡單封裝，它將配置與業務分離，並且將workerman的`onXXX`回調通過類的方法來實現，其他用法與workerman完全相同。

@@ -1,33 +1,33 @@
-# Casbin Erişim Kontrol Kütüphanesi webman-permission
+# Casbin Erişim Kontrol Kütüphanesi webman-permisyon
 
 ## Açıklama
 
-Bu kütüphane, [PHP-Casbin](https://github.com/php-casbin/php-casbin) üzerine kurulmuştur. Bu güçlü ve verimli açık kaynak erişim kontrol çerçevesi, `ACL`, `RBAC`, `ABAC` gibi erişim kontrol modellerini destekler.
+Bu, [PHP-Casbin](https://github.com/php-casbin/php-casbin) üzerine kurulmuş güçlü, verimli bir açık kaynak erişim kontrol çerçevesi olan `ACL`, `RBAC`, `ABAC` gibi erişim kontrol modellerini destekler.
 
-## Proje Adresi
+## Proje Linki
 
 https://github.com/Tinywan/webman-permission
 
 ## Kurulum
- 
+
 ```php
 composer require tinywan/webman-permission
 ```
-> Bu eklenti PHP 7.1+ ve [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998) gerektirir. Resmi belgeler: https://www.workerman.net/doc/webman#/db/others
+> Bu uzantı PHP 7.1+ ve [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998) gerektirir, resmi belge: https://www.workerman.net/doc/webman#/db/others
 
 ## Yapılandırma
 
-### Servis Kaydı
-Aşağıdaki gibi içeriği olan `config/bootstrap.php` adında bir yapılandırma dosyası oluşturun:
+### Servisi Kaydet
+
+Yeni bir yapılandırma dosyası oluşturun `config/bootstrap.php` ve içeriği aşağıdaki gibi olmalıdır:
 
 ```php
     // ...
-    webman\permission\Permission::class,
+    webman\permission\Izin::class,
 ```
-
 ### Model Yapılandırma Dosyası
 
-Aşağıdaki gibi içeriği olan `config/casbin-basic-model.conf` adında bir yapılandırma dosyası oluşturun:
+Yeni bir yapılandırma dosyası oluşturun `config/casbin-basic-model.conf` ve içeriği aşağıdaki gibi olmalıdır:
 
 ```conf
 [request_definition]
@@ -45,10 +45,9 @@ e = some(where (p.eft == allow))
 [matchers]
 m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
 ```
+### Politika Yapılandırma Dosyası
 
-### İzin Yapılandırma Dosyası
-
-Aşağıdaki gibi içeriği olan `config/permission.php` adında bir yapılandırma dosyası oluşturun:
+Yeni bir yapılandırma dosyası oluşturun `config/permission.php` ve içeriği aşağıdaki gibi olmalıdır:
 
 ```php
 <?php
@@ -57,7 +56,7 @@ return [
     /*
      *Varsayılan İzin
      */
-    'default' => 'basic',
+    'default' => 'temel',
 
     'log' => [
         'enabled' => false,
@@ -65,12 +64,12 @@ return [
     ],
 
     'enforcers' => [
-        'basic' => [
+        'temel' => [
             /*
-            * Model Ayarları
+            * Model Ayarı
             */
             'model' => [
-                'config_type' => 'file',
+                'config_type' => 'dosya',
                 'config_file_path' => config_path() . '/casbin-basic-model.conf',
                 'config_text' => '',
             ],
@@ -82,11 +81,11 @@ return [
             * Veritabanı Ayarları.
             */
             'database' => [
-                // Veritabanı bağlantı adı, boş bırakılması durumunda varsayılan yapılandırma kullanılır.
+                // Veritabanı bağlantı adı, boş bırakıldığında varsayılan yapılandırma.
                 'connection' => '',
-                // Kural tablo adı (önek olmadan)
-                'rules_name' => 'rule',
-                // Kural tablosunun tam adı.
+                // Politika tablo adı (önek tablo adını içermez)
+                'rules_name' => 'kural',
+                // Politika tablo tam adı.
                 'rules_table' => 'train_rule',
             ],
         ],
@@ -99,33 +98,33 @@ return [
 ```php
 use webman\permission\Permission;
 
-// Bir kullanıcıya izin ekler
-Permission::addPermissionForUser('eve', 'articles', 'read');
-// Bir kullanıcıya rol ekler.
-Permission::addRoleForUser('eve', 'writer');
-// Bir kurala izin ekler
-Permission::addPolicy('writer', 'articles','edit');
+// bir kullanıcıya izinleri ekler
+Permission::addPermissionForUser('eve', 'makaleler', 'okuma');
+// bir kullanıcıya bir rol ekler
+Permission::addRoleForUser('eve', 'yazar');
+// bir kural için izinleri ekler
+Permission::addPolicy('yazar', 'makaleler','düzenleme');
 ```
 
-Kullanıcının bu tür bir izne sahip olup olmadığını kontrol edebilirsiniz
+Kullanıcının bu tür bir yetkiye sahip olup olmadığını kontrol edebilirsiniz
 
 ```php
-if (Permission::enforce("eve", "articles", "edit")) {
-    // eve'e makaleleri düzenleme izni ver
+if (Permission::enforce("eve", "makaleler", "düzenleme")) {
+    // eve'nin makaleleri düzenlemesine izin ver
 } else {
     // isteği reddet, bir hata göster
 }
-```
+````
 
-## Yetkilendirme Ara Katmanı
+## Yetkilendirme Ara Yazılım
 
-Aşağıdaki gibi bir `app/middleware/AuthorizationMiddleware.php` dosyası oluşturun (dizin mevcut değilse kendiniz oluşturun):
+Dosya oluşturun `app/middleware/YetkilendirmeMiddleware.php` (dizin yoksa kendiniz oluşturun) aşağıdaki gibi:
 
 ```php
 <?php
 
 /**
- * Yetkilendirme Ara Katmanı
+ * Yetkilendirme Ara Yazılımı
  * Yazar: ShaoBo Wan (Tinywan)
  * Tarih: 2021/09/07 14:15
  */
@@ -140,40 +139,40 @@ use Webman\Http\Request;
 use Casbin\Exceptions\CasbinException;
 use webman\permission\Permission;
 
-class AuthorizationMiddleware implements MiddlewareInterface
+class YetkilendirmeMiddleware implements MiddlewareInterface
 {
-    public function process(Request $request, callable $next): Response
-    {
-        $uri = $request->path();
-        try {
-            $userId = 10086;
-            $action = $request->method();
-            if (!Permission::enforce((string) $userId, $uri, strtoupper($action))) {
-                throw new \Exception('Üzgünüz, bu API\'ye erişim izniniz yok');
-            }
-        } catch (CasbinException $exception) {
-            throw new \Exception('Yetkilendirme istisnası' . $exception->getMessage());
-        }
-        return $next($request);
-    }
+	public function process(Request $request, callable $next): Response
+	{
+		$uri = $request->path();
+		try {
+			$userId = 10086;
+			$action = $request->method();
+			if (!Permission::enforce((string) $userId, $uri, strtoupper($action))) {
+				throw new \Exception('Üzgünüm, bu API'ye erişim izniniz yok');
+			}
+		} catch (CasbinException $exception) {
+			throw new \Exception('Yetkilendirme istisnası' . $exception->getMessage());
+		}
+		return $next($request);
+	}
 }
 ```
 
-`config/middleware.php` dosyasına aşağıdaki gibi genel ara katmanı ekleyin:
+`config/middleware.php` içine aşağıdaki gibi bir genel ara yazılım ekleyin:
 
 ```php
 return [
-    // Genel ara katmanı
+    // Genel ara yazılımlar
     '' => [
-        // ... Diğer ara katmanları burada kısaltılmıştır
-        app\middleware\AuthorizationMiddleware::class,
+        // ... diğer ara yazılımlar burada kısaltılmıştır
+        app\middleware\YetkilendirmeMiddleware::class,
     ]
 ];
 ```
 
-## Teşekkürler
+## Teşekkür
 
-[Casbin](https://github.com/php-casbin/php-casbin), tüm belgelere [resmi web sitesi](https://casbin.org/) üzerinden erişebilirsiniz.
+[Casbin](https://github.com/php-casbin/php-casbin), [resmi web sitesinde](https://casbin.org/) tüm belgelere bakabilirsiniz.
 
 ## Lisans
 

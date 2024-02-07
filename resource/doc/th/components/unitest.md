@@ -1,4 +1,4 @@
-# การทดสอบหน่วย
+## ทดสอบหน่วย
 
 ## การติดตั้ง
 
@@ -27,12 +27,12 @@ class TestConfig extends TestCase
 }
 ```
 
-## การเรียกใช้
+## การรัน
 
-ในไดเร็กทอรีโปรเจคเรียกใช้ `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php`
+ในไดเรกทอรีโปรเจครัน `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php`
 
-ผลลัพธ์จะเป็นดังนี้:
-```
+ผลลัพธ์คล้ายกับนี้:
+```text
 PHPUnit 9.5.10 by Sebastian Bergmann and contributors.
 
 .                                                                   1 / 1 (100%)

@@ -1,9 +1,9 @@
 ## Benutzerdefinierte 404
-Wenn webman auf einen 404-Fehler stößt, wird automatisch der Inhalt von `public/404.html` zurückgegeben, daher können Entwickler die Datei `public/404.html` direkt ändern.
+Webman gibt bei einem 404-Fehler automatisch den Inhalt von `public/404.html` zurück, sodass Entwickler die Datei `public/404.html` direkt ändern können.
 
-Wenn Sie den Inhalt des 404-Fehlers dynamisch steuern möchten, zum Beispiel JSON-Daten wie `{"code:"404", "msg":"404 not found"}` für AJAX-Anfragen zurückgeben möchten, oder für Seitenanforderungen das Template `app/view/404.html` zurückgeben möchten, beachten Sie das folgende Beispiel
+Wenn Sie den Inhalt von 404 dynamisch steuern möchten, z.B. bei ajax-Anfragen JSON-Daten `{"code:"404", "msg":"404 not found"}` zurückgeben oder bei Seitenanfragen das Template `app/view/404.html`, befolgen Sie das folgende Beispiel.
 
-> Im folgenden Beispiel wird PHP-Templating als Beispiel verwendet, die Funktionsweise für andere Templates wie `twig`, `blade`, `think-tmplate` ist ähnlich
+> Im Folgenden wird das Beispiel anhand von einfachen PHP-Templates erklärt, aber das Prinzip gilt auch für andere Templates wie `Twig`, `Blade`, `Think-Template`.
 
 **Erstellen Sie die Datei `app/view/404.html`**
 ```html
@@ -19,23 +19,23 @@ Wenn Sie den Inhalt des 404-Fehlers dynamisch steuern möchten, zum Beispiel JSO
 </html>
 ```
 
-**Fügen Sie den folgenden Code in `config/route.php` ein:**
+**Fügen Sie den folgenden Code zu `config/route.php` hinzu:**
 ```php
 use support\Request;
 use Webman\Route;
 
 Route::fallback(function(Request $request){
-    // Rückgabe von JSON für AJAX-Anfragen
+    // Rückgabe von JSON bei ajax-Anfragen
     if ($request->expectsJson()) {
         return json(['code' => 404, 'msg' => '404 not found']);
     }
-    // Seitenanforderung gibt das 404.html Template zurück
+    // Seitenanfrage gibt das 404.html-Template zurück
     return view('404', ['error' => 'some error'])->withStatus(404);
 });
 ```
 
 ## Benutzerdefinierte 500
-**Erstellen von `app/view/500.html`**
+**Erstellen Sie `app/view/500.html`**
 
 ```html
 <!doctype html>
@@ -51,7 +51,7 @@ Benutzerdefiniertes Fehler-Template:
 </html>
 ```
 
-**Erstellen von `app/exception/Handler.php`** (Falls das Verzeichnis nicht existiert, bitte erstellen)
+**Erstellen Sie **app/exception/Handler.php** (Erstellen Sie das Verzeichnis, wenn es nicht vorhanden ist):**
 ```php
 <?php
 
@@ -64,7 +64,7 @@ use Webman\Http\Response;
 class Handler extends \support\exception\Handler
 {
     /**
-     * Rendern und zurückgeben
+     * Rendern und zurückgeben 
      * @param Request $request
      * @param Throwable $exception
      * @return Response
@@ -72,20 +72,19 @@ class Handler extends \support\exception\Handler
     public function render(Request $request, Throwable $exception) : Response
     {
         $code = $exception->getCode();
-        // Rückgabe von JSON-Daten für AJAX-Anfragen
+        // Rückgabe von JSON bei ajax-Anfragen
         if ($request->expectsJson()) {
             return json(['code' => $code ? $code : 500, 'msg' => $exception->getMessage()]);
         }
-        // Seitenanforderung gibt das 500.html Template zurück
+        // Seitenanfrage gibt das 500.html-Template zurück
         return view('500', ['exception' => $exception], '')->withStatus(500);
     }
 }
 ```
 
-**Konfiguration von `config/exception.php`**
+**Konfigurieren Sie `config/exception.php`**
 ```php
 return [
     '' => \app\exception\Handler::class,
 ];
 ```
-

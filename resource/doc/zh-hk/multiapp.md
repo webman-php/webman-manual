@@ -1,28 +1,28 @@
-# 多應用
-有時一個項目可能分為多個子項目，例如一個商城可能分為商城主項目、商城API接口、商城管理後台3個子項目，他們都使用相同的資料庫配置。
+# 多应用
+有时一个项目可能分为多个子项目，例如一个商城可能分为商城主项目、商城api接口、商城管理后台3个子项目，他们都使用相同的数据库配置。
 
-webman允許你這樣規劃app目錄：
+webman允许你这样规划app目录：
 ```
 app
 ├── shop
-│   ├── controller
-│   ├── model
-│   └── view
+│   ├── controller
+│   ├── model
+│   └── view
 ├── api
-│   ├── controller
-│   └── model
+│   ├── controller
+│   └── model
 └── admin
     ├── controller
     ├── model
     └── view
 ```
-當訪問地址 `http://127.0.0.1:8787/shop/{控制器}/{方法}` 時訪問`app/shop/controller`下的控制器與方法。
+当访问地址 `http://127.0.0.1:8787/shop/{控制器}/{方法}` 时访问`app/shop/controller`下的控制器与方法。
 
-當訪問地址 `http://127.0.0.1:8787/api/{控制器}/{方法}` 時訪問`app/api/controller`下的控制器與方法。
+当访问地址 `http://127.0.0.1:8787/api/{控制器}/{方法}` 时访问`app/api/controller`下的控制器与方法。
 
-當訪問地址 `http://127.0.0.1:8787/admin/{控制器}/{方法}` 時訪問`app/admin/controller`下的控制器與方法。
+当访问地址 `http://127.0.0.1:8787/admin/{控制器}/{方法}` 时访问`app/admin/controller`下的控制器与方法。
 
-在webman中，甚至可以這樣規劃app目錄。
+在webman中，甚至可以这样规划app目录。
 ```
 app
 ├── controller
@@ -30,16 +30,17 @@ app
 ├── view
 │
 ├── api
-│   ├── controller
-│   └── model
+│   ├── controller
+│   └── model
 └── admin
     ├── controller
     ├── model
     └── view
 ```
-這樣當地址訪問 `http://127.0.0.1:8787/{控制器}/{方法}` 時訪問的是`app/controller`下的控制器與方法。當路徑裡以api或者admin開頭時訪問的是相對應目錄裡的控制器與方法。
 
-多應用時類的命名空間需符合`psr4`，例如`app/api/controller/FooController.php` 檔案類似如下：
+这样当地址访问 `http://127.0.0.1:8787/{控制器}/{方法}` 时访问的是`app/controller`下的控制器与方法。当路径里以api或者admin开头时访问的是相对应目录里的控制器与方法。
+
+多应用时类的命名空间需符合`psr4`，例如`app/api/controller/FooController.php` 文件类似如下：
 
 ```php
 <?php
@@ -54,41 +55,41 @@ class FooController
 
 ```
 
-## 多應用中間件配置
-有時候你想為不同應用配置不同的中間件，例如`api`應用可能需要一個跨域中間件，`admin`需要一個檢查管理員登錄的中間件，則配置`config/midlleware.php`可能類似下面這樣：
+## 多应用中间件配置
+有时候你想为不同应用配置不同的中间件，例如`api`应用可能需要一个跨域中间件，`admin`需要一个检查管理员登录的中间件，则配置`config/midlleware.php`可能类似下面这样：
 ```php
 return [
-    // 全局中間件
+    // 全局中间件
     '' => [
         support\middleware\AuthCheck::class,
     ],
-    // api應用中間件
+    // api应用中间件
     'api' => [
          support\middleware\AccessControl::class,
      ],
-    // 應用中間件
+    // admin应用中间件
     'admin' => [
          support\middleware\AdminAuthCheck::class,
          support\middleware\SomeOtherClass::class,
     ],
 ];
 ```
-> 以上中間件可能並不存在，這裡僅僅是作為示例講述如何按應用配置中間件
+> 以上中间件可能并不存在，这里仅仅是作为示例讲述如何按应用配置中间件
 
-中間件執行順序為 `全局中間件`->`應用中間件`。
+中间件执行顺序为 `全局中间件`->`应用中间件`。
 
-中間件開發參考[中間件章節](middleware.md)
+中间件开发参考[中间件章节](middleware.md)
 
-## 多應用異常處理配置
-同樣的，你想為不同的應用配置不同的異常處理類，例如`shop`應用裡出現異常你可能想提供一個友好的提示頁面；`api`應用裡出現異常時你想返回的並不是一個頁面，而是一個JSON字符串。為不同應用配置不同的異常處理類的配置檔`config/exception.php`類似如下：
+## 多应用异常处理配置
+同样的，你想为不同的应用配置不同的异常处理类，例如`shop`应用里出现异常你可能想提供一个友好的提示页面；`api`应用里出现异常时你想返回的并不是一个页面，而是一个json字符串。为不同应用配置不同的异常处理类的配置文件`config/exception.php`类似如下：
 ```php
 return [
     'shop' => support\exception\Handler::class,
     'api' => support\exception\ApiHandler::class,
 ];
 ```
-> 不同於中間件，每個應用只能配置一個異常處理類。
+> 不同于中间件，每个应用只能配置一个异常处理类。
 
-> 以上異常處理類可能並不存在，這裡僅僅是作為示例講述如何按應用配置異常處理
+> 以上异常处理类可能并不存在，这里仅仅是作为示例讲述如何按应用配置异常处理
 
-異常處理開發參考[異常處理章節](exception.md)
+异常处理开发参考[异常处理章节](exception.md)

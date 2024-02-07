@@ -1,7 +1,7 @@
 # Risposta
-La risposta è effettivamente un oggetto `support\Response`, e per facilitarne la creazione, webman fornisce alcune funzioni di supporto.
+La risposta è effettivamente un oggetto `support\Response`. Per facilitarne la creazione, webman fornisce alcune funzioni helper.
 
-## Restituire una qualsiasi risposta
+## Restituire una risposta arbitraria
 
 **Esempio**
 ```php
@@ -19,7 +19,7 @@ class FooController
 }
 ```
 
-La funzione di implementazione della risposta è la seguente:
+La funzione `response` è implementata come segue:
 ```php
 function response($body = '', $status = 200, $headers = array())
 {
@@ -27,28 +27,28 @@ function response($body = '', $status = 200, $headers = array())
 }
 ```
 
-È inoltre possibile creare preventivamente un'istanza vuota di `response` e, in seguito, utilizzare i metodi `$response->cookie()`, `$response->header()`, `$response->withHeaders()`, `$response->withBody()` per impostare il contenuto da restituire nel punto appropriato.
+È anche possibile creare un oggetto `response` vuoto e poi, in posizioni appropriate, utilizzare i metodi `$response->cookie()`, `$response->header()`, `$response->withHeaders()`, `$response->withBody()` per impostare il contenuto della risposta.
 ```php
 public function hello(Request $request)
 {
-    // Creare un'istanza
+    // Creare un oggetto
     $response = response();
     
-    // .... Logica di business omessa
+    // .... Logica aziendale omessa
     
-    // Impostare i cookie
+    // Impostare il cookie
     $response->cookie('foo', 'valore');
     
-    // .... Logica di business omessa
+    // .... Logica aziendale omessa
     
-    // Impostare gli header HTTP
+    // Impostare l'intestazione http
     $response->header('Content-Type', 'applicazione/json');
     $response->withHeaders([
-                'X-Header-One' => 'Valore Header 1',
-                'X-Header-Tow' => 'Valore Header 2',
+                'X-Header-One' => 'Valore intestazione 1',
+                'X-Header-Tow' => 'Valore intestazione 2',
             ]);
 
-    // .... Logica di business omessa
+    // .... Logica aziendale omessa
 
     // Impostare i dati da restituire
     $response->withBody('Dati da restituire');
@@ -56,7 +56,7 @@ public function hello(Request $request)
 }
 ```
 
-## Restituire JSON
+## Restituire json
 **Esempio**
 ```php
 <?php
@@ -72,7 +72,7 @@ class FooController
     }
 }
 ```
-L'implementazione della funzione json è la seguente
+La funzione `json` è implementata come segue:
 ```php
 function json($data, $options = JSON_UNESCAPED_UNICODE)
 {
@@ -80,7 +80,8 @@ function json($data, $options = JSON_UNESCAPED_UNICODE)
 }
 ```
 
-## Restituire XML
+
+## Restituire xml
 **Esempio**
 ```php
 <?php
@@ -103,7 +104,7 @@ class FooController
     }
 }
 ```
-L'implementazione della funzione xml è la seguente:
+La funzione `xml` è implementata come segue:
 ```php
 function xml($xml)
 {
@@ -115,7 +116,7 @@ function xml($xml)
 ```
 
 ## Restituire una vista
-Creare il file `app/controller/FooController.php` come segue
+Creare un file `app/controller/FooController.php` come segue:
 
 ```php
 <?php
@@ -132,7 +133,8 @@ class FooController
 }
 ```
 
-Creare il file `app/view/foo/hello.html` come segue
+Creare un file `app/view/foo/hello.html` come segue:
+
 ```html
 <!doctype html>
 <html>
@@ -141,12 +143,12 @@ Creare il file `app/view/foo/hello.html` come segue
     <title>webman</title>
 </head>
 <body>
-ciao <?=htmlspecialchars($name)?>
+hello <?=htmlspecialchars($name)?>
 </body>
 </html>
 ```
 
-## Reindirizzare
+## Redirect
 ```php
 <?php
 namespace app\controller;
@@ -157,12 +159,11 @@ class FooController
 {
     public function hello(Request $request)
     {
-        return redirect('/utente');
+        return redirect('/user');
     }
 }
 ```
-
-L'implementazione della funzione redirect è la seguente:
+La funzione `redirect` è implementata come segue:
 ```php
 function redirect($location, $status = 302, $headers = [])
 {
@@ -174,7 +175,7 @@ function redirect($location, $status = 302, $headers = [])
 }
 ```
 
-## Impostare l'header
+## Impostare l'intestazione
 ```php
 <?php
 namespace app\controller;
@@ -187,12 +188,13 @@ class FooController
     {
         return response('ciao webman', 200, [
             'Content-Type' => 'applicazione/json',
-            'X-Header-One' => 'Valore Header' 
+            'X-Header-One' => 'Valore intestazione' 
         ]);
     }
 }
 ```
-È anche possibile utilizzare i metodi `header` e `withHeaders` per impostare singolarmente o in blocco l'header.
+È possibile utilizzare i metodi `header` e `withHeaders` per impostare un' intestazione singola o multipla.
+
 ```php
 <?php
 namespace app\controller;
@@ -206,35 +208,13 @@ class FooController
         return response('ciao webman')
         ->header('Content-Type', 'applicazione/json')
         ->withHeaders([
-            'X-Header-One' => 'Valore Header 1',
-            'X-Header-Tow' => 'Valore Header 2',
+            'X-Header-One' => 'Valore intestazione 1',
+            'X-Header-Tow' => 'Valore intestazione 2',
         ]);
     }
 }
 ```
-È anche possibile impostare preventivamente l'header e in seguito impostare i dati da restituire.
-```php
-public function hello(Request $request)
-{
-    // Creare un'istanza
-    $response = response();
-    
-    // .... Logica di business omessa
-  
-    // Impostare gli header HTTP
-    $response->header('Content-Type', 'applicazione/json');
-    $response->withHeaders([
-                'X-Header-One' => 'Valore Header 1',
-                'X-Header-Tow' => 'Valore Header 2',
-            ]);
-
-    // .... Logica di business omessa
-
-    // Impostare i dati da restituire
-    $response->withBody('Dati da restituire');
-    return $response;
-}
-```
+È anche possibile impostare in anticipo l'intestazione e successivamente impostare i dati da restituire.
 
 ## Impostare il cookie
 ```php
@@ -252,29 +232,27 @@ class FooController
     }
 }
 ```
+È possibile impostare il cookie in anticipo e successivamente impostare i dati da restituire.
 
-È anche possibile impostare preventivamente il cookie e in seguito impostare i dati da restituire.
 ```php
 public function hello(Request $request)
 {
-    // Creare un'istanza
+    // Creare un oggetto
     $response = response();
     
-    // .... Logica di business omessa
+    // .... Logica aziendale omessa
     
     // Impostare il cookie
     $response->cookie('foo', 'valore');
     
-    // .... Logica di business omessa
+    // .... Logica aziendale omessa
 
     // Impostare i dati da restituire
     $response->withBody('Dati da restituire');
     return $response;
 }
 ```
-
 I parametri completi del metodo cookie sono i seguenti:
-
 `cookie($name, $value = '', $max_age = 0, $path = '', $domain = '', $secure = false, $http_only = false)`
 
 ## Restituire un flusso di file
@@ -294,14 +272,13 @@ class FooController
 ```
 
 - webman supporta l'invio di file di grandi dimensioni
-- Per i file di grandi dimensioni (oltre 2 MB), webman non legge l'intero file in memoria in una sola volta, ma legge e invia il file a blocchi quando opportuno
-- webman ottimizza la velocità di lettura e invio del file in base alla velocità di ricezione del client, garantendo il più rapido invio del file minimizzando al contempo l'utilizzo della memoria
-- L'invio dei dati è non bloccante e non influisce sulla gestione delle altre richieste
-- Il metodo file aggiunge automaticamente l'header 'if-modified-since' e, nella richiesta successiva, verifica l'header 'if-modified-since'. Se il file non è stato modificato, viene restituito direttamente il codice di stato 304 per risparmiare larghezza di banda
-- Il file inviato automaticamente utilizza l'header 'Content-Type' appropriato per essere inviato al browser
-- Se il file non esiste, viene automaticamente convertito in una risposta 404
-
-## Scaricare un file
+- Per i file di grandi dimensioni (oltre 2 MB), webman non legge l'intero file in memoria una sola volta, ma legge e invia il file a segmenti al momento opportuno
+- webman ottimizza la velocità di lettura e invio del file in base alla velocità con cui il client lo riceve, garantendo di inviare il file più rapidamente possibile riducendo al minimo l'uso della memoria
+- L'invio dei dati è non bloccante e non influisce sulle altre richieste in elaborazione
+- Il metodo `file` aggiunge automaticamente l'intestazione `if-modified-since` e controlla l'intestazione `if-modified-since` nella richiesta successiva; se il file non è stato modificato, restituisce direttamente lo stato 304 per risparmiare larghezza di banda
+- Il file inviato userà automaticamente l'intestazione `Content-Type` appropriata per essere inviato al browser
+- Se il file non esiste, viene convertito automaticamente in una risposta 404
+## Scarica il file
 ```php
 <?php
 namespace app\controller;
@@ -312,16 +289,18 @@ class FooController
 {
     public function hello(Request $request)
     {
-        return response()->download(public_path() . '/favicon.ico', 'nomefile.ico');
+        return response()->download(public_path() . '/favicon.ico', 'nome_file.ico');
     }
 }
 ```
-Il metodo download è sostanzialmente simile al metodo file, la differenza è che
-1. impostato il nome del file da scaricare, il file viene effettivamente scaricato invece di essere visualizzato nel browser
-2. il metodo download non verifica l'header 'if-modified-since'
+
+Il metodo download è essenzialmente simile al metodo file, la differenza è
+1. Dopo aver impostato il nome del file da scaricare, il file verrà effettivamente scaricato anziché mostrato nel browser.
+2. Il metodo download non controlla l'intestazione `if-modified-since`.
+
 
 ## Ottenere l'output
-Alcune librerie classi stampando direttamente il contenuto del file sull'output standard, cioè i dati verranno stampati sul terminale della riga di comando e non inviati al browser. In questo caso, è necessario catturare i dati in una variabile con `ob_start();` `ob_get_clean();` e quindi inviarli al browser, ad esempio:
+Alcune librerie stampano direttamente il contenuto del file in standard output, ovvero i dati vengono stampati nel terminale della riga di comando e non inviati al browser. In questo caso è necessario catturare i dati in una variabile utilizzando `ob_start();` `ob_get_clean();`, e successivamente inviarli al browser, per esempio:
 
 ```php
 <?php
@@ -337,9 +316,9 @@ class ImageController
         // Creare un'immagine
         $im = imagecreatetruecolor(120, 20);
         $text_color = imagecolorallocate($im, 233, 14, 91);
-        imagestring($im, 1, 5, 5,  'Una stringa di testo semplice', $text_color);
+        imagestring($im, 1, 5, 5,  'Una semplice stringa di testo', $text_color);
 
-        // Inizio catturare l'output
+        // Iniziare a ottenere l'output
         ob_start();
         // Output dell'immagine
         imagejpeg($im);
@@ -347,7 +326,7 @@ class ImageController
         $image = ob_get_clean();
         
         // Inviare l'immagine
-        return response($image)->header('Content-Type', 'immagine/jpeg');
+        return response($image)->header('Content-Type', 'image/jpeg');
     }
 }
 ```

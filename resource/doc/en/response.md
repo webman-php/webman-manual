@@ -1,8 +1,7 @@
 # Response
+The response is actually a `support\Response` object. To facilitate the creation of this object, webman provides some helper functions.
 
-The response is actually a `support\Response` object. To make it easier to create this object, webman provides some helper functions.
-
-## Returning Any Response
+## Return any response
 
 **Example**
 ```php
@@ -20,7 +19,7 @@ class FooController
 }
 ```
 
-The `response` function is implemented as follows:
+The implementation of the `response` function is as follows:
 ```php
 function response($body = '', $status = 200, $headers = array())
 {
@@ -28,7 +27,7 @@ function response($body = '', $status = 200, $headers = array())
 }
 ```
 
-Alternatively, you can create an empty `response` object first and then use `$response->cookie()`, `$response->header()`, `$response->withHeaders()`, or `$response->withBody()` to set the response content at the appropriate location.
+You can also create an empty `response` object first and then use `$response->cookie()`, `$response->header()`, `$response->withHeaders()`, `$response->withBody()` to set the return content at the appropriate location.
 ```php
 public function hello(Request $request)
 {
@@ -42,7 +41,7 @@ public function hello(Request $request)
     
     // .... Business logic omitted
     
-    // Set HTTP header
+    // Set http headers
     $response->header('Content-Type', 'application/json');
     $response->withHeaders([
                 'X-Header-One' => 'Header Value 1',
@@ -52,13 +51,12 @@ public function hello(Request $request)
     // .... Business logic omitted
 
     // Set the data to be returned
-    $response->withBody('Data to be returned');
+    $response->withBody('Returned data');
     return $response;
 }
 ```
 
-## Returning JSON
-
+## Return JSON
 **Example**
 ```php
 <?php
@@ -82,8 +80,7 @@ function json($data, $options = JSON_UNESCAPED_UNICODE)
 }
 ```
 
-## Returning XML
-
+## Return XML
 **Example**
 ```php
 <?php
@@ -117,9 +114,8 @@ function xml($xml)
 }
 ```
 
-## Returning a View
+## Return view
 Create a new file `app/controller/FooController.php` as follows:
-
 ```php
 <?php
 namespace app\controller;
@@ -134,9 +130,7 @@ class FooController
     }
 }
 ```
-
 Create a new file `app/view/foo/hello.html` as follows:
-
 ```html
 <!doctype html>
 <html>
@@ -165,7 +159,7 @@ class FooController
     }
 }
 ```
-The `redirect` function is implemented as follows:
+The implementation of the `redirect` function is as follows:
 ```php
 function redirect($location, $status = 302, $headers = [])
 {
@@ -177,7 +171,7 @@ function redirect($location, $status = 302, $headers = [])
 }
 ```
 
-## Setting Headers
+## Header settings
 ```php
 <?php
 namespace app\controller;
@@ -215,7 +209,7 @@ class FooController
     }
 }
 ```
-You can also set the header in advance and set the data to be returned at the end.
+You can also set headers in advance and finally set the data to be returned.
 ```php
 public function hello(Request $request)
 {
@@ -224,7 +218,7 @@ public function hello(Request $request)
     
     // .... Business logic omitted
   
-    // Set HTTP header
+    // Set http headers
     $response->header('Content-Type', 'application/json');
     $response->withHeaders([
                 'X-Header-One' => 'Header Value 1',
@@ -234,12 +228,12 @@ public function hello(Request $request)
     // .... Business logic omitted
 
     // Set the data to be returned
-    $response->withBody('Data to be returned');
+    $response->withBody('Returned data');
     return $response;
 }
 ```
 
-## Setting Cookies
+## Set cookie
 ```php
 <?php
 namespace app\controller;
@@ -255,7 +249,7 @@ class FooController
     }
 }
 ```
-Alternatively, you can set the cookie in advance and set the data to be returned at the end.
+You can also set cookies in advance and finally set the data to be returned.
 ```php
 public function hello(Request $request)
 {
@@ -270,14 +264,14 @@ public function hello(Request $request)
     // .... Business logic omitted
 
     // Set the data to be returned
-    $response->withBody('Data to be returned');
+    $response->withBody('Returned data');
     return $response;
 }
 ```
-The `cookie` method takes the following complete parameters:
+The complete parameter list for the `cookie` method is as follows:
 `cookie($name, $value = '', $max_age = 0, $path = '', $domain = '', $secure = false, $http_only = false)`
 
-## Returning File Stream
+## Return file stream
 ```php
 <?php
 namespace app\controller;
@@ -292,16 +286,15 @@ class FooController
     }
 }
 ```
+- webman supports sending very large files
+- For large files (over 2M), webman will not read the entire file into memory at once, but will read and send the file in segments at the appropriate time
+- webman optimizes file reading and sending speed based on the client's receiving speed to ensure the fastest file transmission while minimizing memory usage
+- Data transmission is non-blocking and does not affect the processing of other requests
+- The `file` method will automatically add the `if-modified-since` header and will check the `if-modified-since` header in the next request. If the file has not been modified, it will return 304 directly to save bandwidth
+- The file being sent will automatically be sent to the browser using the appropriate `Content-Type` header
+- If the file does not exist, it will automatically be converted to a 404 response
 
-- webman supports sending very large files.
-- For large files (over 2M), webman does not read the entire file into memory at once, but instead reads and sends the file in segments at the appropriate time.
-- webman optimizes file read and send speed based on the client's receive speed, ensuring the fastest file transfer while minimizing memory usage.
-- Data transmission is non-blocking and does not affect other request processing.
-- The `file` method automatically adds the `if-modified-since` header and checks the `if-modified-since` header on the next request. If the file has not been modified, it returns 304 to save bandwidth.
-- The file being sent is automatically sent to the browser with the appropriate `Content-Type` header.
-- If the file does not exist, it automatically converts to a 404 response.
-
-## Downloading a File
+## Download file
 ```php
 <?php
 namespace app\controller;
@@ -316,12 +309,11 @@ class FooController
     }
 }
 ```
-The `download` method is almost identical to the `file` method, except that:
-1. After setting the download file name, the file will be downloaded instead of displayed in the browser.
-2. The `download` method does not check the `if-modified-since` header.
-
+The `download` method is basically the same as the `file` method, with the difference being that:
+1. After setting the file name for download, the file will be downloaded instead of being displayed in the browser
+2. The `download` method does not check the `if-modified-since` header
 ## Getting Output
-Some libraries directly print file content to standard output, which means the data is printed to the command line terminal and not sent to the browser. In this case, we need to capture the data into a variable using `ob_start();` `ob_get_clean();`, and then send the data to the browser. For example:
+Some libraries directly print the file content to the standard output, which means the data will be printed in the command line terminal and not sent to the browser. In this case, we need to capture the data into a variable using `ob_start();` and `ob_get_clean();`, and then send the data to the browser. For example:
 
 ```php
 <?php

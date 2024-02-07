@@ -1,11 +1,11 @@
-- Инструкция для начинающих
+- Руководство для начинающих
 
   - [Что такое webman](README.md)
-  - [Важные сведения о программировании](attention.md)
+  - [Важные моменты программирования](attention.md)
   - [Сообщество вопросов и ответов](help.md)
-
+  
 - Быстрый старт
-
+  
   - [Установка](install.md)
   - [Структура каталогов](directory.md)
   - [Простой пример](tutorial.md)
@@ -15,15 +15,15 @@
   - [Запрос](request.md)
   - [Ответ](response.md)
   - [Контроллер](controller.md)
-  - [Маршрутизатор](route.md)
+  - [Маршруты](route.md)
   - [Промежуточное ПО](middleware.md)
   - [Представление](view.md)
   - [Статические файлы](static.md)
-  - [Управление сеансом](session.md)
+  - [Управление сессией](session.md)
   - [Обработка исключений](exception.md)
-  - [Журнал](log.md)
+  - [Логирование](log.md)
   - [Файл конфигурации](config.md)
-  - [Множественные приложения](multiapp.md)
+  - [Множество приложений](multiapp.md)
 
 - База данных
 
@@ -31,68 +31,69 @@
   - [Настройка базы данных](db/config.md)
   - [Конструктор запросов](db/queries.md)
   - [Модель](db/model.md)
-  - [Связи моделей](db/relationships.md)
+  - [Связи модели](db/relationships.md)
   - [Пагинация](db/paginator.md)
-  - [Миграция базы данных](db/migration.md)
+  - [Миграции базы данных](db/migration.md)
   - [Redis](db/redis.md)
   - [Кэш](db/cache.md)
   - [MongoDB](db/mongo.md)
   - [ThinkORM](db/thinkorm.md)
   - [ThinkCache](db/thinkcache.md)
   - [Medoo](db/medoo.md)
-
+  
 - Очередь сообщений
   - [Очередь Redis](queue/redis.md)
   - [Stomp](queue/stomp.md)
  
-- Распространенные компоненты
-  - [Валидатор](components/validation.md)
+- Популярные компоненты
+  - [Проверка данных](components/validation.md)
   - [Компонент пагинации](components/paginator.md)
   - [Мультиязычность](components/translation.md)
   - [Обработка изображений](components/image.md)
-  - [Капча](components/captcha.md)
-  - [События](components/event.md)
-  - [Переменные окружения](components/env.md)
-  - [CRON](components/crontab.md)
+  - [Каптча](components/captcha.md)
+  - [События Event](components/event.md)
+  - [Переменные окружения Env](components/env.md)
+  - [Задачи Crontab](components/crontab.md)
   - [Таблица Excel](components/excel.md)
   - [SDK для WeChat](components/wechat.md)
   - [SDK для оплаты](components/payment.md)
-  - [SDK Casbin](components/casbin.md)
-  - [Юнит-тестирование](components/unitest.md)
+  - [SDK для Casbin](components/casbin.md)
+  - [Модульное тестирование](components/unitest.md)
   - [Генерация кодов ошибок](components/generate_error_code.md)
 
-- Основные плагины
+- Базовые плагины
   - [Основные плагины](plugin/base.md)
-  - [Консоль](plugin/console.md)
-  - [Пуш](plugin/push.md)
-  - [Рынок основных плагинов](plugin/market.md)
-  - [Создание основных плагинов](plugin/create.md)
+  - [Консольные команды](plugin/console.md)
+  - [Уведомления](plugin/push.md)
+  - [Магазин базовых плагинов](plugin/market.md)
+  - [Создание базового плагина](plugin/create.md)
 
-- Приложение-плагин
+- Приложения-плагины
   - [Введение](app/app.md)
-  - [Стандарт](app/standard.md)
+  - [Стандарты](app/standard.md)
   - [Создание приложения](app/create.md)
   - [Структура каталогов](app/directory.md)
   - [Маршрутизация](app/route.md)
-  - [Файлы конфигурации](app/config.md)
-  - [Контроллер](app/controller.md)
-  - [Представление](app/view.md)
+  - [Файл конфигурации](app/config.md)
+  - [Контроллеры](app/controller.md)
+  - [Представления](app/view.md)
   - [Статические файлы](app/static.md)
   - [База данных](app/database.md)
   - [Redis](app/redis.md)
-  - [Журнал](app/log.md)
-  - [Подключение webman-admin](app/admin.md)
+  - [Логирование](app/log.md)
+  - [Интеграция с webman-admin](app/admin.md)
   - [Упаковка плагинов](app/pack.md)
   - [Публикация плагинов](app/publish.md)
   - [Установка и удаление](app/install.md)
-  - [Рынок приложений](app/market.md)
+  - [Магазин приложений](app/market.md)
 
-- Продвинутые навыки
+- Продвинутые возможности
+
   - [Пользовательские процессы](process.md)
   - [Внедрение зависимостей](di.md)
   - [AOP](aop.md)
   
-- Прочее
+- Другое
   - [Безопасность](others/security.md)
   - [Проверка отключенных функций](others/disable-function-check.md)
   - [Пользовательские скрипты](others/scripts.md)
@@ -100,15 +101,15 @@
   - [Методы обновления](others/upgrade.md)
   - [Прокси-сервер nginx](others/nginx-proxy.md)
   - [Упаковка в phar](others/phar.md)
-  - [Упаковка в бинарный вид](others/bin.md)
+  - [Бинарная упаковка](others/bin.md)
   - [Процесс запуска](others/process.md)
   - [Жизненный цикл](others/lifecycle.md)
   - [Утечка памяти](others/memory-leak.md)
-  - [Инициализация бизнеса](others/bootstrap.md)
+  - [Инициализация бизнес-логики](others/bootstrap.md)
   - [Автоматическая загрузка](others/autoload.md)
-  - [Обработка медленных процессов](others/task.md)
+  - [Обработка медленных запросов](others/task.md)
   - [Производительность](others/performance.md)
-  - [Тестирование нагрузки](others/benchmarks.md)
+  - [Тестирование производительности](others/benchmarks.md)
   - [Мониторинг файлов](others/monitor.md)
 
 - Обновление

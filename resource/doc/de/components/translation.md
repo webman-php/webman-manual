@@ -1,16 +1,17 @@
 # Mehrsprachigkeit
 
-Die Mehrsprachigkeit wird durch das [symfony/translation](https://github.com/symfony/translation) Modul realisiert.
+Mehrsprachigkeit wird durch das [symfony/translation](https://github.com/symfony/translation) Komponente realisiert.
 
 ## Installation
-```
+```shell
 composer require symfony/translation
 ```
 
-## Erstellung des Sprachpakets
-Webman legt standardmäßig das Sprachpaket im Verzeichnis `resource/translations` ab (falls es nicht vorhanden ist, bitte manuell erstellen). Wenn Sie das Verzeichnis ändern möchten, konfigurieren Sie es in der Datei `config/translation.php`.
-Jede Sprache entspricht einem Unterordner, und die Sprachdefinitionen sind standardmäßig in der Datei `messages.php` enthalten. Hier ist ein Beispiel:
-```
+## Erstellung von Sprachdateien
+Standardmäßig werden die Sprachdateien von webman im Verzeichnis `resource/translations` abgelegt (falls nicht vorhanden, bitte manuell erstellen). Sollte das Verzeichnis geändert werden, kann dies in der Datei `config/translation.php` eingestellt werden.
+Jede Sprache entspricht einem Unterordner, und die Sprachdefinitionen werden standardmäßig in der Datei `messages.php` abgelegt. Hier ist ein Beispiel:
+
+```plaintext
 resource/
 └── translations
     ├── en
@@ -19,12 +20,13 @@ resource/
         └── messages.php
 ```
 
-Alle Sprachdateien enthalten ein Array, zum Beispiel:
+Alle Sprachdateien geben ein Array zurück, zum Beispiel:
+
 ```php
 // resource/translations/en/messages.php
 
 return [
-    'hello' => 'Hallo Webman',
+    'hello' => 'Hello webman',
 ];
 ```
 
@@ -36,7 +38,7 @@ return [
 return [
     // Standardsprache
     'locale' => 'zh_CN',
-    // Fallback-Sprache, die verwendet wird, wenn in der aktuellen Sprache keine Übersetzung gefunden wird
+    // Fallback-Sprache: Wenn eine Übersetzung in der aktuellen Sprache nicht gefunden wird, wird versucht, die Übersetzung in der Fallback-Sprache zu finden.
     'fallback_locale' => ['zh_CN', 'en'],
     // Verzeichnis für Sprachdateien
     'path' => base_path() . '/resource/translations',
@@ -45,12 +47,13 @@ return [
 
 ## Übersetzung
 
-Die Übersetzung erfolgt mittels der `trans()` Methode.
+Die Übersetzung erfolgt mithilfe der `trans()`-Methode.
 
 Erstellen Sie die Sprachdatei `resource/translations/zh_CN/messages.php` wie folgt:
+
 ```php
 return [
-    'hello' => 'Hello Welt!',
+    'hello' => '你好 世界!',
 ];
 ```
 
@@ -65,22 +68,23 @@ class UserController
 {
     public function get(Request $request)
     {
-        $hello = trans('hello'); // Hello Welt!
+        $hello = trans('hello'); // 你好 世界!
         return response($hello);
     }
 }
 ```
 
-Der Zugriff auf `http://127.0.0.1:8787/user/get` gibt "Hello Welt!" zurück.
+Ein Aufruf von `http://127.0.0.1:8787/user/get` gibt "你好 世界!" zurück.
 
 ## Ändern der Standardsprache
 
-Die Sprache wird mit der `locale()` Methode geändert.
+Die Sprache kann mit der Methode `locale()` geändert werden.
 
-Erstellen Sie eine neue Sprachdatei `resource/translations/en/messages.php` wie folgt:
+Erstellen Sie eine neue Sprachdatei `resource/translations/en/messages.php`, wie folgt:
+
 ```php
 return [
-    'hello' => 'Hello Welt!',
+    'hello' => 'hello world!',
 ];
 ```
 
@@ -96,14 +100,14 @@ class UserController
     {
         // Sprache ändern
         locale('en');
-        $hello = trans('hello'); // Hello Welt!
+        $hello = trans('hello'); // hello world!
         return response($hello);
     }
 }
 ```
-Der Zugriff auf `http://127.0.0.1:8787/user/get` gibt "Hello Welt!" zurück.
+Ein Aufruf von `http://127.0.0.1:8787/user/get` gibt "hello world!" zurück.
 
-Sie können auch die vierte Variable der `trans()` Funktion verwenden, um vorübergehend die Sprache zu ändern. Das folgende Beispiel ist äquivalent zum obigen:
+Sie können auch das vierte Argument der `trans()`-Funktion verwenden, um die Sprache temporär zu ändern. Das folgende Beispiel ist äquivalent zu dem obigen:
 ```php
 <?php
 namespace app\controller;
@@ -114,17 +118,18 @@ class UserController
 {
     public function get(Request $request)
     {
-        // Sprache über die vierte Variable ändern
-        $hello = trans('hello', [], null, 'en'); // Hello Welt!
+        // Sprache durch das vierte Argument ändern
+        $hello = trans('hello', [], null, 'en'); // hello world!
         return response($hello);
     }
 }
 ```
 
-## Festlegen der Sprache explizit für jede Anfrage
-Die Übersetzung ist ein Singleton, was bedeutet, dass alle Anfragen dieselbe Instanz teilen. Wenn eine Anfrage die Standardsprache mit `locale()` festlegt, wirkt sich dies auf alle folgenden Anfragen des Prozesses aus. Daher sollte die Sprache für jede Anfrage explizit festgelegt werden. Verwenden Sie beispielsweise das folgende Middleware:
+## Festlegen der Sprache für jede Anfrage explizit
 
-Erstellen Sie die Datei `app/middleware/Lang.php` (falls das Verzeichnis nicht vorhanden ist, bitte manuell erstellen) wie folgt:
+Translation ist ein Singleton, was bedeutet, dass alle Anfragen diese Instanz gemeinsam nutzen. Wenn eine Anfrage die Standardsprache mit `locale()` festlegt, wirkt sich dies auf alle folgenden Anfragen in diesem Prozess aus. Daher sollten wir die Sprache für jede Anfrage explizit festlegen. Zum Beispiel mit dem folgenden Middleware:
+
+Erstellen Sie die Datei `app/middleware/Lang.php` (falls das Verzeichnis nicht existiert, bitte manuell erstellen) wie folgt:
 ```php
 <?php
 namespace app\middleware;
@@ -143,20 +148,19 @@ class Lang implements MiddlewareInterface
 }
 ```
 
-Fügen Sie in der Datei `config/middleware.php` globale Middleware wie unten gezeigt hinzu:
+Fügen Sie in der Datei `config/middleware.php` globale Middleware wie folgt hinzu:
 ```php
 return [
     // Globale Middleware
     '' => [
-        // ... Hier werden andere Middleware-Angaben ausgelassen
+        // ... andere Middleware hier
         app\middleware\Lang::class,
     ]
 ];
 ```
 
-
 ## Verwendung von Platzhaltern
-Manchmal enthält eine Nachricht die zu übersetzende Variable, z.B.
+Manchmal enthält eine Nachricht Variablen, die übersetzt werden müssen, zum Beispiel
 ```php
 trans('hello ' . $name);
 ```
@@ -165,58 +169,57 @@ In solchen Fällen verwenden wir Platzhalter.
 Ändern Sie `resource/translations/zh_CN/messages.php` wie folgt:
 ```php
 return [
-    'hello' => 'Hallo %name%!',
+    'hello' => '你好 %name%!',
+];
 ```
-Übergeben Sie die Daten beim Übersetzen über den zweiten Parameter den entsprechenden Wert des Platzhalters:
+Übergeben Sie die Daten beim Aufruf der Übersetzungsfunktion als Wert des Platzhalters durch das zweite Argument weiter:
 ```php
-trans('hello', ['%name%' => 'Webman']); // Hallo Webman!
+trans('hello', ['%name%' => 'webman']); // 你好 webman!
 ```
 
-## Plural behandeln
-In manchen Sprachen bedingt die Anzahl von Objekten unterschiedliche Satzkonstruktionen, z.B. `Es gibt %count% Apfel`, bei ` %count%` = 1 ist die korrekte Satzkonstruktion, aber bei mehr als 1 ist sie falsch.
+## Behandeln von Pluralformen
+In manchen Sprachen muss aufgrund der Anzahl unterschiedlicher Satzstrukturen unterschieden werden, z.B. `There is %count% apple`. Diese Satzstruktur ist richtig, wenn `%count%` gleich 1 ist, aber falsch, wenn sie größer als 1 ist.
 
-In solchen Fällen verwenden wir **Pipelines** (`|`) für die Angabe von Pluralformen.
+In solchen Fällen verwenden wir **Pipes** (`|`), um die verschiedenen Pluralformen anzugeben.
 
-Die Sprachdatei `resource/translations/en/messages.php` erhält eine neue Eintrag `apple_count` wie folgt:
+Fügen Sie in der Sprachdatei `resource/translations/en/messages.php` die Schlüssel-Wert-Paare für `apple_count` hinzu, wie folgt:
 ```php
 return [
     // ...
-
-    'apple_count' => 'Es gibt einen Apfel|Es gibt %count% Äpfel',
+    'apple_count' => 'There is one apple|There are %count% apples',
 ];
 ```
 
 ```php
-trans('apple_count', ['%count%' => 10]); // Es gibt 10 Äpfel
+trans('apple_count', ['%count%' => 10]); // There are 10 apples
 ```
 
-Sogar spezifische Zahlenbereiche können angegeben werden, um komplexere Regeln für die Pluralbildung zu erstellen:
+Sie können sogar Zahlenbereiche angeben, um komplexere Regeln für Pluralformen zu erstellen:
 ```php
 return [
     // ...
-
-    'apple_count' => '{0} Es gibt keine Äpfel|{1} Es gibt einen Apfel|]1,19] Es gibt %count% Äpfel|[20,Inf[ Es gibt viele Äpfel',
+    'apple_count' => '{0} There are no apples|{1} There is one apple|]1,19] There are %count% apples|[20,Inf[ There are many apples'
 ];
 ```
 
 ```php
-trans('apple_count', ['%count%' => 20]); // Es gibt viele Äpfel
+trans('apple_count', ['%count%' => 20]); // There are many apples
 ```
 
-## Festlegung der Sprachdatei
-Der Standardname für die Sprachdatei ist `messages.php`, tatsächlich können Sie jedoch auch andere Dateinamen für Sprachdateien erstellen.
+## Spezifische Sprachdateien verwenden
+Der Standardname für eine Sprachdatei ist `messages.php`, aber in Wirklichkeit können Sie Sprachdateien mit anderen Namen erstellen.
 
-Erstellen Sie die Sprachdatei `resource/translations/zh_CN/admin.php` wie folgt:
+Erstellen Sie eine Sprachdatei `resource/translations/zh_CN/admin.php` wie folgt:
 ```php
 return [
-    'hello_admin' => 'Hallo Admin!',
+    'hello_admin' => '你好 管理员!',
 ];
 ```
 
-Spezifizieren Sie über das dritte Argument von `trans()` den Dateinamen der Sprachdatei (ohne die `.php` Erweiterung).
+Verwenden Sie das dritte Argument von `trans()` um die Sprachdatei (ohne die `.php`-Erweiterung) anzugeben.
 ```php
-trans('hello', [], 'admin', 'zh_CN'); // Hallo Admin!
+trans('hello', [], 'admin', 'zh_CN'); // 你好 管理员!
 ```
 
 ## Weitere Informationen
-Siehe [symfony/translation-Dokumentation](https://symfony.com/doc/current/translation.html)
+Siehe [Symfony/Translation-Dokumentation](https://symfony.com/doc/current/translation.html)

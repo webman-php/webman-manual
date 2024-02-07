@@ -1,8 +1,8 @@
 # 快取
 
-在webman中，預設使用 [symfony/cache](https://github.com/symfony/cache) 作為快取組件。
+webman預設使用 [symfony/cache](https://github.com/symfony/cache) 作為快取元件。
 
-> 在使用 `symfony/cache` 之前，必須在 `php-cli` 中安裝 Redis 擴展。
+> 在使用 `symfony/cache` 前，必須先為 `php-cli` 安裝 Redis 擴充功能。
 
 ## 安裝
 **php 7.x**
@@ -14,10 +14,10 @@ composer require -W illuminate/redis ^8.2.0 symfony/cache ^5.2
 composer require -W illuminate/redis symfony/cache
 ```
 
-安裝後，需要進行重啟 (reload 無效)。
+安裝後需要 restart 重新啟動（reload 無效）。
 
 ## Redis配置
-Redis 的配置文件位於 `config/redis.php`
+Redis配置文件位於`config/redis.php`
 ```php
 return [
     'default' => [
@@ -49,8 +49,8 @@ class UserController
 ```
 
 > **注意**
-> key 尽量加一个前缀，避免與其他使用 Redis 的業務衝突。
+> key尽量加一个前缀，避免与其它使用redis的业务冲突
 
-## 使用其他快取組件
+## 使用其他快取元件
 
-[ThinkCache](https://github.com/top-think/think-cache) 組件的使用請參考 [其他資料庫](others.md#ThinkCache)。
+[ThinkCache](https://github.com/top-think/think-cache) 元件使用參考[其他資料庫](others.md#ThinkCache)。

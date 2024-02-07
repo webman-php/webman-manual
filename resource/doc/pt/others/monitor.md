@@ -1,23 +1,21 @@
-# Process Monitoring
-webman comes with a built-in monitor process that supports two functions:
+# Monitorar Processos
+webman possui um processo de monitoramento embutido que oferece suporte a duas funcionalidades:
+1. Monitoramento de atualizações de arquivos e carregamento automático de novo código de negócios (geralmente usado durante o desenvolvimento).
+2. Monitoramento de todos os processos que ocupam memória; se um processo estiver prestes a exceder o limite de 'memory_limit' definido no 'php.ini', o processo será reiniciado com segurança (sem impacto no negócio).
 
-1. Monitor file updates and automatically reload new business code (usually used during development)
-2. Monitor all processes occupying memory, and if a process's memory usage is about to exceed the `memory_limit` limit in `php.ini`, it will automatically safely restart the process (without affecting the business).
-
-### Monitoring Configuration
-The configuration is located in the file `config/process.php` under the `monitor` setting:
-
+## Configuração de Monitoramento
+No arquivo de configuração `config/process.php`, a configuração de `monitor` é a seguinte:
 ```php
 global $argv;
 
 return [
-    // File update detection and automatic reload
+    // Detecção de atualizações de arquivos e recarregamento automático
     'monitor' => [
         'handler' => process\Monitor::class,
         'reloadable' => false,
         'constructor' => [
-            // Monitor these directories
-            'monitorDir' => array_merge([
+            // Monitorar esses diretórios
+            'monitorDir' => array_merge([    // Quais diretórios devem ser monitorados
                 app_path(),
                 config_path(),
                 base_path() . '/process',
@@ -25,23 +23,22 @@ return [
                 base_path() . '/resource',
                 base_path() . '/.env',
             ], glob(base_path() . '/plugin/*/app'), glob(base_path() . '/plugin/*/config'), glob(base_path() . '/plugin/*/api')),
-            // Files with these suffixes will be monitored
+            // Arquivos com essas extensões serão monitorados
             'monitorExtensions' => [
                 'php', 'html', 'htm', 'env'
             ],
             'options' => [
-                'enable_file_monitor' => !in_array('-d', $argv) && DIRECTORY_SEPARATOR === '/',
-                'enable_memory_monitor' => DIRECTORY_SEPARATOR === '/',
+                'enable_file_monitor' => !in_array('-d', $argv) && DIRECTORY_SEPARATOR === '/', // Habilitar monitoramento de arquivos
+                'enable_memory_monitor' => DIRECTORY_SEPARATOR === '/',                      // Habilitar monitoramento de memória
             ]
         ]
     ]
 ];
 ```
+`monitorDir` é usado para configurar quais diretórios monitorar para atualizações (não é aconselhável ter muitos arquivos monitorados em um diretório).
+`monitorExtensions` é usado para configurar quais extensões de arquivos no diretório `monitorDir` devem ser monitoradas.
+Quando `options.enable_file_monitor` é `true`, o monitoramento de atualizações de arquivo é ativado (por padrão, no sistema Linux, o monitoramento de arquivo está ativado ao executar em modo de depuração).
+Quando `options.enable_memory_monitor` é `true`, o monitoramento do uso de memória é ativado (o monitoramento de uso de memória não é suportado no sistema Windows).
 
-The `monitorDir` is used to configure which directories to monitor for updates (files in monitored directories should not be too many).
-The `monitorExtensions` is used to configure which file suffixes in the `monitorDir` directory should be monitored.
-The `options.enable_file_monitor` is set to `true` to enable file update monitoring (by default, file monitoring is enabled when running in debug mode under Linux).
-The `options.enable_memory_monitor` is set to `true` to enable memory usage monitoring (memory usage monitoring is not supported on Windows).
-
-> **Note**
-> In Windows, file update monitoring can only be enabled when running `windows.bat` or `php windows.php`.
+> **Dica**
+> No sistema Windows, o monitoramento de atualizações de arquivo só é ativado ao executar `windows.bat` ou `php windows.php`.

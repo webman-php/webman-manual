@@ -1,20 +1,20 @@
 # 設定
-illuminate/database 中支援的資料庫和版本情況如下：
+illuminate/database 的資料庫及版本支援情況如下：
 
  - MySQL 5.6+ 
  - PostgreSQL 9.4+ 
  - SQLite 3.8.8+
  - SQL Server 2017+ 
  
- 資料庫設定檔位置在 `config/database.php`。
- 
+ 資料庫設定檔案位置為 `config/database.php`。
+
  ```php
  return [
-     // 默認資料庫
+     // 預設資料庫
      'default' => 'mysql',
      // 各種資料庫設定
      'connections' => [
- 
+
          'mysql' => [
              'driver'      => 'mysql',
              'host'        => '127.0.0.1',
@@ -35,7 +35,7 @@ illuminate/database 中支援的資料庫和版本情況如下：
              'database' => '',
              'prefix'   => '',
          ],
- 
+
          'pgsql' => [
              'driver'   => 'pgsql',
              'host'     => '127.0.0.1',
@@ -48,7 +48,7 @@ illuminate/database 中支援的資料庫和版本情況如下：
              'schema'   => 'public',
              'sslmode'  => 'prefer',
          ],
- 
+
          'sqlsrv' => [
              'driver'   => 'sqlsrv',
              'host'     => 'localhost',
@@ -62,19 +62,19 @@ illuminate/database 中支援的資料庫和版本情況如下：
      ],
  ];
  ```
- 
+
  ## 使用多個資料庫
-通過 `Db::connection('配置名')` 來選擇使用哪個資料庫，其中 `配置名` 為配置檔 `config/database.php` 中對應配置的 `key`。
- 
+透過 `Db::connection('設定名')` 來選擇使用哪個資料庫，其中 `設定名` 為設定檔案 `config/database.php` 中的對應設定的 `key`。
+
  例如如下資料庫配置：
 
 ```php
  return [
-     // 默認資料庫
+     // 預設資料庫
      'default' => 'mysql',
-     // 各種資料庫配置
+     // 各種資料庫設定
      'connections' => [
- 
+
          'mysql' => [
              'driver'      => 'mysql',
              'host'        =>   '127.0.0.1',
@@ -121,8 +121,8 @@ illuminate/database 中支援的資料庫和版本情況如下：
 
 像這樣切換資料庫。
 ```php
-// 使用默認資料庫，等同於 Db::connection('mysql')->table('users')->where('name', 'John')->first();
-$users = Db::table('users')->where('name', 'John')->first();; 
+// 使用預設資料庫，等同於 Db::connection('mysql')->table('users')->where('name', 'John')->first();
+$users = Db::table('users')->where('name', 'John')->first(); 
 // 使用mysql2
 $users = Db::connection('mysql2')->table('users')->where('name', 'John')->first();
 // 使用pgsql

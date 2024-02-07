@@ -1,20 +1,18 @@
 ## থিংকক্যাশ
 
-### থিংকক্যাশ ইনস্টল করুন
-
+### থিংকক্যাশ ইনস্টল করুন  
 `composer require -W webman/think-cache`
 
-ইনস্টল হওয়ার পরে পুনঃরায় চালু করতে হবে (রিলোড কার্যকর নয়)
+ইনস্টল করার পরে পুনরারম্ভ(restart) করা প্রয়োজন (মুলত বন্ধ করার পর পুনরারম্ভ করা সক্ষম হবে)
 
-
->[webman/think-cache](https://www.workerman.net/plugin/15) মূলত `toptink/think-cache` কে স্বয়ংক্রিয়ভাবে ইনস্টল করার একটি প্লাগইন।
+> [webman/think-cache](https://www.workerman.net/plugin/15) সক্রিয়তা বাহিত একটি `toptink/think-cache` এর অটোমেটেড ইনস্টলেশন প্লাগইন।
 
 > **লক্ষ্য করুন**
-> toptink/think-cache পিএইচপি 8.1 সমর্থন করে না।
-
+> toptink/think-cache পিএইচপি ৮.১ সমর্থন করে না।
+  
 ### কনফিগারেশন ফাইল
 
-কনফিগারেশন ফাইলটি `config/thinkcache.php` অবস্থিত।
+কনফিগারেশন ফাইলটি `config/thinkcache.php` নামে থাকবে।
 
 ### ব্যবহার
 
@@ -36,6 +34,6 @@
   }
   ```
 
-### থিংক-ক্যাশ ব্যবহারের নথি
+### থিং-ক্যাশ ব্যবহার ডকুমেন্ট
 
-[ThinkCache ডকুমেন্টেশন](https://github.com/top-think/think-cache)
+[ThinkCache ডকুমেন্টেশন লিংক](https://github.com/top-think/think-cache)

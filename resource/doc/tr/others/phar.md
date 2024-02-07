@@ -1,22 +1,22 @@
-# phar paketi
+# phar Paketi
 
-phar, PHP'de JAR'a benzer bir paketleme dosyasıdır. Webman projesinizi tek bir phar dosyasına paketlemek için phar'ı kullanabilirsiniz, bu da dağıtımı kolaylaştırır.
+phar, PHP'de JAR'a benzeyen bir paketleme dosyasıdır ve webman proje dosyalarını tek bir phar dosyasına paketlemek için phar'ı kullanabilirsiniz, bu da dağıtımı kolaylaştırır.
 
-**Burada [fuzqing](https://github.com/fuzqing) 'e PR için çok teşekkür ederiz.**
+**Burada [fuzqing](https://github.com/fuzqing) 'e çok teşekkür ederiz.**
 
-> **Dikkat**
-> `php.ini` dosyasındaki phar yapılandırma seçeneklerinin kapatılması gerekmektedir, yani `phar.readonly = 0` olarak ayarlanmalıdır.
+> **Not**
+> `php.ini`'de phar yapılandırma seçeneklerini kapatmanız gerekmektedir, yani `phar.readonly = 0` olarak ayarlanmalıdır.
 
 ## Komut Satırı Aracı Kurulumu
 `composer require webman/console`
 
 ## Yapılandırma Ayarları
-`config/plugin/webman/console/app.php` dosyasını açın, `'exclude_pattern'   => '#^(?!.*(composer.json|/.github/|/.idea/|/.git/|/.setting/|/runtime/|/vendor-bin/|/build/|vendor/webman/admin))(.*)$#` ayarını yaparak, kullanıcıların gereksiz dizinleri ve dosyaları paketlemesini önlemek için bazı dosyaları ve dizinleri paketlemesi gerekmektedir, bu şekilde paket boyutunun fazla olmasını engelleyecektir.
+`config/plugin/webman/console/app.php` dosyasını açın ve ` 'exclude_pattern' => '#^(?!.*(composer.json|/.github/|/.idea/|/.git/|/.setting/|/runtime/|/vendor-bin/|/build/|vendor/webman/admin))(.*)$#'` olarak ayarlayın, bu, kullanıcıların paketleme sırasında gereksiz dizinleri ve dosyaları hariç tutmalarına ve paket boyutunun aşırı büyümesini önlemelerine yardımcı olur.
 
 ## Paketleme
-webman projesinin kök dizininde `php webman phar:pack` komutunu çalıştırarak bir `webman.phar` dosyası oluşturulacaktır.
+webman proje kök dizininde `php webman phar:pack` komutunu çalıştırarak bir `webman.phar` dosyası oluşturacaktır.
 
-> Paketleme ile ilgili yapılandırma `config/plugin/webman/console/app.php` dosyasında bulunmaktadır.
+> Paketleme ilişkili yapılandırmalar `config/plugin/webman/console/app.php` içindedir.
 
 ## Başlatma ve Durdurma İlgili Komutlar
 **Başlatma**
@@ -35,14 +35,14 @@ webman projesinin kök dizininde `php webman phar:pack` komutunu çalıştırara
 `php webman.phar restart` veya `php webman.phar restart -d`
 
 ## Açıklama
-* webman.phar'ı çalıştırdıktan sonra webman.phar dosyasının bulunduğu dizinde geçici dosyalar gibi günlükleri depolamak için runtime dizini oluşturulacaktır.
+* webman.phar çalıştırıldıktan sonra, webman.phar dosyasının bulunduğu dizinde geçici dosyalar gibi günlük dosyasını depolamak için runtime dizini oluşturulur.
 
-* .env dosyasını projenizde kullanıyorsanız, .env dosyasını webman.phar'ın bulunduğu dizine koymalısınız.
+* Eğer projenizde .env dosyasını kullanıyorsanız, .env dosyasını webman.phar dosyasının bulunduğu dizine koymalısınız.
 
-* İşiniz public dizinine dosya yüklemeyi gerektiriyorsa, public dizinini webman.phar'ın bulunduğu dizinden ayrı olarak yerleştirmelisiniz, bu durumda `config/app.php` dosyasını yapılandırmanız gerekmektedir.
+* İşletmenizin public dizinine dosya yüklemesi yapmanız gerekiyorsa, public dizinini webman.phar dosyasının bulunduğu dizine çıkarmalısınız, bu durumda `config/app.php` dosyasını yapılandırmanız gerekmektedir.
 ```
 'public_path' => base_path(false) . DIRECTORY_SEPARATOR . 'public',
 ```
-İşlevler yardımıyla `public_path()` gerçek public dizin konumunu bulabilir.
+İşletme, gerçek public dizini konumunu bulmak için `public_path()` yardımcı fonksiyonunu kullanabilir.
 
-* webman.phar, özel süreçleri Windows'ta çalıştırmayı desteklemez.
+* webman.phar, özel işlemi Windows'ta etkinleştirmez.

@@ -1,56 +1,56 @@
 # Binary Packaging
 
-webman supports packaging the project into a binary file, which allows webman to run on a Linux system without the need for a PHP environment.
+Webman supports packaging projects into a binary file, allowing it to run on Linux systems without the need for a PHP environment.
 
 > **Note**
-> The packaged file is currently only supported to run on x86_64 architecture Linux systems and does not support macOS systems.
-> The phar configuration option in `php.ini` needs to be disabled, i.e. set `phar.readonly = 0`
+> The packaged file currently only supports running on x86_64 architecture Linux systems and does not support macOS.
+> The `php.ini` phar configuration option needs to be turned off by setting `phar.readonly = 0`.
 
-## Install Command Line Tool
+## Install command line tool
 `composer require webman/console ^1.2.24`
 
 ## Configuration Settings
-Open the `config/plugin/webman/console/app.php` file and set 
+Open the `config/plugin/webman/console/app.php` file and set
 ```php
 'exclude_pattern'   => '#^(?!.*(composer.json|/.github/|/.idea/|/.git/|/.setting/|/runtime/|/vendor-bin/|/build/|vendor/webman/admin))(.*)$#'
 ```
-to exclude some unnecessary directories and files when packaging, to avoid excessive package size
+to exclude some unnecessary directories and files during packaging to avoid excessive file size.
 
 ## Packaging
 Run the command
 ```
 php webman build:bin
 ```
-You can also specify which version of PHP to use for packaging, for example
+You can also specify which PHP version to package with, for example
 ```
 php webman build:bin 8.1
 ```
 
-After packaging, a `webman.bin` file will be generated in the build directory.
+This will generate a `webman.bin` file in the build directory.
 
 ## Startup
-Upload the webman.bin file to the Linux server and execute `./webman.bin start` or `./webman.bin start -d` to start.
+Upload webman.bin to the Linux server and execute `./webman.bin start` or `./webman.bin start -d` to start.
 
 ## Principle
-* First, package the local webman project into a phar file
-* Then remotely download php8.x.micro.sfx to the local machine
-* Concatenate php8.x.micro.sfx and the phar file into a binary file
+* First, package the local webman project into a Phar file.
+* Then, remotely download php8.x.micro.sfx to the local environment.
+* Concatenate php8.x.micro.sfx and the Phar file into a binary file.
 
 ## Notes
-* Local PHP versions >= 7.2 can execute the packaging command
-* However, only PHP 8 binary files can be packaged
-* It is strongly recommended to use the same local PHP version for packaging to avoid compatibility issues
-* The packaging will download the PHP 8 source code, but will not install it locally, and will not affect the local PHP environment
-* webman.bin currently only supports running on x86_64 architecture Linux systems and does not support running on macOS
-* By default, env files are not packaged (`config/plugin/webman/console/app.php` controls the exclude_files), so the env file should be placed in the same directory as webman.bin when started
-* During runtime, a runtime directory will be generated in the directory where webman.bin is located, used to store log files
-* Currently, webman.bin does not read external php.ini files. If a custom php.ini is needed, please set it in the `/config/plugin/webman/console/app.php` file under custom_ini.
+* Local PHP versions of 7.2 and above can execute the packaging command.
+* However, only binary files for PHP 8 can be packaged.
+* It is strongly recommended to use the same PHP version for local and packaged versions. For example, if the local version is PHP 8.0, use PHP 8.0 for packaging to avoid compatibility issues.
+* The packaging process will download the PHP 8 source code, but will not install it locally or affect the local PHP environment.
+* The webman.bin currently only supports running on x86_64 architecture Linux systems and does not support macOS.
+* By default, the env file is not packaged (`config/plugin/webman/console/app.php` excludes_files control), so the env file should be placed in the same directory as webman.bin when starting.
+* During runtime, a runtime directory will be generated in the directory where webman.bin is located, which is used to store log files.
+* Currently, webman.bin does not read external php.ini files. If you need to customize php.ini, please set it in the `config/plugin/webman/console/app.php` file under custom_ini.
 
-## Download Standalone PHP
-Sometimes, if you only need an executable PHP file and do not want to deploy the PHP environment, you can download the [standalone PHP here](https://www.workerman.net/download)
+## Downloading the Standalone PHP
+Sometimes you may only want to deploy the PHP environment and only need an executable PHP file. Click [here](https://www.workerman.net/download) to download the [Standalone PHP](https://www.workerman.net/download).
 
-> **Tip**
-> If you need to specify a php.ini file for the standalone PHP, use the following command: `php -c /your/path/php.ini start.php start -d`
+> **Note**
+> If you need to specify the php.ini file for the standalone PHP, please use the following command `php -c /your/path/php.ini start.php start -d`.
 
 ## Supported Extensions
 bcmath
@@ -99,7 +99,6 @@ xmlwriter
 zip
 zlib
 
-## Project Sources
-
-- https://github.com/crazywhalecc/static-php-cli
-- https://github.com/walkor/static-php-cli
+## Project Source
+https://github.com/crazywhalecc/static-php-cli
+https://github.com/walkor/static-php-cli

@@ -5,16 +5,16 @@
 ### Projektadresse
 
 https://github.com/Intervention/image
-  
+
 ### Installation
- 
+
 ```php
 composer require intervention/image
 ```
-  
+
 ### Verwendung
 
-**Hochladen von Seitenfragmente**
+**Upload-Seitenabschnitt**
 
 ```html
   <form method="post" action="/user/img" enctype="multipart/form-data">
@@ -23,7 +23,7 @@ composer require intervention/image
   </form>
 ```
 
-**Neue `app/controller/UserController.php` erstellen**
+**Erstellen Sie `app/controller/UserController.php` neu**
 
 ```php
 <?php
@@ -42,10 +42,9 @@ class UserController
         }
         return response('Datei nicht gefunden');
     }
-    
 }
 ```
-  
+
 ### Weitere Informationen
 
 Besuchen Sie http://image.intervention.io/getting_started/introduction

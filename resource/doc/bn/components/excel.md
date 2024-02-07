@@ -1,35 +1,47 @@
-# ওয়েবম্যান
+# ওয়েবম্যান
 
-## পিএইচপি ফ্রেমওয়ার্ক
+ওয়েবম্যান হল একটি উচ্চ কার্যকরী PHP ফ্রেমওয়ার্ক, যা workerman এর উপর নির্মিত, নিম্নলিখিতটি ওয়েবম্যান এর নথি শুরু হয়।
 
-### প্রজেক্ট ঠিকানা
+## Excel
 
-https://github.com/walkor/webman
+### phpoffice/phpspreadsheet
+
+#### প্রকল্প ঠিকানা
+
+https://github.com/PHPOffice/PhpSpreadsheet
   
-### ইনস্টলেশন
- 
-  ```php
-  composer require workerman/workerman
-  ```
+#### ইনস্টলেশন
+```php
+composer require phpoffice/phpspreadsheet
+```
   
-### ব্যবহার
-
+#### ব্যবহার
 ```php
 <?php
 namespace app\controller;
 
-use Workerman\Worker;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class WebmanController
+class ExcelController
 {
     public function index($request)
     {
-        // আপনার লজিক যুক্ত করুন
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'Hello World !');
+
+        $writer = new Xlsx($spreadsheet);
+        $file_path = public_path().'/hello_world.xlsx';
+        // ফাইলটি public এ সংরক্ষণ করুন
+        $writer->save($file_path);
+        // ফাইল ডাউনলোড করুন
+        return response()->download($file_path, 'ফাইলের_নাম.xlsx');
     }
 
 }
 ```
   
-### বিস্তারিত
+#### আরও বিস্তারিত
 
-https://www.workerman.net/webman
+https://phpspreadsheet.readthedocs.io/en/latest/

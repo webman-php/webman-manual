@@ -3,7 +3,7 @@
 ## Возвращение строки
 **Создание контроллера**
 
-Создайте файл `app/controller/UserController.php` следующего содержания:
+Создайте файл `app/controller/UserController.php` со следующим содержимым
 
 ```php
 <?php
@@ -16,22 +16,22 @@ class UserController
     public function hello(Request $request)
     {
         $default_name = 'webman';
-        // Получаем параметр name из GET-запроса. Если параметр name не передан, возвращаем $default_name
+        // Получение параметра name из GET-запроса, если параметр name не передается, возвращается $default_name
         $name = $request->get('name', $default_name);
-        // Возвращаем строку в браузер
-        return response('hello ' . $name);
+        // Возвращение строки в браузер
+        return response('Привет, ' . $name);
     }
 }
 ```
 
 **Доступ**
 
-Откройте в браузере страницу `http://127.0.0.1:8787/user/hello?name=tom`
+Откройте браузер и перейдите по ссылке `http://127.0.0.1:8787/user/hello?name=tom`
 
-Браузер вернет `hello tom`
+Браузер вернет `Привет, tom`
 
-## Возвращение json
-Измените файл `app/controller/UserController.php` следующим образом:
+## Возвращение JSON
+Измените файл `app/controller/UserController.php` следующим образом
 
 ```php
 <?php
@@ -56,22 +56,22 @@ class UserController
 
 **Доступ**
 
-Откройте в браузере страницу `http://127.0.0.1:8787/user/hello?name=tom`
+Откройте браузер и перейдите по ссылке `http://127.0.0.1:8787/user/hello?name=tom`
 
 Браузер вернет `{"code":0,"msg":"ok","data":"tom"}`
 
-Использование вспомогательной функции json для возврата данных автоматически добавляет заголовок `Content-Type: application/json`
+Использование вспомогательной функции json для возвращения данных автоматически добавит заголовок `Content-Type: application/json`
 
-## Возвращение xml
-Аналогично, использование функции-помощника `xml($xml)` вернет ответ `xml` с заголовком `Content-Type: text/xml`.
+## Возвращение XML
+Точно так же, использование вспомогательной функции `xml($xml)` вернет ответ с заголовком `Content-Type: text/xml`.
 
-Параметр `$xml` может быть строкой `xml` или объектом `SimpleXMLElement`.
+Параметр `$xml` может быть строкой XML или объектом `SimpleXMLElement`.
 
-## Возвращение jsonp
-Аналогично, использование функции-помощника `jsonp($data, $callback_name = 'callback')` вернет ответ `jsonp`.
+## Возвращение JSONP
+Точно так же, использование вспомогательной функции `jsonp($data, $callback_name = 'callback')` вернет ответ JSONP.
 
 ## Возвращение представления
-Измените файл `app/controller/UserController.php` следующим образом:
+Измените файл `app/controller/UserController.php` следующим образом
 
 ```php
 <?php
@@ -90,7 +90,7 @@ class UserController
 }
 ```
 
-Создайте файл `app/view/user/hello.html` следующего содержания:
+Создайте файл `app/view/user/hello.html` со следующим содержимым
 
 ```html
 <!doctype html>
@@ -100,12 +100,13 @@ class UserController
     <title>webman</title>
 </head>
 <body>
-hello <?=htmlspecialchars($name)?>
+Привет <?=htmlspecialchars($name)?>
 </body>
 </html>
 ```
 
-Откройте в браузере страницу `http://127.0.0.1:8787/user/hello?name=tom`
-Браузер вернет html-страницу с содержимым `hello tom`.
+Откройте браузер и перейдите по ссылке `http://127.0.0.1:8787/user/hello?name=tom`
 
-Примечание: по умолчанию webman использует оригинальный синтаксис PHP в качестве шаблона. Если хотите использовать другие представления, ознакомьтесь с [представлениями](view.md).
+Браузер вернет HTML-страницу с содержимым `Привет, tom`.
+
+Примечание: По умолчанию webman использует стандартный синтаксис PHP в качестве шаблонов. Если вы хотите использовать другие представления, ознакомьтесь с [представлением](view.md).

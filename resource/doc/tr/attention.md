@@ -1,22 +1,22 @@
 # Programlama Bilgisi
 
 ## İşletim Sistemi
-webman, hem linux hem de windows işletim sistemlerinde çalışabilir. Ancak, workerman'ın windows'ta çoklu işlem ve daemon işlemi desteği olmaması nedeniyle, windows sistemi sadece geliştirme ve hata ayıklama için önerilmektedir. Canlı ortamda linux sistemini kullanmanızı öneririz.
+webman hem linux hem de windows sistemlerinde çalışabilir. Ancak workerman'ın windows'ta çoklu işlemi desteklemediği ve daemon işlemini desteklemediği için, windows sisteminin yalnızca geliştirme ortamında kullanılması önerilir. Canlı ortamda linux sistemi kullanılmalıdır.
 
 ## Başlatma Yöntemi
-**linux sistemleri** için, `php start.php start` (hata ayıklama modu) veya `php start.php start -d` (daemon modu) komutunu kullanarak başlatılır.
-**windows sistemleri** için, `windows.bat` dosyasını çalıştırabilir veya `php windows.php` komutunu kullanarak başlatılır. Durdurmak için ctrl c tuşlarına basılır. Windows sistemleri, stop reload status reload connections gibi komutları desteklemez.
+**linux sistemlerinde**, `php start.php start` komutu (debug hata ayıklama modunda) veya `php start.php start -d` komutu (daemon modunda) ile başlatılır.
+**windows sistemlerinde** ise `windows.bat` dosyasını çalıştırabilir veya `php windows.php` komutunu kullanarak başlatabilirsiniz. Durdurmak için ctrl+c tuşları kullanılır. Windows sistemleri stop, reload, status, reload connections gibi komutları desteklemez.
 
-## Kalıcı Bellekte Tutma
-webman, kalıcı bellekte tutulan bir framework'tür. Genellikle, php dosyaları belleğe yüklendikten sonra tekrar diskten okunmaz (şablon dosyaları hariç). Bu nedenle canlı ortamda iş kodları veya yapılandırma değişiklikleri etkili olabilmesi için `php start.php reload` komutunu çalıştırmak gereklidir. Eğer işlemle ilgili yapılandırmayı değiştiriyorsanız veya yeni bir composer paketi kurduysanız, `php start.php restart` komutunu çalıştırmalısınız.
+## Sürekli Bellek Kullanımı
+webman sürekli bellek kullanımına sahip bir framework'tür. Genellikle, bir PHP dosyası belleğe yüklendikten sonra tekrar diskten okunmaz (şablon dosyaları hariç). Bu nedenle, canlı ortamda işlem kodu veya yapılandırma değişiklikleri yapıldıktan sonra, etkin olabilmesi için `php start.php reload` komutunu çalıştırmak gereklidir. Eğer işlemle ilgili yapılandırmalar değiştirildiyse veya yeni bir composer paketi yüklendiyse, `php start.php restart` ile yeniden başlatılması gerekir.
 
-> Geliştirme sürecini kolaylaştırmak için, webman modunda çalışan işlemi izlemek için özel bir monitor süreci içerir. İş dosyaları güncellendiğinde otomatik olarak yeniden yüklenir. Bu özellik sadece workerman debug modunda çalışırken (başlatma sırasında `-d` eklenmeden) etkindir. Windows kullanıcıları için bu özelliği etkinleştirmek için `windows.bat` veya `php windows.php` komutlarını çalıştırmalısınız.
+> Geliştirme sürecini kolaylaştırmak için, webman otomatik olarak dosya güncellemelerini izlemek için özel bir izleme süreci içerir. İşlem dosyaları güncellendiğinde otomatik olarak reload işlemi gerçekleştirilir. Bu özellik yalnızca workerman debug modunda çalıştığında (başlatılırken `-d` eklenmez) kullanılabilir. Windows kullanıcıları için ise `windows.bat` dosyasını çalıştırmaları veya `php windows.php` komutunu çalıştırmaları gerekir.
 
-## Çıkış İfadeleri Hakkında
-Geleneksel php-fpm projelerinde, `echo` `var_dump` gibi fonksiyonlarla veri çıktısı alınır ve bu çıktılar genellikle sayfada görüntülenir. Ancak webman'de, bu tür çıktılar genellikle terminalde görünür ve sayfada gösterilmez (şablon dosyaları hariç).
+## Çıktı İfadeleri Hakkında
+Geleneksel php-fpm projelerinde `echo`, `var_dump` gibi fonksiyonlar verileri doğrudan sayfada gösterirken, webman'de bu çıktılar genellikle terminalde görüntülenir ve sayfada görüntülenmez (şablon dosyalarındaki çıktılar hariç).
 
-## `exit` ve `die` İfadeleri Kullanmayın
-`die` veya `exit` komutlarını çalıştırmak, işlemi sonlandırır ve yeniden başlatır, bu da mevcut isteğin doğru şekilde yanıtlanmasını engeller.
+## `exit` veya `die` İfadelerini Kullanmayın
+Die veya exit komutları işlemi sonlandıracağı ve yeniden başlatacağı için, mevcut isteğin doğru şekilde yanıtlanamamasına neden olur.
 
 ## `pcntl_fork` Fonksiyonunu Kullanmayın
-`pcntl_fork` fonksiyonu, yeni bir işlem oluşturur ve webman'da kullanılmasına izin verilmez.
+`pcntl_fork` fonksiyonu bir işlem oluşturur, ancak webman içinde kullanılmamalıdır.

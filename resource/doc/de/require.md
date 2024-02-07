@@ -1,14 +1,13 @@
-# Benötigte Umgebung
-
+# erforderliche Umgebung
 
 ## Linux-System
-Das Linux-System benötigt die Erweiterungen `posix` und `pcntl`, die normalerweise in PHP integriert sind und in der Regel keine zusätzliche Installation erfordern.
+Für das Linux-System werden die Erweiterungen `posix` und `pcntl` benötigt, welche in der Regel bereits in PHP integriert sind und daher normalerweise keine separate Installation erfordern.
 
-Für Benutzer von Baota empfiehlt es sich, nur die Funktionen zu deaktivieren oder zu löschen, die mit `pnctl_` beginnen.
+Benutzer von Baota müssen lediglich die Funktionen, die mit "pnctl_" beginnen, in Baota deaktivieren oder löschen.
 
-Die Erweiterung `event` ist nicht zwingend erforderlich, wird jedoch für bessere Leistung empfohlen.
+Die Erweiterung `event` ist nicht zwingend erforderlich, wird aber für eine bessere Leistung empfohlen.
 
 ## Windows-System
-Webman kann auf Windows-Systemen ausgeführt werden, allerdings wird aufgrund der Unmöglichkeit, mehrere Prozesse und Hintergrundprozesse einzurichten, empfohlen, Windows nur als Entwicklungsplattform zu verwenden. In Produktionsumgebungen sollte ein Linux-System genutzt werden.
+Webman kann auch auf Windows-Systemen ausgeführt werden, jedoch wird empfohlen, Windows nur als Entwicklungsplattform zu verwenden und für die Produktionsumgebung auf Linux-Systeme zurückzugreifen, da unter Windows keine Konfiguration von Multiprozessen und Hintergrundprozessen möglich ist.
 
 Hinweis: Unter Windows sind die Erweiterungen `posix` und `pcntl` nicht erforderlich.

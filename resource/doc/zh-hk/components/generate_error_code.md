@@ -4,9 +4,9 @@
 
 能夠根據給定的規則自動維護錯誤碼的生成。
 
-> 約定返回數據中 code 參數，所有自定義的 code，正數代表服務正常，負數代表服務異常。
+> 約定返回數據中 code 參數，所有自定義的 code ，正數代表服務正常，負數代表服務異常。
 
-## 項目地址
+## 專案地址
 
 https://github.com/teamones-open/response-code-msg
 
@@ -25,7 +25,7 @@ composer require teamones/response-code-msg
 ```php
 <?php
 /**
- * 自動生成的文件 ,請不要手動修改.
+ * 自动生成的文件 ,請不要手動修改.
  * @Author:$Id$
  */
 namespace support;
@@ -52,7 +52,7 @@ return [
 ];
 ```
 
-### 在 start.php 中增加啟動自動生成錯誤碼代碼
+### 在 start.php 中增加啟動自动生成錯誤碼代碼
 
 - 文件路徑 ./start.php
 
@@ -68,9 +68,9 @@ if (config("app.debug")) {
 
 ### 在代碼中使用
 
-下面代碼中**ErrorCode::ModelAddOptionsError**為錯誤碼，其中**ModelAddOptionsError**需要用戶自己根據當前需求語義化首字母大寫去書寫。
+下面代碼中 **ErrorCode::ModelAddOptionsError** 為錯誤碼, 其中 **ModelAddOptionsError** 需要用戶自己根據當前需求語義化首字母大寫去書寫。
 
-> 書寫完你會發現是無法使用的，再下次重啟後會自動生成對應錯誤碼。注意有時候需要重啟兩次。
+> 書寫完你會發現是無法使用的，再次重啟後會自动生成對應錯誤碼。注意有時候需要重啟兩次。
 
 ```php
 <?php
@@ -118,7 +118,7 @@ class Demo
 ```php
 <?php
 /**
- * 自動生成的文件 ,請不要手動修改.
+ * 自动生成的文件 ,請不要手動修改.
  * @Author:$Id$
  */
 namespace support;

@@ -1,10 +1,10 @@
-# Casbin アクセス制御ライブラリ webman-permission
+# Casbinアクセス制御ライブラリ webman-permission
 
 ## 説明
 
-これは、[PHP-Casbin](https://github.com/php-casbin/php-casbin) に基づいており、`ACL`、`RBAC`、`ABAC` などのアクセス制御モデルをサポートする強力で効率的なオープンソースのアクセス制御フレームワークです。
+これは [PHP-Casbin](https://github.com/php-casbin/php-casbin) を基にした強力で効率的なオープンソースのアクセス制御フレームワークであり、`ACL`、`RBAC`、`ABAC`などのアクセス制御モデルをサポートしています。
 
-## プロジェクトURL
+## プロジェクトアドレス
 
 https://github.com/Tinywan/webman-permission
 
@@ -13,20 +13,21 @@ https://github.com/Tinywan/webman-permission
 ```php
 composer require tinywan/webman-permission
 ```
-> この拡張機能は PHP 7.1+ および [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998) が必要であり、公式マニュアルはこちら：https://www.workerman.net/doc/webman#/db/others
+> この拡張機能はPHP 7.1+および[ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998)が必要です。公式マニュアル：https://www.workerman.net/doc/webman#/db/others
 
 ## 設定
 
 ### サービスの登録
-以下のような内容の新しい設定ファイル `config/bootstrap.php` を作成します：
+`config/bootstrap.php` という新しい構成ファイルを作成し、次のような内容にします：
 
 ```php
-    // ...
-    webman\permission\Permission::class,
+// ...
+webman\permission\Permission::class,
 ```
 
-### モデルの設定ファイル
-以下のような内容の新しい設定ファイル `config/casbin-basic-model.conf` を作成します：
+### モデル構成ファイル
+
+`config/casbin-basic-model.conf` という新しい構成ファイルを作成し、次のような内容にします：
 
 ```conf
 [request_definition]
@@ -45,15 +46,16 @@ e = some(where (p.eft == allow))
 m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
 ```
 
-### ポリシーの設定ファイル
-以下のような内容の新しい設定ファイル `config/permission.php` を作成します：
+### ポリシー構成ファイル
+
+`config/permission.php` という新しい構成ファイルを作成し、次のような内容にします：
 
 ```php
 <?php
 
 return [
     /*
-     * デフォルトの権限
+     * デフォルトのアクセス権限
      */
     'default' => 'basic',
 
@@ -65,7 +67,7 @@ return [
     'enforcers' => [
         'basic' => [
             /*
-            * モデルの設定
+            * モデル設定
             */
             'model' => [
                 'config_type' => 'file',
@@ -73,16 +75,16 @@ return [
                 'config_text' => '',
             ],
 
-            // アダプタ 
+            // アダプター
             'adapter' => webman\permission\adapter\DatabaseAdapter::class,
 
             /*
             * データベース設定
             */
             'database' => [
-                // データベース接続名、未指定の場合はデフォルトの設定
+                // データベース接続名、未記入の場合はデフォルト設定
                 'connection' => '',
-                // ポリシーテーブル名（接頭辞を含まない）
+                // ポリシーテーブル名（接頭辞なし）
                 'rules_name' => 'rule',
                 // ポリシーテーブルの完全な名前
                 'rules_table' => 'train_rule',
@@ -92,39 +94,39 @@ return [
 ];
 ```
 
-## クイックスタート
+## 早速始めましょう
 
 ```php
 use webman\permission\Permission;
 
-// ユーザーに権限を追加する
+// ユーザーに権限を追加
 Permission::addPermissionForUser('eve', 'articles', 'read');
-// ユーザーにロールを追加する
+// ユーザーに役割を追加
 Permission::addRoleForUser('eve', 'writer');
-// ルールに権限を追加する
-Permission::addPolicy('writer', 'articles', 'edit');
+// ルールに権限を追加
+Permission::addPolicy('writer', 'articles','edit');
 ```
 
-次のようにして、ユーザーがそのような権限を持っているかどうかを確認できます。
+次のように、ユーザーがそのような権限を持っているかどうかを確認できます。
 
 ```php
 if (Permission::enforce("eve", "articles", "edit")) {
-    // eve に記事の編集を許可する
+    // eveに記事の編集を許可
 } else {
-    // リクエストを拒否してエラーを表示する
+    // リクエストを拒否し、エラーを表示
 }
 ````
 
 ## 認可ミドルウェア
 
-次のように、「app/middleware/AuthorizationMiddleware.php」（ディレクトリが存在しない場合は自分で作成してください）ファイルを作成します：
+`app/middleware/AuthorizationMiddleware.php`（ディレクトリが存在しない場合は作成してください）を次のように作成します：
 
 ```php
 <?php
 
 /**
  * 認可ミドルウェア
- * @author ShaoBo Wan (Tinywan)
+ * @Author ShaoBo Wan (Tinywan)
  * @datetime 2021/09/07 14:15
  */
 
@@ -140,30 +142,30 @@ use webman\permission\Permission;
 
 class AuthorizationMiddleware implements MiddlewareInterface
 {
-    public function process(Request $request, callable $next): Response
-    {
-        $uri = $request->path();
-        try {
-            $userId = 10086;
-            $action = $request->method();
-            if (!Permission::enforce((string) $userId, $uri, strtoupper($action))) {
-                throw new \Exception('申し訳ございませんが、このAPIにアクセス権限がありません');
-            }
-        } catch (CasbinException $exception) {
-            throw new \Exception('認可例外' . $exception->getMessage());
-        }
-        return $next($request);
-    }
+	public function process(Request $request, callable $next): Response
+	{
+		$uri = $request->path();
+		try {
+			$userId = 10086;
+			$action = $request->method();
+			if (!Permission::enforce((string) $userId, $uri, strtoupper($action))) {
+				throw new \Exception('申し訳ありませんが、このAPIにアクセス権限がありません');
+			}
+		} catch (CasbinException $exception) {
+			throw new \Exception('認可エラー'. $exception->getMessage());
+		}
+		return $next($request);
+	}
 }
 ```
 
-`config/middleware.php` にグローバルミドルウェアを以下のように追加します：
+`config/middleware.php` に次のようにグローバルミドルウェアを追加します：
 
 ```php
 return [
     // グローバルミドルウェア
     '' => [
-        // ... 他のミドルウェアを省略
+        // ... 他のミドルウェアは省略
         app\middleware\AuthorizationMiddleware::class,
     ]
 ];
@@ -171,8 +173,8 @@ return [
 
 ## 謝辞
 
-[Casbin](https://github.com/php-casbin/php-casbin)、その[公式ウェブサイト](https://casbin.org/)ですべてのドキュメントを確認できます。
+[Casbin](https://github.com/php-casbin/php-casbin)、すべてのドキュメントは[公式ウェブサイト](https://casbin.org/)でご覧いただけます。
 
 ## ライセンス
 
-このプロジェクトは [Apache 2.0 ライセンス](LICENSE) の下でライセンスされています。
+このプロジェクトは[Apache 2.0ライセンス](LICENSE)のもとでライセンスされています。

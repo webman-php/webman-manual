@@ -1,16 +1,15 @@
-# คอมโพเนนต์ที่เกี่ยวข้องกับรหัสยืนยัน
+# คอมโพเนนต์ที่เกี่ยวกับรหัสยืนยัน
 
 ## webman/captcha
-ที่อยู่โปรเจกต์ https://github.com/webman-php/captcha
+ที่อยู่ของโปรเจค https://github.com/webman-php/captcha
 
 ### การติดตั้ง
-```
-composer require webman/captcha
-```
+```composer require webman/captcha```
 
 ### การใช้งาน
 
 **สร้างไฟล์ `app/controller/LoginController.php`**
+
 
 ```php
 <?php
@@ -30,85 +29,84 @@ class LoginController
     }
     
     /**
-     * แสดงภาพรหัสยืนยัน
+     * แสดงรูปภาพยืนยันตัวตน
      */
     public function captcha(Request $request)
     {
-        // สร้างคลาสรหัสยืนยัน
+        // เริ่มต้นคลาสรหัสยืนยันตัวตน
         $builder = new CaptchaBuilder;
-        // สร้างรหัสยืนยัน
+        // สร้างรหัสยืนยันตัวตน
         $builder->build();
-        // บันทึกค่ารหัสยืนยันไว้ในเซสชั่น
+        // จัดเก็บค่ารหัสยืนยันตัวตนในเซสชัน
         $request->session()->set('captcha', strtolower($builder->getPhrase()));
-        // รับข้อมูลภาพรหัสยืนยันเป็นไบนารี
+        // รับข้อมูลไบนารีของรูปภาพยืนยันตัวตน
         $img_content = $builder->get();
-        // แสดงข้อมูลภาพรหัสยืนยันเป็นไบนารี
+        // แสดงข้อมูลไบนารีของรูปภาพยืนยันตัวตน
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
     }
 
     /**
-     * ตรวจสอบรหัสยืนยัน
+     * ตรวจสอบรหัสยืนยันตัวตน
      */
     public function check(Request $request)
     {
-        // รับฟิลด์รหัสยืนยันจากคำขอแบบ POST
+        // รับค่าฟิลด์รหัสยืนยันตัวตนจากคำขอ post
         $captcha = $request->post('captcha');
-        // เปรียบเทียบค่ารหัสยืนยันที่อยู่ในเซสชั่น
+        // เปรียบเทียบค่ารหัสยืนยันตัวตนในเซสชัน
         if (strtolower($captcha) !== $request->session()->get('captcha')) {
-            return json(['code' => 400, 'msg' => 'รหัสยืนยันที่ป้อนไม่ถูกต้อง']);
+            return json(['code' => 400, 'msg' => 'รหัสยืนยันตัวตนที่ป้อนไม่ถูกต้อง']);
         }
-        return json(['code' => 0, 'msg' => 'ok']);
+        return json(['code' => 0, 'msg' => 'ตกลง']);
     }
 
 }
 ```
 
 **สร้างไฟล์เทมเพลต `app/view/login/index.html`**
-
 ```html
 <!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>การทดสอบรหัสยืนยัน</title>  
+    <title>ทดสอบรหัสยืนยันตัวตน</title>  
 </head>
 <body>
     <form method="post" action="/login/check">
        <img src="/login/captcha" /><br>
         <input type="text" name="captcha" />
-        <input type="submit" value="ส่ง" />
+        <input type="submit" value="ยื่นยัน" />
     </form>
 </body>
 </html>
 ```
 
-เข้าสู่หน้าเว็บ `http://127.0.0.1:8787/login` จะมีหน้าต่างแสดงดังนี้:
+เข้าสู่หน้าเว็บ `http://127.0.0.1:8787/login` จะมีหน้าต่างในรูปแบบดังนี้:
   ![](../../assets/img/captcha.png)
 
-### การตั้งค่าพารามิเตอร์ที่พบบ่อย
+### การตั้งค่าพารามิเตอร์ที่ใช้บ่อย
 ```php
     /**
-     * แสดงภาพรหัสยืนยัน
+     * แสดงรูปภาพยืนยันตัวตน
      */
     public function captcha(Request $request)
     {
-        // สร้างคลาสรหัสยืนยัน
+        // เริ่มต้นคลาสรหัสยืนยันตัวตน
         $builder = new CaptchaBuilder;
-        // ความยาวของรหัสยืนยัน
+        // ความยาวของรหัสยืนยันตัวตน
         $length = 4;
-        // รวมอักขระที่มีในรหัส
+        // รวมตัวอักษรใดใดบ้าง
         $chars = '0123456789abcefghijklmnopqrstuvwxyz';
         $builder = new PhraseBuilder($length, $chars);
         $captcha = new CaptchaBuilder(null, $builder);
-        // สร้างรหัสยืนยัน
+        // สร้างรหัสยืนยันตัวตน
         $builder->build();
-        // บันทึกค่ารหัสยืนยันไว้ในเซสชั่น
+        // จัดเก็บค่ารหัสยืนยันตัวตนในเซสชัน
         $request->session()->set('captcha', strtolower($builder->getPhrase()));
-        // รับข้อมูลภาพรหัสยืนยันเป็นไบนารี
+        // รับข้อมูลไบนารีของรูปภาพยืนยันตัวตน
         $img_content = $builder->get();
-        // แสดงข้อมูลภาพรหัสยืนยันเป็นไบนารี
+        // แสดงข้อมูลไบนารีของรูปภาพยืนยันตัวตน
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
     }
 ```
 
-ดูเพิ่มเติมเกี่ยวกับอินเทอร์เฟซและพารามิเตอร์ที่ https://github.com/webman-php/captcha
+ดูข้อมูลเพิ่มเติมเกี่ยวกับอินเตอร์เฟซและพารามิเตอร์ได้ที่ https://github.com/webman-php/captcha

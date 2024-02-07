@@ -1,9 +1,9 @@
 # 發佈
 
-開發者可以將擁有版權的插件上傳到應用市場，幫助他人的同時也能獲得好處。
-發佈地址 https://www.workerman.net/app/create
+開發者可以將自有版權的插件上傳到應用市場，幫助他人的同時也能獲得受益。
+發布地址 https://www.workerman.net/app/create
 
-注意：發佈時填寫的**版本號**應該與`plugin/{插件}/config/app.php`中版本號一致
+注意：發布時填寫的**版本號**應該與`plugin/{插件}/config/app.php`中版本號一致
 
 ## 上架限制
 **不支持以下類型應用上架**

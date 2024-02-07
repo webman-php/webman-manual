@@ -1,8 +1,8 @@
-# webman Belgeleme
+# WeChat SDK
 
 ## overtrue/wechat
 
-### Proje Bağlantısı
+### Proje Adresi
 
 https://github.com/overtrue/wechat
   
@@ -37,7 +37,6 @@ class WechatController
 
 }
 ```
-  
   
 ### Daha Fazla İçerik
 

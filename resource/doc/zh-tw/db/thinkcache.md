@@ -6,14 +6,14 @@
 安裝後需要restart重啟(reload無效)
 
 
-> [webman/think-cache](https://www.workerman.net/plugin/15) 實際上是一個自動化安裝`toptink/think-cache` 的插件。
+> [webman/think-cache](https://www.workerman.net/plugin/15) 實際上是一個自動安裝`toptink/think-cache` 的插件。
 
 > **注意**
 > toptink/think-cache 不支持php8.1
-
+  
 ### 設定檔
 
-設定檔為 `config/thinkcache.php`
+設定檔位於 `config/thinkcache.php`
 
 ### 使用
 
@@ -34,6 +34,7 @@
       }
   }
   ```
+
 ### Think-Cache使用文件
 
 [ThinkCache文檔地址](https://github.com/top-think/think-cache)

@@ -1,7 +1,7 @@
 # ページネーション
 
-# 1. LaravelのORMベースのページング方法
-Laravelの`illuminate/database`には便利なページング機能が提供されています。
+# 1. LaravelのORMに基づいたページネーション
+Laravelの`illuminate/database`は便利なページネーション機能を提供しています。
 
 ## インストール
 `composer require illuminate/pagination`
@@ -16,33 +16,33 @@ public function index(Request $request)
 }
 ```
 
-## ページネータインスタンスメソッド
+## ページネーションのインスタンスメソッド
 |  メソッド   | 説明  |
 |  ----  |-----|
-|$paginator->count()|現在のページのデータ総数を取得します|
-|$paginator->currentPage()|現在のページ番号を取得します|
-|$paginator->firstItem()|結果セット内の最初のデータの番号を取得します|
-|$paginator->getOptions()|ページネータのオプションを取得します|
-|$paginator->getUrlRange($start, $end)|指定されたページ範囲のURLを作成します|
-|$paginator->hasPages()|複数のページを作成するのに十分なデータがあるかどうかをが取得します|
-|$paginator->hasMorePages()|表示可能な追加のページがあるかどうかを取得します|
-|$paginator->items()|現在のページのデータ項目を取得します|
-|$paginator->lastItem()|結果セット内の最後のデータの番号を取得します|
-|$paginator->lastPage()|最後のページ番号を取得します（simplePaginateでは使用できません）|
-|$paginator->nextPageUrl()|次のページのURLを取得します|
-|$paginator->onFirstPage()|現在のページが最初のページであるかを取得します|
-|$paginator->perPage()|ページごとに表示するデータ数を取得します|
-|$paginator->previousPageUrl()|前のページのURLを取得します|
-|$paginator->total()|結果セット内のデータの総数を取得します（simplePaginateでは使用できません）|
-|$paginator->url($page)|指定したページのURLを取得します|
-|$paginator->getPageName()|ページ番号を格納するためのクエリパラメータ名を取得します|
-|$paginator->setPageName($name)|ページ番号を格納するためのクエリパラメータ名を設定します|
+|$paginator->count()|現在のページのデータ総数を取得|
+|$paginator->currentPage()|現在のページ番号を取得|
+|$paginator->firstItem()|結果セット内の最初のデータの番号を取得|
+|$paginator->getOptions()|ページネータのオプションを取得|
+|$paginator->getUrlRange($start, $end)|指定されたページ番号範囲のURLを作成|
+|$paginator->hasPages()|複数のページを作成するための十分なデータがあるかどうか|
+|$paginator->hasMorePages()|表示可能な追加のページがあるかどうか|
+|$paginator->items()|現在のページのデータ項目を取得|
+|$paginator->lastItem()|結果セット内の最後のデータの番号を取得|
+|$paginator->lastPage()|最後のページのページ番号を取得（simplePaginateでは使用不可）|
+|$paginator->nextPageUrl()|次のページのURLを取得|
+|$paginator->onFirstPage()|現在のページが最初のページかどうか|
+|$paginator->perPage()|1ページに表示するデータの総数を取得|
+|$paginator->previousPageUrl()|前のページのURLを取得|
+|$paginator->total()|結果セット内のデータ総数を取得（simplePaginateでは使用不可）|
+|$paginator->url($page)|指定されたページのURLを取得|
+|$paginator->getPageName()|ページ番号を格納するためのクエリパラメータ名を取得|
+|$paginator->setPageName($name)|ページ番号を格納するためのクエリパラメータ名を設定|
 
 > **注意**
 > `$paginator->links()` メソッドはサポートされていません
 
-## ページングコンポーネント
-webmanでは `$paginator->links()` メソッドを使用してページボタンをレンダリングすることはできませんが、代わりに他のコンポーネントを使用してレンダリングすることができます。例えば、 `jasongrimes/php-paginator` を使用できます。
+## ページネーションコンポーネント
+Webmanでは`$paginator->links()` メソッドを使用してページネーションボタンをレンダリングすることはできませんが、他のコンポーネントを使用してレンダリングすることができます。例えば `jasongrimes/php-paginator` を使用することができます。
 
 **インストール**
 `composer require "jasongrimes/paginator:~1.0"`
@@ -69,12 +69,12 @@ class UserController
 }
 ```
 
-**テンプレート(phpネイティブ)**
-新しいテンプレート app/view/user/get.html を作成します。
+**テンプレート(php原生)**
+新しいテンプレートを作成 app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- 組み込みのBootstrapページングスタイルのサポート -->
+  <!-- Bootstrapページネーションスタイルをネイティブサポート -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -86,11 +86,11 @@ class UserController
 ```
 
 **テンプレート(twig)**
-新しいテンプレート app/view/user/get.html を作成します。
+新しいテンプレートを作成 app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- 組み込みのBootstrapページングスタイルのサポート -->
+  <!-- Bootstrapページネーションスタイルをネイティブサポート -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -104,11 +104,11 @@ class UserController
 ```
 
 **テンプレート(blade)**
-新しいテンプレート app/view/user/get.blade.php を作成します。
+新しいテンプレートを作成 app/view/user/get.blade.php
 ```html
 <html>
 <head>
-  <!-- 組み込みのBootstrapページングスタイルのサポート -->
+  <!-- Bootstrapページネーションスタイルをネイティブサポート -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -120,11 +120,11 @@ class UserController
 ```
 
 **テンプレート(thinkphp)**
-新しいテンプレート app/view/user/get.html を作成します。
+新しいテンプレートを作成 app/view/user/get.html
 ```html
 <html>
 <head>
-    <!-- 組み込みのBootstrapページングスタイルのサポート -->
+    <!-- Bootstrapページネーションスタイルをネイティブサポート -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -135,11 +135,11 @@ class UserController
 </html>
 ```
 
-効果は以下のようになります：
+効果は以下の通りです：
 ![](../../assets/img/paginator.png)
 
-# 2. ThinkphpのORMベースのページング方法
-追加のライブラリをインストールする必要はありません。 think-ormをインストールしていれば、利用可能です。
+# 2. ThinkphpのORMに基づいたページネーション方法
+追加のライブラリをインストールする必要はありません。think-ormがインストールされていれば使用できます。
 
 ## 使用方法
 ```php
@@ -155,7 +155,7 @@ public function index(Request $request)
 ```html
 <html>
 <head>
-    <!-- 組み込みのBootstrapページングスタイルのサポート -->
+    <!-- Bootstrapページネーションスタイルをネイティブサポート -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>

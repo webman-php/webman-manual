@@ -1,7 +1,7 @@
-# 日志
-webman使用 [monolog/monolog](https://github.com/Seldaek/monolog) 处理日志。
+# பதிவு
+webman புள்ளி பணியாளர், உள்ளிட்ட உதவியினால் monolog/monolog ஐ அனுப்புகின்றது.
 
-## 使用
+## பயன்பாடு
 ```php
 <?php
 namespace app\controller;
@@ -13,13 +13,13 @@ class FooController
 {
     public function index(Request $request)
     {
-        Log::info('log test');
-        return response('hello index');
+        Log::info('பதிவு சோதனை');
+        return response('வணக்கம் புள்ளி');
     }
 }
 ```
 
-## 提供的方法
+## வழங்கும் முறைகள்
 ```php
 Log::log($level, $message, array $context = [])
 Log::debug($message, array $context = [])
@@ -31,7 +31,7 @@ Log::critical($message, array $context = [])
 Log::alert($message, array $context = [])
 Log::emergency($message, array $context = [])
 ```
-等价于
+அதே மாதிரி
 ```php
 $log = Log::channel('default');
 $log->log($level, $message, array $context = [])
@@ -45,26 +45,26 @@ $log->alert($message, array $context = [])
 $log->emergency($message, array $context = [])
 ```
 
-## 配置
+## உருவாக்கல்
 ```php
 return [
-    // 默认日志通道
+    // இயல்புநிலை புள்ளி சாதனம்
     'default' => [
-        // 处理默认通道的handler，可以设置多个
+        // இயல்புநிலை புள்ளி சாதனத்தை செயல்படுத்தும் அனுபாத்திகள், பல கையெழுதலாம்
         'handlers' => [
             [   
-                // handler类的名字
+                // அனுபாத்தித் தொகுப்பனின் பெயர்
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // handler类的构造函数参数
+                // அனுபாத்தித் தொகுப்பனின் உருவரலாம்
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // 格式相关
+                // வடிவமைப்பு தொகுப்புப் பகுக்கத்தைப் பற்றி
                 'formatter' => [
-                    // 格式化处理类的名字
+                    // வடிவமைப்பு செயல் பகுதியாக்கலின் பெயர்
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // 格式化处理类的构造函数参数
+                    // வடிவமைப்பு செயல் பகுதியாக்கலின் உருவரலாம்
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -73,49 +73,49 @@ return [
 ];
 ```
 
-## 多通道
-monolog支持多通道，默认使用`default`通道。如果想增加一个`log2`通道，配置类似如下：
+## பல புள்ளி
+monolog பல புள்ளி ஆதரிக்கின்றது, இயல்புநிலையாக `default` புள்ளியைப் பயன்படுத்தி உருமாறி `log2` ஒரு புள்ளியை சேர்த்து உள்ளிடுக. முன்பே ஒரு புள்ளியைச் சேர்த்து உள்ளிட்டால், பிரகாரம் உள்ளிட்டது முரண்டு புள்ளி ஆகும்:
 ```php
 return [
-    // 默认日志通道
+    // இயல்புநிலை புள்ளி சாதனம்
     'default' => [
-        // 处理默认通道的handler，可以设置多个
+        // இயல்புநிலை புள்ளி சாதனத்தை செயல்படுத்தும் அனுபாத்திகள், பல கையெழுதலாம்
         'handlers' => [
             [   
-                // handler类的名字
+                // அனுபாத்தித் தொகுப்பனின் பெயர்
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // handler类的构造函数参数
+                // அனுபாத்தித் தொகுப்பனின் உருவரலாம்
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // 格式相关
+                // வடிவமைப்பு தொகுப்புப் பகுக்கத்தைப் பற்றி
                 'formatter' => [
-                    // 格式化处理类的名字
+                    // வடிவமைப்பு செயல் பகுதியாக்கலின் பெயர்
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // 格式化处理类的构造函数参数
+                    // வடிவமைப்பு செயல் பகுதியாக்கலின் உருவரலாம்
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
         ],
     ],
-    // log2通道
+    // log2 புள்ளி
     'log2' => [
-        // 处理默认通道的handler，可以设置多个
+        // இயல்புநிலை புள்ளி சாதனத்தை செயல்படுத்தும் அனுபாத்திகள், பல கையெழுதலாம்
         'handlers' => [
             [   
-                // handler类的名字
+                // அனுபாத்தித் தொகுப்பனின் பெயர்
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // handler类的构造函数参数
+                // அனுபாத்தித் தொகுப்பனின் உருவரலாம்
                 'constructor' => [
                     runtime_path() . '/logs/log2.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // 格式相关
+                // வடிவமைப்பு தொகுப்புப் பகுக்கத்தைப் பற்றி
                 'formatter' => [
-                    // 格式化处理类的名字
+                    // வடிவமைப்பு செயல் பகுதியாக்கலின் பெயர்
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // 格式化处理类的构造函数参数
+                    // வடிவமைப்பு செயல் பகுதியாக்கலின் உருவரலாம்
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -124,7 +124,7 @@ return [
 ];
 ```
 
-使用`log2`通道时用法如下：
+`log2` புள்ளி பயன்படும்போது பயன்படுத்துதல் வழி:
 ```php
 <?php
 namespace app\controller;
@@ -137,8 +137,8 @@ class FooController
     public function index(Request $request)
     {
         $log = Log::channel('log2');
-        $log->info('log2 test');
-        return response('hello index');
+        $log->info('log2 சோதனை');
+        return response('வணக்கம் புள்ளி');
     }
 }
 ```

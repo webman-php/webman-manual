@@ -1,35 +1,35 @@
-# Normes de développement des plugins d'application
+## Normes de développement de plugins d'application
 
-## Exigences pour les plugins d'application
-* Les plugins ne peuvent pas contenir de code, d'icônes, d'images ou autres éléments violant les droits d'auteur.
-* Le code source des plugins doit être complet et ne peut pas être chiffré.
-* Les plugins doivent offrir des fonctionnalités complètes et ne peuvent pas être simplement des fonctionnalités basiques.
+### Exigences des plugins d'application
+* Les plugins ne doivent pas contenir de code, d'icônes, d'images ou tout autre contenu portant atteinte aux droits d'auteur.
+* Le code source du plugin doit être complet et ne doit pas être crypté.
+* Le plugin doit offrir des fonctionnalités complètes et ne doit pas être simplement une fonctionnalité simple.
 * Une documentation complète des fonctionnalités doit être fournie.
-* Les plugins ne peuvent pas contenir de sous-marché intégré.
-* Aucun texte ou lien promotionnel n'est autorisé à l'intérieur des plugins.
+* Les plugins ne doivent pas inclure de sous-marché.
+* Aucun texte ou lien promotionnel ne doit figurer dans le plugin.
 
-## Identification des plugins d'application
-Chaque plugin d'application possède une identité unique composée de lettres. Cette identité influence le nom du répertoire où se trouve le code source du plugin, l'espace de noms des classes du plugin, et le préfixe des tables de la base de données du plugin.
+### Identification des plugins d'application
+Chaque plugin d'application a une identification unique, composée de lettres. Cette identification affecte le nom du répertoire source du plugin, l'espace de noms de la classe, et le préfixe de la table de la base de données du plugin.
 
-Supposons qu'un développeur utilise "foo" comme identifiant de plugin. Le répertoire du code source du plugin sera `{projet_principal}/plugin/foo`, l'espace de noms correspondant du plugin sera `plugin\foo`, et le préfixe des tables de base de données du plugin sera `foo_`.
+Par exemple, si le développeur a choisi "foo" comme identifiant de plugin, le répertoire source du plugin sera `{projet_principal}/plugin/foo`, l'espace de noms correspondant sera `plugin\foo`, et le préfixe de la table sera `foo_`.
 
-Étant donné que l'identifiant est unique sur l'ensemble du réseau, les développeurs doivent vérifier la disponibilité de l'identifiant avant de commencer le développement, en utilisant l'adresse de vérification d'identifiant d'application [Vérification d'identifiant d'application](https://www.workerman.net/app/check).
+Étant donné que l'identification est unique sur l'ensemble du réseau, les développeurs doivent vérifier la disponibilité de l'identification avant de commencer le développement, en se rendant à l'adresse [Vérification de l'identification de l'application](https://www.workerman.net/app/check).
 
-## Base de données
-* Les noms de table se composent de lettres minuscules de l'alphabet `a-z` et du caractère souligné `_`.
-* Les tables de données du plugin doivent utiliser l'identifiant du plugin comme préfixe. Par exemple, la table "article" du plugin "foo" sera `foo_article`.
-* La clé primaire des tables doit être l'index "id".
-* Le moteur de stockage doit utiliser le moteur InnoDB de manière uniforme.
-* L'encodage des caractères doit être en utf8mb4_general_ci.
-* L'ORM de la base de données peut utiliser Laravel ou Think-ORM.
-* Les champs de date et d'heure sont recommandés à utiliser de type DateTime.
+### Base de données
+* Les noms de table doivent être composés de lettres minuscules `a-z` et de traits de soulignement `_`.
+* Les tables de données du plugin doivent avoir pour préfixe l'identification du plugin. Par exemple, la table "article" du plugin "foo" sera nommée `foo_article`.
+* La clé primaire de la table devrait être "id".
+* Le moteur de stockage doit être le moteur InnoDB.
+* L'encodage de caractères doit être en utf8mb4_general_ci.
+* Il est possible d'utiliser l'ORM de Laravel ou de Think pour la base de données.
+* Il est recommandé d'utiliser le champ de type DateTime pour les données temporelles.
 
-## Normes de codage
+### Normes de codage
 
-#### Norme PSR
-Le code doit être conforme à la norme de chargement PSR4.
+#### Normes PSR
+Le code doit être conforme à la spécification de chargement PSR4.
 
-#### Nommer les classes en utilisant la notation CamelCase avec une majuscule en début de mot
+#### Nommer les classes en utilisant une notation CamelCase commençant par une majuscule
 ```php
 <?php
 
@@ -41,7 +41,7 @@ class ArticleController
 }
 ```
 
-#### Nommer les attributs et les méthodes des classes en utilisant la notation CamelCase avec une minuscule en début de mot
+#### Les attributs et les méthodes des classes doivent commencer par une minuscule suivie de CamelCase
 ```php
 <?php
 
@@ -56,7 +56,7 @@ class ArticleController
     protected $noNeedAuth = ['getComments'];
     
     /**
-     * Obtenir des commentaires
+     * Obtenir les commentaires
      * @param Request $request
      * @return Response
      * @throws BusinessException
@@ -69,23 +69,21 @@ class ArticleController
 ```
 
 #### Commentaires
-Les attributs et les fonctions des classes doivent inclure des commentaires décrivant la fonction, les paramètres et le type de retour.
+Les attributs et les fonctions des classes doivent être accompagnés de commentaires indiquant un résumé, les paramètres et le type de retour.
 
 #### Indentation
-Le code doit utiliser 4 espaces pour l'indentation, et non des tabulations.
+L'indentation du code doit utiliser quatre espaces au lieu de tabulations.
 
-#### Contrôle de flux
-Les mots-clés de contrôle de flux (if, for, while, foreach, etc.) doivent être suivis d'un espace, et les accolades de début et de fin de code de contrôle de flux doivent être sur la même ligne que la parenthèse terminale.
-
+#### Contrôles de flux
+Un espace doit suivre les mots clés de contrôle de flux (if, for, while, foreach, etc.), et les accolades du code de contrôle de flux doivent être sur la même ligne que la parenthèse de fin.
 ```php
 foreach ($users as $uid => $user) {
 
 }
 ```
 
-#### Nommage des variables temporaires
-Il est recommandé de nommer les variables temporaires en utilisant la notation CamelCase avec une minuscule en début de mot (non obligatoire).
-
+#### Nom des variables temporaires
+Il est recommandé de nommer les variables temporaires en commençant par une minuscule suivie de CamelCase (non obligatoire).
 ```php
 $articleCount = 100;
 ```

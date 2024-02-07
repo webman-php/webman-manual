@@ -2,7 +2,7 @@
 
 ## overtrue/wechat
 
-### Endereço do Projeto
+### Endereço do projeto
 
 https://github.com/overtrue/wechat
 
@@ -12,7 +12,7 @@ https://github.com/overtrue/wechat
 composer require overtrue/wechat ^5.0
 ```
 
-### Uso
+### Utilização
 
 ```php
 <?php
@@ -21,7 +21,6 @@ use support\Request;
 use EasyWeChat\Factory;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
-
 class WechatController
 {
     public function index(Request $request)
@@ -34,10 +33,11 @@ class WechatController
 
         $response = $app->server->serve();
         return $response->getContent();
-    }
+      }
+
 }
 ```
 
-### Mais Conteúdo
+### Mais conteúdo
 
-Visite https://www.easywechat.com/5.x/
+Acesse https://www.easywechat.com/5.x/

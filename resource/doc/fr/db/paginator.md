@@ -5,7 +5,11 @@
 The `illuminate/database` package of Laravel provides convenient pagination functionality.
 
 ## Installation
-`composer require illuminate/pagination`
+
+Run the following command to install the package:
+```bash
+composer require illuminate/pagination
+```
 
 ## Usage
 ```php
@@ -18,36 +22,39 @@ public function index(Request $request)
 ```
 
 ## Paginator Instance Methods
+
 | Method | Description |
-| ------ | ----------- |
-|$paginator->count()|Get the total number of items for the current page|
-|$paginator->currentPage()|Get the current page number|
-|$paginator->firstItem()|Get the number of the first item in the result set|
-|$paginator->getOptions()|Get the pagination options|
-|$paginator->getUrlRange($start, $end)|Create a range of URLs for a given page|
-|$paginator->hasPages()|Determine if there are enough items to split into multiple pages|
-|$paginator->hasMorePages()|Determine if there are more items in the result set|
-|$paginator->items()|Get the items for the current page|
-|$paginator->lastItem()|Get the number of the last item in the result set|
-|$paginator->lastPage()|Get the last page number available (not available in simplePaginate)|
-|$paginator->nextPageUrl()|Get the URL for the next page|
-|$paginator->onFirstPage()|Determine if the current page is the first page|
-|$paginator->perPage()|Get the number of items to be shown per page|
-|$paginator->previousPageUrl()|Get the URL for the previous page|
-|$paginator->total()|Get the total number of items in the result set (not available in simplePaginate)|
-|$paginator->url($page)|Get the URL for a given page|
-|$paginator->getPageName()|Get the query parameter name used to store the page|
-|$paginator->setPageName($name)|Set the query parameter name used to store the page|
+| ---- |-----|
+|$paginator->count()|Get the total number of items for the current page.
+|$paginator->currentPage()|Get the current page number.
+|$paginator->firstItem()|Get the number of the first item in the results.
+|$paginator->getOptions()|Get the paginator's options.
+|$paginator->getUrlRange($start, $end)|Get the URL for a given page range.
+|$paginator->hasPages()|Determine if there are enough items to split into multiple pages.
+|$paginator->hasMorePages()|Determine if there are more items in the result set.
+|$paginator->items()|Get the items for the current page.
+|$paginator->lastItem()|Get the number of the last item in the results.
+|$paginator->lastPage()|Get the last page number (not available for simplePaginate).
+|$paginator->nextPageUrl()|Get the URL for the next page.
+|$paginator->onFirstPage()|Determine if the paginator is on the first page.
+|$paginator->perPage()|Get the number of items to display per page.
+|$paginator->previousPageUrl()|Get the URL for the previous page.
+|$paginator->total()|Get the total number of items in the result set (not available for simplePaginate).
+|$paginator->url($page)|Get the URL for a specific page.
+|$paginator->getPageName()|Get the query string key used by the paginator.
+|$paginator->setPageName($name)|Set the query string key used by the paginator.
 
-> **Note**
-> The method `$paginator->links()` is not supported
+> *Note:*
+> The `$paginator->links()` method is not supported.
 
-## Pagination Components
-In webman, the `$paginator->links()` method is not supported for rendering pagination buttons. However, we can use other components for rendering, such as `jasongrimes/php-paginator`.
+## Pagination Component
+In webman, the `$paginator->links()` method cannot be used to render pagination buttons. Instead, you can use other components to render it, for example `jasongrimes/php-paginator`.
 
 **Installation**
-`composer require "jasongrimes/paginator:~1.0"`
-
+Run the following command to install the package:
+```bash
+composer require "jasongrimes/paginator:~1.0"
+```
 
 **Backend**
 ```php
@@ -71,7 +78,7 @@ class UserController
 }
 ```
 
-**Template (PHP native)**
+**Template (PHP Native)**
 Create a new template app/view/user/get.html
 ```html
 <html>
@@ -81,13 +88,13 @@ Create a new template app/view/user/get.html
 </head>
 <body>
 
-<?= $paginator;?>
+<?= $paginator; ?>
 
 </body>
 </html>
 ```
 
-**Template (twig)**
+**Template (Twig)**
 Create a new template app/view/user/get.html
 ```html
 <html>
@@ -105,7 +112,7 @@ Create a new template app/view/user/get.html
 </html>
 ```
 
-**Template (blade)**
+**Template (Blade)**
 Create a new template app/view/user/get.blade.php
 ```html
 <html>
@@ -121,7 +128,7 @@ Create a new template app/view/user/get.blade.php
 </html>
 ```
 
-**Template (thinkphp)**
+**Template (ThinkPHP)**
 Create a new template app/view/user/get.html
 ```html
 <html>
@@ -137,12 +144,12 @@ Create a new template app/view/user/get.html
 </html>
 ```
 
-The effect is as shown in the image:
+The result is as shown in the image below:
 ![](../../assets/img/paginator.png)
 
-# 2. Pagination using Thinkphp's ORM
+# 2. Pagination using ThinkPHP's ORM
 
-No additional library is needed, just install think-orm.
+There is no need to install additional libraries, as long as think-orm is installed.
 
 ## Usage
 ```php
@@ -154,7 +161,7 @@ public function index(Request $request)
 }
 ```
 
-**Template (thinkphp)**
+**Template (ThinkPHP)**
 ```html
 <html>
 <head>

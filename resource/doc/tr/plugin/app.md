@@ -1,94 +1,93 @@
 # Uygulama Eklentileri
-Her uygulama eklentisi, bir tam uygulamadır ve kaynak kodları `{ana proje}/plugin` dizinindedir.
+Her bir uygulama eklentisi, `{ana proje}/plugin` dizini altına yerleştirilmiş tamamlanmış bir uygulamadır.
 
 > **İpucu**
-> `php webman app-plugin:create {eklenti_adı}` komutunu kullanarak (webman/console>=1.2.16 gereklidir), yerelde bir uygulama eklentisi oluşturabilirsiniz,
-> örneğin `php webman app-plugin:create cms` komutu aşağıdaki dizin yapısını oluşturur.
+> Yerelde bir uygulama eklentisi oluşturmak için `php webman app-plugin:create {plugin_adı}` komutunu (webman/console>=1.2.16 gerektirir) kullanabilirsiniz, örneğin `php webman app-plugin:create cms` komutu aşağıdaki dizin yapısını oluşturacaktır
 
 ```
 plugin/
 └── cms
     ├── app
-    │   ├── controller
-    │   │   └── IndexController.php
-    │   ├── exception
-    │   │   └── Handler.php
-    │   ├── functions.php
-    │   ├── middleware
-    │   ├── model
-    │   └── view
-    │       └── index
-    │           └── index.html
+    │   ├── controller
+    │   │   └── IndexController.php
+    │   ├── exception
+    │   │   └── Handler.php
+    │   ├── functions.php
+    │   ├── middleware
+    │   ├── model
+    │   └── view
+    │       └── index
+    │           └── index.html
     ├── config
-    │   ├── app.php
-    │   ├── autoload.php
-    │   ├── container.php
-    │   ├── database.php
-    │   ├── exception.php
-    │   ├── log.php
-    │   ├── middleware.php
-    │   ├── process.php
-    │   ├── redis.php
-    │   ├── route.php
-    │   ├── static.php
-    │   ├── thinkorm.php
-    │   ├── translation.php
-    │   └── view.php
+    │   ├── app.php
+    │   ├── autoload.php
+    │   ├── container.php
+    │   ├── database.php
+    │   ├── exception.php
+    │   ├── log.php
+    │   ├── middleware.php
+    │   ├── process.php
+    │   ├── redis.php
+    │   ├── route.php
+    │   ├── static.php
+    │   ├── thinkorm.php
+    │   ├── translation.php
+    │   └── view.php
     └── public
 ```
 
-Görüldüğü gibi, bir uygulama eklentisi, webman ile aynı dizin yapısına ve yapılandırma dosyalarına sahiptir. Aslında bir uygulama eklentisi geliştirmek, webman projesi geliştirmekle neredeyse aynı deneyimi sunar, yalnızca aşağıdaki bazı konulara dikkat etmek gerekir.
+Görüldüğü gibi bir uygulama eklentisi, webman ile aynı dizin yapısına ve yapılandırma dosyalarına sahiptir. Aslında bir uygulama eklentisi geliştirmek, webman projesi geliştirmekle neredeyse aynı deneyime sahiptir, sadece aşağıdaki birkaç konuya dikkat etmek gerekmektedir.
 
-## Ad Alanı
-Eklenti dizini ve adlandırma PSR4 standartlarına uygun olmalıdır, çünkü eklentiler genellikle plugin dizini altına yerleştirildiği için ad alanları genellikle plugin ile başlar, örneğin `plugin\cms\app\controller\UserController` şeklinde isimlendirilir, burada cms eklentinin kaynak ana dizinidir.
+## Ad Alanları
+Eklenti dizini ve adlandırma PSR4 standartlarına uygun olmalıdır, çünkü eklentiler plugin dizini altına yerleştirilir, bu nedenle ad alanları genellikle plugin ile başlar, örneğin `plugin\cms\app\controller\UserController`, burada cms eklentinin kaynak kodu ana dizinidir.
 
 ## URL Erişimi
-Uygulama eklentisi URL adresi yolu her zaman `/app` ile başlar, örneğin `plugin\cms\app\controller\UserController` için URL adresi `http://127.0.0.1:8787/app/cms/user` şeklindedir.
+Uygulama eklentisi URL adresi yolu her zaman `/app` ile başlar, örneğin `plugin\cms\app\controller\UserController` için URL adresi `http://127.0.0.1:8787/app/cms/user`'dır.
 
 ## Statik Dosyalar
-Statik dosyalar genellikle `plugin/{eklenti}/public` altına yerleştirilir, örneğin `http://127.0.0.1:8787/app/cms/avatar.png` adresine erişmek aslında `plugin/cms/public/avatar.png` dosyasını almak anlamına gelir.
+Statik dosyalar `plugin/{eklenti}/public` dizinine yerleştirilir, örneğin `http://127.0.0.1:8787/app/cms/avatar.png` adresine erişmek aslında `plugin/cms/public/avatar.png` dosyasını almak anlamına gelir.
 
 ## Yapılandırma Dosyaları
-Eklentin yapılandırması normal webman projesi yapılandırması ile aynıdır, ancak eklentin yapılandırması genellikle yalnızca ilgili eklenti üzerinde etkilidir, genellikle ana projeye etki etmez.
-Örneğin `plugin.cms.app.controller_suffix` değeri sadece eklentinin denetleyici soneki üzerinde etki eder, ana projeye etki etmez.
-Örneğin `plugin.cms.app.controller_reuse` değeri sadece eklentinin denetleyicisinin tekrar kullanılıp kullanılmayacağını etkiler, ana projeye etki etmez.
-Örneğin `plugin.cms.middleware` değeri sadece eklentinin orta yazılımlarını etkiler, ana projeye etki etmez.
-Örneğin `plugin.cms.view` değeri sadece eklentinin kullandığı görünümü etkiler, ana projeye etki etmez.
-Örneğin `plugin.cms.container` değeri sadece eklentinin kullandığı konteynırı etkiler, ana projeye etki etmez.
-Örneğin `plugin.cms.exception` değeri sadece eklentinin istisna işleme sınıfını etkiler, ana projeye etki etmez.
+Eklentinin yapılandırması, normal webman projesiyle aynıdır, ancak genellikle eklentinin yapılandırması yalnızca o eklenti için geçerlidir, ana projeyi genellikle etkilemez.
+Örneğin `plugin.cms.app.controller_suffix` değeri sadece eklentinin denetleyici ek soneki üzerinde etkilidir, ana projeyi etkilemez.
+Örneğin `plugin.cms.app.controller_reuse` değeri sadece eklentinin denetleyiciyi yeniden kullanıp kullanmama durumunu etkiler, ana projeyi etkilemez.
+Örneğin `plugin.cms.middleware` değeri sadece eklentinin ara yazılımını etkiler, ana projeyi etkilemez.
+Örneğin `plugin.cms.view` değeri sadece eklentinin kullandığı görünümü etkiler, ana projeyi etkilemez.
+Örneğin `plugin.cms.container` değeri sadece eklentinin kullandığı konteynırı etkiler, ana projeyi etkilemez.
+Örneğin `plugin.cms.exception` değeri sadece eklentinin istisna işleme sınıfını etkiler, ana projeyi etkilemez.
 
-Ancak, yönlendirme genellikle genel olarak kabul edildiği için, eklenti yapılandırmasının yönlendirmeleri de genel olarak kabul edilir.
+Ancak, çünkü yönlendirme globaldir, bu nedenle eklenti yapılandırmanın yönlendirme de global düzeyde etkili olacağını unutmamak gerekmektedir.
 
 ## Yapılandırmayı Almak
-Belirli bir eklenti yapılandırmasını almak için `config('plugin.{eklenti}.{belirli_yapılandırma}');` yöntemini kullanabilirsiniz, örneğin `config('plugin.cms.app')` ile `plugin/cms/config/app.php` dosyasının tüm yapılandırmalarını alabilirsiniz.
-Aynı şekilde, ana proje veya diğer eklentiler de `config('plugin.cms.xxx')` ile cms eklentisinin yapılandırmasını alabilir.
+Belirli bir eklenti yapılandırmasını almak için `config('plugin.{eklenti}.{belirli_yapılandırma}');` yöntemi kullanılır, örneğin `config('plugin.cms.app')` ile `plugin/cms/config/app.php` dosyasının tüm yapılandırmasını alabilirsiniz.
+Aynı şekilde ana proje veya diğer eklentiler, `config('plugin.cms.xxx')` kullanarak cms eklentisinin yapılandırmasını alabilir.
 
 ## Desteklenmeyen Yapılandırmalar
-Uygulama eklentileri `server.php` ve `session.php` yapılandırmalarını desteklemez, ayrıca `app.request_class`, `app.public_path` ve `app.runtime_path` yapılandırmalarını desteklemez.
+Uygulama eklentileri `server.php`, `session.php` yapılandırmalarını desteklemez, `app.request_class`, `app.public_path`, `app.runtime_path` yapılandırmalarını desteklemez.
 
 ## Veritabanı
-Eklentiler kendi veritabanlarını yapılandırabilir, örneğin `plugin/cms/config/database.php` içeriği aşağıdaki gibidir
+Eklenti kendi veritabanını yapılandırabilir, örneğin `plugin/cms/config/database.php` dosyası şu içeriğe sahiptir
 ```php
 return  [
     'default' => 'mysql',
     'connections' => [
-        'mysql' => [ // mysql bağlantı adı
+        'mysql' => [ // mysql bağlantı adıdır
             'driver'      => 'mysql',
             'host'        => '127.0.0.1',
             'port'        => 3306,
             'database'    => 'veritabanı',
             'username'    => 'kullanıcı_adı',
-            'password'    => 'şifre',
+            'password'    => 'parola',
             'charset'     => 'utf8mb4',
             'collation'   => 'utf8mb4_general_ci',
         ],
-        'admin' => [ // admin bağlantı adı
+        'admin' => [ // admin bağlantı adıdır
             'driver'      => 'mysql',
             'host'        => '127.0.0.1',
             'port'        => 3306,
             'database'    => 'veritabanı',
             'username'    => 'kullanıcı_adı',
-            'password'    => 'şifre',
+            'password'    => 'parola',
             'charset'     => 'utf8mb4',
             'collation'   => 'utf8mb4_general_ci',
         ],
@@ -101,20 +100,19 @@ use support\Db;
 Db::connection('plugin.cms.mysql')->table('user')->first();
 Db::connection('plugin.cms.admin')->table('admin')->first();
 ```
-
-Eğer ana projenin veritabanını kullanmak isterseniz, doğrudan kullanabilirsiniz, örneğin
+Ana projenin veritabanını kullanmak istenirse, direkt olarak kullanılabilir, örneğin
 ```php
 use support\Db;
 Db::table('user')->first();
-// Varsayalım ki ana projede admin adında başka bir bağlantı ayarlamış olsun
+// Varsayalım ki ana projede admin bağlantısı da yapılandırılmış
 Db::connection('admin')->table('admin')->first();
 ```
 
 > **İpucu**
-> thinkorm da benzer bir kullanıma sahiptir
+> thinkorm'un kullanımı da benzerdir
 
 ## Redis
-Redis, veritabanı kullanımı ile benzer şekilde kullanılır, örneğin `plugin/cms/config/redis.php`
+Redis kullanımı veritabanıyla benzerdir, örneğin `plugin/cms/config/redis.php` dosyası şu içeriğe sahiptir
 ```php
 return [
     'default' => [
@@ -131,36 +129,37 @@ return [
     ],
 ];
 ```
-Kullanımı şu şekildedir
+Kullanım şekli
 ```php
 use support\Redis;
 Redis::connection('plugin.cms.default')->get('key');
 Redis::connection('plugin.cms.cache')->get('key');
 ```
-
-Aynı şekilde, ana projenin Redis yapılandırmasını yeniden kullanmak istiyorsanız
+Aynı şekilde, ana projenin Redis yapılandırmasını yeniden kullanmak istenirse
 ```php
 use support\Redis;
 Redis::get('key');
-// Varsayalım ki ana projede cache adında başka bir bağlantı ayarlamış olsun
+// Varsayalım ki ana projede cache bağlantısı da yapılandırılmış
 Redis::connection('cache')->get('key');
 ```
 
-## Günlük (Log)
-Günlük kullanımı da veritabanı kullanımıyla benzerdir
+## Günlük
+Günlük sınıfının kullanımı veritabanı kullanımına benzer.
+
 ```php
 use support\Log;
 Log::channel('plugin.admin.default')->info('test');
 ```
 
-Eğer ana projenin günlük yapılandırmasını yeniden kullanmak istiyorsanız, doğrudan kullanabilirsiniz
+Ana projenin günlük yapılandırmasını yeniden kullanmak istiyorsanız, doğrudan şunu kullanabilirsiniz:
+
 ```php
 use support\Log;
-Log::info('Log content');
-// Varsayalım ki ana projede test adında başka bir günlük yapılandırması ayarlamış olsun
-Log::channel('test')->info('Log content');
+Log::info('Günlük içeriği');
+// Varsayalım ana projenin 'test' adında bir günlük yapılandırması var
+Log::channel('test')->info('Günlük içeriği');
 ```
 
 # Uygulama Eklentisi Kurulumu ve Kaldırılması
-Uygulama eklentisini kurarken, eklenti dizinini `{ana proje}/plugin` dizinine kopyalamanız yeterlidir, etkin olabilmesi için reload veya restart yapmanız gerekir.
-Kaldırmak istediğinizde, ilgili eklenti dizinini doğrudan `{ana proje}/plugin` dizininden silebilirsiniz.
+Uygulama eklentisi kurulumu, eklenti dizinini `{ana proje}/plugin` dizinine kopyalamanız yeterlidir; yeniden yükleme veya yeniden başlatma gereklidir.
+Kaldırma işlemi, ilgili eklenti dizinini `{ana proje}/plugin` dizininden doğrudan silerek gerçekleştirilebilir.

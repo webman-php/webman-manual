@@ -1,12 +1,12 @@
-# Coroutine
+# Coroutines
 
-> **Coroutine Requirements**
+> **Requirements**
 > PHP>=8.1workerman>=5.0 webman-framework>=1.5 revolt/event-loop>1.0.0
-> To upgrade webman, run command: `composer require workerman/webman-framework ^1.5.0`
-> To upgrade workerman, run command: `composer require workerman/workerman ^5.0.0`
+> webman upgrade command `composer require workerman/webman-framework ^1.5.0`
+> workerman upgrade command `composer require workerman/workerman ^5.0.0`
 > Fiber coroutine requires installation of `composer require revolt/event-loop ^1.0.0`
 
-# Examples
+# Example
 ### Delayed Response
 
 ```php
@@ -27,10 +27,10 @@ class TestController
     }
 }
 ```
-`Timer::sleep()` is similar to the `sleep()` function in PHP, but the difference is that `Timer::sleep()` does not block the process.
+`Timer::sleep()` is similar to PHP's built-in `sleep()` function, but the difference is that `Timer::sleep()` does not block the process.
 
 
-### Making HTTP Requests
+### Sending HTTP Requests
 
 > **Note**
 > Requires installation of `composer require workerman/http-client ^2.0.0`
@@ -49,31 +49,30 @@ class TestController
     {
         static $client;
         $client = $client ?: new Client();
-        $response = $client->get('http://example.com'); // Synchronously initiate an asynchronous request
+        $response = $client->get('http://example.com'); // Asynchronously send a synchronous request
         return $response->getBody()->getContents();
     }
 }
 ```
-Similarly, the `$client->get('http://example.com')` request is non-blocking, which can be used to non-blockingly initiate HTTP requests in webman, improving application performance.
+Similarly, the `$client->get('http://example.com')` request is non-blocking, which can be used to asynchronously send HTTP requests in webman and improve application performance.
 
 For more information, refer to [workerman/http-client](https://www.workerman.net/doc/workerman/components/workerman-http-client.html)
 
-### Adding the support\Context class
+### Adding support\Context Class
 
-The `support\Context` class is used to store request context data. When the request is completed, the corresponding context data will be automatically deleted. This means that the context data's lifecycle follows the request's lifecycle. `support\Context` supports Fiber, Swoole, and Swow coroutine environments.
+The `support\Context` class is used to store request context data. When the request is completed, the corresponding context data is automatically deleted. In other words, the context data's lifespan follows the request's lifespan. `support\Context` supports Fiber, Swoole, and Swow coroutine environments.
 
 ### Swoole Coroutine
-
-After installing the Swoole extension (requires swoole>=5.0), enable Swoole coroutine by configuring config/server.php as follows:
+After installing the Swoole extension (requires swoole>=5.0), enable Swoole coroutine by configuring config/server.php
 ```php
 'event_loop' => \Workerman\Events\Swoole::class,
 ```
 
 For more information, refer to [workerman event-driven](https://www.workerman.net/doc/workerman/appendices/event.html)
 
-### Global Variable Pollution
+### Global Variable Contamination
 
-In a coroutine environment, it is forbidden to store **request-related** state information in global variables or static variables, as this may lead to global variable pollution. For example:
+In a coroutine environment, it is prohibited to store **request-related** state information in global variables or static variables, as this may lead to global variable contamination. For example:
 
 ```php
 <?php
@@ -96,13 +95,13 @@ class TestController
 }
 ```
 
-By setting the number of processes to 1, when we make two consecutive requests:
-1. http://127.0.0.1:8787/test?name=lilei
-2. http://127.0.0.1:8787/test?name=hanmeimei
+Setting the number of processes to 1, when we make two consecutive requests:  
+http://127.0.0.1:8787/test?name=lilei  
+http://127.0.0.1:8787/test?name=hanmeimei  
+We expect the results of the two requests to be `lilei` and `hanmeimei`, respectively, but actually both return `hanmeimei`.
+This is because the second request overwrites the static variable `$name`, and when the first request completes its sleep and returns, the static variable `$name` has already become `hanmeimei`.
 
-We expect the results of the two requests to be `lilei` and `hanmeimei`, respectively. However, in reality, both responses return `hanmeimei`. This is because the second request overrides the static variable `$name`, and by the time the first request finishes sleeping, the static variable `$name` has already become `hanmeimei`.
-
-**The correct approach is to use the context to store request state data**
+**The correct approach is to use context to store request state data:**
 ```php
 <?php
 
@@ -123,7 +122,7 @@ class TestController
 }
 ```
 
-**Local variables do not cause data pollution**
+**Local variables do not cause data contamination:**
 ```php
 <?php
 
@@ -143,15 +142,15 @@ class TestController
     }
 }
 ```
-Because `$name` is a local variable, coroutines cannot access local variables from each other, so using local variables is coroutine-safe.
+Because `$name` is a local variable, coroutines cannot access local variables from other coroutines, so using local variables is coroutine-safe.
 
 # About Coroutines
-Coroutines are not a silver bullet. Introducing coroutines means needing to pay attention to the issue of global variable/static variable pollution and setting the context. In addition, debugging bugs in a coroutine environment is more complicated than in a blocking style of programming.
+Coroutines are not a silver bullet. Introducing coroutines means that you need to be aware of global variable/static variable contamination and set up the context. Additionally, debugging bugs in a coroutine environment is more complex than in blocking programming.
 
-In reality, webman's blocking style of programming is already fast enough. According to the recent three rounds of benchmark data from [techempower.com](https://www.techempower.com/benchmarks/#section=data-r21&l=zijnjz-6bj&test=db&f=1ekg-cbcw-2t4w-27wr68-pc0-iv9slc-0-1ekgw-39g-kxs00-o0zk-4fu13d-2x8do8-2), in database-related businesses, webman's blocking style is nearly twice as performant as Go's web framework Gin, Echo, and others, and nearly 40 times as performant as the traditional framework Laravel.
+In webman, blocking programming is already fast enough. According to the latest round of benchmarking data from [techempower.com](https://www.techempower.com/benchmarks/#section=data-r21&l=zijnjz-6bj&test=db&f=1ekg-cbcw-2t4w-27wr68-pc0-iv9slc-0-1ekgw-39g-kxs00-o0zk-4fu13d-2x8do8-2), over the past three years, webman's blocking programming with database business is nearly 2 times faster than Go web frameworks such as gin and echo, and nearly 40 times faster than traditional frameworks like Laravel.
 ![](../../assets/img/benchemarks-go-sw.png?)
 
-When the database and Redis are both on the intranet, the performance of multi-process blocking style programming may often be higher than that of coroutines. This is because when the database, Redis, and other components are sufficiently fast, the overhead of coroutine creation, scheduling, and destruction may be greater than the overhead of process switching. Therefore, introducing coroutines at this point may not significantly improve performance.
+When the database and Redis are on the intranet, blocking programming performance may be higher than coroutine programming. This is because when the database and Redis are fast enough, the overhead of coroutine creation, scheduling, and destruction may be greater than the overhead of process switching. Therefore, introducing coroutines may not significantly improve performance in such cases.
 
 # When to Use Coroutines
-When there are slow accesses in the business, for example, when the business needs to access third-party interfaces, you can use [workerman/http-client](https://www.workerman.net/doc/workerman/components/workerman-http-client.html) to initiate asynchronous HTTP calls using coroutines to improve the application's concurrency capabilities.
+Coroutines can be used when there is slow access in the business logic, such as when the business needs to access a third-party API. In such cases, you can use the [workerman/http-client](https://www.workerman.net/doc/workerman/components/workerman-http-client.html) to asynchronously make an HTTP call in a coroutine, thereby improving the application's concurrent capability.

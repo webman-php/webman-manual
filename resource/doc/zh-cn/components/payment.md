@@ -15,7 +15,7 @@ composer require yansongda/pay ^3.0.0
 
 > 说明：以下以支付宝沙箱环境为环境进行文档编写，若有问题，请及时反馈哦！
 
-### 配置文件
+## 配置文件
 
 假设有以下配置文件 `config/payment.php`
 
@@ -111,7 +111,7 @@ return [
 │   └── appCertPublicKey_2016090900470841.crt
 ```
 
-### 初始化
+## 初始化
 
 直接调用 `config` 方法初始化
 ```php
@@ -121,7 +121,7 @@ Pay::config($config);
 ```
 > 注意：如果是支付宝沙箱模式，一定要记得开启配置文件 `'mode' => \Yansongda\Pay\Pay::MODE_SANDBOX,`，该选项默认为默认为正常模式。
 
-### 支付（网页）
+## 支付（网页）
 
 ```php
 use support\Request;
@@ -151,9 +151,7 @@ public function payment(Request $request)
 }
 ```
 
-### 回调
-
-#### 异步回调
+## 异步回调
 
 ```php
 use support\Request;
@@ -191,7 +189,7 @@ public function alipayNotify(Request $request): Response
 ```
 > 注意：不能使用插件本身 `return Pay::alipay()->success();`响应支付宝回调，如果你用到中间件会出现中间件问题。所以响应支付宝需要使用webman的响应类 `support\Response;`
 
-#### 同步回调
+## 同步回调
 
 ```php
 use support\Request;

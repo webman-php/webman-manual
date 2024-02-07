@@ -2,24 +2,25 @@
 
 ## Prozesslebenszyklus
 - Jeder Prozess hat eine lange Lebensdauer.
-- Jeder Prozess läuft unabhängig voneinander, ohne sich zu beeinflussen.
-- Jeder Prozess kann während seiner Lebensdauer mehrere Anfragen bearbeiten.
-- Beim Empfang von Befehlen wie `stop`, `reload` oder `restart` führt der Prozess einen Ausstieg durch und beendet den aktuellen Lebenszyklus.
+- Jeder Prozess arbeitet unabhängig voneinander und stört sich nicht gegenseitig.
+- Jeder Prozess kann während seiner Lebensdauer mehrere Anfragen verarbeiten.
+- Wenn ein Prozess die Befehle `stop`, `reload` oder `restart` empfängt, führt er einen Ausstieg aus und beendet seine aktuelle Lebensdauer.
 
 > **Hinweis**
-> Jeder Prozess arbeitet unabhängig voneinander, was bedeutet, dass jeder Prozess seine eigenen Ressourcen, Variablen und Klasseninstanzen verwaltet. Dies äußert sich darin, dass jeder Prozess seine eigene Datenbankverbindung hat und einige Singleton-Instanzen für jeden Prozess initialisiert werden. Dadurch werden viele Prozesse mehrfach initialisiert.
+> Jeder Prozess arbeitet unabhängig voneinander, was bedeutet, dass jeder Prozess seine eigenen Ressourcen, Variablen und Klasseninstanzen wie z.B. eigene Datenbankverbindungen verwaltet. Einige Singleton-Instanzen werden in jedem Prozess einmal initialisiert, was bedeutet, dass sie mehrmals initialisiert werden, wenn mehrere Prozesse vorhanden sind.
 
-## Anfragelebenszyklus
-- Jede Anfrage erzeugt ein `$request`-Objekt.
-- Das `$request`-Objekt wird nach Abschluss der Anfrageverarbeitung freigegeben.
+## Anforderungslebenszyklus
+- Jede Anfrage generiert ein `$request`-Objekt.
+- Das `$request`-Objekt wird nach Abschluss der Anfrageabwicklung freigegeben.
 
 ## Controller-Lebenszyklus
-- Jeder Controller wird in jedem Prozess nur einmal instanziiert, in mehreren Prozessen mehrmals (mit Ausnahme der Controller-Wiederverwendung, siehe [Controller-Lebenszyklus](https://www.workerman.net/doc/webman/controller.html#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F)).
-- Controller-Instanzen werden von mehreren Anfragen innerhalb des aktuellen Prozesses geteilt (mit Ausnahme der Controller-Wiederverwendung).
-- Der Controller-Lebenszyklus endet, wenn der Prozess beendet wird (mit Ausnahme der Controller-Wiederverwendung).
+- Jeder Controller wird in jedem Prozess nur einmal instanziiert, in mehreren Prozessen jedoch mehrmals (mit Ausnahme des Controller-Reuse, siehe [Controller-Lebenszyklus](https://www.workerman.net/doc/webman/controller.html#%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F)).
+- Instanzen eines Controllers werden von mehreren Anfragen innerhalb des aktuellen Prozesses geteilt (mit Ausnahme des Controller-Reuse).
+- Der Controller-Lebenszyklus endet, wenn der Prozess beendet wird (mit Ausnahme des Controller-Reuse).
 
-## Über den Variablen-Lebenszyklus
-Da webman auf PHP basiert, folgt es vollständig dem Variablenentsorgungsmechanismus von PHP. Temporäre Variablen, einschließlich Instanzen von Klassen, die mit dem Schlüsselwort `new` erstellt wurden, werden automatisch nach dem Ende einer Funktion oder Methode entsorgt, und ein manuelles `unset` ist nicht erforderlich. Mit anderen Worten, die Entwicklung mit webman unterscheidet sich im Grunde nicht von der traditionellen Framework-Entwicklung. Im folgenden Beispiel wird die Instanz `$foo` automatisch freigegeben, wenn die Methode `index` abgeschlossen wird:
+## Zur Variablenlebensdauer
+Webman basiert auf PHP und folgt daher vollständig dem Variablenbereinigungsmechanismus von PHP. Temporäre Variablen, die in der Geschäftslogik erstellt wurden, einschließlich Instanzen von Klassen, die mit dem `new`-Schlüsselwort erstellt wurden, werden automatisch nach Beendigung einer Funktion oder Methode bereinigt und müssen nicht manuell mit `unset` freigegeben werden. Das bedeutet, dass die Erfahrung der Entwicklung mit Webman im Wesentlichen der Entwicklung mit herkömmlichen Frameworks entspricht. Zum Beispiel wird die Instanz von `$foo` im folgenden Beispiel automatisch freigegeben, wenn die `index`-Methode abgeschlossen ist:
+
 ```php
 <?php
 
@@ -32,12 +33,13 @@ class IndexController
 {
     public function index(Request $request)
     {
-        $foo = new Foo(); // Hier wird angenommen, dass es eine Klasse Foo gibt
+        $foo = new Foo(); // Angenommen, es gibt eine Klasse namens Foo
         return response($foo->sayHello());
     }
 }
 ```
-Wenn Sie eine Instanz einer Klasse wiederverwenden möchten, können Sie die Klasse in einer statischen Eigenschaft der Klasse oder in einer Eigenschaft eines langen Lebenszyklusobjekts (wie dem Controller) speichern. Alternativ können Sie die Methode `get` des Container-Containers verwenden, um eine Instanz der Klasse zu initialisieren, wie zum Beispiel:
+Wenn Sie möchten, dass eine Instanz einer Klasse wiederverwendet wird, können Sie die Klasse in einem statischen Attribut der Klasse oder in einem Attribut eines Objekts mit langer Lebensdauer (z. B. des Controllers) speichern oder die `get`-Methode des Container-Containers verwenden, um eine Instanz der Klasse zu initialisieren, zum Beispiel:
+
 ```php
 <?php
 
@@ -56,14 +58,14 @@ class IndexController
     }
 }
 ```
-
-Die Methode `Container::get()` wird verwendet, um eine Instanz der Klasse zu erstellen und zu speichern. Beim erneuten Aufruf mit denselben Parametern wird die zuvor erstellte Instanz zurückgegeben.
+Die `Container::get()`-Methode dient zum Erstellen und Speichern von Klasseninstanzen. Bei erneutem Aufruf mit denselben Parametern wird die zuvor erstellte Instanz zurückgegeben.
 
 > **Hinweis**
-> `Container::get()` kann nur Instanzen ohne Konstruktorparameter initialisieren. `Container::make()` kann Instanzen mit Konstruktoren parametern erstellen, aber im Gegensatz zu `Container::get()` wird `Container::make()` die Instanz nicht wiederverwenden, dh selbst bei gleichen Parametern wird `Container::make()` immer eine neue Instanz zurückgeben.
+> `Container::get()` kann nur Instanzen ohne Konstruktorargumente initialisieren. `Container::make()` kann Instanzen mit Konstruktorargumenten erstellen, und im Gegensatz zu `Container::get()` wird `Container::make()` die Instanz nicht wiederverwenden, was bedeutet, dass sie immer eine neue Instanz zurückgibt, auch bei wiederholtem Aufruf mit denselben Parametern.
 
-# Über Memory Leaks
-In den meisten Fällen tritt in unseren Geschäftslogiken kein Memory Leak auf (nur sehr wenige Benutzer haben auf Memory Leaks hingewiesen). Es ist ausreichend, darauf zu achten, dass sich die Array-Daten mit langem Lebenszyklus nicht unbegrenzt erweitern. Sehen Sie sich bitte den folgenden Code an:
+# Über Speicherlecks
+In den allermeisten Fällen tritt in unserem Geschäftscode kein Speicherleck auf (nur sehr wenige Benutzer haben davon berichtet). Es genügt, darauf zu achten, dass die langzeitigen Array-Daten nicht endlos wachsen. Betrachten Sie bitte den folgenden Code:
+
 ```php
 <?php
 namespace app\controller;
@@ -78,15 +80,15 @@ class FooController
     public function index(Request $request)
     {
         $this->data[] = time();
-        return response('Hallo Index');
+        return response('hello index');
     }
 
     public function hello(Request $request)
     {
-        return response('Hallo Webman');
+        return response('hello webman');
     }
 }
 ```
-Ein Controller ist standardmäßig mit einem langen Lebenszyklus ausgestattet (mit Ausnahme der Controller-Wiederverwendung), und die Array-Eigenschaft `$data` desselben Controllers hat ebenfalls einen langen Lebenszyklus. Mit zunehmenden Anfragen an `foo/index` erweitert sich das `$data`-Array und führt zu einem Memory Leak.
+Ein Controller ist standardmäßig langzeitig (mit Ausnahme des Controller-Reuse), und ebenso ist die Eigenschaft `$data` des Controllers ebenfalls langzeitig. Wenn die Anfragen für `foo/index` weiterhin hinzugefügt werden, wächst das Element `$data`-Array endlos, was zu einem Speicherleck führen kann.
 
-Für weitere Informationen siehe [Memory-Leaks](./memory-leak.md)
+Für weitere Informationen siehe [Speicherlecks](./memory-leak.md).

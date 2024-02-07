@@ -1,18 +1,18 @@
 # AOP
 
-> Vielen Dank an den Autor von Hyperf
+> Thanks to the author of Hyperf for the contribution
 
 ### Installation
 
-- Installieren Sie die AOP-Integration
+- Install aop-integration
 
 ```shell
 composer require "hyperf/aop-integration: ^1.1"
 ```
 
-### Hinzufügen von AOP-spezifischen Konfigurationen
+### Add AOP related configuration
 
-Es ist erforderlich, dass wir im Verzeichnis "config" die Datei "config.php" mit den folgenden Konfigurationen hinzufügen:
+We need to add the `config.php` configuration in the `config` directory
 
 ```php
 <?php
@@ -36,31 +36,31 @@ return [
         ],
     ],
     'aspects' => [
-        // Fügen Sie hier die entsprechenden Aspekte hinzu
+        // Here write the corresponding Aspect
         app\aspect\DebugAspect::class,
     ]
 ];
 
 ```
 
-### Konfiguration der Einstiegsdatei start.php
+### Configure the entry file start.php
 
-> Den Initialisierungsschritt platzieren wir unter "timezone". Der folgende Code wird ausgelassen.
+> We will place the initialization method below the timezone, and the other code is omitted below
 
-```
+```php
 use Hyperf\AopIntegration\ClassLoader;
 
 if ($timezone = config('app.default_timezone')) {
     date_default_timezone_set($timezone);
 }
 
-// Initialisierung
+// Initialize
 ClassLoader::init();
 ```
 
 ### Test
 
-Legen wir zuerst die zu bearbeitende Klasse an:
+First, let's write the class to be intercepted
 
 ```php
 <?php
@@ -75,7 +75,7 @@ class UserService
 }
 ```
 
-Als nächstes fügen wir den entsprechenden `DebugAspect` hinzu:
+Secondly, add the corresponding `DebugAspect`
 
 ```php
 <?php
@@ -99,7 +99,7 @@ class DebugAspect extends AbstractAspect
 }
 ```
 
-Dann bearbeiten wir den Controller `app/controller/IndexController.php`:
+Next, edit the controller `app/controller/IndexController.php`
 
 ```php
 <?php
@@ -117,7 +117,7 @@ class IndexController
 }
 ```
 
-Als nächstes konfigurieren wir die Route:
+Then configure the route
 
 ```php
 <?php
@@ -126,7 +126,7 @@ use Webman\Route;
 Route::any('/json', [app\controller\IndexController::class, 'json']);
 ```
 
-Zuletzt starten wir den Service und führen einen Test durch.
+Finally, start the service and test it.
 
 ```shell
 php start.php start

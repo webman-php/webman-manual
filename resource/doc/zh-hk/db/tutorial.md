@@ -1,6 +1,6 @@
 # 快速開始
 
-webman數據庫預設採用 [illuminate/database](https://github.com/illuminate/database)，也就是 [laravel的數據庫](https://learnku.com/docs/laravel/8.x/database/9400)，使用方式與laravel相同。
+webman數據庫默認採用的是 [illuminate/database](https://github.com/illuminate/database)，也就是[laravel的數據庫](https://learnku.com/docs/laravel/8.x/database/9400)，用法與laravel相同。
 
 當然你可以參考[使用其他數據庫組件](others.md)章節使用ThinkPHP或者其他數據庫。
 
@@ -11,12 +11,13 @@ webman數據庫預設採用 [illuminate/database](https://github.com/illuminate/
 安裝後需要restart重啟(reload無效)
 
 > **提示**
-> 如果不需要分⾴、數據庫事件、打印SQL，則只需要執⾏
+> 如果不需要分頁、數據庫事件、打印SQL，則只需要執行
 > `composer require -W illuminate/database`
 
 ## 數據庫配置
 `config/database.php`
 ```php
+
 return [
     // 默認數據庫
     'default' => 'mysql',

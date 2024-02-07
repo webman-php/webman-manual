@@ -1,19 +1,18 @@
-# Ara yazılım
-Ara yazılım genellikle istekleri veya yanıtları engellemek için kullanılır. Örneğin, bir denetleyiciyi çalıştırmadan önce kullanıcı kimliğini genel bir şekilde doğrulamak, kullanıcı oturum açmamışsa oturum açma sayfasına yönlendirmek veya yanıta belirli bir başlık eklemek gibi işlemler için kullanılır. Bir diğer örnek ise belirli bir URI isteğinin oranını hesaplamaktır.
+# Arak Katmanı
+Arak katmanı genellikle isteği veya yanıtı durdurmak için kullanılır. Örneğin, bir denetleyiciyi çalıştırmadan önce kullanıcı kimliğini doğrulamak için genel olarak kullanılır, kullanıcı giriş yapmamışsa giriş sayfasına yönlendirir veya isteğe belirli bir başlık ekler. Örneğin, belirli bir URI isteğinin yüzdesini hesaplar.
 
-## Ara yazılım soğan modeli
+## Arak Katmanı Soğan Modeli
 
-```
-                              
+```                      
             ┌──────────────────────────────────────────────────────┐
-            │                     middleware1                      │ 
+            │                     arak_katmanı1                      │ 
             │     ┌──────────────────────────────────────────┐     │
-            │     │               middleware2                │     │
+            │     │               arak_katmanı2                │     │
             │     │     ┌──────────────────────────────┐     │     │
-            │     │     │         middleware3          │     │     │        
+            │     │     │         arak_katmanı3          │     │     │        
             │     │     │     ┌──────────────────┐     │     │     │
             │     │     │     │                  │     │     │     │
- 　── İstek ───────────────────────> Denetleyici ─ Yanıt ───────────────────────────> İstemci
+   ── İstek ───────────────────────> Denetleyici ─ Yanıt ───────────────────────────> İstemci
             │     │     │     │                  │     │     │     │
             │     │     │     └──────────────────┘     │     │     │
             │     │     │                              │     │     │
@@ -23,58 +22,55 @@ Ara yazılım genellikle istekleri veya yanıtları engellemek için kullanılı
             │                                                      │
             └──────────────────────────────────────────────────────┘
 ```
-Ara yazılım ve denetleyici, klasik bir soğan modelinin bir parçasını oluşturur. Ara yazılım, kat kat soğan kabuğu gibi birbirine eklenmiştir, denetleyiciyse soğanın çekirdeğidir. Yukarıdaki şekilde görüldüğü gibi, istek, ara yazılım 1, 2, 3'ten geçerek denetleyiciye ulaşır; denetleyici bir yanıt döndürür ve bu yanıt tekrar 3, 2, 1 sırasıyla ara yazılımlardan geçerek sonunda istemciye döner. Yani her ara yazılımın içinde isteği alabilir ve yanıtı elde edebiliriz.
+Arak katmanı ve denetleyici, klasik bir soğan modeli oluşturur. Arak katmanı, birbirine geçmiş bir dizi soğan kabuğuna benzerken, denetleyici soğanın iç kısmını oluşturur. Yukarıdaki şekilde gösterildiği gibi istek, arak_katmanı1,2,3'ten geçerek denetleyiciye ulaşır, denetleyici bir yanıt döner ve ardından yanıt 3,2,1 sırasıyla arak katmanından geçerek nihayetinde istemciye döner. Yani her arak katmanında isteği alabilir ve yanıtı elde edebiliriz.
 
-## İstek engelleme
-Bazen belirli bir isteğin denetleyici katmanına ulaşmasını istemeyebiliriz, örneğin, bir kimlik doğrulama ara yazılımında mevcut kullanıcının giriş yapmadığını fark edersek isteği doğrudan engelleyip giriş yanıtı döndürebiliriz. Bu durumda işlem aşağıdaki gibi olabilir:
+## İstek Engellemesi
+Bazen isteğin denetleyici katmanına ulaşmasını istemeyebiliriz, örneğin middleware2'de geçerli bir kullanıcı oturumunun olmadığını tespit edersek, isteği doğrudan engelleyip bir giriş yanıtı döndürebiliriz. Bu durum aşağıdaki gibi olacaktır:
 
+```                      
+            ┌────────────────────────────────────────────────────────────┐
+            │                         arak_katmanı1                        │ 
+            │     ┌────────────────────────────────────────────────┐     │
+            │     │                   arak_katmanı2                  │     │
+            │     │          ┌──────────────────────────────┐      │     │
+            │     │          │        arak_katmanı3           │      │     │       
+            │     │          │    ┌──────────────────┐      │      │     │
+            │     │          │    │                  │      │      │     │
+   ── İstek ─────────┐     │    │    Denetleyici    │      │      │     │
+            │     │ Yanıt │    │                  │      │      │     │
+   <───────────────────┘     │    └──────────────────┘      │      │     │
+            │     │          │                              │      │     │
+            │     │          └──────────────────────────────┘      │     │
+            │     │                                                │     │
+            │     └────────────────────────────────────────────────┘     │
+            │                                                            │
+            └────────────────────────────────────────────────────────────┘
 ```
-                              
-            ┌───────────────────────────────────────────────────────┐
-            │                     middleware1                       │ 
-            │     ┌───────────────────────────────────────────┐     │
-            │     │          　 　 Kimlik Doğrulama Ara Yazılımı   │     │
-            │     │      ┌──────────────────────────────┐     │     │
-            │     │      │         middleware3          │     │     │       
-            │     │      │     ┌──────────────────┐     │     │     │
-            │     │      │     │                  │     │     │     │
-  　── İstek ───────────┐   │     │       Denetleyici     │     │     │
-            │     │ Yanıt │     │                  │     │     │     │
-   <─────────────────┘   │     └──────────────────┘     │     │     │
-            │     │      │                              │     │     │
-            │     │      └──────────────────────────────┘     │     │
-            │     │                                           │     │
-            │     └───────────────────────────────────────────┘     │
-            │                                                       │
-            └───────────────────────────────────────────────────────┘
-```
 
-Yukarıdaki gibi, istek kimlik doğrulama ara yazılımına ulaştığında giriş yanıtı döndürmüş ve yanıt, kimlik doğrulama ara yazılımından geçerek ara yazılım 1'e ulaşmış ve tarayıcıya geri dönmüştür.
-
-## Ara yazılım arayüzü
-Ara yazılımların `Webman\MiddlewareInterface` arayüzünü uygulamaları gerekmektedir.
+Yukarıdaki gibi istek arak_katmanı2'ye ulaştıktan sonra bir giriş yanıtı oluşturulur ve yanıt arak_katmanı1'e geçerek istemciye döner.
+## Orta Yazılım Arabirimi
+Orta yazılım, `Webman\MiddlewareInterface` arabirimini uygulamalıdır.
 ```php
 interface MiddlewareInterface
 {
     /**
-     * Process an incoming server request.
+     * Gelen sunucu isteğini işler.
      *
-     * Processes an incoming server request in order to produce a response.
-     * If unable to produce the response itself, it may delegate to the provided
-     * request handler to do so.
+     * Bir yanıt üretmek için gelen sunucu isteğini işler.
+     * Kendisi yanıtı üretemezse, sağlanan istek işleyiciye devretmek için kullanabilir.
      */
     public function process(Request $request, callable $handler): Response;
 }
 ```
-Yani `process` metodunu uygulamaları gerekmektedir. `process` metodunun varsayılan olarak `support\Response` nesnesi döndürmesi gerekmektedir; bu nesne genellikle `$handler($request)` tarafından oluşturulur (istek soğanın çekirdeğine doğru devam eder), ayrıca `response()` `json()` `xml()` `redirect()` gibi yardımcı fonksiyonlar kullanılarak oluşturulabilir (istek soğanın çekirdeğinde durur).
+Yani, `process` yöntemini uygulamak zorunludur. `process` yöntemi, bir `support\Response` nesnesi dönmelidir. Bu nesne varsayılan olarak `$handler($request)` tarafından oluşturulur (isteğin soğan katmanında devam etmesine izin verir), isteğin durmasını veya diğer yardımcı işlevler tarafından oluşturulan yanıtı (örneğin `response()`, `json()`, `xml()`, `redirect()` vb.) döndürebilir (isteğin soğan katmanında durmasına neden olur).
 
-## Ara yazılımda isteği ve yanıtı elde etme
-Ara yazılım içinde isteği ve denetleyiciden gelen yanıtı elde edebiliriz, dolayısıyla ara yazılım içinde üç aşama bulunmaktadır.
-1. İstek geçişi aşaması, yani talep işleme aşamasından önceki aşama
-2. Denetleyicinin isteği işleme aşaması, yani talep işleme aşaması
-3. Yanıt çıkışı aşaması, yani işlemden sonra gelen aşama
+## İstek ve Yanıtı Orta Yazılımda Almak
+Orta yazılım içinde isteği alabilir ve denetleyici tarafından oluşturulan yanıtı alabiliriz, bu nedenle orta yazılım içinde üç bölüme ayrılır.
+1. İstek geçişi aşaması, yani isteği işlemeden önceki aşama
+2. Denetleyici tarafından isteğin işlenme aşaması
+3. Yanıt çıkış aşaması, yani isteğin işlenmesinden sonraki aşama
 
-Ara yazılımdaki üç aşama şu şekilde gösterilir:
+Orta yazılım içindeki bu üç aşama şu şekilde gösterilir
 ```php
 <?php
 namespace app\middleware;
@@ -87,19 +83,19 @@ class Test implements MiddlewareInterface
 {
     public function process(Request $request, callable $handler) : Response
     {
-        echo 'Burası istek geçişi aşaması, yani işlem öncesidir.';
-        
-        $response = $handler($request); // Soğanın çekirdeğine doğru devam eder, denetleyici yanıtını elde edene kadar
-        
-        echo 'Burası yanıt çıkışı aşaması, yani işlem sonrasıdır.';
-        
+        echo 'Bu istek geçişi aşamasıdır, yani isteği işlemeden önce';
+
+        $response = $handler($request); // Denetleyiciye ulaşana kadar devam eden istekler
+
+        echo 'Bu yanıt çıkış aşamasıdır, yani isteği işledikten sonra';
+
         return $response;
     }
 }
 ```
-## Örnek: Kimlik Doğrulama Ara Katman
-`app/middleware/AuthCheckTest.php` adında bir dosya oluşturun (`app` dizini mevcut değilse lütfen kendiniz oluşturun) aşağıdaki gibi:
 
+## Örnek: Kimlik Doğrulama Orta Yazılımı
+`app/middleware/AuthCheckTest.php` dosyası oluşturun (dizin yoksa kendiniz oluşturun) aşağıdaki gibi:
 ```php
 <?php
 namespace app\middleware;
@@ -114,27 +110,27 @@ class AuthCheckTest implements MiddlewareInterface
     public function process(Request $request, callable $handler) : Response
     {
         if (session('user')) {
-            // Zaten oturum açıldı, istek devam etmek için soğanın içinden geçmeye devam et
+            // Giriş yapılmış, istek devam eder
             return $handler($request);
         }
 
-        // Yönlendirici hangi yöntemlerin giriş yapılmasına gerek olmadığını yansıtabilir
+        // Kontrolcü hangi yöntemlerin giriş yapmaya gerek olmadığını yansıtacak şekilde yansıyın
         $controller = new ReflectionClass($request->controller);
         $noNeedLogin = $controller->getDefaultProperties()['noNeedLogin'] ?? [];
 
-        // Erişilmek istenen yöntem için giriş yapılması gerekiyor
+        // Erişilmek istenen yöntem giriş gerektiriyor
         if (!in_array($request->action, $noNeedLogin)) {
-            // İsteği engelle, yeniden yönlendiren bir yanıt döndür ve isteği soğanın içinden geçirmeyi durdur
+            // İsteği engelle, yönlendirme yanıtı dönerek isteği durdur
             return redirect('/user/login');
         }
 
-        // Giriş yapmaya gerek yok, isteği soğanın içinden geçmeye devam et
+        // Giriş yapmaya gerek olmadığı için istek devam eder
         return $handler($request);
     }
 }
 ```
 
-Yeni bir denetleyici oluşturun `app/controller/UserController.php`
+Yeni kontrolcü oluşturun `app/controller/UserController.php`
 ```php
 <?php
 namespace app\controller;
@@ -143,7 +139,7 @@ use support\Request;
 class UserController
 {
     /**
-     * Giriş yapılması gerekmeyen yöntemler
+     * Giriş yapmaya gerek olmayan yöntemler
      */
     protected $noNeedLogin = ['login'];
 
@@ -155,29 +151,29 @@ class UserController
 
     public function info()
     {
-        return json(['code' => 0, 'msg' => 'başarılı', 'veri' => session('user')]);
+        return json(['code' => 0, 'msg' => 'başarılı', 'data' => session('user')]);
     }
 }
 ```
 
-> **Dikkat**
-> `$noNeedLogin` içerisinde mevcut denetleyicinin giriş yapılmasına gerek olmadan erişilebilen yöntemleri kayıt edilir
+> **Not**
+> `$noNeedLogin` içerisinde, kullanıcı girişi yapmadan erişilebilecek yöntemler kaydedilmiştir.
 
-`config/middleware.php` dosyasına aşağıdaki gibi global ara katman ekleyin:
+`config/middleware.php` içine global bir orta yazılım ekleyin:
 ```php
 return [
-    // Global ara katmanlar
+    // Global orta yazılımlar
     '' => [
-        // ... Diğer ara katmanlar burada kısaltılmıştır
+        // ... Diğer orta yazılımlar buraya eklenir
         app\middleware\AuthCheckTest::class,
     ]
 ];
 ```
 
-Kimlik doğrulama ara katmanı ile, artık denetleyici katmanında giriş yapılıp yapılmadığıyla ilgilenmeden iş mantığı kodları yazabiliriz.
+Kimlik doğrulama orta yazılımı sayesinde, kontrolcü katmanında giriş yapılıp yapılmadığını düşünmeden iş mantığı kodlarını yazabiliriz.
 
-## Örnek: Cross-Origin Request (CORS) Ara Katmanı
-`app/middleware/AccessControlTest.php` adında bir dosya oluşturun (`app` dizini mevcut değilse lütfen kendiniz oluşturun) aşağıdaki gibi:
+## Örnek: Cross-Origin Request (CORS) Orta Yazılımı
+`app/middleware/AccessControlTest.php` dosyası oluşturun (dizin yoksa kendiniz oluşturun) aşağıdaki gibi:
 ```php
 <?php
 namespace app\middleware;
@@ -190,10 +186,10 @@ class AccessControlTest implements MiddlewareInterface
 {
     public function process(Request $request, callable $handler) : Response
     {
-        // Eğer bir options isteği ise boş bir yanıt döndür, aksi halde soğanın içinden geçmeye devam et ve bir yanıt al
+        // Eğer options isteği ise boş bir yanıt döndür, aksi halde devam et ve bir yanıt al
         $response = $request->method() == 'OPTIONS' ? response('') : $handler($request);
         
-        // Yanıta CORS'a ilişkin HTTP başlıkları ekle
+        // Yanıta CORS ile ilgili HTTP başlıkları ekle
         $response->withHeaders([
             'Access-Control-Allow-Credentials' => 'true',
             'Access-Control-Allow-Origin' => $request->header('origin', '*'),
@@ -207,49 +203,48 @@ class AccessControlTest implements MiddlewareInterface
 ```
 
 > **Not**
-> CORS, OPTIONS isteği oluşturabilir, bu nedenle OPTIONS isteğinin denetleyiciye girmesini istemiyoruz, bu nedenle OPTIONS isteği için doğrudan boş bir yanıt döndürdük (`response('')`).
-> Eğer API'nizin rotası ayar gerektiriyorsa, `Route::any(..)` veya `Route::add(['POST', 'OPTIONS'], ..)` kullanmanız gerekmektedir.
+> CORS'un OPTIONS isteği gönderebileceği unutulmamalıdır. OPTIONS isteğinin denetleyiciye gitmesini istemiyorsak, direkt olarak boş bir yanıt döndürmeliyiz (`response('')`). İsteğinizin yönlendirilmesi gerekiyorsa, `Route::any(..)` veya `Route::add(['POST', 'OPTIONS'], ..)` kullanarak üzerinde bir rota belirlemelisiniz.
 
-`config/middleware.php` dosyasına aşağıdaki gibi global ara katman ekleyin:
+`config/middleware.php` içine global bir orta yazılım ekleyin:
 ```php
 return [
-    // Global ara katmanlar
+    // Global orta yazılımlar
     '' => [
-        // ... Diğer ara katmanlar burada kısaltılmıştır
+        // ... Diğer orta yazılımlar buraya eklenir
         app\middleware\AccessControlTest::class,
     ]
 ];
 ```
 
-> **Dikkat**
-> Ajax isteği özel başlık eklerse, bu özel başlığı ara katman içinde `Access-Control-Allow-Headers` alanına eklemelisiniz, aksi halde `Request header field XXXX is not allowed by Access-Control-Allow-Headers in preflight response.` hatası alabilirsiniz.
-
+> **Not**
+> Eğer ajax isteği özel header'ları ayarladıysa, bu özel header'ı `Access-Control-Allow-Headers` alanına eklemeyi unutmayın. Aksi halde `Request header field XXXX is not allowed by Access-Control-Allow-Headers in preflight response.` hatası alabilirsiniz.
 ## Açıklama
 
-- Ara katmanlar global, uygulama (sadece çoklu uygulama modunda etkilidir, bkz. [multiapp.md](multiapp.md)) veya rota ara katmanları olarak ayrılır.
-- Şu anda tek bir denetleyici için ara katmanı desteği yoktur (ancak benzer şekilde denetleyici ara katmanı işlevselliğini `$request->controller` ile değerlendirerek ara katmanda uygulayabilirsiniz).
-- Ara katman yapılandırma dosyası konumu `config/middleware.php` dizinindedir.
-- Global ara katman yapılandırması `''` anahtar altında bulunur.
-- Uygulama ara katman yapılandırması belirli bir uygulama adı altında bulunur, örneğin
+- Middleware, genel middleware, uygulama middleware (yalnızca çoklu uygulama modunda geçerlidir, bkz. [Çoklu Uygulama](multiapp.md)) ve route (yol) middleware olarak üçe ayrılır.
+- Şu anda tek bir denetleyici için middleware desteği yoktur (ancak middleware içinde `$request->controller` kontrollerine benzer işlevsellik elde etmek için kontrol edilebilir).
+- Middleware yapılandırma dosyası konumu `config/middleware.php` içindedir.
+- Genel middleware yapılandırması `''` anahtarı altında yapılır.
+- Uygulama middleware yapılandırması belirli bir uygulama adının altında yapılır, örneğin
 
 ```php
 return [
-    // Global ara katmanlar
+    // Genel middleware
     '' => [
         app\middleware\AuthCheckTest::class,
         app\middleware\AccessControlTest::class,
     ],
-    // api uygulama ara katmanı (sadece çoklu uygulama modunda etkilidir)
+    // api uygulama middleware (uygulama middleware yalnızca çoklu uygulama modunda geçerlidir)
     'api' => [
         app\middleware\ApiOnly::class,
     ]
 ];
 ```
 
-## Rota Ara Katmanları
+## Route (Yol) Middleware
 
-Bir veya bir grup rotaya ara katman ekleyebiliriz.
-Örneğin `config/route.php` dosyasına aşağıdaki yapılandırmayı ekleyebiliriz:
+Belirli bir veya bir grup routelere middleware (ara yazılım) atanabilir.
+Örneğin `config/route.php` içine aşağıdaki yapılandırmayı ekleyebiliriz:
+
 ```php
 <?php
 use support\Request;
@@ -270,31 +265,33 @@ Route::group('/blog', function () {
 ]);
 ```
 
-## Ara Katman Constructor'a Parametre Aktarma
+## Middleware İnşa Fonksiyonuna Parametre Geçme
 
 > **Not**
-> Bu özellik için webman-framework >= 1.4.8 gerekir
+> Bu özellik webman-framework >= 1.4.8 sürümünde desteklenmektedir
 
-1.4.8 sürümünden itibaren yapılandırmada ara katmanı veya anonim fonksiyonu doğrudan örnekleyebiliriz, bu da constructor fonksiyonuna parametre aktarılmasını kolaylaştırır.
-Örneğin `config/middleware.php` dosyasında aşağıdaki gibi yapılandırmalar yapılabilir:
-```
+1.4.8 sürümünden itibaren, yapılandırma dosyası doğrudan middleware'i veya anonim işlevi örnekleyebilmektedir, bu şekilde middleware'e inşa fonksiyonu ile parametre geçmek kolaylaşır.
+Örneğin `config/middleware.php` dosyasında şu şekilde yapılandırma yapılabilir:
+
+```php
 return [
-    // Global ara katmanlar
+    // Genel middleware
     '' => [
         new app\middleware\AuthCheckTest($param1, $param2, ...),
         function(){
             return new app\middleware\AccessControlTest($param1, $param2, ...);
         },
     ],
-    // api uygulama ara katmanı (sadece çoklu uygulama modunda etkilidir)
+    // api uygulama middleware (uygulama middleware yalnızca çoklu uygulama modunda geçerlidir)
     'api' => [
         app\middleware\ApiOnly::class,
     ]
 ];
 ```
 
-Benzer şekilde rota ara katmanları da constructor fonksiyonuna parametre aktarabilmektedir. Örneğin `config/route.php` dosyasında aşağıdaki şekilde yapılandırmalar yapılabilmektedir:
-```
+Aynı zamanda route (yol) middleware de inşa fonksiyonu ile parametre geçebilir, örneğin `config/route.php` içinde:
+
+```php
 Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->middleware([
     new app\middleware\MiddlewareA($param1, $param2, ...),
     function(){
@@ -303,13 +300,12 @@ Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->mi
 ]);
 ```
 
-## Ara Katman Sıralaması
+## Middleware Yürütme Sırası
+- Middleware yürütme sırası `genel middleware`-> `uygulama middleware`-> `route (yol) middleware` şeklindedir.
+- Birden fazla genel middleware olduğunda, yapılandırılan sıraya göre işlem yapılır (uygulama middleware ve route middleware de aynı prensibe göre çalışır).
+- 404 istekleri hiçbir middleware'i tetiklemez, genel middlewareleri de içermez.
 
-- Ara katman sıralaması `global ara katmanlar`->`uygulama ara katmanları`->`rota ara katmanları` şeklindedir.
-- Birden çok global ara katmanı olduğunda, ara katmanların asıl yapılandırma sırasına göre çalışır (uygulama ara katmanları ve rota ara katmanları da aynı şekilde çalışır).
-- 404 isteği hiçbir ara katmanı tetiklemez, bunlar global ara katmanlar da dahil olmak üzere.
-
-## Rota Ara Katmanına Parametre Geçme (rota->setParams)
+## Route (Yol) Middleware'e Parametre Geçme (route->setParams)
 
 **Route yapılandırması `config/route.php`**
 ```php
@@ -320,7 +316,7 @@ use Webman\Route;
 Route::any('/test', [app\controller\IndexController::class, 'index'])->setParams(['some_key' =>'some value']);
 ```
 
-**Ara Katman (varsayılan olarak global) (global ara katman olarak varsayarsak)**
+**Middleware (varsayılan olarak genel middleware alalım)**
 ```php
 <?php
 namespace app\middleware;
@@ -333,7 +329,7 @@ class Hello implements MiddlewareInterface
 {
     public function process(Request $request, callable $handler) : Response
     {
-        // Varsayılan rota $request->route null olduğu için, $request->route boş olup olmadığını kontrol etmelisiniz
+        // Varsayılan route $request->route null olduğu için, $request->route'un boş olup olmadığını kontrol etmemiz gerekiyor
         if ($route = $request->route) {
             $value = $route->param('some_key');
             var_export($value);
@@ -343,11 +339,11 @@ class Hello implements MiddlewareInterface
 }
 ```
 
-## Ara Katmandan Denetleyiciye Parametre Geçme
+## Middleware'den Denetleyiciye Parametre Geçme
 
-Bazen denetleyicinin ara katmanda oluşan veriyi kullanması gerekebilir, bu durumda denetleyiciye parametre göndermek için `$request` nesnesine özellik ekleyerek yapabiliriz. Örneğin:
+Bazı durumlarda denetleyicinin middleware'de oluşturulan verileri kullanması gerekebilir, bu durumda middleware'de `$request` nesnesine özellik ekleyerek denetleyiciye parametre geçebiliriz. Örneğin:
 
-**Ara Katman**
+**Middleware**
 ```php
 <?php
 namespace app\middleware;
@@ -381,15 +377,14 @@ class FooController
     }
 }
 ```
-
-## Middleware, Geçerli İstek Yolu Bilgisini Alma
+## Middleware, mevcut istek rota bilgilerini almak
 
 > **Not**
 > webman-framework >= 1.3.2 gereklidir
 
-`$request->route` kullanarak route nesnesini alabilir ve ilgili bilgilere erişmek için ilgili yöntemleri çağırabiliriz.
+`$request->route` kullanarak route objesini alabiliriz ve ilgili bilgileri almak için ilgili yöntemleri çağırabiliriz.
 
-**Route Konfigürasyonu**
+**Route Ayarı**
 ```php
 <?php
 use support\Request;
@@ -412,11 +407,11 @@ class Hello implements MiddlewareInterface
     public function process(Request $request, callable $handler) : Response
     {
         $route = $request->route;
-        // İstek herhangi bir rotaya eşleşmiyorsa (varsayılan rota hariç), $request->route null olacaktır
-        // Varsayalım ki tarayıcı /user/111 adresine erişiyor, o zaman aşağıdaki bilgileri yazdırmalıdır
+        // İstek hiçbir rota ile eşleşmiyorsa (varsayılan rota hariç), $request->route null olur
+        // Diyelim ki tarayıcı adresine /user/111 girdik, o zaman şu bilgileri yazdırabiliriz
         if ($route) {
             var_export($route->getPath());       // /user/{uid}
-            var_export($route->getMethods());    // ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS']
+            var_export($route->getMethods());    // ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD','OPTIONS']
             var_export($route->getName());       // user_view
             var_export($route->getMiddleware()); // []
             var_export($route->getCallback());   // ['app\\controller\\UserController', 'view']
@@ -432,21 +427,21 @@ class Hello implements MiddlewareInterface
 > `$route->param()` yöntemi için webman-framework >= 1.3.16 gereklidir.
 
 
-## Middleware, İstisna Alma
+## Middleware, istisnaları almak
 
 > **Not**
 > webman-framework >= 1.3.15 gereklidir
 
-İşlem sırasında istisna oluşabilir, middleware içinde `$response->exception()` kullanarak istisnayı alabiliriz.
+Middleware içerisinde `$response->exception()` kullanarak işlem sırasında oluşan istisnaları alabiliriz.
 
-**Route Konfigürasyonu**
+**Rota Ayarı**
 ```php
 <?php
 use support\Request;
 use Webman\Route;
 
 Route::any('/user/{uid}', function (Request $request, $uid) {
-    throw new \Exception('istisna testi');
+    throw new \Exception('exception test');
 });
 ```
 
@@ -473,40 +468,42 @@ class Hello implements MiddlewareInterface
 }
 ```
 
+
 ## Süper Global Middleware
 
 > **Not**
-> Bu özellik webman-framework >= 1.5.16 gerektirir
+> Bu özellik için webman-framework >= 1.5.16 gereklidir
 
-Ana projenin global middleware'ı sadece ana projeyi etkiler, [uygulama eklentileri](app/app.md) üzerinde herhangi bir etki yaratmaz. Bazen tüm eklentileri etkileyen bir middleware eklemek isteyebiliriz, bu durumda süper global middleware'ı kullanabiliriz.
+Ana projenin küresel middleware'leri sadece ana projeyi etkiler, [uygulama eklentileri](app/app.md) üzerinde herhangi bir etkiye sahip değildir. Bazı durumlarda, tüm eklentileri de etkileyen bir middleware eklemek isteyebiliriz, bu durumda süper global middleware'i kullanabiliriz.
 
-`config/middleware.php` içinde aşağıdaki gibi yapılandırabiliriz:
+`config/middleware.php` dosyasında aşağıdaki gibi yapılandırın:
 ```php
 return [
-    '@' => [ // Ana projeye ve tüm eklentilere global middleware ekleyin
+    '@' => [ // Ana projeyi ve tüm eklentileri etkileyecek global middleware ekleyin
         app\middleware\MiddlewareGlobl::class,
     ], 
     '' => [], // Sadece ana projeye global middleware ekleyin
 ];
 ```
 
+> **İpucu**
+> `@` süper global middleware'ı sadece ana projede değil, aynı zamanda belirli bir eklentide de yapılandırabilirsiniz, örneğin `plugin/ai/config/middleware.php` dosyasında `@` süper global middleware'ı yapılandırırsanız, bu durumda ana projeyi ve tüm eklentileri etkiler.
+
+
+## Belirli bir eklentiye middleware ekleme
+
 > **Not**
-> `@` süper global middleware yalnızca ana projede değil, aynı zamanda bir eklenti içinde de yapılandırılabilir, örneğin `plugin/ai/config/middleware.php` içinde `@` süper global middleware yapılandırılırsa, bu durum ana projeyi ve tüm eklentileri etkiler.
+> Bu özellik için webman-framework >= 1.5.16 gereklidir
 
-## Bir Eklentiye Middleware Ekleme
+Bazen [uygulama eklentileri](app/app.md) için belirli bir middleware eklemek isteyebiliriz, ancak eklentinin kodunu değiştirmek istemeyiz (çünkü güncellemelerde üzerine yazılabilir), bu durumda ana projede middleware ekleyebiliriz.
 
-> **Not**
-> Bu özellik webman-framework >= 1.5.16 gerektirir
-
-Bazen bir [uygulama eklentisi](app/app.md) ne middleware eklemek isteyebiliriz, ancak kodunu (güncellemelerle üzerine yazılacağı için) değiştirmek istemeyiz, bu durumda ana projede middleware ekleyebiliriz.
-
-`config/middleware.php` içinde aşağıdaki gibi yapılandırabiliriz:
+`config/middleware.php` dosyasında aşağıdaki gibi yapılandırın:
 ```php
 return [
-    'plugin.ai' => [], // ai eklentisine middleware ekle
-    'plugin.ai.admin' => [], // ai eklentisinin admin modülüne middleware ekle
+    'plugin.ai' => [], // ai eklentisine middleware ekleyin
+    'plugin.ai.admin' => [], // ai eklentisinin admin modülüne middleware ekleyin
 ];
 ```
 
-> **Not**
-> Tabii ki, böyle bir yapılandırmayı diğer eklentileri etkileyecek şekilde bir eklentiye de ekleyebilirsiniz, örneğin `plugin/foo/config/middleware.php` içine yukarıdaki yapılandırmayı eklerseniz, bu ai eklentisini etkiler.
+> **İpucu**
+> Tabii ki, aynı yapılandırmayı bir eklentiye etki etmek için bu tür bir yapılandırmayı diğer eklentilere de ekleyebilirsiniz, örneğin `plugin/foo/config/middleware.php` dosyasına yukarıdaki yapılandırmayı eklerseniz, bu durum ai eklentisini etkileyecektir.

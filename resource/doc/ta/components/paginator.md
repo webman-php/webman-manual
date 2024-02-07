@@ -1,20 +1,20 @@
-# 分页组件
+# பக்கம் தாட்டு
 
 ## jasongrimes/php-paginator
 
-### 项目地址
+### திட்டம் இடம்
 
 https://github.com/jasongrimes/php-paginator
-  
-### 安装
+
+### நிறுவு
 
 ```php
 composer require "jasongrimes/paginator:^1.0.3"
 ```
-  
-### 使用
 
-新建 `app/controller/UserController.php`
+### பயன்பாடு
+
+புதிய `app/controller/UserController.php` உருவாக்கவும்
 ```php
 <?php
 namespace app\controller;
@@ -25,7 +25,7 @@ use JasonGrimes\Paginator;
 class UserController
 {
     /**
-     * 用户列表
+     * பயனர் பட்டியல்
      */
     public function get(Request $request)
     {
@@ -39,12 +39,13 @@ class UserController
     
 }
 ```
-**模板(php原生)**
-新建模版 app/view/user/get.html
+**டெம்ப்ளேட்(PHP உருவாக்கம்)**
+
+புதிய டெம்ப்ளேட் app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- 内置支持 Bootstrap 分页样式 -->
+  <!-- உள்ளூரினவரை Bootstrap பக்க பார்வை முறை -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -55,12 +56,13 @@ class UserController
 </html>
 ```
 
-**模板(twig)**
-新建模版 app/view/user/get.html
+**டெம்ப்ளேட்(twig)**
+
+புதிய டெம்ப்ளேட் app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- 内置支持 Bootstrap 分页样式 -->
+  <!-- உள்ளூரினவரை Bootstrap பக்க பார்வை முறை -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -73,12 +75,13 @@ class UserController
 </html>
 ```
 
-**模板(blade)**
-新建模版 app/view/user/get.blade.php
+**டெம்ப்ளேட்(பிளேட்)**
+
+புதிய டெம்ப்ளேட் app/view/user/get.blade.php
 ```html
 <html>
 <head>
-  <!-- 内置支持 Bootstrap 分页样式 -->
+  <!-- உள்ளூரினவரை Bootstrap பக்க பார்வை முறை -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -89,12 +92,13 @@ class UserController
 </html>
 ```
 
-**模板(thinkphp)**
-新建模版 app/view/user/get.blade.php
+**டெம்ப்ளேட்(திங்க்பிபி)**
+
+புதிய டெம்ப்ளேட் app/view/user/get.blade.php
 ```html
 <html>
 <head>
-    <!-- 内置支持 Bootstrap 分页样式 -->
+    <!-- உள்ளூரினவரை Bootstrap பக்க பார்வை முறை -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -105,11 +109,8 @@ class UserController
 </html>
 ```
 
-效果如下：
-![](../../assets/img/paginator.png)
-  
-### 更多内容
+பார்வையிலேயே பாகங்கள் பட்டிக்கள்![](../../assets/img/paginator.png)
 
-访问 https://github.com/jasongrimes/php-paginator
-  
+### மேலும் உள்ளடக்கங்களுக்கு
 
+https://github.com/jasongrimes/php-paginator

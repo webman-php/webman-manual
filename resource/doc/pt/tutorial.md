@@ -1,9 +1,9 @@
 # Exemplo Simples
 
-## Retornar uma string
-**Criar um controlador**
+## Retornando uma String
+**Criando um Controlador**
 
-Crie o arquivo `app/controller/UserController.php` com o seguinte conteúdo:
+Crie o arquivo `app/controller/UserController.php` como abaixo
 
 ```php
 <?php
@@ -16,9 +16,9 @@ class UserController
     public function hello(Request $request)
     {
         $default_name = 'webman';
-        // Obter o parâmetro 'name' da requisição GET. Se não houver nenhum parâmetro 'name' passado, retorna $default_name
+        // Obter o parâmetro 'name' da solicitação GET. Se nenhum parâmetro 'name' for passado, retornar $default_name.
         $name = $request->get('name', $default_name);
-        // Retorna a string para o navegador
+        // Retornar uma string para o navegador
         return response('hello ' . $name);
     }
 }
@@ -30,8 +30,8 @@ Acesse no navegador `http://127.0.0.1:8787/user/hello?name=tom`
 
 O navegador retornará `hello tom`
 
-## Retornar JSON
-Altere o arquivo `app/controller/UserController.php` para o seguinte conteúdo:
+## Retornando JSON
+Altere o arquivo `app/controller/UserController.php` como abaixo
 
 ```php
 <?php
@@ -60,18 +60,18 @@ Acesse no navegador `http://127.0.0.1:8787/user/hello?name=tom`
 
 O navegador retornará `{"code":0,"msg":"ok","data":"tom"}`
 
-O uso da função auxiliar json para retornar dados automaticamente adicionará o cabeçalho `Content-Type: application/json`
+Usando a função auxiliar json para retornar dados, automaticamente é adicionado o cabeçalho `Content-Type: application/json`
 
-## Retornar XML
-Da mesma forma, usando a função auxiliar `xml($xml)` retornará uma resposta `XML` com o cabeçalho `Content-Type: text/xml`.
+## Retornando XML
+Da mesma forma, utilizar a função auxiliar `xml($xml)` retornará uma resposta XML com cabeçalho `Content-Type: text/xml`.
 
-O parâmetro `$xml` pode ser uma string `XML` ou um objeto `SimpleXMLElement`.
+O parâmetro `$xml` pode ser uma string XML ou um objeto `SimpleXMLElement`.
 
-## Retornar JSONP
-Da mesma forma, usando a função auxiliar `jsonp($data, $callback_name = 'callback')` retornará uma resposta `JSONP`.
+## Retornando JSONP
+Da mesma forma, utilizar a função auxiliar `jsonp($data, $callback_name = 'callback')` retornará uma resposta JSONP.
 
-## Retornar uma visualização
-Altere o arquivo `app/controller/UserController.php` para o seguinte conteúdo:
+## Retornando uma Visão
+Altere o arquivo `app/controller/UserController.php` como abaixo
 
 ```php
 <?php
@@ -90,7 +90,7 @@ class UserController
 }
 ```
 
-Crie o arquivo `app/view/user/hello.html` com o seguinte conteúdo:
+Crie o arquivo `app/view/user/hello.html` como abaixo
 
 ```html
 <!doctype html>
@@ -106,6 +106,6 @@ hello <?=htmlspecialchars($name)?>
 ```
 
 Acesse no navegador `http://127.0.0.1:8787/user/hello?name=tom`
-Será retornado uma página HTML com o conteúdo `hello tom`.
+será retornado uma página HTML com o conteúdo `hello tom`.
 
-Observação: O webman usa a sintaxe nativa do PHP como modelo por padrão. Para utilizar outras visualizações, consulte [Visão](view.md).
+Nota: Por padrão, o webman utiliza a sintaxe nativa do PHP como modelo. Se desejar usar outras visualizações, consulte [View](view.md).

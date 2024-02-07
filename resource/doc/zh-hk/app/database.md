@@ -1,5 +1,5 @@
 # 資料庫
-插件可以配置自己的數據庫，例如`plugin/foo/config/database.php`內容如下
+插件可以配置自己的資料庫，例如`plugin/foo/config/database.php`內容如下
 ```php
 return  [
     'default' => 'mysql',
@@ -34,7 +34,7 @@ Db::connection('plugin.foo.mysql')->table('user')->first();
 Db::connection('plugin.foo.admin')->table('admin')->first();
 ```
 
-如果想使用主項目的數據庫，則直接使用即可，例如
+如果想使用主項目的資料庫，則直接使用即可，例如
 ```php
 use support\Db;
 Db::table('user')->first();
@@ -42,10 +42,9 @@ Db::table('user')->first();
 Db::connection('admin')->table('admin')->first();
 ```
 
-## 給Model配置數據庫
+## 為Model配置資料庫
 
-我們可以為Model創建一個Base類，Base類用`$connection`指定插件自己的數據庫連接，例如
-
+我們可以為Model創建一個Base類，Base類用`$connection`指定插件自己的資料庫連接，例如
 ```php
 <?php
 
@@ -64,10 +63,10 @@ class Base extends Model
 }
 ```
 
-這樣插件裡所有的Model繼承自Base，就自動使用了插件自己的數據庫。
+這樣插件裡所有的Model繼承自Base，就自動使用了插件自己的資料庫。
 
-## 複用數據庫配置
-當然我們可以複用主項目的數據庫配置，如果接入了[webman-admin](https://www.workerman.net/plugin/82)，也可以複用[webman-admin](https://www.workerman.net/plugin/82)數據庫配置，例如
+## 複用資料庫配置
+當然我們可以複用主項目的資料庫配置，如果接入了[webman-admin](https://www.workerman.net/plugin/82)，也可以複用[webman-admin](https://www.workerman.net/plugin/82)資料庫配置，例如
 ```php
 <?php
 

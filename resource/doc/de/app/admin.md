@@ -1,13 +1,13 @@
 # Integration von webman-admin
 
-[webman-admin](https://www.workerman.net/plugin/82) ist das offizielle von webman entwickelte Admin-Panel.
-Es unterstützt die Einstellung von Berechtigungen, die Generierung von Menüs (einfaches CRUD) und verfügt über eine Benutzertabelle, um den Datenaustausch zwischen verschiedenen Anwendungs-Plugins zu erleichtern.
+[webman-admin](https://www.workerman.net/plugin/82) ist das von offiziellen Webman-Entwicklern erstellte Verwaltungstool.
+Es unterstützt die Rechteverwaltung, die Generierung von Menüs (One-Click-CRUD) und verfügt über eine benutzerfreundliche Benutzertabelle, um die gemeinsame Datennutzung für verschiedene Anwendungs-Plugins zu erleichtern.
 
 ## Vorteile der Integration von webman-admin
 
-* Bereitstellung eines einheitlichen Backend-Zugangs für verschiedene Anwendungs-Plugins zur Verbesserung der Benutzererfahrung
-* Reduzierung der Entwicklungszeit für Backend von Anwendungs-Plugins und Senkung der Wartungskosten
-* Das Admin-Panel verfügt über eine Funktion zur Verwaltung von Plugins, die die zentrale Suche und Installation von Plugins erleichtert
+* Bietet eine einheitliche Back-Office-Schnittstelle für verschiedene Anwendungs-Plugins, um die Benutzererfahrung zu verbessern.
+* Reduziert die Entwicklungszeit und senkt die Wartungskosten für die Back-Office-Entwicklung von Anwendungs-Plugins.
+* Das Verwaltungstool verfügt über eine Funktion zur zentralen Suche und Installation von Plugins.
 
 ## Integrationsdokumentation
 https://www.workerman.net/doc/webman-admin/development/link.html

@@ -1,12 +1,12 @@
-# webman Event-Bibliothek webman-event
+# webman Event Library webman-event
 
-[![Lizenz](https://img.shields.io/github/license/Tinywan/webman-event)]()
+[![license](https://img.shields.io/github/license/Tinywan/webman-event)]()
 [![webman-event](https://img.shields.io/github/v/release/tinywan/webman-event?include_prereleases)]()
 [![webman-event](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 [![webman-event](https://img.shields.io/github/last-commit/tinywan/webman-event/main)]()
 [![webman-event](https://img.shields.io/github/v/tag/tinywan/webman-event?color=ff69b4)]()
 
-Der Vorteil von Events gegenüber Middleware besteht darin, dass Events eine präzisere Positionierung (oder eine feinere Granularität) gegenüber Middleware aufweisen und besser für die Erweiterung einiger Geschäftsszenarien geeignet sind. Zum Beispiel müssen wir häufig eine Reihe von Operationen ausführen, nachdem sich ein Benutzer registriert oder angemeldet hat. Durch das Ereignissystem können wir die Anmeldung ohne Beeinträchtigung des vorhandenen Codes erweitern. Dies reduziert die Kopplung des Systems und verringert gleichzeitig die Möglichkeit von Fehlern.
+Der Vorteil von Events gegenüber Mittlerwaren besteht darin, dass Events im Vergleich zu Mittlerwaren präziser positioniert sind (oder genauer gesagt, die Granularität ist feiner) und besser für die Erweiterung einiger Geschäftsszenarien geeignet sind. Beispielsweise müssen wir häufig eine Reihe von Operationen durchführen, nachdem sich ein Benutzer registriert oder angemeldet hat. Durch das Event-System können wir die Anmeldung ohne Eingriffe in den vorhandenen Code erweitern, die Kopplung des Systems reduzieren und gleichzeitig die Möglichkeit von Fehlern verringern.
 
 ## Projektadresse
 
@@ -22,36 +22,36 @@ Der Vorteil von Events gegenüber Middleware besteht darin, dass Events eine pr�
 composer require tinywan/webman-event
 ```
 
-## Konfiguration 
+## Konfiguration
 
-Der Ereignissystem-Konfigurationsdatei `config/event.php` enthält den folgenden Inhalt:
+Der Event-Konfigurationsdatei `config/event.php` hat folgenden Inhalt:
 
 ```php
 return [
-    // Ereignisüberwachung
+    // Event-Listener
     'listener'    => [],
 
-    // Ereignisabonnent
+    // Event-Abonnenten
     'subscriber' => [],
 ];
 ```
 
-### Prozessstartkonfiguration
+### Prozessstart-Konfiguration
 
 Öffnen Sie `config/bootstrap.php` und fügen Sie die folgende Konfiguration hinzu:
 
 ```php
 return [
-    // Hier sind andere Konfigurationen ausgelassen ...
+    // andere Konfigurationen werden hier ausgelassen ...
     webman\event\EventManager::class,
 ];
 ```
 
 ## Schnellstart
 
-### Definition des Ereignisses
+### Eventdefinition
 
-Ereignisklasse `LogErrorWriteEvent.php`
+Event-Klasse `LogErrorWriteEvent.php`
 
 ```php
 declare(strict_types=1);
@@ -62,7 +62,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class LogErrorWriteEvent extends Event
 {
-    const NAME = 'log.error.write';  // Ereignisname, die eindeutige Kennung des Ereignisses
+    const NAME = 'log.error.write';  // Eventname, die eindeutige Kennung des Events
 
     /** @var array */
     public array $log;
@@ -79,19 +79,20 @@ class LogErrorWriteEvent extends Event
 }
 ```
 
-### Ereignisüberwachung
+### Event-Listener
+
 ```php
 return [
-    // Ereignisüberwachung
+    // Event-Listener
     'listener'    => [
         \extend\event\LogErrorWriteEvent::NAME  => \extend\event\LogErrorWriteEvent::class,
     ],
 ];
 ```
 
-### Ereignisabonnent
+### Event-Abonnent
 
-Abonnementklasse `LoggerSubscriber.php`
+Abonnentenklasse `LoggerSubscriber.php`
 
 ```php
 namespace extend\event\subscriber;
@@ -102,7 +103,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class LoggerSubscriber implements EventSubscriberInterface
 {
     /**
-     * @desc: Methode Beschreibung
+     * @desc: Beschreibung der Methode
      * @return array|string[]
      */
     public static function getSubscribedEvents()
@@ -113,7 +114,7 @@ class LoggerSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @desc: Ereignis auslösen
+     * @desc: Event auslösen
      * @param LogErrorWriteEvent $event
      */
     public function onLogErrorWrite(LogErrorWriteEvent $event)
@@ -124,19 +125,19 @@ class LoggerSubscriber implements EventSubscriberInterface
 }
 ```
 
-Ereignisabonnement
+Event-Abonnement
 ```php
 return [
-    // Ereignisabonnement
+    // Event-Abonnements
     'subscriber' => [
         \extend\event\subscriber\LoggerSubscriber::class,
     ],
 ];
 ```
 
-### Ereignisauslöser
+### Event-Auslöser
 
-Das `LogErrorWriteEvent` Ereignis auslösen.
+`LogErrorWriteEvent` Ereignis auslösen.
 
 ```php
 $error = [
@@ -146,10 +147,10 @@ $error = [
 EventManager::trigger(new LogErrorWriteEvent($error),LogErrorWriteEvent::NAME);
 ```
 
-Ergebnis anzeigen
+Ausführungsergebnis
 
-![Druckergebnis] (./trigger.png)
+![Print result](./trigger.png)
 
 ## Lizenz
 
-Dieses Projekt ist unter der [Apache 2.0-Lizenz](LICENSE) lizenziert.
+Dieses Projekt ist lizenziert unter der [Apache 2.0-Lizenz](LICENSE).

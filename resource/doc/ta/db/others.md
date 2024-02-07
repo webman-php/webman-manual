@@ -1,11 +1,11 @@
 # மற்ற தரவுத்தளங்களை பயன்படுத்துவது
-[illuminate/database](https://github.com/illuminate/database) இல் குறித்து உங்களுக்கு webman பிரச்சினை எதுவும் இல்லை.
+[illuminate/database](https://github.com/illuminate/database) போன்ற தரவுத்தளங்களுக்கு பேரவையாக, webman இன் பெறுமையில் மற்ற தரவுத்தள கூடுதல் பொருட்களைப் பயன்படுத்த முடியும்.
 
 ## ThinkORM
-[thinkorm](thinkorm.md) இல் குறித்து காண்க
+குறிக்கும் [thinkorm](thinkorm.md)
 
 ## ThinkCache
-[think-cache](thinkcache.md) இல் குறித்து காண்க
+குறிக்கும் [think-cache](thinkcache.md)
 
-## Medoo தரவுத்தளம் சேர்க்கை
-[medoo சேர்க்கை](https://www.workerman.net/plugin/29) இல் குறித்து காண்க
+## Medoo தரவகம் பேனல்
+குறிக்கும் [medoo பேனல்](../db/medoo.md)

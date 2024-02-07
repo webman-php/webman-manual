@@ -1,15 +1,15 @@
-# Bibliothèque de contrôle d'accès Casbin webman-permission
+# Bibliothèque de contrôle d'accès Casbin pour webman-permission
 
 ## Description
 
-Il est basé sur [PHP-Casbin](https://github.com/php-casbin/php-casbin), un framework de contrôle d'accès open-source puissant et efficace, prenant en charge des modèles de contrôle d'accès tels que `ACL`, `RBAC`, `ABAC`, etc.
+Il est basé sur [PHP-Casbin](https://github.com/php-casbin/php-casbin), un framework de contrôle d'accès open source puissant et efficace, prenant en charge des modèles de contrôle d'accès tels que `ACL`, `RBAC`, `ABAC`, etc.
 
 ## Adresse du projet
 
 https://github.com/Tinywan/webman-permission
-  
+
 ## Installation
- 
+
 ```php
 composer require tinywan/webman-permission
 ```
@@ -18,9 +18,7 @@ composer require tinywan/webman-permission
 ## Configuration
 
 ### Enregistrement du service
-
 Créez un fichier de configuration `config/bootstrap.php` avec un contenu similaire à :
-
 ```php
     // ...
     webman\permission\Permission::class,
@@ -28,7 +26,6 @@ Créez un fichier de configuration `config/bootstrap.php` avec un contenu simila
 ### Fichier de configuration du modèle
 
 Créez un fichier de configuration `config/casbin-basic-model.conf` avec un contenu similaire à :
-
 ```conf
 [request_definition]
 r = sub, obj, act
@@ -45,16 +42,15 @@ e = some(where (p.eft == allow))
 [matchers]
 m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
 ```
-### Fichier de configuration de la stratégie
+### Fichier de configuration de la politique
 
 Créez un fichier de configuration `config/permission.php` avec un contenu similaire à :
-
 ```php
 <?php
 
 return [
     /*
-     *Permission par défaut
+     * Autorisations par défaut
      */
     'default' => 'basic',
 
@@ -74,42 +70,43 @@ return [
                 'config_text' => '',
             ],
 
-            // Adaptateur.
+            // Adaptateur .
             'adapter' => webman\permission\adapter\DatabaseAdapter::class,
 
             /*
             * Configuration de la base de données.
             */
             'database' => [
-                // Nom de la connexion à la base de données, non spécifié pour la configuration par défaut.
+                // Nom de la connexion à la base de données, laisser vide pour utiliser la configuration par défaut.
                 'connection' => '',
-                // Nom de la table de règles (sans le préfixe de table)
+                // Nom de la table des règles (sans le préfixe de la table)
                 'rules_name' => 'rule',
-                // Nom complet de la table de règles.
+                // Nom complet de la table des règles.
                 'rules_table' => 'train_rule',
             ],
         ],
     ],
 ];
 ```
+
 ## Démarrage rapide
 
 ```php
 use webman\permission\Permission;
 
-// Ajoute des permissions à un utilisateur
+// Ajoute des autorisations à un utilisateur
 Permission::addPermissionForUser('eve', 'articles', 'read');
-// Ajoute un rôle à un utilisateur
+// Ajoute un rôle pour un utilisateur
 Permission::addRoleForUser('eve', 'writer');
-// Ajoute des permissions à une règle
+// Ajoute des autorisations à une règle
 Permission::addPolicy('writer', 'articles','edit');
 ```
 
-Vous pouvez vérifier si un utilisateur a de telles autorisations
+Vous pouvez vérifier si l'utilisateur a une telle autorisation
 
 ```php
 if (Permission::enforce("eve", "articles", "edit")) {
-    // autorise eve à modifier des articles
+    // autorise eve à modifier les articles
 } else {
     // refuser la demande, afficher une erreur
 }
@@ -117,15 +114,14 @@ if (Permission::enforce("eve", "articles", "edit")) {
 
 ## Middleware d'autorisation
 
-Créez le fichier `app/middleware/AuthorizationMiddleware.php` (créez le répertoire s'il n'existe pas) comme suit :
-
+Créez le fichier `app/middleware/AuthorizationMiddleware.php` (créez le répertoire si nécessaire) avec le contenu suivant :
 ```php
 <?php
 
 /**
  * Middleware d'autorisation
- * Auteur: ShaoBo Wan (Tinywan)
- * Date et heure: 2021/09/07 14:15
+ * @author ShaoBo Wan (Tinywan)
+ * @datetime 2021/09/07 14:15
  */
 
 declare(strict_types=1);
@@ -140,20 +136,20 @@ use webman\permission\Permission;
 
 class AuthorizationMiddleware implements MiddlewareInterface
 {
-    public function process(Request $request, callable $next): Response
-    {
-        $uri = $request->path();
-        try {
-            $userId = 10086;
-            $action = $request->method();
-            if (!Permission::enforce((string) $userId, $uri, strtoupper($action))) {
-                throw new \Exception('Désolé, vous n'avez pas l'autorisation d'accéder à cette interface');
-            }
-        } catch (CasbinException $exception) {
-            throw new \Exception('Erreur d'autorisation' . $exception->getMessage());
-        }
-        return $next($request);
-    }
+	public function process(Request $request, callable $next): Response
+	{
+		$uri = $request->path();
+		try {
+			$userId = 10086;
+			$action = $request->method();
+			if (!Permission::enforce((string) $userId, $uri, strtoupper($action))) {
+				throw new \Exception('Désolé, vous n'avez pas l'autorisation d'accéder à cette interface.');
+			}
+		} catch (CasbinException $exception) {
+			throw new \Exception('Erreur d'autorisation' . $exception->getMessage());
+		}
+		return $next($request);
+	}
 }
 ```
 
@@ -163,15 +159,15 @@ Ajoutez le middleware global dans `config/middleware.php` comme suit :
 return [
     // Middleware global
     '' => [
-        // ... autres middlewares omis ici
+        // ... autres middlewares
         app\middleware\AuthorizationMiddleware::class,
     ]
 ];
 ```
 
-## Merci
+## Remerciements
 
-[Casbin](https://github.com/php-casbin/php-casbin), vous pouvez consulter toute la documentation sur leur [site officiel](https://casbin.org/).
+[Casbin](https://github.com/php-casbin/php-casbin), vous pouvez consulter toute la documentation sur son [site officiel](https://casbin.org/).
 
 ## Licence
 

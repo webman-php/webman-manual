@@ -1,9 +1,9 @@
-# Abhängigkeitsautomatische Injection
+# Abhängigkeitsinjektion (DI)
 
-In webman ist die automatische Injection von Abhängigkeiten eine optionale Funktion, die standardmäßig deaktiviert ist. Wenn Sie die automatische Injection von Abhängigkeiten benötigen, wird empfohlen, [php-di](https://php-di.org/doc/getting-started.html) zu verwenden. Nachfolgend finden Sie die Verwendung von webman in Kombination mit `php-di`.
+In webman ist die automatische Abhängigkeitsinjektion optional und standardmäßig deaktiviert. Wenn Sie die automatische Abhängigkeitsinjektion benötigen, empfehlen wir die Verwendung von [php-di](https://php-di.org/doc/getting-started.html). Im Folgenden finden Sie die Verwendung von `php-di` in Verbindung mit webman.
 
 ## Installation
-```
+```php
 composer require psr/container ^1.1.1 php-di/php-di ^6 doctrine/annotations ^1.14
 ```
 
@@ -16,10 +16,10 @@ $builder->useAnnotations(true);
 return $builder->build();
 ```
 
-> In `config/container.php` wird letztendlich eine Instanz eines Containers zurückgegeben, die dem `PSR-11`-Standard entspricht. Wenn Sie `php-di` nicht verwenden möchten, können Sie hier eine andere Instanz erstellen und zurückgeben, die dem `PSR-11`-Standard entspricht.
+> Die Datei `config/container.php` gibt letztendlich eine Instanz eines Containers zurück, die dem `PSR-11`-Standard entspricht. Wenn Sie `php-di` nicht verwenden möchten, können Sie hier eine andere Instanz erstellen und zurückgeben, die dem `PSR-11`-Standard entspricht.
 
-## Konstruktor Injection
-Erstellen Sie `app/service/Mailer.php` (wenn das Verzeichnis nicht vorhanden ist, erstellen Sie es bitte) mit dem folgenden Inhalt:
+## Konstruktorinjektion
+Legen Sie den Inhalt von `app/service/Mailer.php` (erstellen Sie das Verzeichnis, wenn es nicht existiert) wie folgt fest:
 ```php
 <?php
 namespace app\service;
@@ -28,13 +28,12 @@ class Mailer
 {
     public function mail($email, $content)
     {
-        // Versandcode für E-Mails ausgelassen
+        // Senden der E-Mail-Code ausgelassen
     }
 }
 ```
 
 Der Inhalt von `app/controller/UserController.php` lautet wie folgt:
-
 ```php
 <?php
 namespace app\controller;
@@ -58,34 +57,34 @@ class UserController
     }
 }
 ```
-In der Regel sind folgende Codes erforderlich, um die Instanziierung von `app\controller\UserController` abzuschließen:
+In der Regel benötigen Sie den folgenden Code, um die Instanziierung von `app\controller\UserController` abzuschließen:
 ```php
 $mailer = new Mailer;
 $user = new UserController($mailer);
 ```
-Durch die Verwendung von `php-di` ist es jedoch nicht erforderlich, `Mailer` im Controller manuell zu instanziieren. Webman übernimmt das automatisch für Sie. Wenn bei der Instanziierung von `Mailer` andere Klassendependenzen vorhanden sind, instanziiert und injiziert webman diese ebenfalls automatisch. Der Entwickler muss keine Initialisierungsarbeiten durchführen.
+Nach der Verwendung von `php-di` muss der Entwickler das `Mailer` im Controller nicht mehr manuell instanziieren, webman erledigt dies automatisch für Sie. Wenn bei der Instanziierung des `Mailer` zusätzliche Klassenabhängigkeiten vorhanden sind, werden diese ebenfalls automatisch instanziiert und eingefügt. Der Entwickler muss keine Initialisierungsarbeiten durchführen.
 
-> **Beachten**
-> Nur Instanzen, die von Frameworks oder `php-di` erstellt wurden, können die automatische Abhängigkeitsinjektion abschließen. Instanzen, die manuell mit `new` erstellt wurden, können die automatische Abhängigkeitsinjektion nicht abschließen. Wenn eine Injektion erforderlich ist, verwenden Sie die `support\Container`-Schnittstelle anstelle der `new`-Anweisung, z.B.:
+> **Achtung**
+> Die automatische Abhängigkeitsinjektion ist nur möglich, wenn die Instanz von einem Framework oder `php-di` erstellt wird. Eine manuell erstellte Instanz mit dem `new`-Schlüsselwort kann keine automatische Abhängigkeitsinjektion durchführen. Wenn die Injektion erforderlich ist, verwenden Sie das `support/Container`-Interface anstelle der `new`-Anweisung, z. B.:
 
 ```php
 use app\service\UserService;
 use app\service\LogService;
 use support\Container;
 
-// Instanzen, die mit dem Schlüsselwort 'new' erstellt wurden, können nicht abhängig gemacht werden
+// Eine mit dem Schlüsselwort "new" erstellte Instanz kann keine Abhängigkeiten injizieren
 $user_service = new UserService;
-// Instanzen, die mit dem Schlüsselwort 'new' erstellt wurden, können nicht abhängig gemacht werden
-$log_service = new LogService($pfad, $name);
+// Eine mit dem Schlüsselwort "new" erstellte Instanz kann keine Abhängigkeiten injizieren
+$log_service = new LogService($path, $name);
 
-// Instanzen, die von Container erstellt wurden, können abhängig gemacht werden
+// Eine mit "Container" erstellte Instanz kann Abhängigkeiten injizieren
 $user_service = Container::get(UserService::class);
-// Instanzen, die von Container erstellt wurden, können abhängig gemacht werden
-$log_service = Container::make(LogService::class, [$pfad, $name]);
+// Eine mit "Container" erstellte Instanz kann Abhängigkeiten injizieren
+$log_service = Container::make(LogService::class, [$path, $name]);
 ```
 
-## Annotation Injection
-Neben der Konstruktor-Dependency-Injection können wir auch die Annotation-Injection verwenden. Im obigen Beispiel wird der `app\controller\UserController` wie folgt geändert:
+## Annotationsinjektion
+Neben der Konstruktorabhängigkeitsinjektion können wir auch die Annotationsinjektion verwenden. Setzen Sie das Beispiel von `app\controller\UserController` wie folgt fort:
 ```php
 <?php
 namespace app\controller;
@@ -109,10 +108,10 @@ class UserController
     }
 }
 ```
-In diesem Beispiel wird die Injection über `@Inject` durchgeführt und der Objekttyp wird über `@var` deklariert. Dieses Beispiel erzielt das gleiche Ergebnis wie die Konstruktorinjektion, ist aber kompakter im Code.
+In diesem Beispiel wird die Injektion durch die Verwendung des `@Inject`-Annotations-Kommentars und die Deklaration des Objekttyps mit dem `@var`-Kommentar erreicht. Diese Methode liefert das gleiche Ergebnis wie die Konstruktorinjektion, ist jedoch kürzer im Code.
 
-> **Beachten**
-> Webman unterstützte vor Version 1.4.6 keine Controller-Parameterinjektion. Beispielsweise wird der folgende Code nicht unterstützt, wenn webman<=1.4.6 ist:
+> **Achtung**
+> webman unterstützt bis zur Version 1.4.6 keine Controller-Parameterinjektion. Der folgende Code wird nicht unterstützt, wenn webman <= 1.4.6 verwendet wird:
 
 ```php
 <?php
@@ -123,7 +122,7 @@ use app\service\Mailer;
 
 class UserController
 {
-    // Vor Version 1.4.6 wird die Controllerparameterinjektion nicht unterstützt
+    // Vor Version 1.4.6 wird die Controller-Parameterinjektion nicht unterstützt
     public function register(Request $request, Mailer $mailer)
     {
         $mailer->mail('hello@webman.com', 'Hallo und willkommen!');
@@ -133,7 +132,7 @@ class UserController
 ```
 
 ## Benutzerdefinierte Konstruktorinjektion
-Manchmal sind die Parameter, die an den Konstruktor übergeben werden, möglicherweise keine Klasseninstanzen, sondern Daten wie Zeichenfolgen, Zahlen, Arrays usw. Beispielsweise benötigt der Konstruktor von Mailer den SMTP-Server-IP und den Port:
+Manchmal sind die Parameter, die dem Konstruktor übergeben werden, keine Klasseninstanzen, sondern Daten wie Zeichenfolgen, Zahlen, Arrays usw. Zum Beispiel erfordert der Mailer-Konstruktor die Übermittlung der SMTP-Server-IP und des Ports:
 ```php
 <?php
 namespace app\service;
@@ -152,28 +151,28 @@ class Mailer
 
     public function mail($email, $content)
     {
-        // Versandcode für E-Mails ausgelassen
+        // Senden der E-Mail-Code ausgelassen
     }
 }
 ```
-In diesem Fall kann die Konstruktorinjektion wie zuvor gezeigt nicht direkt verwendet werden, da `php-di` den Wert von `$smtp_host` und `$smtp_port` nicht kennt. In solchen Fällen kann eine benutzerdefinierte Injektion versucht werden.
+In solchen Fällen kann die Konstruktorinjektion mit vorherigen Methoden nicht direkt verwendet werden, da `php-di` den Wert von `$smtp_host` und `$smtp_port` nicht kennt. In diesem Fall können Sie versuchen, eine benutzerdefinierte Injektion zu verwenden.
 
-Fügen Sie in `config/dependence.php` (erstellen Sie die Datei, wenn sie nicht existiert) den folgenden Code hinzu:
+Fügen Sie in `config/dependence.php` (falls die Datei nicht existiert, erstellen Sie sie) den folgenden Code hinzu:
 ```php
 return [
-    // ... andere Konfigurationen hier ignoriert
+    // ... Andere Konfigurationen hier ausgelassen
     
     app\service\Mailer::class =>  new app\service\Mailer('192.168.1.11', 25);
 ];
 ```
 Wenn eine Instanz von `app\service\Mailer` benötigt wird, wird automatisch die in dieser Konfiguration erstellte Instanz von `app\service\Mailer` verwendet.
 
-Wir beachten, dass `config/dependence.php` `new` zur Instanziierung der Klasse `Mailer` verwendet. Dies ist in diesem Beispiel kein Problem, aber stellen Sie sich vor, wenn die Klasse `Mailer` von anderen Klassen abhängig ist oder Annotation-Injection verwendet, wird die Initialisierung mit `new` die automatische Injektion der Abhängigkeiten nicht abschließen. Die Lösung besteht darin, die benutzerdefinierte Interface-Injection zu verwenden, um die Klasse mit den Methoden `Container::get(classname)` oder `Container::make(classname, [constructor_arg])` zu initialisieren.
+Wir beachten, dass in `config/dependence.php` das Schlüsselwort `new` zur Instanziierung der Mailer-Klasse verwendet wird. In diesem Beispiel gibt es kein Problem damit, aber stellen Sie sich vor, dass die `Mailer`-Klasse von anderen Klassen abhängt oder Annotationsinjektionen innerhalb der `Mailer`-Klasse verwendet werden. Die Verwendung von `new` zur Initialisierung verhindert die automatische Abhängigkeitsinjektion. Die Lösung besteht darin, benutzerdefinierte Schnittstelleninjektionen zu verwenden, indem Sie die Methoden `Container::get(ClassName)` oder `Container::make(ClassName, [ConstructorParameters])` zum Initialisieren der Klassen verwenden.
 
-## Benutzerdefinierte Interface-Injektion
-In realen Projekten möchten wir eher mit Schnittstellen als mit konkreten Klassen arbeiten. Beispielsweise sollte `app\controller\UserController` die `app\service\MailerInterface` und nicht `app\service\Mailer` einbeziehen.
+## Benutzerdefinierte Schnittstelleninjektion
+In realen Projekten bevorzugen wir es, gegen eine Schnittstelle zu programmieren, anstatt gegen konkrete Klassen. Zum Beispiel sollte `app\controller\UserController` `app\service\MailerInterface` anstelle von `app\service\Mailer` importieren.
 
-Definieren Sie das `MailerInterface`-Interface wie folgt:
+Definieren Sie das `MailerInterface`-Interface.
 ```php
 <?php
 namespace app\service;
@@ -184,7 +183,7 @@ interface MailerInterface
 }
 ```
 
-Implementieren Sie das `MailerInterface`-Interface wie folgt:
+Definieren Sie die Implementierung des `MailerInterface`-Interfaces.
 ```php
 <?php
 namespace app\service;
@@ -203,12 +202,12 @@ class Mailer implements MailerInterface
 
     public function mail($email, $content)
     {
-        // Versandcode für E-Mails ausgelassen
+        // Senden der E-Mail-Code ausgelassen
     }
 }
 ```
 
-Nun müssen Sie das `MailerInterface`-Interface anstelle der konkreten Implementierung einbeziehen.
+Importieren Sie das `MailerInterface`-Interface anstelle der konkreten Implementierung.
 ```php
 <?php
 namespace app\controller;
@@ -233,7 +232,7 @@ class UserController
 }
 ```
 
-Die `config/dependence.php` definiert die Implementierung des `MailerInterface`-Interfaces, wie folgt:
+Definieren Sie in `config/dependence.php` die Implementierung des `MailerInterface`-Interfaces wie folgt.
 ```php
 use Psr\Container\ContainerInterface;
 return [
@@ -242,15 +241,13 @@ return [
     }
 ];
 ```
+So wird automatisch die Implementierung von `Mailer` verwendet, wenn das Business `MailerInterface` benötigt.
 
-Daher wird automatisch die Implementierung von `Mailer` verwendet, wenn das Geschäft `MailerInterface`-Interface benötigt.
-
-> Der Vorteil der Programmierung mit Schnittstellen besteht darin, dass, wenn eine Komponente ausgetauscht werden muss, keine Änderungen am Geschäftscode erforderlich sind. Es ist nur notwendig, die konkrete Implementierung in `config/dependence.php` zu ändern. Dies ist auch für Unit-Tests sehr nützlich.
-
+> Das Programmieren gegen Schnittstellen ist vorteilhaft, da bei Bedarf das Hinzufügen oder Austauschen einer Komponente kein Ändern des Businesscodes erfordert. Es reicht aus, die konkrete Implementierung in `config/dependence.php` zu ändern. Dies ist auch beim Unit-Testing sehr nützlich.
 ## Andere benutzerdefinierte Injektionen
-In `config/dependence.php` können neben der Definition der Abhängigkeiten von Klassen auch andere Werte wie Zeichenfolgen, Zahlen, Arrays usw. definiert werden.
+In `config/dependence.php` können neben der Definition von Klassenabhängigkeiten auch andere Werte wie Zeichenfolgen, Zahlen, Arrays usw. definiert werden.
 
-Beispielsweise definiert `config/dependence.php` wie folgt:
+Zum Beispiel, in `config/dependence.php` definiert wie folgt:
 ```php
 return [
     'smtp_host' => '192.168.1.11',
@@ -258,7 +255,7 @@ return [
 ];
 ```
 
-Deshalb kann über `@Inject` `smtp_host` und `smtp_port` in die Klasseneigenschaften injiziert werden.
+Dann können wir `@Inject` verwenden, um `smtp_host` und `smtp_port` in die Klassenattribute einzufügen.
 ```php
 <?php
 namespace app\service;
@@ -279,13 +276,13 @@ class Mailer
 
     public function mail($email, $content)
     {
-        // Versandcode für E-Mails ausgelassen
+        // Code zum Senden von E-Mails ausgelassen
         echo "{$this->smtpHost}:{$this->smtpPort}\n"; // wird 192.168.1.11:25 ausgeben
     }
 }
 ```
 
-> Beachten Sie: Innerhalb von `@Inject("key")` befindet sich ein String.
+> Hinweis: In `@Inject("key")` befindet sich der Schlüssel in Anführungszeichen
 
 ## Weitere Informationen
-Bitte beachten Sie das [Handbuch von php-di](https://php-di.org/doc/getting-started.html)
+Bitte beachten Sie das [php-di Handbuch](https://php-di.org/doc/getting-started.html)

@@ -1,6 +1,6 @@
 # Denetleyiciler
 
-Yeni bir denetleyici dosyası oluşturun `app/controller/FooController.php`.
+Yeni bir denetleyici dosyası oluşturun: `app/controller/FooController.php`.
 
 ```php
 <?php
@@ -12,27 +12,27 @@ class FooController
 {
     public function index(Request $request)
     {
-        return response('hello index');
+        return response('merhaba index');
     }
     
     public function hello(Request $request)
     {
-        return response('hello webman');
+        return response('merhaba webman');
     }
 }
 ```
 
-`http://127.0.0.1:8787/foo` adresine erişildiğinde, sayfa `hello index` dönecektir.
+`http://127.0.0.1:8787/foo` adresine erişildiğinde, sayfa `merhaba index` döndürecektir.
 
-`http://127.0.0.1:8787/foo/hello` adresine erişildiğinde, sayfa `hello webman` dönecektir.
+`http://127.0.0.1:8787/foo/hello` adresine erişildiğinde, sayfa `merhaba webman` döndürecektir.
 
-Tabii ki, yol eşlemesini değiştirmek için yol eşlemesi yapılandırmasını kullanabilirsiniz, [Yol Eşlemesi](route.md) bölümüne bakınız.
+Tabii ki, rota kurallarını değiştirmek için rota yapılandırmasını kullanabilirsiniz, bkz.[Rota](route.md).
 
 > **İpucu**
-> 404 hatası alırsanız, `config/app.php` dosyasını açın ve `controller_suffix` öğesini `Controller` olarak ayarlayın ve yeniden başlatın.
+> Eğer 404 hatası alırsanız, `config/app.php` dosyasını açın ve `controller_suffix` değerini `Controller` olarak ayarlayın, ardından sunucuyu yeniden başlatın.
 
-## Denetleyici Soneki
-webman sürüm 1.3'ten itibaren, `config/app.php` dosyasında denetleyici son eki ayarını desteklemektedir. Eğer `config/app.php` dosyasında `controller_suffix` öğesini boş `''` olarak ayarlarsanız, denetleyici aşağıdaki gibi olacaktır.
+## Denetleyici Sonekleri
+webman 1.3 sürümünden itibaren, `config/app.php` dosyasında denetleyici soneği ayarlamayı desteklemektedir. Eğer `config/app.php` dosyasında `controller_suffix` boş olarak ayarlanırsa, denetleyici sınıfı aşağıdaki gibi olacaktır.
 
 `app\controller\Foo.php`.
 
@@ -46,34 +46,33 @@ class Foo
 {
     public function index(Request $request)
     {
-        return response('hello index');
+        return response('merhaba index');
     }
     
     public function hello(Request $request)
     {
-        return response('hello webman');
+        return response('merhaba webman');
     }
 }
 ```
 
-Denetleyici sonekini `Controller` olarak ayarlamayı şiddetle tavsiye ederiz. Bu, denetleyici ve model sınıf adları arasındaki çakışmayı önlemenin yanı sıra güvenliği de artırabilir.
+Denetleyici soneğini `Controller` olarak ayarlamak şiddetle tavsiye edilir, bu şekilde denetleyici ve model sınıf adları arasındaki çakışmayı önleyebilir ve güvenliği artırabilirsiniz.
 
 ## Açıklama
-- Framework otomatik olarak `support\Request` nesnesini denetleyiciye geçirir, bu sayede kullanıcı giriş verilerine (get, post, başlık, tanımlayıcı çerez vb.) erişebilirsiniz, bkz. [İstek](request.md)
-- Denetleyici, sayı, dize veya `support\Response` nesnesi döndürebilir, ancak diğer türde veri döndüremez.
-- `support\Response` nesnesi, `response()`, `json()`, `xml()`, `jsonp()`, `redirect()` vb. yardımcı işlevlerle oluşturulabilir.
+- Çerçeve otomatik olarak `support\Request` nesnesini denetleyiciye iletir; bu nesne aracılığıyla kullanıcı giriş verilerini (get, post, başlık, çerez vb.) alabilirsiniz, bkz.[İstek](request.md).
+- Denetleyiciler, sayı, dize veya `support\Response` nesnesi döndürebilir, ancak diğer türde veri döndüremezler.
+- `support\Response` nesnesi, `response()`, `json()`, `xml()`, `jsonp()`, `redirect()` vb. yardımcı fonksiyonlar aracılığıyla oluşturulabilir.
 
-## Denetleyici Yaşam Döngüsü
+## Denetleyici Hayat Döngüsü
+`config/app.php` dosyasındaki `controller_reuse` değeri `false` olarak ayarlandığında, her istek için ilgili denetleyici örneği yeniden başlatılır, istek sona erdikten sonra denetleyici örneği imha edilir; bu, geleneksel çerçeve çalışma mekanizmasıyla aynıdır.
 
-`config/app.php` dosyasında `controller_reuse` öğesi `false` olarak ayarlandığında, her istek karşılanırken ilgili denetleyici örneği her seferinde başlatılır, istek sona erdikten sonra denetleyici örneği yok edilir ve bellekten alınır. Bu, geleneksel framework'lerin çalışma mekanizmasıyla aynıdır.
-
-`config/app.php` dosyasında `controller_reuse` öğesi `true` olarak ayarlandığında, tüm istekler aynı denetleyici örneğini yeniden kullanır, yani bir denetleyici örneği bir kez oluşturulduğunda sürekli bellekte kalır ve tüm istekler bu örneği yeniden kullanır.
-
-> **Dikkat**
-> Denetleyici yeniden kullanımını kapatmak için webman sürüm 1.4.0 veya üstüne ihtiyaç vardır, yani 1.4.0'dan önce denetleyiciler varsayılan olarak tüm istekleri yeniden kullanır ve değiştirilemez.
+`config/app.php` dosyasındaki `controller_reuse` değeri `true` olarak ayarlandığında, tüm istekler denetleyici örneğini yeniden kullanır, yani bir kez oluşturulduğunda bu denetleyici örneği sürekli hafızada kalır ve tüm isteklerde yeniden kullanılır.
 
 > **Dikkat**
-> Denetleyici yeniden kullanımını etkinleştirdiğinizde, isteklerin denetleyicinin herhangi bir özelliğini değiştirmemesi gerekir, çünkü bu tür değişiklikler sonraki istekleri etkiler.
+> Denetleyici yeniden kullanımının devre dışı bırakılması webman>=1.4.0 sürümünü gerektirir; yani 1.4.0'dan önce tüm istekler otomatik olarak denetleyiciyi yeniden kullanır ve bu ayar değiştirilemez.
+
+> **Dikkat**
+> Denetleyici yeniden kullanımı etkinleştirildiğinde, isteklerin denetleyicinin herhangi bir özelliğini değiştirmesi gerekmektedir, çünkü bu değişiklikler sonraki istekleri etkileyecektir.
 
 ```php
 <?php
@@ -89,20 +88,20 @@ class FooController
     {
         $model = $this->getModel($id);
         $model->update();
-        return response('ok');
+        return response('tamam');
     }
     
     public function delete(Request $request, $id)
     {
         $model = $this->getModel($id);
         $model->delete();
-        return response('ok');
+        return response('tamam');
     }
     
     protected function getModel($id)
     {
-        // Bu yöntem, update?id=1 isteği yapıldıktan sonra modeli saklar
-        // delete?id=2 isteği yapıldığında, 1'in verilerini silecektir
+        // Bu yöntem, ilk kez update?id=1 isteğinden sonra modeli saklar
+        // Eğer tekrar delete?id=2 isteği yapılırsa, 1'in verilerini silecektir
         if (!$this->model) {
             $this->model = Model::find($id);
         }
@@ -112,7 +111,7 @@ class FooController
 ```
 
 > **İpucu**
-> Yapıcı fonksiyon `__construct()` içinde veri döndürmek herhangi bir etkiye sahip olmaz, örneğin
+> Denetleyici `__construct()` yapısından veri döndürmek herhangi bir etki yaratmayacaktır, örneğin;
 
 ```php
 <?php
@@ -124,23 +123,23 @@ class FooController
 {
     public function __construct()
     {
-        // Yapıcı fonksiyon içinde veri döndürmek herhangi bir etkiye sahip değildir, tarayıcı bu yanıtı almayacaktır
-        return response('hello'); 
+        // Oluşturucu fonksiyonundan dönen verinin herhangi bir etkisi olmayacak, tarayıcı bu yanıtı almaz
+        return response('merhaba'); 
     }
 }
 ```
 
-## Denetleyiciyi Yeniden Kullanmamanın ve Yeniden Kullanmanın Farkı
-Farklar aşağıdaki gibidir:
+## Denetleyici Yeniden Kullanımı vs. Yeniden Kullanmama
+Farklar şunlardır:
 
-#### Denetleyiciyi Yeniden Kullanmama
-Her istek için yeni bir denetleyici örneği oluşturulur, istek sona erdikten sonra bu örnek serbest bırakılır ve bellek geri kazanılır. Denetleyiciyi yeniden kullanmama, geleneksel framework'lerin alışkanlıklarına uygun durumdadır. Denetleyicinin tekrar tekrar oluşturulması ve yok edilmesi nedeniyle performansı, yeniden kullanma durumundan biraz daha düşüktür (helloworld yük testinde performans yaklaşık %10 daha düşüktür, işleve dayalı çoğu durumda ihmal edilebilir).
+#### Denetleyici Yeniden Kullanma
+Her istek, yeni bir denetleyici örneği oluşturacak ve istek sona erdikten sonra bu örneği serbest bırakacak ve belleği geri kazanacaktır. Denetleyici yeniden kullanmama ve geleneksel çerçeveyle aynıdır, çoğu geliştirici alışkanlığına uygundur. Denetleyicinin sürekli olarak oluşturulup imha edilmesi nedeniyle performans, yeniden kullanılan denetleyiciden biraz düşüktür (helloworld performans testinde yaklaşık%10 performans düşer, işleme benzer şekilde ihmal edilebilir).
 
-#### Denetleyiciyi Yeniden Kullanma
-Eğer yeniden kullanıma izin verilirse, bir işlem sadece bir kez bir denetleyici oluşturur, istek sona erdikten sonra bu denetleyici örneğini serbest bırakmaz, işlemin sonraki istekleri bu örneği yeniden kullanır. Denetleyiciyi yeniden kullanma durumu performans bakımından daha iyidir, ancak çoğu geliştiricinin alışkanlıklarına uygun değildir.
+#### Denetleyici Yeniden Kullanmama
+Yeniden kullanma durumunda, bir işlem sadece bir kez bir denetleyici oluşturur ve istek sona erdikten sonra bu denetleyici örneğini serbest bırakmaz, ardışık isteklerde bu örnekleri yeniden kullanır. Yeniden kullanılan denetleyicinin performansı daha iyidir, ancak çoğu geliştirici alışkanlığına uygundan farklıdır.
 
-#### Aşağıdaki Durumlarda Denetleyiciyi Yeniden Kullanamazsınız
+#### Aşağıdaki durumlarda, Denetleyici Yeniden Kullanmayı Kullanamazsınız
 
-İstek, denetleyicinin özelliklerini değiştiriyorsa, denetleyici yeniden kullanılamaz, çünkü bu özelliklerin değişikliği sonraki istekleri etkiler.
+İstekler, denetleyicinin özelliklerini değiştirecekse, denetleyici yeniden kullanılamaz, çünkü bu özelliklerin değişimi sonraki istekleri etkileyecektir.
 
-Bazı geliştiriciler, her istek için denetleyici oluşturmak için yapıcı fonksiyon `__construct()` içinde bazı başlatmalar yapmayı tercih ederler, bu durumda denetleyiciyi yeniden kullanamazsınız, çünkü mevcut işlemde yapılandırıcı fonksiyon yalnızca bir kez çağrılır, her istek için çağrılmaz.
+Bazı geliştiriciler, her istek için başlangıçta bir şeyler yapmak için denetleyici oluşturucu fonksiyonu `__construct()` kullanırlar, bu durumda denetleyici yeniden kullanılamaz, çünkü bu özelliğin yapıcı fonksiyonu yalnızca bir kez çağrılır, her istek için çağrılmaz.

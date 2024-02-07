@@ -1,17 +1,17 @@
-# Wechat SDK
+# WeChat SDK
 
 ## overtrue/wechat
 
-### Project Address
+### Project URL
 
 https://github.com/overtrue/wechat
-
+  
 ### Installation
-
+ 
 ```php
 composer require overtrue/wechat ^5.0
 ```
-
+  
 ### Usage
 
 ```php
@@ -37,7 +37,7 @@ class WechatController
 
 }
 ```
-
+  
 ### More Information
 
 Visit https://www.easywechat.com/5.x/

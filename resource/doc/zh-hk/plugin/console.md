@@ -1,4 +1,4 @@
-# webman/console 命令列插件
+# webman/console 命令行插件
 
 `webman/console` 基於 `symfony/console`
 
@@ -11,7 +11,7 @@ composer require webman/console
 ```
 
 ## 支援的命令
-**使用方法**
+**使用方法**  
 `php webman 命令` 或者 `php webman 命令`。
 例如 `php webman version` 或者 `php webman version`
 
@@ -23,7 +23,7 @@ composer require webman/console
 **打印當前路由配置**
 
 ### make:controller
-**創建一個控制器文件**
+**創建一個控制器文件** 
 例如 `php webman make:controller admin` 將創建一個 `app/controller/AdminController.php`
 例如 `php webman make:controller api/user` 將創建一個 `app/api/controller/UserController.php`
 
@@ -42,12 +42,12 @@ composer require webman/console
 
 ### plugin:create
 **創建一個基礎插件**
-例如 `php webman plugin:create --name=foo/admin` 將創建`config/plugin/foo/admin` 和 `vendor/foo/admin`  兩個目录
+例如 `php webman plugin:create --name=foo/admin` 將創建`config/plugin/foo/admin` 和 `vendor/foo/admin` 兩個目錄
 參見[創建基礎插件](/doc/webman/plugin/create.html)
 
 ### plugin:export
 **導出基礎插件**
-例如 `php webman plugin:export --name=foo/admin`
+例如 `php webman plugin:export --name=foo/admin` 
 參見[創建基礎插件](/doc/webman/plugin/create.html)
 
 ### plugin:export
@@ -61,7 +61,7 @@ composer require webman/console
 > 此特性需要webman>=1.2.4 webman-framework>=1.2.4 webman\console>=1.0.5
 
 ## 自定義命令
-用戶可以定義自己的命令，例如以下是打印資料庫配置的命令
+用戶可以定義自己的命令，例如以下是打印數據庫配置的命令
 
 * 執行 `php webman make:command config:mysql`
 * 打開 `app/command/ConfigMySQLCommand.php` 修改成如下
@@ -115,13 +115,13 @@ class ConfigMySQLCommand extends Command
     }
 }
 ```
-
+  
 ## 測試
 
-命令列執行 `php webman config:mysql`
+命令行執行 `php webman config:mysql`
 
 結果類似如下：
-```
+```bash
 +-------+---------+--------+-----------+------+----------+----------+----------+-------------+---------+-----------------+--------+--------+--------+--------+---------+
 | name  | default | driver | host      | port | database | username | password | unix_socket | charset | collation       | prefix | strict | engine | schema | sslmode |
 +-------+---------+--------+-----------+------+----------+----------+----------+-------------+---------+-----------------+--------+--------+--------+--------+---------+

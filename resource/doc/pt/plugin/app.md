@@ -1,11 +1,10 @@
-# Plugins de aplicativos
-Cada plugin de aplicativo é um aplicativo completo, com o código-fonte localizado no diretório `{diretório_principal}/plugin`
+# Plug-in de Aplicativo
+Cada plug-in de aplicativo é um aplicativo completo, cujo código-fonte é colocado no diretório `{projeto principal}/plugin`
 
 > **Dica**
-> Usando o comando `php webman app-plugin:create {nome_do_plugin}` (necessário webman/console>=1.2.16) é possível criar um plugin de aplicativo localmente.
-> Por exemplo, `php webman app-plugin:create cms` criará a seguinte estrutura de diretório
+> Usando o comando `php webman app-plugin:create {nome_do_plug-in}` (requer webman/console>=1.2.16) é possível criar um plug-in de aplicativo localmente, por exemplo, `php webman app-plugin:create cms` criará a seguinte estrutura de diretório
 
-```
+```plaintext
 plugin/
 └── cms
     ├── app
@@ -37,37 +36,37 @@ plugin/
     └── public
 ```
 
-Notamos que um plugin de aplicativo possui a mesma estrutura de diretório e arquivos de configuração do webman. Na realidade, o desenvolvimento de um plugin de aplicativo é basicamente a mesma experiência que desenvolver um projeto webman, apenas prestando atenção a alguns aspectos.
+Podemos observar que um plug-in de aplicativo possui a mesma estrutura de diretório e arquivos de configuração que o webman. Na verdade, o desenvolvimento de um plug-in de aplicativo é basicamente a mesma experiência que desenvolver um projeto webman, apenas algumas coisas precisam ser observadas.
 
 ## Namespace
-O diretório e a nomenclatura do plugin seguem a especificação PSR4. Como os plugins são armazenados no diretório do plugin, os namespaces começam com plugin. Por exemplo, `plugin\cms\app\controller\UserController`, onde cms é o diretório principal do código-fonte do plugin.
+O diretório e o nome do plug-in seguem a especificação PSR4. Como os plug-ins são colocados no diretório de plugin, o namespace começa com plugin, por exemplo `plugin\cms\app\controller\UserController`, onde cms é o diretório principal de código-fonte do plug-in.
 
-## Acesso a URL
-Os caminhos de endereço URL do plugin de aplicativo começam com `/app`, por exemplo, o endereço URL do `plugin\cms\app\controller\UserController` é `http://127.0.0.1:8787/app/cms/user`.
+## Acesso à URL
+Os caminhos dos endereços URL do plug-in de aplicativo começam com `/app`, por exemplo, o endereço URL de `plugin\cms\app\controller\UserController` é `http://127.0.0.1:8787/app/cms/user`.
 
 ## Arquivos estáticos
-Os arquivos estáticos estão localizados em `plugin/{plugin}/public`. Por exemplo, acessar `http://127.0.0.1:8787/app/cms/avatar.png` na verdade está obtendo o arquivo `plugin/cms/public/avatar.png`.
+Os arquivos estáticos são colocados em `plugin/{nome_do_plug-in}/public`, por exemplo, acessar `http://127.0.0.1:8787/app/cms/avatar.png` na verdade está obtendo o arquivo `plugin/cms/public/avatar.png`.
 
 ## Arquivos de configuração
-As configurações do plugin são semelhantes às de um projeto webman normal, mas as configurações do plugin geralmente afetam apenas o plugin atual e não o projeto principal.
-Por exemplo, o valor de `plugin.cms.app.controller_suffix` afeta apenas o sufixo do controlador do plugin, sem afetar o projeto principal.
-Por exemplo, o valor de `plugin.cms.app.controller_reuse` afeta apenas se o controlador do plugin é reutilizado, sem afetar o projeto principal.
-Por exemplo, o valor de `plugin.cms.middleware` afeta apenas os middleware do plugin, sem afetar o projeto principal.
-Por exemplo, o valor de `plugin.cms.view` afeta apenas as visualizações usadas pelo plugin, sem afetar o projeto principal.
-Por exemplo, o valor de `plugin.cms.container` afeta apenas o contêiner usado pelo plugin, sem afetar o projeto principal.
-Por exemplo, o valor de `plugin.cms.exception` afeta apenas a classe de tratamento de exceções do plugin, sem afetar o projeto principal.
+As configurações do plug-in são semelhantes às do projeto webman. No entanto, as configurações do plug-in geralmente afetam apenas o próprio plug-in e não o projeto principal.
+Por exemplo, o valor de `plugin.cms.app.controller_suffix` afeta apenas o sufixo do controlador do plug-in, sem afetar o projeto principal.
+Por exemplo, o valor de `plugin.cms.app.controller_reuse` afeta apenas se o plug-in reutiliza controladores, sem afetar o projeto principal.
+Por exemplo, o valor de `plugin.cms.middleware` afeta apenas os middlewares do plug-in, sem afetar o projeto principal.
+Por exemplo, o valor de `plugin.cms.view` afeta apenas as visualizações usadas pelo plug-in, sem afetar o projeto principal.
+Por exemplo, o valor de `plugin.cms.container` afeta apenas o contêiner usado pelo plug-in, sem afetar o projeto principal.
+Por exemplo, o valor de `plugin.cms.exception` afeta apenas a classe de tratamento de exceções do plug-in, sem afetar o projeto principal.
 
-No entanto, como as rotas são globais, as configurações de rotas de plugins também afetam globalmente.
+No entanto, porque as rotas são globais, as configurações de rota do plug-in também afetam globalmente.
 
-## Obtenção de configuração
-A maneira de obter a configuração de um determinado plugin é `config('plugin.{plugin}.{configuração_específica}')`. Por exemplo, para obter todas as configurações de `plugin/cms/config/app.php`, a maneira é `config('plugin.cms.app')`.
-Da mesma forma, o projeto principal ou outros plugins podem usar `config('plugin.cms.xxx')` para obter a configuração do plugin cms.
+## Obtenção de configurações
+Para obter configurações de um determinado plug-in, use `config('plugin.{nome_do_plug-in}.{configuração_específica}')`, por exemplo, obter todas as configurações em `plugin/cms/config/app.php` usando `config('plugin.cms.app')`.
+Da mesma forma, o projeto principal ou outros plug-ins podem usar `config('plugin.cms.xxx')` para obter as configurações do plug-in cms.
 
 ## Configurações não suportadas
-Os plugins de aplicativos não oferecem suporte para as configurações server.php e session.php, nem oferecem suporte para as configurações `app.request_class`, `app.public_path` e `app.runtime_path`.
+Os plug-ins de aplicativo não suportam as configurações server.php e session.php, e também não suportam as configurações `app.request_class`, `app.public_path` e `app.runtime_path`.
 
 ## Banco de dados
-Os plugins podem configurar seu próprio banco de dados, por exemplo, o conteúdo de `plugin/cms/config/database.php` é o seguinte
+Os plug-ins podem configurar seu próprio banco de dados. Por exemplo, o conteúdo de `plugin/cms/config/database.php` é o seguinte
 ```php
 return  [
     'default' => 'mysql',
@@ -76,7 +75,7 @@ return  [
             'driver'      => 'mysql',
             'host'        => '127.0.0.1',
             'port'        => 3306,
-            'database'    => 'banco_de_dados',
+            'database'    => 'nome_do_banco_de_dados',
             'username'    => 'nome_de_usuário',
             'password'    => 'senha',
             'charset'     => 'utf8mb4',
@@ -86,7 +85,7 @@ return  [
             'driver'      => 'mysql',
             'host'        => '127.0.0.1',
             'port'        => 3306,
-            'database'    => 'banco_de_dados',
+            'database'    => 'nome_do_banco_de_dados',
             'username'    => 'nome_de_usuário',
             'password'    => 'senha',
             'charset'     => 'utf8mb4',
@@ -95,26 +94,26 @@ return  [
     ],
 ];
 ```
-A maneira de usá-lo é `Db::connection('plugin.{plugin}.{nome_de_conexão}');`, por exemplo
+A forma de utilização é `Db::connection('plugin.{nome_do_plug-in}.{nome_da_conexão}');`, por exemplo
 ```php
 use support\Db;
 Db::connection('plugin.cms.mysql')->table('user')->first();
 Db::connection('plugin.cms.admin')->table('admin')->first();
 ```
 
-Se desejar usar o banco de dados principal, simplesmente o use, por exemplo
+Se deseja usar o banco de dados do projeto principal, basta utilizá-lo diretamente, por exemplo
 ```php
 use support\Db;
 Db::table('user')->first();
-// Supondo que o projeto principal também tenha uma conexão chamada admin
+// Supondo que o projeto principal também configurou uma conexão admin
 Db::connection('admin')->table('admin')->first();
 ```
 
 > **Dica**
-> O thinkorm tem um uso semelhante.
+> O thinkorm também possui um uso semelhante
 
 ## Redis
-O uso do Redis é semelhante ao do banco de dados, por exemplo, `plugin/cms/config/redis.php`
+O uso do Redis é semelhante ao do banco de dados. Por exemplo, `plugin/cms/config/redis.php`
 ```php
 return [
     'default' => [
@@ -131,18 +130,18 @@ return [
     ],
 ];
 ```
-Ao utilizá-lo
+Ao utilizar
 ```php
 use support\Redis;
 Redis::connection('plugin.cms.default')->get('chave');
 Redis::connection('plugin.cms.cache')->get('chave');
 ```
 
-Da mesma forma, se desejar reutilizar a configuração do Redis do projeto principal
+Da mesma forma, caso queira reutilizar a configuração do Redis do projeto principal
 ```php
 use support\Redis;
 Redis::get('chave');
-// Supondo que o projeto principal também tenha uma conexão chamada cache
+// Supondo que o projeto principal também configurou uma conexão cache
 Redis::connection('cache')->get('chave');
 ```
 
@@ -152,8 +151,7 @@ O uso da classe de log é semelhante ao uso do banco de dados
 use support\Log;
 Log::channel('plugin.admin.default')->info('teste');
 ```
-
-Se desejar reutilizar a configuração de log do projeto principal, use diretamente
+Caso queira reutilizar a configuração de log do projeto principal, basta utilizá-la diretamente
 ```php
 use support\Log;
 Log::info('conteúdo_do_log');
@@ -161,6 +159,6 @@ Log::info('conteúdo_do_log');
 Log::channel('teste')->info('conteúdo_do_log');
 ```
 
-# Instalação e desinstalação do plugin de aplicativo
-Para instalar um plugin de aplicativo, basta copiar o diretório do plugin para o diretório `{diretório_principal}/plugin`, e será necessário recarregar ou reiniciar para que as mudanças entrem em vigor.
-Para desinstalar, basta excluir o diretório do plugin correspondente em `{diretório_principal}/plugin`.
+# Instalação e Desinstalação de Plug-ins de Aplicativo
+Ao instalar um plug-in de aplicativo, basta copiar o diretório do plug-in para o diretório `{projeto_principal}/plugin` e, em seguida, recarregar ou reiniciar para que o plug-in tenha efeito.
+Para desinstalar, basta excluir o diretório do plug-in correspondente em `{projeto_principal}/plugin`.

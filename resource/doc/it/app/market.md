@@ -1,3 +1,3 @@
 # Mercato dei plugin
 
-[Clicca qui per accedere al mercato delle applicazioni](/apps)
+[Fare clic qui per accedere al mercato delle app](/apps)

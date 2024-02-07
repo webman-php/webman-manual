@@ -1,22 +1,22 @@
 # Migration Database Migration Tool Phinx
 
-## Description
+## Introduction
 
-Phinx allows developers to easily modify and maintain databases. It avoids manual writing of SQL statements and uses a powerful PHP API to manage database migration. Developers can use version control to manage their database migrations. Phinx makes it easy to migrate data between different databases. It can also track which migration scripts have been executed, allowing developers to focus more on writing better systems without worrying about the state of the database.
+Phinx allows developers to easily modify and maintain databases. It eliminates the need for manually writing SQL statements, using a powerful PHP API to manage database migrations. Developers can use version control to manage their database migrations. Phinx can easily perform data migrations between different databases. It can also track which migration scripts have been executed, allowing developers to focus more on writing better systems without worrying about the state of the database.
 
-## Project URL
+## Project Address
 
 https://github.com/cakephp/phinx
 
 ## Installation
+ 
+  ```php
+  composer require robmorgan/phinx
+  ```
+  
+## Official Chinese Documentation Address
 
-```php
-composer require robmorgan/phinx
-```
-
-## Official Chinese Documentation
-
-For detailed usage, please refer to the official Chinese documentation. Here we will only discuss how to configure and use Phinx in webman.
+For detailed usage, you can refer to the official Chinese documentation. Here, we only discuss how to configure and use Phinx in webman.
 
 https://tsy12321.gitbooks.io/phinx-doc/content/
 
@@ -25,15 +25,15 @@ https://tsy12321.gitbooks.io/phinx-doc/content/
 ```
 .
 ├── app                           Application directory
-│   ├── controller                Controller directory
-│   │   └── Index.php             Controller
-│   ├── model                     Model directory
+│   ├── controller                Controller directory
+│   │   └── Index.php             Controller
+│   ├── model                     Model directory
 ......
 ├── database                      Database files
-│   ├── migrations                Migration files
-│   │   └── 20180426073606_create_user_table.php
-│   ├── seeds                     Test data
-│   │   └── UserSeeder.php
+│   ├── migrations                Migration files
+│   │   └── 20180426073606_create_user_table.php
+│   ├── seeds                     Test data
+│   │   └── UserSeeder.php
 ......
 ```
 
@@ -65,22 +65,22 @@ return [
 ];
 ```
 
-## Usage Recommendations
+## Suggestions for Use
 
-Once migration files are merged into the code, they should not be modified again. If there are issues, a new modification or deletion operation file must be created to handle them.
+Once the migration file is merged, it should not be modified again. If any issues arise, a new modification or deletion operation file should be created to handle the issue.
 
-#### Naming Convention for Table Creation Operation Files
+#### Naming Convention for Data Table Creation Operation Files
 
-`{time(auto create)}_create_{lowercase_table_name_in_english}`
+`{time(auto create)}_create_{table name in lowercase}`
 
-#### Naming Convention for Table Modification Operation Files
+#### Naming Convention for Data Table Modification Operation Files
 
-`{time(auto create)}_modify_{lowercase_table_name_in_english+specific_lowercase_modification_item}`
+`{time(auto create)}_modify_{table name in lowercase + specific modification in lowercase}`
 
-#### Naming Convention for Table Deletion Operation Files
+### Naming Convention for Data Table Deletion Operation Files
 
-`{time(auto create)}_delete_{lowercase_table_name_in_english+specific_lowercase_modification_item}`
+`{time(auto create)}_delete_{table name in lowercase + specific modification in lowercase}`
 
-#### Naming Convention for Data Filling Files
+### Naming Convention for Data Filling Files
 
-`{time(auto create)}_fill_{lowercase_table_name_in_english+specific_lowercase_modification_item}`
+`{time(auto create)}_fill_{table name in lowercase + specific modification in lowercase}`

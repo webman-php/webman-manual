@@ -1,32 +1,31 @@
-# ตรวจสอบการปิดใช้งานฟังก์ชัน
+# การปิดการตรวจสอบฟังก์ชัน
 
-ใช้สคริปต์นี้เพื่อตรวจสอบว่าฟังก์ชันไหนถูกปิดใช้งานหรือไม่ โดยรันคำสั่งต่อไปนี้ในโหมดคำสั่ง
-```curl -Ss https://www.workerman.net/webman/check | php```
+ใช้สคริปต์นี้เพื่อตรวจสอบว่ามีการปิดใช้งานฟังก์ชันหรือไม่ ใช้คำสั่งcurl -Ss https://www.workerman.net/webman/check | phpผ่าน command line
 
-หากมีการแจ้งเตือนว่า```Functions ชื่อฟังก์ชัน ถูกปิดใช้งาน โปรดตรวจสอบ disable_functions ใน php.ini``` หมายความว่าฟังก์ชันที่ webman ขึ้นอยู่ถูกปิดใช้งาน จึงต้องเอาปิดใช้งานใน php.ini ก่อนที่จะใช้ webman ได้อย่างปกติ
-สามารถทำการเอามันออกจากการปิดใช้งานได้โดยการใช้วิธีใดก็ได้จากทางนี้
+หากมีการแจ้งเตือน"ฟังก์ชันชื่อฟังก์ชัน ถูกปิดการใช้งาน โปรดตรวจสอบ disable_functions ใน php.ini" นั้นหมายความว่ามีการปิดใช้งานฟังก์ชันที่ webman ต้องการ จึงต้องระบุถอดการปิดใช้งานใน php.ini เพื่อให้ webman ใช้งานได้ตามปกติ
+เพื่อถอดการปิดที่ใช้วิธีดังต่อไปนี้
 
-## วิธีที่ 1
+## วิธีที่ 1 
 ติดตั้ง `webman/console` 
-```
+``` 
 composer require webman/console ^v1.2.35
 ```
 
 รันคำสั่ง
-```
+``` 
 php webman fix-disable-functions
 ```
 
 ## วิธีที่ 2
 
-รันสคริปต์ `curl -Ss https://www.workerman.net/webman/fix-disable-functions | php` เพื่อเอามันออกจากการปิดใช้งาน
+รันสคริปต์ `curl -Ss https://www.workerman.net/webman/fix-disable-functions | php` เพื่อถอดการปิดใช้งาน
 
 ## วิธีที่ 3
 
-รันคำสั่ง `php --ini` เพื่อค้นหาตำแหน่งของไฟล์ php.ini ที่ php cli ใช้
+รัน `php --ini` เพื่อค้นหาตำแหน่งของไฟล์ php.ini ที่ php cli ใช้
 
-เปิด php.ini และค้นหา `disable_functions` และเอาออกชื่อฟังก์ชันต่อไปนี้ออก
-```
+เปิด php.ini แล้วค้นหา `disable_functions` และถอดการใช้งานฟังก์ชันต่อไปนี้
+``` 
 stream_socket_server
 stream_socket_client
 pcntl_signal_dispatch

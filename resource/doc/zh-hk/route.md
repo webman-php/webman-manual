@@ -8,9 +8,9 @@ webman默認路由規則是 `http://127.0.0.1:8787/{控制器}/{動作}`。
 - `http://127.0.0.1:8787` 將默認訪問`app\controller\IndexController`類的`index`方法
 - `http://127.0.0.1:8787/foo` 將默認訪問`app\controller\FooController`類的`index`方法
 - `http://127.0.0.1:8787/foo/test` 將默認訪問`app\controller\FooController`類的`test`方法
-- `http://127.0.0.1:8787/admin/foo/test` 將默認訪問`app\admin\controller\FooController`類的`test`方法（參考[多應用](multiapp.md)）
+- `http://127.0.0.1:8787/admin/foo/test` 將默認訪問`app\admin\controller\FooController`類的`test`方法 (參考[多應用](multiapp.md))
 
-此外，webman從1.4開始支持更複雜的默認路由，例如
+另外webman從1.4開始支持更複雜的默認路由，例如
 ```php
 app
 ├── admin
@@ -48,6 +48,7 @@ Route::any('/test', function ($request) {
 
 > **注意**
 > 路由路徑必須以`/`開頭，例如
+
 ```php
 // 錯誤的用法
 Route::any('test', function ($request) {
@@ -60,6 +61,7 @@ Route::any('/test', function ($request) {
 });
 ```
 
+
 ## 類路由
 `config/route.php`裡添加如下路由代碼
 ```php
@@ -67,8 +69,9 @@ Route::any('/testclass', [app\controller\IndexController::class, 'test']);
 ```
 當訪問地址為 `http://127.0.0.1:8787/testclass` 時，將返回`app\controller\IndexController`類的`test`方法的返回值。
 
+
 ## 路由參數
-如果路由中存在參數，通過`{key}`來匹配，匹配結果將傳遞到對應的控制器方法參數中（從第二個參數開始依次傳遞），例如：
+如果路由中存在參數，通過`{key}`來匹配，匹配結果將傳遞到對應的控制器方法參數中(從第二個參數開始依次傳遞)，例如：
 ```php
 // 匹配 /user/123 /user/abc
 Route::any('/user/{id}', [app\controller\UserController::class, 'get']);
@@ -107,8 +110,10 @@ Route::options('[{path:.+}]', function () {
 });
 ```
 
+
 ## 路由分組
 有時候路由包含了大量相同的前綴，這時候我們可以用路由分組來簡化定義。例如：
+
 ```php
 Route::group('/blog', function () {
    Route::any('/create', function ($request) {return response('create');});
@@ -116,7 +121,7 @@ Route::group('/blog', function () {
    Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
 }
 ```
-等價於
+等價與
 ```php
 Route::any('/blog/create', function ($request) {return response('create');});
 Route::any('/blog/edit', function ($request) {return response('edit');});
@@ -124,6 +129,7 @@ Route::any('/blog/view/{id}', function ($request, $id) {return response("view $i
 ```
 
 group嵌套使用
+
 ```php
 Route::group('/blog', function () {
    Route::group('/v1', function () {
@@ -133,9 +139,9 @@ Route::group('/blog', function () {
    });  
 }
 ```
-
 ## 路由中間件
-我們可以給某個一個或某一組路由設置中間件。
+
+我們可以為某個一個或某一組路由設定中間件。
 例如：
 ```php
 Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->middleware([
@@ -180,7 +186,7 @@ Route::group('/blog', function () {
    })->middleware([
         app\middleware\MiddlewareA::class,
         app\middleware\MiddlewareB::class,
-    });  
+    ]);  
 });
 ```
 
@@ -195,20 +201,20 @@ Route::resource('/test', app\controller\IndexController::class, ['index','create
 // 如 notify 訪問地址則為any型路由 /test/notify或/test/notify/{id} 都可 routeName為 test.notify
 Route::resource('/test', app\controller\IndexController::class, ['index','create','notify']);
 ```
-| 動詞   | 統一資源標識符（URI）                 | 行動   | 路由名稱       |
-|--------|-------------------------------|---------|---------------|
-| GET    | /test                        | index   | test.index    |
-| GET    | /test/create                 | create  | test.create   |
-| POST   | /test                        | store   | test.store    |
-| GET    | /test/{id}                   | show    | test.show     |
-| GET    | /test/{id}/edit              | edit    | test.edit     |
-| PUT    | /test/{id}                   | update  | test.update   |
-| DELETE | /test/{id}                   | destroy | test.destroy  |
-| PUT    | /test/{id}/recovery          | recovery| test.recovery |
+| Verb   | URI                 | Action   | Route Name    |
+|--------|---------------------|----------|---------------|
+| GET    | /test               | index    | test.index    |
+| GET    | /test/create        | create   | test.create   |
+| POST   | /test               | store    | test.store    |
+| GET    | /test/{id}          | show     | test.show     |
+| GET    | /test/{id}/edit     | edit     | test.edit     |
+| PUT    | /test/{id}          | update   | test.update   |
+| DELETE | /test/{id}          | destroy  | test.destroy  |
+| PUT    | /test/{id}/recovery | recovery | test.recovery |
 
 ## url生成
 > **注意** 
-> 暫時不支持group嵌套的路由生成url  
+> 暫時不支持group嵌套的路由生成url 
 
 例如路由：
 ```php
@@ -218,8 +224,7 @@ Route::any('/blog/{id}', [app\controller\BlogController::class, 'view'])->name('
 ```php
 route('blog.view', ['id' => 100]); // 結果為 /blog/100
 ```
-
-視圖裡使用路由的url時可以使用此方法，這樣不管路由規則如何變化，url都會自动生成，避免因路由地址調整導致大量更改視圖文件的情況。
+視圖裡使用路由的url時可以使用此方法，這樣不管路由規則如何變化，url都會自動生成，避免因路由地址調整導致大量更改視圖文件的情況。
 
 ## 獲取路由信息
 > **注意**
@@ -228,7 +233,7 @@ route('blog.view', ['id' => 100]); // 結果為 /blog/100
 通過`$request->route`對象我們可以獲取當前請求路由信息，例如
 
 ```php
-$route = $request->route; // 等價於 $route = request()->route;
+$route = $request->route; // 等價與 $route = request()->route;
 if ($route) {
     var_export($route->getPath());
     var_export($route->getMethods());
@@ -240,7 +245,7 @@ if ($route) {
 ```
 
 > **注意**
-> 如果當前請求沒有匹配到config/route.php中配置的任何路由，則`$request->route`為null，也就是說走默認路由時`$request->route`為null 
+> 如果當前請求沒有匹配到config/route.php中配置的任何路由，則`$request->route`為null，也就是說走預設路由時`$request->route`為null
 
 ## 處理404
 當路由找不到時默認返回404狀態碼並輸出`public/404.html`文件內容。
@@ -258,7 +263,7 @@ Route::fallback(function(){
 });
 ```
 
-相關連結 [自定義404 500頁面](others/custom-error-page.md)
+相關連接 [自定義404 500頁面](others/custom-error-page.md)
 
 ## 路由接口
 ```php
@@ -287,17 +292,16 @@ Route::disableDefaultRoute($plugin = '');
 // 回退路由，設置默認的路由兜底
 Route::fallback($callback, $plugin = '');
 ```
-如果uri沒有對應的路由（包括默認路由），且回退路由也未設置，則會返回404。
-
-## 多個路由配置文件
-如果你想使用多個路由配置文件對路由進行管理，例如[多應用](multiapp.md)時每個應用下有自己的路由配置，這時可以通過`require`外部文件的方式加載外部路由配置文件。
-例如`config/route.php`中
+如果uri沒有對應的路由(包括默認路由)，且回退路由也未設置，則會返回404。
+## 多個路由配置檔
+如果您希望使用多個路由配置檔來管理路由，例如[多應用](multiapp.md)時每個應用下都有自己的路由配置，這時可以通過 `require` 外部檔案的方式來加載外部路由配置檔。
+例如 `config/route.php` 中
 ```php
 <?php
 
-// 加載admin應用下的路由配置
+// 加載 admin 應用下的路由配置
 require_once app_path('admin/config/route.php');
-// 加載api應用下的路由配置
+// 加載 api 應用下的路由配置
 require_once app_path('api/config/route.php');
 
 ```

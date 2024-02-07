@@ -1,25 +1,25 @@
-webman은 기본적으로 PHP 기본 구문을 템플릿으로 사용하며, `opcache`를 활성화하면 최상의 성능을 얻을 수 있습니다. 또한, webman은 [Twig](https://twig.symfony.com/doc/3.x/)、 [Blade](https://learnku.com/docs/laravel/8.x/blade/9377)、 [think-template](https://www.kancloud.cn/manual/think-template/content) 템플릿 엔진을 제공합니다.
+## 뷰
+webman은 기본적으로 PHP 네이티브 구문을 템플릿으로 사용하며, `opcache`를 활성화하면 최상의 성능을 제공합니다. PHP 네이티브 템플릿 외에도 [Twig](https://twig.symfony.com/doc/3.x/)、 [Blade](https://learnku.com/docs/laravel/8.x/blade/9377)、 [think-template](https://www.kancloud.cn/manual/think-template/content) 템플릿 엔진을 제공합니다.
 
 ## opcache 활성화
-템플릿 사용 시, php.ini의 `opcache.enable` 및 `opcache.enable_cli` 옵션을 활성화하는 것이 좋으며, 이렇게 하면 템플릿 엔진이 최상의 성능을 발휘할 수 있습니다.
+뷰를 사용할 때는 php.ini의 `opcache.enable` 및 `opcache.enable_cli` 옵션을 활성화하는 것이 좋으며, 이를 통해 템플릿 엔진의 최상의 성능을 얻을 수 있습니다.
 
 ## Twig 설치
-1. composer를 사용하여 설치합니다.
-
-    `composer require twig/twig`
-
-2. 구성을 변경하여 `config/view.php`를 다음과 같이 합니다.
+1. composer로 설치
+   ```
+   composer require twig/twig
+   ```
+2. `config/view.php` 구성 변경
    ```php
    <?php
    use support\view\Twig;
-
+  
    return [
        'handler' => Twig::class
    ];
    ```
    > **참고**
-   > 다른 구성 옵션은 options로 전달됩니다. 예를 들어  
-
+   > 다른 구성 옵션은 options를 통해 전달할 수 있습니다. 예를 들어
    ```php
    return [
        'handler' => Twig::class,
@@ -31,11 +31,11 @@ webman은 기본적으로 PHP 기본 구문을 템플릿으로 사용하며, `op
    ```
 
 ## Blade 설치
-1. composer를 사용하여 설치합니다.
-
-    `composer require psr/container ^1.1.1 webman/blade`
-
-2. 구성을 변경하여 `config/view.php`를 다음과 같이 합니다.
+1. composer로 설치
+   ```
+   composer require psr/container ^1.1.1 webman/blade
+   ```
+2. `config/view.php` 구성 변경
    ```php
    <?php
    use support\view\Blade;
@@ -46,11 +46,11 @@ webman은 기본적으로 PHP 기본 구문을 템플릿으로 사용하며, `op
    ```
 
 ## think-template 설치
-1. composer를 사용하여 설치합니다.
-
-    `composer require topthink/think-template`
-
-2. 구성을 변경하여 `config/view.php`를 다음과 같이 합니다.
+1. composer로 설치
+   ```
+   composer require topthink/think-template
+   ```
+2. `config/view.php` 구성 변경
    ```php
    <?php
    use support\view\ThinkPHP;
@@ -60,8 +60,7 @@ webman은 기본적으로 PHP 기본 구문을 템플릿으로 사용하며, `op
    ];
    ```
    > **참고**
-   > 다른 구성 옵션은 options로 전달됩니다. 예를 들어
-
+   > 다른 구성 옵션은 options를 통해 전달할 수 있습니다. 예를 들어
    ```php
    return [
        'handler' => ThinkPHP::class,
@@ -73,9 +72,8 @@ webman은 기본적으로 PHP 기본 구문을 템플릿으로 사용하며, `op
    ];
    ```
 
-## 기본 PHP 템플릿 엔진 예시
-다음과 같이 파일 `app/controller/UserController.php`를 작성합니다.
-
+## 네이티브 PHP 템플릿 엔진 예시
+다음과 같이 `app/controller/UserController.php` 파일을 생성합니다.
 ```php
 <?php
 namespace app\controller;
@@ -90,9 +88,7 @@ class UserController
     }
 }
 ```
-
-다음과 같이 파일 `app/view/user/hello.html`을 작성합니다.
-
+다음과 같이 `app/view/user/hello.html` 파일을 생성합니다.
 ```html
 <!doctype html>
 <html>
@@ -107,7 +103,7 @@ hello <?=htmlspecialchars($name)?>
 ```
 
 ## Twig 템플릿 엔진 예시
-`config/view.php`를 다음과 같이 변경합니다.
+`config/view.php`를 다음과 같이 수정합니다.
 ```php
 <?php
 use support\view\Twig;
@@ -116,8 +112,7 @@ return [
     'handler' => Twig::class
 ];
 ```
-
-`app/controller/UserController.php`를 다음과 같이 작성합니다.
+다음과 같이 `app/controller/UserController.php` 파일을 작성합니다.
 ```php
 <?php
 namespace app\controller;
@@ -132,9 +127,7 @@ class UserController
     }
 }
 ```
-
-`app/view/user/hello.html` 파일을 다음과 같이 작성합니다.
-
+다음과 같이 `app/view/user/hello.html` 파일을 작성합니다.
 ```html
 <!doctype html>
 <html>
@@ -147,11 +140,10 @@ hello {{name}}
 </body>
 </html>
 ```
-
-더 많은 문서는 [Twig](https://twig.symfony.com/doc/3.x/)에서 확인할 수 있습니다.
+자세한 내용은[Twig](https://twig.symfony.com/doc/3.x/)를 참조하세요.
 
 ## Blade 템플릿 예시
-`config/view.php`를 다음과 같이 변경합니다.
+`config/view.php`를 다음과 같이 수정합니다.
 ```php
 <?php
 use support\view\Blade;
@@ -160,8 +152,7 @@ return [
     'handler' => Blade::class
 ];
 ```
-
-`app/controller/UserController.php`를 다음과 같이 작성합니다.
+다음과 같이 `app/controller/UserController.php` 파일을 작성합니다.
 ```php
 <?php
 namespace app\controller;
@@ -176,10 +167,8 @@ class UserController
     }
 }
 ```
-
-`app/view/user/hello.blade.php` 파일을 다음과 같이 작성합니다. 
-> 참고: blade 템플릿 확장자는 `.blade.php`입니다.
-
+다음과 같이 `app/view/user/hello.blade.php` 파일을 작성합니다.
+> blade 템플릿의 경우 확장자는`.blade.php` 입니다.
 ```html
 <!doctype html>
 <html>
@@ -192,11 +181,10 @@ hello {{$name}}
 </body>
 </html>
 ```
-
-더 많은 문서는 [Blade](https://learnku.com/docs/laravel/8.x/blade/9377)에서 확인할 수 있습니다.
+자세한 내용은 [Blade](https://learnku.com/docs/laravel/8.x/blade/9377)를 참조하세요.
 
 ## ThinkPHP 템플릿 예시
-`config/view.php`를 다음과 같이 변경합니다.
+`config/view.php`를 다음과 같이 수정합니다.
 ```php
 <?php
 use support\view\ThinkPHP;
@@ -205,8 +193,7 @@ return [
     'handler' => ThinkPHP::class
 ];
 ```
-
-`app/controller/UserController.php`를 다음과 같이 작성합니다.
+다음과 같이 `app/controller/UserController.php` 파일을 작성합니다.
 ```php
 <?php
 namespace app\controller;
@@ -221,10 +208,8 @@ class UserController
     }
 }
 ```
-
-`app/view/user/hello.html` 파일을 다음과 같이 작성합니다.
-
-```php
+다음과 같이 `app/view/user/hello.html` 파일을 작성합니다.
+```html
 <!doctype html>
 <html>
 <head>
@@ -236,12 +221,10 @@ hello {$name}
 </body>
 </html>
 ```
-
-더 많은 문서는 [think-template](https://www.kancloud.cn/manual/think-template/content)에서 확인할 수 있습니다.
+자세한 내용은 [think-template](https://www.kancloud.cn/manual/think-template/content)를 참조하세요.
 
 ## 템플릿 할당
-`view(템플릿, 변수 배열)`을 사용하여 템플릿에 값을 할당하는 것 외에도 `View::assign()`을 호출하여 어디에서든지 템플릿에 값을 할당할 수 있습니다. 예를 들어:
-
+`view(템플릿, 변수 배열)`을 사용하여 템플릿에 할당하는 것 외에도 어디서든 `View::assign()`을 호출하여 템플릿에 값을 할당할 수 있습니다. 예를 들어:
 ```php
 <?php
 namespace app\controller;
@@ -262,54 +245,51 @@ class UserController
     }
 }
 ```
-
-`View::assign()`은 특정 상황에서 매우 유용하며, 예를 들어 시스템의 각 페이지 상단에 현재 로그인한 사용자 정보를 표시해야하는 경우에 매우 편리합니다. 모든 페이지에 이 정보를 `view('템플릿', ['user_info' => '사용자 정보']);` 형식으로 할당하는 것은 매우 귀찮을 수 있습니다. 이 문제를 해결하기 위해 미들웨어에서 사용자 정보를 가져 와서 `View::assign()`를 통해 사용자 정보를 템플릿에 할당할 수 있습니다.
+`View::assign()`은 일부 상황에서 매우 유용합니다. 예를 들어 어떤 시스템의 각 페이지 상단에는 현재 로그인한 사용자 정보를 표시해야 하는 경우, 각 페이지에 이 정보를 `view('템플릿', ['user_info' => '사용자 정보']);`를 통해 할당하는 것은 매우 번거로워집니다. 해결 방법은 미들웨어에서 사용자 정보를 얻고, 그런 다음 `View::assign()`를 사용하여 템플릿에 사용자 정보를 할당하는 것입니다.
 
 ## 뷰 파일 경로에 대해
+
 #### 컨트롤러
-컨트롤러가 `view('템플릿명',[]);`를 호출할 때, 뷰 파일은 다음과 같은 규칙으로 찾습니다.
+컨트롤러가 `view('템플릿명',[]);`을 호출할 때, 뷰 파일은 다음과 같은 규칙에 따라 찾습니다:
 
-1. 다중 애플리케이션이 아닌 경우, `app/view/` 아래에서 해당하는 뷰 파일을 사용합니다.
-2. [다중 애플리케이션](multiapp.md)인 경우, `app/애플리케이션명/view/` 아래에서 해당하는 뷰 파일을 사용합니다.
+1. 다중 애플리케이션을 사용하지 않는 경우, `app/view/`에서 해당하는 뷰 파일을 사용합니다.
+2. [다중 애플리케이션](multiapp.md)을 사용하는 경우, `app/애플리케이션명/view/`에서 해당하는 뷰 파일을 사용합니다.
 
-요약하자면, `$request->app`이 비어있다면 `app/view/` 아래의 뷰 파일을 사용하고, 그렇지 않다면 `app/{$request->app}/view/` 아래의 뷰 파일을 사용합니다.
+종합하면, `$request->app`이 비어있을 경우 `app/view/`의 뷰 파일을 사용하고, 그렇지 않은 경우 `app/{$request->app}/view/`의 뷰 파일을 사용합니다.
 
 #### 클로저 함수
-클로저 함수의 경우 `$request->app`이 비어있고, 어떤 애플리케이션에 속하지 않기 때문에 `app/view/` 아래의 뷰 파일을 사용합니다. 예를 들어 `config/route.php`에서 라우트를 정의하는 경우 다음과 같이 사용됩니다.
+클로저 함수의 경우 `$request->app`이 비어있으므로, 클로저 함수는 `app/view/`의 뷰 파일을 사용합니다. 예를 들어 `config/route.php`에서 라우트를 정의할 경우:
 ```php
-Route::any('/admin/user/get', function (Reqeust $reqeust) {
+Route::any('/admin/user/get', function (Request $request) {
     return view('user', []);
 });
 ```
-이는 `app/view/user.html`을 모텝 파일로 사용합니다(blade 템플릿을 사용할 때는 `app/view/user.blade.php`).
+`app/view/user.html` 파일을 모든 클로저 함수의 템플릿 파일로 사용합니다(Blade 템플릿을 사용하는 경우 `app/view/user.blade.php` 파일을 사용한다).
 
-#### 특정 애플리케이션 지정
-다중 애플리케이션 모드에서 뷰가 재사용되도록 하려면 `view($template, $data, $app = null)` 함수의 세 번째 매개변수 `$app`을 사용하여 뷰 파일을 지정할 수 있습니다. 예를들어 `view('user', [], 'admin');`를 사용하면 `app/admin/view/` 아래의 뷰 파일을 강제로 사용합니다.
+#### 애플리케이션 지정
+다중 애플리케이션 모드에서 템플릿을 재사용할 수 있도록 하기 위해 `view($template, $data, $app = null)`은 세 번째 매개변수 `$app`을 사용하여 어떤 애플리케이션 디렉토리의 템플릿을 사용할지 지정할 수 있습니다. 예를 들어 `view('user', [], 'admin');`의 경우, `app/admin/view/`의 뷰 파일을 강제로 사용합니다.
 
 ## Twig 확장
-
 > **참고**
-> 이 기능은 webman-framework>=1.4.8 이상을 필요로 합니다
+> 이 기능은 webman-framework>=1.4.8 이상이 필요합니다.
 
-`config/view.php`에 대한 `view.extension`을 콜백하여 Twig 뷰 인스턴스를 확장할 수 있습니다. 예를들어`config/view.php`는 다음과 같습니다.
+`view.extension` 설정을 통해 Twig 뷰 인스턴스를 확장할 수 있습니다. 예를 들어 `config/view.php`는 다음과 같습니다.
 ```php
 <?php
 use support\view\Twig;
 return [
     'handler' => Twig::class,
     'extension' => function (Twig\Environment $twig) {
-        $twig->addExtension(new your\namespace\YourExtension()); // Extension 추가
+        $twig->addExtension(new your\namespace\YourExtension()); // 확장 추가
         $twig->addFilter(new Twig\TwigFilter('rot13', 'str_rot13')); // 필터 추가
         $twig->addFunction(new Twig\TwigFunction('function_name', function () {})); // 함수 추가
     }
 ];
 ```
-
-## Blade 확장
-> **참고**
-> 이 기능은 webman-framework>=1.4.8 이상을 필요로 합니다
-
-마찬가지로 `config/view.php`에 대한 `view.extension`을 콜백하여 Blade 뷰 인스턴스를 확장할 수 있습니다. 예를들어 `config/view.php`는 다음과 같습니다.
+## 블레이드 확장
+> **주의**
+> 이 기능은 webman-framework>=1.4.8이 필요합니다.
+동일한 방법으로 `view.extension` 콜백을 구성하여 블레이드 뷰 인스턴스를 확장할 수 있습니다. 예를들어 `config/view.php`은 다음과 같습니다.
 
 ```php
 <?php
@@ -317,7 +297,7 @@ use support\view\Blade;
 return [
     'handler' => Blade::class,
     'extension' => function (Jenssegers\Blade\Blade $blade) {
-        // Blade 지시어 추가
+        // 블레이드에 지시문 추가
         $blade->directive('mydate', function ($timestamp) {
             return "<?php echo date('Y-m-d H:i:s', $timestamp); ?>";
         });
@@ -325,14 +305,14 @@ return [
 ];
 ```
 
-## blade에서 컴포넌트 사용
+## 블레이드에서 component 구성 사용
 
-> **참고
-> webman/blade>=1.5.2가 필요합니다**
+> **주의**
+> webman/blade>=1.5.2 가 필요합니다.
 
-예를 들어 Alert 컴포넌트를 추가해야하는 경우
+Alert component를 추가해야하는 경우
 
-**`app/view/components/Alert.php`를 만듭니다.**
+**`app/view/components/Alert.php`를 만듭니다**.
 ```php
 <?php
 
@@ -355,14 +335,14 @@ class Alert extends Component
 }
 ```
 
-**`app/view/components/alert.blade.php`를 만듭니다.**
-```
+**`app/view/components/alert.blade.php`를 만듭니다**.
+```php
 <div>
     <b style="color: red">hello blade component</b>
 </div>
 ```
 
-**`/config/view.php`의 유사 코드**
+**`/config/view.php`는 다음과 같은 코드입니다.**
 ```php
 <?php
 use support\view\Blade;
@@ -374,7 +354,7 @@ return [
 ];
 ```
 
-다음으로, Blade 컴포넌트 Alert를 설정했습니다. 이제 템플릿에서 사용할 때 다음과 같습니다.
+이로써 Blade component Alert가 설정되었습니다. 템플릿에서 사용하면 다음과 같습니다.
 ```html
 <!doctype html>
 <html>
@@ -392,7 +372,7 @@ return [
 
 
 ## think-template 확장
-think-template에서는 `view.options.taglib_pre_load`를 사용하여 태그 라이브러리를 확장할 수 있습니다. 예를 들어
+think-template은 `view.options.taglib_pre_load`를 사용하여 태그 라이브러리를 확장합니다. 예를들어
 ```php
 <?php
 use support\view\ThinkPHP;
@@ -403,4 +383,5 @@ return [
     ]
 ];
 ```
-자세한 내용은 [think-template 태그 확장](https://www.kancloud.cn/manual/think-template/1286424)에서 확인할 수 있습니다.
+
+자세한 내용은 [think-template tag extension](https://www.kancloud.cn/manual/think-template/1286424)를 참조하십시오.

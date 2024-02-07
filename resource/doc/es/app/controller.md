@@ -1,8 +1,8 @@
 # Controlador
 
-Según la especificación PSR4, el espacio de nombres de la clase del controlador debe comenzar con `plugin\{identificador_del_plugin}`, por ejemplo:
+Según la especificación PSR4, el espacio de nombres de la clase del controlador comienza con `plugin\{identificador del plugin}`, por ejemplo:
 
-Crear el archivo del controlador `plugin/foo/app/controller/FooController.php`.
+Crear un archivo de controlador `plugin/foo/app/controller/FooController.php`.
 
 ```php
 <?php
@@ -28,6 +28,7 @@ Cuando se accede a `http://127.0.0.1:8787/app/foo/foo`, la página devuelve `hel
 
 Cuando se accede a `http://127.0.0.1:8787/app/foo/foo/hello`, la página devuelve `hello webman`.
 
+
 ## Acceso a URL
-La ruta de la dirección URL de la aplicación del complemento comienza con `/app`, seguido del identificador del complemento, y luego el controlador y método específico.
-Por ejemplo, la dirección URL del controlador `plugin\foo\app\controller\UserController` es `http://127.0.0.1:8787/app/foo/user`.
+La ruta de la dirección URL de la aplicación del complemento siempre comienza con `/app`, seguido del identificador del plugin y luego el controlador y el método específico.
+Por ejemplo, la dirección URL para `plugin\foo\app\controller\UserController` es `http://127.0.0.1:8787/app/foo/user`.

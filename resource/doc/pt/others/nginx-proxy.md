@@ -1,13 +1,13 @@
 # Proxy do nginx
-Quando o webman precisa fornecer acesso direto à Internet, é recomendável adicionar um proxy nginx antes do webman, o que traz as seguintes vantagens.
+Quando o webman precisa fornecer acesso direto à Internet, é recomendável adicionar um proxy nginx na frente do webman, com os seguintes benefícios:
 
-- Os recursos estáticos são tratados pelo nginx, permitindo que o webman se concentre no processamento da lógica de negócios.
-- Permite que vários webman compartilhem as portas 80 e 443 e diferenciem os diferentes sites por meio de nomes de domínio, permitindo a implantação de vários sites em um único servidor.
-- Pode coexistir com a arquitetura php-fpm e webman.
-- O proxy nginx permite a implementação do SSL para o https, sendo mais simples e eficiente.
-- Capaz de filtrar estritamente algumas solicitações ilegais da Internet.
+- Os recursos estáticos são tratados pelo nginx, permitindo que o webman se concentre no processamento lógico do negócio.
+- Permite que vários webman compartilhem as portas 80 e 443, diferenciando os sites por nomes de domínio e possibilitando a implantação de vários sites em um único servidor.
+- Pode coexistir com a estrutura php-fpm e webman.
+- O proxy do nginx realiza SSL para implementar https de forma mais simples e eficiente.
+- Pode filtrar rigorosamente algumas solicitações externas ilegítimas.
 
-## Exemplo de proxy nginx
+## Exemplo de Proxy do nginx
 ```
 upstream webman {
     server 127.0.0.1:8787;
@@ -15,10 +15,10 @@ upstream webman {
 }
 
 server {
-  server_name nome_do_site;
+  server_name domain_do_site;
   listen 80;
   access_log off;
-  root /seu/webman/public;
+  root /seu/diretorio/webman/public;
 
   location ^~ / {
       proxy_set_header X-Real-IP $remote_addr;

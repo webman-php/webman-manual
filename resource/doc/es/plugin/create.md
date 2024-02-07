@@ -1,69 +1,68 @@
 # Proceso de generación y publicación de complementos básicos
 
 ## Principio
-1. Tomando como ejemplo un complemento de origen cruzado, el complemento se divide en tres partes: un archivo de programa de middleware de origen cruzado, un archivo de configuración de middleware.php y uno generado mediante comando Install.php.
-2. Utilizamos un comando para empaquetar y publicar los tres archivos en Composer.
-3. Cuando un usuario instala un complemento de origen cruzado utilizando Composer, Install.php del complemento copiará el archivo de programa de middleware de origen cruzado y el archivo de configuración a `{directorio principal del proyecto}/config/plugin`, para que webman los cargue. Esto logra que el archivo de programa de middleware de origen cruzado se configure automáticamente y entre en efecto.
-4. Cuando un usuario elimina el complemento mediante Composer, Install.php eliminará el archivo de programa de middleware de origen cruzado correspondiente y el archivo de configuración, logrando la desinstalación automática del complemento.
+1. Tomemos un complemento de unión cruzada como ejemplo. El complemento consta de tres partes: un archivo de programa de middleware de unión cruzada, un archivo de configuración de middleware llamado middleware.php, y uno generado automáticamente a través del comando Install.php.
+2. Utilizamos el comando para empaquetar y publicar los tres archivos en Composer.
+3. Cuando los usuarios instalan el complemento de unión cruzada utilizando Composer, Install.php copiará el archivo de programa de middleware de unión cruzada y el archivo de configuración en `{proyecto principal}/config/plugin`, para que webman lo cargue. Esto implementa la configuración automática efectiva de los archivos de middleware de unión cruzada.
+4. Cuando los usuarios eliminan el complemento utilizando Composer, Install.php eliminará los archivos correspondientes del programa de middleware de unión cruzada y de configuración, logrando la desinstalación automática del complemento.
 
-## Normas
-1. El nombre del complemento consta de dos partes, `fabricante` y `nombre del complemento`. Por ejemplo, `webman/push`, que corresponde al nombre del paquete de Composer.
-2. Los archivos de configuración del complemento se almacenan de forma unificada en `config/plugin/fabricante/nombre del complemento/` (el comando de consola creará automáticamente el directorio de configuración). Si el complemento no requiere configuraciones, se deben eliminar los directorios de configuración creados automáticamente.
-3. El directorio de configuración del complemento solo admite los archivos: app.php (configuración principal del complemento), bootstrap.php (configuración de inicio de proceso), route.php (configuración de ruta), middleware.php (configuración de middleware), process.php (configuración de proceso personalizado), database.php (configuración de base de datos), redis.php (configuración de Redis) y thinkorm.php (configuración de ThinkORM). Estas configuraciones serán reconocidas automáticamente por webman.
-4. El complemento utiliza el siguiente método para acceder a la configuración`config('plugin.fabricante.nombre del complemento.archivo de configuración.item específico');`, por ejemplo `config('plugin.webman.push.app.app_key')`.
-5. Si el complemento tiene su propia configuración de base de datos, se accede de la siguiente manera: `illuminate/database` como `Db::connection('plugin.fabricante.nombre del complemento.conexión específica')` y `thinkrom` como `Db::connct('plugin.fabricante.nombre del complemento.conexión específica')`.
-6. Si un complemento necesita colocar archivos de negocios en el directorio `app/`, asegúrese de que no entren en conflicto con el proyecto del usuario ni con otros complementos.
-7. Los complementos deben evitar copiar archivos o directorios al proyecto principal en la medida de lo posible. Por ejemplo, el complemento de origen cruzado, aparte de los archivos de configuración que deben copiarse al proyecto principal, el archivo de programa de middleware debe colocarse en `vendor/webman/cros/src` y no necesita copiarse al proyecto principal.
-8. Se recomienda utilizar letras mayúsculas para el espacio de nombres del complemento, por ejemplo, Webman/Console.
+## Normativa
+1. El nombre del complemento consta de dos partes, el "fabricante" y el "nombre del complemento", por ejemplo, `webman/push`, que corresponde al nombre del paquete de Composer.
+2. Los archivos de configuración del complemento se colocan de forma unificada en `config/plugin/fabricante/nombre del complemento/` (el comando de consola creará automáticamente el directorio de configuración). Si el complemento no requiere configuración, se debe eliminar el directorio de configuración creado automáticamente.
+3. El directorio de configuración del complemento solo admite los archivos app.php (configuración principal del complemento), bootstrap.php (configuración de inicio de procesos), route.php (configuración de ruta), middleware.php (configuración de middleware), process.php (configuración de procesos personalizados), database.php (configuración de bases de datos), redis.php (configuración de Redis), thinkorm.php (configuración de ThinkORM). Estas configuraciones serán automáticamente reconocidas por webman.
+4. Para acceder a la configuración del complemento, se utiliza el siguiente método: `config('plugin.fabricante.nombre del complemento.nombre del archivo de configuración.configuración específica');`, por ejemplo, `config('plugin.webman.push.app.app_key')`.
+5. Si el complemento tiene su propia configuración de base de datos, se accede de la siguiente manera: para `illuminate/database` como `Db::connection('plugin.fabricante.nombre del complemento.conexión específica')`, y para `thinkrom` como `Db::connct('plugin.fabricante.nombre del complemento.conexión específica')`.
+6. Si un complemento necesita colocar archivos de negocio en el directorio `app/`, se debe garantizar que no entren en conflicto con los proyectos de los usuarios ni con otros complementos.
+7. Los complementos deben evitar copiar archivos o directorios al proyecto principal tanto como sea posible. Por ejemplo, aparte del archivo de configuración, el archivo de middleware del complemento de unión cruzada debe ubicarse en `vendor/webman/cros/src` y no necesita copiarse al proyecto principal.
+8. Se sugiere que los espacios de nombres de los complementos utilicen mayúsculas, por ejemplo, Webman/Console.
 
 ## Ejemplo
 
-**Instalación de la línea de comandos `webman/console`**
+**Instalar el comando de línea `webman/console`**
 
 `composer require webman/console`
 
-#### Crear un complemento
+### Crear un complemento
 
-Supongamos que el nombre del complemento creado es `foo/admin` (el nombre también es el nombre del proyecto que se publicará posteriormente en Composer, el nombre debe estar en minúsculas). Ejecute el siguiente comando
+Supongamos que el complemento creado se llama `foo/admin` (el nombre también será el nombre del proyecto que se publicará a través de Composer, y el nombre debe ser en minúsculas).
+Ejecutar el comando
 `php webman plugin:create --name=foo/admin`
 
-Después de crear el complemento, se generará el directorio `vendor/foo/admin` para almacenar los archivos relacionados con el complemento y `config/plugin/foo/admin` para almacenar las configuraciones relacionadas con el complemento.
+Después de crear el complemento, se generará el directorio `vendor/foo/admin` para almacenar los archivos relacionados con el complemento y `config/plugin/foo/admin` para almacenar la configuración relacionada con el complemento.
 
 > Nota
-> `config/plugin/foo/admin` admite las siguientes configuraciones: app.php (configuración principal del complemento), bootstrap.php (configuración de inicio de proceso), route.php (configuración de ruta), middleware.php (configuración de middleware), process.php (configuración de proceso personalizado), database.php (configuración de base de datos), redis.php (configuración de Redis) y thinkorm.php (configuración de ThinkORM). El formato de configuración es el mismo que el de webman, y estas configuraciones se reconocerán automáticamente por webman y se fusionarán en la configuración.
-Cuando se utilice, acceda con el prefijo `plugin`, por ejemplo `config('plugin.foo.admin.app')`.
+> `config/plugin/foo/admin` admite las siguientes configuraciones: app.php (configuración principal del complemento), bootstrap.php (configuración de inicio de procesos), route.php (configuración de ruta), middleware.php (configuración de middleware), process.php (configuración de procesos personalizados), database.php (configuración de bases de datos), redis.php (configuración de Redis), thinkorm.php (configuración de ThinkORM). El formato de la configuración es el mismo que el de webman, y estas configuraciones se reconocerán automáticamente y se fusionarán en la configuración.
+Al acceder a ellas, se usa el prefijo `plugin`, por ejemplo, `config('plugin.foo.admin.app')`.
 
+### Exportar el complemento
 
-#### Exportar complemento
-
-Una vez que hayamos desarrollado el complemento, ejecutamos el siguiente comando para exportar el complemento.
+Una vez que hemos desarrollado el complemento, ejecutamos el siguiente comando para exportarlo
 `php webman plugin:export --name=foo/admin`
 
-> Explicación
-Al exportar, el directorio config/plugin/foo/admin se copiará a src dentro de vendor/foo/admin, y se generará automáticamente un archivo Install.php. Install.php se utiliza para realizar operaciones automáticas al instalar y desinstalar el complemento.
-La operación predeterminada al instalar es copiar las configuraciones de src dentro de vendor/foo/admin al directorio config/plugin del proyecto actual.
-La operación predeterminada al eliminar es eliminar los archivos de configuración del directorio config/plugin del proyecto actual.
-Puede modificar Install.php para realizar operaciones personalizadas al instalar y desinstalar el complemento.
+> Nota
+> Después de la exportación, el directorio config/plugin/foo/admin se copiará en vendor/foo/admin/src, y se generará automáticamente un Install.php. Install.php se utiliza para ejecutar ciertas operaciones automáticamente al instalar o desinstalar un complemento.
+> La operación predeterminada de la instalación consiste en copiar la configuración de vendor/foo/admin/src al directorio actual del proyecto en config/plugin.
+> La operación predeterminada de eliminación consiste en eliminar los archivos de configuración del directorio actual del proyecto en config/plugin.
+> Puede modificar Install.php para realizar operaciones personalizadas al instalar o desinstalar el complemento.
 
-#### Publicar complemento
-* Supongamos que ya tienes una cuenta en [github](https://github.com) y en [packagist](https://packagist.org)
-* Crea un proyecto admin en [github](https://github.com) y sube el código. Supongamos que la dirección del proyecto es `https://github.com/yourusername/admin`.
-* Ingresa a la dirección `https://github.com/yourusername/admin/releases/new` para publicar un lanzamiento, por ejemplo, `v1.0.0`.
-* Ingresa a [packagist](https://packagist.org), haz clic en `Submit` en la navegación, y sube la dirección de tu proyecto de github `https://github.com/yourusername/admin`. Así es como se publica un complemento.
+### Publicar el complemento
+* Supongamos que ya tienes una cuenta en [github](https://github.com) y [packagist](https://packagist.org)
+* Crea un proyecto admin en [github](https://github.com) y sube el código. Supongamos que la dirección del proyecto es `https://github.com/tuusuario/admin`
+* Ingresa a la dirección `https://github.com/tuusuario/admin/releases/new` para publicar un release, por ejemplo, `v1.0.0`
+* Ingresa a [packagist](https://packagist.org) y haz clic en `Submit` en la navegación, luego envía la dirección de tu proyecto en GitHub, `https://github.com/tuusuario/admin`, para completar la publicación del complemento
 
 > **Consejo**
-> Si al enviar el complemento a `packagist` aparece un mensaje de conflicto, puedes utilizar un nombre de fabricante diferente, por ejemplo, cambiar `foo/admin` a `myfoo/admin`.
+> Si al ingresar un complemento en `packagist` se muestra un conflicto, considera cambiar el nombre del fabricante, por ejemplo, cambia `foo/admin` a `myfoo/admin`
 
-Cuando actualices el código del proyecto del complemento en el futuro, asegúrate de sincronizar el código con github, volver a ingresar a `https://github.com/yourusername/admin/releases/new` para publicar un nuevo lanzamiento, y luego en la página de `https://packagist.org/packages/foo/admin` haz clic en `Update` para actualizar la versión.
+Si el código de tu proyecto de complemento se actualiza, necesitarás sincronizar el código con GitHub, volver a ingresar a la dirección `https://github.com/tuusuario/admin/releases/new` para publicar un nuevo release, y luego en la página `https://packagist.org/packages/foo/admin` haz clic en el botón `Update` para actualizar la versión.
 
 ## Agregar comandos al complemento
-A veces, los complementos necesitan comandos personalizados para ofrecer funciones de asistencia, por ejemplo, al instalar el complemento `webman/redis-queue`, el proyecto agregará automáticamente un comando `redis-queue:consumer`, para que el usuario simplemente ejecute `php webman redis-queue:consumer send-mail` y se generará una clase consumidora SendMail.php en el proyecto, lo que ayuda al desarrollo rápido.
+A veces, los complementos necesitan algunos comandos personalizados que proporcionen funciones de asistencia, por ejemplo, después de instalar el complemento `webman/redis-queue`, el proyecto se expandirá automáticamente con un comando `redis-queue:consumer`, y los usuarios solo necesitan ejecutar `php webman redis-queue:consumer send-mail` para generar rápidamente una clase consumidora llamada SendMail.php en el proyecto, lo que ayuda al desarrollo rápido.
 
-Supongamos que el complemento `foo/admin` necesita agregar el comando `foo-admin:add`, sigue los pasos a continuación.
+Supongamos que el complemento `foo/admin` necesita agregar el comando `foo-admin:add`. Consulta los siguientes pasos.
 
-#### Crear un nuevo comando
-
-**Crea un nuevo archivo de comando `vendor/foo/admin/src/FooAdminAddCommand.php`**
+### Crear un nuevo comando
+**Crea un archivo de comando llamado `vendor/foo/admin/src/FooAdminAddCommand.php`**
 
 ```php
 <?php
@@ -79,7 +78,7 @@ use Symfony\Component\Console\Input\InputArgument;
 class FooAdminAddCommand extends Command
 {
     protected static $defaultName = 'foo-admin:add';
-    protected static $defaultDescription = 'Esta es la descripción del comando';
+    protected static $defaultDescription = 'Descripción del comando aquí';
 
     /**
      * @return void
@@ -105,10 +104,10 @@ class FooAdminAddCommand extends Command
 ```
 
 > **Nota**
-> Para evitar conflictos entre comandos de complementos, se recomienda que el formato del nombre del comando sea `fabricante-nombre del complemento:comando específico`, por ejemplo, todos los comandos del complemento `foo/admin` deben tener `foo-admin:` como prefijo, por ejemplo `foo-admin:add`.
+> Para evitar conflictos entre comandos de complementos, se recomienda que el formato del comando sea `fabricante-nombre del complemento:comando específico`, por ejemplo, todos los comandos del complemento `foo/admin` deberían tener como prefijo `foo-admin:`, por ejemplo, `foo-admin:add`.
 
-#### Agregar configuración
-**Crea un nuevo archivo de configuración `config/plugin/foo/admin/command.php`**
+### Agregar configuración
+**Crea una configuración llamada `config/plugin/foo/admin/command.php`**
 ```php
 <?php
 
@@ -116,12 +115,12 @@ use Foo\Admin\FooAdminAddCommand;
 
 return [
     FooAdminAddCommand::class,
-    // ....se pueden agregar múltiples configuraciones...
+    // ....puedes agregar múltiples configuraciones...
 ];
 ```
 
 > **Consejo**
-> `command.php` se utiliza para configurar comandos personalizados del complemento. Cada elemento del array corresponde a una clase de comando de consola, y cada archivo de clase corresponde a un comando. Cuando un usuario ejecuta un comando de consola, `webman/console` cargará automáticamente todos los comandos personalizados configurados en `command.php` de cada complemento. Para obtener más información sobre comandos de consola, consulta [Command Line](console.md).
+> `command.php` se utiliza para configurar comandos personalizados del complemento. Cada elemento del array corresponde a un archivo de clase de comando, y cada archivo de clase corresponde a un comando. Cuando un usuario ejecuta un comando en la línea de comandos, `webman/console` cargará automáticamente los comandos personalizados establecidos en `command.php` de cada complemento. Para obtener más información sobre comandos, consulta [Comandos de consola](console.md).
 
-#### Ejecutar exportación
-Ejecuta el comando `php webman plugin:export --name=foo/admin` para exportar el complemento y enviarlo a `packagist`. De esta forma, al instalar el complemento `foo/admin`, se agregará el comando  `foo-admin:add`. Al ejecutar `php webman foo-admin:add jerry`, se imprimirá `Admin add jerry`.
+### Ejecutar la exportación
+Ejecuta el comando `php webman plugin:export --name=foo/admin` para exportar el complemento y subirlo a `packagist`. De esta manera, al instalar el complemento `foo/admin`, se agregará el comando `foo-admin:add`. Al ejecutar `php webman foo-admin:add jerry`, se imprimirá `Admin add jerry`.

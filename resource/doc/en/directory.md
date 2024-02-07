@@ -1,4 +1,4 @@
-# Directory Structure
+# Directory structure
 ```
 .
 ├── app                           Application directory
@@ -7,12 +7,12 @@
 │   ├── view                      View directory
 │   ├── middleware                Middleware directory
 │   │   └── StaticFile.php        Built-in static file middleware
-|   └── functions.php             Business custom functions are placed in this file
+|   └── functions.php             Business custom functions are written here
 |
 ├── config                        Configuration directory
 │   ├── app.php                   Application configuration
 │   ├── autoload.php              Files configured here will be automatically loaded
-│   ├── bootstrap.php             Configuration for the onWorkerStart callback when the process starts
+│   ├── bootstrap.php             Callback configuration that runs the onWorkerStart when the process is started
 │   ├── container.php             Container configuration
 │   ├── dependence.php            Container dependency configuration
 │   ├── database.php              Database configuration
@@ -21,21 +21,21 @@
 │   ├── middleware.php            Middleware configuration
 │   ├── process.php               Custom process configuration
 │   ├── redis.php                 Redis configuration
-│   ├── route.php                 Routing configuration
-│   ├── server.php                Server configuration for ports, processes, etc.
+│   ├── route.php                 Route configuration
+│   ├── server.php                Server configuration including ports, number of processes, etc.
 │   ├── view.php                  View configuration
 │   ├── static.php                Static file switch and static file middleware configuration
 │   ├── translation.php           Multilingual configuration
 │   └── session.php               Session configuration
 ├── public                        Static resource directory
 ├── process                       Custom process directory
-├── runtime                       Application runtime directory, requiring write permissions
-├── start.php                     Server startup file
-├── vendor                        Directory for third-party libraries installed by Composer
+├── runtime                       Runtime directory of the application, which requires write permission
+├── start.php                     Service start file
+├── vendor                        Directory where third-party libraries installed by Composer are stored
 └── support                       Library adaptation (including third-party libraries)
     ├── Request.php               Request class
     ├── Response.php              Response class
-    ├── Plugin.php                Plugin installation and uninstallation scripts
-    ├── helpers.php               Helper functions (business custom functions should be placed in app/functions.php)
-    └── bootstrap.php             Initialization script after process startup
+    ├── Plugin.php                Plugin installation and uninstallation script
+    ├── helpers.php               Helper functions (business custom functions should be written in app/functions.php)
+    └── bootstrap.php             Initialization script after the process is started
 ```

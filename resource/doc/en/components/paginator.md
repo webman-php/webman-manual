@@ -5,16 +5,17 @@
 ### Project Address
 
 https://github.com/jasongrimes/php-paginator
-  
+
 ### Installation
 
 ```php
 composer require "jasongrimes/paginator:^1.0.3"
 ```
-  
+
 ### Usage
 
-Create `app/controller/UserController.php`
+Create a new `app/controller/UserController.php` file.
+
 ```php
 <?php
 namespace app\controller;
@@ -25,7 +26,7 @@ use JasonGrimes\Paginator;
 class UserController
 {
     /**
-     * User List
+     * User list
      */
     public function get(Request $request)
     {
@@ -39,12 +40,14 @@ class UserController
     
 }
 ```
+
 **Template (PHP Native)**
-Create template `app/view/user/get.html`
+Create a new template `app/view/user/get.html`.
+
 ```html
 <html>
 <head>
-  <!-- Built-in support for Bootstrap pagination style -->
+  <!-- Built-in support for Bootstrap pagination styles -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -56,11 +59,12 @@ Create template `app/view/user/get.html`
 ```
 
 **Template (Twig)**
-Create template `app/view/user/get.html`
+Create a new template `app/view/user/get.html`.
+
 ```html
 <html>
 <head>
-  <!-- Built-in support for Bootstrap pagination style -->
+  <!-- Built-in support for Bootstrap pagination styles -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -74,11 +78,12 @@ Create template `app/view/user/get.html`
 ```
 
 **Template (Blade)**
-Create template `app/view/user/get.blade.php`
+Create a new template `app/view/user/get.blade.php`.
+
 ```html
 <html>
 <head>
-  <!-- Built-in support for Bootstrap pagination style -->
+  <!-- Built-in support for Bootstrap pagination styles -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -90,11 +95,12 @@ Create template `app/view/user/get.blade.php`
 ```
 
 **Template (ThinkPHP)**
-Create template `app/view/user/get.blade.php`
+Create a new template `app/view/user/get.blade.php`.
+
 ```html
 <html>
 <head>
-    <!-- Built-in support for Bootstrap pagination style -->
+    <!-- Built-in support for Bootstrap pagination styles -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -105,9 +111,9 @@ Create template `app/view/user/get.blade.php`
 </html>
 ```
 
-The effect is as follows:
+The result will be as follows:
 ![](../../assets/img/paginator.png)
-  
+
 ### More Information
 
-Visit https://github.com/jasongrimes/php-paginator
+Visit https://github.com/jasongrimes/php-paginator.

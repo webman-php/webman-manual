@@ -7,7 +7,7 @@ composer require --dev phpunit/phpunit
 ```
 
 ## 使用
-新建文件 `tests/TestConfig.php`，用於測試數據庫配置
+新建檔案 `tests/TestConfig.php`，用於測試數據庫配置
 ```php
 <?php
 use PHPUnit\Framework\TestCase;
@@ -25,10 +25,9 @@ class TestConfig extends TestCase
     }
 }
 ```
-  
-## 運行
 
-在項目根目錄中運行 `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php`
+## 執行
+在項目根目錄執行 `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php`
 
 結果類似如下：
 ```

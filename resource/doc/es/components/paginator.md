@@ -2,7 +2,7 @@
 
 ## jasongrimes/php-paginator
 
-### Repositorio
+### Dirección del proyecto
 
 https://github.com/jasongrimes/php-paginator
   
@@ -40,11 +40,11 @@ class UserController
 }
 ```
 **Plantilla (PHP nativo)**
-Crear la plantilla en app/view/user/get.html
+Crear la plantilla app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- Soporte integrado para estilos de paginación de Bootstrap -->
+  <!-- Soporte incorporado para estilos de paginación Bootstrap -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -56,11 +56,11 @@ Crear la plantilla en app/view/user/get.html
 ```
 
 **Plantilla (twig)**
-Crear la plantilla en app/view/user/get.html
+Crear la plantilla app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- Soporte integrado para estilos de paginación de Bootstrap -->
+  <!-- Soporte incorporado para estilos de paginación Bootstrap -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -74,11 +74,11 @@ Crear la plantilla en app/view/user/get.html
 ```
 
 **Plantilla (blade)**
-Crear la plantilla en app/view/user/get.blade.php
+Crear la plantilla app/view/user/get.blade.php
 ```html
 <html>
 <head>
-  <!-- Soporte integrado para estilos de paginación de Bootstrap -->
+  <!-- Soporte incorporado para estilos de paginación Bootstrap -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -90,11 +90,11 @@ Crear la plantilla en app/view/user/get.blade.php
 ```
 
 **Plantilla (thinkphp)**
-Crear la plantilla en app/view/user/get.blade.php
+Crear la plantilla app/view/user/get.blade.php
 ```html
 <html>
 <head>
-    <!-- Soporte integrado para estilos de paginación de Bootstrap -->
+    <!-- Soporte incorporado para estilos de paginación Bootstrap -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -105,9 +105,9 @@ Crear la plantilla en app/view/user/get.blade.php
 </html>
 ```
 
-Efecto:
+Efecto visual:
 ![](../../assets/img/paginator.png)
   
-### Más información
+### Más contenido
 
 Visita https://github.com/jasongrimes/php-paginator

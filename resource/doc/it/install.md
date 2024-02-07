@@ -1,8 +1,7 @@
-# Requisiti di sistema
+# Requisiti di ambiente
 
 * PHP >= 7.2
 * [Composer](https://getcomposer.org/) >= 2.0
-
 
 ### 1. Creare un progetto
 
@@ -10,32 +9,32 @@
 composer create-project workerman/webman
 ```
 
-### 2. Esecuzione
+### 2. Eseguire
 
-Entra nella directory di webman   
+Andare alla directory webman   
 
 #### Utenti Windows
-Doppio clic su `windows.bat` oppure eseguire `php windows.php` per avviare
+Fare doppio clic su `windows.bat` o eseguire `php windows.php` per avviare
 
 > **Nota**
-> Se si verificano errori, è molto probabile che alcune funzioni siano disabilitate, fare riferimento a [Controllo delle funzioni disabilitate](others/disable-function-check.md) per rimuovere la disabilitazione
+> Se si verificano errori, è probabile che alcune funzioni siano disabilitate. Consultare il [controllo delle funzioni disabilitate](others/disable-function-check.md) per sbloccarle
 
 #### Utenti Linux
-Esegui in modalità `debug` (per lo sviluppo e il debug)
- 
+Eseguire in modalità `debug` (per lo sviluppo e il debug)
+
 ```php
 php start.php start
 ```
 
-Esegui in modalità `daemon` (per l'ambiente di produzione)
+Eseguire in modalità `daemon` (per l'ambiente di produzione)
 
 ```php
 php start.php start -d
 ```
 
 > **Nota**
-> Se si verificano errori, è molto probabile che alcune funzioni siano disabilitate, fare riferimento a [Controllo delle funzioni disabilitate](others/disable-function-check.md) per rimuovere la disabilitazione
+> Se si verificano errori, è probabile che alcune funzioni siano disabilitate. Consultare il [controllo delle funzioni disabilitate](others/disable-function-check.md) per sbloccarle
 
 ### 3. Accesso
 
-Accedi tramite browser a `http://indirizzoip:8787`
+Accedere al browser a `http://indirizzo-ip:8787`

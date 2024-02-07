@@ -1,17 +1,15 @@
-# 验证码相关组件
-
-
+# சோதித்தல் குறியீட்டு தொகுப்புகள்
 ## webman/captcha
-项目地址 https://github.com/webman-php/captcha
+திட்டத்தின் முகவரி https://github.com/webman-php/captcha
 
-### 安装
+### நிறுவு
 ```
 composer require webman/captcha
 ```
 
-### 使用
+### பயன்பாடு
 
-**建立文件 `app/controller/LoginController.php`**
+**கோப்பு `app/controller/LoginController.php` ஐ உருவாக்கு**
 
 ```php
 <?php
@@ -23,7 +21,7 @@ use Webman\Captcha\CaptchaBuilder;
 class LoginController
 {
     /**
-     * 测试页面
+     * சோதனை பக்கம்
      */
     public function index(Request $request)
     {
@@ -31,85 +29,84 @@ class LoginController
     }
     
     /**
-     * 输出验证码图像
+     * சான்றுகளை வெளிப்படுத்தும்
      */
     public function captcha(Request $request)
     {
-        // 初始化验证码类
+        // சான்றுகள் படித்தாக்கக் கட்டளை ஆரம்பிப்பது
         $builder = new CaptchaBuilder;
-        // 生成验证码
+        // சான்று உருவாக்குக்கு
         $builder->build();
-        // 将验证码的值存储到session中
+        // சான்றுகளின் மதிப்பை session இல் சேமிக்க
         $request->session()->set('captcha', strtolower($builder->getPhrase()));
-        // 获得验证码图片二进制数据
+        // சான்று படத்தின் இருகமுறை தரவைப் பெறுங்கள்
         $img_content = $builder->get();
-        // 输出验证码二进制数据
+        // சான்று அடங்காத தரவைப் புறக்காக்கப்படுத்துக
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
     }
 
     /**
-     * 检查验证码
+     * சான்றுகளை சரிபார்க்கவும்
      */
     public function check(Request $request)
     {
-        // 获取post请求中的captcha字段
+        // போஸ்ட் வேலையான captcha புலத்தைப் பெறுங்கள்
         $captcha = $request->post('captcha');
-        // 对比session中的captcha值
+        // session இல் உள்ள captcha மதிப்பை ஒப்பிடுங்கள்
         if (strtolower($captcha) !== $request->session()->get('captcha')) {
-            return json(['code' => 400, 'msg' => '输入的验证码不正确']);
+            return json(['code' => 400, 'msg' => 'உள்ளிட்ட சான்று தவறானது']);
         }
-        return json(['code' => 0, 'msg' => 'ok']);
+        return json(['code' => 0, 'msg' => 'சரி']);
     }
-
 }
 ```
 
-**建立模版文件`app/view/login/index.html`**
+**தொகுப்பு கோப்பை `app/view/login/index.html` உருவாக்கவும்**
 
 ```html
 <!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>验证码测试</title>  
+    <title>சான்று சோதனை</title>  
 </head>
 <body>
     <form method="post" action="/login/check">
        <img src="/login/captcha" /><br>
         <input type="text" name="captcha" />
-        <input type="submit" value="提交" />
+        <input type="submit" value="சமர்ப்பிக்கவும்" />
     </form>
 </body>
 </html>
 ```
 
-进入页面`http://127.0.0.1:8787/login` 界面类似如下：
+பக்கம் `http://127.0.0.1:8787/login` உள்ளிடப்பட்டால் பக்கம் போன்றதாகும்:
   ![](../../assets/img/captcha.png)
 
-### 常见参数设置
+### பொதுவான அமைப்புகள்
 ```php
     /**
-     * 输出验证码图像
+     * சான்றுகளை வெளிப்படுத்தும்
      */
     public function captcha(Request $request)
     {
-        // 初始化验证码类
+        // சான்றுகள் படித்தாக்கத்தை ஆரம்பிப்பது
         $builder = new CaptchaBuilder;
-        // 验证码长度
+        // சான்று நீளம்
         $length = 4;
-        // 包含哪些字符
+        // எந்த எழுத்துகள் அடைவதற்குச் சேர்க்கப்படுகின்றன
         $chars = '0123456789abcefghijklmnopqrstuvwxyz';
         $builder = new PhraseBuilder($length, $chars);
         $captcha = new CaptchaBuilder(null, $builder);
-        // 生成验证码
+        // சான்று உருவாக்குங்கள்
         $builder->build();
-        // 将验证码的值存储到session中
+        // சான்றுகளின் மதிப்பை session இல் சேமிக்க
         $request->session()->set('captcha', strtolower($builder->getPhrase()));
-        // 获得验证码图片二进制数据
+        // சான்று படத்தின் இருகமுறை தரவைப் பெறுங்கள்
         $img_content = $builder->get();
-        // 输出验证码二进制数据
+        // சான்று அடங்காத தரவைப் புறக்காக்கப்படுத்துங்கள்
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
     }
 ```
 
-更多接口及参数参考 https://github.com/webman-php/captcha
+மேலும் அனைத்து அமைப்புகள் மற்றும் அளபுருக்களுக்கு https://github.com/webman-php/captcha பார்வையிடவும்

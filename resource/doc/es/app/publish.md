@@ -1,15 +1,15 @@
 # Publicación
 
-Los desarrolladores pueden subir plugins con derechos de autor a la tienda de aplicaciones para ayudar a otros y también obtener beneficios.
+Los desarrolladores pueden cargar sus propios complementos con derechos de autor en el mercado de aplicaciones para ayudar a otros y al mismo tiempo beneficiarse.
 Dirección de publicación: https://www.workerman.net/app/create
 
-Nota: El **número de versión** ingresado al publicar debe coincidir con el número de versión en `plugin/{插件}/config/app.php`.
+Nota: El **número de versión** que se ingrese al publicar debe coincidir con el número de versión en `plugin/{plugin}/config/app.php`
 
-## Restricciones de Listado
-**No se admiten las siguientes categorías de aplicaciones para su inclusión**
+## Restricciones para publicar
+**No se admiten las siguientes categorías de aplicaciones para su publicación:**
 
-**Financieras** incluyendo, pero no limitado a, pagos agregados, reembolsos, préstamos, subastas, criptomonedas, blockchain  
-**Juegos de azar** incluyendo, pero no limitado a, loterías, subastas, juegos de cartas, tarjetas de puntos, etc.  
-**Recolectores** incluyendo, pero no limitado a, novelas, cómics, películas, series, recursos compartidos, etc.  
-**Aplicaciones extranjeras** relacionadas con, pero no limitadas a, servidores en la nube, VPN, etc.
-**Chat y atención al cliente**, actualmente no se admiten para ser incluidas.
+**Categoría financiera** que incluye, entre otros, pagos consolidados, reembolsos, préstamos, subastas, criptomoneda, blockchain.
+**Categoría de juegos de mesa** que incluye, entre otros, sorteos, subastas, NiuNiu, tarjetas prepago, etc.
+**Categoría de recopilación** que incluye, entre otros, novelas, cómics, películas, series, intercambio de recursos.
+**Relacionado con aplicaciones extranjeras** que incluye, entre otros, hosting en la nube, VPN, etc.
+**Categoría de chat y atención al cliente** no admitida temporalmente para su publicación.

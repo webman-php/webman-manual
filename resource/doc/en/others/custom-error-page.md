@@ -1,9 +1,9 @@
 ## Custom 404
-When a 404 error occurs in webman, it will automatically return the content inside `public/404.html`, so developers can directly modify the `public/404.html` file.
+webman automatically returns the content in `public/404.html` when a 404 error occurs, so developers can directly modify the `public/404.html` file.
 
-If you want to dynamically control the content of the 404 error, such as returning JSON data `{"code:"404", "msg":"404 not found"}` for AJAX requests, and returning the `app/view/404.html` template for page requests, please refer to the following example.
+If you want to dynamically control the content of the 404 error, for example, return JSON data `{"code:"404", "msg":"404 not found"}` for AJAX requests, and return the `app/view/404.html` template for page requests, please refer to the following example:
 
-> The example below uses PHP native templates, and the principles are similar for other templates such as `twig`, `blade`, and `think-tmplate`.
+> The example below uses PHP native templates as an example. Other templates such as `twig`, `blade`, `think-template` have similar principles.
 
 **Create the file `app/view/404.html`**
 ```html
@@ -19,7 +19,7 @@ If you want to dynamically control the content of the 404 error, such as returni
 </html>
 ```
 
-**Add the following code to `config/route.php`:**
+**Add the following code in `config/route.php`:**
 ```php
 use support\Request;
 use Webman\Route;
@@ -51,7 +51,7 @@ Custom error template:
 </html>
 ```
 
-**Create** `app/exception/Handler.php` **(if the directory does not exist, please create it yourself)**
+**Create app/exception/Handler.php** (create the directory if it does not exist)
 ```php
 <?php
 

@@ -1,12 +1,11 @@
-# कैप्चा संबंधित कंपोनेंट
+# कैप्चा संबंधित कंपोनेंट्स
+
 
 ## webman/captcha
 प्रोजेक्ट लिंक https://github.com/webman-php/captcha
 
 ### स्थापना
-```
-कमांड कोम्पोजर का उपयोग कर webman/captcha के लिए इंस्टॉल करें
-```
+```composer require webman/captcha```
 
 ### उपयोग
 
@@ -22,7 +21,7 @@ use Webman\Captcha\CaptchaBuilder;
 class LoginController
 {
     /**
-     * परीक्षण पेज
+     * परीक्षण पृष्ठ
      */
     public function index(Request $request)
     {
@@ -34,15 +33,15 @@ class LoginController
      */
     public function captcha(Request $request)
     {
-        // कैप्चा बिल्डर का प्रारंभ
+        // कैप्चा वर्ग की प्रारंभिककरण
         $builder = new CaptchaBuilder;
         // कैप्चा उत्पन्न करें
         $builder->build();
-        // कैप्चा मान को सत्रांश में स्टोर करें
+        // कैप्चा मान को सत्र में संग्रहीत करें
         $request->session()->set('captcha', strtolower($builder->getPhrase()));
-        // कैप्चा छवि के बाइनरी डेटा प्राप्त करें
+        // कैप्चा छवि का द्विआधारी डेटा प्राप्त करें
         $img_content = $builder->get();
-        // कैप्चा बाइनरी डेटा प्रदान करें
+        // कैप्चा द्विआधारी डेटा प्रोड्यूस करें
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
     }
 
@@ -51,11 +50,11 @@ class LoginController
      */
     public function check(Request $request)
     {
-        // captcha फ़ील्ड को पोस्ट अनुरोध से प्राप्त करें
+        // कैप्चा फ़ील्ड को पोस्ट अनुरोध से प्राप्त करें
         $captcha = $request->post('captcha');
-        // सत्रांश में captcha मान की तुलना करें
+        // सत्र में कैप्चा मान की तुलना करें
         if (strtolower($captcha) !== $request->session()->get('captcha')) {
-            return json(['code' => 400, 'msg' => 'दर्ज किया गया कैप्चा गलत है']);
+            return json(['code' => 400, 'msg' => 'दर्ज किया गया कैप्चा सही नहीं है']);
         }
         return json(['code' => 0, 'msg' => 'ठीक है']);
     }
@@ -63,7 +62,7 @@ class LoginController
 }
 ```
 
-**टेम्पलेट फ़ाइल बनाएं`app/view/login/index.html`**
+**टेम्पलेट फ़ाइल बनाएं `app/view/login/index.html`**
 
 ```html
 <!doctype html>
@@ -82,17 +81,17 @@ class LoginController
 </html>
 ```
 
-पेज पर जाएँ `http://127.0.0.1:8787/login` और दस्तावेज़ की तरह दिखिएगा:
+पृष्ठ पर जाएं `http://127.0.0.1:8787/login` जैसा कि निम्नलिखित दिखाई देता है:
   ![](../../assets/img/captcha.png)
 
-### आम चरण सेटिंग्स
+### सामान्य पैरामीटर सेटिंग्स
 ```php
     /**
      * कैप्चा छवि उत्पन्न करें
      */
     public function captcha(Request $request)
     {
-        // कैप्चा बिल्डर का प्रारंभ
+        // कैप्चा वर्ग की प्रारंजिकरण
         $builder = new CaptchaBuilder;
         // कैप्चा लंबाई
         $length = 4;
@@ -102,13 +101,13 @@ class LoginController
         $captcha = new CaptchaBuilder(null, $builder);
         // कैप्चा उत्पन्न करें
         $builder->build();
-        // कैप्चा मान को सत्रांश में स्टोर करें
+        // कैप्चा मान को सत्र में संग्रहीत करें
         $request->session()->set('captcha', strtolower($builder->getPhrase()));
-        // कैप्चा छवि के बाइनरी डेटा प्राप्त करें
+        // कैप्चा छवि का द्विआधारी डेटा प्राप्त करें
         $img_content = $builder->get();
-        // कैप्चा बाइनरी डेटा प्रदान करें
+        // कैप्चा द्विआधारी डेटा प्रोड्यूस करें
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
     }
 ```
-
-अधिक विवरण और पैरामीटर देखें https://github.com/webman-php/captcha
+ 
+अधिक एपीआई और पैरामीटर के लिए यह देखें https://github.com/webman-php/captcha

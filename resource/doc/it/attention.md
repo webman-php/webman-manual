@@ -1,22 +1,22 @@
-# Nota per i programmatori
+# Note di programmazione
 
 ## Sistema operativo
-webman supporta l'esecuzione su sistemi Linux e Windows. Tuttavia, poiché workerman non supporta la configurazione multi-processo e il processo demone in Windows, si consiglia di utilizzare Windows solo per lo sviluppo e il debug in ambienti di sviluppo e di utilizzare il sistema Linux in ambienti di produzione.
+webman supporta simultaneamente l'esecuzione su sistemi Linux e Windows. Tuttavia, poiché workerman non supporta la configurazione multi-processo e il processo di gestione su Windows, si consiglia solo di utilizzare Windows per lo sviluppo e il debug dell'ambiente di sviluppo, mentre per l'ambiente di produzione si consiglia di utilizzare il sistema operativo Linux.
 
 ## Modalità di avvio
-Su **sistemi Linux**, avviare con il comando `php start.php start` (modalità di debug) o `php start.php start -d` (modalità demone).
-Su **sistemi Windows**, eseguire `windows.bat` o utilizzare il comando `php windows.php` per avviare, e premere ctrl+c per interrompere. Il sistema Windows non supporta i comandi stop, reload, status, reload connections, etc.
+**Sistema Linux** si avvia con il comando `php start.php start` (modalità debug) `php start.php start -d` (modalità processo di gestione)
+**Sistema Windows** si avvia eseguendo `windows.bat` oppure utilizzando il comando `php windows.php`, e si interrompe premendo ctrl c. Il sistema Windows non supporta i comandi stop, reload, status, connections, etc.
 
 ## Memoria residente
-webman è un framework a memoria residente; di solito, una volta che i file php sono stati caricati in memoria, vengono riutilizzati e non vengono più letti dal disco rigido (ad eccezione dei file di template). Quindi, le modifiche al codice di produzione o alla configurazione richiedono l'esecuzione di `php start.php reload` per essere effettive. Se si modificano le configurazioni relative al processo o si installano nuovi pacchetti composer, è necessario riavviare con `php start.php restart`.
+webman è un framework in memoria residente, in generale, una volta che i file PHP sono stati caricati in memoria, vengono riutilizzati e non vengono letti nuovamente dal disco (ad eccezione dei file di modello). Quindi, per rendere effettive le modifiche al codice di business o alla configurazione nell'ambiente di produzione, è necessario eseguire il comando `php start.php reload`. Se si modificano le impostazioni del processo o installando nuovi pacchetti composer, è necessario riavviare con `php start.php restart`.
 
-> Per facilitare lo sviluppo, webman include un monitor come processo personalizzato per monitorare le modifiche ai file di business e eseguire automaticamente il ricaricamento quando vengono aggiornati. Questa funzionalità è disponibile solo quando workerman viene eseguito in modalità di debug (senza l'opzione `-d` durante l'avvio). Gli utenti Windows devono eseguire `windows.bat` o `php windows.php` per abilitare questa funzionalità.
+> Per facilitare lo sviluppo, webman include un processo di monitoraggio personalizzato per rilevare gli aggiornamenti dei file di business. Quando vengono aggiornati file di business, viene eseguito automaticamente il reload. Questa funzionalità è disponibile solo quando workerman è in esecuzione in modalità debug (senza `-d` all'avvio). Gli utenti Windows devono eseguire `windows.bat` o `php windows.php` per utilizzare questa funzionalità.
 
-## Output delle istruzioni
-Nel progetto tradizionale php-fpm, l'uso di funzioni come `echo` o `var_dump` per l'output dei dati li visualizza direttamente nella pagina web, mentre in webman, tali output vengono di solito visualizzati nel terminale e non nella pagina web (ad eccezione dell'output nei file di template).
+## Riguardo alle istruzioni di output
+Nei progetti tradizionali con php-fpm, l'utilizzo di funzioni come `echo` e `var_dump` per l'output dei dati viene visualizzato direttamente nella pagina, mentre in webman, tali output di solito vengono visualizzati nel terminale e non nella pagina (ad eccezione degli output dai file di modello).
 
-## Evitare di utilizzare istruzioni `exit` o `die`
-Eseguire `die` o `exit` comporterà la chiusura e il riavvio del processo, impedendo al richiesta corrente di essere elaborata correttamente.
+## Evitare l'uso di istruzioni `exit` o `die`
+L'esecuzione di `die` o `exit` causa la chiusura del processo e il riavvio, impedendo una corretta risposta alla richiesta corrente.
 
-## Evitare di utilizzare la funzione `pcntl_fork`
+## Evitare l'uso delle funzioni `pcntl_fork`
 L'uso di `pcntl_fork` per creare un processo non è consentito in webman.

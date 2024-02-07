@@ -1,31 +1,30 @@
-```php
 # Fonksiyon Kontrolünü Devre Dışı Bırakma
 
-Bu betiği, yasaklanmış fonksiyonların olup olmadığını kontrol etmek için kullanın. Komut satırında şu kodu çalıştırın: `curl -Ss https://www.workerman.net/webman/check | php`
+Bu betik, yasaklı fonksiyonların olup olmadığını kontrol etmek için kullanılır. Komut satırında şu komutu çalıştırın: ```curl -Ss https://www.workerman.net/webman/check | php```
 
-Eğer `Functions fonksiyon_adı has be disabled. Please check disable_functions in php.ini` gibi bir uyarı alırsanız, webman'in bağımlı olduğu fonksiyonlar yasaklanmış demektir. Webman'i normal bir şekilde kullanabilmek için bu fonksiyonların yasağının php.ini'den kaldırılması gerekmektedir.
-Yasaklamayı kaldırmak için aşağıdaki yöntemlerden birini seçebilirsiniz.
+Eğer ```Functions fonksiyon_adı has be disabled. Please check disable_functions in php.ini``` şeklinde bir uyarı alırsanız, webman'ın bağımlı olduğu fonksiyonların devre dışı bırakıldığını gösterir. Webman'ı normal bir şekilde kullanabilmek için php.ini dosyasında bu fonksiyonların devre dışı bırakılmasını kaldırmanız gerekmektedir. Devre dışı bırakma işlemi için aşağıdaki yöntemleri kullanabilirsiniz.
 
 ## Yöntem 1
-`webman/console`'ı kurun
+`webman/console` paketini yükleyin
 ```
 composer require webman/console ^v1.2.35
 ```
 
-Aşağıdaki komutu çalıştırın
+Ardından şu komutu çalıştırın
 ```
 php webman fix-disable-functions
 ```
 
 ## Yöntem 2
-
-Yasaklamayı kaldırmak için aşağıdaki komutu çalıştırın: `curl -Ss https://www.workerman.net/webman/fix-disable-functions | php`
+Aşağıdaki komutu çalıştırarak devre dışı bırakmayı kaldırabilirsiniz
+```
+curl -Ss https://www.workerman.net/webman/fix-disable-functions | php
+```
 
 ## Yöntem 3
-
 `php --ini` komutunu çalıştırarak php cli'nin kullandığı php.ini dosyasının konumunu bulun.
 
-Php.ini dosyasını açın ve `disable_functions` bölümünü bulun, aşağıdaki fonksiyonların çağrılarını kaldırın
+php.ini dosyasını açın ve `disable_functions` kısmını bulun, aşağıdaki fonksiyonların çağrılmasını kaldırın
 ```
 stream_socket_server
 stream_socket_client
@@ -49,5 +48,4 @@ proc_open
 proc_get_status
 proc_close
 shell_exec
-```
 ```

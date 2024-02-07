@@ -1,8 +1,8 @@
 # Библиотека управления доступом Casbin webman-permission
 
-## Описание
+## Объяснение
 
-Он основан на [PHP-Casbin](https://github.com/php-casbin/php-casbin), мощном и эффективном фреймворке управления доступом с открытым исходным кодом, который поддерживает модели управления доступом, такие как `ACL`, `RBAC`, `ABAC` и другие.
+Он основан на [PHP-Casbin](https://github.com/php-casbin/php-casbin), мощном и эффективном открытом фреймворке управления доступом, поддерживающем модели управления доступом, такие как `ACL`, `RBAC`, `ABAC` и т. д.
 
 ## Адрес проекта
 
@@ -13,21 +13,22 @@ https://github.com/Tinywan/webman-permission
 ```php
 composer require tinywan/webman-permission
 ```
-> Это расширение требует PHP 7.1+ и [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998), официальная документация: https://www.workerman.net/doc/webman#/db/others
+>Это расширение требует PHP 7.1+ и [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998), официальная документация: https://www.workerman.net/doc/webman#/db/others
 
 ## Настройка
 
-### Регистрация сервиса
-Создайте файл конфигурации `config/bootstrap.php` с похожим содержимым:
+### Регистрация службы
+
+Создайте файл конфигурации `config/bootstrap.php` со следующим содержимым:
 
 ```php
-    // ...
-    webman\permission\Permission::class,
+// ...
+webman\permission\Permission::class,
 ```
 
-### Файл конфигурации модели
+### Файл конфигурации Model
 
-Создайте файл конфигурации `config/casbin-basic-model.conf` с похожим содержимым:
+Создайте файл конфигурации `config/casbin-basic-model.conf` со следующим содержимым:
 
 ```conf
 [request_definition]
@@ -48,14 +49,14 @@ m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
 
 ### Файл конфигурации политики
 
-Создайте файл конфигурации `config/permission.php` с похожим содержимым:
+Создайте файл конфигурации `config/permission.php` со следующим содержимым:
 
 ```php
 <?php
 
 return [
     /*
-     *Default  Permission
+     *По умолчанию разрешение
      */
     'default' => 'basic',
 
@@ -67,7 +68,7 @@ return [
     'enforcers' => [
         'basic' => [
             /*
-            * Настройка модели
+            * Настройки модели
             */
             'model' => [
                 'config_type' => 'file',
@@ -75,14 +76,14 @@ return [
                 'config_text' => '',
             ],
 
-            // Адаптер
+            // Адаптер .
             'adapter' => webman\permission\adapter\DatabaseAdapter::class,
 
             /*
-            * Настройки базы данных
+            * Настройки базы данных.
             */
             'database' => [
-                // Имя подключения к базе данных, если не заполнено, используется конфигурация по умолчанию.
+                // Имя подключения к базе данных, оставьте пустым, чтобы использовать настройки по умолчанию.
                 'connection' => '',
                 // Имя таблицы политики (без префикса таблицы)
                 'rules_name' => 'rule',
@@ -92,22 +93,22 @@ return [
         ],
     ],
 ];
-```
+``` 
 
 ## Быстрый старт
 
 ```php
 use webman\permission\Permission;
 
-// добавить права пользователю
+// добавить права доступа для пользователя
 Permission::addPermissionForUser('eve', 'articles', 'read');
-// добавить роль пользователю.
+// добавить роль для пользователя.
 Permission::addRoleForUser('eve', 'writer');
-// добавить права для роли
+// добавить права доступа для правила
 Permission::addPolicy('writer', 'articles','edit');
 ```
 
-Вы можете проверить, обладает ли пользователь такими правами:
+Вы можете проверить, имеет ли пользователь такие права доступа:
 
 ```php
 if (Permission::enforce("eve", "articles", "edit")) {
@@ -117,17 +118,17 @@ if (Permission::enforce("eve", "articles", "edit")) {
 }
 ````
 
-## Middleware авторизации
+## Промежуточное ПО авторизации
 
-Создайте файл `app/middleware/AuthorizationMiddleware.php` (если директории не существует, создайте ее) следующим образом:
+Создайте файл `app/middleware/AuthorizationMiddleware.php` (если папка не существует, создайте ее) следующим образом:
 
 ```php
 <?php
 
 /**
- * Middleware авторизации
- * Автор: ShaoBo Wan (Tinywan)
- * Дата и время: 2021/09/07 14:15
+ * Промежуточное ПО авторизации
+ * Автор ShaoBo Wan (Tinywan)
+ * Дата и время 2021/09/07 14:15
  */
 
 declare(strict_types=1);
@@ -142,30 +143,30 @@ use webman\permission\Permission;
 
 class AuthorizationMiddleware implements MiddlewareInterface
 {
-    public function process(Request $request, callable $next): Response
-    {
-        $uri = $request->path();
-        try {
-            $userId = 10086;
-            $action = $request->method();
-            if (!Permission::enforce((string) $userId, $uri, strtoupper($action))) {
-                throw new \Exception('Извините, у вас нет доступа к этому интерфейсу');
-            }
-        } catch (CasbinException $exception) {
-            throw new \Exception('Ошибка авторизации: ' . $exception->getMessage());
-        }
-        return $next($request);
-    }
+	public function process(Request $request, callable $next): Response
+	{
+		$uri = $request->path();
+		try {
+			$userId = 10086;
+			$action = $request->method();
+			if (!Permission::enforce((string) $userId, $uri, strtoupper($action))) {
+				throw new \Exception('Извините, у вас нет прав доступа к этому интерфейсу');
+			}
+		} catch (CasbinException $exception) {
+			throw new \Exception('Исключение авторизации' . $exception->getMessage());
+		}
+		return $next($request);
+	}
 }
 ```
 
-Добавьте глобальный middleware в `config/middleware.php` как показано ниже:
+Добавьте глобальное промежуточное ПО в `config/middleware.php`:
 
 ```php
 return [
-    // Глобальный middleware
+    // Глобальное промежуточное ПО
     '' => [
-        // ... Здесь опущены другие middleware
+        // ... здесь опущены другие промежуточное ПО
         app\middleware\AuthorizationMiddleware::class,
     ]
 ];
@@ -173,8 +174,8 @@ return [
 
 ## Благодарность
 
-[Casbin](https://github.com/php-casbin/php-casbin), вы можете посмотреть всю документацию на их [официальном веб-сайте](https://casbin.org/).
+[Casbin](https://github.com/php-casbin/php-casbin), вы можете найти всю документацию на его [официальном сайте](https://casbin.org/).
 
 ## Лицензия
 
-Этот проект лицензирован по лицензии [Apache 2.0 license](LICENSE).
+Этот проект лицензирован по [лицензии Apache 2.0](LICENSE).

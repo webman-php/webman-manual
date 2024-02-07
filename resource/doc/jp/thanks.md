@@ -1,4 +1,4 @@
-＃webmanとドキュメントに貢献してくれた以下の貢献者に感謝します
+# webmanおよびドキュメントへの貢献者に感謝します
 <table>
   <tr>
     <td align="center">

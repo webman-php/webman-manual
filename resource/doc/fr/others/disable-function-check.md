@@ -1,31 +1,33 @@
-# Désactivation de la vérification des fonctions
+# Désactiver la vérification des fonctions
 
-Utilisez ce script pour vérifier si des fonctions ont été désactivées. Exécutez la commande suivante dans le terminal : ```curl -Ss https://www.workerman.net/webman/check | php```
+Utilisez ce script pour vérifier si des fonctions sont désactivées. Exécutez la commande suivante dans le terminal : ```curl -Ss https://www.workerman.net/webman/check | php```.
 
-Si vous obtenez le message ```La fonction nom_de_la_fonction a été désactivée. Veuillez vérifier les disable_functions dans php.ini```, cela signifie que les fonctions dont webman a besoin ont été désactivées. Il faut les réactiver dans php.ini pour pouvoir utiliser webman correctement.
-Pour réactiver ces fonctions, suivez l'une des méthodes ci-dessous.
+Si vous voyez le message ```La fonction nom_de_fonction a été désactivée. Veuillez vérifier disable_functions dans php.ini```, cela signifie que les fonctions dont webman a besoin sont désactivées et doivent être activées dans le fichier php.ini pour pouvoir utiliser webman correctement.
 
-## Méthode 1
-Installez `webman/console`
-```
+Pour lever l'interdiction, suivez l'une des méthodes ci-dessous.
+
+## Méthode un
+Installez `webman/console` :
+```bash
 composer require webman/console ^v1.2.35
 ```
 
-Exécutez la commande
-```
+Exécutez la commande :
+```bash
 php webman fix-disable-functions
 ```
 
-## Méthode 2
+## Méthode deux
+Exécutez le script suivant pour lever l'interdiction :
+```bash
+curl -Ss https://www.workerman.net/webman/fix-disable-functions | php
+```
 
-Exécutez le script `curl -Ss https://www.workerman.net/webman/fix-disable-functions | php` pour réactiver les fonctions désactivées.
-
-## Méthode 3
-
+## Méthode trois
 Exécutez `php --ini` pour trouver l'emplacement du fichier php.ini utilisé par php cli.
 
-Ouvrez php.ini, trouvez `disable_functions` et réactivez l'appel des fonctions suivantes :
-```
+Ouvrez php.ini et trouvez `disable_functions`, puis supprimez l'appel des fonctions suivantes :
+```plaintext
 stream_socket_server
 stream_socket_client
 pcntl_signal_dispatch

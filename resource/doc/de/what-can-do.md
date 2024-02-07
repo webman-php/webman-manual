@@ -1,12 +1,10 @@
 # Was webman tun kann
 
 ## Traditionelle Webseiten
-webman bietet eine vollständige MVC-Architektur, die für die Entwicklung traditioneller Webseiten verwendet werden kann.
+Webman bietet eine umfassende MVC-Architektur, die für die Entwicklung traditioneller Webseiten verwendet werden kann.
 
-
-## HTTP-Schnittstelle
-Neben der Entwicklung traditioneller Webseiten eignet sich webman besonders gut als HTTP-Schnittstelle, um RPC-Dienste oder Mikroservices nach außen hin anzubieten.
+## HTTP-Schnittstellen
+Neben der Entwicklung traditioneller Webseiten eignet sich webman auch besonders gut als HTTP-Schnittstelle für die Bereitstellung von RPC-Diensten oder Mikroservices nach außen.
 
 ## Sonstiges
-webman bietet auch eine [benutzerdefinierte Prozessfunktionalität](process.md) an, mit der wie bei Workerman beliebige Serverprogramme realisiert werden können, einschließlich Echtzeitkommunikationsdiensten, Internet of Things, Spielserver, Mikroservices und vielem mehr.
-
+Webman bietet [eine benutzerdefinierte Prozessfunktionalität](process.md), mit der ähnlich wie bei Workerman jegliche Serverprogramme wie Echtzeitkommunikationsdienste, das Internet der Dinge, Spieleserver, Mikroservices usw. umgesetzt werden können.

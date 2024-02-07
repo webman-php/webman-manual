@@ -1,35 +1,35 @@
 # Uygulama Eklentisi Geliştirme Standartları
 
 ## Uygulama Eklentisi Gereksinimleri
-* Eklentiler telif hakkı ihlali içeren kod, simge veya görüntü içeremez
-* Eklenti kaynak kodu şifreli olamaz ve tamamlanmış bir kod içermelidir
-* Eklenti tamamlanmış bir işlevsellik sunmalıdır, basit bir işlevsellik olmamalıdır
-* Tam işlevsellik sunabilmek için eksiksiz bir işlevsellik tanıtımı ve belgesi sunulmalıdır
-* Eklenti alt pazar içeremez
-* Eklenti içinde herhangi bir metin veya tanıtım bağlantısı bulunmamalıdır
+* Eklentiler telif hakkı ihlali içeren kod, simge veya görüntü içeremez.
+* Eklenti kaynak kodu şifrelenmemiş ve eksiksiz olmalıdır.
+* Eklenti tam işlevsellik sağlamalı, basit bir işlev olmamalıdır.
+* Tam işlevsellik tanıtımı ve belgeler sunulmalıdır.
+* Eklentiler alt pazarı içeremez.
+* Eklenti içinde herhangi bir metin veya tanıtım bağlantısı bulunmamalıdır.
 
-## Uygulama Eklentisi Kimliği
-Her uygulama eklentisi benzersiz bir kimliğe sahiptir, bu kimlik harflerden oluşur. Bu kimlik, uygulama eklentisinin kaynak kodunun bulunduğu dizini, sınıfın ad alanını ve eklenti veritabanı tablo öneki etkiler.
+## Uygulama Eklentisi Tanımlama
+Her uygulama eklentisi benzersiz bir tanımlayıcıya sahiptir, bu tanımlayıcı harflerden oluşur. Bu tanımlayıcı, eklentinin kaynak kodunun bulunduğu dizini, sınıfın ad alanını ve eklenti veritabanı tablo öneki etkiler.
 
-Örneğin, geliştirici "foo" olarak bir eklenti kimliği kullandığında, eklenti kaynak kodu dizini `{ana_proje}/plugin/foo` olarak olur, ilgili eklenti ad alanı `plugin\foo` olur ve tablo öneki `foo_` olur.
+Geliştirici, örneğin `foo` olarak bir eklenti tanımlayıcısı kullanıyorsa, eklentinin kaynak kodunun bulunduğu dizin `{main_project}/plugin/foo` olacak, ilgili eklenti sınıfının ad alanı `plugin\foo` ve tablo öneki `foo_` olacaktır.
 
-Kimlik global olarak benzersiz olduğundan, geliştiricilerin geliştirmeden önce kimliğin kullanılabilirliğini kontrol etmeleri gerekmektedir. Kontrol adresi [Uygulama Kimliği Kontrolü](https://www.workerman.net/app/check).
+Tanımlayıcı benzersiz olduğu için, geliştirici geliştirmeye başlamadan önce tanımlayıcının kullanılabilir olup olmadığını kontrol etmelidir. Kontrol adresi [Uygulama Tanımlayıcı Kontrolü](https://www.workerman.net/app/check).
 
 ## Veritabanı
-* Tablo adları küçük harfli `a-z` ve alt çizgi `_` kullanarak oluşturulmalıdır
-* Eklenti veritabanı tabloları eklenti kimliği ile öneklenmelidir, örneğin "foo" eklentinin makale tablosu `foo_article` olmalıdır
-* Tablo anahtarları id olarak belirtilmelidir
-* Depolama motoru olarak innodb motoru kullanılmalıdır
-* Karakter seti olarak utf8mb4_general_ci kullanılmalıdır
-* Veritabanı ORM'si olarak laravel veya think-orm kullanılabilir
-* Zaman alanları için DateTime kullanılması önerilir
+* Tablo adları küçük harf `a-z` ve alt çizgi `_` içermelidir.
+* Eklenti veri tabloları, eklenti tanımlayıcı ile öneklenmelidir; örneğin foo eklentisinin makale tablosu `foo_article` olmalıdır.
+* Tablo anahtarları endeks olarak id olarak belirlenmelidir.
+* Depolama motoru olarak innodb motoru kullanılmalıdır.
+* Karakter seti olarak utf8mb4_general_ci kullanılmalıdır.
+* Veritabanı ORM kullanımı için laravel veya think-orm tercih edilmelidir.
+* Zaman alanlarında DateTime kullanımı tavsiye edilir.
 
 ## Kod Standartları
 
 #### PSR Standartları
-Kodlar PSR4 yükleme standartlarına uygun olmalıdır
+Kodlar PSR4 yükleme standartlarına uygun olmalıdır.
 
-#### Sınıfların Adlandırılması
+#### Sınıf Adlandırmaları Büyük Harfle Başlayan CamelCase Olmalıdır
 ```php
 <?php
 
@@ -41,7 +41,7 @@ class ArticleController
 }
 ```
 
-#### Sınıf özellikleri ve yöntemleri küçük harfle başlayan camelCase şeklinde olmalıdır
+#### Sınıfın Özellikleri ve Metodları Küçük Harfle Başlayan CamelCase Olmalıdır
 ```php
 <?php
 
@@ -50,7 +50,7 @@ namespace plugin\foo\app\controller;
 class ArticleController
 {
     /**
-     * Kimlik doğrulamaya ihtiyaç duymayan yöntemler
+     * Yetkilendirmeye gerek olmayan metodlar
      * @var array
      */
     protected $noNeedAuth = ['getComments'];
@@ -69,21 +69,21 @@ class ArticleController
 ```
 
 #### Yorumlar
-Sınıf özellikleri ve fonksiyonları genel bir bakış, parametreler, dönüş türü içermelidir
+Sınıfın özellikleri ve fonksiyonları, genel bir açıklama, parametreler ve dönüş türü içeren yorumları içermelidir.
 
 #### Girintileme
-Kodlar 4 boşluk kullanılarak girintilenmelidir, tab kullanılmamalıdır
+Kodlar, bir tab yerine 4 boşluk kullanılarak girinti yapılmalıdır.
 
-#### Akış kontrolü
-Akış kontrol anahtar kelimesi (if for while foreach gibi) sonrasında bir boşluk bırakılmalıdır, akış kontrol kod bloğu parantezleri bitiş paranteziyle aynı satırda olmalıdır.
+#### Akış Kontrolü
+Akış kontrol anahtar kelimeleri (if for while foreach vb.) ardından bir boşluk bırakılmalı, akış kontrol kodları başlangıç parantezleri bitiş parantezlerinin aynı satırda olacak şekilde olmalıdır.
 ```php
 foreach ($users as $uid => $user) {
 
 }
 ```
 
-#### Geçici Değişken İsimleri
-Küçük harfle başlayan camelCase şeklinde adlandırılması önerilir (zorunlu değildir)
+#### Geçici Değişken Adları
+Küçük harfle başlayan CamelCase kullanımı önerilir (zorunlu değil)
 ```php
 $articleCount = 100;
 ```

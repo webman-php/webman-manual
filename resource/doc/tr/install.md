@@ -12,13 +12,13 @@ composer create-project workerman/webman
 
 ### 2. Çalıştırma
 
-webman dizinine gidin
+Webman dizinine girin
 
 #### Windows Kullanıcıları
-`windows.bat` dosyasını çift tıklayın veya `php windows.php` komutunu çalıştırarak başlatın
+Çift tıklayarak `windows.bat` dosyasını veya `php windows.php` komutunu çalıştırın
 
 > **Not**
-> Eğer bir hata alırsanız, muhtemelen bazı fonksiyonlar yasaklanmıştır. [Fonksiyon Yasaklama Kontrolü](others/disable-function-check.md) belgesine başvurarak yasaklamayı kaldırabilirsiniz
+> Eğer bir hata alırsanız, muhtemelen işlevler devre dışı bırakılmıştır, [disable-function-check.md](others/disable-function-check.md) belgesine bakarak devre dışı bırakma işlemini gerçekleştirin
 
 #### Linux Kullanıcıları
 `debug` modunda çalıştırma (geliştirme ve hata ayıklama için)
@@ -27,15 +27,15 @@ webman dizinine gidin
 php start.php start
 ```
 
-`daemon` modunda çalıştırma (canlı ortam için)
+`daemon` modunda çalıştırma (prodüksiyon ortamı için)
 
 ```php
 php start.php start -d
 ```
 
 > **Not**
-> Eğer bir hata alırsanız, muhtemelen bazı fonksiyonlar yasaklanmıştır. [Fonksiyon Yasaklama Kontrolü](others/disable-function-check.md) belgesine başvurarak yasaklamayı kaldırabilirsiniz
+> Eğer bir hata alırsanız, muhtemelen işlevler devre dışı bırakılmıştır, [disable-function-check.md](others/disable-function-check.md) belgesine bakarak devre dışı bırakma işlemini gerçekleştirin
 
 ### 3. Erişim
 
-Tarayıcı üzerinden `http://ip adresi:8787` adresine gidin
+Tarayıcıdan `http://ip adresi:8787` adresine erişin

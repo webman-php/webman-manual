@@ -1,12 +1,12 @@
-# Auto-generate error code component
+# Automatic Error Code Generator
 
 ## Description
 
-Automatically maintain the generation of error codes based on given rules.
+This component is able to automatically generate error codes based on given rules.
 
-> It is agreed that the code parameter in the return data, for all custom codes, positive numbers represent normal service, and negative numbers represent service exceptions.
+> The "code" parameter in the returned data is conventionally used, where all custom codes are positive numbers representing a functioning service, while negative numbers represent a service exception.
 
-## Project Address
+## Project Repository
 
 https://github.com/teamones-open/response-code-msg
 
@@ -18,14 +18,14 @@ composer require teamones/response-code-msg
 
 ## Usage
 
-### Empty ErrorCode class file
+### Empty ErrorCode Class File
 
 - File path: ./support/ErrorCode.php
 
 ```php
 <?php
 /**
- * Auto-generated file, please do not modify manually.
+ * Automatically generated file, please do not modify manually.
  * @Author:$Id$
  */
 namespace support;
@@ -35,9 +35,9 @@ class ErrorCode
 }
 ```
 
-### Configuration file
+### Configuration File
 
-Error codes will be automatically generated incrementally according to the parameters configured below. For example, if system_number = 201, and start_min_number = 10000, the first generated error code will be -20110001.
+The error codes will be automatically generated based on the following configuration parameters. For example, if the system_number is 201 and the start_min_number is 10000, the first generated error code will be -20110001.
 
 - File path: ./config/error_code.php
 
@@ -46,13 +46,13 @@ Error codes will be automatically generated incrementally according to the param
 
 return [
     "class" => new \support\ErrorCode(), // ErrorCode class file
-    "root_path" => app_path(), // current code root directory
-    "system_number" => 201, // system identifier
-    "start_min_number" => 10000 // error code generation range, e.g. 10000-99999
+    "root_path" => app_path(), // Current code root directory
+    "system_number" => 201, // System identifier
+    "start_min_number" => 10000 // Error code range (e.g. 10000-99999)
 ];
 ```
 
-### Add the code for auto-generating error codes to start.php
+### Add Auto-generate Error Code Code in start.php
 
 - File path: ./start.php
 
@@ -66,11 +66,11 @@ if (config("app.debug")) {
 }
 ```
 
-### Usage in the code
+### Usage in Code
 
-In the following code, **ErrorCode::ModelAddOptionsError** represents an error code, where **ModelAddOptionsError** needs to be written by the user according to the current semantic requirements in capital letters.
+In the following code, **ErrorCode::ModelAddOptionsError** is the error code, where **ModelAddOptionsError** needs to be written by the user based on the semantic meaning with capitalization for the first letter.
 
-> After writing it, you may find that it cannot be used, and the corresponding error code will be generated after the next restart. Note that sometimes it may need to be restarted twice.
+> After writing, you will find that it cannot be used. It will be generated after the next restart. Note that sometimes it needs to be restarted twice.
 
 ```php
 <?php
@@ -113,12 +113,12 @@ class Demo
 }
 ```
 
-### Generated ./support/ErrorCode.php file
+### Generated ./support/ErrorCode.php File
 
 ```php
 <?php
 /**
- * Auto-generated file, please do not modify manually.
+ * Automatically generated file, please do not modify manually.
  * @Author:$Id$
  */
 namespace support;

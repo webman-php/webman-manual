@@ -2,10 +2,10 @@
 
 `webman/console` は `symfony/console` に基づいています。
 
-> プラグインはwebman>=1.2.2とwebman-framework>=1.2.1が必要です。
+> プラグインにはwebman>=1.2.2およびwebman-framework>=1.2.1が必要です。
 
 ## インストール
- 
+
 ```sh
 composer require webman/console
 ```
@@ -16,55 +16,55 @@ composer require webman/console
 例： `php webman version` または `php webman version`
 
 ## サポートされているコマンド
-### version
-**webmanのバージョン番号を出力します**
+### バージョン
+**webmanのバージョンを表示します**
 
 ### route:list
-**現在のルート構成を出力します**
+**現在のルート構成を表示します**
 
 ### make:controller
 **コントローラーファイルを作成します** 
-例： `php webman make:controller admin` は `app/controller/AdminController.php` を作成します
-例： `php webman make:controller api/user` は `app/api/controller/UserController.php` を作成します
+例： `php webman make:controller admin` は `app/controller/AdminController.php` を作成します。
+例： `php webman make:controller api/user` は `app/api/controller/UserController.php` を作成します。
 
 ### make:model
 **モデルファイルを作成します**
-例： `php webman make:model admin` は `app/model/Admin.php` を作成します
-例： `php webman make:model api/user` は `app/api/model/User.php` を作成します
+例： `php webman make:model admin` は `app/model/Admin.php` を作成します。
+例： `php webman make:model api/user` は `app/api/model/User.php` を作成します。
 
 ### make:middleware
 **ミドルウェアファイルを作成します**
-例： `php webman make:middleware Auth` は `app/middleware/Auth.php` を作成します
+例： `php webman make:middleware Auth` は `app/middleware/Auth.php` を作成します。
 
 ### make:command
 **カスタムコマンドファイルを作成します**
-例： `php webman make:command db:config` は `app\command\DbConfigCommand.php` を作成します
+例： `php webman make:command db:config` は `app\command\DbConfigCommand.php` を作成します。
 
 ### plugin:create
-**基本的なプラグインを作成します**
-例： `php webman plugin:create --name=foo/admin` は `config/plugin/foo/admin` と `vendor/foo/admin` の2つのディレクトリを作成します
-詳細は[基本的なプラグインを作成](/doc/webman/plugin/create.html)を参照してください
+**基本プラグインを作成します**
+例： `php webman plugin:create --name=foo/admin` は `config/plugin/foo/admin` と `vendor/foo/admin` という2つのディレクトリを作成します
+[基本プラグインの作成](/doc/webman/plugin/create.html)を参照してください。
 
 ### plugin:export
-**基本的なプラグインをエクスポートします**
+**基本プラグインをエクスポートします**
 例： `php webman plugin:export --name=foo/admin` 
-詳細は[基本的なプラグインを作成](/doc/webman/plugin/create.html)を参照してください
+[基本プラグインの作成](/doc/webman/plugin/create.html)を参照してください。
 
 ### plugin:export
 **アプリケーションプラグインをエクスポートします**
 例： `php webman plugin:export shop` 
-詳細は[アプリケーションプラグイン](/doc/webman/plugin/app.html)を参照してください
+[アプリケーションプラグイン](/doc/webman/plugin/app.html)を参照してください。
 
 ### phar:pack
 **webmanプロジェクトをpharファイルにパッケージ化します**
-詳細は[pharパッケージング](/doc/webman/others/phar.html)を参照してください
-> この機能にはwebman>=1.2.4、webman-framework>=1.2.4、webman\console>=1.0.5が必要です
+[pharパッケージ化](/doc/webman/others/phar.html)を参照してください。
+> この機能にはwebman>=1.2.4、webman-framework>=1.2.4、webman\console>=1.0.5が必要です。
 
 ## カスタムコマンド
-ユーザーは独自のコマンドを定義することができます。以下はデータベース構成を出力するコマンドの例です。
+ユーザーは独自のコマンドを定義することができます。以下はデータベース構成を表示するコマンドの例です。
 
-* `php webman make:command config:mysql` を実行します
-* `app/command/ConfigMySQLCommand.php` を以下のように変更します
+* `php webman make:command config:mysql` を実行します。
+* `app/command/ConfigMySQLCommand.php`を開いて、以下のように変更します。
 
 ```php
 <?php
@@ -83,7 +83,7 @@ class ConfigMySQLCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('MySQLの構成情報は以下の通りです：');
+        $output->writeln('MySQL構成は次のとおりです：');
         $config = config('database');
         $headers = ['name', 'default', 'driver', 'host', 'port', 'database', 'username', 'password', 'unix_socket', 'charset', 'collation', 'prefix', 'strict', 'engine', 'schema', 'sslmode'];
         $rows = [];
@@ -115,13 +115,13 @@ class ConfigMySQLCommand extends Command
     }
 }
 ```
-  
+
 ## テスト
 
-コマンドラインで `php webman config:mysql` を実行します
+コマンドラインで `php webman config:mysql` を実行します。
 
-以下は結果です：
-```
+以下のような結果が得られます：
+```plaintext
 +-------+---------+--------+-----------+------+----------+----------+----------+-------------+---------+-----------------+--------+--------+--------+--------+---------+
 | name  | default | driver | host      | port | database | username | password | unix_socket | charset | collation       | prefix | strict | engine | schema | sslmode |
 +-------+---------+--------+-----------+------+----------+----------+----------+-------------+---------+-----------------+--------+--------+--------+--------+---------+
@@ -129,5 +129,5 @@ class ConfigMySQLCommand extends Command
 +-------+---------+--------+-----------+------+----------+----------+----------+-------------+---------+-----------------+--------+--------+--------+--------+---------+
 ```
 
-## その他の参考資料
+## 追加リソース
 http://www.symfonychina.com/doc/current/components/console.html

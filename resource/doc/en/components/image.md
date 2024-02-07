@@ -2,7 +2,7 @@
 
 ## intervention/image
 
-### Project Address
+### Project link
 
 https://github.com/Intervention/image
 
@@ -14,7 +14,7 @@ composer require intervention/image
 
 ### Usage
 
-**Upload page snippet**
+**Upload page fragment**
 
 ```html
   <form method="post" action="/user/img" enctype="multipart/form-data">
@@ -45,6 +45,7 @@ class UserController
     
 }
 ```
+
 
 ### More Information
 

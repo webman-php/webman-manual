@@ -1,11 +1,12 @@
 # Contexto
 
-A classe `support\Context` é usada para armazenar dados de contexto da solicitação. Quando a solicitação é concluída, os dados de contexto correspondentes serão automaticamente removidos. Ou seja, a vida útil dos dados de contexto segue a vida útil da solicitação. `support\Context` é compatível com ambientes de coroutine Fiber, Swoole e Swow.
+A classe `support\Context` é usada para armazenar os dados do contexto da solicitação. Quando a solicitação é concluída, os dados contextuais correspondentes são excluídos automaticamente. Isso significa que a vida útil dos dados do contexto segue a vida útil da solicitação. O `support\Context` é compatível com os ambientes de coroutine Fiber, Swoole e Swow.
 
-Para mais informações consulte [webman coroutine](./fiber.md)
+Para mais informações, consulte [webman coroutine](./fiber.md).
 
 # Interface
-O contexto fornece as seguintes interfaces
+
+O contexto fornece as seguintes interfaces:
 
 ## Definir dados de contexto
 ```php
@@ -23,7 +24,7 @@ Context::delete(string $name);
 ```
 
 > **Observação**
-> O framework chama automaticamente a interface Context::destroy() para destruir os dados de contexto após a conclusão da solicitação. As operações manuais não devem chamar Context::destroy().
+> O framework chama automaticamente a interface Context::destroy() para destruir os dados contextuais após a conclusão da solicitação. Os negócios não podem chamar manualmente Context::destroy().
 
 # Exemplo
 ```php
@@ -45,4 +46,4 @@ class TestController
 ```
 
 # Atenção
-**Ao usar coroutines**, não armazene **dados de estado relacionados à solicitação** em variáveis globais ou variáveis estáticas, pois isso pode causar poluição de dados globais. A prática correta é armazená-los e acessá-los usando o Context.
+**Ao usar coroutines**, não armazene **dados de estado relacionados à solicitação** em variáveis globais ou variáveis estáticas, pois isso pode causar contaminação de dados globais. A prática correta é armazenar e acessar esses dados usando o Contexto.

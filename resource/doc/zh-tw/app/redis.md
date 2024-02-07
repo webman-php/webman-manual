@@ -1,5 +1,5 @@
 # Redis
-Redis用法與數據庫類似，例如 `plugin/foo/config/redis.php`
+Redis用法與資料庫類似，例如 `plugin/foo/config/redis.php`
 ```php
 return [
     'default' => [

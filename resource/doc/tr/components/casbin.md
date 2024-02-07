@@ -1,32 +1,32 @@
-# Casbin
+# Webman
 
-## Açıklama
+## Tanım
 
-Casbin, güçlü ve verimli bir açık kaynak erişim kontrol çerçevesidir ve yetkilendirme mekanizması çeşitli erişim kontrol modellerini destekler.
+Webman, yüksek performanslı bir PHP çatısı olan Workerman üzerine geliştirilmiş bir PHP çatısıdır. Ağ uygulamaları geliştirmek için kullanılan bu çatı, yüksek verimlilik ve hız sunar.
 
-## Proje Linki
+## Proje Adresi
 
-https://github.com/teamones-open/casbin
+https://github.com/walkor/webman
 
 ## Kurulum
- 
-  ```php
-  composer require teamones/casbin
-  ```
 
-## Casbin Resmi Websitesi
+```php
+composer require teamones/casbin
+```
 
-Detaylı kullanım için resmi Çince belgelere bakabilirsiniz, burada sadece webman'de nasıl yapılandırılacağını anlatacağız.
+## Webman Resmi Web Sitesi
+
+Detaylı kullanım için resmi web sitesi üzerindeki Türkçe belgelendirmeyi inceleyebilirsiniz. Burada sadece webman üzerinde nasıl yapılandırılacağını anlatacağız.
 
 https://casbin.org/docs/zh-CN/overview
 
 ## Klasör Yapısı
 
-```
+```plaintext
 .
 ├── config                        Konfigürasyon klasörü
 │   ├── casbin-restful-model.conf Kullanılan izin modeli yapılandırma dosyası
-│   ├── casbin.php                casbin yapılandırması
+│   ├── casbin.php                Casbin konfigürasyonu
 ......
 ├── database                      Veritabanı dosyaları
 │   ├── migrations                Göç dosyaları
@@ -45,10 +45,10 @@ class CreateRuleTable extends AbstractMigration
 {
     public function change()
     {
-        $table = $this->table('rule', ['id' => false, 'primary_key' => ['id'], 'engine' => 'InnoDB', 'collation' => 'utf8mb4_general_ci', 'comment' => 'Kural tablosu']);
+        $table = $this->table('rule', ['id' => false, 'primary_key' => ['id'], 'engine' => 'InnoDB', 'collation' => 'utf8mb4_general_ci', 'comment' => 'Rules Table']);
 
-        $table->addColumn('id', 'integer', ['identity' => true, 'signed' => false, 'limit' => 11, 'comment' => 'Primary key ID'])
-            ->addColumn('ptype', 'char', ['default' => '', 'limit' => 8, 'comment' => 'Kural tipi'])
+        $table->addColumn('id', 'integer', ['identity' => true, 'signed' => false, 'limit' => 11, 'comment' => 'Primary Key ID'])
+            ->addColumn('ptype', 'char', ['default' => '', 'limit' => 8, 'comment' => 'Rule Type'])
             ->addColumn('v0', 'string', ['default' => '', 'limit' => 128])
             ->addColumn('v1', 'string', ['default' => '', 'limit' => 128])
             ->addColumn('v2', 'string', ['default' => '', 'limit' => 128])
@@ -61,9 +61,9 @@ class CreateRuleTable extends AbstractMigration
 }
 ```
 
-## Casbin Yapılandırması
+## Casbin Konfigürasyonu
 
-İzin kuralı modeli yapılandırma diline buradan bakabilirsiniz: https://casbin.org/docs/zh-CN/syntax-for-models
+İzin kuralları modeli yapılandırma dilbilgisini görmek için: https://casbin.org/docs/zh-CN/syntax-for-models
 
 ```php
 <?php
@@ -72,7 +72,7 @@ return [
     'default' => [
         'model' => [
             'config_type' => 'file',
-            'config_file_path' => config_path() . '/casbin-restful-model.conf', // İzin kuralı modeli yapılandırma dosyası
+            'config_file_path' => config_path() . '/casbin-restful-model.conf', // Izin kuralları modeli yapılandırma dosyası
             'config_text' => '',
         ],
         'adapter' => [
@@ -83,7 +83,7 @@ return [
     'rbac' => [
         'model' => [
             'config_type' => 'file',
-            'config_file_path' => config_path() . '/casbin-rbac-model.conf', // İzin kuralı modeli yapılandırma dosyası
+            'config_file_path' => config_path() . '/casbin-rbac-model.conf', // Izin kuralları modeli yapılandırma dosyası
             'config_text' => '',
         ],
         'adapter' => [
@@ -96,32 +96,31 @@ return [
 
 ### Adaptör
 
-Mevcut composer kılıfının bir parçası olarak think-orm'in model yöntemine uyum sağlar, diğer orm'ler için vendor/teamones/src/adapters/DatabaseAdapter.php'ye bakabilirsiniz
+Mevcut composer paketinde think-orm'ın model yöntemi için uyarlama yapılmıştır, diğer ORM'ler için lütfen vendor/teamones/src/adapters/DatabaseAdapter.php dosyasına bakınız.
 
-Daha sonra yapılandırmayı değiştirin
+Daha sonra yapılandırmayı güncelleyin.
 
 ```php
 return [
     'default' => [
         'model' => [
             'config_type' => 'file',
-            'config_file_path' => config_path() . '/casbin-restful-model.conf', // İzin kuralı modeli yapılandırma dosyası
+            'config_file_path' => config_path() . '/casbin-restful-model.conf', // Izin kuralları modeli yapılandırma dosyası
             'config_text' => '',
         ],
         'adapter' => [
-            'type' => 'adapter', // Burada tipi adaptör moduna ayarlayın
+            'type' => 'adapter', // Burada tip uyarlama moduna konfigüre edildi
             'class' => \app\adapter\DatabaseAdapter::class,
         ],
     ],
 ];
 ```
+## Kullanım Kılavuzu
 
-## Kullanım Talimatları
-
-### İçe Aktarma
+### Dahil Etme
 
 ```php
-# İçe Aktarma
+# Dahil etme
 use teamones\casbin\Enforcer;
 ```
 
@@ -135,9 +134,9 @@ Enforcer::addPermissionForUser('user1', '/user', 'read');
 Enforcer::instance('rbac')->addPermissionForUser('user1', '/user', 'read');
 ```
 
-### Sık Kullanılan API'lerin Tanıtımı
+### Yaygın API'lerin Tanıtımı
 
-Daha fazla API kullanımı için resmi dökümanlara bakabilirsiniz
+Daha fazla API kullanımı için resmi belgelere bakın
 
 - Yönetim API'si: https://casbin.org/docs/zh-CN/management-api
 - RBAC API'si: https://casbin.org/docs/zh-CN/rbac-api
@@ -151,7 +150,7 @@ Enforcer::addPermissionForUser('user1', '/user', 'read');
 
 Enforcer::deletePermissionForUser('user1', '/user', 'read');
 
-# Kullanıcının tüm izinlerini alma
+# Kullanıcının tüm izinlerini al
 
 Enforcer::getPermissionsForUser('user1'); 
 
@@ -163,23 +162,23 @@ Enforcer::addRoleForUser('user1', 'role1');
 
 Enforcer::addPermissionForUser('role1', '/user', 'edit');
 
-# Tüm rolleri alma
+# Tüm rolleri al
 
 Enforcer::getAllRoles();
 
-# Kullanıcının tüm rollerini alma
+# Kullanıcının tüm rollerini al
 
 Enforcer::getRolesForUser('user1');
 
-# Role göre kullanıcıları alma
+# Role göre kullanıcıyı al
 
 Enforcer::getUsersForRole('role1');
 
-# Bir kullanıcının bir role ait olup olmadığını kontrol etme
+# Kullanıcının belirli bir role ait olup olmadığını kontrol etme
 
 Enforcer::hasRoleForUser('use1', 'role1');
 
-# Kullanıcı rollerini silme
+# Kullanıcı rolünü silme
 
 Enforcer::deleteRoleForUser('use1', 'role1');
 
@@ -187,11 +186,11 @@ Enforcer::deleteRoleForUser('use1', 'role1');
 
 Enforcer::deleteRolesForUser('use1');
 
-# Role silme
+# Rolü silme
 
 Enforcer::deleteRole('role1');
 
-# Izin silme
+# İzni silme
 
 Enforcer::deletePermission('/user', 'read');
 

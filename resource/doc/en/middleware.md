@@ -1,8 +1,8 @@
 # Middleware
 
-Middleware is generally used to intercept requests or responses. For example, uniformly verifying user identity before executing the controller, redirecting to the login page if the user is not logged in, adding a specific header to the response, or even collecting statistics on the proportion of requests for a certain URI, and so on.
+Middleware is generally used for intercepting requests or responses. For example, validating user identity before executing the controller, redirecting to the login page if the user is not logged in, or adding a header to the response. It can also be used for tracking the percentage of requests for a specific URI, and much more.
 
-## Middleware Onion Model
+## The Onion Model of Middleware
 
 ```
                               
@@ -14,7 +14,7 @@ Middleware is generally used to intercept requests or responses. For example, un
             │     │     │         middleware3          │     │     │        
             │     │     │     ┌──────────────────┐     │     │     │
             │     │     │     │                  │     │     │     │
- 　── Request ───────────────────> Controller ─ Response ───────────────────────────> Client
+   ── Request ───────────────────────> Controller ─ Response ───────────────────────────> Client
             │     │     │     │                  │     │     │     │
             │     │     │     └──────────────────┘     │     │     │
             │     │     │                              │     │     │
@@ -24,34 +24,35 @@ Middleware is generally used to intercept requests or responses. For example, un
             │                                                      │
             └──────────────────────────────────────────────────────┘
 ```
-The middleware and the controller form a classic onion model, where the middleware layers are akin to the layers of an onion, and the controller forms the onion core. As shown in the diagram, the request passes through middleware 1, 2, 3 to reach the controller like an arrow, and the controller returns a response which then passes back through the middleware layers in the order of 3, 2, 1 before being returned to the client. This means that within each middleware, we can both access the request and obtain the response.
+
+Middleware and controllers form a classic onion model, where middleware acts as layers of onion skin, and the controller is the core of the onion. As shown in the diagram, the request passes through middleware 1, 2, and 3 before reaching the controller. The controller returns a response, which then passes back through the middleware in reverse order (3, 2, 1) and ultimately returns to the client. This means that within each middleware, we can access both the request and the response.
 
 ## Request Interception
 
-Sometimes we do not want a certain request to reach the controller layer. For example, if in an authentication middleware we find that the current user is not logged in, we can directly intercept the request and return a login response. The process would look something like this:
+Sometimes, we don't want a particular request to reach the controller layer. For example, if we find in middleware 2 that the current user is not logged in, we can intercept the request and return a login response. The flow would look something like this:
 
 ```
                               
-            ┌───────────────────────────────────────────────────────────┐
-            │                     middleware1                           │ 
-            │     ┌───────────────────────────────────────────────┐     │
-            │     │               Authentication Middleware       │     │
-            │     │          ┌──────────────────────────────┐     │     │
-            │     │          │         middleware3          │     │     │
-            │     │          │     ┌──────────────────┐     │     │     │
-            │     │          │     │                  │     │     │     │
-   ── Request ───────────┐   │     │    Controller    │     │     │     │
-            │     │ Response │     │                  │     │     │     │
-   <─────────────────────┘   │     └──────────────────┘     │     │     │
-            │     │          │                              │     │     │
-            │     │          └──────────────────────────────┘     │     │
-            │     │                                               │     │
-            │     └───────────────────────────────────────────────┘     │
-            │                                                           │
-            └───────────────────────────────────────────────────────────┘
+            ┌────────────────────────────────────────────────────────────┐
+            │                         middleware1                        │ 
+            │     ┌────────────────────────────────────────────────┐     │
+            │     │                   middleware2                  │     │
+            │     │          ┌──────────────────────────────┐      │     │
+            │     │          │        middleware3           │      │     │       
+            │     │          │    ┌──────────────────┐      │      │     │
+            │     │          │    │                  │      │      │     │
+   ── Request ─────────┐     │    │    Controller    │      │      │     │
+            │     │ Response │    │                  │      │      │     │
+   <───────────────────┘     │    └──────────────────┘      │      │     │
+            │     │          │                              │      │     │
+            │     │          └──────────────────────────────┘      │     │
+            │     │                                                │     │
+            │     └────────────────────────────────────────────────┘     │
+            │                                                            │
+            └────────────────────────────────────────────────────────────┘
 ```
 
-As shown above, the request reaches the authentication middleware, generates a login response, then passes back through middleware 1 before being returned to the browser.
+As shown in the diagram, the request reaches middleware 2 and generates a login response, which then passes back through middleware 1 and returns to the client.
 
 ## Middleware Interface
 
@@ -71,17 +72,18 @@ interface MiddlewareInterface
 }
 ```
 
-This means that the `process` method must be implemented, and it must return a `support\Response` object. By default, this object is generated by `$handler($request)` (request continues to pass through the onion core), but it can also be a response generated by helper functions such as `response()`, `json()`, `xml()`, or `redirect()` (request stops passing through the onion core).
+In other words, middleware must implement the `process` method, which must return a `support\Response` object. By default, this object is generated by `$handler($request)` (continuing the request through the onion layers), but it can also be a response generated by helper functions like `response()`, `json()`, `xml()`, `redirect()`, etc. (stopping the request from continuing through the onion layers).
 
-## Accessing Request and Response in Middleware
+## Accessing the Request and Response in Middleware
 
-In the middleware, we can access the request and obtain response after the controller has been executed. Therefore, the middleware can be divided into three parts internally:
+In middleware, we can access both the request and the response. Therefore, a middleware can be divided into three parts:
 
-1. The request passage phase, which is the phase before request processing.
-2. The controller handles the request phase, which is the request processing phase.
-3. The response passage phase, which is the phase after request processing.
+1. Request traversal phase - before request processing
+2. Controller processing phase - request processing
+3. Response traversal phase - after request processing
 
-The manifestation of these three phases in the middleware is as follows:
+The three phases are reflected in the middleware as follows:
+
 ```php
 <?php
 namespace app\middleware;
@@ -94,20 +96,19 @@ class Test implements MiddlewareInterface
 {
     public function process(Request $request, callable $handler) : Response
     {
-        echo 'This is the request passage phase, before request processing';
+        echo 'This is the request traversal phase, before request processing.';
         
-        $response = $handler($request); // Continues to pass through the onion core until the controller generates a response.
+        // Continue through the onion layers until a response is obtained from the controller
+        $response = $handler($request);
         
-        echo 'This is the response passage phase, after request processing';
+        echo 'This is the response traversal phase, after request processing.';
         
         return $response;
     }
 }
 ```
-
 ## Example: Authentication Middleware
-
-Create a file `app/middleware/AuthCheckTest.php` (create the directory if it doesn't exist) as follows:
+Create file `app/middleware/AuthCheckTest.php` (create directory if it does not exist) as follows:
 ```php
 <?php
 namespace app\middleware;
@@ -122,19 +123,21 @@ class AuthCheckTest implements MiddlewareInterface
     public function process(Request $request, callable $handler) : Response
     {
         if (session('user')) {
-            // The user is already logged in, request continues to pass through the onion core
+            // Already logged in, continue with the request
             return $handler($request);
         }
 
+        // Get the methods that do not require login using reflection
         $controller = new ReflectionClass($request->controller);
         $noNeedLogin = $controller->getDefaultProperties()['noNeedLogin'] ?? [];
 
+        // Method requires login
         if (!in_array($request->action, $noNeedLogin)) {
-            // Intercept the request and return a redirect response; request stops passing through the onion core
+            // Intercept the request and return a redirect response, stopping the request from continuing
             return redirect('/user/login');
         }
 
-        // The action does not require login, request continues to pass through the onion core
+        // Method does not require login, continue with the request
         return $handler($request);
     }
 }
@@ -148,6 +151,9 @@ use support\Request;
 
 class UserController
 {
+    /**
+     * Methods that do not require login
+     */
     protected $noNeedLogin = ['login'];
 
     public function login(Request $request)
@@ -162,24 +168,24 @@ class UserController
     }
 }
 ```
-> **Note:**
-> `$noNeedLogin` records the methods of the current controller that can be accessed without logging in.
+
+> **Note**
+> The `$noNeedLogin` array stores the methods in the controller that do not require login.
 
 Add the global middleware in `config/middleware.php` as follows:
 ```php
 return [
     // Global middleware
     '' => [
-        // ... other middleware is omitted here
+        // ... other middleware omitted
         app\middleware\AuthCheckTest::class,
     ]
 ];
 ```
+With the authentication middleware, we can focus on writing business code in the controller layer without worrying about whether the user is logged in.
 
-With the authentication middleware, we can focus on writing business logic in the controller without worrying about whether the user is logged in.
-
-## Example: Cross-origin Request Middleware
-Create a file `app/middleware/AccessControlTest.php` (create the directory if it doesn't exist) as follows:
+## Example: Cross-Origin Request Middleware
+Create file `app/middleware/AccessControlTest.php` (create directory if it does not exist) as follows:
 ```php
 <?php
 namespace app\middleware;
@@ -192,8 +198,10 @@ class AccessControlTest implements MiddlewareInterface
 {
     public function process(Request $request, callable $handler) : Response
     {
+        // If it is an OPTIONS request, return an empty response, otherwise continue with the request and get a response
         $response = $request->method() == 'OPTIONS' ? response('') : $handler($request);
         
+        // Add CORS-related HTTP headers to the response
         $response->withHeaders([
             'Access-Control-Allow-Credentials' => 'true',
             'Access-Control-Allow-Origin' => $request->header('origin', '*'),
@@ -206,26 +214,32 @@ class AccessControlTest implements MiddlewareInterface
 }
 ```
 
-Add the middleware in `config/middleware.php` as follows:
+> **Note**
+> Cross-origin requests may trigger an OPTIONS request. We do not want OPTIONS requests to reach the controller, so we directly return an empty response (`response('')`) to intercept the request.
+> If your API needs routing, please use `Route::any(..)` or `Route::add(['POST', 'OPTIONS'], ..)` to configure the route.
+
+Add the global middleware in `config/middleware.php` as follows:
 ```php
 return [
     // Global middleware
     '' => [
-        // ... other middleware is omitted here
+        // ... other middleware omitted
         app\middleware\AccessControlTest::class,
     ]
 ];
 ```
-> **Note:**
-> If the ajax request has custom headers, it is necessary to include the custom header in the `Access-Control-Allow-Headers` field in the middleware to avoid the `Request header field XXXX is not allowed by Access-Control-Allow-Headers in preflight response.` error.
 
-## Conclusion
+> **Note**
+> If the AJAX request has custom headers, you need to add the custom headers to the `Access-Control-Allow-Headers` field in the middleware, otherwise it will report `Request header field XXXX is not allowed by Access-Control-Allow-Headers in preflight response.`
 
-- Middleware is divided into global middleware, application-specific middleware (only effective in multi-application mode, see [multiapp.md](multiapp.md)), and route middleware.
-- Currently does not support middleware in individual controllers, but similar controller middleware functionality can be implemented in middleware by judging `$request->controller`.
-- The middleware configuration file is located in `config/middleware.php`.
-- Global middleware configurations are under the key `''`.
-- Application-specific middleware configurations are under the specific application names, for example:
+## Explanation
+  
+ - Middleware is divided into global middleware, application middleware (only effective in multi-application mode, see [Multi-Application](multiapp.md)), and route middleware.
+ - Currently, single controller middleware is not supported (however, you can use `$request->controller` in the middleware to achieve similar functionality to controller middleware).
+ - The middleware configuration file is located at `config/middleware.php`.
+ - Global middleware is configured under the key `''`.
+ - Application middleware is configured under the specific application name, for example:
+
 ```php
 return [
     // Global middleware
@@ -233,7 +247,7 @@ return [
         app\middleware\AuthCheckTest::class,
         app\middleware\AccessControlTest::class,
     ],
-    // Application-specific middleware (only effective in multi-application mode)
+    // Application middleware (only effective in multi-application mode)
     'api' => [
         app\middleware\ApiOnly::class,
     ]
@@ -242,7 +256,9 @@ return [
 
 ## Route Middleware
 
-Route middleware can be set for a single route or a group of routes. For example, add the following configuration to the `config/route.php` file:
+We can set middleware for a single route or a group of routes.
+For example, add the following configuration in `config/route.php`:
+
 ```php
 <?php
 use support\Request;
@@ -263,10 +279,15 @@ Route::group('/blog', function () {
 ]);
 ```
 
-## Passing Parameters to Middleware Constructors
+## Middleware Constructor Parameters
 
-This feature requires `webman-framework >= 1.4.8`. After version 1.4.8, the configuration file supports direct instantiation of middleware or anonymous functions, making it convenient to pass parameters to middleware through their constructors. For example, in the `config/middleware.php` file, you can configure as follows:
-```
+> **Note**
+> This feature requires webman-framework >= 1.4.8
+
+Starting from version 1.4.8, the configuration file supports instantiating middleware directly or using anonymous functions, making it easy to pass parameters to the middleware through the constructor.
+For example, you can also configure the `config/middleware.php` as follows:
+
+```php
 return [
     // Global middleware
     '' => [
@@ -275,14 +296,16 @@ return [
             return new app\middleware\AccessControlTest($param1, $param2, ...);
         },
     ],
-    // Application-specific middleware (only effective in multi-application mode)
+    // Application middleware (only effective in multi-application mode)
     'api' => [
         app\middleware\ApiOnly::class,
     ]
 ];
 ```
-Similarly, route middleware can also pass parameters through their constructors. For example, in the `config/route.php` file, you can configure as follows:
-```
+
+Similarly, you can pass parameters to middleware through the constructor in route middleware. For example, in `config/route.php`:
+
+```php
 Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->middleware([
     new app\middleware\MiddlewareA($param1, $param2, ...),
     function(){
@@ -292,13 +315,13 @@ Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->mi
 ```
 
 ## Middleware Execution Order
-- The middleware execution order is `global middleware` -> `application-specific middleware` -> `route middleware`.
-- When there are multiple global middleware, they are executed in the order they are configured (the same applies to application-specific and route middleware).
-- The 404 request does not trigger any middleware, including global middleware.
+ - The execution order of middleware is `global middleware` -> `application middleware` -> `route middleware`.
+ - When there are multiple global middleware, they are executed in the order specified in the middleware configuration (the same applies to application middleware and route middleware).
+ - 404 requests will not trigger any middleware, including global middleware.
 
-## Passing Parameters to Middleware from Route (route->setParams)
+## Passing Parameters from Routes to Middleware (route->setParams)
 
-**Route Configuration `config/route.php`**
+**Route configuration `config/route.php`**
 ```php
 <?php
 use support\Request;
@@ -307,7 +330,7 @@ use Webman\Route;
 Route::any('/test', [app\controller\IndexController::class, 'index'])->setParams(['some_key' =>'some value']);
 ```
 
-**Middleware (Assuming it's a global middleware)**
+**Middleware (assuming it is global middleware)**
 ```php
 <?php
 namespace app\middleware;
@@ -320,7 +343,7 @@ class Hello implements MiddlewareInterface
 {
     public function process(Request $request, callable $handler) : Response
     {
-        // Default route $request->route is null, so it needs to be checked if $request->route is empty
+        // $request->route is null by default, so we need to check $request->route for null
         if ($route = $request->route) {
             $value = $route->param('some_key');
             var_export($value);
@@ -329,10 +352,9 @@ class Hello implements MiddlewareInterface
     }
 }
 ```
-
 ## Passing Parameters from Middleware to Controller
 
-Sometimes, the controller needs to use data generated in the middleware. In such cases, we can pass parameters to the controller by adding properties to the `$request` object. For example:
+Sometimes the controller needs to use data generated in the middleware. In this case, we can pass parameters to the controller by adding attributes to the `$request` object. For example:
 
 **Middleware**
 ```php
@@ -369,9 +391,11 @@ class FooController
 }
 ```
 
-## Middleware Getting Current Request Route Information
+## Middleware Gets Current Route Information
+> **Note**
+> Requires webman-framework >= 1.3.2
 
-This feature requires `webman-framework >= 1.3.2`. We can use `$request->route` to get the route object, and then call the corresponding method to get the information.
+We can use `$request->route` to get the route object and retrieve corresponding information by calling the respective methods.
 
 **Route Configuration**
 ```php
@@ -396,11 +420,11 @@ class Hello implements MiddlewareInterface
     public function process(Request $request, callable $handler) : Response
     {
         $route = $request->route;
-        // If the request does not match any routes (except the default route), $request->route will be null
-        // Assuming the browser accesses the address /user/111, the following information will be printed
+        // If the request does not match any route (except the default route), $request->route will be null
+        // Assuming the browser accesses the URL /user/111, the following information will be printed
         if ($route) {
             var_export($route->getPath());       // /user/{uid}
-            var_export($route->getMethods());    // ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS']
+            var_export($route->getMethods());    // ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD','OPTIONS']
             var_export($route->getName());       // user_view
             var_export($route->getMiddleware()); // []
             var_export($route->getCallback());   // ['app\\controller\\UserController', 'view']
@@ -412,12 +436,15 @@ class Hello implements MiddlewareInterface
 }
 ```
 
-> **Note:**
-> The `$route->param()` method requires `webman-framework >= 1.3.16`
+> **Note**
+> `$route->param()` method requires webman-framework >= 1.3.16
 
-## Middleware Getting Exception
 
-This feature requires `webman-framework >= 1.3.15`. We can use `$response->exception()` to get the exception when an error occurs in the middleware.
+## Middleware Gets Exceptions
+> **Note**
+> Requires webman-framework >= 1.3.15
+
+Exceptions may occur during the business process. Use `$response->exception()` in the middleware to retrieve the exception.
 
 **Route Configuration**
 ```php
@@ -455,26 +482,32 @@ class Hello implements MiddlewareInterface
 
 ## Super Global Middleware
 
-This feature requires `webman-framework >= 1.5.16`. The super global middleware affects not only the main project but also all [application plugins](app/app.md). If you want to add a middleware that affects all the plugins, you can use the super global middleware.
+> **Note**
+> This feature requires webman-framework >= 1.5.16
 
-Configure as follows in the `config/middleware.php` file:
+Global middleware in the main project only affects the main project and does not affect [application plugins](app/app.md). Sometimes we want to add a middleware that affects all global plugins, including all plugins. In this case, we can use the super-global middleware.
+
+Configure the following in `config/middleware.php`:
 ```php
 return [
     '@' => [ // Add global middleware to the main project and all plugins
         app\middleware\MiddlewareGlobl::class,
     ], 
-    '' => [], // Add global middleware only to the main project
+    '' => [], // Add global middleware to the main project only
 ];
 ```
 
-> **Note:**
-> The `@` super global middleware can be configured not only in the main project but also in a specific plugin. For example, if the super global middleware is configured in the `plugin/ai/config/middleware.php`, it will also affect the main project and all plugins.
+> **Note**
+> `@` super global middleware can be configured not only in the main project but also in a specific plugin. For example, if you configure `@` super-global middleware in `plugin/ai/config/middleware.php`, it will also affect the main project and all plugins.
 
 ## Adding Middleware to a Plugin
 
-This feature requires `webman-framework >= 1.5.16`. If you want to add middleware to a specific [application plugin](app/app.md) without changing the plugin's code (as it will be overridden during an upgrade), you can configure it in the main project to add middleware to the plugin.
+> **Note**
+> This feature requires webman-framework >= 1.5.16
 
-Configure as follows in the `config/middleware.php` file:
+Sometimes we want to add middleware to a [application plugin](app/app.md) without modifying the plugin's code (because it will be overwritten during an update). In this case, we can configure middleware for it in the main project.
+
+Configure the following in `config/middleware.php`:
 ```php
 return [
     'plugin.ai' => [], // Add middleware to the ai plugin
@@ -482,5 +515,5 @@ return [
 ];
 ```
 
-> **Note:**
-> Similarly, you can also add a similar configuration to another plugin to affect other plugins. For example, adding the same configuration in `plugin/foo/config/middleware.php` will affect the ai plugin.
+> **Note**
+> Of course, similar configurations can be added in a plugin to affect other plugins. For example, if you add the above configuration in `plugin/foo/config/middleware.php`, it will affect the ai plugin.

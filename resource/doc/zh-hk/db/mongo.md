@@ -1,10 +1,10 @@
 # MongoDB
 
-webman默認使用 [jenssegers/mongodb](https://github.com/jenssegers/laravel-mongodb) 作為mongodb組件，它是從laravel項目中抽離出來的，用法與laravel相同。
+webman預設使用 [jenssegers/mongodb](https://github.com/jenssegers/laravel-mongodb) 作為mongodb組件，它是從laravel項目中抽離出來的，用法與laravel相同。
 
-在使用`jenssegers/mongodb`之前，必須先給`php-cli`安裝mongodb擴展。
+在使用`jenssegers/mongodb`之前必須先給`php-cli`安裝mongodb擴展。
 
-> 使用命令`php -m | grep mongodb`查看`php-cli`是否裝了mongodb擴展。注意：即使你在`php-fpm`安裝了mongodb擴展，不代表你在`php-cli`可以使用它，因為`php-cli`和`php-fpm`是不同的應用程式，可能使用的是不同的`php.ini`配置。使用命令`php --ini`來查看你的`php-cli`使用的是哪個`php.ini`配置文件。
+> 使用命令`php -m | grep mongodb`查看`php-cli`是否裝了mongodb擴展。注意：即使你在`php-fpm`安裝了mongodb擴展，不代表你在`php-cli`可以使用它，因為`php-cli`和`php-fpm`是不同的應用程序，可能使用的是不同的`php.ini`配置。使用命令`php --ini`來查看你的`php-cli`使用的是哪個`php.ini`配置文件。
 
 ## 安裝
 
@@ -28,7 +28,7 @@ return [
 
     'connections' => [
 
-         ...這裡省略了其它配置...
+         ...這裡省略了其他配置...
 
         'mongodb' => [
             'driver'   => 'mongodb',

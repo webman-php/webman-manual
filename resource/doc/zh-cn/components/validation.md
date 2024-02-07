@@ -4,18 +4,18 @@ composer有很多验证器可以直接在使用，例如：
 #### <a href="#respect-validation"> respect/validation</a>
 
 <a name="think-validate"></a>
-## 验证器 top-think/think-validate
+# 验证器 top-think/think-validate
 
-### 说明
+## 说明
 ThinkPHP官方验证器
 
-### 项目地址
+## 项目地址
 https://github.com/top-think/think-validate
 
-### 安装
+## 安装
 `composer require topthink/think-validate`
 
-### 快速开始
+## 快速开始
 
 **新建 `app/index/validate/User.php`**
 
@@ -61,22 +61,22 @@ if (!$validate->check($data)) {
 <a name="respect-validation"></a>
 # 验证器 workerman/validation
 
-### 说明
+## 说明
 
 项目为 https://github.com/Respect/Validation 的汉化版本
 
-### 项目地址
+## 项目地址
 
 https://github.com/walkor/validation
   
   
-### 安装
+## 安装
  
 ```php
 composer require workerman/validation
 ```
 
-### 快速开始
+## 快速开始
 
 ```php
 <?php
@@ -147,7 +147,7 @@ class IndexController
 }
 ```
 
-### Validator 功能指南
+## Validator 功能指南
 
 ```php
 use Respect\Validation\Validator as v;
@@ -235,7 +235,7 @@ v::optional(v::alpha())->validate(null); // true
 v::not(v::intVal())->validate(10); // false
 ```
   
-### Validator 三个方法 `validate()` `check()` `assert()` 区别
+## Validator 三个方法 `validate()` `check()` `assert()` 区别
 
 `validate()`返回布尔型，不会抛出异常
 
@@ -244,7 +244,7 @@ v::not(v::intVal())->validate(10); // false
 `assert()`验证失败时抛出异常，通过`$exception->getFullMessage()`可以获得所有验证失败的原因
   
   
-### 常用验证规则列表
+## 常用验证规则列表
 
 `Alnum()` 只包含字母和数字
 
@@ -298,7 +298,7 @@ v::not(v::intVal())->validate(10); // false
   
 更多验证规则参见 https://respect-validation.readthedocs.io/en/2.0/list-of-rules/ 
   
-### 更多内容
+## 更多内容
 
 访问 https://respect-validation.readthedocs.io/en/2.0/
   

@@ -1,5 +1,5 @@
 # ตัวตรวจสอบ
-คุณสามารถใช้ composer เพื่อใช้งานตัวตรวจสอบหลายรูปแบบ เช่น:
+Composer มีตัวตรวจสอบหลายตัวที่สามารถใช้งานได้โดยตรง เช่น:
 #### <a href="#think-validate"> top-think/think-validate</a>
 #### <a href="#respect-validation"> respect/validation</a>
 
@@ -7,15 +7,16 @@
 ## ตัวตรวจสอบ top-think/think-validate
 
 ### คำอธิบาย
-ตัวตรวจสอบอย่างเป็นทางการของ ThinkPHP
+ตัวตรวจสอบหลักของ ThinkPHP
 
 ### ที่อยู่โปรเจกต์
 https://github.com/top-think/think-validate
 
-### วิธีการติดตั้ง
+### การติดตั้ง
 `composer require topthink/think-validate`
 
-### การเริ่มต้น
+### เริ่มต้น
+
 **สร้าง `app/index/validate/User.php`**
 
 ```php
@@ -33,17 +34,17 @@ class User extends Validate
     ];
 
     protected $message  =   [
-        'name.require' => 'ต้องกรอกชื่อ',
-        'name.max'     => 'ชื่อต้องไม่เกิน 25 ตัวอักษร',
+        'name.require' => 'ต้องระบุชื่อ',
+        'name.max'     => 'ชื่อต้องมีความยาวไม่เกิน 25 ตัวอักษร',
         'age.number'   => 'อายุต้องเป็นตัวเลข',
         'age.between'  => 'อายุต้องอยู่ระหว่าง 1-120',
-        'email'        => 'รูปแบบอีเมลไม่ถูกต้อง'   
+        'email'        => 'รูปแบบอีเมลไม่ถูกต้อง',    
     ];
 
 }
 ```
-  
 **การใช้**
+
 ```php
 $data = [
     'name'  => 'thinkphp',
@@ -58,22 +59,22 @@ if (!$validate->check($data)) {
 ```
 
 <a name="respect-validation"></a>
-# ตัวตรวจสอบ workerman/validation
+# ตัวตรวจสอบ workerman/validation 
 
 ### คำอธิบาย
-โปรเจกต์นี้เป็นเวอร์ชันที่ถูกแปลเป็นภาษาจีนของ https://github.com/Respect/Validation
+
+โปรเจกต์เป็นรุ่นภาษาจีนของ https://github.com/Respect/Validation 
 
 ### ที่อยู่โปรเจกต์
 https://github.com/walkor/validation
   
-  
-### วิธีการติดตั้ง
- 
+### การติดตั้ง
+
 ```php
 composer require workerman/validation
 ```
 
-### การเริ่มต้น
+### เริ่มต้น
 
 ```php
 <?php
@@ -93,31 +94,30 @@ class IndexController
             'password' => v::length(5, 64)->setName('รหัสผ่าน')
         ]);
         Db::table('user')->insert($data);
-        return json(['code' => 0, 'msg' => 'สำเร็จ']);
+        return json(['code' => 0, 'msg' => 'ดีแล้ว']);
     }
 }  
 ```
-  
-**เข้าถึงผ่าน jquery**
-  
-  ```js
-  $.ajax({
-      url : 'http://127.0.0.1:8787',
-      type : "post",
-      dataType:'json',
-      data : {nickname:'แท็ค', username:'tom cat', password: '123456'}
-  });
-  ```
-  
-ผลลัพธ์ที่ได้:
+
+**ผ่าน jquery**
+
+```js
+$.ajax({
+    url : 'http://127.0.0.1:8787',
+    type : "post",
+    dataType:'json',
+    data : {nickname:'ส้มตำ', username:'tom cat', password: '123456'}
+});
+```
+ผลลัพธ์:
 
 `{"code":500,"msg":"ชื่อผู้ใช้ ต้องประกอบด้วยตัวอักษร (a-z) และตัวเลข (0-9) เท่านั้น"}`
 
 คำอธิบาย:
 
-`v::input(array $input, array $rules)` เป็นการตรวจสอบและรวบรวมข้อมูล หากการตรวจสอบล้มเหลวจะโยนข้อยกเว้น `Respect\Validation\Exceptions\ValidationException` ถ้าตรวจสอบผ่านจะคืนข้อมูลที่ตรวจสอบแล้ว (เป็นอาร์เรย์)
+`v::input(array $input, array $rules)` ใช้ในการตรวจสอบและเก็บข้อมูล หากการตรวจสอบล้มเหลว จะโยนข้อยกเว้น`Respect\Validation\Exceptions\ValidationException` ผ่าน ถ้าตรวจสอบสำเร็จจะได้รับข้อมูลที่ตรวจสอบแล้ว (มีลิสต์แอร์เรย์) 
 
-หากโค้ดธุรกิจไม่จับข้อยกเว้นการตรวจสอบ เฟรมเวิร์ก webman จะจับข้อยกเว้นโดยอัตโนมัติและสามารถเลือกคืนข้อมูลเช่น json หรือหน้าข้อยกเว้นปกติตามหัวข้อ HTTP หากผลเรทที่คืนไม่ตรงตามความต้องการของธุรกิจ ผู้พัฒนาสามารถจับข้อยกเว้น `ValidationException` ด้วยตนเองและคืนข้อมูลที่ต้องการ เช่นตัวอย่างด้านล่าง:
+หากโค้ดธุรกิจไม่จับข้อยกเว้นการตรวจสอบได้ webman framework จะจับข้อยกเว้นโดยอัตโนมัติและเลือกที่จะส่งข้อมูล json (เช่น `{"code":500, "msg":"xxx"}`) หรือหน้าข้อยกเว้นทั่วไปตามข้อกำหนดการร้องขอ HTTP หากรูปแบบที่ส่งไม่ตรงตามต้องการของธุรกิจ เจ้าของธุรกิจสามารถจับข้อยกเว้น`ValidationException`เองและส่งข้อมูลที่ต้องการ ตามตัวอย่างด้านล่าง:
 
 ```php
 <?php
@@ -139,23 +139,23 @@ class IndexController
         } catch (ValidationException $e) {
             return json(['code' => 500, 'msg' => $e->getMessage()]);
         }
-        return json(['code' => 0, 'msg' => 'สำเร็จ', 'data' => $data]);
+        return json(['code' => 0, 'msg' => 'ดีแล้ว', 'data' => $data]);
     }
 }
 ```
 
-### คำแนะนำสำหรับฟังก์ชัน Validator
+### แนะนำฟังก์ชัน Validator 
 
 ```php
 use Respect\Validation\Validator as v;
 
 // ตรวจสอบกฎเดียว
 $number = 123;
-v::numericVal()->validate($number); // true
+v::numericVal()->validate($number); // จริง
 
-// ตรวจสอบลูกโซ่ของกฎหลายอันต่อเนื่อง
+// ตรวจสอบลูกโซ่ของกฎหลายๆอัน
 $usernameValidator = v::alnum()->noWhitespace()->length(1, 15);
-$usernameValidator->validate('alganet'); // true
+$usernameValidator->validate('alganet'); // จริง
 
 // รับเหตุผลที่ตรวจสอบล้มเหลวครั้งแรก
 try {
@@ -164,47 +164,46 @@ try {
     echo $exception->getMessage(); // ชื่อผู้ใช้ ต้องประกอบด้วยตัวอักษร (a-z) และตัวเลข (0-9) เท่านั้น
 }
 
-// รับเหตุผลทดลองทั้งหมดที่ตรวจสอบล้มเหลว
+// รับเหตุผลทั้งหมดที่ตรวจสอบล้มเหลว
 try {
     $usernameValidator->setName('ชื่อผู้ใช้')->assert('alg  anet');
 } catch (ValidationException $exception) {
     echo $exception->getFullMessage();
-    // คำสั่งจะพิมพ์
-    // - ชื่อผู้ใช้ ต้องประกอบด้วยกฎต่อไปนี้
-    //     - ชื่อผู้ใช้ ต้องประกอบด้วยตัวอักษร (a-z) และตัวเลข (0-9) เท่านั้น
-    //     - ชื่อผู้ใช้ ต้องไม่มีช่องว่าง
+    // จะพิมพ์
+    // -  ชื่อผู้ใช้ ต้องประกอบด้วยตัวอักษร (a-z) และตัวเลข (0-9) เท่านั้น
+    //     - ชื่อผู้ใช้ ไม่สามารถมีช่องว่างได้
   
     var_export($exception->getMessages());
-    // คำสั่งจะพิมพ์
+    // จะพิมพ์
     // array (
     //   'alnum' => 'ชื่อผู้ใช้ ต้องประกอบด้วยตัวอักษร (a-z) และตัวเลข (0-9) เท่านั้น',
-    //   'noWhitespace' => 'ชื่อผู้ใช้ ต้องไม่มีช่องว่าง',
+    //   'noWhitespace' => 'ชื่อผู้ใช้ ไม่สามารถมีช่องว่างได้',
     // )
 }
 
-// การกำหนดข้อความแสดงผลที่กำหนดเอง
+// ปรับเปลี่ยนข้อผิดพลาดที่กำหนดเอง
 try {
     $usernameValidator->setName('ชื่อผู้ใช้')->assert('alg  anet');
 } catch (ValidationException $exception) {
     var_export($exception->getMessages([
         'alnum' => 'ชื่อผู้ใช้ต้องประกอบด้วยตัวอักษรและตัวเลขเท่านั้น',
-        'noWhitespace' => 'ชื่อผู้ใช้ต้องไม่มีช่องว่าง',
-        'length' => 'อันนี้ความเท่าตามกฎ ดังนั้นจะไม่แสดง'
+        'noWhitespace' => 'ชื่อผู้ใช้ไม่สามารถมีช่องว่างได้',
+        'length' => 'length ตรงกับกฎ ดังนั้น อันนี้จะไม่แสดง'
     ]);
-    // คำสั่งจะพิมพ์ 
+    // จะพิมพ์ 
     // array(
     //    'alnum' => 'ชื่อผู้ใช้ต้องประกอบด้วยตัวอักษรและตัวเลขเท่านั้น',
-    //    'noWhitespace' => 'ชื่อผู้ใช้ต้องไม่มีช่องว่าง'
+    //    'noWhitespace' => 'ชื่อผู้ใช้ไม่สามารถมีช่องว่างได้'
     // )
 }
 
-// ตรวจสอบอ็อबเจ็กต์
+// ตรวจสอบอ็อบเจ็กต์
 $user = new stdClass;
 $user->name = 'Alexandre';
 $user->birthdate = '1987-07-01';
 $userValidator = v::attribute('name', v::stringType()->length(1, 32))
                 ->attribute('birthdate', v::date()->minAge(18));
-$userValidator->validate($user); // true
+$userValidator->validate($user); // จริง
 
 // ตรวจสอบอาร์เรย์
 $data = [
@@ -222,79 +221,78 @@ v::key(
     )
     ->assert($data); // สามารถใช้ check() หรือ validate() ได้เช่นกัน
   
-// ตรวจสอบที่มีตัวเลือก
-v::alpha()->validate(''); // เท็จ 
-v::alpha()->validate(null); // เท็จ 
+// ตรวจสอบออฟชันอย่างเลือกได้
+v::alpha()->validate(''); // เท็จ
+v::alpha()->validate(null); // เท็จ
 v::optional(v::alpha())->validate(''); // จริง
 v::optional(v::alpha())->validate(null); // จริง
 
-// กฎทำให้เป็นประกาศ
+// กฎที่เป็นตรงกันข้มูล
 v::not(v::intVal())->validate(10); // เท็จ
 ```
-  
-### ฟังก์ชัน Validator 3 ฟังก์ชัน `validate()` `check()` `assert()` แตกต่างกันที่ไหน
 
-`validate()` คืนค่าเป็นบูลีน และไม่โยนข้อยกเว้น
+### ฟังก์ชัน Validator 3 ฟังก์ชัน `validate()` `check()` `assert()` แตกต่างกันอย่างไร
 
-`check()` โยนข้อยกเว้นเมื่อตรวจสอบล้มเหลว และสามารถใช้ `$exception->getMessage()` เพื่อรับเหตุผลที่ตรวจสอบล้มเหลวครั้งแรก
+`validate()` จะคืนค่าบูลีนภายนอกเบ้าไดร์เมื่อตรวจสอบล้มเหลว
 
-`assert()` โยนข้อยกเว้นเมื่อตรวจสอบล้มเหลว และสามารถใช้ `$exception->getFullMessage()` เพื่อรับเหตุผลที่ตรวจสอบล้มเหลวทั้งหมด
-  
-  
-### รายการกฎที่ใช้ตรวจสอบประจำ
+`check()` เมื่อตรวจสอบล้มเหลวจะโยนข้อยกเว้นและสามารถใช้ `$exception->getMessage()` สำหรับเหตุผลล้มเหลวครั้งแรก
 
-`Alnum()` ประกอบด้วยตัวอักษรและตัวเลขเท่านั้น
+`assert()` เมื่อตรวจสอบล้มเหลวจะโยนข้อยกเว้นและสามารถใช้ `$exception->getFullMessage()` สำหรับเหตุผลล้มเหลวทั้งหมด
 
-`Alpha()` ประกอบด้วยตัวอักษรเท่านั้น
+### รายการกฎอยู่สม่ำเสมอ
 
-`ArrayType()` ชนิดของอาร์เรย์
+`Alnum()` อยู่เฉพาะตัวอักษรและตัวเลข
 
-`Between(mixed $minimum, mixed $maximum)` ตรวจสอบว่าได้รับข้อมูลอยู่ระหว่างค่าอื่น ๆ
+`Alpha()` อยู่เฉพาะตัวอักษร
 
-`BoolType()` ตรวจสอบว่าเป็นชนิดบูล
+`ArrayType()` ประเภทอาร์เรย์
 
-`Contains(mixed $expectedValue)` ตรวจสอบว่าได้รับข้อมูลที่มีค่าอยู่ภายใน
+`Between(mixed $minimum, mixed $maximum)` ตรวจสอบยืดหยุ่นว่าข้อมูลอยู่ระหว่างค่าอื่นๆ
 
-`ContainsAny(array $needles)` ตรวจสอบว่าได้รับข้อมูลที่มีอย่างน้อยหนึ่งค่าที่กำหนด
+`BoolType()` ตรวจสอบว่าเป็นบูลีนหรือไม่
 
-`Digit()` ตรวจสอบว่าได้รับข้อมูลที่มีตัวเลขเท่านั้น
+`Contains(mixed $expectedValue)` ตรวจสอบว่าข้อมูลมีโดยสารของค่าไหน
 
-`Domain()` ตรวจสอบว่าเป็นโดเมนที่ถูกต้อง
+`ContainsAny(array $needles)` ตรวจสอบว่าข้อมูลมีอย่างน้อยหนึ่งค่าที่ถูกกำหนดไว้
 
-`Email()` ตรวจสอบว่าเป็นที่อยู่อีเมลที่ถูกต้อง
+`Digit()` ตรวจสอบว่าข้อมูลมีเฉพาะตัวเลขเท่านั้น
 
-`Extension(string $extension)` ตรวจสอบนามสกุลไฟล์
+`Domain()` ตรวจสอบว่าเป็นโดเมนที่ถูกต้องหรือไม่
 
-`FloatType()` ตรวจสอบว่าเป็นชนิดทศนิยม
+`Email()` ตรวจสอบว่าเป็นอีเมลที่ถูกต้องหรือไม่
 
-`IntType()` ตรวจสอบว่าเป็นจำนวนเต็ม
+`Extension(string $extension)` ตรวจสอบส่วนขยาย
 
-`Ip()` ตรวจสอบว่าเป็นที่อยู่ IP
+`FloatType()` ตรวจสอบว่าเป็นทศนิยมหรือไม่
 
-`Json()` ตรวจสอบว่าเป็นข้อมูลที่เป็น JSON
+`IntType()` ตรวจสอบว่าเป็นจำนวนเต็มหรือไม่
 
-`Length(int $min, int $max)` ตรวจสอบความยาวว่าอยู่ในช่วงที่กำหนด
+`Ip()` ตรวจสอบว่าเป็นที่อยู่ไอพีหรือไม่
 
-`LessThan(mixed $compareTo)` ตรวจสอบความยาวน้อยกว่าค่าที่กำหนด
+`Json()` ตรวจสอบว่าเป็นข้อมูล json
 
-`Lowercase()` ตรวจสอบว่าเป็นตัวอักษรพิมพ์เล็ก
+`Length(int $min, int $max)` ตรวจสอบความยาวของข้อมูลอยู่ในช่วงที่กำหนด
 
-`MacAddress()` ตรวจสอบว่าเป็นที่อยู่ MAC
+`LessThan(mixed $compareTo)` ตรวจสอบว่าความยาวมีค่าน้อยกว่าค่าที่กำหนด
 
-`NotEmpty()` ตรวจสอบว่าไม่ว่างเปล่า
+`Lowercase()` ตรวจสอบว่าเป็นตัวอักษรพิมพ์เล็กหรือไม่
 
-`NullType()` ตรวจสอบว่าเป็นค่าว่าง
+`MacAddress()` ตรวจสอบว่าเป็นแอดเดรสแมคหรือไม่
+
+`NotEmpty()` ตรวจสอบว่าไม่เป็นค่าว่าง
+
+`NullType()` ตรวจสอบว่าเป็นค่า null
 
 `Number()` ตรวจสอบว่าเป็นตัวเลข
 
-`ObjectType()` ตรวจสอบว่าเป็นอ๊อบเจ็กต์
+`ObjectType()` ตรวจสอบว่าเป็นอ็อบเจ็กต์
 
-`StringType()` ตรวจสอบว่าเป็นชนิดสตริง
+`StringType()` ตรวจสอบว่าเป็นประเภทของสตริง
 
-`Url()` ตรวจสอบว่าเป็น URL
-  
-สำหรับรายการกฎที่ใช้ตรวจสอบเพิ่มเติม โปรดดูที่ https://respect-validation.readthedocs.io/en/2.0/list-of-rules/
-  
+`Url()` ตรวจสอบว่าเป็น url
+
+สำหรับรายการกฎการตรวจสอบอื่นๆ ดูได้ที่ https://respect-validation.readthedocs.io/en/2.0/list-of-rules/
+
 ### เนื้อหาเพิ่มเติม
 
 เยี่ยมชม https://respect-validation.readthedocs.io/en/2.0/

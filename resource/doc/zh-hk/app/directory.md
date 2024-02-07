@@ -1,4 +1,4 @@
-# 目錄結構
+# 目录结构
 
 ```
 plugin/
@@ -33,11 +33,11 @@ plugin/
     └── api
 ```
 
-我們可以看到應用插件具有與webman相同的目錄結構和配置文件，事實上，開發插件的經驗與開發webman普通應用基本上沒有區別。
-插件目錄和命名遵循PSR4規範，因為插件都放置於plugin目錄下，所以命名空間都以plugin開頭，例如`plugin\foo\app\controller\UserController`。
+我们看到一个应用插件有着与webman相同的目录结构及配置文件，实际上开发体验与开发webman普通应用基本没有区别
+插件目录及命名遵循PSR4规范，因为插件都放置于plugin目录下，所以命名空间都以plugin开头，例如`plugin\foo\app\controller\UserController`。
 
-## 關於 API 目錄
-每個插件中都有一個api目錄，如果您的應用程序提供了一些內部接口給其他應用程序調用，需要將接口放在api目錄。
-請注意，這裡所說的接口是函數調用的接口，而不是網絡調用的接口。
-例如`郵件插件`在 `plugin/email/api/Email.php` 提供了一個`Email::send()`接口，用於供其他應用程序調用發送郵件。
-另外，plugin/email/api/Install.php 是自動生成的，用於讓webman-admin插件市場調用執行安裝或卸載操作。
+## 关于 api 目录
+每个插件里有一个api目录，如果你的应用提供了一些内部接口给其它应用调用，需要将接口放在api目录。
+注意，这里所说的接口是函数调用的接口，非网络调用的接口。
+例如`邮件插件`在 `plugin/email/api/Email.php` 提供了一个`Email::send()`接口，用于给其它应用调用发邮件。
+另外 plugin/email/api/Install.php 是自动生成的，用来让webman-admin插件市场调用执行安装或卸载操作。

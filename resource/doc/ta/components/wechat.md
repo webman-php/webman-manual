@@ -1,17 +1,17 @@
-# வீக்சின் SDK
+# வெப்மான் 
 
-## overtrue/wechat
+## ஒவர்ட்ரூ / வெப்மான்
 
-### திட்டம் இடம்
+### திட்ட இடம்
 
 https://github.com/overtrue/wechat
-  
-### நிறுவவும்
- 
+
+### நிறுவு
+
 ```php
 composer require overtrue/wechat ^5.0
 ```
-  
+
 ### பயன்பாடு
 
 ```php
@@ -34,10 +34,11 @@ class WechatController
         $response = $app->server->serve();
         return $response->getContent();
       }
-
 }
 ```
-  
+
 ### மேலும் உள்ளடக்கம்
 
-பார்வை https://www.easywechat.com/5.x/
+இந்த https://www.easywechat.com/5.x/ ஐ அணுகவும்.
+
+

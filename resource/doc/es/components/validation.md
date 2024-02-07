@@ -1,6 +1,5 @@
 # Validador
-
-Composer tiene una gran cantidad de validadores que se pueden utilizar directamente, como por ejemplo:
+Hay muchos validadores disponibles en Composer que se pueden utilizar directamente, como por ejemplo:
 
 #### <a href="#think-validate"> top-think/think-validate</a>
 #### <a href="#respect-validation"> respect/validation</a>
@@ -19,7 +18,7 @@ https://github.com/top-think/think-validate
 
 ### Comienzo rápido
 
-**Crear `app/index/validate/User.php`**
+**Cree `app/index/validate/User.php`**
 
 ```php
 <?php
@@ -38,14 +37,14 @@ class User extends Validate
     protected $message  =   [
         'name.require' => 'El nombre es obligatorio',
         'name.max'     => 'El nombre no puede tener más de 25 caracteres',
-        'age.number'   => 'La edad debe ser numérica',
-        'age.between'  => 'La edad debe estar entre 1 y 120',
+        'age.number'   => 'La edad debe ser un número',
+        'age.between'  => 'La edad solo puede estar entre 1 y 120',
         'email'        => 'Formato de correo electrónico incorrecto',    
     ];
 
 }
 ```
-  
+
 **Uso**
 ```php
 $data = [
@@ -60,20 +59,19 @@ if (!$validate->check($data)) {
 }
 ```
 
-<a name="respect-validation"></a>
+
 # Validador workerman/validation
 
 ### Descripción
 
-Proyecto para la versión en chino simplificado de https://github.com/Respect/Validation
+Proyecto como una versión traducida de https://github.com/Respect/Validation
 
 ### Dirección del proyecto
 
 https://github.com/walkor/validation
-  
-  
+
 ### Instalación
- 
+
 ```php
 composer require workerman/validation
 ```
@@ -93,9 +91,9 @@ class IndexController
     public function index(Request $request)
     {
         $data = v::input($request->post(), [
-            'nickname' => v::length(1, 64)->setName('Apodo'),
-            'username' => v::alnum()->length(5, 64)->setName('Nombre de usuario'),
-            'password' => v::length(5, 64)->setName('Contraseña')
+            'nickname' => v::length(1, 64)->setName('apodo'),
+            'username' => v::alnum()->length(5, 64)->setName('nombre de usuario'),
+            'password' => v::length(5, 64)->setName('contraseña')
         ]);
         Db::table('user')->insert($data);
         return json(['code' => 0, 'msg' => 'ok']);
@@ -103,7 +101,7 @@ class IndexController
 }  
 ```
   
-**Acceso a través de jQuery**
+**Acceso a través de jquery**
   
   ```js
   $.ajax({
@@ -114,15 +112,15 @@ class IndexController
   });
   ```
   
-Obtención de resultado:
+Resultado:
 
 `{"code":500,"msg":"El nombre de usuario solo puede contener letras (a-z) y números (0-9)"}`
 
-Descripción:
+Explicación:
 
-`v::input(array $input, array $rules)` se utiliza para validar y recopilar datos. Si la validación de los datos falla, se lanzará la excepción `Respect\Validation\Exceptions\ValidationException`, en caso de éxito, se devolverán los datos validados (array).
+`v::input(array $input, array $rules)` se utiliza para validar y recopilar datos. Si la validación falla, se genera una excepción `Respect\Validation\Exceptions\ValidationException`, de lo contrario, devuelve los datos validados (un array). 
 
-Si el código de negocio no captura la excepción de validación, el marco webman la capturará automáticamente y, según la cabecera de la solicitud HTTP, elegirá devolver los datos en formato JSON (similar a `{"code":500, "msg":"xxx"}`) o una página de excepción normal. Si el formato de devolución no cumple con los requisitos del negocio, el desarrollador puede capturar manualmente la excepción `ValidationException` y devolver los datos necesarios, similar al siguiente ejemplo:
+Si el código del negocio no captura la excepción de validación, el marco de trabajo webman la capturará automáticamente y devolverá datos en formato JSON (similar a `{"code":500, "msg":"xxx"}`) o una página de excepción común según el encabezado de la solicitud HTTP. Si el formato de retorno no cumple con las necesidades del negocio, el desarrollador puede capturar manualmente la excepción `ValidationException` y devolver los datos necesarios, como en este ejemplo:
 
 ```php
 <?php
@@ -138,8 +136,8 @@ class IndexController
     {
         try {
             $data = v::input($request->post(), [
-                'username' => v::alnum()->length(5, 64)->setName('Nombre de usuario'),
-                'password' => v::length(5, 64)->setName('Contraseña')
+                'username' => v::alnum()->length(5, 64)->setName('nombre de usuario'),
+                'password' => v::length(5, 64)->setName('contraseña')
             ]);
         } catch (ValidationException $e) {
             return json(['code' => 500, 'msg' => $e->getMessage()]);
@@ -149,57 +147,58 @@ class IndexController
 }
 ```
 
+
 ### Guía de funciones del Validador
 
 ```php
 use Respect\Validation\Validator as v;
 
-// Validación de una regla única
+// Validación de una sola regla
 $number = 123;
 v::numericVal()->validate($number); // true
 
-// Validación encadenada de múltiples reglas
+// Validación en cadena de varias reglas
 $usernameValidator = v::alnum()->noWhitespace()->length(1, 15);
 $usernameValidator->validate('alganet'); // true
 
-// Obtener la primera razón de validación fallida
+// Obtener la primera razón de fallo de validación
 try {
-    $usernameValidator->setName('Nombre de usuario')->check('alg  anet');
+    $usernameValidator->setName('nombre de usuario')->check('alg  anet');
 } catch (ValidationException $exception) {
     echo $exception->getMessage(); // El nombre de usuario solo puede contener letras (a-z) y números (0-9)
 }
 
-// Obtener todas las razones de validación fallida
+// Obtener todas las razones de fallo de validación
 try {
-    $usernameValidator->setName('Nombre de usuario')->assert('alg  anet');
+    $usernameValidator->setName('nombre de usuario')->assert('alg  anet');
 } catch (ValidationException $exception) {
     echo $exception->getFullMessage();
     // Imprimirá
-    // -  Nombre de usuario debe cumplir con las siguientes reglas
-    //     - El nombre de usuario solo puede contener letras (a-z) y números (0-9)
-    //     - El nombre de usuario no puede contener espacios en blanco
+    // -  El nombre de usuario debe cumplir con las siguientes reglas
+    //    - El nombre de usuario solo puede contener letras (a-z) y números (0-9)
+    //    - El nombre de usuario no puede contener espacios
   
     var_export($exception->getMessages());
     // Imprimirá
     // array (
     //   'alnum' => 'El nombre de usuario solo puede contener letras (a-z) y números (0-9)',
-    //   'noWhitespace' => 'El nombre de usuario no puede contener espacios en blanco',
+    //   'noWhitespace' => 'El nombre de usuario no puede contener espacios',
     // )
 }
 
-// Mensajes de error personalizados
+// Mensaje de error personalizado
 try {
-    $usernameValidator->setName('Nombre de usuario')->assert('alg  anet');
+    $usernameValidator->setName('nombre de usuario')->assert('alg  anet');
 } catch (ValidationException $exception) {
     var_export($exception->getMessages([
         'alnum' => 'El nombre de usuario solo puede contener letras y números',
-        'noWhitespace' => 'El nombre de usuario no puede contener espacios en blanco',
-        'length' => 'La longitud cumple con las reglas, por lo que esta no se mostrará'
+        'noWhitespace' => 'El nombre de usuario no puede contener espacios',
+        'length' => 'length se ajusta a la regla, por lo que esta no se mostrará'
     ]);
     // Imprimirá 
     // array(
     //    'alnum' => 'El nombre de usuario solo puede contener letras y números',
-    //    'noWhitespace' => 'El nombre de usuario no puede contener espacios en blanco'
+    //    'noWhitespace' => 'El nombre de usuario no puede contener espacios'
     // )
 }
 
@@ -225,7 +224,7 @@ v::key(
         ->key('field2', v::stringType())
         ->key('field3', v::boolType())
     )
-    ->assert($data); // también se puede usar check() o validate()
+    ->assert($data); // También se puede usar check() o validate()
   
 // Validación opcional
 v::alpha()->validate(''); // false 
@@ -233,72 +232,75 @@ v::alpha()->validate(null); // false
 v::optional(v::alpha())->validate(''); // true
 v::optional(v::alpha())->validate(null); // true
 
-// Reglas negadas
+// Regla de negación
 v::not(v::intVal())->validate(10); // false
 ```
-  
-### Diferencias entre los métodos `validate()`, `check()` y `assert()` del Validador
 
-`validate()` devuelve un booleano y no lanza una excepción
 
-`check()` lanza una excepción al fallar la validación, mostrando la primera razón de validación fallida a través de `$exception->getMessage()`
+### Diferencia entre los tres métodos del Validador `validate()`, `check()`, `assert()`
 
-`assert()` lanza una excepción al fallar la validación, mostrando todas las razones de validación fallida a través de `$exception->getFullMessage()`
-  
+`validate()` devuelve un valor booleano y no genera una excepción
+
+`check()` genera una excepción en caso de error de validación y devuelve el motivo del primer error a través de `$exception->getMessage()`
+
+`assert()` genera una excepción en caso de error de validación y a través de `$exception->getFullMessage()` se pueden obtener todos los motivos de error de validación
+
+
 ### Lista de reglas de validación comunes
 
-`Alnum()` sólo contiene letras y números
+`Alnum()` contiene solo letras y números
 
-`Alpha()` sólo contiene letras
+`Alpha()` contiene solo letras
 
-`ArrayType()` tipo de array
+`ArrayType()` tipo array
 
-`Between(mixed $minimum, mixed $maximum)` valida si la entrada está entre dos valores
+`Between(mixed $minimum, mixed $maximum)` verifica si el valor está entre dos valores
 
-`BoolType()` valida si es un booleano
+`BoolType()` verifica si es de tipo booleano
 
-`Contains(mixed $expectedValue)` valida si la entrada contiene ciertos valores
+`Contains(mixed $expectedValue)` verifica si el valor contiene ciertos valores
 
-`ContainsAny(array $needles)` valida si la entrada contiene al menos uno de los valores definidos
+`ContainsAny(array $needles)` verifica si el valor contiene al menos uno de los valores definidos
 
-`Digit()` valida si la entrada sólo contiene dígitos
+`Digit()` verifica si el valor contiene solo dígitos
 
-`Domain()` valida si es un dominio válido
+`Domain()` verifica si es un dominio válido
 
-`Email()` valida si es una dirección de correo electrónico válida
+`Email()` verifica si es una dirección de correo electrónico válida
 
-`Extension(string $extension)` valida la extensión del nombre de archivo
+`Extension(string $extension)` verifica la extensión
 
-`FloatType()` valida si es un número decimal
+`FloatType()` verifica si es de tipo flotante
 
-`IntType()` valida si es un número entero
+`IntType()` verifica si es un entero
 
-`Ip()` valida si es una dirección IP
+`Ip()` verifica si es una dirección IP
 
-`Json()` valida si es un dato en formato JSON
+`Json()` verifica si es un dato JSON
 
-`Length(int $min, int $max)` valida si la longitud está en el intervalo dado
+`Length(int $min, int $max)` verifica si la longitud está en el rango dado
 
-`LessThan(mixed $compareTo)` valida si la longitud es menor que un valor dado
+`LessThan(mixed $compareTo)` verifica si la longitud es menor que el valor dado
 
-`Lowercase()` valida si son letras minúsculas
+`Lowercase()` verifica si la cadena contiene solo letras minúsculas
 
-`MacAddress()` valida si es una dirección MAC
+`MacAddress()` verifica si es una dirección MAC
 
-`NotEmpty()` valida si no está vacío
+`NotEmpty()` verifica si no está vacío
 
-`NullType()` valida si es nulo
+`NullType()` verifica si es nulo
 
-`Number()` valida si es un número
+`Number()` verifica si es un número
 
-`ObjectType()` valida si es un objeto
+`ObjectType()` verifica si es de tipo objeto
 
-`StringType()` valida si es una cadena de texto
+`StringType()` verifica si es de tipo string
 
-`Url()` valida si es una URL
-  
-Para más reglas de validación, consultar https://respect-validation.readthedocs.io/en/2.0/list-of-rules/ 
-  
+`Url()` verifica si es una URL
+
+Para más reglas de validación, consulta https://respect-validation.readthedocs.io/en/2.0/list-of-rules/
+
+
 ### Más información
 
-Visitar https://respect-validation.readthedocs.io/en/2.0/
+Visita https://respect-validation.readthedocs.io/en/2.0/

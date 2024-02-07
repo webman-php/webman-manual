@@ -1,4 +1,4 @@
-# Comunidade de Ajuda
+# Ajuda da comunidade
 
 ## Comunidade de Perguntas e Respostas
 

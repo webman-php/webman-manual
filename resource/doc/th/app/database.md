@@ -1,24 +1,24 @@
 # ฐานข้อมูล
-ปลั๊กอินสามารถกำหนดฐานข้อมูลของตนเองได้ เช่น `plugin/foo/config/database.php` โดยเนื้อหาจะมีดังนี้
+ปลั๊กอินสามารถกำหนดฐานข้อมูลของตนเองได้ เช่น `plugin/foo/config/database.php` ด้วยเนื้อหาดังนี้
 ```php
 return  [
     'default' => 'mysql',
     'connections' => [
-        'mysql' => [ // mysql เป็นชื่อการเชื่อมต่อ
+        'mysql' => [ // ชื่อการเชื่อมต่อ mysql
             'driver'      => 'mysql',
             'host'        => '127.0.0.1',
             'port'        => 3306,
-            'database'    => 'ฐานข้อมูล',
+            'database'    => 'ชื่อฐานข้อมูล',
             'username'    => 'ชื่อผู้ใช้',
             'password'    => 'รหัสผ่าน',
             'charset'     => 'utf8mb4',
             'collation'   => 'utf8mb4_general_ci',
         ],
-        'admin' => [ // admin เป็นชื่อการเชื่อมต่อ
+        'admin' => [ // ชื่อการเชื่อมต่อ admin
             'driver'      => 'mysql',
             'host'        => '127.0.0.1',
             'port'        => 3306,
-            'database'    => 'ฐานข้อมูล',
+            'database'    => 'ชื่อฐานข้อมูล',
             'username'    => 'ชื่อผู้ใช้',
             'password'    => 'รหัสผ่าน',
             'charset'     => 'utf8mb4',
@@ -27,24 +27,24 @@ return  [
     ],
 ];
 ```
-การอ้างถึงจะเป็นแบบ `Db::connection('plugin.{ชื่อปลั๊ก}.{ชื่อการเชื่อมต่อ}');` ตัวอย่างเช่น
+การอ้างถึงโดยใช้ `Db::connection('plugin.{ชื่อปลั๊ก}.{ชื่อการเชื่อมต่อ}');` เช่น
 ```php
 use support\Db;
 Db::connection('plugin.foo.mysql')->table('user')->first();
 Db::connection('plugin.foo.admin')->table('admin')->first();
 ```
 
-หากต้องการใช้งานฐานข้อมูลของโปรเจคหลัก สามารถใช้งานได้โดยตรงเช่น
+หากต้องการใช้ฐานข้อมูลของโปรเจคหลัก สามารถใช้ได้โดยตรง เช่น
 ```php
 use support\Db;
 Db::table('user')->first();
-// สมมติว่าโปรเจคหลักมีการกำหนดการเชื่อมต่อ admin
+// สมมติว่าโปรเจคหลักกำหนดการเชื่อมต่อ admin 
 Db::connection('admin')->table('admin')->first();
 ```
 
 ## กำหนดฐานข้อมูลสำหรับ Model
-เราสามารถสร้างคลาส Base สำหรับ Model โดยใช้ `$connection` เพื่อระบุการเชื่อมต่อฐานข้อมูลของปลั๊กอินเอง เช่น
 
+เราสามารถสร้างคลาส Base สำหรับ Model โดยใช้ `$connection` ระบุการเชื่อมต่อฐานข้อมูลของปลั๊กเอง เช่น
 ```php
 <?php
 
@@ -62,11 +62,10 @@ class Base extends Model
 
 }
 ```
+ด้วยวิธีนี้ Model ทั้งหมดในปลั๊กจะสืบทอดจาก Base และจะใช้ฐานข้อมูลของปลั๊กเองโดยอัตโนมัติ
 
-ด้วยการนี้ Model ทั้งหมดในปลั๊กอินจะสืบทอดจาก Base และจะใช้งานฐานข้อมูลของปลั๊กอินเองโดยอัตโนมัติ
-
-## การใช้งานการกำหนดฐานข้อมูลใหม่
-แน่นอนเราสามารถใช้กำหนดฐานข้อมูลจากโปรเจคหลัก หรือถ้ามีการทำการเชื่อมต่อ [webman-admin](https://www.workerman.net/plugin/82) ก็สามารถใช้กำหนดฐานข้อมูลจาก [webman-admin](https://www.workerman.net/plugin/82) ได้ เช่น
+## การใช้งานกำหนดค่าฐานข้อมูลอย่างมีประสิทธิภาพ
+แน่นอนเราสามารถนำค่ากำหนดของฐานข้อมูลของโปรเจคหลักมาใช้ซ้ำได้ หรือหากใช้ [webman-admin](https://www.workerman.net/plugin/82) ยังสามารถนำค่ากำหนดของ [webman-admin](https://www.workerman.net/plugin/82) มาใช้ซ้ำได้ด้วย เช่น
 ```php
 <?php
 

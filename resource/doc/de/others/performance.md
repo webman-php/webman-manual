@@ -1,29 +1,28 @@
-# Leistung von webman
+# webman Leistung
 
-### Verarbeitungsprozess bei herkömmlichen Frameworks
+### Traditioneller Framework-Anfrageverarbeitungsprozess
 
-1. Nginx / Apache empfängt die Anfrage.
-2. Nginx / Apache leitet die Anfrage an php-fpm weiter.
-3. Php-fpm initialisiert die Umgebung, z. B. durch das Erstellen einer Variablenliste.
-4. Php-fpm ruft das RINIT jedes Erweiterungsmoduls auf.
-5. Php-fpm liest die PHP-Datei von der Festplatte (kann durch Verwendung von Opcache vermieden werden).
-6. Php-fpm führt die lexikalische, syntaktische und Opcode-Kompilierung durch (kann durch Verwendung von Opcache vermieden werden).
-7. Php-fpm führt den Opcode aus, einschließlich 8., 9., 10. und 11.
-8. Das Framework initialisiert, wie zum Beispiel die Instanziierung verschiedener Klassen, einschließlich Container, Controller, Routen, Middleware usw.
-9. Das Framework stellt eine Verbindung zur Datenbank her und überprüft Berechtigungen, verbindet sich mit Redis.
-10. Das Framework führt die Geschäftslogik aus.
-11. Das Framework beendet die Verbindung zur Datenbank und Redis.
-12. Php-fpm gibt Ressourcen frei, zerstört alle Klassendefinitionen und Instanzen, zerstört den Symboltisch usw.
-13. Php-fpm ruft die RSHUTDOWN-Methode jedes Erweiterungsmoduls in der Reihenfolge auf.
-14. Php-fpm leitet das Ergebnis an Nginx / Apache weiter.
-15. Nginx / Apache gibt das Ergebnis an den Client zurück.
+1. Nginx/Apache empfängt die Anfrage
+2. Nginx/Apache leitet die Anfrage an php-fpm weiter
+3. PHP-FPM initialisiert die Umgebung, wie das Erstellen einer Variablenliste
+4. PHP-FPM ruft RINIT von verschiedenen Erweiterungen/Modulen auf
+5. PHP-FPM liest PHP-Dateien von der Festplatte (durch Verwendung von OpCache vermeidbar)
+6. PHP-FPM führt lexikale und syntaktische Analyse durch und kompiliert sie in Opcode (durch Verwendung von OpCache vermeidbar)
+7. PHP-FPM führt Opcode aus, einschließlich 8, 9, 10, 11
+8. Framework-Initialisierung, wie die Instanziierung verschiedener Klassen wie Container, Controller, Routing, Middleware usw.
+9. Framework stellt eine Verbindung zur Datenbank her und führt Berechtigungsprüfungen durch, stellt Verbindung zu Redis her
+10. Framework führt Geschäftslogik aus
+11. Framework schließt die Datenbank- und Redis-Verbindung
+12. PHP-FPM gibt Ressourcen frei, zerstört alle Klassendefinitionen, Instanzen, löst den Symboltabelle auf usw.
+13. PHP-FPM ruft die RSHUTDOWN-Methoden der verschiedenen Erweiterungen/Module in Reihenfolge auf
+14. PHP-FPM leitet das Ergebnis an Nginx/Apache weiter
+15. Nginx/Apache gibt das Ergebnis an den Client zurück
 
-### Verarbeitungsprozess bei webman
+### Webmans Anfrageverarbeitungsprozess
+1. Das Framework empfängt die Anfrage
+2. Das Framework führt die Geschäftslogik aus
+3. Das Framework gibt das Ergebnis an den Client zurück
 
-1. Das Framework empfängt die Anfrage.
-2. Das Framework führt die Geschäftslogik aus.
-3. Das Framework gibt das Ergebnis an den Client zurück.
+Richtig, in Abwesenheit einer nginx-Front-End-Proxylösung hat das Framework nur diese 3 Schritte. Man kann sagen, dass dies bereits das Maximum an Leistung für ein PHP-Framework ist, was die Leistung von webman um das Mehrfache oder sogar Zehnfache im Vergleich zu traditionellen Frameworks steigert.
 
-Ja, ohne Nginx-Reverse-Proxys gibt es in diesem Fall tatsächlich nur diese 3 Schritte. Man kann sagen, dass dies bereits das ultimative Ziel für ein PHP-Framework ist, was die Leistung von webman um ein Vielfaches oder sogar um das Zehnfache gegenüber herkömmlichen Frameworks verbessert.
-
-Weitere Informationen finden Sie unter [Leistungsprüfungen](benchmarks.md)
+Weitere Informationen siehe [Leistungstests](benchmarks.md)

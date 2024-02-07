@@ -1,7 +1,7 @@
 # Пагинация
 
-# 1. Способ пагинации с использованием Laravel ORM
-`illuminate/database` в Laravel предоставляет удобную функцию пагинации.
+# 1. Основанный на Laravel ORM способ пагинации
+`illuminate/database` в Laravel предоставляет удобную функцию для создания пагинации.
 
 ## Установка
 `composer require illuminate/pagination`
@@ -17,38 +17,37 @@ public function index(Request $request)
 ```
 
 ## Методы экземпляра пагинатора
-| Метод   | Описание  |
+|  Метод   | Описание  |
 |  ----  |-----|
 |$paginator->count()|Получить общее количество данных на текущей странице|
 |$paginator->currentPage()|Получить номер текущей страницы|
-|$paginator->firstItem()|Получить номер первого элемента в наборе результатов|
+|$paginator->firstItem()|Получить номер первого элемента в наборе данных|
 |$paginator->getOptions()|Получить опции пагинатора|
-|$paginator->getUrlRange($start, $end)|Создать диапазон URL для указанных страниц|
-|$paginator->hasPages()|Есть ли достаточное количество данных для создания нескольких страниц|
-|$paginator->hasMorePages()|Есть ли еще страницы для отображения|
+|$paginator->getUrlRange($start, $end)|Создать URL для указанного диапазона страниц|
+|$paginator->hasPages()|Проверить, достаточно ли данных для создания нескольких страниц|
+|$paginator->hasMorePages()|Проверить, есть ли ещё страницы для отображения|
 |$paginator->items()|Получить элементы текущей страницы|
-|$paginator->lastItem()|Получить номер последнего элемента в наборе результатов|
-|$paginator->lastPage()|Получить номер последней страницы (недоступно в simplePaginate)|
+|$paginator->lastItem()|Получить номер последнего элемента в наборе данных|
+|$paginator->lastPage()|Получить номер последней страницы (недоступно при использовании simplePaginate)|
 |$paginator->nextPageUrl()|Получить URL следующей страницы|
-|$paginator->onFirstPage()|Является ли текущая страница первой|
+|$paginator->onFirstPage()|Проверить, является ли текущая страница первой|
 |$paginator->perPage()|Получить общее количество элементов на странице|
 |$paginator->previousPageUrl()|Получить URL предыдущей страницы|
-|$paginator->total()|Получить общее количество данных в наборе результатов (недоступно в simplePaginate)|
+|$paginator->total()|Получить общее количество данных в наборе (недоступно при использовании simplePaginate)|
 |$paginator->url($page)|Получить URL для указанной страницы|
-|$paginator->getPageName()|Получить имя запроса для хранения номера страницы|
-|$paginator->setPageName($name)|Установить имя запроса для хранения номера страницы|
+|$paginator->getPageName()|Получить имя параметра запроса для хранения номера страницы|
+|$paginator->setPageName($name)|Установить имя параметра запроса для хранения номера страницы|
 
 > **Примечание**
 > Метод `$paginator->links()` не поддерживается.
 
 ## Компонент пагинации
-В webman нельзя использовать метод `$paginator->links()` для отображения кнопок пагинации, однако мы можем использовать другие компоненты для отображения, такие как `jasongrimes/php-paginator`.
+В webman нельзя использовать метод `$paginator->links()` для отображения кнопок пагинации, однако можно использовать другие компоненты для отображения, например `jasongrimes/php-paginator`.
 
 **Установка**
 `composer require "jasongrimes/paginator:~1.0"`
 
-
-**На сервере**
+**На серверной стороне**
 ```php
 <?php
 namespace app\controller;
@@ -70,12 +69,12 @@ class UserController
 }
 ```
 
-**Шаблон (чистый php)**
+**Шаблон (чистый PHP)**
 Создайте шаблон app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- Встроенная поддержка стилей пагинации Bootstrap -->
+  <!-- Поддержка стилей пагинации Bootstrap по умолчанию -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -86,12 +85,12 @@ class UserController
 </html>
 ```
 
-**Шаблон (twig)** 
+**Шаблон (twig)**
 Создайте шаблон app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- Встроенная поддержка стилей пагинации Bootstrap -->
+  <!-- Поддержка стилей пагинации Bootstrap по умолчанию -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -104,12 +103,12 @@ class UserController
 </html>
 ```
 
-**Шаблон (blade)** 
+**Шаблон (blade)**
 Создайте шаблон app/view/user/get.blade.php
 ```html
 <html>
 <head>
-  <!-- Встроенная поддержка стилей пагинации Bootstrap -->
+  <!-- Поддержка стилей пагинации Bootstrap по умолчанию -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -125,7 +124,7 @@ class UserController
 ```html
 <html>
 <head>
-    <!-- Встроенная поддержка стилей пагинации Bootstrap -->
+    <!-- Поддержка стилей пагинации Bootstrap по умолчанию -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -136,11 +135,12 @@ class UserController
 </html>
 ```
 
-Результат:
+Результат будет следующим:
 ![](../../assets/img/paginator.png)
 
-# 2. Способ пагинации с использованием ORM в Thinkphp
-Нет необходимости устанавливать дополнительные библиотеки, просто установите think-orm.
+# 2. Основанный на ORM в Thinkphp способ пагинации
+Не требуется устанавливать дополнительные библиотеки, достаточно установить think-orm.
+
 ## Использование
 ```php
 public function index(Request $request)
@@ -155,7 +155,7 @@ public function index(Request $request)
 ```html
 <html>
 <head>
-    <!-- Встроенная поддержка стилей пагинации Bootstrap -->
+    <!-- Поддержка стилей пагинации Bootstrap по умолчанию -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>

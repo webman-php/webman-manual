@@ -35,6 +35,8 @@ $worker->onWorkerStart = function () {
         $contents = splitMarkdownByHeadings($fileContent);
         $count = count($contents);
         foreach ($contents as $index => $content) {
+            $len = strlen($content);
+            //echo $file, " $index $len\n";
             Timer::add($time, function () use ($content, $file, $index, $count, $file_index, $file_count) {
                 echo "$file $index $count start\n";
                 translateTraditionalChinese($content, $file, $index, $count);
@@ -92,15 +94,24 @@ function translateTraditionalChinese($content, $file, $index, $count)
                 ['role' => 'user', 'content' => $content]
             ],
         ], [
-        'complete' => function($result, $response) use ($file, $index, $count) {
+        'complete' => function($result, $response) use ($file, $index, $count, $content, $apikey) {
             global $cache;
             if (isset($result['error'])) {
                 var_export($result);
+                echo "\napiley: $apikey\n";
                 return;
             }
-            $content = $result['choices'][0]['message']['content'] . "\n";
-            echo $file," $index ",$result['choices'][0]['finish_reason'],"\n\n";
-            $cache[$file][$index] = $content;
+            $translate_content = $result['choices'][0]['message']['content'] . "\n";
+            $cache[$file][$index] = $translate_content;
+            $stop_reason = $result['choices'][0]['finish_reason'];
+            // 内容超长，手动处理
+            if ($stop_reason === 'length') {
+                $cache[$file][$index] = $content;
+                //$cache[$file] = [];
+            }
+            $content_length = strlen($content);
+            $stop_reason = $stop_reason === 'length' ? "[[[length $content_length]]]]" : 'stop';
+            echo $file," $index ", $stop_reason,"\n\n";
             ksort($cache[$file]);
             // 所有文档片段收集完毕
             if ($count === count($cache[$file])) {
@@ -113,7 +124,7 @@ function translateTraditionalChinese($content, $file, $index, $count)
 
 function splitMarkdownByHeadings($markdown) {
     // 使用正则表达式匹配一级级标题
-    $pattern = '/^##\s+(.*)$/m';
+    $pattern = '/^##\s+(.*?)$/m';
     preg_match_all($pattern, $markdown, $matches);
     // 将匹配到的标题作为分割点，将文档分割成多个段落
     $sections = [];
@@ -130,7 +141,7 @@ function splitMarkdownByHeadings($markdown) {
     foreach ($sections as $section) {
         $index = count($data) - 1;
         $tmp = $data[$index] . $section;
-        if (strlen($tmp) < 9000) {
+        if (strlen($tmp) < 500 || $data[$index] === '') {
             $data[$index] = $tmp;
         } else {
             $data[] = $section;

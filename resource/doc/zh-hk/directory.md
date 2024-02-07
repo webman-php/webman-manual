@@ -1,41 +1,41 @@
-# 目錄結構
+# 目录结构
 ```
 .
-├── app                           應用目錄
-│   ├── controller                控制器目錄
-│   ├── model                     模型目錄
-│   ├── view                      視圖目錄
-│   ├── middleware                中間件目錄
-│   │   └── StaticFile.php        自帶靜態文件中間件
-|   └── functions.php             業務自定義函數寫到這個文件裡
+├── app                           应用目录
+│   ├── controller                控制器目录
+│   ├── model                     模型目录
+│   ├── view                      视图目录
+│   ├── middleware                中间件目录
+│   │   └── StaticFile.php        自带静态文件中间件
+|   └── functions.php             业务自定义函数写到这个文件里
 |
-├── config                        配置目錄
-│   ├── app.php                   應用配置
-│   ├── autoload.php              這裡配置的文件會被自動加載
-│   ├── bootstrap.php             進程啟動時onWorkerStart時運行的回調配置
+├── config                        配置目录
+│   ├── app.php                   应用配置
+│   ├── autoload.php              这里配置的文件会被自动加载
+│   ├── bootstrap.php             进程启动时onWorkerStart时运行的回调配置
 │   ├── container.php             容器配置
-│   ├── dependence.php            容器依賴配置
-│   ├── database.php              數據庫配置
-│   ├── exception.php             異常配置
-│   ├── log.php                   日誌配置
-│   ├── middleware.php            中間件配置
-│   ├── process.php               自定義進程配置
+│   ├── dependence.php            容器依赖配置
+│   ├── database.php              数据库配置
+│   ├── exception.php             异常配置
+│   ├── log.php                   日志配置
+│   ├── middleware.php            中间件配置
+│   ├── process.php               自定义进程配置
 │   ├── redis.php                 redis配置
 │   ├── route.php                 路由配置
-│   ├── server.php                端口、進程數等伺服器配置
-│   ├── view.php                  視圖配置
-│   ├── static.php                靜態文件開關及靜態文件中間件配置
-│   ├── translation.php           多語言配置
+│   ├── server.php                端口、进程数等服务器配置
+│   ├── view.php                  视图配置
+│   ├── static.php                静态文件开关及静态文件中间件配置
+│   ├── translation.php           多语言配置
 │   └── session.php               session配置
-├── public                        靜態資源目錄
-├── process                       自定義進程目錄
-├── runtime                       應用的運行時目錄，需要可寫權限
-├── start.php                     服務啟動文件
-├── vendor                        composer安裝的第三方類庫目錄
-└── support                       類庫適配(包括第三方類庫)
-    ├── Request.php               請求類
-    ├── Response.php              響應類
-    ├── Plugin.php                插件安裝卸載腳本
-    ├── helpers.php               助手函數(業務自定義函數請寫到app/functions.php)
-    └── bootstrap.php             進程啟動後初始化腳本
+├── public                        静态资源目录
+├── process                       自定义进程目录
+├── runtime                       应用的运行时目录，需要可写权限
+├── start.php                     服务启动文件
+├── vendor                        composer安装的第三方类库目录
+└── support                       类库适配(包括第三方类库)
+    ├── Request.php               请求类
+    ├── Response.php              响应类
+    ├── Plugin.php                插件安装卸载脚本
+    ├── helpers.php               助手函数(业务自定义函数请写到app/functions.php)
+    └── bootstrap.php             进程启动后初始化脚本
 ```

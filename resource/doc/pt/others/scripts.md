@@ -1,9 +1,8 @@
 # Script personalizado
 
-Às vezes precisamos escrever alguns scripts temporários nos quais podemos chamar qualquer classe ou interface, assim como fazemos com o webman, para concluir operações como importação de dados, atualização de dados e estatísticas. Isso é muito fácil de fazer no webman, por exemplo:
+Às vezes, precisamos escrever alguns scripts temporários, nos quais podemos chamar classes ou interfaces arbitrariamente, semelhante ao que é feito no webman, para realizar operações como importação de dados, atualizações e estatísticas. Isso é extremamente fácil de fazer no webman, como por exemplo:
 
-**Crie um novo `scripts/update.php`** (se o diretório não existir, crie-o)
-
+**Criar `scripts/update.php`** (crie o diretório se ele não existir)
 ```php
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -16,4 +15,4 @@ $user = Db::table('user')->find(1);
 var_dump($user);
 ```
 
-Claro que também podemos usar o `webman/console` para criar comandos personalizados e realizar operações semelhantes, consulte [Linha de Comando](../plugin/console.md).
+Claro, também podemos usar o comando personalizado `webman/console` para realizar esse tipo de operação, consulte [Linha de Comando](../plugin/console.md)

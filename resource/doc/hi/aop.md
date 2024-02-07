@@ -1,10 +1,10 @@
 # AOP
 
-> धन्यवाद Hyperf लेखक की सबमिट करने के लिए
+> धन्यवाद Hyperf लेखक की सबमिट्टिंग के लिए
 
 ### स्थापना
 
-- aop-इंटीग्रेशन स्थापित करें
+- aop-integration इंस्टॉल करें
 
 ```shell
 composer require "hyperf/aop-integration: ^1.1"
@@ -12,7 +12,7 @@ composer require "hyperf/aop-integration: ^1.1"
 
 ### AOP संबंधित कॉन्फ़िगरेशन जोड़ें
 
-हमें `config` निर्देशिका के अंदर, `config.php` कॉन्फ़िगरेशन जोड़ने की जरूरत है
+हमें `config` फ़ोल्डर के अंदर, `config.php` कॉन्फ़िगरेशन जोड़ने की आवश्यकता है
 
 ```php
 <?php
@@ -36,31 +36,31 @@ return [
         ],
     ],
     'aspects' => [
-        // यहां अनुरुप Aspect लिखें
+        // यहां सम्बंधित Aspect लिखें
         app\aspect\DebugAspect::class,
     ]
 ];
 
 ```
 
-### कॉन्फ़िग प्रवेश फ़ाइल start.php
+### कॉन्फ़िगरेशन एंट्री फ़ाइल start.php
 
-> हम वक्तक्षेत्र के नीचे आप्रकार की शुरुआती विधि डालेंगे, नीचे बाकी कोड नहीं दिखाया गया है
+> हम इनिशियलाइज़ेशन मेथड को टाइमज़ोन के नीचे रखेंगे, निम्नलिखित कोड को छोड़ते हैं।
 
-```
+```php
 use Hyperf\AopIntegration\ClassLoader;
 
 if ($timezone = config('app.default_timezone')) {
     date_default_timezone_set($timezone);
 }
 
-// प्रारंभ करें
+// इनिशियलाइज़ेशन
 ClassLoader::init();
 ```
 
-### परीक्षण
+### टेस्ट
 
-सबसे पहले हमें काटने योग्य वर्ग लिखने के लिए प्रोत्साहित करें
+सबसे पहले हमें इंजेक्शन क्लास लिखने के लिए लिखना होगा
 
 ```php
 <?php
@@ -75,7 +75,7 @@ class UserService
 }
 ```
 
-उसके बाद संबंधित `DebugAspect` जोड़ें
+उसके बाद विशेष DebugAspect जोड़ें
 
 ```php
 <?php
@@ -117,7 +117,7 @@ class IndexController
 }
 ```
 
-फिर मार्ग समर्थन को कॉन्फ़िगर करें
+और फिर रूटर कॉन्फ़िगरेशन करें
 
 ```php
 <?php
@@ -126,7 +126,7 @@ use Webman\Route;
 Route::any('/json', [app\controller\IndexController::class, 'json']);
 ```
 
-अंत में सेवा शुरू करें और परीक्षण करें।
+अंत में सेवा शुरू करें और टेस्ट करें।
 
 ```shell
 php start.php start

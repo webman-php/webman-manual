@@ -1,21 +1,21 @@
 ## Gestione dei file statici
-webman supporta l'accesso ai file statici, i quali sono tutti posizionati nella directory `public`. Ad esempio, accedere a `http://127.0.0.1:8787/upload/avatar.png` in realtà equivale ad accedere a `{directory principale del progetto}/public/upload/avatar.png`.
+webman supporta l'accesso ai file statici, che sono tutti posizionati nella directory `public`. Ad esempio, accedere a `http://127.0.0.8787/upload/avatar.png` corrisponde effettivamente ad accedere a `{main project directory}/public/upload/avatar.png`.
 
 > **Nota**
-> A partire dalla versione 1.4, webman supporta i plugin dell'applicazione. L'accesso ai file statici che inizia con `/app/xx/nomefile` in realtà punta alla directory `public` del plugin dell'applicazione, quindi a partire da webman >=1.4.0 non è supportato l'accesso alla directory `{directory principale del progetto}/public/app/`.
-> Per ulteriori informazioni, consulta il [plugin dell'applicazione](./plugin/app.md).
+> A partire dalla versione 1.4, webman supporta i plugin dell'applicazione. L'accesso ai file statici che inizia con `/app/xx/nomefile` in realtà corrisponde all'accesso alla directory `public` del plugin dell'applicazione, il che significa che in webman >=1.4.0 non è supportato l'accesso alle directory sotto `{main project directory}/public/app/`.
+> Per ulteriori informazioni, consultare il [plugin dell'applicazione](./plugin/app.md).
 
-### Disattivare il supporto dei file statici
-Se non è necessario il supporto dei file statici, modifica il valore dell'opzione `enable` in `config/static.php` in false. Dopo la disattivazione, l'accesso a tutti i file statici restituirà un errore 404.
+### Disabilita il supporto dei file statici
+Se non è necessario il supporto dei file statici, modificare il file `config/static.php` impostando l'opzione `enable` su false. Dopo la disabilitazione, l'accesso a tutti i file statici restituirà un errore 404.
 
-### Modificare la directory dei file statici
-webman utilizza di default la directory public come directory dei file statici. Se si desidera modificarla, è possibile farlo modificando la funzione di supporto `public_path()` in `support/helpers.php`.
+### Modifica della directory dei file statici
+webman utilizza per impostazione predefinita la directory public come directory dei file statici. Se è necessario modificarla, modificare la funzione di supporto `public_path()` del file `support/helpers.php`.
 
 ### Middleware per i file statici
-webman include un middleware per i file statici, che si trova in `app/middleware/StaticFile.php`.
-A volte è necessario effettuare delle operazioni sui file statici, ad esempio aggiungere intestazioni HTTP cross-origin o impedire l'accesso ai file con un punto (`.`) iniziale, e per fare ciò è possibile utilizzare questo middleware.
+webman include un middleware per i file statici, posizionato in `app/middleware/StaticFile.php`.
+A volte è necessario eseguire alcune operazioni sui file statici, ad esempio aggiungere intestazioni http per il controllo degli accessi da server diversi o impedire l'accesso ai file che iniziano con un punto (`.`). È possibile utilizzare questo middleware per farlo.
 
-Il file `app/middleware/StaticFile.php` ha un contenuto simile al seguente:
+Il contenuto di `app/middleware/StaticFile.php` è simile al seguente:
 ```php
 <?php
 namespace support\middleware;
@@ -26,15 +26,15 @@ use Webman\Http\Request;
 
 class StaticFile implements MiddlewareInterface
 {
-    public function process(Request $request, callable $next) : Response
+    public function process(Request $request, callable $next): Response
     {
-        // Vietare l'accesso ai file nascosti che iniziano con .
+        // Impedisce l'accesso ai file nascosti che iniziano con .
         if (strpos($request->path(), '/.') !== false) {
             return response('<h1>403 forbidden</h1>', 403);
         }
         /** @var Response $response */
         $response = $next($request);
-        // Aggiungere intestazioni HTTP cross-origin
+        // Aggiunge intestazioni http per il controllo degli accessi da server diversi
         /*$response->withHeaders([
             'Access-Control-Allow-Origin'      => '*',
             'Access-Control-Allow-Credentials' => 'true',
@@ -43,4 +43,4 @@ class StaticFile implements MiddlewareInterface
     }
 }
 ```
-Se è necessario utilizzare questo middleware, è necessario attivarlo nell'opzione `middleware` in `config/static.php`.
+Se è necessario utilizzare questo middleware, è necessario abilitarlo nell'opzione `middleware` del file `config/static.php`.

@@ -2,19 +2,19 @@
 
 ## intervention/image
 
-### プロジェクトのURL
+### プロジェクトのリンク
 
 https://github.com/Intervention/image
-
+  
 ### インストール
-
+ 
 ```php
 composer require intervention/image
 ```
-
+  
 ### 使用方法
 
-**アップロードページのスニペット**
+**アップロードページの断片**
 
 ```html
   <form method="post" action="/user/img" enctype="multipart/form-data">
@@ -45,7 +45,7 @@ class UserController
     
 }
 ```
+  
+### 追加情報
 
-### その他の内容
-
-http://image.intervention.io/getting_started/introduction をご確認ください。
+http://image.intervention.io/getting_started/introduction をご覧ください

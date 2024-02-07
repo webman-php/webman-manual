@@ -1,4 +1,4 @@
-# 圖像處理元件
+# 圖像處理組件
 
 ## intervention/image
 
@@ -23,7 +23,7 @@ composer require intervention/image
   </form>
 ```
 
-**新增 `app/controller/UserController.php`**
+**新建 `app/controller/UserController.php`**
 
 ```php
 <?php
@@ -48,4 +48,4 @@ class UserController
 
 ### 更多內容
 
-請訪問 http://image.intervention.io/getting_started/introduction
+訪問 http://image.intervention.io/getting_started/introduction

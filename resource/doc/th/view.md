@@ -1,84 +1,80 @@
 ## มุมมอง
-webman มีการใช้ภาษา PHP ธรรมดาเป็นต้นฉบับเป็นรูปแบบของเทมเพลต ในสภาวะที่ opcache เปิดเมื่อทำการเปิดใช้งานจะมีประสิทธิภาพที่ดีที่สุด นอกจากนี้ยังมีเทมเพลตเอนจินอื่นๆ เช่น [Twig](https://twig.symfony.com/doc/3.x/)  [Blade](https://learnku.com/docs/laravel/8.x/blade/9377)  [think-template](https://www.kancloud.cn/manual/think-template/content) ให้ใช้งาน
+webman ใช้ไวยากรณ์เดิมของ PHP เป็นมุมมองเริ่มต้น และมีประสิทธิภาพที่ดีที่สุดเมื่อเปิด `opcache` นอกจากมุมมองเริ่มต้นของ PHP webman ยังมีเครื่องมือบังคับอื่น ๆ เช่น [Twig](https://twig.symfony.com/doc/3.x/) 、 [Blade](https://learnku.com/docs/laravel/8.x/blade/9377) และ [think-template](https://www.kancloud.cn/manual/think-template/content) 
 
 ## เปิดใช้งาน opcache
-อย่างมากแนะนำให้เปิดค่า `opcache.enable` และ `opcache.enable_cli` ใน php.ini เมื่อใช้งานเทมเพลตเพื่อให้เทมเพลตเอนจินทำงานได้ดีที่สุด
+เมื่อใช้มุมมอง แนะนำให้เปิดตัวเลือก `opcache.enable` และ `opcache.enable_cli` ใน php.ini เพื่อให้เครื่องมงนมุมมองทำงานด้วยประสิทธิภาพที่ดีที่สุด
 
-## การติดตั้ง Twig
+## ติดตั้ง Twig
 1. ติดตั้งผ่านคำสั่ง composer
 
-```composer require twig/twig```
+   `composer require twig/twig`
 
-2. แก้ไขการตั้งค่าใน `config/view.php` เป็น
+2. แก้ไขการตั้งค่า `config/view.php` เป็น
+    ```php
+    <?php
+    use support\view\Twig;
 
-```php
-<?php
-use support\view\Twig;
+    return [
+        'handler' => Twig::class
+    ];
+    ```
+    > **เทรียบกันด้วยการตั้งค่า**
+    > ตัวเลือกการตั้งค่าอื่น ๆ สามารถส่งผ่าน options เช่น  
 
-return [
-    'handler' => Twig::class
-];
-```
-> **คำแนะนำ**
-> การตั้งค่าอื่นๆ สามารถส่งผ่าน options เช่น
+    ```php
+    return [
+        'handler' => Twig::class,
+        'options' => [
+            'debug' => false,
+            'charset' => 'utf-8'
+        ]
+    ];
+    ```
+    
+## ติดตั้ง Blade
+1. ติดตั้งผ่าน composer 
 
-```php
-return [
-    'handler' => Twig::class,
-    'options' => [
-        'debug' => false,
-        'charset' => 'utf-8'
-    ]
-];
-```
+   `composer require psr/container ^1.1.1 webman/blade`
 
+2. แก้ไขการตั้งค่า `config/view.php` เป็น
+    ```php
+    <?php
+    use support\view\Blade;
 
-## การติดตั้ง Blade
-1. ติดตั้งผ่านคำสั่ง composer
+    return [
+        'handler' => Blade::class
+    ];
+    ```
 
-```composer require psr/container ^1.1.1 webman/blade```
+## ติดตั้ง think-template
+1. ติดตั้งผ่าน composer
 
-2. แก้ไขการตั้งค่าใน `config/view.php` เป็น
+  `composer require topthink/think-template`
 
-```php
-<?php
-use support\view\Blade;
+2. แก้ไขการตั้งค่า `config/view.php` เป็น
+    ```php
+    <?php
+    use support\view\ThinkPHP;
 
-return [
-    'handler' => Blade::class
-];
-```
+    return [
+        'handler' => ThinkPHP::class,
+    ];
+    ```
+    > **เทรียบกันด้วยการตั้งค่า**
+    > ตัวเลือกการตั้งค่าอื่น ๆ สามารถส่งผ่าน options เช่น
 
-## การติดตั้ง think-template
-1. ติดตั้งผ่านคำสั่ง composer
+    ```php
+    return [
+        'handler' => ThinkPHP::class,
+        'options' => [
+            'view_suffix' => 'html',
+            'tpl_begin' => '{',
+            'tpl_end' => '}'
+        ]
+    ];
+    ```
 
-```composer require topthink/think-template```
-
-2. แก้ไขการตั้งค่าใน `config/view.php` เป็น
-
-```php
-<?php
-use support\view\ThinkPHP;
-
-return [
-    'handler' => ThinkPHP::class,
-];
-```
-> **คำแนะนำ**
-> การตั้งค่าอื่นๆ สามารถส่งผ่าน options เช่น
-
-```php
-return [
-    'handler' => ThinkPHP::class,
-    'options' => [
-        'view_suffix' => 'html',
-        'tpl_begin' => '{',
-        'tpl_end' => '}'
-    ]
-];
-```
-
-## ตัวอย่างการใช้งานเทมเพลตภาษา PHP ธรรมดา
+## ตัวอย่างของเครื่องมือมุมมอง PHP ธรรมดาร
 สร้างไฟล์ `app/controller/UserController.php` ดังนี้
 
 ```php
@@ -111,9 +107,8 @@ hello <?=htmlspecialchars($name)?>
 </html>
 ```
 
-## ตัวอย่างการใช้งานเทมเพลตภาษา Twig
-แก้ไขการตั้งค่าใน `config/view.php` เป็น
-
+## ตัวอย่างของเครื่องมือมุมมอง Twig
+แก้ไขการตั้งค่า `config/view.php` เป็น
 ```php
 <?php
 use support\view\Twig;
@@ -155,11 +150,10 @@ hello {{name}}
 </html>
 ```
 
-สำหรับข้อมูลเพิ่มเติม ดูได้ใน [Twig](https://twig.symfony.com/doc/3.x/) 
+สามารถดูข้อมูลเพิ่มเติมได้ที่ [Twig](https://twig.symfony.com/doc/3.x/)
 
-## ตัวอย่างการใช้งานเทมเพลตภาษา Blade
-แก้ไขการตั้งค่าใน `config/view.php` เป็น
-
+## ตัวอย่างของเครื่องมือมุมมอง Blade
+แก้ไขการตั้งค่า `config/view.php` เป็น
 ```php
 <?php
 use support\view\Blade;
@@ -188,7 +182,7 @@ class UserController
 
 ไฟล์ `app/view/user/hello.blade.php` ดังนี้
 
-> ข้อควรระวัง: ชื่อของไฟล์เทมเพลต blade ต้องเป็น `.blade.php`
+> โปรดทราบว่า หลังส่วนต่อท้ายของไฟล์ blade เป็น `.blade.php`
 
 ```html
 <!doctype html>
@@ -203,11 +197,10 @@ hello {{$name}}
 </html>
 ```
 
-สำหรับข้อมูลเพิ่มเติม ดูได้ใน [Blade](https://learnku.com/docs/laravel/8.x/blade/9377)
+สามารถดูข้อมูลเพิ่มเติมได้ที่ [Blade](https://learnku.com/docs/laravel/8.x/blade/9377)
 
-## ตัวอย่างการใช้งานเทมเพลตภาษา think-template
-แก้ไขการตั้งค่าใน `config/view.php` เป็น
-
+## ตัวอย่างของเครื่องมือมุมมองของ ThinkPHP
+แก้ไขการตั้งค่า `config/view.php` เป็น
 ```php
 <?php
 use support\view\ThinkPHP;
@@ -236,7 +229,6 @@ class UserController
 
 ไฟล์ `app/view/user/hello.html` ดังนี้
 
-
 ```html
 <!doctype html>
 <html>
@@ -250,11 +242,10 @@ hello {$name}
 </html>
 ```
 
-สำหรับข้อมูลเพิ่มเติม ดูได้ใน [think-template](https://www.kancloud.cn/manual/think-template/content)
+สามารถดูข้อมูลเพิ่มเติมได้ที่ [think-template](https://www.kancloud.cn/manual/think-template/content)
 
-## การ set ค่าให้เทมเพลต
-นอกจากการใช้ `view(เทมเพลต, อาร์เรย์ของตัวแปร)` เพื่อ set ค่าให้เทมเพลต ยังสามารถทำได้จากตัวแปร ซึ่งจะ set ค่าให้เทมเพลตได้ในทุกๆที่ เช่น:
-
+## การกำหนดค่าให้กับมุมมอง
+นอกจากการกำหนดค่าด้วย `view(มุมมอง, อาร์เรย์ตัวแปร)` เรายังสามารถกำหนดค่าให้กับมุมมองที่ตำแหน่งใด ๆ โดยการเรียกใช้ `View::assign()` ตัวอย่างเช่น:
 ```php
 <?php
 namespace app\controller;
@@ -275,48 +266,51 @@ class UserController
     }
 }
 ```
+`View::assign()` มีประโยชน์มากในบางสถานการณ์ เช่น ในระบบบางระบบทุกหน้าต้องแสดงข้อมูลของผู้ใช้ที่ล็อกอิน หากต้องการกำหนดค่าข้อมูลผู้ใช้ทั้งหมดผ่าน `View::assign()` จะลดความยุ่งยากในการกำหนดค่าทุกหน้าเพจ. 
 
-`View::assign()` มีประโยชน์มากในบางโอกาส เช่น ระบบใดๆ เมื่อทุกหน้าเพจจะต้องแสดงข้อมูลของผู้ใช้ที่ login ตัวแปรของผู้ใช้ที่ login จึงสามารถ set ค่าให้เทมเพลตผ่าน `View::assign()` ได้
+## เกี่ยวกับเส้นทางไฟล์มุมมอง
+#### ควบคุม
+เมื่อควบคุมเรียกใช้ `view('ชื่อมุมมอง',[]);` ไฟล์มุมมองจะถูกค้นหาตามกฎดังนี้:
 
-## เกี่ยวกับการกำหนดเส้นทางของไฟล์เทมเพลต
+1. ในกรณีที่ไม่ใช่แอพหลายตัว ใช้ไฟล์มุมมองที่อยู่ใต้ `app/view/`
+2. ในกรณีที่เป็น [แอพหลายตัว](multiapp.md) ใช้ไฟล์มุมมองที่อยู่ใต้ `app/ชื่อแอพ/view/`
 
-#### ตัวควบคุม
-เมื่อตัวควบคุมเรียกใช้ `view('ชื่อเทมเพลต', []);` อย่างต่อไปนี้คือตามกฏการค้นหา
-
-1. เมื่อไม่มีการใช้แอปพลิเคชันซึ่งใช้ `app/view/` เป็นไฟล์เทมเพลตที่นำมาใช้
-2. [ในกรณีไฟล์เทมเพลตมีมากกว่า 1 แอปพลิเคชัน](multiapp.md) ให้ใช้ไฟล์เทมเพลตจาก `app/ชื่อแอปพลิเคชัน/view/`
-
-และในท้ายที่สุด การกำหนดว่าถ้า `$request->app` ว่างเปล่า จะใช้เทมเพลตจาก `app/view/` หรือจะใช้ `app/{$request->app}/view/`
+งานจริงทั้งหมดคือ หาก `$request->app` ว่างเปล่า ใช้ไฟล์มุมมองที่อยู่ใต้ `app/view/` แต่ถ้าไม่ก็ใช้ไฟล์มุมมองที่อยู่ใต้ `app/{$request->app}/view/`
 
 #### ฟังก์ชันปิด
-เพราะฟังก์ชันปิดใช้ `$request->app` ว่างเปล่า ซึ่งไม่ได้อยู่ภายใต้แอปพลิเคชันใดๆ ดังนั้นในกรณีนี้จะใช้ไฟล์เทมเพลตจาก `app/view/` เช่นเดียวกันกับการใช้เทมเพลต blade ที่ไฟล์เทมเพลตจะใช้ `app/view/user.blade.php`
+ฟังก์ชันปิด `$request->app` ว่างเปล่า ไม่ได้อยู่ในแอพใด ดังนั้นฟังก์ชันปิดนั้นใช้ไฟล์มุมมองที่อยู่ใต้ `app/view/` ตัวอย่างเช่น การกำหนดเส้นทางในไฟล์ `config/route.php` ดังนี้
+```php
+Route::any('/admin/user/get', function (Reqeust $reqeust) {
+    return view('user', []);
+});
+```
+จะใช้ `app/view/user.html` เป็นไฟล์มุมมอง (ในกรณีที่ใช้มุมมอง blade ไฟล์มุมมองจะเป็น `app/view/user.blade.php`)
 
-#### การกำหนดแอปพลิเคชัน
-เพื่อที่จะทำให้ไฟล์เทมเพลตสามารถใช้ซ้ำในโหมดมากขึ้น `view($template, $data, $app = null)` มีอาร์กิวเมนตที่สาม `$app` สามารถใช้สำหรับกำหนดให้มันใช้ไฟล์เทมเพลตภายใต้ไดเรกทอรี่ของแอปพลิเคชันใดๆ เช่น  `view('user', [], 'admin');` จะบังคับให้ใช้ไฟล์เทมเพลตจาก `app/admin/view/`
+#### การกำหนดแอพ
+เพื่อให้ไฟล์มุมมองในโหมดแอพหลายตัวสามารถสามารถใช้ซ้ำได้ `view($template, $data, $app = null)` มีพารามิเตอร์ที่สาม `$app` ที่สามารถใช้เพื่อกำหนดให้มุมมองใช้อยู่ใต้ไดเรคทอรีของแอพใด ๆ เช่น `view('user', [], 'admin');` จะบังคับให้ใช้ไฟล์มุมมองที่อยู่ใต้ `app/admin/view/`
 
-
-## การเพิ่มส่วนขยายใน twig
-
+## ขยายtwig
 > **โปรดทราบ**
-> คุณสามารถทำการเพิ่มส่วนขยายในตัวกำหนด `view.extension` โดยที่คุณสามารถเพิ่มเพื่อต่อขยายเทมเพลต twig ได้ เช่น `config/view.php` เพิ่มเป็นดังนี้
+> ฟีเจอร์นี้ต้องการ webman-framework>=1.4.8
 
+เราสามารถขยายอินสแทนมุมมอง twig โดยการใช้การตั้งค่า `view.extension` callback ในตัวอย่างของ `config/view.php` ดังนี้
 ```php
 <?php
 use support\view\Twig;
+
 return [
     'handler' => Twig::class,
     'extension' => function (Twig\Environment $twig) {
-        $twig->addExtension(new your\namespace\YourExtension()); // เพิ่มส่วนขยาย
-        $twig->addFilter(new Twig\TwigFilter('rot13', 'str_rot13')); // เพิ่มตัวกรอง
+        $twig->addExtension(new your\namespace\YourExtension()); // เพิ่ม Extension
+        $twig->addFilter(new Twig\TwigFilter('rot13', 'str_rot13')); // เพิ่ม Filter
         $twig->addFunction(new Twig\TwigFunction('function_name', function () {})); // เพิ่มฟังก์ชัน
     }
 ];
 ```
-
-
-## การเพิ่มส่วนขยายใน Blade
+## ขยาย blade
 > **โปรดทราบ**
-> คุณสามารถทำการเพิ่มส่วนขยายในตัวกำหนด `view.extension` โดยที่คุณสามารถเพิ่มเพื่อต่อขยายเทมเพลต Blade ได้ เช่น `config/view.php` เพิ่มเป็นดังนี้
+> คุณต้องการ webman-framework>=1.4.8 เพื่อใช้คุณลักษณะนี้
+เช่นกัน เราสามารถขยายการมองเห็น blade โดยการให้คำร้องกลับไปที่คอนฟิก `view.extension` ตัวอย่างเช่น `config/view.php` ดังต่อไปนี้
 
 ```php
 <?php
@@ -324,7 +318,7 @@ use support\view\Blade;
 return [
     'handler' => Blade::class,
     'extension' => function (Jenssegers\Blade\Blade $blade) {
-        // เพิ่มกรอบ blade
+        // เพิ่มคำสั่งให้กับ blade
         $blade->directive('mydate', function ($timestamp) {
             return "<?php echo date('Y-m-d H:i:s', $timestamp); ?>";
         });
@@ -332,11 +326,12 @@ return [
 ];
 ```
 
-## การใช้งานคอมโพแนนต์ใน Blade
-> **โปรดทราบ
-> จะต้องใช้งาน webman/blade>=1.5.2**
+## ใช้ component ในการใช้ blade
 
-สมมติว่าต้องการเพิ่มคอมโพแนนต์เพิ่มเติม เช่น Alert
+> **โปรดทราบ**
+> ต้องการ webman/blade>=1.5.2
+
+สมมติว่าคุณต้องการเพิ่ม Alert ใน component
 
 **สร้าง `app/view/components/Alert.php`**
 ```php
@@ -368,8 +363,7 @@ class Alert extends Component
 </div>
 ```
 
-**`/config/view.php` การตั้งค่าผล้ายกับนี้**
-
+**`/config/view.php` คล้ายกับรหัสต่อไปนี้**
 ```php
 <?php
 use support\view\Blade;
@@ -381,7 +375,7 @@ return [
 ];
 ```
 
-นับจากนี้ ตัวคอมโพแนนต์ของ Blade คือ Alert มันจะเสร็จสมบูรณ์ และในเทมเพลตก็สามารถเรียกใช้ได้แบบนี้
+ดังนั้น Blade component Alert ได้ตั้งค่าเรียบร้อยแล้ว การใช้ในแม่แบบจะเป็นดังตัวอย่างต่อไปนี้
 ```html
 <!doctype html>
 <html>
@@ -398,9 +392,8 @@ return [
 ```
 
 
-## เพิ่มส่วนขยายใน think-template
-think-template ใช้`view.options.taglib_pre_load` เพื่อสุ่มการเพิ่มป้าย <body> ลงในหน้า HTML
-
+## ขยาย think-template
+think-template ใช้ `view.options.taglib_pre_load` เพื่อขยายตัวช่วยคำสั่ง ตัวอย่างเช่น
 ```php
 <?php
 use support\view\ThinkPHP;
@@ -412,4 +405,4 @@ return [
 ];
 ```
 
-โปรดดูรายละเอียดเพิ่มเติมได้ที่ [think-template การเพิ่มป้าย](https://www.kancloud.cn/manual/think-template/1286424)
+รายละเอียดเพิ่มเติมอ่าน [think-template"การขยายแท็ก"](https://www.kancloud.cn/manual/think-template/1286424)

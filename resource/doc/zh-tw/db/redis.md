@@ -1,11 +1,11 @@
 # Redis
 
-webman的redis組件預設使用的是[illuminate/redis](https://github.com/illuminate/redis)，也就是laravel的redis庫，用法與laravel相同。
+webman的redis組件默認使用的是[illuminate/redis](https://github.com/illuminate/redis)，也就是laravel的redis庫，用法與laravel相同。
 
-使用`illuminate/redis`之前必須先給`php-cli`安裝redis擴展。
+在使用`illuminate/redis`之前，必須先給`php-cli`安裝redis擴展。
 
 > **注意**
-> 使用命令`php -m | grep redis`查看`php-cli`是否裝了redis擴展。注意：即使你在`php-fpm`安裝了redis擴展，不代表你在`php-cli`可以使用它，因為`php-cli`和`php-fpm`是不同的應用程序，可能使用的是不同的`php.ini`配置。使用命令`php --ini`來查看你的`php-cli`使用的是哪個`php.ini`配置文件。
+> 使用命令`php -m | grep redis`查看`php-cli`是否安裝了redis擴展。請注意：即使你在`php-fpm`安裝了redis擴展，並不代表你在`php-cli`可以使用它，因為`php-cli`和`php-fpm`是不同的應用程式，可能使用不同的`php.ini`配置。請使用命令`php --ini`來查看你的`php-cli`使用的是哪個`php.ini`配置文件。
 
 ## 安裝
 
@@ -29,7 +29,7 @@ return [
 ];
 ```
 
-## 示例
+## 範例
 ```php
 <?php
 namespace app\controller;
@@ -78,7 +78,7 @@ Redis::expire($key, $ttl)
 Redis::expireAt($key, $timestamp)
 Redis::select($dbIndex)
 ```
-等同於
+等價於
 ```php
 $redis = Redis::connection('default');
 $redis->append($key, $value)
@@ -91,7 +91,7 @@ $redis->getBit($key, $offset)
 ```
 
 > **注意**
-> 慎用`Redis::select($db)`介面，由於webman是常駐內存的框架，如果某一個請求使用`Redis::select($db)`切換資料庫後將會影響後續其他請求。多資料庫建議將不同的`$db`配置成不同的Redis連接配置。
+> 慎用`Redis::select($db)`介面，由於webman是常駐內存的框架，如果某一個請求使用`Redis::select($db)`切換資料庫後將會影響後續其他請求。請多個資料庫建議將不同的`$db`配置成不同的Redis連接配置。
 
 ## 使用多個 Redis 連接
 例如配置文件`config/redis.php`
@@ -120,7 +120,7 @@ $redis->get('test_key');
 ```
 
 ## 集群配置
-如果你的應用使用 Redis 服務器集群，你應該在 Redis 配置文件中使用 clusters 鍵來定義這些集群：
+如果你的應用使用 Redis 伺服器集群，你應該在 Redis 配置文件中使用 clusters 鍵來定義這些集群：
 ```php
 return [
     'clusters' => [
@@ -137,7 +137,7 @@ return [
 ];
 ```
 
-默認情況下，集群可以在節點上實現客戶端分片，允許你實現節點池以及創建大量可用內存。這裡要注意，客戶端共用不會處理失敗的情況；因此，這個功能主要適用於從另一個主資料庫獲取的緩存數據。如果要使用 Redis 原生集群，需要在配置文件下的 options 鍵中做出如下指定：
+默認情況下，集群可以在節點上實現客戶端分片，允許你實現節點池以及創建大量可用內存。這裡要注意，客戶端共用不會處理失敗的情況；因此，這個功能主要適用於從另一個主資料庫獲取的快取數據。如果要使用 Redis 原生集群，需要在配置文件下的 options 鍵中做出如下指定：
 
 ```php
 return[

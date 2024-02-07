@@ -9,32 +9,32 @@
 composer create-project workerman/webman
 ```
 
-### 2. Exécuter
+### 2. Exécution
 
-Aller dans le répertoire webman
+Accédez au répertoire webman
 
 #### Utilisateurs Windows
 Double-cliquez sur `windows.bat` ou exécutez `php windows.php` pour démarrer
 
 > **Remarque**
-> En cas d'erreur, il est probable qu'une fonction soit désactivée, veuillez consulter [Vérification de la désactivation des fonctions](others/disable-function-check.md) pour lever la désactivation.
+> En cas d'erreur, il est probable qu'une fonction soit désactivée. Consultez [Vérification des fonctions désactivées](others/disable-function-check.md) pour lever les restrictions
 
 #### Utilisateurs Linux
-Exécution en mode `debug` (pour le développement et le débogage)
+Exécutez en mode `debug` (pour le développement et le débogage)
 
 ```php
 php start.php start
 ```
 
-Exécution en mode `daemon` (pour l'environnement de production)
+Exécutez en mode `daemon` (pour l'environnement de production)
 
 ```php
 php start.php start -d
 ```
 
 > **Remarque**
-> En cas d'erreur, il est probable qu'une fonction soit désactivée, veuillez consulter [Vérification de la désactivation des fonctions](others/disable-function-check.md) pour lever la désactivation.
+> En cas d'erreur, il est probable qu'une fonction soit désactivée. Consultez [Vérification des fonctions désactivées](others/disable-function-check.md) pour lever les restrictions
 
 ### 3. Accès
 
-Accéder via le navigateur à `http://adresse_IP:8787`
+Accédez depuis un navigateur à `http://adresseIP:8787`

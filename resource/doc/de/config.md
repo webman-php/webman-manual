@@ -1,26 +1,26 @@
 # Konfigurationsdatei
 
-## Standort
-Die Konfigurationsdatei von webman befindet sich im Verzeichnis `config/`, und im Projekt kann über die Funktion `config()` auf die entsprechende Konfiguration zugegriffen werden.
+## Position
+Die Konfigurationsdatei von webman befindet sich im Verzeichnis `config/` und kann im Projekt durch Verwendung der Funktion `config()` abgerufen werden.
 
-## Konfiguration abrufen
+## Abrufen von Konfigurationen
 
 Alle Konfigurationen abrufen
 ```php
 config();
 ```
 
-Alle Konfigurationen in `config/app.php` abrufen
+Alle Konfigurationen aus `config/app.php` abrufen
 ```php
 config('app');
 ```
 
-Die Konfiguration `debug` in `config/app.php` abrufen
+Die Konfiguration `debug` aus `config/app.php` abrufen
 ```php
 config('app.debug');
 ```
 
-Wenn die Konfiguration ein Array ist, können Sie mit einem Punkt `.` auf die Elemente im Array zugreifen, zum Beispiel
+Wenn die Konfiguration ein Array ist, können die Werte der Array-Elemente über `.` abgerufen werden, zum Beispiel
 ```php
 config('file.key1.key2');
 ```
@@ -29,10 +29,10 @@ config('file.key1.key2');
 ```php
 config($key, $default);
 ```
-Durch das Übergeben des zweiten Parameters an `config()` kann ein Standardwert übergeben werden. Wenn die Konfiguration nicht vorhanden ist, wird der Standardwert zurückgegeben. Wenn keine Konfiguration vorhanden ist und kein Standardwert festgelegt wurde, wird `null` zurückgegeben.
+Durch den Parameter default in config wird ein Standardwert übergeben. Wenn die Konfiguration nicht existiert, wird der Standardwert zurückgegeben. Wenn kein Standardwert festgelegt ist und die Konfiguration nicht existiert, wird null zurückgegeben.
 
 ## Benutzerdefinierte Konfiguration
-Entwickler können ihre eigenen Konfigurationsdateien im Verzeichnis `config/` hinzufügen, zum Beispiel
+Entwickler können ihre eigenen Konfigurationsdateien im Verzeichnis `config/` hinzufügen, beispielsweise
 
 **config/payment.php**
 
@@ -44,15 +44,15 @@ return [
 ];
 ```
 
-**Verwendung bei der Konfigurationsabfrage**
+**Verwendung beim Abrufen der Konfiguration**
 ```php
 config('payment');
 config('payment.key');
 config('payment.key');
 ```
 
-## Ändern der Konfiguration
-webman unterstützt keine dynamische Änderung der Konfiguration. Alle Konfigurationen müssen manuell in den entsprechenden Konfigurationsdateien geändert werden, und ein Neustart (`reload` oder `restart`) ist erforderlich.
+## Konfiguration ändern
+webman unterstützt keine dynamische Änderung der Konfiguration. Alle Konfigurationen müssen manuell in der entsprechenden Konfigurationsdatei geändert und dann neu geladen oder neu gestartet werden.
 
 > **Hinweis**
-> Die Serverkonfiguration `config/server.php` und die Prozesskonfiguration `config/process.php` unterstützen kein `reload`. Ein `restart` ist erforderlich, um die Konfiguration wirksam zu machen.
+> Die Serverkonfiguration `config/server.php` und Prozesskonfiguration `config/process.php` unterstützen kein neu Laden. Es ist ein Neustart erforderlich, um die Änderungen wirksam zu machen.

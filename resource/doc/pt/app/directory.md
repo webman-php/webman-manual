@@ -1,4 +1,4 @@
-# Estrutura do diretório
+# Estrutura de diretório
 
 ```
 plugin/
@@ -33,11 +33,11 @@ plugin/
     └── api
 ```
 
-Podemos ver que um plugin de aplicativo tem a mesma estrutura de diretório e arquivos de configuração que webman, na verdade, a experiência de desenvolvimento de um plugin é basicamente a mesma do desenvolvimento de um aplicativo comum no webman.
-Os diretórios e nomes dos plugins seguem a especificação PSR4, e como os plugins são todos colocados no diretório plugin, os namespaces começam com "plugin\", por exemplo `plugin\foo\app\controller\UserController`.
+Nós vemos uma estrutura de diretório e arquivos de configuração semelhantes ao webman em um plugin. Na verdade, a experiência de desenvolvimento de um aplicativo comum do webman é basicamente a mesma que a de desenvolvimento de um plugin.
+O diretório e o nome do plugin seguem a especificação PSR4. Visto que os plugins são todos armazenados no diretório de plugin, os namespaces começam com "plugin\", por exemplo, `plugin\foo\app\controller\UserController`.
 
 ## Sobre o diretório api
-Cada plugin possui um diretório api e se o seu aplicativo oferecer algumas interfaces internas para serem chamadas por outros aplicativos, é necessário colocar as interfaces no diretório api.
-É importante ressaltar que as interfaces mencionadas são para chamadas de funções, e não para chamadas de rede.
-Por exemplo, o `plugin de e-mail` fornece uma interface `Email::send()` em `plugin/email/api/Email.php`, para ser chamada por outros aplicativos para enviar e-mails.
-Além disso, `plugin/email/api/Install.php` é gerado automaticamente e é usado para que o mercado de plugins webman-admin execute operações de instalação ou desinstalação.
+Cada plugin tem um diretório api. Se o seu aplicativo fornece algumas interfaces internas para serem chamadas por outros aplicativos, é necessário colocar as interfaces no diretório api.
+É importante ressaltar que as interfaces mencionadas são interfaces de chamadas de função, não de chamadas de rede.
+Por exemplo, o plugin de `email` fornece uma interface `Email::send()` em `plugin/email/api/Email.php` para que outros aplicativos possam enviar e-mails.
+Além disso, `plugin/email/api/Install.php` é gerado automaticamente e é usado para permitir que o mercado de plugins do webman-admin execute operações de instalação ou desinstalação.

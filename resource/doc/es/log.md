@@ -14,7 +14,7 @@ class FooController
     public function index(Request $request)
     {
         Log::info('prueba de registro');
-        return response('hola índice');
+        return response('hola index');
     }
 }
 ```
@@ -50,12 +50,12 @@ $log->emergency($message, array $context = [])
 return [
     // Canal de registro predeterminado
     'default' => [
-        // Manipuladores para el canal predeterminado, se pueden configurar varios
+        // Manejadores del canal predeterminado, se pueden configurar varios
         'handlers' => [
             [   
-                // Nombre de la clase del manipulador
+                // Nombre de la clase del manejador
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // Parámetros del constructor de la clase del manipulador
+                // Parámetros del constructor de la clase del manejador
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
@@ -74,17 +74,17 @@ return [
 ```
 
 ## Múltiples canales
-monolog admite múltiples canales, utilizando el canal `default` de forma predeterminada. Si se desea agregar un canal `log2`, la configuración sería similar a la siguiente:
+monolog soporta múltiples canales, y por defecto utiliza el canal `default`. Si deseas agregar un canal `log2`, la configuración sería similar a la siguiente:
 ```php
 return [
     // Canal de registro predeterminado
     'default' => [
-        // Manipuladores para el canal predeterminado, se pueden configurar varios
+        // Manejadores del canal predeterminado, se pueden configurar varios
         'handlers' => [
             [   
-                // Nombre de la clase del manipulador
+                // Nombre de la clase del manejador
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // Parámetros del constructor de la clase del manipulador
+                // Parámetros del constructor de la clase del manejador
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
@@ -101,12 +101,12 @@ return [
     ],
     // Canal log2
     'log2' => [
-        // Manipuladores para el canal log2, se pueden configurar varios
+        // Manejadores del canal log2, se pueden configurar varios
         'handlers' => [
             [   
-                // Nombre de la clase del manipulador
+                // Nombre de la clase del manejador
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // Parámetros del constructor de la clase del manipulador
+                // Parámetros del constructor de la clase del manejador
                 'constructor' => [
                     runtime_path() . '/logs/log2.log',
                     Monolog\Logger::DEBUG,
@@ -124,7 +124,7 @@ return [
 ];
 ```
 
-El uso del canal `log2` sería de la siguiente manera:
+El uso del canal `log2` sería el siguiente:
 ```php
 <?php
 namespace app\controller;
@@ -138,7 +138,7 @@ class FooController
     {
         $log = Log::channel('log2');
         $log->info('prueba de log2');
-        return response('hola índice');
+        return response('hola index');
     }
 }
 ```

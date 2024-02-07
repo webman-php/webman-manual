@@ -1,10 +1,10 @@
 # AOP
 
-> Hyperfの作者に感謝します
+> ありがとう、Hyperfの作者の提出に感謝します
 
 ### インストール
 
-- aop-integrationをインストールします
+- aop-integrationのインストール
 
 ```shell
 composer require "hyperf/aop-integration: ^1.1"
@@ -12,7 +12,7 @@ composer require "hyperf/aop-integration: ^1.1"
 
 ### AOP関連の設定を追加
 
-`config`ディレクトリに`config.php`設定を追加する必要があります
+`config`ディレクトリに`config.php`構成を追加する必要があります。
 
 ```php
 <?php
@@ -36,18 +36,18 @@ return [
         ],
     ],
     'aspects' => [
-        // ここに対応するAspectを記述します
+        // ここに対応するアスペクトを記述する
         app\aspect\DebugAspect::class,
     ]
 ];
 
 ```
 
-### エントリーポイントファイルstart.phpの構成
+### 設定エントリーポイント start.php
 
-> 初期化メソッドを`timezone`の下に配置し、以下は他のコードを省略します
+> 初期化メソッドをtimezoneの下に配置します。以下、他のコードは省略します。
 
-```
+```php
 use Hyperf\AopIntegration\ClassLoader;
 
 if ($timezone = config('app.default_timezone')) {
@@ -60,7 +60,7 @@ ClassLoader::init();
 
 ### テスト
 
-まず、インターセプト対象のクラスを作成します
+まず、切り込む対象のクラスを書いてみましょう。
 
 ```php
 <?php
@@ -75,7 +75,7 @@ class UserService
 }
 ```
 
-次に、対応する`DebugAspect`を追加します
+次に、対応する`DebugAspect`を追加します。
 
 ```php
 <?php
@@ -99,7 +99,7 @@ class DebugAspect extends AbstractAspect
 }
 ```
 
-次に、コントローラー`app/controller/IndexController.php`を編集します
+次に、コントローラー`app/controller/IndexController.php`を編集します。
 
 ```php
 <?php
@@ -117,7 +117,7 @@ class IndexController
 }
 ```
 
-次に、ルートを構成します
+そして、ルートを設定します。
 
 ```php
 <?php
@@ -126,9 +126,9 @@ use Webman\Route;
 Route::any('/json', [app\controller\IndexController::class, 'json']);
 ```
 
-最後にサーバーを起動してテストします。
+最後にサービスを起動してテストします。
 
 ```shell
 php start.php start
-curl http://127.0.0.1:8787/json
+curl  http://127.0.0.1:8787/json
 ```

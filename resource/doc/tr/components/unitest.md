@@ -1,4 +1,4 @@
-# Birim Testleri
+# Birim Test
 
 ## Kurulum
 
@@ -7,7 +7,8 @@ composer require --dev phpunit/phpunit
 ```
 
 ## Kullanım
-`tests/TestConfig.php` adında yeni bir dosya oluşturun, bu dosya veritabanı yapılandırmasını test etmek için kullanılacak.
+
+`tests/TestConfig.php` adında yeni bir dosya oluşturun ve veritabanı yapılandırmasını test etmek için kullanın.
 
 ```php
 <?php
@@ -28,15 +29,17 @@ class TestConfig extends TestCase
 ```
 
 ## Çalıştırma
-Proje kök dizininde `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php` komutunu çalıştırın.
 
-Sonuç aşağıdakine benzer olacaktır:
-```
+Proje kök dizininde aşağıdaki komutu çalıştırın: `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php`
+
+Sonuç aşağıdakine benzer olmalıdır:
+
+```plaintext
 PHPUnit 9.5.10 tarafından Sebastian Bergmann ve katkıda bulunanlar.
 
 .                                                                   1 / 1 (100%)
 
-Zaman: 00:00.010, Bellek: 6.00 MB
+Time: 00:00.010, Memory: 6.00 MB
 
-OK (1 test, 5 doğrulama)
+OK (1 test, 5 assertions)
 ```

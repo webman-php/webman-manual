@@ -1,28 +1,29 @@
 # Plugin della riga di comando webman/console
 
-`webman/console` basato su `symfony/console`
+`webman/console` si basa su `symfony/console`
 
->Plugin richiesto webman>=1.2.2 webman-framework>=1.2.1
+> Il plug-in richiede webman>=1.2.2 webman-framework>=1.2.1
 
 ## Installazione
 
 ```sh
-composer require webman/console
+compositore richiede webman/console
 ```
 
 ## Comandi supportati
 **Uso**  
-`php webman comando` oppure `php webman comando`.
-Ad esempio `php webman version` o `php webman version`
+`php webman comando` o `php webman comando`.
+Ad esempio `php webman versione` o `php webman versione`
 
+## Comandi supportati
 ### versione
 **Stampa il numero di versione di webman**
 
 ### route:list
-**Stampa la configurazione attuale del percorso**
+**Stampa la configurazione del percorso corrente**
 
 ### make:controller
-**Crea un file controller**
+**Crea un file controller** 
 Ad esempio `php webman make:controller admin` creerà un `app/controller/AdminController.php`
 Ad esempio `php webman make:controller api/user` creerà un `app/api/controller/UserController.php`
 
@@ -42,25 +43,25 @@ Ad esempio `php webman make:command db:config` creerà un `app\command\DbConfigC
 ### plugin:create
 **Crea un plugin di base**
 Ad esempio `php webman plugin:create --name=foo/admin` creerà due directory `config/plugin/foo/admin` e `vendor/foo/admin`
-Vedi [Creazione di un plugin di base](/doc/webman/plugin/create.html)
+Vedere [Creazione di un plugin di base](/doc/webman/plugin/create.html)
 
 ### plugin:export
 **Esporta un plugin di base**
-Ad esempio `php webman plugin:export --name=foo/admin` 
-Vedi [Creazione di un plugin di base](/doc/webman/plugin/create.html)
+Ad esempio `php webman plugin:export --name=foo/admin`
+Vedere [Creazione di un plugin di base](/doc/webman/plugin/create.html)
 
 ### plugin:export
 **Esporta un plugin dell'applicazione**
 Ad esempio `php webman plugin:export shop`
-Vedi [Plugin dell'applicazione](/doc/webman/plugin/app.html)
+Vedere [Plugin dell'applicazione](/doc/webman/plugin/app.html)
 
 ### phar:pack
-**Imballa il progetto webman come file phar**
-Vedi [Imballaggio phar](/doc/webman/others/phar.html)
-> Qeusta caratteristica richiede webman>=1.2.4 webman-framework>=1.2.4 webman\console>=1.0.5
+**Imballa il progetto webman in un file phar**
+Vedere [Imballaggio phar](/doc/webman/others/phar.html)
+> Questa funzionalità richiede webman>=1.2.4 webman-framework>=1.2.4 webman\console>=1.0.5
 
 ## Comandi personalizzati
-Gli utenti possono definire i propri comandi, ad esempio di seguito è riportato un comando per stampare la configurazione del database.
+Gli utenti possono definire i propri comandi, ad esempio il seguente comando stampa la configurazione del database
 
 * Eseguire `php webman make:command config:mysql`
 * Aprire `app/command/ConfigMySQLCommand.php` e modificarlo come segue
@@ -84,7 +85,7 @@ class ConfigMySQLCommand extends Command
     {
         $output->writeln('Ecco le informazioni di configurazione di MySQL:');
         $config = config('database');
-        $headers = ['nome', 'predefinito', 'driver', 'host', 'porta', 'database', 'username', 'password', 'unix_socket', 'charset', 'collation', 'prefisso', 'rigoroso', 'motore', 'schema', 'sslmode'];
+        $headers = ['nome', 'predefinito', 'driver', 'host', 'porta', 'database', 'nome utente', 'password', 'unix_socket', 'charset', 'collation', 'prefisso', 'rigoroso', 'motore', 'schema', 'modo ssl'];
         $rows = [];
         foreach ($config['connections'] as $name => $db_config) {
             $row = [];
@@ -117,12 +118,13 @@ class ConfigMySQLCommand extends Command
 
 ## Test
 
-Esegui il comando nel terminale `php webman config:mysql`
+Esegui il comando da riga di comando `php webman config:mysql`
 
 Il risultato sarà simile a quanto segue:
-```
+
+``` 
 +-------+---------+--------+-----------+------+----------+----------+----------+-------------+---------+-----------------+--------+--------+--------+--------+---------+
-| nome  | predefinito | driver | host      | port | database | username | password | unix_socket | charset | collation       | prefisso | rigoroso | motore | schema | sslmode |
+| nome  | predefinito | driver | host      | porta | database | nome utente | password | unix_socket | charset | collation       | prefisso | rigoroso | motore | schema | modo ssl |
 +-------+---------+--------+-----------+------+----------+----------+----------+-------------+---------+-----------------+--------+--------+--------+--------+---------+
 | mysql | vero    | mysql  | 127.0.0.1 | 3306 | mysql    | root     | ******   |             | utf8    | utf8_unicode_ci |        | 1      |        |        |         |
 +-------+---------+--------+-----------+------+----------+----------+----------+-------------+---------+-----------------+--------+--------+--------+--------+---------+

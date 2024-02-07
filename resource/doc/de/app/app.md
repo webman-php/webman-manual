@@ -3,13 +3,13 @@
 > Anwendungs-Plugins erfordern webman>=1.4.0
 
 ## Konzept
-Schnelles Aufbauen Ihrer eigenen Anwendung wie das Zusammenstellen von Bausteinen.
+Schnelles Aufbau der eigenen Anwendung wie das Zusammenstellen von Bausteinen.
 
 ## Einführung
-Ein Anwendungs-Plugin ist tatsächlich eine vollständige Anwendung, die als Plugin in das Hauptprojekt installiert werden kann, um dem Hauptprojekt schnell eine bestimmte Modulfunktion hinzuzufügen. Zum Beispiel benötigt das Hauptprojekt ein Frage-Antwort-System, dann kann ein Frage-Antwort-Anwendungs-Plugin installiert werden. Wenn ein Shop-System benötigt wird, kann ein Shop-Anwendungs-Plugin installiert werden. Alle Plugins beeinflussen sich gegenseitig nicht: stecken Sie ein, verwenden Sie es sofort, und wenn es nicht benötigt wird, können Sie es mit einem Klick entfernen.
+Ein Anwendungs-Plugin ist eigentlich eine komplette Anwendung, die als Plugin in das Hauptprojekt installiert werden kann, um diesem schnell eine bestimmte Modulfunktion zu verleihen. Zum Beispiel benötigt das Hauptprojekt ein Frage-und-Antwort-System, dann kann ein Frage-und-Antwort-Anwendungs-Plugin installiert werden. Braucht man ein Einkaufssystem, kann das Einkaufs-Anwendungs-Plugin installiert werden. Alle Plugins beeinflussen sich nicht gegenseitig, sind sofort einsatzbereit und können mit einem Klick gelöscht werden.
 
 ## Auswirkungen
-Anwendungs-Plugins verbessern die Wiederverwendbarkeit von webman-Projekten erheblich. Jeder Entwickler kann sein Projekt in ein Plugin umwandeln und anderen Projekten zur Installation und Nutzung zur Verfügung stellen, um anderen Projekten zu nutzen und selbst Einnahmen zu erzielen.
+Anwendungs-Plugins erhöhen die Wiederverwendbarkeit von webman-Projekten erheblich. Jeder Entwickler kann sein eigenes Projekt in ein Plugin umgestalten und anderen Projekten zur Nutzung anbieten, um diese zu nutzen und gleichzeitig Einnahmen zu erzielen.
 
 ## Einnahmen erzielen
-webman bietet einen offiziellen [App-Marktplatz](https://www.workerman.net/apps), auf dem Entwickler ihre entwickelten Anwendungen einreichen und davon profitieren können.
+Webman bietet einen offiziellen [App-Marktplatz](https://www.workerman.net/apps), auf dem Entwickler ihre erstellten Anwendungen einreichen und daraus Einnahmen erzielen können.

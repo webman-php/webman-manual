@@ -1,14 +1,14 @@
-# यूनिट टेस्टिंग
+# एकक परीक्षण
 
-  
 ## स्थापना
- 
+
 ```php
 composer require --dev phpunit/phpunit
 ```
-  
+
 ## उपयोग
-`tests/TestConfig.php` नामक नया फ़ाइल बनाएं, जो डेटाबेस कॉन्फ़िगरेशन का परीक्षण करने के लिए है
+`tests/TestConfig.php` फ़ाइल नई बनाएं, जिसे डेटाबेस कॉन्फ़िगरेशन की जांच के लिए उपयोग किया जाएगा।
+
 ```php
 <?php
 use PHPUnit\Framework\TestCase;
@@ -26,11 +26,12 @@ class TestConfig extends TestCase
     }
 }
 ```
-  
-## चालू
-प्रोजेक्ट रूट फ़ोल्डर में `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php` को चलाएं
 
-परिणाम निम्नलिखित प्रकार का होगा:
+## चलाना
+
+प्रोजेक्ट रूट फ़ोल्डर में `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php` को चलाएँ।
+
+नतीजा निम्नलिखित तरह होगा:
 ```
 PHPUnit 9.5.10 by Sebastian Bergmann and contributors.
 

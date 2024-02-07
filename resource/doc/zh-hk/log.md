@@ -13,8 +13,8 @@ class FooController
 {
     public function index(Request $request)
     {
-        Log::info('日誌測試');
-        return response('你好，這是首頁');
+        Log::info('log test');
+        return response('hello index');
     }
 }
 ```
@@ -31,7 +31,7 @@ Log::critical($message, array $context = [])
 Log::alert($message, array $context = [])
 Log::emergency($message, array $context = [])
 ```
-等同於
+等價於
 ```php
 $log = Log::channel('default');
 $log->log($level, $message, array $context = [])
@@ -74,7 +74,7 @@ return [
 ```
 
 ## 多通道
-monolog支持多通道，默認使用`default`通道。如果想增加一個`log2`通道，配置類似如下：
+monolog支持多通道，默认使用`default`通道。如果想增加一個`log2`通道，配置類似如下：
 ```php
 return [
     // 默認日誌通道
@@ -137,8 +137,8 @@ class FooController
     public function index(Request $request)
     {
         $log = Log::channel('log2');
-        $log->info('log2 測試');
-        return response('你好，這是首頁');
+        $log->info('log2 test');
+        return response('hello index');
     }
 }
 ```

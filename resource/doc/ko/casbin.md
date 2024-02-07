@@ -1,8 +1,8 @@
-# Casbin 액세스 제어 라이브러리 webman-permission
+# Casbin 접근 제어 라이브러리 webman-permission
 
 ## 설명
 
-이 라이브러리는 [PHP-Casbin](https://github.com/php-casbin/php-casbin)에 기반하며, ACL, RBAC, ABAC 등 다양한 액세스 제어 모델을 지원하는 강력하고 효율적인 오픈 소스 액세스 제어 프레임워크입니다.
+이는 [PHP-Casbin](https://github.com/php-casbin/php-casbin)을 기반으로 합니다. 이는 강력하고 효율적인 오픈 소스 접근 제어 프레임 워크로, `ACL`, `RBAC`, `ABAC` 등의 접근 제어 모델을 지원합니다.
 
 ## 프로젝트 주소
 
@@ -13,20 +13,22 @@ https://github.com/Tinywan/webman-permission
 ```php
 composer require tinywan/webman-permission
 ```
-> 이 확장은 PHP 7.1+ 및 [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998)이 필요하며, 공식 설명서는 https://www.workerman.net/doc/webman#/db/others 에서 볼 수 있습니다.
+
+> 이 확장은 PHP 7.1+ 및 [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998)이 필요하며, 공식 문서는 다음을 참조하십시오: https://www.workerman.net/doc/webman#/db/others
 
 ## 설정
 
 ### 서비스 등록
-`config/bootstrap.php` 파일을 만들고 다음과 같이 내용을 입력하세요.
+새로운 설정 파일 `config/bootstrap.php`을 만들고 아래와 같이 적절한 내용을 추가하십시오.
 
 ```php
-    // ...
-    webman\permission\Permission::class,
+// ...
+webman\permission\Permission::class,
 ```
-### 모델 구성 파일
 
-`config/casbin-basic-model.conf` 파일을 만들고 다음과 같이 내용을 입력하세요.
+### Model 설정 파일
+
+새로운 설정 파일 `config/casbin-basic-model.conf`을 만들고 아래와 같이 적절한 내용을 추가하십시오.
 
 ```conf
 [request_definition]
@@ -44,9 +46,10 @@ e = some(where (p.eft == allow))
 [matchers]
 m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
 ```
-### 정책 설정 파일
 
-`config/permission.php` 파일을 만들고 다음과 같이 내용을 입력하세요.
+### Policy 설정 파일
+
+새로운 설정 파일 `config/permission.php`을 만들고 아래와 같이 적절한 내용을 추가하십시오.
 
 ```php
 <?php
@@ -73,24 +76,25 @@ return [
                 'config_text' => '',
             ],
 
-            // 适配器 .
+            // 어댑터
             'adapter' => webman\permission\adapter\DatabaseAdapter::class,
 
             /*
-            * 데이터베이스 설정.
+            * 데이터베이스 설정
             */
             'database' => [
-                // 데이터베이스 연결 이름, 기본 설정으로 비워 둡니다.
+                // 데이터베이스 연결 이름, 기본 구성이 아닌 경우 입력
                 'connection' => '',
-                // 정책 테이블 이름(접두사 없음)
+                // 정책 테이블 이름 (접두사 없음)
                 'rules_name' => 'rule',
-                // 정책 테이블 전체 이름.
+                // 정책 테이블 전체 이름
                 'rules_table' => 'train_rule',
             ],
         ],
     ],
 ];
 ```
+
 ## 빠른 시작
 
 ```php
@@ -100,31 +104,31 @@ use webman\permission\Permission;
 Permission::addPermissionForUser('eve', 'articles', 'read');
 // 사용자에게 역할 추가
 Permission::addRoleForUser('eve', 'writer');
-// 정책에 권한 추가
-Permission::addPolicy('writer', 'articles','edit');
+// 규칙에 권한 추가
+Permission::addPolicy('writer', 'articles', 'edit');
 ```
 
 사용자가 해당 권한을 가지고 있는지 확인할 수 있습니다.
 
 ```php
 if (Permission::enforce("eve", "articles", "edit")) {
-    // eve에게 article 편집 권한 부여
+    // 이브에게 기사 수정을 허용
 } else {
-    // 요청 거부, 오류 표시
+    // 요청을 거부하고 오류 표시
 }
 ````
 
-## 인가 미들웨어
+## 권한 미들웨어
 
-`app/middleware/AuthorizationMiddleware.php` 파일을 생성하고 아래와 같이 작성하세요. (디렉토리가 없는 경우 직접 만들어주세요)
+`app/middleware/AuthorizationMiddleware.php` 파일을 생성하여 다음과 같이 추가하십시오(디렉터리가 없는 경우 직접 만드십시오).
 
 ```php
 <?php
 
 /**
- * 인가 미들웨어
+ * 권한 미들웨어
  * 작성자: ShaoBo Wan (Tinywan)
- * 날짜: 2021/09/07 14:15
+ * 일시: 2021/09/07 14:15
  */
 
 declare(strict_types=1);
@@ -146,32 +150,32 @@ class AuthorizationMiddleware implements MiddlewareInterface
 			$userId = 10086;
 			$action = $request->method();
 			if (!Permission::enforce((string) $userId, $uri, strtoupper($action))) {
-				throw new \Exception('죄송합니다. 해당 API에 대한 액세스 권한이 없습니다.');
+				throw new \Exception('죄송합니다. 해당 인터페이스에 대한 액세스 권한이 없습니다.');
 			}
 		} catch (CasbinException $exception) {
-			throw new \Exception('인가 예외' . $exception->getMessage());
+			throw new \Exception('권한 예외' . $exception->getMessage());
 		}
 		return $next($request);
 	}
 }
 ```
 
-`config/middleware.php` 파일에 전역 미들웨어를 추가하세요.
+`config/middleware.php`에서 전역 미들웨어를 추가하십시오.
 
 ```php
 return [
     // 전역 미들웨어
     '' => [
-        // ... 여기에 다른 미들웨어를 생략했습니다.
+        // ... 다른 미들웨어는 여기서 생략했습니다.
         app\middleware\AuthorizationMiddleware::class,
     ]
 ];
 ```
 
-## 감사의 글
+## 감사합니다
 
-[Casbin](https://github.com/php-casbin/php-casbin)은 [공식 웹 사이트](https://casbin.org/)에서 모든 문서를 확인할 수 있습니다.
+[Casbin](https://github.com/php-casbin/php-casbin)을 사용해 주셔서 감사합니다. [공식 사이트](https://casbin.org/)에서 모든 문서를 확인할 수 있습니다.
 
-## 라이센스
+## 라이선스
 
-이 프로젝트는 [Apache 2.0 라이센스](LICENSE)에 따라 라이센스가 부여됩니다.
+이 프로젝트는 [Apache 2.0 라이선스](LICENSE)에 따라 라이선스가 부여됩니다.

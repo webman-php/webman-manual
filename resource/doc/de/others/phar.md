@@ -1,32 +1,31 @@
-# Phar-Paketierung
+# Phar-Packung
 
-Phar ist eine Art von Paketierungsdatei in PHP, ähnlich wie JAR. Sie können webman-Projekte mit Phar in eine einzelne Phar-Datei verpacken, um die Bereitstellung zu erleichtern.
+Phar ist eine Art von Paketdatei in PHP, ähnlich wie JAR. Sie können Phar verwenden, um Ihr Webman-Projekt in eine einzelne Phar-Datei zu verpacken und bequem zu deployen.
 
-**Hier möchten wir uns bei [fuzqing](https://github.com/fuzqing) für das Einreichen von PR bedanken.**
+**Ein großes Dankeschön an [fuzqing](https://github.com/fuzqing) für den Pull Request.**
 
 > **Hinweis**
-> Sie müssen die phar-Einstellungsoptionen in der `php.ini` deaktivieren, indem Sie `phar.readonly = 0` setzen.
+> Sie müssen die Pharo-Konfigurationsoptionen in `php.ini` deaktivieren, indem Sie `phar.readonly = 0` setzen.
 
 ## Installation des Befehlszeilenwerkzeugs
-Führen Sie `composer require webman/console` aus.
+`composer require webman/console`
 
-## Konfigurationseinstellungen
-Öffnen Sie die Datei `config/plugin/webman/console/app.php` und setzen Sie `'exclude_pattern' => '#^(?!.*(composer.json|/.github/|/.idea/|/.git/|/.setting/|/runtime/|/vendor-bin/|/build/|vendor/webman/admin))(.*)$#'`, um einige unnötige Verzeichnisse und Dateien bei der Paketierung zu ignorieren und ein übermäßiges Paketvolumen zu vermeiden.
+## Konfiguration einrichten
+Öffnen Sie die Datei `config/plugin/webman/console/app.php` und setzen Sie `'exclude_pattern' => '#^(?!.*(composer.json|/.github/|/.idea/|/.git/|/.setting/|/runtime/|/vendor-bin/|/build/|vendor/webman/admin))(.*)$#'`, um beim Packen einige unnötige Verzeichnisse und Dateien auszuschließen und ein zu großes Packvolumen zu vermeiden.
 
-## Paketierung
-Führen Sie im Stammverzeichnis des webman-Projekts den Befehl `php webman phar:pack` aus.
-Es wird eine Datei `webman.phar` im Build-Verzeichnis erstellt.
+## Packen
+Führen Sie den Befehl `php webman phar:pack` im Stammverzeichnis des Webman-Projekts aus, um eine `webman.phar`-Datei im Build-Verzeichnis zu erstellen.
 
-> Die Konfiguration für die Paketierung befindet sich in `config/plugin/webman/console/app.php`.
+> Die Konfiguration für das Packen befindet sich in `config/plugin/webman/console/app.php`.
 
-## Start- und Stoppbefehle
+## Befehle zum Starten und Beenden
 **Starten**
 `php webman.phar start` oder `php webman.phar start -d`
 
 **Stoppen**
 `php webman.phar stop`
 
-**Status überprüfen**
+**Status anzeigen**
 `php webman.phar status`
 
 **Verbindungsstatus anzeigen**
@@ -35,13 +34,13 @@ Es wird eine Datei `webman.phar` im Build-Verzeichnis erstellt.
 **Neustarten**
 `php webman.phar restart` oder `php webman.phar restart -d`
 
-## Hinweise
-* Wenn Sie webman.phar ausführen, wird im Verzeichnis, in dem sich webman.phar befindet, ein Verzeichnis "runtime" erstellt, in dem temporäre Dateien wie Protokolle gespeichert werden.
+## Hinweis
+* Wenn Sie webman.phar ausführen, wird im Verzeichnis von webman.phar ein Laufzeitverzeichnis erstellt, in dem temporäre Dateien wie Protokolle abgelegt werden.
 
-* Wenn Ihr Projekt eine .env-Datei verwendet, muss diese im selben Verzeichnis wie webman.phar platziert werden.
+* Wenn Sie in Ihrem Projekt eine .env-Datei verwenden, müssen Sie die .env-Datei im Verzeichnis von webman.phar platzieren.
 
-* Wenn Ihr Geschäftsbetrieb Dateien in das öffentliche Verzeichnis hochladen muss, müssen Sie das öffentliche Verzeichnis auslagern und im selben Verzeichnis wie webman.phar platzieren. In diesem Fall ist eine Konfiguration in `config/app.php` erforderlich.
-```
+* Wenn Ihr Geschäftsvorgang das Hochladen von Dateien in das öffentliche Verzeichnis erfordert, müssen Sie das öffentliche Verzeichnis aus dem Verzeichnis von webman.phar herausnehmen und im Verzeichnis von webman.phar platzieren. In diesem Fall müssen Sie auch `config/app.php` konfigurieren.
+```php
 'public_path' => base_path(false) . DIRECTORY_SEPARATOR . 'public',
 ```
 Das Geschäft kann die Hilfsfunktion `public_path()` verwenden, um den tatsächlichen Speicherort des öffentlichen Verzeichnisses zu finden.

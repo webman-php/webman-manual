@@ -1,23 +1,23 @@
-# İstisna Yönetimi
+# İstisna İşleme
 
 ## Yapılandırma
 `config/exception.php`
 ```php
 return [
-    // Burada istisna işleme sınıfını yapılandırın
+    // İstisna işleme sınıfını burada yapılandırın
     '' => support\exception\Handler::class,
 ];
 ```
-Çoklu uygulama modunda, her uygulama için ayrı istisna işleme sınıfı yapılandırabilirsiniz, bkz. [Çoklu Uygulama](multiapp.md)
+Çoklu uygulama modunda her uygulama için ayrı ayrı istisna işleme sınıfı yapılandırabilirsiniz. [Çoklu Uygulama](multiapp.md) bölümüne bakınız.
 
 
 ## Varsayılan İstisna İşleme Sınıfı
-webman'de istisnalar varsayılan olarak `support\exception\Handler` sınıfı tarafından işlenir. Varsayılan istisna işleme sınıfını değiştirmek için `config/exception.php` yapılandırma dosyasını değiştirebilirsiniz. İstisna işleme sınıfı, `Webman\Exception\ExceptionHandlerInterface` arabirimini uygulamak zorundadır.
+webman'de istisnalar varsayılan olarak `support\exception\Handler` sınıfı tarafından işlenir. Varsayılan istisna işleme sınıfını değiştirmek için `config/exception.php` yapılandırma dosyasını değiştirebilirsiniz. İstisna işleme sınıfı `Webman\Exception\ExceptionHandlerInterface` arayüzünü uygulamak zorundadır.
 ```php
 interface ExceptionHandlerInterface
 {
     /**
-     * Günlüğe kayıt
+     * Günlüğe kaydet
      * @param Throwable $e
      * @return mixed
      */
@@ -35,24 +35,24 @@ interface ExceptionHandlerInterface
 
 
 
-## Yanıtı Oluşturma
-İstisna işleme sınıfındaki `render` yöntemi yanıtı oluşturmak için kullanılır.
+## Yanıt Oluşturma
+İstisna işleme sınıfı içindeki `render` yöntemi yanıtı oluşturmak için kullanılır.
 
-Eğer `config/app.php` yapılandırma dosyasında `debug` değeri `true` ise (kısaca `app.debug=true`), ayrıntılı istisna bilgileri döndürülür, aksi takdirde özet istisna bilgileri döndürülür.
+Eğer `config/app.php` yapılandırma dosyasında `debug` değeri `true` ise (kısaca `app.debug=true`), ayrıntılı istisna bilgileri döndürülür, aksi halde kısa istisna bilgilerini döndürür.
 
-Eğer istek json yanıt bekliyorsa, istisna bilgileri json formatında döndürülür, örneğin
+Eğer istemci isteği JSON yanıt bekliyorsa, istisna bilgisi JSON formatında döndürülür, benzer şekilde:
 ```json
 {
     "code": "500",
-    "msg": "istisna bilgisi"
+    "msg": "İstisna Bilgisi"
 }
 ```
-Eğer `app.debug=true` ise, json verilerine ayrıntılı bir `trace` alanı eklenir.
+Eğer `app.debug=true` ise, JSON verilerine ayrıca detaylı çağrı yığını (`trace`) alanı eklenir.
 
 Varsayılan istisna işleme mantığını değiştirmek için kendi istisna işleme sınıfınızı yazabilirsiniz.
 
-# İş İstisnası BusinessException
-Bazen iç içe geçmiş bir fonksiyonda isteği sonlandırmak ve istemciye bir hata iletisi döndürmek isteyebiliriz, bu durumda bunu yapmak için `BusinessException` fırlatılabilir.
+# İş İstisnaları BusinessException
+Bazen iç içe geçmiş bir fonksiyonda isteği sonlandırmak ve istemciye bir hata ileti döndürmek isteyebiliriz, bu durumda bunu yapmak için `BusinessException` fırlatabiliriz.
 Örneğin:
 
 ```php
@@ -73,25 +73,25 @@ class FooController
     protected function chackInpout($input)
     {
         if (!isset($input['token'])) {
-            throw new BusinessException('Parametre hatası', 3000);
+            throw new BusinessException('Parametre Hatası', 3000);
         }
     }
 }
 ```
 
-Yukarıdaki örnek aşağıdaki gibi bir yanıt döndürecektir
+Yukarıdaki örnek aşağıdakini döndürecektir:
 ```json
-{"code": 3000, "msg": "Parametre hatası"}
+{"code": 3000, "msg": "Parametre Hatası"}
 ```
 
 > **Not**
-> İş istisnası BusinessException işlemesine gerek yoktur, çünkü framework otomatik olarak yakalar ve istek tipine uygun çıktı döndürür.
+> İş istisnası BusinessException yakalanması gerekmeyen bir durumdur, çerçeve otomatik olarak yakalar ve isteğin türüne göre uygun çıktıyı döndürür.
 
-## Özel İş İstisnası Oluşturma
+## Özel İş İstisnaları
 
-Yukarıdaki yanıt ihtiyaçlarınıza uygun değilse, örneğin `msg`'yi `message` olarak değiştirmek istiyorsanız, `MyBusinessException` adında özel bir istisna oluşturabilirsiniz.
+Eğer yukarıdaki yanıt sizin gereksinimlerinize uymuyorsa, örneğin `msg` yerine `message` yazmak istiyorsanız, `MyBusinessException` adında özel bir istisna sınıfı oluşturabilirsiniz.
 
-Aşağıdaki gibi bir `app/exception/MyBusinessException.php` dosyası oluşturun
+`app/exception/MyBusinessException.php` dosyasını aşağıdaki içerikle oluşturun:
 ```php
 <?php
 
@@ -105,29 +105,29 @@ class MyBusinessException extends BusinessException
 {
     public function render(Request $request): ?Response
     {
-        // json isteği json veri döndürür
+        // JSON isteği JSON veri döndürür
         if ($request->expectsJson()) {
             return json(['code' => $this->getCode() ?: 500, 'message' => $this->getMessage()]);
         }
-        // json olmayan istek bir sayfa döndürür
+        // JSON olmayan istek bir sayfa döndürür
         return new Response(200, [], $this->getMessage());
     }
 }
 ```
 
-Bu durumda iş istisnası oluşturulduğunda
+Böylece iş mantığı
 ```php
 use app\exception\MyBusinessException;
 
-throw new MyBusinessException('Parametre hatası', 3000);
+throw new MyBusinessException('Parametre Hatası', 3000);
 ```
-json isteği aşağıdaki gibi bir json döner
+çalıştığında, JSON isteği aşağıdaki gibi bir JSON yanıt alacaktır:
 ```json
-{"code": 3000, "message": "Parametre hatası"}
+{"code": 3000, "message": "Parametre Hatası"}
 ```
 
 > **İpucu**
-> BusinessException istisnası, iş istisnası (örneğin kullanıcı giriş parametre hatası) olduğu için beklenen bir durumdur, bu nedenle framework onun ölümcül bir hata olduğunu düşünmez ve günlüğe kaydetmez.
+> BusinessException istisnası, öngörülebilir bir iş istisnası olduğu için çerçeve onu ölümcül bir hata olarak kabul etmez ve günlüğe kaydetmez.
 
-## Özet
-Mevcut isteği kesmeyi ve istemciye bir bilgi döndürmeyi düşündüğünüz herhangi bir durumda `BusinessException` istisnasının kullanımını düşünebilirsiniz.
+## Sonuç
+Mevcut isteği sonlandırıp istemciye bilgi döndürmek istediğiniz her durumda `BusinessException` istisnasını kullanmayı düşünebilirsiniz.

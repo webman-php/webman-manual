@@ -1,55 +1,52 @@
-# Webman इवेंट लाइब्रेरी webman-event
+# वेबमैन इवेंट लाइब्रेरी webman-event
 
-[![license](https://img.shields.io/github/license/Tinywan/webman-event)]()
+[![लाइसेंस](https://img.shields.io/github/license/Tinywan/webman-event)]()
 [![webman-event](https://img.shields.io/github/v/release/tinywan/webman-event?include_prereleases)]()
 [![webman-event](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 [![webman-event](https://img.shields.io/github/last-commit/tinywan/webman-event/main)]()
 [![webman-event](https://img.shields.io/github/v/tag/tinywan/webman-event?color=ff69b4)]()
 
-इवेंट मध्यवर्तीकरण की तुलना में इवेंट का फायदा इस से होता है कि इवेंट मध्यवर्तीकरण से बेहतर निश्चित स्थान (या बोल सकते हैं कि अधिक सूक्ष्म) होता है, और कुछ व्यावसायिक परिस्थितियों के विस्तार के लिए अधिक उपयुक्त होता है। उदाहरण के लिए, हमें आमतौर पर उपयोगकर्ता दर्ज करने या लॉगिन करने के बाद कुछ कार्य करने की जरूरत होती है, इवेंट सिस्टम के माध्यम से प्रारंभिक कोड में अतिक्रमण किए बिना लॉगिन के कार्य के विस्तार को संपन्न कर सकते हैं, जो सिस्टम की संलग्नता को कम करता है, साथ ही साथ बग की संभावनाओं को भी कम करता है।
+इवेंट मध्यवर्तिन तुलना में इवेंट का फायदा यह है कि इवेंट मध्यवर्ती से अधिक सटीक स्थानांतरण (या स्थानांतरण फाइनग्रैन्ड पार्टिलस) कर सकता है, और कुछ व्यावसायिक स्थिति के विस्तार के लिए अधिक उपयुक्त है। उदाहरण के लिए, हमारे पास उपयोगकर्ता पंजीकरण या प्रवेश के बाद कुछ कार्य करने की आवश्यकता होती है, जिसमें इवेंट सिस्टम के माध्यम से प्रवेश के कार्य का विस्तार किया जा सकता है, मूल कोड को भिन्न किया जा सकता है, जिससे सिस्टम की मोस्ती कम होती है, साथ ही साथ बग की संभावनाएँ कम हो जाती हैं।
 
-## परियोजना पता
+## प्रोजेक्ट पता
 
 [https://github.com/Tinywan/webman-permission](https://github.com/Tinywan/webman-permission)
 
-## आवश्यकताएँ
+## निर्भरता
 
 - [symfony/event-dispatcher](https://github.com/symfony/event-dispatcher)
 
 ## स्थापना
 
-```shell script
-composer require tinywan/webman-event
+```शैल स्क्रिप्ट
+कॉम्पोजर आवश्यक tinywan/webman-event
 ```
+## सेटिंग्स 
 
-## कॉन्फ़िगरेशन
-
-इवेंट कॉन्फ़िगरेशन फ़ाइल `config/event.php` की सामग्री निम्नलिखित है
+इवेंट सेटिंग्स फ़ाइल `config/event.php` की सामग्री निम्नलिखित है
 
 ```php
 return [
-    // इवेंट सुनना
+    // इवेंट सुनने वाला
     'listener'    => [],
 
-    // इवेंट सदस्य
+    // इवेंट सब्सक्राइबर
     'subscriber' => [],
 ];
 ```
+### प्रक्रिया प्रारंभ करने की सेटिंग
 
-### प्रक्रिया प्रारंभ करने का विन्यास
-
-`config/bootstrap.php` खोलें, और निम्न विन्यास जोड़ें:
+`config/bootstrap.php` खोलें, और निम्न को जोड़ें:
 
 ```php
 return [
-    // यहां अन्य विन्यास छोड़ दिए गए हैं ...
+    // यहाँ अन्य सेटिंग छोड़ दी गई है ...
     webman\event\EventManager::class,
 ];
 ```
+## त्वरित आरंभ
 
-## तेज़ आरंभ
-
-### इवेंट परिभाषित करें
+### इवेंट परिभाषित
 
 इवेंट क्लास `LogErrorWriteEvent.php`
 
@@ -62,7 +59,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class LogErrorWriteEvent extends Event
 {
-    const NAME = 'log.error.write';  // इवेंट नाम, इवेंट का अद्वितीय पहचान है
+    const NAME = 'log.error.write';  // इवेंट नाम, इवेंट की यूनिक पहचान
 
     /** @var array */
     public array $log;
@@ -80,18 +77,19 @@ class LogErrorWriteEvent extends Event
 ```
 
 ### इवेंट सुनना
+
 ```php
 return [
-    // इवेंट सुनना
+    // इवेंट सुनने वाला
     'listener'    => [
         \extend\event\LogErrorWriteEvent::NAME  => \extend\event\LogErrorWriteEvent::class,
     ],
 ];
 ```
 
-### इवेंट सदस्य
+### इवेंट सब्सक्राइब
 
-सदस्य क्लास `LoggerSubscriber.php`
+सब्सक्राइबर क्लास `LoggerSubscriber.php`
 
 ```php
 namespace extend\event\subscriber;
@@ -102,8 +100,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class LoggerSubscriber implements EventSubscriberInterface
 {
     /**
-     * @desc: मेथड विवरण
-     * @return array|string[]
+     * @desc: विधि विवरण
+     * @return string[]
      */
     public static function getSubscribedEvents()
     {
@@ -113,21 +111,21 @@ class LoggerSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @desc: इवेंट ट्रिगर करना
+     * @desc: इवेंट ट्रिगर
      * @param LogErrorWriteEvent $event
      */
     public function onLogErrorWrite(LogErrorWriteEvent $event)
     {
-        // कुछ विशिष्ट व्यावसायिक तार्किक
+        // कुछ व्यावसायिक तार्किक
         var_dump($event->handle());
     }
 }
 ```
 
-इवेंट सदस्य
+इवेंट सब्सक्राइब
 ```php
 return [
-    // इवेंट सदस्य
+    // इवेंट सब्सक्राइब
     'subscriber' => [
         \extend\event\subscriber\LoggerSubscriber::class,
     ],
@@ -146,10 +144,10 @@ $error = [
 EventManager::trigger(new LogErrorWriteEvent($error),LogErrorWriteEvent::NAME);
 ```
 
-कार्य परिणाम
+नतीजे
 
-![प्रिंट आउट](./trigger.png)
+![प्रिंट आउट नतीजा](./trigger.png)
 
 ## लाइसेंस
 
-इस परियोजना का लाइसेंस [एपाची 2.0 लाइसेंस](LICENSE) के तहत है।
+इस प्रोजेक्ट का लाइसेंस [Apache 2.0 license](LICENSE) के तहत है।

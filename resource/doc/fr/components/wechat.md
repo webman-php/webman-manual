@@ -2,7 +2,7 @@
 
 ## overtrue/wechat
 
-### URL du projet
+### Projet Adresse
 
 https://github.com/overtrue/wechat
 
@@ -13,6 +13,7 @@ composer require overtrue/wechat ^5.0
 ```
 
 ### Utilisation
+
 ```php
 <?php
 namespace app\controller;
@@ -37,6 +38,6 @@ class WechatController
 }
 ```
 
-### Pour plus de contenu
+### Plus de contenu
 
-Consultez https://www.easywechat.com/5.x/
+Visitez https://www.easywechat.com/5.x/

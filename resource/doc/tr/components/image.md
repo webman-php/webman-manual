@@ -5,13 +5,13 @@
 ### Proje Adresi
 
 https://github.com/Intervention/image
-  
+
 ### Kurulum
- 
+
 ```php
 composer require intervention/image
 ```
-  
+
 ### Kullanım
 
 **Yükleme Sayfası Parçası**
@@ -23,7 +23,7 @@ composer require intervention/image
   </form>
 ```
 
-**Yeni `app/controller/UserController.php` Oluşturun**
+**`app/controller/UserController.php` içinde yeni oluşturun**
 
 ```php
 <?php
@@ -42,10 +42,9 @@ class UserController
         }
         return response('dosya bulunamadı');
     }
-    
 }
 ```
-  
+
 ### Daha Fazla İçerik
 
-http://image.intervention.io/getting_started/introduction adresini ziyaret edin.
+http://image.intervention.io/getting_started/introduction

@@ -1,9 +1,8 @@
 # 依賴自動注入
-在webman裡依賴自動注入是可選功能，此功能預設關閉。如果你需要依賴自動注入，推薦使用[php-di](https://php-di.org/doc/getting-started.html)，以下是webman結合`php-di`的用法。
+在webman裡依賴自動注入是可選功能，此功能預設是關閉的。如果你需要依賴自動注入，推薦使用[php-di](https://php-di.org/doc/getting-started.html)，以下是webman結合 `php-di` 的用法。
 
 ## 安裝
-```
-composer require psr/container ^1.1.1 php-di/php-di ^6 doctrine/annotations ^1.14
+```composer require psr/container ^1.1.1 php-di/php-di ^6 doctrine/annotations ^1.14
 ```
 
 修改配置`config/container.php`，其最終內容如下：
@@ -27,7 +26,7 @@ class Mailer
 {
     public function mail($email, $content)
     {
-        // 發送郵件程式碼省略
+        // 發送郵件程式略
     }
 }
 ```
@@ -57,15 +56,14 @@ class UserController
     }
 }
 ```
-正常情況下，需要以下代碼才能完成`app\controller\UserController`的實例化：
+正常情況下，需要以下程式碼才能完成`app\controller\UserController`的實例化：
 ```php
 $mailer = new Mailer;
 $user = new UserController($mailer);
-```
-當使用`php-di`後，開發者無需手動實例化控制器中的`Mailer`，webman會自動幫你完成。如果在實例化`Mailer`過程中有其它類的依賴，webman也會自動實例化並注入。開發者不需要任何的初始化工作。
+```當使用`php-di`後，開發者無需手動實例化控制器中的`Mailer`，webman會自動幫你完成。如果在實例化`Mailer`過程中有其它類的依賴，webman也會自動實例化並注入。開發者不需要任何的初始化工作。
 
 > **注意**
-> 必須是由框架或者`php-di`創建的實例才能完成依賴自動注入，手動`new`的實例無法完成依賴自動注入，如需注入，需要使用`support\Container`接口替換`new`語句，例如：
+> 必須是由框架或者`php-di`創建的實例才能完成依賴自動注入，手動`new`的實例無法完成依賴自動注入，如需注入，需要使用`support\Container`介面替換`new`語句，例如：
 
 ```php
 use app\service\UserService;
@@ -107,11 +105,10 @@ class UserController
         return response('ok');
     }
 }
-```
-這個例子通過 `@Inject` 註解注入，並且由 `@var` 註解聲明對象類型。這個例子和構造函數注入效果一樣，但是代碼更精簡。
+```這個例子通過 `@Inject` 註解注入，並且由 `@var` 註解聲明對象類型。這個例子和構造函數注入效果一樣，但是程式碼更精簡。
 
 > **注意**
-> webman在1.4.6版本之前不支持控制器參數注入，例如以下代碼當webman<=1.4.6時是不支持的
+> webman在1.4.6版本之前不支持控制器參數注入，例如以下程式碼當webman<=1.4.6時是不支援的
 
 ```php
 <?php
@@ -151,29 +148,25 @@ class Mailer
 
     public function mail($email, $content)
     {
-        // 發送郵件程式碼省略
+        // 發送郵件程式略
     }
 }
-```
+```這種情況無法直接使用前面介紹的構造函數自動注入，因為`php-di`無法確定`$smtp_host` `$smtp_port`的值是什麼。這時候可以嘗試自定義注入。
 
-這種情況無法直接使用前面介紹的構造函數自動注入，因為`php-di`無法確定`$smtp_host` `$smtp_port`的值是什麼。這時候可以嘗試自定義注入。
-
-在`config/dependence.php`(文件不存在請自行創建)中加入如下代碼：
+在`config/dependence.php`(檔案不存在請自行創建)中加入如下程式碼：
 ```php
 return [
     // ... 這裡忽略了其他配置
     
     app\service\Mailer::class =>  new app\service\Mailer('192.168.1.11', 25);
 ];
-```
-這樣當依賴注入需要獲取`app\service\Mailer`實例時將自動使用這個配置中創建的`app\service\Mailer`實例。
+```這樣當依賴注入需要獲取`app\service\Mailer`實例時將自動使用這個配置中創建的`app\service\Mailer`實例。
 
-我們注意到，`config/dependence.php` 中使用了`new`來實例化`Mailer`類，這個在本示例沒有任何問題，但是想象下如果`Mailer`類依賴了其他類的話或者`Mailer`類內部使用了註解注入，使用`new`初始化將不會依賴自動注入。解決辦法是利用自定義接口注入，通過`Container::get(類名)` 或者 `Container::make(類名, [構造函數參數])`方法來初始化類。
+我們注意到，`config/dependence.php` 中使用了`new`來實例化`Mailer`類，這個在本示例沒有任何問題，但是想象下如果`Mailer`類依賴了其他類的話或者`Mailer`類內部使用了註解注入，使用`new`初始化將不會依賴自動注入。解決辦法是利用自定義介面注入，通過`Container::get(類名)` 或者 `Container::make(類名, [構造函數參數])`方法來初始化類。
+## 自訂接口注入
+在實際的專案中，我們更希望以接口為導向進行編碼，而不是具體的類別。例如在 `app\controller\UserController` 中，應該引入 `app\service\MailerInterface` 而不是 `app\service\Mailer`。
 
-## 自定義介面注入
-在現實項目中，我們更希望面向介面編程，而不是具體的類。比如`app\controller\UserController`裡應該引入`app\service\MailerInterface`而不是`app\service\Mailer`。
-
-定義`MailerInterface`介面。
+定義 `MailerInterface` 接口。
 ```php
 <?php
 namespace app\service;
@@ -184,7 +177,7 @@ interface MailerInterface
 }
 ```
 
-定義`MailerInterface`介面的實現。
+定義 `MailerInterface` 介面的實作。
 ```php
 <?php
 namespace app\service;
@@ -192,15 +185,15 @@ namespace app\service;
 class Mailer implements MailerInterface
 {
     private $smtpHost;
-
+  
     private $smtpPort;
-
+  
     public function __construct($smtp_host, $smtp_port)
     {
         $this->smtpHost = $smtp_host;
         $this->smtpPort = $smtp_port;
     }
-
+  
     public function mail($email, $content)
     {
         // 發送郵件程式碼省略
@@ -208,7 +201,7 @@ class Mailer implements MailerInterface
 }
 ```
 
-引入`MailerInterface`介面而非具體實現。
+引入 `MailerInterface` 介面而非具體實作。
 ```php
 <?php
 namespace app\controller;
@@ -224,7 +217,7 @@ class UserController
      * @var MailerInterface
      */
     private $mailer;
-    
+
     public function register(Request $request)
     {
         $this->mailer->mail('hello@webman.com', 'Hello and welcome!');
@@ -233,7 +226,7 @@ class UserController
 }
 ```
 
-`config/dependence.php` 將 `MailerInterface` 介面定義如下實現。
+`config/dependence.php` 將 `MailerInterface` 介面定義如下實作。
 ```php
 use Psr\Container\ContainerInterface;
 return [
@@ -243,14 +236,14 @@ return [
 ];
 ```
 
-這樣當業務需要使用`MailerInterface`介面時，將自動使用`Mailer`實現。
+這樣當業務需要使用 `MailerInterface` 介面時，將自動使用 `Mailer` 實作。
 
-> 面向介面編程的好處是，當我們需要更換某個組件時，不需要更改業務代碼，只需要更改`config/dependence.php`中的具體實現即可。這在做單元測試也非常有用。
+> 面向接口編程的好處是，當我們需要更換某個組件時，不需要更改業務程式碼，只需要更改 `config/dependence.php` 中的具體實作即可。這在做單元測試也非常有用。
 
-## 其它自定義注入
-`config/dependence.php`除了能定義類的依賴，也能定義其它值，例如字串、數字、陣列等。
+## 其他自訂注入
+`config/dependence.php` 除了能定義類的相依性，也能定義其他值，例如字串、數字、陣列等。
 
-例如`config/dependence.php`定義如下：
+例如 `config/dependence.php` 定義如下：
 ```php
 return [
     'smtp_host' => '192.168.1.11',
@@ -258,7 +251,7 @@ return [
 ];
 ```
 
-這時候我們可以通過`@Inject`將`smtp_host` `smtp_port` 注入到類的屬性中。
+這時候我們可以透過 `@Inject` 將 `smtp_host` 和 `smtp_port` 注入到類別的屬性中。
 ```php
 <?php
 namespace app\service;
@@ -271,12 +264,12 @@ class Mailer
      * @Inject("smtp_host")
      */
     private $smtpHost;
-
+  
     /**
      * @Inject("smtp_port")
      */
     private $smtpPort;
-
+  
     public function mail($email, $content)
     {
         // 發送郵件程式碼省略
@@ -287,6 +280,5 @@ class Mailer
 
 > 注意：`@Inject("key")` 裡面是雙引號
 
-
 ## 更多內容
-請參考[php-di手冊](https://php-di.org/doc/getting-started.html)
+請參考 [php-di手冊](https://php-di.org/doc/getting-started.html)

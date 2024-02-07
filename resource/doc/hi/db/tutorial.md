@@ -1,28 +1,27 @@
-# तेज़ शुरू
+# त्वरित शुरू
 
-webman डेटाबेस डिफ़ॉल्ट रूप से [illuminate/database](https://github.com/illuminate/database) का उपयोग करता है, जो कि [laravel डेटाबेस](https://learnku.com/docs/laravel/8.x/database/9400) है, इसका उपयोग लैरेवल के समान है।
+वेबमैन डेटाबेस डिफ़ॉल्ट रूप से [Illuminate/database](https://github.com/illuminate/database) का उपयोग करता है, यानी [लारावेल डेटाबेस](https://learnku.com/docs/laravel/8.x/database/9400), जिसका उपयोग भी लारावेल में किया जाता है।
 
-बेशक, आप [अन्य डेटाबेस कॉम्पोनेंट का उपयोग](others.md) करने के लिए "उपयोग करने के लिए" अध्याय में ThinkPHP या अन्य डेटाबेस का उपयोग कर सकते हैं।
+आप अन्य डेटाबेस कॉम्पोनेंट का उपयोग करने के लिए [अन्य](others.md) अध्याय का उपयोग कर सकते हैं, जैसे ThinkPHP या अन्य डेटाबेस का उपयोग करना।
 
 ## स्थापना
 
-`कॉम्पोज़र डिमांड -W illuminate/database illuminate/pagination illuminate/events symfony/var-dumper`
+`कंपोजर स्थापित करें -डब्ल्यू illuminate/database illuminate/pagination illuminate/events symfony/var-dumper`
 
-स्थापना के बाद पुनः शुरू करने की आवश्यकता होगी (रीलोड अमान्य है)
+स्थापना के बाद पुन: शुरू करने की आवश्यकता होगी (रिलोड वैध नहीं है)
 
-> **सूचना**
-> यदि पृष्ठभाग, डेटाबेस घटनाएँ, SQL छापा नहीं चाहिए, तो केवल यह कार्रवाई करनी होगी
-> `कॉम्पोज़र डिमांड -W illuminate/database`
+> **टिप्पणी**
+> यदि पेजिनेशन, डेटाबेस इवेंट, SQL प्रिंट की आवश्यकता नहीं है, तो केवल निम्न अमल करना होगा
+> `कंपोजर स्थापित करें -डब्ल्यू illuminate/database`
 
-## डेटाबेस कॉन्फ़िगरेशन
+## डेटाबेस सेटअप
 `config/database.php`
 ```php
-
 return [
     // डिफ़ॉल्ट डेटाबेस
     'default' => 'mysql',
 
-    // विभिन्न डेटाबेस कॉन्फ़िगरेशन
+    // विभिन्न डाटाबेस सेटअप
     'connections' => [
         'mysql' => [
             'driver'      => 'mysql',

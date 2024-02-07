@@ -1,21 +1,20 @@
-# Processus de surveillance
-webman est livré avec un processus de surveillance appelé monitor, qui prend en charge deux fonctionnalités :
-1. Surveiller les mises à jour des fichiers et recharger automatiquement le nouveau code métier (généralement utilisé pendant le développement).
-2. Surveiller l'utilisation de la mémoire par tous les processus ; s'il est constaté qu'un processus utilise presque la limite définie dans `memory_limit` de `php.ini`, il redémarrera automatiquement de manière sécurisée (sans affecter l'activité).
+# Surveillance des processus
+Webman est livré avec un processus de surveillance appelé "monitor" qui prend en charge deux fonctionnalités :
+1. Surveillance des mises à jour de fichiers et rechargement automatique du nouveau code métier (généralement utilisé pendant le développement).
+2. Surveillance de l'utilisation de la mémoire par tous les processus. Si la consommation mémoire d'un processus dépasse bientôt la limite définie dans `php.ini` (`memory_limit`), le processus sera redémarré en toute sécurité sans affecter l'activité métier.
 
-### Configuration de la surveillance
-Dans le fichier de configuration `config/process.php`, configurez la surveillance dans la section `monitor` de la manière suivante :
+### Configuration de surveillance
+Dans le fichier de configuration `config/process.php`, sous la configuration `monitor` :
+
 ```php
 global $argv;
 
 return [
-    // Détection des mises à jour des fichiers et rechargement automatique
     'monitor' => [
         'handler' => process\Monitor::class,
         'reloadable' => false,
         'constructor' => [
-            // Surveiller ces répertoires
-            'monitorDir' => array_merge([    // Quels répertoires doivent être surveillés
+            'monitorDir' => array_merge([
                 app_path(),
                 config_path(),
                 base_path() . '/process',
@@ -23,22 +22,22 @@ return [
                 base_path() . '/resource',
                 base_path() . '/.env',
             ], glob(base_path() . '/plugin/*/app'), glob(base_path() . '/plugin/*/config'), glob(base_path() . '/plugin/*/api')),
-            // Les fichiers avec ces extensions seront surveillés
             'monitorExtensions' => [
                 'php', 'html', 'htm', 'env'
             ],
             'options' => [
-                'enable_file_monitor' => !in_array('-d', $argv) && DIRECTORY_SEPARATOR === '/', // Activer la surveillance des fichiers
-                'enable_memory_monitor' => DIRECTORY_SEPARATOR === '/',                      // Activer la surveillance de la mémoire
+                'enable_file_monitor' => !in_array('-d', $argv) && DIRECTORY_SEPARATOR === '/',
+                'enable_memory_monitor' => DIRECTORY_SEPARATOR === '/',
             ]
         ]
     ]
 ];
 ```
-L'option `monitorDir` est utilisée pour configurer les répertoires à surveiller (il est déconseillé de surveiller trop de fichiers dans les répertoires).
-L'option `monitorExtensions` est utilisée pour configurer les extensions de fichiers à surveiller dans le répertoire spécifié par `monitorDir`.
-Lorsque la valeur de `options.enable_file_monitor` est `true`, la surveillance des mises à jour de fichiers est activée (activée par défaut en mode debug sur les systèmes Linux).
-Lorsque la valeur de `options.enable_memory_monitor` est `true`, la surveillance de l'utilisation de la mémoire est activée (la surveillance de l'utilisation de la mémoire n'est pas prise en charge sur les systèmes Windows).
+
+Le paramètre `monitorDir` est utilisé pour configurer les répertoires à surveiller (il est déconseillé de surveiller un grand nombre de fichiers dans ces répertoires).
+Le paramètre `monitorExtensions` est utilisé pour spécifier les extensions des fichiers à surveiller dans les répertoires définis dans `monitorDir`.
+La valeur `options.enable_file_monitor` est définie sur `true` pour activer la surveillance des mises à jour de fichiers (par défaut, la surveillance des fichiers est activée lors de l'exécution en mode debug sous Linux).
+La valeur `options.enable_memory_monitor` est définie sur `true` pour activer la surveillance de l'utilisation de la mémoire (la surveillance de la mémoire n'est pas prise en charge par Windows).
 
 > **Remarque**
-> Sur les systèmes Windows, la surveillance des mises à jour de fichiers ne peut être activée que lorsque vous exécutez `windows.bat` ou `php windows.php`.
+> Sous Windows, la surveillance des mises à jour de fichiers n'est activée que lorsque vous exécutez `windows.bat` ou `php windows.php`.

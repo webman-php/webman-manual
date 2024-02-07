@@ -1,8 +1,8 @@
 # ควบคุม
 
-ตามหลักการ PSR4 คลาสควบคุมจะมีเนมสเปซที่เริ่มต้นด้วย `plugin\{รหัสปลั๊กอิน}` เช่น
+ตามข้อกำหนดของ PSR4 โดย namespace ของคลาสควบคุมจะขึ้นต้นด้วย `plugin\{รหัสปลั๊กอิน}` เช่น
 
-สร้างไฟล์ควบคุมใหม่ `plugin/foo/app/controller/FooController.php`。
+สร้างไฟล์ควบคุม `plugin/foo/app/controller/FooController.php` ดังตัวอย่างต่อไปนี้
 
 ```php
 <?php
@@ -24,11 +24,10 @@ class FooController
 }
 ```
 
-เมื่อเข้าถึง `http://127.0.0.1:8787/app/foo/foo` จะแสดงหน้า `hello index`
+เมื่อเข้าถึง `http://127.0.0.1:8787/app/foo/foo` จะแสดงผลเป็น `hello index`
 
-เมื่อเข้าถึง `http://127.0.0.1:8787/app/foo/foo/hello` จะแสดงหน้า `hello webman`
+เมื่อเข้าถึง `http://127.0.0.1:8787/app/foo/foo/hello` จะแสดงผลเป็น `hello webman`
 
-
-## การเข้าถึง URL
-เส้นทาง URL ของปลั๊กอินแอปพลิเคชันจะขึ้นต้นด้วย `/app` ตามด้วยรหัสปลั๊กอิน และตามด้วยควบคุมและเมทอดที่เฉพาะเจาะจง	
-เช่น `plugin\foo\app\controller\UserController` URL คือ `http://127.0.0.1:8787/app/foo/user`
+## URL ที่เข้าถึง
+ที่อยู่ URL ของปลั๊กอินแอปพลิเคชันเริ่มต้นด้วย `/app` ตามด้วยรหัสปลั๊กอิน และตามด้วยควบคุมและวิธีการที่เฉพาะเจาะจง
+เช่น URL ของควบคุม `plugin\foo\app\controller\UserController` คือ `http://127.0.0.1:8787/app/foo/user`

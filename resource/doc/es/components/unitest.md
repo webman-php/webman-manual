@@ -1,13 +1,15 @@
 # Pruebas unitarias
 
 ## Instalación
- 
+
 ```php
 composer require --dev phpunit/phpunit
 ```
-  
+
 ## Uso
+
 Cree un archivo `tests/TestConfig.php` para probar la configuración de la base de datos.
+
 ```php
 <?php
 use PHPUnit\Framework\TestCase;
@@ -25,14 +27,17 @@ class TestConfig extends TestCase
     }
 }
 ```
-  
+
 ## Ejecución
 
-En el directorio raíz del proyecto, ejecute `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php`
-
-El resultado será similar al siguiente:
+Ejecute en el directorio raíz del proyecto:
+```bash
+./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php
 ```
-PHPUnit 9.5.10 por Sebastian Bergmann y colaboradores.
+
+El resultado será similar a:
+```plaintext
+PHPUnit 9.5.10 by Sebastian Bergmann and contributors.
 
 .                                                                   1 / 1 (100%)
 

@@ -2,7 +2,7 @@
 
 ## intervention/image
 
-### URL проекта
+### Адрес проекта
 
 https://github.com/Intervention/image
 
@@ -48,4 +48,4 @@ class UserController
 
 ### Дополнительная информация
 
-Посетите страницу http://image.intervention.io/getting_started/introduction
+Посетите http://image.intervention.io/getting_started/introduction

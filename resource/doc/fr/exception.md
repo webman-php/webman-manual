@@ -8,53 +8,49 @@ return [
     '' => support\exception\Handler::class,
 ];
 ```
-En mode multi-applications, vous pouvez configurer une classe de gestion des exceptions distincte pour chaque application, voir [Multi-Application](multiapp.md).
-
+En mode d'application multiple, vous pouvez configurer une classe de gestion des exceptions distincte pour chaque application, voir [Application multiple](multiapp.md)
 
 ## Classe de gestion des exceptions par défaut
-Par défaut, les exceptions dans webman sont gérées par la classe `support\exception\Handler`. Vous pouvez modifier la classe de gestion des exceptions par défaut en modifiant le fichier de configuration `config/exception.php`. La classe de gestion des exceptions doit implémenter l'interface `Webman\Exception\ExceptionHandlerInterface`.
+Les exceptions dans webman sont gérées par défaut par la classe `support\exception\Handler`. Vous pouvez modifier la classe de gestion des exceptions par défaut en modifiant le fichier de configuration `config/exception.php`. La classe de gestion des exceptions doit implémenter l'interface `Webman\Exception\ExceptionHandlerInterface`.
 ```php
 interface ExceptionHandlerInterface
 {
     /**
-     * Enregistre un journal
+     * Enregistrer les logs
      * @param Throwable $e
      * @return mixed
      */
     public function report(Throwable $e);
 
     /**
-     * Rendu de la réponse
+     * Rendre la réponse
      * @param Request $request
      * @param Throwable $e
      * @return Response
      */
-    public function render(Request $request, Throwable $e): Response;
+    public function render(Request $request, Throwable $e) : Response;
 }
 ```
 
+## Rendre une réponse
+La méthode `render` dans la classe de gestion des exceptions est utilisée pour rendre une réponse.
 
+Si la valeur de `debug` dans le fichier de configuration `config/app.php` est `true` (abrégé en `app.debug=true`), des informations détaillées sur l'exception seront renvoyées, sinon des informations succinctes sur l'exception seront renvoyées.
 
-## Rendu de la réponse
-La méthode `render` de la classe de gestion des exceptions est utilisée pour le rendu de la réponse.
-
-Si la valeur de `debug` dans le fichier de configuration `config/app.php` est définie sur `true` (ci-après abrégée `app.debug=true`), des informations détaillées sur l'exception seront renvoyées, sinon des informations succinctes sur l'exception seront renvoyées.
-
-Si la requête attend une réponse JSON, les informations sur l'exception renvoyées sous forme de JSON seront similaires à :
+Si la demande attend une réponse en JSON, les informations sur l'exception seront renvoyées au format JSON, par exemple
 ```json
 {
     "code": "500",
     "msg": "Informations sur l'exception"
 }
 ```
-Si `app.debug=true`, les données JSON incluront un champ `trace` supplémentaire renvoyant une pile d'appels détaillée.
+Si `app.debug=true`, les données JSON incluront également un champ `trace` renvoyant une pile d'appels détaillée.
 
 Vous pouvez écrire votre propre classe de gestion des exceptions pour modifier la logique de gestion des exceptions par défaut.
 
 # Exception métier BusinessException
-Parfois, nous voulons interrompre une demande à l'intérieur d'une fonction imbriquée et renvoyer un message d'erreur au client. Cela peut être réalisé en lançant une `BusinessException`.
+Parfois, nous voulons interrompre une requête à l'intérieur d'une fonction imbriquée et renvoyer un message d'erreur au client. Dans ce cas, nous pouvons le faire en lançant une `BusinessException`.
 Par exemple :
-
 ```php
 <?php
 namespace app\controller;
@@ -66,32 +62,32 @@ class FooController
 {
     public function index(Request $request)
     {
-        $this->chackInpout($request->post());
+        $this->checkInput($request->post());
         return response('hello index');
     }
     
-    protected function chackInpout($input)
+    protected function checkInput($input)
     {
         if (!isset($input['token'])) {
-            throw new BusinessException('Paramètre incorrect', 3000);
+            throw new BusinessException('Erreur de paramètre', 3000);
         }
     }
 }
 ```
 
-L'exemple ci-dessus va renvoyer
+L'exemple ci-dessus renverra un
 ```json
-{"code": 3000, "msg": "Paramètre incorrect"}
+{"code": 3000, "msg": "Erreur de paramètre"}
 ```
 
 > **Remarque**
-> La BusinessException n'a pas besoin d'être capturée par un try-catch car le framework la capture automatiquement et renvoie la sortie appropriée en fonction du type de demande.
+> Une BusinessException n'a pas besoin d'être capturée par un bloc try-catch, le framework la capture automatiquement et renvoie une sortie appropriée en fonction du type de requête.
 
-## Personnalisation de l'exception métier
+## Exception métier personnalisée
 
-Si la réponse ci-dessus ne correspond pas à vos besoins, par exemple si vous souhaitez changer `msg` en `message`, vous pouvez personnaliser une `MyBusinessException`.
+Si la réponse ci-dessus ne correspond pas à vos besoins, par exemple si vous souhaitez changer `msg` en `message`, vous pouvez créer une `MyBusinessException` personnalisée.
 
-Créez le fichier `app/exception/MyBusinessException.php` avec le contenu suivant :
+Créez un nouveau fichier `app/exception/MyBusinessException.php` avec le contenu suivant :
 ```php
 <?php
 
@@ -105,29 +101,30 @@ class MyBusinessException extends BusinessException
 {
     public function render(Request $request): ?Response
     {
-        // Retourne des données JSON pour une requête JSON
+        // Renvoi des données JSON pour les requêtes JSON
         if ($request->expectsJson()) {
             return json(['code' => $this->getCode() ?: 500, 'message' => $this->getMessage()]);
         }
-        // Sinon, renvoie une page non JSON
+        // Renvoi d'une page pour les requêtes non-JSON
         return new Response(200, [], $this->getMessage());
     }
 }
 ```
 
-Ainsi, lorsque l'entreprise utilise
+De cette manière, lorsque vous appelez
 ```php
 use app\exception\MyBusinessException;
 
-throw new MyBusinessException('Paramètre incorrect', 3000);
+throw new MyBusinessException('Erreur de paramètre', 3000);
 ```
-la demande JSON recevra une réponse semblable à :
+une requête JSON recevra une réponse au format JSON similaire à la suivante
 ```json
-{"code": 3000, "message": "Paramètre incorrect"}
+{"code": 3000, "message": "Erreur de paramètre"}
 ```
 
-> **Conseil**
-> Comme l'exception BusinessException est une exception métier (par exemple, une erreur de saisie de l'utilisateur), elle est prévisible. Par conséquent, le framework ne la considère pas comme une erreur fatale et n'enregistre pas de journal.
+> **Remarque**
+> Comme l'exception BusinessException est une exception métier (par exemple, une erreur de saisie utilisateur) et est prévisible, le framework ne la considère pas comme une erreur fatale et ne la journalise pas.
 
-## En résumé
-Vous pouvez envisager d'utiliser l'exception `BusinessException` à tout moment où vous voulez interrompre la demande actuelle et renvoyer des informations au client.
+## Conclusion
+
+Lorsque vous souhaitez interrompre une requête en cours et renvoyer des informations au client, vous pouvez envisager d'utiliser l'exception `BusinessException`.

@@ -1,11 +1,11 @@
-- ガイド
+- 入門ガイド
 
   - [webmanとは](README.md)
-  - [プログラムの要点](attention.md)
-  - [Q&A コミュニティ](help.md)
-  
-- クイックスタート
-  
+  - [プログラミングに関する注意事項](attention.md)
+  - [Q&Aコミュニティ](help.md)
+
+- スタートガイド
+
   - [インストール](install.md)
   - [ディレクトリ構造](directory.md)
   - [簡単な例](tutorial.md)
@@ -23,40 +23,40 @@
   - [例外処理](exception.md)
   - [ログ](log.md)
   - [設定ファイル](config.md)
-  - [複数アプリケーション](multiapp.md)
+  - [マルチアプリケーション](multiapp.md)
 
 - データベース
 
   - [クイックスタート](db/tutorial.md)
-  - [データベースの構成](db/config.md)
-  - [クエリビルダ](db/queries.md)
+  - [データベースの設定](db/config.md)
+  - [クエリビルダー](db/queries.md)
   - [モデル](db/model.md)
-  - [モデル関係](db/relationships.md)
-  - [ページング](db/paginator.md)
-  - [データベース移行](db/migration.md)
+  - [モデル関連付け](db/relationships.md)
+  - [ページネーション](db/paginator.md)
+  - [データベースマイグレーション](db/migration.md)
   - [Redis](db/redis.md)
   - [キャッシュ](db/cache.md)
   - [MongoDB](db/mongo.md)
   - [ThinkORM](db/thinkorm.md)
   - [ThinkCache](db/thinkcache.md)
   - [Medoo](db/medoo.md)
-  
+
 - メッセージキュー
-  - [Redis キュー](queue/redis.md)
+  - [Redisキュー](queue/redis.md)
   - [Stomp](queue/stomp.md)
  
 - 一般的なコンポーネント
   - [バリデータ](components/validation.md)
   - [ページネーションコンポーネント](components/paginator.md)
-  - [多言語](components/translation.md)
+  - [多言語対応](components/translation.md)
   - [画像処理](components/image.md)
   - [キャプチャ](components/captcha.md)
-  - [イベント](components/event.md)
-  - [環境変数コンポーネント](components/env.md)
-  - [Crontab スケジュール](components/crontab.md)
-  - [Excel スプレッドシート](components/excel.md)
+  - [Eventイベント](components/event.md)
+  - [Env環境変数コンポーネント](components/env.md)
+  - [Crontab定期実行タスク](components/crontab.md)
+  - [Excelスプレッドシート](components/excel.md)
   - [WeChat SDK](components/wechat.md)
-  - [支払いSDK](components/payment.md)
+  - [Payment SDK](components/payment.md)
   - [Casbin SDK](components/casbin.md)
   - [ユニットテスト](components/unitest.md)
   - [エラーコード生成](components/generate_error_code.md)
@@ -64,12 +64,12 @@
 - 基本プラグイン
   - [基本プラグイン](plugin/base.md)
   - [コマンドライン](plugin/console.md)
-  - [プッシュ通知](plugin/push.md)
+  - [プッシュ](plugin/push.md)
   - [基本プラグインマーケット](plugin/market.md)
   - [基本プラグインの提出](plugin/create.md)
 
 - アプリケーションプラグイン
-  - [紹介](app/app.md)
+  - [概要](app/app.md)
   - [規格](app/standard.md)
   - [アプリケーションの作成](app/create.md)
   - [ディレクトリ構造](app/directory.md)
@@ -85,18 +85,18 @@
   - [プラグインのパッケージ化](app/pack.md)
   - [プラグインの公開](app/publish.md)
   - [インストールとアンインストール](app/install.md)
-  - [アプリケーション市場](app/market.md)
+  - [アプリケーションマーケット](app/market.md)
 
-- アドバンスト
+- 上級者向け
   - [カスタムプロセス](process.md)
   - [依存性注入](di.md)
   - [AOP](aop.md)
   
 - その他
   - [セキュリティ](others/security.md)
-  - [関数無効チェック](others/disable-function-check.md)
+  - [無効な関数の検査](others/disable-function-check.md)
   - [カスタムスクリプト](others/scripts.md)
-  - [カスタム404 500](others/custom-error-page.md)
+  - [カスタム404 500ページ](others/custom-error-page.md)
   - [アップグレード方法](others/upgrade.md)
   - [nginxプロキシ](others/nginx-proxy.md)
   - [pharパッケージ](others/phar.md)
@@ -106,9 +106,9 @@
   - [メモリリーク](others/memory-leak.md)
   - [ビジネスの初期化](others/bootstrap.md)
   - [自動ロード](others/autoload.md)
-  - [スロービジネス処理](others/task.md)
+  - [遅延ビジネス処理](others/task.md)
   - [パフォーマンス](others/performance.md)
-  - [ストレステスト](others/benchmarks.md)
+  - [負荷テスト](others/benchmarks.md)
   - [ファイル監視](others/monitor.md)
 
 - アップグレード

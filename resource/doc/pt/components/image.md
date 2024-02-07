@@ -14,16 +14,16 @@ composer require intervention/image
 
 ### Utilização
 
-**Trecho de Página de Upload**
+**Trecho da Página de Upload**
 
 ```html
-  <form method="post" action="/user/img" enctype="multipart/form-data">
-      <input type="file" name="file">
-      <input type="submit" value="Enviar">
-  </form>
+<form method="post" action="/user/img" enctype="multipart/form-data">
+    <input type="file" name="file">
+    <input type="submit" value="Submit">
+</form>
 ```
 
-**Crie `app/controller/UserController.php`**
+**Criar novo arquivo `app/controller/UserController.php`**
 
 ```php
 <?php
@@ -40,11 +40,11 @@ class UserController
             $image = Image::make($file)->resize(100, 100);
             return response($image->encode('png'), 200, ['Content-Type' => 'image/png']);
         }
-        return response('arquivo não encontrado');
+        return response('file not found');
     }
 }
 ```
 
 ### Mais Informações
 
-Visite http://image.intervention.io/getting_started/introduction
+Acesse http://image.intervention.io/getting_started/introduction

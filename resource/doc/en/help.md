@@ -1,4 +1,4 @@
-# Community Support
+# Community Help
 
 ## Q&A Community
 

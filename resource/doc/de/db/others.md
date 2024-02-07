@@ -1,5 +1,5 @@
-# Verwendung einer anderen Datenbank
-Neben [illuminate/database](https://github.com/illuminate/database) können in webman auch andere Datenbankkomponenten verwendet werden.
+# Verwendung anderer Datenbanken
+Neben [illuminate/database](https://github.com/illuminate/database) können Sie in webman auch andere Datenbankkomponenten verwenden.
 
 ## ThinkORM
 Siehe [thinkorm](thinkorm.md)
@@ -7,5 +7,5 @@ Siehe [thinkorm](thinkorm.md)
 ## ThinkCache
 Siehe [think-cache](thinkcache.md)
 
-## Medoo-Datenbankplugin
-Siehe [Medoo-Plugin](https://www.workerman.net/plugin/29)
+## Medoo-Datenbank-Plugin
+Siehe [medoo-Plugin](../db/medoo.md)

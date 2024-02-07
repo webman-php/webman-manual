@@ -1,6 +1,5 @@
 # 單元測試
 
-
 ## 安裝
 
 ```php
@@ -8,7 +7,7 @@ composer require --dev phpunit/phpunit
 ```
 
 ## 使用
-創建檔案 `tests/TestConfig.php`，用於測試資料庫配置
+建立文件 `tests/TestConfig.php`，用於測試資料庫配置
 ```php
 <?php
 use PHPUnit\Framework\TestCase;
@@ -29,9 +28,9 @@ class TestConfig extends TestCase
 
 ## 執行
 
-在專案根目錄執行 `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php`
+在專案根目錄下執行 `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php`
 
-結果類似如下：
+執行結果如下：
 ```
 PHPUnit 9.5.10 by Sebastian Bergmann and contributors.
 

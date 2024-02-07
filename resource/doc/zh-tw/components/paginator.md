@@ -2,7 +2,7 @@
 
 ## jasongrimes/php-paginator
 
-### 專案地址
+### 專案連結
 
 https://github.com/jasongrimes/php-paginator
 
@@ -14,7 +14,7 @@ composer require "jasongrimes/paginator:^1.0.3"
 
 ### 使用
 
-新建 `app/controller/UserController.php`
+建立 `app/controller/UserController.php`
 ```php
 <?php
 namespace app\controller;
@@ -36,11 +36,10 @@ class UserController
         $paginator = new Paginator($total_items, $items_perPage, $current_page, $url_pattern);
         return view('user/get', ['paginator' => $paginator]);
     }
-    
 }
 ```
-**範本(PHP原生)**
-新建範本 app/view/user/get.html
+**模板(原生 PHP)**
+建立模板 app/view/user/get.html
 ```html
 <html>
 <head>
@@ -55,9 +54,8 @@ class UserController
 </html>
 ```
 
-
-**範本(twig)**
-新建範本 app/view/user/get.html
+**模板(twig)**
+建立模板 app/view/user/get.html
 ```html
 <html>
 <head>
@@ -74,8 +72,8 @@ class UserController
 </html>
 ```
 
-**範本(blade)**
-新建範本 app/view/user/get.blade.php
+**模板(blade)**
+建立模板 app/view/user/get.blade.php
 ```html
 <html>
 <head>
@@ -90,8 +88,8 @@ class UserController
 </html>
 ```
 
-**範本(thinkphp)**
-新建範本 app/view/user/get.blade.php
+**模板(thinkphp)**
+建立模板 app/view/user/get.blade.php
 ```html
 <html>
 <head>
@@ -111,4 +109,4 @@ class UserController
 
 ### 更多內容
 
-訪問 https://github.com/jasongrimes/php-paginator
+請造訪 https://github.com/jasongrimes/php-paginator

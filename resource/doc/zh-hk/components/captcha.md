@@ -2,10 +2,10 @@
 
 
 ## webman/captcha
-專案地址https://github.com/webman-php/captcha
+專案地址 https://github.com/webman-php/captcha
 
 ### 安裝
-```
+``` 
 composer require webman/captcha
 ```
 
@@ -41,7 +41,7 @@ class LoginController
         $builder->build();
         // 將驗證碼的值存儲到session中
         $request->session()->set('captcha', strtolower($builder->getPhrase()));
-        // 獲得驗證碼圖片二進制數據
+        // 獲取驗證碼圖片二進制數據
         $img_content = $builder->get();
         // 輸出驗證碼二進制數據
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
@@ -64,7 +64,7 @@ class LoginController
 }
 ```
 
-**建立模版文件`app/view/login/index.html`**
+**建立模板文件`app/view/login/index.html`**
 
 ```html
 <!doctype html>
@@ -112,4 +112,4 @@ class LoginController
     }
 ```
 
-更多接口及參數參考https://github.com/webman-php/captcha
+更多接口及參數參考 https://github.com/webman-php/captcha

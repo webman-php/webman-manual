@@ -1,9 +1,9 @@
-# 響應
-響應實際上是一個 `support\Response` 對象，為了方便創建這個對象，webman提供了一些輔助函數。
+# 回應
+回應實際上是一個`support\Response`物件，為了方便建立這個物件，webman提供了一些輔助函式。
 
-## 返回任意響應
+## 回傳任意回應
 
-**例子**
+**範例**
 ```php
 <?php
 namespace app\controller;
@@ -19,7 +19,7 @@ class FooController
 }
 ```
 
-response 函數實現如下：
+response函式實現如下：
 ```php
 function response($body = '', $status = 200, $headers = array())
 {
@@ -27,12 +27,11 @@ function response($body = '', $status = 200, $headers = array())
 }
 ```
 
-你也可以先創建一個空的 `response` 對象，然後在適當的位置利用 `$response->cookie()` `$response->header()` `$response->withHeaders()` `$response->withBody()` 設置返回內容。
-
+你也可以先建立一個空的`response`物件，然後在適當的位置利用`$response->cookie()` `$response->header()` `$response->withHeaders()` `$response->withBody()`設置返回內容。
 ```php
 public function hello(Request $request)
 {
-    // 創建一個對象
+    // 建立一個物件
     $response = response();
     
     // .... 業務邏輯省略
@@ -42,7 +41,7 @@ public function hello(Request $request)
     
     // .... 業務邏輯省略
     
-    // 設置http頭
+    // 設置http標頭
     $response->header('Content-Type', 'application/json');
     $response->withHeaders([
                 'X-Header-One' => 'Header Value 1',
@@ -51,14 +50,14 @@ public function hello(Request $request)
 
     // .... 業務邏輯省略
 
-    // 設置要返回的數據
-    $response->withBody('返回的數據');
+    // 設置要返回的資料
+    $response->withBody('返回的資料');
     return $response;
 }
 ```
 
-## 返回json
-**例子**
+## 回傳json
+**範例**
 ```php
 <?php
 namespace app\controller;
@@ -73,8 +72,7 @@ class FooController
     }
 }
 ```
-
-json 函數實現如下
+json函式實現如下
 ```php
 function json($data, $options = JSON_UNESCAPED_UNICODE)
 {
@@ -82,8 +80,9 @@ function json($data, $options = JSON_UNESCAPED_UNICODE)
 }
 ```
 
-## 返回xml
-**例子**
+
+## 回傳xml
+**範例**
 ```php
 <?php
 namespace app\controller;
@@ -105,8 +104,7 @@ class FooController
     }
 }
 ```
-
-xml 函數實現如下：
+xml函式實現如下：
 ```php
 function xml($xml)
 {
@@ -117,8 +115,8 @@ function xml($xml)
 }
 ```
 
-## 返回視圖
-新建文件 `app/controller/FooController.php` 如下
+## 回傳視圖
+新增檔案 `app/controller/FooController.php` 如下
 
 ```php
 <?php
@@ -135,7 +133,7 @@ class FooController
 }
 ```
 
-新建文件 `app/view/foo/hello.html` 如下
+新增檔案 `app/view/foo/hello.html` 如下
 
 ```html
 <!doctype html>
@@ -150,7 +148,7 @@ hello <?=htmlspecialchars($name)?>
 </html>
 ```
 
-## 重定向
+## 重新導向
 ```php
 <?php
 namespace app\controller;
@@ -165,8 +163,7 @@ class FooController
     }
 }
 ```
-
-redirect 函數實現如下：
+redirect函式實現如下：
 ```php
 function redirect($location, $status = 302, $headers = [])
 {
@@ -178,7 +175,7 @@ function redirect($location, $status = 302, $headers = [])
 }
 ```
 
-## header設置
+## 設置標頭
 ```php
 <?php
 namespace app\controller;
@@ -196,7 +193,7 @@ class FooController
     }
 }
 ```
-也可以利用 `header` 和 `withHeaders` 方法來單個或者批量設置 header。
+也可以利用`header`和`withHeaders`方法來單個或者批量設置header。
 ```php
 <?php
 namespace app\controller;
@@ -216,16 +213,16 @@ class FooController
     }
 }
 ```
-你也可以提前設置 header，最後設置將要返回的數據。
+你也可以提前設置header，最後設置將要返回的資料。
 ```php
 public function hello(Request $request)
 {
-    // 創建一個對象
+    // 建立一個物件
     $response = response();
     
     // .... 業務邏輯省略
     
-    // 設置http頭
+    // 設置http標頭
     $response->header('Content-Type', 'application/json');
     $response->withHeaders([
                 'X-Header-One' => 'Header Value 1',
@@ -234,8 +231,8 @@ public function hello(Request $request)
 
     // .... 業務邏輯省略
 
-    // 設置要返回的數據
-    $response->withBody('返回的數據');
+    // 設置要返回的資料
+    $response->withBody('返回的資料');
     return $response;
 }
 ```
@@ -257,12 +254,11 @@ class FooController
     }
 }
 ```
-
-你也可以提前設置 cookie，最後設置要返回的數據。
+你也可以提前設置cookie，最後設置要返回的資料。
 ```php
 public function hello(Request $request)
 {
-    // 創建一個對象
+    // 建立一個物件
     $response = response();
     
     // .... 業務邏輯省略
@@ -272,17 +268,15 @@ public function hello(Request $request)
     
     // .... 業務邏輯省略
 
-    // 設置要返回的數據
-    $response->withBody('返回的數據');
+    // 設置要返回的資料
+    $response->withBody('返回的資料');
     return $response;
 }
 ```
-
 cookie方法完整參數如下：
 
 `cookie($name, $value = '', $max_age = 0, $path = '', $domain = '', $secure = false, $http_only = false)`
-
-## 返回檔案流
+## 返回檔案串流
 ```php
 <?php
 namespace app\controller;
@@ -299,13 +293,12 @@ class FooController
 ```
 
 - webman支持發送超大檔案
-- 對於大檔案(超過2M)，webman不會將整個檔案一次性讀入內存，而是在合適的時機分段讀取檔案並發送
+- 對於大檔案（超過2M），webman不會一次性將整個檔案讀入內存，而是在適當的時機分段讀取檔案並發送
 - webman會根據客戶端接收速度來優化檔案讀取發送速度，保證最快速發送檔案的同時將內存佔用減少到最低
 - 數據發送是非阻塞的，不會影響其他請求處理
-- file方法會自動添加 `if-modified-since` 頭並在下一個請求時檢測 `if-modified-since` 頭，如果檔案未修改則直接返回304以便節省頻寬
-- 發送的檔案會自動使用合適的 `Content-Type` 頭發送給瀏覽器
-- 如果檔案不存在，會自動轉爲404響應
-
+- file方法會自動添加`if-modified-since`頭並在下一個請求時檢測`if-modified-since`頭，如果檔案未修改則直接返回304以便節省頻寬
+- 發送的檔案會自動使用合適的`Content-Type`頭發送給瀏覽器
+- 如果檔案不存在，會自動轉為404響應
 
 ## 下載檔案
 ```php
@@ -318,17 +311,16 @@ class FooController
 {
     public function hello(Request $request)
     {
-        return response()->download(public_path() . '/favicon.ico', '文件名.ico');
+        return response()->download(public_path() . '/favicon.ico', '檔案名.ico');
     }
 }
-```
-download方法與file方法基本一致，的區別是
+```  
+download方法與file方法基本一致，區別是：
 1、設置下載的檔案名後檔案會被下載下來，而不是顯示在瀏覽器裡
-2、download方法不會檢查 `if-modified-since` 頭
-
+2、download方法不會檢查`if-modified-since`頭
 
 ## 獲取輸出
-有些類庫是將檔案內容直接打印到標准輸出的，也就是數據會打印在命令行終端裡，並不會發送給瀏覽器，這時候我們需要通過 `ob_start();` `ob_get_clean();` 將數據捕獲到一個變量中，再將數據發送給瀏覽器，例如：
+有些類庫是將檔案內容直接打印到標準輸出的，也就是數據會打印在命令行終端裡，並不會發送給瀏覽器，這時候我們需要通過`ob_start();` `ob_get_clean();` 將數據捕獲到一個變量中，再將數據發送給瀏覽器，例如：
 
 ```php
 <?php

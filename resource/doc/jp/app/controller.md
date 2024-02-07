@@ -1,8 +1,8 @@
 # コントローラー
 
-PSR4規格に基づき、コントローラークラスの名前空間は `plugin\{プラグイン識別子}` で始まります。例えば、
+PSR4規格に従い、コントローラークラスの名前空間は`plugin\{プラグイン識別子}`で始まります。例えば、
 
-コントローラーファイル `plugin/foo/app/controller/FooController.php` を新規作成します。
+新しいコントローラーファイル `plugin/foo/app/controller/FooController.php` を作成します。
 
 ```php
 <?php
@@ -24,11 +24,10 @@ class FooController
 }
 ```
 
-`http://127.0.0.1:8787/app/foo/foo` にアクセスすると、ページに `hello index` が返されます。
+`http://127.0.0.1:8787/app/foo/foo` を訪問すると、ページは `hello index` を返します。
 
-`http://127.0.0.1:8787/app/foo/foo/hello` にアクセスすると、ページに `hello webman` が返されます。
+`http://127.0.0.1:8787/app/foo/foo/hello` を訪問すると、ページは `hello webman` を返します。
 
-
-## URLアクセス
-アプリのプラグインのURLアドレスは常に `/app` で始まり、その後にプラグインの識別子、そして具体的なコントローラーとメソッドが続きます。
-例えば、`plugin\foo\app\controller\UserController` のURLアドレスは `http://127.0.0.1:8787/app/foo/user` です。
+## URLへのアクセス
+アプリケーションのプラグインのURLアドレスのパスはすべて`/app`で始まり、それに続いてプラグインの識別子、そして具体的なコントローラーとメソッドが続きます。
+例えば、`plugin\foo\app\controller\UserController`のURLアドレスは `http://127.0.0.1:8787/app/foo/user` です。

@@ -3,7 +3,7 @@ webman自带一个monitor监控进程，它支持两个功能
 1. 监控文件更新并自动reload载入新的业务代码(一般在开发时使用)
 2. 监控所有进程占用内存，如果某个进程占用内存即将超过`php.ini`中`memory_limit`限制则自动安全重启该进程(不影响业务)
 
-### 监控配置
+## 监控配置
 配置文件 `config/process.php` 中`monitor`配置
 ```php
 

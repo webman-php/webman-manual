@@ -16,7 +16,7 @@ return [
     ],
 ];
 ```
-Cuando se usa
+Para usarlo
 ```php
 use support\Redis;
 Redis::connection('plugin.foo.default')->get('key');
@@ -27,6 +27,6 @@ Del mismo modo, si se desea reutilizar la configuración de Redis del proyecto p
 ```php
 use support\Redis;
 Redis::get('key');
-// Suponiendo que el proyecto principal también tiene una conexión de caché configurada
+// Supongamos que el proyecto principal también ha configurado una conexión de cache
 Redis::connection('cache')->get('key');
 ```

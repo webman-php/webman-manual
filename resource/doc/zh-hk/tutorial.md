@@ -1,6 +1,6 @@
 # 簡單示例
 
-## 返回字串
+## 返回字符串
 **新建控制器**
 
 新建文件 `app/controller/UserController.php` 如下
@@ -18,7 +18,7 @@ class UserController
         $default_name = 'webman';
         // 從get請求裡獲得name參數，如果沒有傳遞name參數則返回$default_name
         $name = $request->get('name', $default_name);
-        // 向瀏覽器返回字串
+        // 向瀏覽器返回字符串
         return response('hello ' . $name);
     }
 }
@@ -58,14 +58,14 @@ class UserController
 
 在瀏覽器裡訪問 `http://127.0.0.1:8787/user/hello?name=tom`
 
-瀏覽器將返回 `{"code":0,"msg":"ok","data":"tom"}`
+瀏覽器將返回 `{"code":0,"msg":"ok","data":"tom""}`
 
-使用json助手函數返回資料將自動加上一個header頭 `Content-Type: application/json`
+使用json助手函數返回數據將自動加上一個header頭 `Content-Type: application/json`
 
 ## 返回xml
 同理，使用助手函數 `xml($xml)` 將返回一個帶 `Content-Type: text/xml` 頭的 `xml` 響應。
 
-其中 `$xml` 參數可以是 `xml` 字串，也可以是 `SimpleXMLElement` 對象
+其中 `$xml` 參數可以是 `xml` 字符串，也可以是 `SimpleXMLElement` 對象
 
 ## 返回jsonp
 同理，使用助手函數 `jsonp($data, $callback_name = 'callback')` 將返回一個 `jsonp` 響應。
@@ -108,4 +108,4 @@ hello <?=htmlspecialchars($name)?>
 在瀏覽器裡訪問 `http://127.0.0.1:8787/user/hello?name=tom`
 將返回一個內容為 `hello tom` 的html頁面。
 
-注意：webman默認使用的是php原生語法作為模版。如果想使用其它視圖參見[視圖](view.md)。
+注意：webman默認使用的是php原生語法作為模版。如果想使用其他視圖參見[視圖](view.md)。

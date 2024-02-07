@@ -1,17 +1,17 @@
-# ইমেজ প্রসেসিং কম্পোনেন্ট
+# চিত্র প্রসেসিং কম্পোনেন্ট
 
 ## intervention/image
 
-### প্রজেক্ট লিঙ্ক
+### প্রকল্প ঠিকানা
 
 https://github.com/Intervention/image
-  
-### ইন্সটলেশন
- 
+
+### ইনস্টলেশন
+
 ```php
 composer require intervention/image
 ```
-  
+
 ### ব্যবহার
 
 **আপলোড পেজ ফ্রেগমেন্ট**
@@ -19,7 +19,7 @@ composer require intervention/image
 ```html
   <form method="post" action="/user/img" enctype="multipart/form-data">
       <input type="file" name="file">
-      <input type="submit" value="সাবমিট">
+      <input type="submit" value="জমা দিন">
   </form>
 ```
 
@@ -40,13 +40,11 @@ class UserController
             $image = Image::make($file)->resize(100, 100);
             return response($image->encode('png'), 200, ['Content-Type' => 'image/png']);
         }
-        return response('ফাইল পাওয়া যায়নি');
+        return response('ফাইল পাওয়া যায়নি');
     }
-    
 }
 ```
-  
-### অধিক তথ্য
 
-http://image.intervention.io/getting_started/introduction এ ভিজিট করুন
-  
+### আরও সামগ্রী
+
+http://image.intervention.io/getting_started/introduction

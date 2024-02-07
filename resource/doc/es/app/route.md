@@ -1,18 +1,18 @@
 ## Archivo de configuración de rutas
-El archivo de configuración de rutas del complemento se encuentra en `plugin/nombre_del_complemento/config/route.php`
+El archivo de configuración de rutas del plugin se encuentra en `plugin/nombre_del_plugin/config/route.php`.
 
-## Ruta predeterminada
-El camino de la URL de la aplicación del complemento comienza con `/app`, por ejemplo, la URL del controlador `plugin\foo\app\controller\UserController` es `http://127.0.0.1:8787/app/foo/user`
+## Ruta por defecto
+Las direcciones URL de los plugins de la aplicación comienzan con `/app`, por ejemplo, la dirección URL para `plugin\foo\app\controller\UserController` es `http://127.0.0.1:8787/app/foo/user`.
 
-## Deshabilitar la ruta predeterminada
-Si desea deshabilitar la ruta predeterminada de un complemento de la aplicación, configure algo similar en la configuración de la ruta
+## Deshabilitar la ruta por defecto
+Si desea deshabilitar la ruta por defecto de un plugin de la aplicación, configure lo siguiente en la configuración de la ruta:
 ```php
 Route::disableDefaultRoute('foo');
 ```
 
-## Manejo de la devolución de 404
-Si desea establecer un fallback para un complemento de la aplicación, debe pasar el nombre del complemento como segundo parámetro, por ejemplo
-```
+## Manejar la devolución de error 404
+Si desea establecer un fallback para un plugin de la aplicación, debe pasar el nombre del plugin como segundo parámetro, por ejemplo:
+```php
 Route::fallback(function(){
     return redirect('/');
 }, 'foo');

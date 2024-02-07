@@ -4,13 +4,11 @@
 프로젝트 주소 https://github.com/webman-php/captcha
 
 ### 설치
-```
-composer require webman/captcha
-```
+```composer require webman/captcha```
 
 ### 사용
 
-**`app/controller/LoginController.php` 파일 생성**
+** 파일 만들기 `app/controller/LoginController.php`**
 
 ```php
 <?php
@@ -53,16 +51,17 @@ class LoginController
     {
         // 포스트 요청에서 captcha 필드 가져오기
         $captcha = $request->post('captcha');
-        // 세션에서 captcha 값 비교
+        // 세션에 있는 captcha 값과 비교
         if (strtolower($captcha) !== $request->session()->get('captcha')) {
-            return json(['code' => 400, 'msg' => '입력한 인증 코드가 올바르지 않습니다']);
+            return json(['code' => 400, 'msg' => '잘못된 인증 코드 입력']);
         }
         return json(['code' => 0, 'msg' => 'ok']);
     }
+
 }
 ```
 
-**`app/view/login/index.html` 템플릿 파일 생성**
+** 템플릿 파일 만들기 `app/view/login/index.html`**
 
 ```html
 <!doctype html>
@@ -81,7 +80,7 @@ class LoginController
 </html>
 ```
 
-`http://127.0.0.1:8787/login` 페이지로 이동하면 다음과 같이 보입니다:
+`http://127.0.0.1:8787/login` 페이지로 이동하면 아래와 같은 화면이 나타납니다:
   ![](../../assets/img/captcha.png)
 
 ### 일반적인 매개변수 설정
@@ -95,9 +94,8 @@ class LoginController
         $builder = new CaptchaBuilder;
         // 인증 코드 길이
         $length = 4;
-        // 포함할 문자
+        // 어떤 문자가 포함되는지
         $chars = '0123456789abcefghijklmnopqrstuvwxyz';
-        // PhraseBuilder를 사용하여 새로운 CaptchaBuilder 생성
         $builder = new PhraseBuilder($length, $chars);
         $captcha = new CaptchaBuilder(null, $builder);
         // 인증 코드 생성
@@ -111,4 +109,4 @@ class LoginController
     }
 ```
 
-더 많은 API 및 매개변수에 대한 정보는 https://github.com/webman-php/captcha 를 참조하세요.
+더 많은 API와 매개변수에 대한 정보는 https://github.com/webman-php/captcha 를 참조하세요.

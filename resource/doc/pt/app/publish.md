@@ -1,16 +1,16 @@
 # Publicação
 
-Os desenvolvedores podem enviar plugins com direitos autorais para o mercado de aplicativos, ajudando os outros e também se beneficiando.
+Os desenvolvedores podem enviar plugins com direitos autorais para a loja de aplicativos, ajudando outras pessoas e também se beneficiando.
 
-Endereço de publicação: https://www.workerman.net/app/create
+Link para a publicação: https://www.workerman.net/app/create
 
-Aviso: O **número da versão** preenchido durante a publicação deve ser consistente com o número da versão em `plugin/{plugin}/config/app.php`.
+Nota: O **número da versão** fornecido durante a publicação deve ser consistente com o número da versão em `plugin/{插件}/config/app.php`.
 
-## Restrições de listagem
-**Não são suportados os seguintes tipos de aplicativos para listagem:**
+## Restrições de publicação
+**Os seguintes tipos de aplicativos não são suportados para publicação:**
 
-**Financeiros** incluindo, mas não se limitando a pagamentos agregados, reembolsos, empréstimos, leilões, moedas digitais, blockchain  
-**Jogos de azar** incluindo, mas não se limitando a sorteios, leilões, jogo de cartas "niuniu", cartões virtuais, etc.  
-**Coleta de dados** incluindo, mas não se limitando a novelas, histórias em quadrinhos, filmes, compartilhamento de recursos, etc.  
-**Aplicativos relacionados a estrangeiros** incluindo, mas não se limitando a hospedagem na nuvem, VPN, etc.
-**Bate-papo, suporte ao cliente** atualmente não suportados para listagem.
+**Financeiros:** Incluindo, mas não se limitando a, pagamentos agregados, cashback, empréstimos, leilões, moedas digitais, blockchain.
+**Jogos de azar:** Incluindo, mas não se limitando a, sorteios, raspadinhas, touro, cartões pré-pagos, etc.
+**Coleta de dados:** Incluindo, mas não se limitando a, novels, quadrinhos, filmes, compartilhamento de recursos.
+**Aplicativos relacionados ao exterior:** Incluindo, mas não se limitando a, hospedagem na nuvem, VPN.
+**Chat e atendimento ao cliente:** Não são suportados para publicação no momento.

@@ -1,6 +1,6 @@
 # ஒற்றை சோதனை
 
-## நிறுவவும்
+## நிறுவல்
 
 ```php
 composer require --dev phpunit/phpunit
@@ -8,7 +8,7 @@ composer require --dev phpunit/phpunit
 
 ## பயன்பாடு
 
-சேவையகத்தின் கட்டமைக்கான `tests/TestConfig.php` எனும் புதிய கோப்பை உருவாக்குக
+புதிய கோப்பு `tests/TestConfig.php` உருவாக்கவும், தரவற்ற உள்ளது சோதிக்கவும்
 ```php
 <?php
 use PHPUnit\Framework\TestCase;
@@ -27,16 +27,17 @@ class TestConfig extends TestCase
 }
 ```
 
-## இயக்குகின்றேன்
+## இயக்குவது
 
-கணினியில் ரூட் இடம் பயன்பாடு `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php`
-முடிவு பெற்றுகொண்டபோது ஒரு போராட்டம் போன்றது:
-```
-PHPUnit 9.5.10 by Sebastian Bergmann and contributors.
+திட்டம் ரூட் உருப்பினால் `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php` இயக்கம்
+
+முடிவு போக்குவது போன்ற குறிப்புகள் கொண்டுள்ளது:
+``` 
+PHPUnit 9.5.10 ஆனது சேபாஸ்டியன் பெர்க்மான் மற்றும் பங்கிகள் இயக்கம்.
 
 .                                                                   1 / 1 (100%)
 
-Time: 00:00.010, Memory: 6.00 MB
+நேரம்: 00:00.010, நினைவகம்: 6.00 எம்.பி
 
-OK (1 test, 5 assertions)
+சரி (1 சோதனை, 5 கருத்துகள்)
 ```

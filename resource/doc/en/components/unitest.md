@@ -1,13 +1,13 @@
 # Unit Testing
 
 ## Installation
-
+ 
 ```php
 composer require --dev phpunit/phpunit
 ```
 
 ## Usage
-Create a file `tests/TestConfig.php` for testing the database configuration.
+Create a file `tests/TestConfig.php` to test the database configuration.
 ```php
 <?php
 use PHPUnit\Framework\TestCase;
@@ -26,12 +26,12 @@ class TestConfig extends TestCase
 }
 ```
 
-## Execution
+## Running
 
-Run the following command in the root directory of the project: `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php`
+Run the command `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php` in the root directory of your project.
 
 The result will be similar to the following:
-```
+```text
 PHPUnit 9.5.10 by Sebastian Bergmann and contributors.
 
 .                                                                   1 / 1 (100%)

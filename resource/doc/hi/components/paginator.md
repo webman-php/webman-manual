@@ -1,4 +1,4 @@
-# पेजिनेटर कॉंपोनेंट
+# पेजिनेटर कॉम्पोनेंट
 
 ## jasongrimes/php-paginator
 
@@ -14,7 +14,7 @@ composer require "jasongrimes/paginator:^1.0.3"
 
 ### उपयोग
 
-नया `app/controller/UserController.php` बनाएँ
+नया बनाएँ `app/controller/UserController.php`
 ```php
 <?php
 namespace app\controller;
@@ -40,33 +40,35 @@ class UserController
 }
 ```
 **टेम्पलेट (PHP मूल)**
+
 नया टेम्पलेट बनाएँ app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- इंबिल्ट समर्थन Bootstrap पेजिनेटर स्टाइल -->
+  <!-- इंटीग्रेटेड Bootstrap पेजिनेटर स्टाइल्स सपोर्ट -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
-  
-<?= $paginator;?>
+
+<?= $paginator; ?>
 
 </body>
 </html>
 ```
 
 **टेम्पलेट (twig)**
+
 नया टेम्पलेट बनाएँ app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- इंबिल्ट समर्थन Bootstrap पेजिनेटर स्टाइल -->
+  <!-- इंटीग्रेटेड Bootstrap पेजिनेटर स्टाइल्स सपोर्ट -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
 
 {% autoescape false %}
-{{paginator}}
+{{ paginator }}
 {% endautoescape %}
 
 </body>
@@ -74,11 +76,12 @@ class UserController
 ```
 
 **टेम्पलेट (ब्लेड)**
+
 नया टेम्पलेट बनाएँ app/view/user/get.blade.php
 ```html
 <html>
 <head>
-  <!-- इंबिल्ट समर्थन Bootstrap पेजिनेटर स्टाइल -->
+  <!-- इंटीग्रेटेड Bootstrap पेजिनेटर स्टाइल्स सपोर्ट -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -89,17 +92,18 @@ class UserController
 </html>
 ```
 
-**टेम्पलेट (थिंकपीएचपी)**
+**टेम्पलेट (thinkphp)**
+
 नया टेम्पलेट बनाएँ app/view/user/get.blade.php
 ```html
 <html>
 <head>
-    <!-- इंबिल्ट समर्थन Bootstrap पेजिनेटर स्टाइल -->
+    <!-- इंटीग्रेटेड Bootstrap पेजिनेटर स्टाइल्स सपोर्ट -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
 
-<?=$paginator?>
+<?=$paginator ?>
 
 </body>
 </html>
@@ -108,6 +112,6 @@ class UserController
 परिणाम निम्नलिखित है:
 ![](../../assets/img/paginator.png)
 
-### और अधिक सामग्री
+### अधिक जानकारी
 
-https://github.com/jasongrimes/php-paginator पर जाएं
+परिवर्तन करने के लिए https://github.com/jasongrimes/php-paginator  विजिट करें।

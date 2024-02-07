@@ -1,3 +1,4 @@
+
 # ユニットテスト
 
 ## インストール
@@ -7,7 +8,7 @@ composer require --dev phpunit/phpunit
 ```
 
 ## 使用法
-`tests/TestConfig.php`という新しいファイルを作成して、データベースの設定をテストします。
+`tests/TestConfig.php`というファイルを作成し、データベース設定のテストに使用します。
 
 ```php
 <?php
@@ -29,9 +30,9 @@ class TestConfig extends TestCase
 
 ## 実行
 
-プロジェクトのルートディレクトリで次のコマンドを実行します： `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php`。
+プロジェクトのルートディレクトリで、`./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php`を実行します。
 
-次のような結果が表示されます：
+以下のような結果が表示されます：
 
 ```
 PHPUnit 9.5.10 by Sebastian Bergmann and contributors.

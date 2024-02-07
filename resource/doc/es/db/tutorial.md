@@ -1,22 +1,23 @@
 # Comienzo rápido
 
-La base de datos webman utiliza por defecto [illuminate/database](https://github.com/illuminate/database), que es la base de datos de [Laravel](https://learnku.com/docs/laravel/8.x/database/9400) y se utiliza de la misma manera que Laravel.
+La base de datos de webman utiliza por defecto [illuminate/database](https://github.com/illuminate/database), que es la base de datos de [Laravel](https://learnku.com/docs/laravel/8.x/database/9400), y se utiliza de la misma manera que en Laravel.
 
-Por supuesto, puedes consultar la sección [Uso de otros componentes de bases de datos](others.md) para utilizar ThinkPHP u otras bases de datos.
+Por supuesto, puedes consultar la sección [Usando otros componentes de la base de datos](others.md) para utilizar ThinkPHP u otras bases de datos.
 
 ## Instalación
 
 `composer require -W illuminate/database illuminate/pagination illuminate/events symfony/var-dumper`
 
-Después de la instalación, es necesario reiniciar (reload no es válido).
+Después de la instalación, es necesario reiniciar (reload no es efectivo)
 
-> **Nota**
-> Si no se necesita paginación, eventos de base de datos y la impresión de SQL, solamente es necesario ejecutar
+> **Consejo**
+> Si no necesitas paginación, eventos de base de datos, o imprimir consultas SQL, simplemente ejecuta
 > `composer require -W illuminate/database`
 
 ## Configuración de la base de datos
 `config/database.php`
 ```php
+
 return [
     // Base de datos por defecto
     'default' => 'mysql',
@@ -44,6 +45,7 @@ return [
 ];
 ```
 
+
 ## Uso
 ```php
 <?php
@@ -59,7 +61,7 @@ class UserController
         $default_uid = 29;
         $uid = $request->get('uid', $default_uid);
         $name = Db::table('users')->where('uid', $uid)->value('username');
-        return response("Hola $name");
+        return response("hello $name");
     }
 }
 ```

@@ -4,19 +4,19 @@
 
 ### Descripción
 
-`workerman/crontab` es similar a crontab en Linux, pero la diferencia es que `workerman/crontab` admite tareas programadas a nivel de segundos.
+`workerman/crontab` es similar al crontab de Linux, la diferencia es que `workerman/crontab` admite programación a nivel de segundos.
 
 Explicación del tiempo:
 
-```
+```plaintext
 0   1   2   3   4   5
 |   |   |   |   |   |
 |   |   |   |   |   +------ día de la semana (0 - 6) (Domingo=0)
 |   |   |   |   +------ mes (1 - 12)
 |   |   |   +-------- día del mes (1 - 31)
 |   |   +---------- hora (0 - 23)
-|   +------------ minutos (0 - 59)
-+-------------- segundos (0-59) [Opcional, si no está presente, la unidad de tiempo mínima es el minuto]
+|   +------------ minuto (0 - 59)
++-------------- segundo (0-59)[Puede omitirse, si no hay 0, la granularidad de tiempo mínima es el minuto]
 ```
 
 ### Dirección del proyecto
@@ -31,7 +31,7 @@ composer require workerman/crontab
 
 ### Uso
 
-**Paso 1: Crear un archivo de proceso `process/Task.php`**
+**Paso 1: Crear el archivo de proceso `process/Task.php`**
 
 ```php
 <?php
@@ -69,7 +69,7 @@ class Task
             echo date('Y-m-d H:i:s')."\n";
         });
       
-        // Ejecutar a las 7:50 todos los días, tenga en cuenta que se omitió el campo de segundos aquí
+        // Ejecutar a las 7:50 todos los días, aquí se omite la posición de los segundos
         new Crontab('50 7 * * *', function(){
             echo date('Y-m-d H:i:s')."\n";
         });
@@ -78,13 +78,13 @@ class Task
 }
 ```
 
-**Paso 2: Configurar el archivo de proceso para iniciar con webman**
+**Paso 2: Configurar el archivo de proceso para iniciar junto con webman**
 
 Abrir el archivo de configuración `config/process.php` y agregar la siguiente configuración
 
 ```php
 return [
-    ....otras configuraciones, se omiten aquí....
+    ....otras configuraciones, omitidas por brevedad....
   
     'task'  => [
         'handler'  => process\Task::class
@@ -96,13 +96,13 @@ return [
 
 > Nota: Las tareas programadas no se ejecutarán de inmediato; comenzarán a ejecutarse en el próximo minuto.
 
-### Explicación
-
-crontab no es asíncrono, por ejemplo, si un proceso de tarea programa dos temporizadores, A y B, ambos se ejecutan cada segundo, pero la tarea A toma 10 segundos, entonces B debe esperar a que A termine antes de ser ejecutado, lo que causa un retraso en la ejecución de B. Si la aplicación es sensible al intervalo de tiempo, es necesario ejecutar las tareas programadas sensibles al tiempo en un proceso separado para evitar que otras tareas programadas las afecten. Por ejemplo, en `config/process.php` se hace la siguiente configuración:
+### Notas
+El crontab no es asíncrono. Por ejemplo, si un proceso de tarea configura dos temporizadores, A y B, para ejecutarse cada segundo, pero la tarea A tarda 10 segundos en ejecutarse, entonces B tendrá que esperar a que A se complete antes de ejecutarse, lo que ocasionará un retraso en la ejecución de B.
+Si el negocio es muy sensible al intervalo de tiempo, es necesario ejecutar las tareas programadas sensibles al tiempo en un proceso separado para evitar que sean afectadas por otras tareas programadas. Por ejemplo, en `config/process.php` se puede hacer la siguiente configuración
 
 ```php
 return [
-    ....otras configuraciones, se omiten aquí....
+    ....otras configuraciones, omitidas por brevedad....
   
     'task1'  => [
         'handler'  => process\Task1::class
@@ -112,7 +112,8 @@ return [
     ],
 ];
 ```
-Se pueden colocar las tareas programadas sensibles al tiempo en `process/Task1.php` y las demás tareas programadas en `process/Task2.php`.
 
-### Más información
-Para obtener más información sobre la configuración en `config/process.php`, consulte [Proceso personalizado](../process.md)
+Colocar las tareas programadas sensibles al tiempo en `process/Task1.php` y las demás tareas programadas en `process/Task2.php`.
+
+### Más
+Para obtener más información sobre la configuración de `config/process.php`, consulte [Proceso personalizado](../process.md)

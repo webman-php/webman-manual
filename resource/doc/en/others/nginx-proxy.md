@@ -1,14 +1,15 @@
 # Nginx Proxy
-When webman needs to provide direct external access, it is recommended to add an nginx proxy in front of webman for the following benefits:
 
-- Static resources are handled by nginx, allowing webman to focus on business logic processing.
-- Multiple webman instances can share ports 80 and 443, and different sites can be distinguished by domain names to achieve multiple site deployment on a single server.
+When webman requires direct access from the external network, it is recommended to add an nginx proxy in front of webman for the following benefits:
+
+- Nginx handles static resources, allowing webman to focus on business logic processing.
+- Enables multiple webmen to share ports 80 and 443, distinguishing different sites through domain names, and achieving the deployment of multiple sites on a single server.
 - Enables coexistence of php-fpm and webman architecture.
-- Nginx proxy can implement SSL for https, making it simpler and more efficient.
-- Can strictly filter out some illegal external requests.
+- Nginx proxy facilitates SSL implementation for https, making it simpler and more efficient.
+- Strictly filters out some illegal requests from the external network.
 
 ## Nginx Proxy Example
-```
+```nginx
 upstream webman {
     server 127.0.0.1:8787;
     keepalive 10240;
@@ -33,4 +34,4 @@ server {
 }
 ```
 
-In general, developers only need to configure the server_name and root with the actual values, and the other fields do not need to be configured.
+Generally, developers only need to configure the server_name and root with actual values, and the other fields do not need to be configured.

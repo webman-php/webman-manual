@@ -1,8 +1,8 @@
 # Controlador
 
-Conforme a especificação PSR4, o namespace da classe do controlador começa com `plugin\{identificação-do-plugin}`, por exemplo
+De acordo com a especificação PSR4, o namespace da classe do controlador começa com `plugin\{identificação do plugin}`, por exemplo
 
-Crie o arquivo do controlador `plugin/foo/app/controller/FooController.php`.
+Crie um novo arquivo de controlador `plugin/foo/app/controller/FooController.php`.
 
 ```php
 <?php
@@ -14,20 +14,20 @@ class FooController
 {
     public function index(Request $request)
     {
-        return response('olá índice');
+        return response('hello index');
     }
     
     public function hello(Request $request)
     {
-        return response('olá webman');
+        return response('hello webman');
     }
 }
 ```
 
-Quando acessar `http://127.0.0.1:8787/app/foo/foo`, a página retornará `olá índice`
+Quando acessar `http://127.0.0.1:8787/app/foo/foo`, a página retornará `hello index`
 
-Quando acessar `http://127.0.0.1:8787/app/foo/foo/hello`, a página retornará `olá webman`
+Quando acessar `http://127.0.0.1:8787/app/foo/foo/hello`, a página retornará `hello webman`
 
 ## Acesso via URL
-O caminho do endereço URL do plugin começa com `/app`, seguido pela identificação do plugin e, em seguida, o controlador e o método específicos.
-Por exemplo, o endereço URL do `UserController` do plugin `plugin\foo\app\controller` é `http://127.0.0.1:8787/app/foo/user`
+Os caminhos de endereço URL dos plugins de aplicativos começam com `/app`, seguidos pela identificação do plugin e, em seguida, pelo controlador e método específicos.
+Por exemplo, o endereço URL do `plugin\foo\app\controller\UserController` é `http://127.0.0.1:8787/app/foo/user`

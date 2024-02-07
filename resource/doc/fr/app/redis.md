@@ -1,5 +1,5 @@
 # Redis
-L'utilisation de Redis est similaire à celle d'une base de données, par exemple `plugin/foo/config/redis.php`
+L'utilisation de Redis est similaire à celle d'une base de données, par exemple dans `plugin/foo/config/redis.php`
 ```php
 return [
     'default' => [
@@ -16,7 +16,7 @@ return [
     ],
 ];
 ```
-Utilisation
+Lors de l'utilisation
 ```php
 use support\Redis;
 Redis::connection('plugin.foo.default')->get('key');
@@ -27,6 +27,6 @@ De même, si vous souhaitez réutiliser la configuration Redis du projet princip
 ```php
 use support\Redis;
 Redis::get('key');
-// Supposons que le projet principal ait également configuré une connexion cache
+// Supposez que le projet principal a également configuré une connexion cache
 Redis::connection('cache')->get('key');
 ```

@@ -1,21 +1,21 @@
 # 業務初始化
 
-有時我們需要在進程啟動後進行一些業務初始化，這個初始化在進程生命周期中只執行一次，例如進程啟動後設置一個定時器，或者初始化數據庫連接等。以下將對此進行說明。
+有時我們需要在進程啟動後進行一些業務初始化，這個初始化在進程生命週期只執行一次，例如進程啟動後設置一個定時器，或者初始化數據庫連接等。下面我們將對此進行講解。
 
 ## 原理
-根據 **[執行流程](process.md)** 中的說明，webman在進程啟動後會加載`config/bootstrap.php`(包括`config/plugin/*/*/bootstrap.php`)中設置的類，並執行類的start方法。我們在start方法中可以加入業務代碼，即可完成進程啟動後業務初始化操作。
+根據**[執行流程](process.md)**中的說明，webman在進程啟動後會加載`config/bootstrap.php`（包括`config/plugin/*/*/bootstrap.php`）中設置的類，並執行類的start方法。我們在start方法中可以加入業務代碼，即可完成進程啟動後業務初始化操作。
 
 ## 流程
 假設我們要做一個定時器，用於定時上報當前進程的內存佔用，這個類取名為`MemReport`。
 
 #### 執行命令
 
-執行命令 `php webman make:bootstrap MemReport` 生成初始化文件 `app/bootstrap/MemReport.php`
+執行命令 `php webman make:bootstrap MemReport` 生成初始化檔案 `app/bootstrap/MemReport.php`
 
 > **提示**
 > 如果你的webman沒有安裝 `webman/console`，執行命令 `composer require webman/console` 安裝
 
-#### 編輯初始化文件
+#### 編輯初始化檔案
 編輯`app/bootstrap/MemReport.php`，內容類似如下：
 ```php
 <?php

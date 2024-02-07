@@ -1,23 +1,22 @@
 # ビジネスの初期化
 
-時にはプロセスの起動後にビジネスの初期化を行う必要があります。この初期化はプロセスのライフサイクルで一度だけ実行されます。例えば、プロセスの起動後にタイマーを設定したり、データベース接続を初期化したりすることがあります。以下ではこれについて説明します。
+時にはプロセス起動後にビジネスの初期化を行う必要があります。この初期化はプロセスのライフサイクルで一度だけ実行され、例えばプロセス起動後にタイマーを設定したり、データベース接続を初期化したりすることができます。以下ではこれについて説明します。
 
 ## 原理
-**[プロセスフロー](process.md)** によると、Webmanはプロセスの起動後に`config/bootstrap.php`（`config/plugin/*/*/bootstrap.php`も含む）で設定されたクラスをロードし、クラスのstartメソッドを実行します。startメソッドにビジネスコードを追加することで、プロセスの起動後のビジネス初期化操作を完了できます。
+**[実行フロー](process.md)**に従って、webmanはプロセスの起動後に`config/bootstrap.php`（`config/plugin/*/*/bootstrap.php`も含む）で設定されたクラスを読み込み、クラスのstartメソッドを実行します。startメソッドにビジネスコードを追加することで、プロセスの起動後のビジネス初期化を完了させることができます。
 
-## プロセス
-例として、現在のプロセスのメモリ使用量を定期的に報告するためのタイマーを作成することを考えます。このクラスの名前は`MemReport`とします。
+## フロー
+定期的に現在のプロセスのメモリ使用状況を報告するためのタイマーを作成する場合を考えてみます。このクラスの名前を`MemReport`とします。
 
 #### コマンドの実行
 
-`php webman make:bootstrap MemReport` コマンドを実行して、初期化ファイル `app/bootstrap/MemReport.php` を生成します。
+`php webman make:bootstrap MemReport`コマンドを実行して、初期化ファイル `app/bootstrap/MemReport.php`を生成します。
 
 > **ヒント**
-> もしwebmanが`webman/console`をインストールしていない場合は、`composer require webman/console` コマンドを実行してインストールしてください。
+> もしwebmanが`webman/console`をインストールしていない場合は、`composer require webman/console`コマンドを実行してください。
 
 #### 初期化ファイルの編集
-`app/bootstrap/MemReport.php` を編集し、以下のような内容にします。
-
+`app/bootstrap/MemReport.php`を編集し、以下のような内容にします。
 ```php
 <?php
 
@@ -29,16 +28,16 @@ class MemReport implements Bootstrap
 {
     public static function start($worker)
     {
-        // コマンドライン環境であるかどうか？
+        // コマンドライン環境か？
         $is_console = !$worker;
         if ($is_console) {
-            // 自分はコマンドライン環境でこの初期化を実行したくない場合は、ここで直接リターンします
+            // コマンドライン環境でこの初期化を実行したくない場合は、ここで直接戻ります
             return;
         }
         
         // 10秒ごとに実行
         \Workerman\Timer::add(10, function () {
-            // この例では、報告プロセスを代わりに出力しています
+            // デモ目的で、ここでは報告プロセスを代用して出力を使用しています
             echo memory_get_usage() . "\n";
         });
         
@@ -48,24 +47,22 @@ class MemReport implements Bootstrap
 ```
 
 > **ヒント**
-> コマンドラインを使用している場合でも、フレームワークは`config/bootstrap.php`で設定されたstartメソッドを実行します。このため、`$worker`がnullであるかどうかを使って、コマンドライン環境であるかどうかを判断し、それに基づいてビジネス初期化コードを実行するかどうかを決定できます。
+> コマンドラインを使用する際、フレームワークは`config/bootstrap.php`で設定されたstartメソッドも実行します。私たちは`$worker`がnullであるかどうかでコマンドライン環境かどうかを判断し、それに基づいてビジネスの初期化コードを実行するかどうかを決定することができます。
 
 #### プロセス起動時の設定
-`config/bootstrap.php`を開いて、`MemReport`クラスを起動アイテムに追加します。
-
+`config/bootstrap.php`を開いて、`MemReport`クラスを起動項目に追加してください。
 ```php
 return [
-    // ...他の設定はここで省略されています...
-
+    // ...その他の設定は省略...
+    
     app\bootstrap\MemReport::class,
 ];
 ```
 
-これでビジネス初期化の流れが完成しました。
+これでビジネスの初期化フローを完成させました。
 
-## 追加情報
-[カスタムプロセス](../process.md)が起動した場合も、`config/bootstrap.php`でstartメソッドが実行されます。`$worker->name`を使用して現在のプロセスが何であるかを判断し、そのプロセスでビジネス初期化コードを実行するかどうかを決定できます。たとえば、monitorプロセスを監視する必要がない場合、`MemReport.php`は以下のような内容になります。
-
+## 補足説明
+[カスタムプロセス](../process.md)は起動後に`config/bootstrap.php`で設定されたstartメソッドも実行されます。私たちは`$worker->name`を使用して現在のプロセスがどのプロセスかを判断し、そのプロセスでビジネスの初期化コードを実行するかどうかを決定することができます。例えば、monitorプロセスを監視する必要がない場合、`MemReport.php`の内容は以下のようになります。
 ```php
 <?php
 
@@ -77,21 +74,21 @@ class MemReport implements Bootstrap
 {
     public static function start($worker)
     {
-        // コマンドライン環境であるかどうか？
+        // コマンドライン環境か？
         $is_console = !$worker;
         if ($is_console) {
-            // 自分はコマンドライン環境でこの初期化を実行したくない場合は、ここで直接リターンします
+            // コマンドライン環境でこの初期化を実行したくない場合は、ここで直接戻ります
             return;
         }
         
-        // monitorプロセスではタイマーを実行しない
+        // monitorプロセスはタイマーを実行しない
         if ($worker->name == 'monitor') {
             return;
         }
         
         // 10秒ごとに実行
         \Workerman\Timer::add(10, function () {
-            // この例では、報告プロセスを代わりに出力しています
+            // デモ目的で、ここでは報告プロセスを代用して出力を使用しています
             echo memory_get_usage() . "\n";
         });
         

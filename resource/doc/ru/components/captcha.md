@@ -1,16 +1,17 @@
 # Компоненты, связанные с капчей
 
+
 ## webman/captcha
 Ссылка на проект: https://github.com/webman-php/captcha
 
 ### Установка
-```
+``` 
 composer require webman/captcha
 ```
 
 ### Использование
 
-**Создайте файл `app/controller/LoginController.php`**
+**Создание файла `app/controller/LoginController.php`**
 
 ```php
 <?php
@@ -28,9 +29,9 @@ class LoginController
     {
         return view('login/index');
     }
-    
+
     /**
-     * Генерация изображения капчи
+     * Вывод изображения капчи
      */
     public function captcha(Request $request)
     {
@@ -40,9 +41,9 @@ class LoginController
         $builder->build();
         // Сохранение значения капчи в сессию
         $request->session()->set('captcha', strtolower($builder->getPhrase()));
-        // Получение бинарных данных изображения капчи
+        // Получение двоичных данных изображения капчи
         $img_content = $builder->get();
-        // Вывод бинарных данных капчи
+        // Вывод двоичных данных капчи
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
     }
 
@@ -51,26 +52,26 @@ class LoginController
      */
     public function check(Request $request)
     {
-        // Получение поля капчи из POST запроса
+        // Получение поля captcha из POST-запроса
         $captcha = $request->post('captcha');
         // Сравнение значения капчи из сессии
         if (strtolower($captcha) !== $request->session()->get('captcha')) {
             return json(['code' => 400, 'msg' => 'Введенный код капчи неверен']);
         }
-        return json(['code' => 0, 'msg' => 'ок']);
+        return json(['code' => 0, 'msg' => 'ok']);
     }
 
 }
 ```
 
-**Создайте файл шаблона `app/view/login/index.html`**
+**Создание файла шаблона `app/view/login/index.html`**
 
 ```html
 <!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Тестирование капчи</title>  
+    <title>Тест капчи</title>  
 </head>
 <body>
     <form method="post" action="/login/check">
@@ -82,14 +83,13 @@ class LoginController
 </html>
 ```
 
-Зайдите на страницу `http://127.0.0.1:8787/login` и появится следующий экран:
+Перейдите на страницу `http://127.0.0.1:8787/login`, внешний вид будет похож на следующий:
   ![](../../assets/img/captcha.png)
 
-### Общие настройки
-
+### Настройка общих параметров
 ```php
     /**
-     * Генерация изображения капчи
+     * Вывод изображения капчи
      */
     public function captcha(Request $request)
     {
@@ -97,7 +97,7 @@ class LoginController
         $builder = new CaptchaBuilder;
         // Длина капчи
         $length = 4;
-        // Включенные символы
+        // Символы, включаемые в капчу
         $chars = '0123456789abcefghijklmnopqrstuvwxyz';
         $builder = new PhraseBuilder($length, $chars);
         $captcha = new CaptchaBuilder(null, $builder);
@@ -105,11 +105,11 @@ class LoginController
         $builder->build();
         // Сохранение значения капчи в сессию
         $request->session()->set('captcha', strtolower($builder->getPhrase()));
-        // Получение бинарных данных изображения капчи
+        // Получение двоичных данных изображения капчи
         $img_content = $builder->get();
-        // Вывод бинарных данных капчи
+        // Вывод двоичных данных капчи
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
     }
 ```
 
-Для получения дополнительной информации об интерфейсах и параметрах обратитесь к https://github.com/webman-php/captcha
+Более подробную информацию о доступных методах и параметрах смотрите в документации по ссылке: https://github.com/webman-php/captcha

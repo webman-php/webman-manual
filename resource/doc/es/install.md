@@ -1,41 +1,41 @@
-# Requerimientos del entorno
+# Requisitos del entorno
 
 * PHP >= 7.2
 * [Composer](https://getcomposer.org/) >= 2.0
 
 
-### 1. Crear un proyecto
+### 1. Crear proyecto
 
 ```php
 composer create-project workerman/webman
 ```
 
-### 2. Ejecución
+### 2. Ejecutar
 
-Ingrese al directorio de webman   
+Ir al directorio de webman
 
-#### Usuarios de Windows
-Haga doble clic en `windows.bat` o ejecute `php windows.php` para iniciar
+#### Para usuarios de Windows
+Doble clic en `windows.bat` o ejecutar `php windows.php` para iniciar
 
-> **Nota**
-> Si hay algún error, es posible que alguna función esté deshabilitada, consulte [Comprobación de funciones deshabilitadas](others/disable-function-check.md) para habilitarlas.
+> **Consejo**
+> Si hay un error, es posible que algunas funciones estén deshabilitadas. Consulte [Verificación de funciones deshabilitadas](others/disable-function-check.md) para habilitarlas
 
-#### Usuarios de Linux
-Ejecución en modo `debug` (para desarrollo y depuración)
+#### Para usuarios de Linux
+Ejecutar en modo `debug` (para desarrollo y depuración)
 
 ```php
 php start.php start
 ```
 
-Ejecución en modo `daemon` (para entorno de producción)
+Ejecutar en modo `daemon` (para entorno de producción)
 
 ```php
 php start.php start -d
 ```
 
-> **Nota**
-> Si hay algún error, es posible que alguna función esté deshabilitada, consulte [Comprobación de funciones deshabilitadas](others/disable-function-check.md) para habilitarlas.
+> **Consejo**
+> Si hay un error, es posible que algunas funciones estén deshabilitadas. Consulte [Verificación de funciones deshabilitadas](others/disable-function-check.md) para habilitarlas
 
-### 3. Acceso
+### 3. Acceder
 
-Acceda desde un navegador a `http://direcciónip:8787`
+Acceder desde el navegador a `http://direcciónip:8787`

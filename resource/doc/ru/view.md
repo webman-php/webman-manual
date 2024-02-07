@@ -1,84 +1,83 @@
 ## Представление
-По умолчанию webman использует синтаксис PHP в качестве шаблона с лучшей производительностью при включенном `opcache`. Помимо шаблонов PHP, webman также предоставляет шаблонные движки [Twig](https://twig.symfony.com/doc/3.x/), [Blade](https://learnku.com/docs/laravel/8.x/blade/9377), [think-template](https://www.kancloud.cn/manual/think-template/content).
+По умолчанию webman использует нативный синтаксис PHP в качестве шаблона с лучшей производительностью при включенном `opcache`. Кроме нативного шаблона PHP, webman также предоставляет шаблонизаторы [Twig](https://twig.symfony.com/doc/3.x/)、 [Blade](https://learnku.com/docs/laravel/8.x/blade/9377)、 [think-template](https://www.kancloud.cn/manual/think-template/content).
 
 ## Включение opcache
-При использовании представлений настоятельно рекомендуется включить опцию `opcache.enable` и `opcache.enable_cli` в php.ini, чтобы шаблонный движок работал наилучшим образом. 
+При использовании представлений настоятельно рекомендуется включить опцию `opcache.enable` и `opcache.enable_cli` в php.ini, чтобы шаблонизаторы достигли наилучшей производительности.
 
 ## Установка Twig
 1. Установка через composer
 
    `composer require twig/twig`
-   
-2. Измените файл конфигурации `config/view.php` следующим образом
 
-```php
-<?php
-use support\view\Twig;
+2. Измените конфигурацию `config/view.php` на следующую:
+   ```php
+   <?php
+   use support\view\Twig;
 
-return [
-    'handler' => Twig::class
-];
-```
-> **Подсказка**
-> Другие параметры конфигурации передаются через опцию, например
+   return [
+       'handler' => Twig::class
+   ];
+   ```
 
-```php
-return [
-    'handler' => Twig::class,
-    'options' => [
-        'debug' => false,
-        'charset' => 'utf-8'
-    ]
-];
-```
+   > **Подсказка**
+   > Другие параметры конфигурации передаются через опцию `options`, например
+   ```php
+   return [
+       'handler' => Twig::class,
+       'options' => [
+           'debug' => false,
+           'charset' => 'utf-8'
+       ]
+   ];
+   ```
 
 ## Установка Blade
 1. Установка через composer
 
-   `composer require psr/container ^1.1.1 webman/blade`
-   
-2. Измените файл конфигурации `config/view.php` следующим образом
+   ```
+   composer require psr/container ^1.1.1 webman/blade
+   ```
 
-```php
-<?php
-use support\view\Blade;
+2. Измените конфигурацию `config/view.php` на следующую:
+   ```php
+   <?php
+   use support\view\Blade;
 
-return [
-    'handler' => Blade::class
-];
-```
+   return [
+       'handler' => Blade::class
+   ];
+   ```
 
 ## Установка think-template
 1. Установка через composer
 
    `composer require topthink/think-template`
-   
-2. Измените файл конфигурации `config/view.php` следующим образом
 
-```php
-<?php
-use support\view\ThinkPHP;
+2. Измените конфигурацию `config/view.php` на следующую:
+   ```php
+   <?php
+   use support\view\ThinkPHP;
 
-return [
-    'handler' => ThinkPHP::class,
-];
-```
-> **Подсказка**
-> Другие параметры конфигурации передаются через опцию, например
+   return [
+       'handler' => ThinkPHP::class,
+   ];
+   ```
 
-```php
-return [
-    'handler' => ThinkPHP::class,
-    'options' => [
-        'view_suffix' => 'html',
-        'tpl_begin' => '{',
-        'tpl_end' => '}'
-    ]
-];
-```
+   > **Подсказка**
+   > Другие параметры конфигурации передаются через опцию `options`, например
+   ```php
+   return [
+       'handler' => ThinkPHP::class,
+       'options' => [
+           'view_suffix' => 'html',
+           'tpl_begin' => '{',
+           'tpl_end' => '}'
+       ]
+   ];
+   ```
 
-## Пример шаблона PHP
-Создайте файл `app/controller/UserController.php` со следующим содержимым
+## Пример шаблона на нативном PHP
+Создайте файл `app/controller/UserController.php` следующего содержания:
 
 ```php
 <?php
@@ -95,7 +94,7 @@ class UserController
 }
 ```
 
-Создайте файл `app/view/user/hello.html` со следующим содержимым
+Создайте файл `app/view/user/hello.html` следующего содержания:
 
 ```html
 <!doctype html>
@@ -110,9 +109,8 @@ hello <?=htmlspecialchars($name)?>
 </html>
 ```
 
-## Пример шаблона Twig
-Измените файл конфигурации `config/view.php` следующим образом
-
+## Пример шаблона на Twig
+Измените конфигурацию `config/view.php` на следующую:
 ```php
 <?php
 use support\view\Twig;
@@ -122,7 +120,7 @@ return [
 ];
 ```
 
-`app/controller/UserController.php`:
+Файл `app/controller/UserController.php` следующего содержания:
 
 ```php
 <?php
@@ -139,7 +137,7 @@ class UserController
 }
 ```
 
-Файл `app/view/user/hello.html`:
+Файл `app/view/user/hello.html` следующего содержания:
 
 ```html
 <!doctype html>
@@ -154,11 +152,10 @@ hello {{name}}
 </html>
 ```
 
-Более подробную информацию можно найти [здесь](https://twig.symfony.com/doc/3.x/)
+Дополнительную документацию можно найти по ссылке [Twig](https://twig.symfony.com/doc/3.x/).
 
-## Пример шаблона Blade
-Измените файл конфигурации `config/view.php` следующим образом
-
+## Пример шаблона на Blade
+Измените конфигурацию `config/view.php` на следующую:
 ```php
 <?php
 use support\view\Blade;
@@ -168,7 +165,7 @@ return [
 ];
 ```
 
-`app/controller/UserController.php`:
+Файл `app/controller/UserController.php` следующего содержания:
 
 ```php
 <?php
@@ -185,9 +182,9 @@ class UserController
 }
 ```
 
-Файл `app/view/user/hello.blade.php`:
+Файл `app/view/user/hello.blade.php` следующего содержания:
 
-> Обратите внимание, что расширение файла для шаблона Blade - `.blade.php`
+> Обратите внимание, что у шаблона Blade расширение файла `.blade.php`
 
 ```html
 <!doctype html>
@@ -202,11 +199,10 @@ hello {{$name}}
 </html>
 ```
 
-Более подробную информацию можно найти [здесь](https://learnku.com/docs/laravel/8.x/blade/9377)
+Дополнительную документацию можно найти по ссылке [Blade](https://learnku.com/docs/laravel/8.x/blade/9377).
 
-## Пример шаблона think-template
-Измените файл конфигурации `config/view.php` следующим образом
-
+## Пример шаблона на think-template
+Измените конфигурацию `config/view.php` на следующую:
 ```php
 <?php
 use support\view\ThinkPHP;
@@ -216,7 +212,7 @@ return [
 ];
 ```
 
-`app/controller/UserController.php`:
+Файл `app/controller/UserController.php` следующего содержания:
 
 ```php
 <?php
@@ -233,7 +229,7 @@ class UserController
 }
 ```
 
-Файл `app/view/user/hello.html`:
+Файл `app/view/user/hello.html` следующего содержания:
 
 ```html
 <!doctype html>
@@ -248,11 +244,10 @@ hello {$name}
 </html>
 ```
 
-Более подробную информацию можно найти [здесь](https://www.kancloud.cn/manual/think-template/content)
+Дополнительную документацию можно найти по ссылке [think-template](https://www.kancloud.cn/manual/think-template/content).
 
 ## Присвоение значений шаблону
-Помимо использования `view(шаблон, массив_переменных)` для присвоения значений шаблону, мы также можем использовать вызов `View::assign()` в любом месте. Например:
-
+Помимо использования `view(шаблон, массив_переменных)` для присвоения значений шаблону, мы также можем использовать `View::assign()` в любом месте для присвоения значений шаблону. Например:
 ```php
 <?php
 namespace app\controller;
@@ -274,56 +269,52 @@ class UserController
 }
 ```
 
-`View::assign()` очень полезен в некоторых ситуациях, например, если каждая страница в системе должна отображать информацию о текущем пользователе в верхней части, использование `view(шаблон, ['user_info' => 'информация о пользователе']);` будет неудобным. Решением будет получение информации о пользователе через промежуточный слой и затем присвоение информации о пользователе шаблону с помощью `View::assign()`.
+`View::assign()` очень полезен в некоторых ситуациях, например, если на каждой странице системы нужно отображать информацию о текущем пользователе, то заносить эту информацию в шаблон через `view('шаблон', ['user_info' => 'Информация о пользователе']);` на каждой странице будет очень неудобно. Решением будет получить информацию о пользователе в промежуточном обработчике, а затем использовать `View::assign()` для присвоения информации о пользователе шаблону.
 
-## О расположении файлов представлений
+## О путях к файлам представлений
 
 #### Контроллер
-При вызове контроллером `view('название_шаблона',[]);`, файл представления ищется в соответствии с следующими правилами:
+Когда контроллер вызывает `view('название_шаблона',[]);`, файл представления ищется в соответствии со следующими правилами:
 
-1. При отсутствии множественных приложений используется файл представления в `app/view/`.
-2. При наличии [множественных приложений](multiapp.md) используется файл представления в `app/имя_приложения/view/`.
+1. В случае отсутствия множества приложений используется файл представления из `app/view/`
+2. [В множестве приложений](multiapp.md) используется файл представления из `app/имя_приложения/view/`
 
-В общем, если `$request->app` пустой, используется файл представления в `app/view/`, в противном случае используется файл представления в `app/{$request->app}/view/`.
+В общем, если `$request->app` пуст, используется файл представления из `app/view/`, в противном случае используется файл представления из `app/{$request->app}/view/`.
 
 #### Замыкание
-Так как `$request->app` пустой и не принадлежит ни к одному приложению, для замыкания используется файл представления в `app/view/`, например, когда маршрут определен в файле конфигурации `config/route.php` так:
-
+Замыкание `$request->app` не относится к какому-либо приложению, поэтому замыкание использует файл представления из `app/view/`, например, определенный маршрут в `config/route.php`:
 ```php
 Route::any('/admin/user/get', function (Reqeust $reqeust) {
     return view('user', []);
 });
 ```
-используется файл представления `app/view/user.html` (если используется шаблон Blade, файл представления будет `app/view/user.blade.php`).
+использует файл представления `app/view/user.html` в случае использования шаблонизатора Blade файл представления будет `app/view/user.blade.php`.
 
-#### Указанное приложение
-Для многоприложенной модели, чтобы представление могло быть использовано повторно, `view(шаблон, данные, приложение = null)` предоставляет третий параметр `$app`, который можно использовать для указания, какое приложение должно использоваться для файла представления. Например, `view('user', [], 'admin');` принудительно использует файл представления в `app/admin/view/`.
+#### Указание приложения
+Чтобы шаблоны могли повторно использоваться в режиме множества приложений, метод `view($template, $data, $app = null)` предоставляет третий параметр `$app`, который можно использовать для указания использования шаблона из каталога определенного приложения. Например, `view('user', [], 'admin')` является обязательным использованием файлов представления из `app/admin/view/`.
 
 ## Расширение twig
 
 > **Обратите внимание**
-> Эта функция доступна с webman-framework>=1.4.8
+> Эта функция требует webman-framework>=1.4.8
 
-Мы можем расширить экземпляр представления twig, присвоив обратный вызов `view.extension` в конфигурации, например, в `config/view.php`:
-
+Мы можем расширить экземпляр представления twig, добавив обратный вызов к конфигурации `view.extension`, например, `config/view.php`:
 ```php
 <?php
 use support\view\Twig;
 return [
     'handler' => Twig::class,
     'extension' => function (Twig\Environment $twig) {
-        $twig->addExtension(new your\namespace\YourExtension()); // Добавить расширение
-        $twig->addFilter(new Twig\TwigFilter('rot13', 'str_rot13')); // Добавить фильтр
-        $twig->addFunction(new Twig\TwigFunction('function_name', function () {})); // Добавить функцию
+        $twig->addExtension(new your\namespace\YourExtension()); // добавление расширения
+        $twig->addFilter(new Twig\TwigFilter('rot13', 'str_rot13')); // добавление фильтра
+        $twig->addFunction(new Twig\TwigFunction('function_name', function () {})); // добавление функции
     }
 ];
 ```
-
-## Расширение blade
-> **Обратите внимание**
-> Эта функция доступна с webman-framework>=1.4.8
-
-Аналогично, мы можем расширить экземпляр представления blade, присвоив обратный вызов `view.extension` в конфигурации, например, в `config/view.php`:
+## Расширение Blade
+> **Примечание**
+> Данная функция требует webman-framework>=1.4.8
+Точно так же мы можем расширить экземпляр представления Blade, добавив обратный вызов `view.extension` в файл конфигурации `config/view.php`, как показано ниже:
 
 ```php
 <?php
@@ -331,7 +322,7 @@ use support\view\Blade;
 return [
     'handler' => Blade::class,
     'extension' => function (Jenssegers\Blade\Blade $blade) {
-        // Добавить директивы в blade
+        // Добавление директив в Blade
         $blade->directive('mydate', function ($timestamp) {
             return "<?php echo date('Y-m-d H:i:s', $timestamp); ?>";
         });
@@ -339,15 +330,14 @@ return [
 ];
 ```
 
-## Использование компонента blade
+## Использование компонента в Blade
 
-> **Обратите внимание**
-> Необходим webman/blade>=1.5.2
+> **Примечание**
+> Требуется webman/blade>=1.5.2
 
-Предположим, нам нужно добавить компонент Alert
+Предположим, что нужно добавить компонент Alert
 
 **Создайте файл `app/view/components/Alert.php`**
-
 ```php
 <?php
 
@@ -371,14 +361,13 @@ class Alert extends Component
 ```
 
 **Создайте файл `app/view/components/alert.blade.php`**
-
 ```php
 <div>
     <b style="color: red">hello blade component</b>
 </div>
 ```
 
-**Файл `/config/view.php` примет следующий вид**
+**Файл `/config/view.php` должен быть примерно следующим:**
 
 ```php
 <?php
@@ -391,8 +380,7 @@ return [
 ];
 ```
 
-Таким образом, компонент Blade Alert настроен, и в шаблоне его можно использовать так:
-
+Таким образом, компонент Alert Blade настроен полностью, и его использование в шаблоне будет следующим образом:
 ```html
 <!doctype html>
 <html>
@@ -421,4 +409,4 @@ return [
 ];
 ```
 
-Подробнее см. [Расширение тегов think-template](https://www.kancloud.cn/manual/think-template/1286424)
+Подробности см. в [расширении тегов think-template](https://www.kancloud.cn/manual/think-template/1286424)

@@ -2,7 +2,7 @@
 
 webman的redis組件默認使用的是[illuminate/redis](https://github.com/illuminate/redis)，也就是laravel的redis庫，用法與laravel相同。
 
-使用`illuminate/redis`之前必須先給`php-cli`安裝redis擴展。
+在使用`illuminate/redis`之前必須先給`php-cli`安裝redis擴展。
 
 > **注意**
 > 使用命令`php -m | grep redis`查看`php-cli`是否裝了redis擴展。注意：即使你在`php-fpm`安裝了redis擴展，不代表你在`php-cli`可以使用它，因為`php-cli`和`php-fpm`是不同的應用程序，可能使用的是不同的`php.ini`配置。使用命令`php --ini`來查看你的`php-cli`使用的是哪個`php.ini`配置文件。
@@ -29,7 +29,7 @@ return [
 ];
 ```
 
-## 示範
+## 示例
 ```php
 <?php
 namespace app\controller;
@@ -136,8 +136,7 @@ return [
 
 ];
 ```
-
-默認情況下，集群可以在節點上實現客戶端分片，允許你實現節點池以及創建大量可用內存。這裡要注意，客戶端共用不會處理失敗的情況；因此，這個功能主要適用於從另一個主數據庫獲取的緩存數據。如果要使用 Redis 原生集群，需要在配置文件下的 options 鍵中做出如下指定：
+預設情況下，集群可以在節點上實現客戶端分片，允許你實現節點池以及創建大量可用內存。這裡要注意，客戶端共用不會處理失敗的情況；因此，這個功能主要適用於從另一個主數據庫獲取的緩存數據。如果要使用 Redis 原生集群，需要在配置文件下的 options 鍵中做出如下指定：
 
 ```php
 return[
@@ -152,7 +151,7 @@ return[
 ```
 
 ## 管道命令
-當你需要在一個操作中給伺服器發送很多命令時，推薦你使用管道命令。 pipeline 方法接受一個 Redis 實例的 闭包 。你可以將所有的命令發送給 Redis 實例，它們都會在一個操作中執行完成：
+當你需要在一個操作中給伺服器發送很多命令時，推薦你使用管道命令。 pipeline 方法接受一個 Redis 實例的閉包 。你可以將所有的命令發送給 Redis 實例，它們都會在一個操作中執行完成：
 ```php
 Redis::pipeline(function ($pipe) {
     for ($i = 0; $i < 1000; $i++) {

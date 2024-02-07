@@ -1,20 +1,20 @@
-# Composant de traitement d'images
+# Composant de traitement d'image
 
 ## intervention/image
 
 ### Adresse du projet
 
 https://github.com/Intervention/image
-  
+
 ### Installation
- 
+
 ```php
 composer require intervention/image
 ```
-  
+
 ### Utilisation
 
-**Fragment de code pour la page de téléversement**
+**Fragment de page de téléchargement**
 
 ```html
   <form method="post" action="/user/img" enctype="multipart/form-data">
@@ -40,12 +40,12 @@ class UserController
             $image = Image::make($file)->resize(100, 100);
             return response($image->encode('png'), 200, ['Content-Type' => 'image/png']);
         }
-        return response('fichier introuvable');
+        return response('fichier non trouvé');
     }
     
 }
 ```
-  
-### Pour plus d'informations
+
+### Plus de contenu
 
 Visitez http://image.intervention.io/getting_started/introduction

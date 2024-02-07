@@ -2,7 +2,7 @@
 
 ## Description
 
-Phinx permet aux développeurs de modifier et de maintenir la base de données de manière concise. Il évite la rédaction manuelle de requêtes SQL en utilisant une puissante API PHP pour gérer les migrations de base de données. Les développeurs peuvent utiliser le contrôle de version pour gérer leurs migrations de base de données. Phinx permet de facilement réaliser des migrations de données entre différentes bases de données. Il est également possible de suivre les scripts de migration qui ont été exécutés, ce qui permet aux développeurs de se concentrer davantage sur la rédaction d'un meilleur système sans se soucier de l'état de la base de données.
+Phinx permet aux développeurs de modifier et de maintenir facilement la base de données. Il évite l'écriture manuelle de requêtes SQL en utilisant une puissante API PHP pour gérer les migrations de base de données. Les développeurs peuvent utiliser le contrôle de version pour gérer leurs migrations de base de données. Phinx facilite la migration des données entre différentes bases de données. Il permet également de suivre quels scripts de migration ont été exécutés, ce qui permet aux développeurs de se concentrer davantage sur la manière d'écrire de meilleurs systèmes sans se soucier de l'état de la base de données.
 
 ## Adresse du projet
 
@@ -10,19 +10,19 @@ https://github.com/cakephp/phinx
 
 ## Installation
 
-  ```php
-  composer require robmorgan/phinx
-  ```
+```php
+composer require robmorgan/phinx
+```
 
 ## Documentation officielle en chinois
 
-Pour une utilisation détaillée, veuillez consulter la documentation officielle en chinois. Ici, nous allons seulement expliquer comment configurer et utiliser Phinx dans webman.
+Pour un guide détaillé, veuillez consulter la documentation officielle en chinois. Ici, nous allons uniquement expliquer comment configurer et utiliser Phinx avec webman.
 
 https://tsy12321.gitbooks.io/phinx-doc/content/
 
 ## Structure des fichiers de migration
 
-```
+```plaintext
 .
 ├── app                           Répertoire de l'application
 │   ├── controller                Répertoire des contrôleurs
@@ -39,7 +39,7 @@ https://tsy12321.gitbooks.io/phinx-doc/content/
 
 ## Configuration de phinx.php
 
-Créez un fichier phinx.php à la racine du projet
+Créez le fichier phinx.php dans le répertoire racine du projet
 
 ```php
 <?php
@@ -67,21 +67,20 @@ return [
 
 ## Recommandations d'utilisation
 
-Une fois fusionnés, les fichiers de migration ne peuvent plus être modifiés. En cas de problème, il est nécessaire de créer un nouveau fichier de modification ou de suppression pour y remédier.
+Une fois que les fichiers de migration ont été fusionnés, il n'est plus permis de les modifier. En cas de problème, il est nécessaire de créer un nouveau fichier de modification ou de suppression pour y remédier.
 
 #### Règles de nommage des fichiers d'opérations de création de table
 
-`{time (créé automatiquement)}_create_{nom de la table en minuscules}`
+`{time (créé automatiquement)}_create_{nom de table en minuscules}`
 
 #### Règles de nommage des fichiers d'opérations de modification de table
 
-`{time (créé automatiquement)}_modify_{nom de la table en minuscules + élément spécifique de modification en minuscules}`
+`{time (créé automatiquement)}_modify_{nom de table en minuscules + élément de modification en minuscules}`
 
 #### Règles de nommage des fichiers d'opérations de suppression de table
 
-`{time (créé automatiquement)}_delete_{nom de la table en minuscules + élément spécifique de modification en minuscules}`
+`{time (créé automatiquement)}_delete_{nom de table en minuscules + élément de modification en minuscules}`
 
 #### Règles de nommage des fichiers de remplissage de données
 
-`{time (créé automatiquement)}_fill_{nom de la table en minuscules + élément spécifique de modification en minuscules}`
-
+`{time (créé automatiquement)}_fill_{nom de table en minuscules + élément de modification en minuscules}`

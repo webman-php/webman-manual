@@ -1,15 +1,13 @@
-# Crontab Timing Task Component
+# crontab scheduling component
 
 ## workerman/crontab
 
 ### Description
 
-`workerman/crontab` is similar to the crontab in Linux, the difference is that `workerman/crontab` supports second-level timing.
+`workerman/crontab` is similar to the linux crontab, but the difference is that `workerman/crontab` supports scheduling at the second level.
 
-Time Specification:
-
-
-```
+Time format:
+```plaintext
 0   1   2   3   4   5
 |   |   |   |   |   |
 |   |   |   |   |   +------ day of week (0 - 6) (Sunday=0)
@@ -17,19 +15,19 @@ Time Specification:
 |   |   |   +-------- day of month (1 - 31)
 |   |   +---------- hour (0 - 23)
 |   +------------ min (0 - 59)
-+-------------- sec (0-59)[optional, if the 0th position is omitted, the minimum time unit is minutes]
++-------------- sec (0-59) [optional, if not present, the minimum time granularity is minutes]
 ```
 
-### Project Address
+### Project Link
 
 https://github.com/walkor/crontab
-
+  
 ### Installation
-
+ 
 ```php
 composer require workerman/crontab
 ```
-
+  
 ### Usage
 
 **Step 1: Create a process file `process/Task.php`**
@@ -43,68 +41,65 @@ use Workerman\Crontab\Crontab;
 class Task
 {
     public function onWorkerStart()
-    {
-    
-        // Execute every second
+    {        
+        // Run every second
         new Crontab('*/1 * * * * *', function(){
             echo date('Y-m-d H:i:s')."\n";
         });
         
-        // Execute every 5 seconds
+        // Run every 5 seconds
         new Crontab('*/5 * * * * *', function(){
             echo date('Y-m-d H:i:s')."\n";
         });
         
-        // Execute every minute
+        // Run every minute
         new Crontab('0 */1 * * * *', function(){
             echo date('Y-m-d H:i:s')."\n";
         });
         
-        // Execute every 5 minutes
+        // Run every 5 minutes
         new Crontab('0 */5 * * * *', function(){
             echo date('Y-m-d H:i:s')."\n";
         });
         
-        // Execute at the first second of every minute
+        // Run on the first second of every minute
         new Crontab('1 * * * * *', function(){
             echo date('Y-m-d H:i:s')."\n";
         });
       
-        // Execute at 7:50 every day, note that the second position is omitted here
+        // Run at 7:50am every day. Note that the second field is omitted here
         new Crontab('50 7 * * *', function(){
             echo date('Y-m-d H:i:s')."\n";
         });
-        
     }
 }
 ```
-
+  
 **Step 2: Configure the process file to start with webman**
-
+  
 Open the configuration file `config/process.php` and add the following configuration
-
+  
 ```php
 return [
-    ....other configurations, omitted here....
+    // Other configurations...
   
     'task'  => [
         'handler'  => process\Task::class
     ],
 ];
 ```
-
+  
 **Step 3: Restart webman**
 
-> Note: Timing tasks will not be executed immediately, all timing tasks will start counting and executing in the next minute.
+> Note: The scheduled tasks will not execute immediately. They will start counting and executing from the next minute.
 
-### Note
-
-Crontab is not asynchronous. For example, a task process sets two timers, A and B, both of which execute a task every second. However, if task A takes 10 seconds to execute, then task B has to wait for A to finish before it can be executed, causing a delay in the execution of task B.
-If the business is sensitive to time intervals, it is necessary to run sensitive timing tasks in a separate process to prevent interference from other timing tasks. For example, do the following configuration in `config/process.php`:
+### Explanation
+Crontab is not asynchronous. For example, if a task process sets two timers, A and B, to run every second, and A takes 10 seconds to complete, then B will have to wait for A to finish before it can be executed, causing a delay in B's execution.
+If the business is sensitive to time intervals, it is recommended to run the sensitive tasks in a separate process to prevent them from being affected by other tasks. For example, configure `config/process.php` as follows:
 
 ```php
 return [
-    ....other configurations, omitted here....
+    // Other configurations...
   
     'task1'  => [
         'handler'  => process\Task1::class
@@ -114,9 +109,7 @@ return [
     ],
 ];
 ```
-
-Place time-sensitive timing tasks in `process/Task1.php` and other timing tasks in `process/Task2.php`.
+Place the sensitive tasks in `process/Task1.php` and other tasks in `process/Task2.php`.
 
 ### More
-
-For more `config/process.php` configuration instructions, please refer to [Custom Processes](../process.md)
+For more configuration options in `config/process.php`, please refer to [Custom Processes](../process.md).

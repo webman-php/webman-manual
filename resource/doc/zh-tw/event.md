@@ -6,9 +6,9 @@
 [![webman-event](https://img.shields.io/github/last-commit/tinywan/webman-event/main)]()
 [![webman-event](https://img.shields.io/github/v/tag/tinywan/webman-event?color=ff69b4)]()
 
-事件相較於中間件的優勢是事件比中間件更加精確定位（或者說粒度更細），並且更適合一些業務場景的擴展。例如，我們通常會遇到用戶註冊或者登錄後需要做一系列操作，通過事件系統可以做到不侵入原有代碼完成登錄的操作擴展，降低系統的耦合性的同時，也降低了BUG的可能性。
+事件相比中間件的優勢是事件比中間件更加精確定位（或者說粒度更細），並且更適合一些業務場景的擴展。例如，我們通常會遇到使用者註冊或者登錄後需要做一系列操作，通過事件系統可以做到不侵入原有程式碼完成登錄的操作擴展，降低系統的耦合性的同時，也降低了BUG的可能性。
 
-## 項目地址
+## 專案地址
 
 [https://github.com/Tinywan/webman-permission](https://github.com/Tinywan/webman-permission)
 
@@ -21,9 +21,9 @@
 ```shell script
 composer require tinywan/webman-event
 ```
-## 配置 
+## 設定
 
-事件配置文件 `config/event.php` 內容如下
+事件設定檔 `config/event.php` 內容如下
 
 ```php
 return [
@@ -34,13 +34,13 @@ return [
     'subscriber' => [],
 ];
 ```
-### 進程啟動配置
+### 進程啟動設定
 
-打開 `config/bootstrap.php`，加入如下配置：
+打開 `config/bootstrap.php`，加入如下設定：
 
 ```php
 return [
-    // 這裡省略了其它配置 ...
+    // 這裡省略了其他設定 ...
     webman\event\EventManager::class,
 ];
 ```
@@ -122,6 +122,7 @@ class LoggerSubscriber implements EventSubscriberInterface
 ```
 
 事件訂閱
+
 ```php
 return [
     // 事件訂閱
@@ -137,7 +138,7 @@ return [
 
 ```php
 $error = [
-    'errorMessage' => '錯誤訊息',
+    'errorMessage' => '錯誤消息',
     'errorCode' => 500
 ];
 EventManager::trigger(new LogErrorWriteEvent($error),LogErrorWriteEvent::NAME);
@@ -145,7 +146,7 @@ EventManager::trigger(new LogErrorWriteEvent($error),LogErrorWriteEvent::NAME);
 
 執行結果
 
-![打印结果](./trigger.png)
+![打印結果](./trigger.png)
 
 ## 授權
 

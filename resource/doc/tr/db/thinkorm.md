@@ -4,15 +4,15 @@
 
 `composer require -W webman/think-orm`
 
-Kurulumdan sonra yeniden başlatma gereklidir (reload geçersiz).
+Kurulumdan sonra restart(reload geçersiz) yapmanız gereklidir.
 
-> **Not**
-> Kurulum başarısız olursa, muhtemelen composer vekil kullanıyorsunuzdur. `composer config -g --unset repos.packagist` komutunu çalıştırmayı deneyerek composer vekilini kapatmayı deneyin.
+> **İpucu**
+> Kurulum başarısız olursa, muhtemelen composer proxy kullandığınızdan kaynaklanmıştır, deneyin `composer config -g --unset repos.packagist` komutunu çalıştırarak composer proxy'yi kaldırın.
 
-> [webman/think-orm](https://www.workerman.net/plugin/14) aslında `toptink/think-orm`'un otomatik kurulumunu yapan bir eklentidir. Eğer webman sürümünüz `1.2`'den düşükse bu eklentiyi kullanamazsınız, bu durumda [think-orm'u manuel olarak kurma ve yapılandırma](https://www.workerman.net/a/1289) makalesine bakabilirsiniz.
+> [webman/think-orm](https://www.workerman.net/plugin/14) aslında `toptink/think-orm`'ın otomatik olarak kurulması için bir eklentidir. Eğer webman sürümünüz `1.2`'den düşükse bu eklentiyi kullanamazsınız, bu durumda [think-orm'u manuel olarak kurma ve yapılandırma](https://www.workerman.net/a/1289) yazısına bakabilirsiniz.
 
 ### Yapılandırma Dosyası
-Gerçek duruma göre yapılandırma dosyasını `config/thinkorm.php` şeklinde değiştirin.
+Gerçek duruma göre `config/thinkorm.php` yapılandırma dosyasını düzenleyin.
 
 ### Kullanım
 
@@ -35,7 +35,7 @@ class FooController
 
 ### Model Oluşturma
 
-ThinkOrm modeli `think\Model` sınıfından türetilir, aşağıdaki gibi:
+ThinkOrm modeli `think\Model`'den miras alır, aşağıdaki gibi bir örnekle;
 
 ```php
 <?php
@@ -63,14 +63,14 @@ class User extends Model
 }
 ```
 
-Ayrıca aşağıdaki komut kullanılarak thinkorm tabanlı model oluşturulabilir:
+Ayrıca aşağıdaki komutu kullanarak thinkorm tabanlı model oluşturabilirsiniz;
 
-```php
-php webman make:model table_name
+```shell
+php webman make:model tablo_adı
 ```
 
-> **Not**
-> Bu komutun çalışması için `webman/console` kurulu olmalıdır. Kurulum komutu `composer require webman/console ^1.2.13` şeklindedir.
+> **İpucu**
+> Bu komut için `webman/console`'ın yüklenmesi gereklidir, kurulum komutu `composer require webman/console ^1.2.13` şeklindedir.
 
 > **Dikkat**
-> Eğer make:model komutu ana projenin `illuminate/database`'i kullandığını tespit ederse, `illuminate/database` tabanlı model dosyası oluşturur, thinkorm yerine. Bu durumda, tp parametresi ekleyerek think-orm modelini zorunlu olarak oluşturabilirsiniz, komut şöyle olur: `php webman make:model table_name tp` (Eğer çalışmazsa, `webman/console` sürümünü güncelleyin).
+> make:model komutu ana projenin `illuminate/database` kullandığını algılarsa, `illuminate/database` tabanlı model dosyaları oluşturur, think-orm tabanlı oluşturmak için tp parametresini ekleyerek komutu şu şekilde çalıştırabilirsiniz `php webman make:model tablo_adı tp` (Eğer çalışmazsa `webman/console`'ı güncelleyin)

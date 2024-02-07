@@ -1,116 +1,113 @@
-- ขั้นตอนเบื้องต้น
+- คู่มือเริ่มต้น
 
-  - [webman คืออะไร](README.md)
-  - [คำแนะนำการเขียนโปรแกรม](attention.md)
+  - [webmanคืออะไร](README.md)
+  - [คำแนะนำในการเขียนโปรแกรม](attention.md)
   - [ชุมชนคำถามและคำตอบ](help.md)
-
-- เริ่มต้นเร็ว
   
+- เริ่มต้นอย่างรวดเร็ว
   - [การติดตั้ง](install.md)
   - [โครงสร้างไดเร็กทอรี](directory.md)
   - [ตัวอย่างง่าย ๆ](tutorial.md)
 
-- ฟังก์ชั่นพื้นฐาน
-
-  - [ข้อร้องขอ](request.md)
-  - [การตอบรับ](response.md)
-  - [ควบคุมเซอร์วิส](controller.md)
+- ฟังก์ชันพื้นฐาน
+  - [คำขอ](request.md)
+  - [การตอบกลับ](response.md)
+  - [ตัวควบคุม](controller.md)
   - [เส้นทาง](route.md)
   - [มิดเดิลแวร์](middleware.md)
   - [มุมมอง](view.md)
-  - [ไฟล์สแตติก](static.md)
+  - [ไฟล์แบบคงที่](static.md)
   - [การจัดการเซสชัน](session.md)
-  - [การจัดการข้อยกเว้น](exception.md)
+  - [การจัดการข้อผิดพลาด](exception.md)
   - [บันทึก](log.md)
-  - [ไฟล์การตั้งค่า](config.md)
-  - [การทำงานของหลายแอป](multiapp.md)
+  - [ไฟล์กำหนดค่า](config.md)
+  - [แอปพลิเคชันหลายรายการ](multiapp.md)
 
 - ฐานข้อมูล
-
-  - [เริ่มต้นด่่วน](db/tutorial.md)
+  - [เริ่มต้นอย่างรวดเร็ว](db/tutorial.md)
   - [กำหนดค่าฐานข้อมูล](db/config.md)
-  - [คิวรีคอนสตรักเตอร์](db/queries.md)
+  - [ผู้สืบค้นคิวรี](db/queries.md)
   - [โมเดล](db/model.md)
   - [ความสัมพันธ์ของโมเดล](db/relationships.md)
-  - [หน้าแบ่งหน้า](db/paginator.md)
-  - [การย้ายฐานข้อมูล](db/migration.md)
-  - [เรดิส](db/redis.md)
+  - [หน้าเพจ](db/paginator.md)
+  - [การโยกย้ายฐานข้อมูล](db/migration.md)
+  - [Redis](db/redis.md)
   - [แคช](db/cache.md)
-  - [มองโกดีบี](db/mongo.md)
+  - [MongoDB](db/mongo.md)
   - [ThinkORM](db/thinkorm.md)
   - [ThinkCache](db/thinkcache.md)
   - [Medoo](db/medoo.md)
-
+  
 - คิวข้อความ
   - [คิว Redis](queue/redis.md)
   - [Stomp](queue/stomp.md)
-
-- คอมโพเนนท์ที่ใช้บ่อย
+ 
+- คอมโพเนนท์ที่นิยม
   - [ตัวตรวจสอบ](components/validation.md)
-  - [คอมโพเนนท์หน้าเพจ](components/paginator.md)
+  - [คอมโพเนนท์การแบ่งหน้า](components/paginator.md)
   - [หลายภาษา](components/translation.md)
   - [การประมวลผลภาพ](components/image.md)
-  - [การตรวจสอบความถูกต้อง](components/captcha.md)
+  - [รหัสยืนยัน](components/captcha.md)
   - [เหตุการณ์](components/event.md)
-  - [คอมโพเนนท์ระบบสภาพแวดล้อม](components/env.md)
-  - [งานตัดเวลา](components/crontab.md)
-  - [ไฟล์ Excel](components/excel.md)
-  - [SDK ไว้แชท](components/wechat.md)
+  - [คอมโพเนนท์ตัวแปรสภาพแวดล้อม](components/env.md)
+  - [การทำงานตามเวลา](components/crontab.md)
+  - [ตารางงาน Excel](components/excel.md)
+  - [SDK ไว้ชาว](components/wechat.md)
   - [SDK การชำระเงิน](components/payment.md)
-  - [SDK Casbin](components/casbin.md)
-  - [การทดสอบหน่วย](components/unitest.md)
+  - [SDK แคสบิน](components/casbin.md)
+  - [การทดสอบแบบเฉพาะกลุ่ม](components/unitest.md)
   - [การสร้างรหัสข้อผิดพลาด](components/generate_error_code.md)
 
 - ปลั๊กอินพื้นฐาน
   - [ปลั๊กอินพื้นฐาน](plugin/base.md)
-  - [คอมดรดและคำสั่ง](plugin/console.md)
-  - [การโปรโมท](plugin/push.md)
+  - [คอมมานด์ไลน์](plugin/console.md)
+  - [การแจ้งเตือน](plugin/push.md)
   - [ตลาดปลั๊กอินพื้นฐาน](plugin/market.md)
   - [ส่งปลั๊กอินพื้นฐาน](plugin/create.md)
 
-- ปลั๊กอินแอปพื้นฐาน
+- ปลั๊กอินแอปพลิเคชัน
   - [การแนะนำ](app/app.md)
-  - [มาตรฐาน](app/standard.md)
-  - [การสร้างแอปพื้นฐาน](app/create.md)
+  - [ข้อกำหนด](app/standard.md)
+  - [การสร้างแอปพลิเคชัน](app/create.md)
   - [โครงสร้างไดเร็กทอรี](app/directory.md)
   - [เส้นทาง](app/route.md)
-  - [ไฟล์การตั้งค่า](app/config.md)
-  - [ควบคุมเซอร์วิส](app/controller.md)
+  - [ไฟล์กำหนดค่า](app/config.md)
+  - [ตัวควบคุม](app/controller.md)
   - [มุมมอง](app/view.md)
-  - [ไฟล์สแตติก](app/static.md)
+  - [ไฟล์แบบคงที่](app/static.md)
   - [ฐานข้อมูล](app/database.md)
-  - [เรดิส](app/redis.md)
+  - [Redis](app/redis.md)
   - [บันทึก](app/log.md)
-  - [เข้าร่วม webman-admin](app/admin.md)
-  - [ผสมปลั๊กอิน](app/pack.md)
-  - [เผยแพร่ปลั๊กอิน](app/publish.md)
+  - [เข้าร่วมเว็บมาน-แอดมิน](app/admin.md)
+  - [บรรจุปลั๊กอิน](app/pack.md)
+  - [แพ็คปลั๊กอิน](app/publish.md)
   - [การติดตั้งและถอนการติดตั้ง](app/install.md)
-  - [ตลาดแอปพื้นฐาน](app/market.md)
+  - [ตลาดแอปพลิเคชัน](app/market.md)
 
-- ระดับขั้นสูง
+- ขั้นสูง
   - [กระบวนการที่กำหนดเอง](process.md)
-  - [การฉายภายนอก](di.md)
+  - [ฝังตัวแฟรมเวิร์ก](di.md)
   - [AOP](aop.md)
-
+  
 - อื่น ๆ
   - [ความปลอดภัย](others/security.md)
-  - [การตรวจสอบฟังก์ชั่นที่ถูกปิดใช้งาน](others/disable-function-check.md)
+  - [การตรวจสอบการปิดใช้งานฟังก์ชัน](others/disable-function-check.md)
   - [สคริปต์ที่กำหนดเอง](others/scripts.md)
-  - [การกำหนดเอง 404 500](others/custom-error-page.md)
-  - [วิธีอัพเกรด](others/upgrade.md)
-  - [การแทนที่ nginx](others/nginx-proxy.md)
-  - [การบรรจุ phar](others/phar.md)
-  - [การบรรจุฐานสอ](others/bin.md)
+  - [การปรับแต่งหน้าข้อผิดพลาด 404 และ 500](others/custom-error-page.md)
+  - [วิธีการอัพเกรด](others/upgrade.md)
+  - [nginx พร็อกซี](others/nginx-proxy.md)
+  - [phar แพ็คเกจ](others/phar.md)
+  - [การแพ็คเกจแบบไบนารี](others/bin.md)
   - [กระบวนการเริ่มต้น](others/process.md)
-  - [วงจรชีวิต](others/lifecycle.md)
-  - [การรั่วจำ](others/memory-leak.md)
+  - [ชีวิตของโปรแกรม](others/lifecycle.md)
+  - [การรั่วหล่อเพียงข้อมูล](others/memory-leak.md)
   - [การเริ่มต้นธุรกิจ](others/bootstrap.md)
   - [การโหลดอัตโนมัติ](others/autoload.md)
-  - [การประมวลผลธุรกิจที่ช้า](others/task.md)
+  - [การประมวลธุรกิจช้า](others/task.md)
   - [ประสิทธิภาพ](others/performance.md)
-  - [การทดสอบแรงดัน](others/benchmarks.md)
+  - [การทดสอบแรงกดดัน](others/benchmarks.md)
   - [การตรวจสอบไฟล์](others/monitor.md)
 
-- การอัพเกรด
+- อัพเกรด
   - [1.4](upgrade/1-4.md)
   - [ขอบคุณ](thanks.md)

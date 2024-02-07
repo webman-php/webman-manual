@@ -1,5 +1,5 @@
 # 日誌
-webman 使用 [monolog/monolog](https://github.com/Seldaek/monolog) 處理日誌。
+webman使用 [monolog/monolog](https://github.com/Seldaek/monolog) 處理日誌。
 
 ## 使用
 ```php
@@ -14,7 +14,7 @@ class FooController
     public function index(Request $request)
     {
         Log::info('日誌測試');
-        return response('你好，索引');
+        return response('你好，這裡是首頁');
     }
 }
 ```
@@ -50,12 +50,12 @@ $log->emergency($message, array $context = [])
 return [
     // 默認日誌通道
     'default' => [
-        // 處理默認通道的處理程序，可以設置多個
+        // 處理默認通道的handler，可以設置多個
         'handlers' => [
             [   
-                // 處理程序類的名稱
+                // handler類的名稱
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // 處理程序類的構造函數參數
+                // handler類的構造函數參數
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
@@ -74,17 +74,17 @@ return [
 ```
 
 ## 多通道
-monolog 支持多通道，默認使用`default`通道。如果想增加一個`log2`通道，配置類似如下：
+monolog支持多通道，默認使用`default`通道。如果想增加一個`log2`通道，配置類似如下：
 ```php
 return [
     // 默認日誌通道
     'default' => [
-        // 處理默認通道的處理程序，可以設置多個
+        // 處理默認通道的handler，可以設置多個
         'handlers' => [
             [   
-                // 處理程序類的名稱
+                // handler類的名稱
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // 處理程序類的構造函數參數
+                // handler類的構造函數參數
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
@@ -101,12 +101,12 @@ return [
     ],
     // log2通道
     'log2' => [
-        // 處理默認通道的處理程序，可以設置多個
+        // 處理log2通道的handler，可以設置多個
         'handlers' => [
             [   
-                // 處理程序類的名稱
+                // handler類的名稱
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // 處理程序類的構造函數參數
+                // handler類的構造函數參數
                 'constructor' => [
                     runtime_path() . '/logs/log2.log',
                     Monolog\Logger::DEBUG,
@@ -138,7 +138,7 @@ class FooController
     {
         $log = Log::channel('log2');
         $log->info('log2 測試');
-        return response('你好，索引');
+        return response('你好，這裡是首頁');
     }
 }
 ```

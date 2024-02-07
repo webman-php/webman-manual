@@ -1,9 +1,9 @@
 # Basit Örnek
 
-## Dize Döndürme
+## Dize döndürme
 **Controller Oluşturma**
 
-Aşağıdaki gibi `app/controller/UserController.php` dosyasını oluşturun
+Aşağıdaki gibi `app/controller/UserController.php` dosyasını oluşturun:
 
 ```php
 <?php
@@ -16,9 +16,9 @@ class UserController
     public function hello(Request $request)
     {
         $default_name = 'webman';
-        // get isteğinden name parametresini al, eğer name parametresi geçilmediyse $default_name döndür
+        // Get isteğinden ad parametresini al, eğer ad parametresi yoksa $default_name döndür
         $name = $request->get('name', $default_name);
-        // Tarayıcıya dize dönüşü
+        // Tarayıcıya dize döndür
         return response('hello ' . $name);
     }
 }
@@ -28,10 +28,10 @@ class UserController
 
 Tarayıcıda `http://127.0.0.1:8787/user/hello?name=tom` adresine gidin
 
-Tarayıcı `hello tom` döndürecektir
+Tarayıcı `hello tom` döndürecektir.
 
-## Json Döndürme
-`app/controller/UserController.php` dosyasını aşağıdaki gibi değiştirin
+## JSON döndürme
+`app/controller/UserController.php` dosyasını aşağıdaki gibi değiştirin:
 
 ```php
 <?php
@@ -58,20 +58,20 @@ class UserController
 
 Tarayıcıda `http://127.0.0.1:8787/user/hello?name=tom` adresine gidin
 
-Tarayıcı `{"code":0,"msg":"ok","data":"tom""}` döndürecektir
+Tarayıcı `{"code":0,"msg":"ok","data":"tom"}` döndürecektir.
 
-Veri döndürmek için json yardımcı fonksiyonu otomatik olarak `Content-Type: application/json` başlığını ekleyecektir
+Veri döndürmek için json yardımcı fonksiyonu otomatik olarak `Content-Type: application/json` başlığını ekler.
 
-## Xml Döndürme
-Benzer şekilde, yardımcı fonksiyonu `xml($xml)` kullanarak `xml` yanıtı ile birlikte `Content-Type: text/xml` başlığını döndürecektir.
+## XML döndürme
+Benzer şekilde, `xml($xml)` yardımcı fonksiyonu, `text/xml` başlıklı bir `xml` yanıtı döndürecektir.
 
-Burada `$xml` parametresi, `xml` dizesi veya `SimpleXMLElement` nesnesi olabilir
+Burada `$xml` parametresi bir `xml` dizesi veya `SimpleXMLElement` nesnesi olabilir.
 
-## Jsonp Döndürme
-Benzer şekilde, `jsonp($data, $callback_name = 'callback')` yardımcı fonksiyonunu kullanarak `jsonp` yanıtı döndürebilirsiniz.
+## JSONP döndürme
+Benzer şekilde, `jsonp($data, $callback_name = 'callback')` yardımcı fonksiyonu bir `jsonp` yanıtı döndürecektir.
 
-## Görünüm Döndürme
-`app/controller/UserController.php` dosyasını aşağıdaki gibi değiştirin
+## Görünüm döndürme
+`app/controller/UserController.php` dosyasını aşağıdaki gibi değiştirin:
 
 ```php
 <?php
@@ -90,7 +90,7 @@ class UserController
 }
 ```
 
-Aşağıdaki gibi `app/view/user/hello.html` dosyasını oluşturun
+Aşağıdaki gibi `app/view/user/hello.html` dosyasını oluşturun:
 
 ```html
 <!doctype html>
@@ -105,6 +105,7 @@ hello <?=htmlspecialchars($name)?>
 </html>
 ```
 
-Tarayıcıda `http://127.0.0.1:8787/user/hello?name=tom` adresine giderek bir `hello tom` içerikli html sayfa alacaksınız.
+Tarayıcıda `http://127.0.0.1:8787/user/hello?name=tom` adresine gidin
+`hello tom` içeriğini döndüren bir html sayfa alacaksınız.
 
-Not: Webman varsayılan olarak şablon olarak php orijinal sözdizimini kullanır. Diğer görünümleri kullanmak istiyorsanız [görünüm](view.md) sayfasına bakınız.
+Not: webman, şablon olarak varsayılan olarak PHP'nin orijinal sözdizimini kullanır. Başka görünümler kullanmak istiyorsanız [View](view.md) bölümüne bakınız.

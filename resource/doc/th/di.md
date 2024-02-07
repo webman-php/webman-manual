@@ -1,13 +1,12 @@
-# การฝังแทรกอัตโนมัติของขึ้นอยู่กับความสามารถในการ Inject ขึ้นมาเอง
-
-ใน webman การฝังแทรกอัตโนมัติเป็นฟังก์ชันที่ไม่บังคับใช้ และมันถือเป็นฟังก์ชันที่ปิดอยู่โดยค่าแพร่งได้ หากคุณต้องการการฝังแทรกอัตโนมัติ ขอแนะนำที่ให้ใช้ [php-di](https://php-di.org/doc/getting-started.html) ดังต่อไปนี้คือการใช้ webman ร่วมกับ `php-di`
+# การสร้างความสามารถในการส่งเข้า
+ใน webman การสร้างความสามารถในการส่งเข้าเป็นคุณสมบัติที่เลือกได้ คุณสมบัตินี้ถูกปิดไว้โดยค่าเริ่มต้น หากคุณต้องการสร้างความสามารถในการส่งเข้า แนะนำให้ใช้[php-di](https://php-di.org/doc/getting-started.html) ต่อไปคือวิธีการใช้ webman ร่วมกับ `php-di`
 
 ## การติดตั้ง
 ```
 composer require psr/container ^1.1.1 php-di/php-di ^6 doctrine/annotations ^1.14
 ```
 
-แก้ไขการกำหนดค่า `config/container.php` ดังนี้:
+แก้ไขการตั้งค่า `config/container.php` ให้เป็นดังนี้
 ```php
 $builder = new \DI\ContainerBuilder();
 $builder->addDefinitions(config('dependence', []));
@@ -15,14 +14,10 @@ $builder->useAutowiring(true);
 $builder->useAnnotations(true);
 return $builder->build();
 ```
+> `config/container.php` ต้องคืนการสร้างตัวอย่างที่เป็นไปตามมาตรฐาน `PSR-11` ถ้าคุณไม่ต้องการใช้ `php-di` คุณสามารถสร้างและคืนตัวอย่างอื่นที่เป็นไปตามมาตรฐาน `PSR-11` ที่นี่
 
-> การส่งคืนจาก `config/container.php` จะต้องเป็นตัวอย่างของอุ
-
-
-
-# การฝังแทรกอัตโนมัติที่ผ่านการสร้างอ้างถึง
-
-สร้างไฟล์ `app/service/Mailer.php` (หากยังไม่มีไดเรกทอรี โปรดสร้างขึ้นมา) ดังนี้:
+## การส่งตัวให้นำมาใช้
+สร้าง `app/service/Mailer.php`(ถ้าโฟลเดอร์ไม่มีให้สร้างขึ้นมาเอง) โดยมีเนื้อหาดังนี้
 ```php
 <?php
 namespace app\service;
@@ -31,12 +26,12 @@ class Mailer
 {
     public function mail($email, $content)
     {
-        // โค้ดส่งอีเมล์ถูกประหยัด
+        // โค้ดส่งอีเมลล์ของคุณ
     }
 }
 ```
 
-เนื้อหาของไฟล์ `app/controller/UserController.php` มีดังนี้:
+เนื้อหาของ `app/controller/UserController.php` ดังนี้
 ```php
 <?php
 namespace app\controller;
@@ -55,40 +50,40 @@ class UserController
 
     public function register(Request $request)
     {
-        $this->mailer->mail('hello@webman.com', 'สวัสดีและยินดีต้อนรับ!');
-        return response('ตกลง');
+        $this->mailer->mail('hello@webman.com', 'Hello and welcome!');
+        return response('ok');
     }
 }
 ```
-ในทางปกติจะต้องมีการใช้รหัสดังนี้เพื่อสร้างอินสแตนซ์ของ `app\controller\UserController`:
+
+ตามปกติต้องมีการใช้โค้ดนี้เพื่อทำให้  `app\controller\UserController` ได้ยิ่งไปกับการสร้างโดยตั้งชื่อตัวแปรประเภท Mailer ไว้ดังนี้
 ```php
 $mailer = new Mailer;
 $user = new UserController($mailer);
 ```
-เมื่อใช้ `php-di` แล้ว ผู้พัฒนาไม่จำเป็นต้องสร้างอินสแตนซ์ของ `Mailer` ในคลาส `UserController` นั้น  webman จะทำการสร้างขึ้นให้อัตโนมัติตาม และหากขณกำลังสร้างอินสแตนซ์ของ `Mailer` และบันทึกคำทั้งหมด  webman ก็จะทำการสร้างและฝังการแทรักอัตโนมัติให้อัตโนมัติด้วย ผู้พัฒนาก็ไม่จำเป็นที่จะต้องทำอะไงเลย
+เมื่อใช้ `php-di` นักพัฒนาไม่จำเป็นต้องสร้างตัวแปรของ `Mailer` ในคอนโทลเลอร์ เพราะ webman จะทำให้ด้วยเอง ถ้าต้องการใช้คลาสอื่นในการสร้าง `Mailer` ก็จะทำการสร้างและส่งเข้าโดยอัตโนมัติ นักพัฒนาไม่จำเป็นต้องทำงานเริ่มต้นใด ๆ
 
-> **โปรดระวัง**
-> คำสั่งใหม่ที่ถูกสร้างขึ้นโดยร่างกายหรือ `php-di` จึงทำ การต่ออินสแตนฺสไพ่ท์ความสามารถในที่นี้แม้คำสั่งใหม่ที่ถูกสร้างขึ้นโดยร่างกายหรือแบบ `DI` อัตโนมัติก็ยังคงไม่สามาร์ท ถ้าต้องการที่จะฝังการแทรกอัตโนมัติจะต้องใช้ `support\Container` แทนคำสั่ง `new` เช่น:
+> **หมายเหตุ**
+> ต้องมีการสร้างตัวอย่างที่ถูกสร้างด้วย webman หรือ `php-di` เท่านั้นที่จะสามารถส่งเข้าอัตโนมัติได้ การสร้างตัวเองด้วยคำสั่ง `new` ไม่สามารถส่งเข้าอัตโนมัติ หากต้องการส่งเข้าจะต้องใช้ `support\Container` อินเทอร์เฟซแทนคำสั่ง `new` เช่น
+
 ```php
 use app\service\UserService;
 use app\service\LogService;
 use support\Container;
 
-// การสร้างอินสแตนฺสด้วยคำสั่ง new ไม่สามารถให้การแทรกอัตโนมัติ
+// สร้างตัวตามคำสั่ง new ไม่สามารถทำให้ส่งเข้าได้
 $user_service = new UserService;
-// การสร้างอินสแตนฺสด้วยคำสั่ง new ไม่สามารถให้การแทรกอัตโนมัติ
+// สร้างตัวตามคำสั่ง new ไม่สามารถทำให้ส่งเข้าได้
 $log_service = new LogService($path, $name);
 
-// การสร้างอินสแตนฺสด้วย `Container` สามารถให้การแทรกอัตโนมัติ
+// สร้างตัวโดยใช้ Container เพื่อทำให้สามารถส่งเข้าได้
 $user_service = Container::get(UserService::class);
-// การสร้างอินสแตนฺสด้วย `Container` สามารถให้การแทรกอัตโนมัติ
+// สร้างตัวโดยใช้ Container เพื่อทำให้สามารถส่งเข้าได้
 $log_service = Container::make(LogService::class, [$path, $name]);
 ```
 
-## การฝังกัอไถอัตโนมัติ
-
-นอกจากการฝังแทรกอัตโนมัติผ่านการสร้างของอ้างถึงแล้วเรายังสามารถใช้การฝังแทรกอัตโนมันได้อีกด้วย ต่อไปนี้คือตัวอย่างการใช้การฝังแทรกอัตโนมัติ:
-
+## ส่งเข้าโดยใช้คำอธิบาย
+นอกจากการส่งเข้าการสร้างตัวด้วยสร้อยการู้ ยังสามารถใช้การส่งเข้าโดยใช้คำอธิบายได้อีกด้วย ตัดเช่นตัวอย่างที่กำหนดไว้ข้างต้น  `app\controller\UserController` การเปลี่ยนแปลงเป็นดังนี้
 ```php
 <?php
 namespace app\controller;
@@ -101,21 +96,22 @@ class UserController
 {
     /**
      * @Inject
-     *  @var Mailer
-    */
+     * @var Mailer
+     */
     private $mailer;
 
     public function register(Request $request)
     {
-        $this->mailer->mail('hello@webman.com', 'สวัสดีและยินดีต้อนรับ!');
-        return response('ตกลง');
+        $this->mailer->mail('hello@webman.com', 'Hello and welcome!');
+        return response('ok');
     }
 }
 ```
-ตัวอย่างนี้ใช้การฝังแทรกอัตโนมัติผ่านการใช้ `@Inject` และประกาศสิ่งที่อ้างถึงเป็นวัสดุ ตัวอย่างนี้และ การฝังแทรกอัตโนมัติผ่านการสร้างของอ้างถึงเหมือนกัน แต่โค๊ดจะถูกสั้นลง
+โดยตัวอย่างนี้ผ่านการใช้ `@Inject` การส่งเข้าภูมิการ์ และได้ทำการประกาศประเภทวัตถุด้วย `@var` โดยตัวอย่างนี้และการส่งเข้าตามคำอธิบายได้ทำซ้ำเอฟเฟกต์กับ การส่งเข้าตามสร้างตัว แต่โค้ดสั้นกว่า
 
-> **โปรดระวัง**
-> รุ่น webman 1.4.6 หลังบ้านไม่รองรับการฝังไว้ไห้ชื่อคอนโทรลเลอร์ เช่น  ในขณะที่ webman <= 1.4.6 ต้องการส่งผ่านคำสั่งดังต่อไปนี้คือ  ไม่สามารถให้การฝังแทรกอัตโนมันได้
+> **หมายเหตุ**
+> เวอร์ชันก่อนหน้าที่เขียนโค้ดนี้ webman ไม่รองรับการส่งพารามิเตอร์ของคอนโทลเลอร์ เช่น โค้ดนี้เมื่อ webman<=1.4.6 จะไม่รองรับ
+
 ```php
 <?php
 namespace app\controller;
@@ -125,40 +121,160 @@ use app\service\Mailer;
 
 class UserController
 {
-    // 1.4.6 ข้างหลังไม่สามารถให้การฝังแทรกอัตโนมัน้ได้
+    // มีการส่งพารามิเตอร์ของคอนโทลเลอร์ไม่รองรับก่อนเวอร์ชัน 1.4.6
     public function register(Request $request, Mailer $mailer)
     {
-        $mailer->mail('hello@webman.com', 'สวัสดีและยินดีต้อนรับ!');
-        return response('ตกลง');
+        $mailer->mail('hello@webman.com', 'Hello and welcome!');
+        return response('ok');
     }
 }
 ```
 
+## การสร้างตัวอย่างการส่งเข้าเองเอง
+เวลาในบางครั้งพารามิเตอร์ที่ผ่านการสร้างตัวอย่างอาจจะไม่ใช่ตัวอย่างของคลาส แต่อาจจะเป็นสตริง, เลข, อาเรย์ และอื่น ๆ ตัวอย่างเช่น Mailer จำเป็นต้องผ่านการส่ง smpt server ip และ port:
 
-## การฝังแทรกอัตโนมัติท้องพ่นร้าย
+```php
+<?php
+namespace app\service;
 
-เกิดขึ้นบาณชี้มข้อมควอย่างขึ้นกลม ทำให้ไฟคมิ ที่สร่างกายต้องทุการเวกั็นเสขของผีบกซ์เป่าหรือประเทวไม่ใช้  เช่น Mailer ที่ต้องการเชื่อมต่อไปยั้ง SMTP และพอร์ต
+class Mailer
+{
+    private $smtpHost;
 
+    private $smtpPort;
 
-อาจไม่สามารถใช้โค้ดอินทนฺสก๊าม่าที่ใช้การฝังแทรกอัตโนมันได้เพราะ `php-di` ไม่แน่ใจถึงค่าของ `$smtp_host` และ `$smtp_port` บาดนี้สามารถจะคววาให้การฝังขึ้นอย่างท้องพ่นร้าย ซื่อท้องนั้นเราสามารถกำหนดก่สนาม `config/dependence.php` (หากยังไม่มีโปรดสร้างขึ้นมา) ดังต่อไปนี้:
+    public function __construct($smtp_host, $smtp_port)
+    {
+        $this->smtpHost = $smtp_host;
+        $this->smtpPort = $smtp_port;
+    }
+
+    public function mail($email, $content)
+    {
+        // โค้ดส่งอีเมลล์ของคุณ
+    }
+}
+```
+
+การส่งเข้าด้วยตนเองจะไม่สามารถใช้สร้างตัวอย่างที่ผ่านการสร้างตัวอย่างได้เนื่องจาก `php-di` ไม่สามารถระบุค่าของ `$smtp_host` `$smtp_port` ได้ ในกรณีนี้ลองใช้การส่งเข้าโดยกำหนดเอง
+
+ใน `config/dependence.php`(หากไม่มีไฟล์นี้ให้สร้างขึ้นมาเอง) อย่างนี้:
 ```php
 return [
-    // ... ละไว้ค่าการตั้งคา
+    // ... การตั้งค่าส่วนต่อ
     app\service\Mailer::class =>  new app\service\Mailer('192.168.1.11', 25);
 ];
 ```
+นี่คือการสร้างเมื่อต้องการผ่านการสร้างตัวอย่างคอลสการีเป็นตัวอย่างให้ `app\service\Mailer` โดยระบบจะทำการส่งโดยอัตโนมัติ `app\service\Mailer` ระหับตัวอย่างที่สร้างไว้ในคอสนี้
 
+เราสังเกตได้ว่า `config/dependence.php` ใช้คำสั่ง `new` ในการสร้าง `Mailer` นั้นไม่มีปัญหาในตัวอย่างนี้ แต่มองการว่าถ้า `Mailer` อีกรูปแบบจะต้องผ่านการสร้างด้วย `new` สร้างตัวเองข้อมูลผ่านการสสร้างตัวอย่างของคอลสหไม่สามารถส่งเข้าได้ วิธีการแก้ไขคือใช้การส่งเข้าระหว่างฟฟฟ ย้ำ `Container::get(ชื่อคลาส)` หรือ `Container::make(ชื่อคลาส, [พารามิเตอร์ของคอนโทลเลอร์])` เพื่อสร้างคลาส
+## การฝังอินเทอร์เฟซที่กำหนดเอง
+ในโครงการจริงเราต้องการโปรแกรมตามหลักการของอินเทอร์เฟซ แทนที่จะเป็นคลาสที่เฉพาะเจาะจง เช่น `app\controller\UserController` ควรจะ include `app\service\MailerInterface` แทนที่จะ include `app\service\Mailer`  
+กำหนดอินเทอร์เฟซ `MailerInterface` ดังนี้
+```php
+<?php
+namespace app\service;
 
+interface MailerInterface
+{
+    public function mail($email, $content);
+}
+```
+กำหนดการปฏิบัติตามอินเทอร์เฟซ `MailerInterface`
+```php
+<?php
+namespace app\service;
 
-โดยนี้เมื่อมีการฝังกใขอ 'app\service\Mailer' แล้วทางการเลือก `config/dependence.php` ไปเมื่อต้องการค่า `app\service\Mailer` จะถูกใช้อัตโนมัติ
-เราฮาบการใช์ถูกที่ไปถูกทำให้รู้ค่านี้ `config/dependence.php` ใช้คลาสเรียจื `new` เช่น:
-หากคละงนี้ตอนแบสไม่มีปัญหาอะไหล่ แต่เราจบยนสะใจได้ว่าหากคลาส Mailer อยู่ที่ ณ่นี้คลาสอื่นๆ หรือ อีกและหรื้รำงี้คลาส Mailer จินั้นไม่ถูกใช้การแทรกอัตโนมัน ไล่ตามคำรองรัลน คือการติวันการแทรกอัตโนมันด้วยการใช้ตัววชีบวับ
-จากการฝังขแทรกอัตโนมันได้ตองการใช้ `Container::get(ชื่อคลาส)` หรือ  `Container::make(ชูลคลุส, [อาร์การขน])` เมื่อทำให้ คลาส
+class Mailer implements MailerInterface
+{
+    private $smtpHost;
 
-## การฝังแทรกอัตโนมันด้วยการติว ซีบว้า่
+    private $smtpPort;
 
-ในตัวอย่างโปรเจกต์จริง เรื่องเรายกบ้นเลย่ต่อตัวที่ขี่ว่าีีเอส บงสัคกั主องในต่น  อาทิ แมรัว ซับป์ ทีาน น้ัคส  ซี่เปิอ  เที่ร อี่า  แหระอรา ใผ้า  วจจัา นารี้ืาำ ปรบาจัง เป็นห์กงูยย์้  โปรชาด ผ&mcaron;นูสงินัง เพื่ุพ 
- ตามนีย้ญี่รื่้สวยววนง โนปคู่จาถื่ัสดู การงาดไ้รารน่  ยัhันืsื Hง้ไล ยั้ืสเดืg  กขดลันแิ้ เตลาแวกลำ้ แชงงล้ รีงยูงวูบร  งรอัหง งแกสอกเลด์งสื้ท็บ  วสีฉอ  ึกรถลปื้บั นกสร  ฉดดิัก จดแพาืค้ื  เีสรสิวทยเห โอสฮบแหํุ้หศ โมแ้เใารแส าีวรห์จไรค ลื่ทืเแงงบ แสนลัเสื้สลา อดทน เ้นอ้บทยู้า ร้ง้ยสูไมทํ้า ้ข้ซสาารปฉ้ยว ้ยีบยัซีแบง หส์ร์ีงใงี่ยู  าทบงแฉจรทุำ ิดงْพสีรไ ู่จไ์ อสจงยำสฮั ืลพแจงีืงค &จำ
-ิร ขั่ีบะุร จียิ้ีซก้ ผันขันหั &ใญ็ชเรุัส 
- าสงครีถำเสใ็ด าีุ้ใ้ค จุะบุคุแ่์์ทมีม์ ล้ใรปั์งย้ถชุเ นญดกุฒ้รื่บง้&ดลื่บ้้ ฃ้า้แสคทส้&โู่ๆ ไี่ตใื่้เา็เงออ ขกรโร้้ฒกร ใ่ขห้้เด บอ้้ซ แใขยูตสยุ ณุ&้บ ามส์.ลืส้ยผดค&ย้ม ท้ใกรเนยแหจ้&ถึเอป โ้มใ้ดไ้่ยวน&เบปุยาาด ีดุ ผ่คใมยิจไ์ สดึาทูก ดัีดบแ้ืยปย้า นดิดำแย้่สดี ีิจ้้ยบรัี้ หรกีไอใรั สุเโ้คขดํ์ะง็ ูบปํ้้
- ซืเัท่า บิีุนูแ็ู้้ค ้ย
+    public function __construct($smtp_host, $smtp_port)
+    {
+        $this->smtpHost = $smtp_host;
+        $this->smtpPort = $smtp_port;
+    }
+
+    public function mail($email, $content)
+    {
+        // ข้อความส่งออกจะถูกละเลย
+    }
+}
+```
+Include อินเทอร์เฟซ `MailerInterface` แทนที่จะมีการปฏิบัติตามตัวเอง
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+use app\service\MailerInterface;
+use DI\Annotation\Inject;
+
+class UserController
+{
+    /**
+     * @Inject
+     * @var MailerInterface
+     */
+    private $mailer;
+    
+    public function register(Request $request)
+    {
+        $this->mailer->mail('hello@webman.com', 'สวัสดีและยินดีต้อนรับ!');
+        return response('ok');
+    }
+}
+```
+`config/dependence.php` ถูกกำหนดตามอินเทอร์เฟซ `MailerInterface` ดังนี้
+```php
+use Psr\Container\ContainerInterface;
+return [
+    app\service\MailerInterface::class => function(ContainerInterface $container) {
+        return $container->make(app\service\Mailer::class, ['smtp_host' => '192.168.1.11', 'smtp_port' => 25]);
+    }
+];
+```
+นั่นคือเมื่อธุรกิจต้องการใช้ `MailerInterface` อินเทอร์เฟซ จะถูกใช้ `Mailer` สิ่งที่ดำเนินการ  
+>  ประโยชน์ของการใช้อินเทอร์เฟซคือ เมื่อเราต้องการเปลี่ยนคอมโพเนนต์ใด ๆ เราไม่จำเป็นต้องเปลี่ยนโค้ดทำธุรกิจ แค่ต้องการเปลี่ยนการปฏิบัติตามใน `config/dependence.php` เท่านั้น สิ่งนี้ก็เป็นประโยชน์มากในการทดสอบของหน่วย
+
+## การฝังอินเจคอื่นๆ
+ใน `config/dependence.php` สามารถกำหนดค่าต่างๆของคลาสอื่นคลาส เช่น สตริง ตัวเลข อาเรย์ และอื่นๆ  
+เช่น `config/dependence.php` ถูกกำหนดดังนี้
+```php
+return [
+    'smtp_host' => '192.168.1.11',
+    'smtp_port' => 25
+];
+```
+นี้เวลาเราสามารถใช้ `@Inject` เพื่อฝัง `smtp_host` `smtp_port` เข้าไปในแอตทริบิวต์
+```php
+<?php
+namespace app\service;
+
+use DI\Annotation\Inject;
+
+class Mailer
+{
+    /**
+     * @Inject("smtp_host")
+     */
+    private $smtpHost;
+
+    /**
+     * @Inject("smtp_port")
+     */
+    private $smtpPort;
+
+    public function mail($email, $content)
+    {
+        // ข้อความส่งออกจะถูกละเลย
+        echo "{$this->smtpHost}:{$this->smtpPort}\n"; // ผลลัพธ์จะเอา 192.168.1.11:25
+    }
+}
+```
+>  โปรดทราบ: `@Inject("key")` ในนั้นมีเครื่องหมายคำพูดคู่
+
+## เนื้อหาเพิ่มเติม
+โปรดอ้างถึง[คู่มือ php-di](https://php-di.org/doc/getting-started.html)

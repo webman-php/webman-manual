@@ -1,18 +1,18 @@
-# Struttura delle directory
+# Struttura del progetto
 ```
 .
-├── app                           Directory dell'applicazione
-│   ├── controller                Directory dei controller
-│   ├── model                     Directory dei modelli
-│   ├── view                      Directory delle viste
-│   ├── middleware                Directory dei middleware
+├── app                           Cartella delle applicazioni
+│   ├── controller                Cartella dei controller
+│   ├── model                     Cartella dei modelli
+│   ├── view                      Cartella delle viste
+│   ├── middleware                Cartella dei middleware
 │   │   └── StaticFile.php        Middleware per file statici predefinito
-|   └── functions.php             Le funzioni personalizzate del business vengono scritte in questo file
+|   └── functions.php             Le funzioni personalizzate dell'applicazione vanno in questo file
 |
-├── config                        Directory di configurazione
+├── config                        Cartella di configurazione
 │   ├── app.php                   Configurazione dell'applicazione
 │   ├── autoload.php              I file configurati qui verranno caricati automaticamente
-│   ├── bootstrap.php             Configurazioni di callback eseguite durante l'avvio del processo in onWorkerStart
+│   ├── bootstrap.php             Configurazioni dei callback da eseguire all'avvio del processo onWorkerStart
 │   ├── container.php             Configurazione del contenitore
 │   ├── dependence.php            Configurazione delle dipendenze del contenitore
 │   ├── database.php              Configurazione del database
@@ -20,22 +20,22 @@
 │   ├── log.php                   Configurazione dei log
 │   ├── middleware.php            Configurazione dei middleware
 │   ├── process.php               Configurazione dei processi personalizzati
-│   ├── redis.php                 Configurazione di Redis
+│   ├── redis.php                 Configurazione di redis
 │   ├── route.php                 Configurazione del routing
-│   ├── server.php                Configurazione del server, porte, numero di processi, ecc.
+│   ├── server.php                Configurazione del server, porte, numeri di processo, ecc.
 │   ├── view.php                  Configurazione delle viste
-│   ├── static.php                Attivazione dei file statici e configurazione dei middleware per i file statici
-│   ├── translation.php           Configurazione della multilingua
+│   ├── static.php                Configurazione dei file statici e dello switch dei file statici
+│   ├── translation.php           Configurazione delle lingue
 │   └── session.php               Configurazione della sessione
-├── public                        Directory delle risorse statiche
-├── process                       Directory dei processi personalizzati
-├── runtime                       Directory delle runtime dell'applicazione, necessita di permessi di scrittura
+├── public                        Cartella delle risorse statiche
+├── process                       Cartella dei processi personalizzati
+├── runtime                       Cartella di runtime dell'applicazione, necessita dei permessi di scrittura
 ├── start.php                     File di avvio del servizio
-├── vendor                        Directory delle librerie di terze parti installate con composer
-└── support                       Adattamento della libreria (inclusa la libreria di terze parti)
+├── vendor                        Cartella delle librerie di terze parti installate tramite composer
+└── support                       Adattatori di librerie (comprensivi delle librerie di terze parti)
     ├── Request.php               Classe di richiesta
     ├── Response.php              Classe di risposta
     ├── Plugin.php                Script di installazione e disinstallazione del plugin
-    ├── helpers.php               Funzioni di supporto (si prega di scrivere le funzioni personalizzate del business in app/functions.php)
+    ├── helpers.php               Funzioni di supporto (le funzioni personalizzate dell'applicazione vanno nel file app/functions.php)
     └── bootstrap.php             Script di inizializzazione dopo l'avvio del processo
 ```

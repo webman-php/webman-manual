@@ -2,7 +2,7 @@
 
 ## jasongrimes/php-paginator
 
-### 專案地址
+### 項目地址
 
 https://github.com/jasongrimes/php-paginator
   
@@ -40,7 +40,7 @@ class UserController
 }
 ```
 **模板(php原生)**
-新建模板 app/view/user/get.html
+新建模版 app/view/user/get.html
 ```html
 <html>
 <head>
@@ -56,7 +56,7 @@ class UserController
 ```
 
 **模板(twig)**
-新建模板 app/view/user/get.html
+新建模版 app/view/user/get.html
 ```html
 <html>
 <head>
@@ -74,7 +74,7 @@ class UserController
 ```
 
 **模板(blade)**
-新建模板 app/view/user/get.blade.php
+新建模版 app/view/user/get.blade.php
 ```html
 <html>
 <head>
@@ -90,7 +90,7 @@ class UserController
 ```
 
 **模板(thinkphp)**
-新建模板 app/view/user/get.blade.php
+新建模版 app/view/user/get.blade.php
 ```html
 <html>
 <head>

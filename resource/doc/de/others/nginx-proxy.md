@@ -1,24 +1,23 @@
 # Nginx-Proxy
-Wenn Webman direkten externen Zugriff bieten muss, wird empfohlen, einen Nginx-Proxy vor Webman zu platzieren, um folgende Vorteile zu erzielen.
+Wenn webman direkten Zugriff auf das Internet benötigt, wird empfohlen, einen Nginx-Proxy vor webman zu setzen, um folgende Vorteile zu erzielen.
+- Statische Ressourcen werden von Nginx verarbeitet, damit sich webman auf die Geschäftslogik konzentrieren kann.
+- Mehrere webman-Instanzen können den Port 80 und 443 gemeinsam nutzen und durch verschiedene Domains unterschieden werden, um mehrere Websites auf einem Server zu betreiben.
+- PHP-FPM und webman-Architektur können zusammenarbeiten.
+- Der Nginx-Proxy ermöglicht SSL über HTTPS, was einfacher und effizienter ist.
+- Es ermöglicht die strikte Filterung einiger unerwünschter externer Anfragen.
 
-- Statische Ressourcen werden von Nginx verarbeitet, damit sich Webman auf die Verarbeitung von Geschäftslogik konzentrieren kann.
-- Mehrere Webman-Instanzen können den Port 80 und 443 gemeinsam nutzen und durch die Verwendung von Domainnamen verschiedene Websites auf einem einzigen Server bereitstellen.
-- PHP-FPM und Webman können gemeinsam betrieben werden.
-- Der Nginx-Proxy ermöglicht eine einfache und effiziente Implementierung von SSL für HTTPS.
-- Es können unerwünschte Anfragen aus dem Internet streng gefiltert werden.
-
-## Beispiel für Nginx-Proxy
-```
+## Nginx-Proxy-Beispiel
+```nginx
 upstream webman {
     server 127.0.0.1:8787;
     keepalive 10240;
 }
 
 server {
-  server_name site_domain;
+  server_name domain_der_website;
   listen 80;
   access_log off;
-  root /your/webman/public;
+  root /dein/webman/öffentlich;
 
   location ^~ / {
       proxy_set_header X-Real-IP $remote_addr;
@@ -32,5 +31,4 @@ server {
   }
 }
 ```
-
-Normalerweise muss der Entwickler in der obigen Konfiguration nur die Werte für `server_name` und `root` konfigurieren, die anderen Felder müssen nicht angepasst werden.
+Im Allgemeinen muss der Entwickler in der obigen Konfiguration nur den server_name und root-Werte auf die tatsächlichen Werte setzen. Andere Felder müssen nicht konfiguriert werden.

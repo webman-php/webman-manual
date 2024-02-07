@@ -4,16 +4,15 @@
 
 `composer require -W webman/think-orm`
 
-インストール後にはrestart（reloadではありません）が必要です。
+インストール後はrestart再起動が必要です（reloadは無効です）
 
 > **ヒント**
-> インストールが失敗した場合、おそらくcomposerプロキシを使用しているためです。`composer config -g --unset repos.packagist` を実行してcomposerプロキシを解除してみてください。
+> インストールに失敗した場合、おそらくcomposerプロキシを使用しているためです。`composer config -g --unset repos.packagist` を実行してcomposerプロキシを解除してみてください。
 
-> [webman/think-orm](https://www.workerman.net/plugin/14) は実際には `toptink/think-orm` を自動的にインストールするプラグインです。Webmanのバージョンが`1.2`未満の場合、このプラグインを使用できない場合は、[手動でthink-ormをインストールして設定する方法](https://www.workerman.net/a/1289) を参照してください。
+> [webman/think-orm](https://www.workerman.net/plugin/14) は、実際には`toptink/think-orm`を自動的にインストールするプラグインです。webmanのバージョンが`1.2`未満の場合、このプラグインを使用できません。その場合は、[手動でthink-ormをインストールして設定する](https://www.workerman.net/a/1289) 記事を参照してください。
 
 ### 設定ファイル
-
-実際の状況に応じて、設定ファイル `config/thinkorm.php` を変更してください。
+実際の状況に応じて`config/thinkorm.php` 設定ファイルを修正してください。
 
 ### 使用方法
 
@@ -36,7 +35,7 @@ class FooController
 
 ### モデルの作成
 
-ThinkOrmモデルは`think\Model` を継承します。以下のようになります。
+ThinkOrmモデルは `think\Model` を継承します。以下のようになります。
 ```
 <?php
 namespace app\model;
@@ -63,13 +62,13 @@ class User extends Model
 }
 ```
 
-また、以下のコマンドを使用して、thinkormに基づくモデルを作成することもできます。
+また、以下のコマンドを使用してthinkormベースのモデルを作成することもできます。
 ```
 php webman make:model テーブル名
 ```
 
 > **ヒント**
-> このコマンドを使用するには、`webman/console` をインストールする必要があります。インストールコマンドは `composer require webman/console ^1.2.13` です。
+> このコマンドを使用するには、`webman/console` をインストールする必要があります。インストールコマンドは`composer require webman/console ^1.2.13`です。
 
 > **注意**
-> make:model コマンドは、親プロジェクトが`illuminate/database` を使用していることを検出した場合、`illuminate/database` に基づくモデルファイルを作成し、thinkormではない場合があります。この場合は、パラメータtpを追加して強制的にthink-ormに基づくモデルを生成することができます。例：`php webman make:model テーブル名 tp`（効果がない場合は、`webman/console` をアップグレードしてください）。
+> make:model コマンドは、親プロジェクトが`illuminate/database`を使用していることが検出された場合には、`illuminate/database`ベースのモデルファイルを作成し、thinkormベースのモデルではありません。この場合は、追加パラメータtpを使用して強制的にthink-ormのモデルを生成することができます。コマンドは次のようになります： `php webman make:model テーブル名 tp`（機能しない場合は`webman/console`をアップグレードしてください）。

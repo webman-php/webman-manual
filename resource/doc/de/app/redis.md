@@ -1,5 +1,5 @@
 # Redis
-Die Verwendung von Redis ähnelt der von Datenbanken, z.B. in `plugin/foo/config/redis.php`
+Die Verwendung von Redis ist ähnlich wie die Verwendung einer Datenbank, z.B. `plugin/foo/config/redis.php`
 ```php
 return [
     'default' => [

@@ -1,9 +1,9 @@
-## Personalizar o erro 404
-Quando ocorre um erro 404 no webman, ele automaticamente retorna o conteúdo de `public/404.html`, então os desenvolvedores podem simplesmente modificar o arquivo `public/404.html`.
+## Personalizar 404
+Quando o webman retorna um erro 404, ele automaticamente mostra o conteúdo do arquivo `public/404.html`, então os desenvolvedores podem simplesmente mudar o arquivo `public/404.html`.
 
-Se você deseja controlar dinamicamente o conteúdo do erro 404, por exemplo, retornando dados JSON `{"code:"404", "msg":"404 not found"}` em requisições ajax, e retornando o modelo `app/view/404.html` em requisições de página, siga o exemplo abaixo.
+Se você quer controlar dinamicamente o conteúdo do erro 404, por exemplo, retornar dados JSON `{"code:"404", "msg":"404 not found"}` durante uma requisição AJAX, ou retornar o template `app/view/404.html` durante uma requisição de página, por favor siga o exemplo abaixo.
 
-> O exemplo a seguir é baseado em modelos PHP puros, outros modelos como `twig`, `blade`, `think-tmplate` são semelhantes em princípio.
+> O exemplo a seguir é baseado no uso de templates PHP nativos, mas o princípio é similar para outros templates como `twig`, `blade` ou `think-template`.
 
 **Crie o arquivo `app/view/404.html`**
 ```html
@@ -19,23 +19,23 @@ Se você deseja controlar dinamicamente o conteúdo do erro 404, por exemplo, re
 </html>
 ```
 
-**Adicione o seguinte código em `config/route.php`:**
+**Adicione o seguinte código no`config/route.php`:**
 ```php
 use support\Request;
 use Webman\Route;
 
 Route::fallback(function(Request $request){
-    // Retorna JSON em requisições ajax
+    // retorna um JSON durante uma requisição AJAX
     if ($request->expectsJson()) {
         return json(['code' => 404, 'msg' => '404 not found']);
     }
-    // Retorna o modelo 404.html em requisições de página
+    // retorna o template 404.html durante uma requisição de página
     return view('404', ['error' => 'some error'])->withStatus(404);
 });
 ```
 
-## Personalizar o erro 500
-**Crie `app/view/500.html`**
+## Personalizar 500
+**Crie o arquivo `app/view/500.html`**
 
 ```html
 <!doctype html>
@@ -45,14 +45,13 @@ Route::fallback(function(Request $request){
     <title>500 Internal Server Error</title>
 </head>
 <body>
-Modelo de erro personalizado:
+Erro personalizado:
 <?=htmlspecialchars($exception)?>
 </body>
 </html>
 ```
 
-**Crie** `app/exception/Handler.php` **(crie o diretório se ele não existir)**
-
+**Crie o arquivo `app/exception/Handler.php` (se o diretório não existir, por favor crie-o):**
 ```php
 <?php
 
@@ -65,7 +64,7 @@ use Webman\Http\Response;
 class Handler extends \support\exception\Handler
 {
     /**
-     * Renderizar retorno
+     * Renderizar e retornar
      * @param Request $request
      * @param Throwable $exception
      * @return Response
@@ -73,11 +72,11 @@ class Handler extends \support\exception\Handler
     public function render(Request $request, Throwable $exception) : Response
     {
         $code = $exception->getCode();
-        // Retorna dados JSON em requisições ajax
+        // Retorna dados JSON durante uma requisição AJAX
         if ($request->expectsJson()) {
             return json(['code' => $code ? $code : 500, 'msg' => $exception->getMessage()]);
         }
-        // Retorna o modelo 500.html em requisições de página
+        // Retorna o template 500.html durante uma requisição de página
         return view('500', ['exception' => $exception], '')->withStatus(500);
     }
 }

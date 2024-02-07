@@ -1,18 +1,18 @@
 # AOP
 
-> Merci à l'auteur de Hyperf pour sa contribution
+> Merci pour la soumission de l'auteur de Hyperf
 
 ### Installation
 
-- Installer l'intégration aop
+- Installer aop-integration
 
 ```shell
 composer require "hyperf/aop-integration: ^1.1"
 ```
 
-### Ajouter la configuration AOP
+### Ajouter une configuration concernant AOP
 
-Nous devons ajouter la configuration `config.php` dans le répertoire `config`
+Nous devons ajouter une configuration "config.php" dans le répertoire `config`
 
 ```php
 <?php
@@ -43,18 +43,18 @@ return [
 
 ```
 
-### Configuration du fichier d'entrée start.php
+### Fichier d'entrée de configuration start.php
 
-> Nous placerons la méthode d'initialisation en dessous de `timezone`, le reste du code est omis ci-dessous.
+> Nous allons placer la méthode d'initialisation sous le fuseau horaire, le code suivant est omis
 
-```
+```php
 use Hyperf\AopIntegration\ClassLoader;
 
 if ($timezone = config('app.default_timezone')) {
     date_default_timezone_set($timezone);
 }
 
-// Initialisation
+// Initialiser
 ClassLoader::init();
 ```
 
@@ -75,7 +75,7 @@ class UserService
 }
 ```
 
-Ensuite, ajoutons l'`DebugAspect` correspondant
+Ensuite, ajoutez l'aspect `DebugAspect` correspondant
 
 ```php
 <?php
@@ -99,7 +99,7 @@ class DebugAspect extends AbstractAspect
 }
 ```
 
-Ensuite, nous éditons le contrôleur `app/controller/IndexController.php`
+Ensuite, modifiez le contrôleur `app/controller/IndexController.php`
 
 ```php
 <?php
@@ -117,7 +117,7 @@ class IndexController
 }
 ```
 
-Ensuite, configurons la route
+Ensuite, configurez la route
 
 ```php
 <?php
@@ -126,7 +126,7 @@ use Webman\Route;
 Route::any('/json', [app\controller\IndexController::class, 'json']);
 ```
 
-Enfin, démarrons le service et testons.
+Enfin, démarrez le service et testez.
 
 ```shell
 php start.php start

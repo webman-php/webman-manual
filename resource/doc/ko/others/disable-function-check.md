@@ -1,30 +1,30 @@
-# 함수 확인 해제
+# 함수 비활성화 확인
 
-이 스크립트를 사용하여 금지된 함수가 있는지 확인하십시오. 명령 줄에서 `curl -Ss https://www.workerman.net/webman/check | php`를 실행하십시오.
+이 스크립트를 사용하여 비활성화된 함수가 있는지 확인하십시오. 명령 라인에서 다음을 실행하십시오: ```curl -Ss https://www.workerman.net/webman/check | php```
 
-`Functions 함수명 has be disabled. Please check disable_functions in php.ini`라는 메시지가 나오면 webman이 의존하는 함수가 비활성화되었다는 것을 의미하며, webman을 정상적으로 사용하려면 php.ini에서 비활성화를 해제해야 합니다.
-비활성화를 해제하려면 다음 방법 중 하나를 참고하십시오.
+함수가 비활성화되었다는 메시지가 나오면 ```php.ini``` 파일에서 기능을 활성화해야만 webman을 정상적으로 사용할 수 있습니다. 비활성화 해제를 위해 다음 방법 중 하나를 선택하십시오.
 
 ## 방법 1
-`webman/console`을 설치하십시오.
-```
+`webman/console` 을 설치합니다.
+``` 
 composer require webman/console ^v1.2.35
 ```
 
-다음 명령을 실행하십시오.
+다음 명령을 실행합니다.
 ```
 php webman fix-disable-functions
 ```
 
 ## 방법 2
-
-`curl -Ss https://www.workerman.net/webman/fix-disable-functions | php` 스크립트를 실행하여 비활성화를 해제하십시오.
+비활성화된 함수를 해제하기 위해 다음 스크립트를 실행하십시오:
+```
+curl -Ss https://www.workerman.net/webman/fix-disable-functions | php
+```
 
 ## 방법 3
+`php --ini` 명령을 실행하여 php cli가 사용하는 ```php.ini``` 파일 위치를 찾으십시오.
 
-`php --ini`를 실행하여 php cli가 사용하는 php.ini 파일의 위치를 찾으십시오.
-
-php.ini를 열어 `disable_functions`를 찾고 다음 함수의 호출을 해제하십시오.
+그리고 ```php.ini``` 파일을 열고, `disable_functions`를 찾아 다음 함수의 호출을 해제하십시오.
 ```
 stream_socket_server
 stream_socket_client

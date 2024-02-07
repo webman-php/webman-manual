@@ -1,5 +1,5 @@
 # Datenbank
-Plugins können ihre eigene Datenbank konfigurieren. Zum Beispiel sieht der Inhalt von `plugin/foo/config/database.php` wie folgt aus:
+Plugins können ihre eigene Datenbank konfigurieren, z. B. der Inhalt von `plugin/foo/config/database.php`:
 
 ```php
 return  [
@@ -29,7 +29,7 @@ return  [
 ];
 ```
 
-Der Aufruf erfolgt über `Db::connection('plugin.{Plugin}.{Verbindungsnamen}');`, zum Beispiel:
+Die Verwendung erfolgt über `Db::connection('plugin.{Plugin}.{Verbindungsnamen}');`, z. B.
 
 ```php
 use support\Db;
@@ -37,7 +37,7 @@ Db::connection('plugin.foo.mysql')->table('user')->first();
 Db::connection('plugin.foo.admin')->table('admin')->first();
 ```
 
-Wenn Sie die Datenbank des Hauptprojekts verwenden möchten, können Sie dies direkt tun, zum Beispiel:
+Wenn Sie die Datenbank des Hauptprojekts nutzen möchten, verwenden Sie sie direkt, z. B.
 
 ```php
 use support\Db;
@@ -46,9 +46,8 @@ Db::table('user')->first();
 Db::connection('admin')->table('admin')->first();
 ```
 
-## Konfiguration der Datenbank für Model
-
-Wir können eine Basis-Klasse für Model erstellen, in der die Basis-Klasse mit `$connection` die Verbindung zur Datenbank des Plugins angibt, zum Beispiel:
+## Konfiguration der Datenbank für Models
+Wir können eine Base-Klasse für das Model erstellen, in der die Variable `$connection` auf die Verbindung der Plugin-Datenbank gesetzt wird, z. B.
 
 ```php
 <?php
@@ -68,10 +67,10 @@ class Base extends Model
 }
 ```
 
-Auf diese Weise erben alle Modelle im Plugin automatisch von Base und verwenden automatisch die Datenbank des Plugins.
+Auf diese Weise erben alle Models im Plugin automatisch von Base und verwenden somit automatisch die Datenbank des Plugins.
 
-## Datenbankkonfiguration wiederverwenden
-Natürlich können wir die Datenbankkonfiguration des Hauptprojekts wiederverwenden. Wenn Sie beispielsweise [webman-admin](https://www.workerman.net/plugin/82) integriert haben, können Sie auch die Datenbankkonfiguration von [webman-admin](https://www.workerman.net/plugin/82) verwenden, zum Beispiel:
+## Wiederverwendung der Datenbankkonfiguration
+Natürlich können wir die Datenbankkonfiguration des Hauptprojekts wiederverwenden. Wenn Sie beispielsweise [webman-admin](https://www.workerman.net/plugin/82) integriert haben, können Sie auch die Datenbankkonfiguration von [webman-admin](https://www.workerman.net/plugin/82) wiederverwenden, z. B.
 
 ```php
 <?php

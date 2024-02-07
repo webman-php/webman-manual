@@ -5,13 +5,13 @@
 ### Project Address
 
 https://github.com/PHPOffice/PhpSpreadsheet
-  
+
 ### 安裝
- 
-  ```php
-  composer require phpoffice/phpspreadsheet
-  ```
-  
+
+```php
+composer require phpoffice/phpspreadsheet
+```
+
 ### 使用
 
 ```php
@@ -31,14 +31,15 @@ class ExcelController
 
         $writer = new Xlsx($spreadsheet);
         $file_path = public_path().'/hello_world.xlsx';
-        // 保存文件到 public 下
+        // 將文件保存到 public 目錄下
         $writer->save($file_path);
         // 下載文件
-        return response()->download($file_path, '檔名.xlsx');
+        return response()->download($file_path, '文件名.xlsx');
     }
+
 }
 ```
-  
+
 ### 更多內容
 
-請訪問 https://phpspreadsheet.readthedocs.io/en/latest/
+請參閱 https://phpspreadsheet.readthedocs.io/en/latest/

@@ -1,8 +1,8 @@
 # แคช
 
-ใน webman มีการใช้ [symfony/cache](https://github.com/symfony/cache)  เป็นคอมโพเนนต์แคชเริ่มต้น
+webman ใช้ [symfony/cache](https://github.com/symfony/cache) เป็นคอมโพเนนต์แคชตามค่าเริ่มต้น.
 
-> ก่อนที่จะใช้ `symfony/cache` จำเป็นต้องติดตั้งเพิ่มเติม redis extension สำหรับ `php-cli`
+> ก่อนที่จะใช้ `symfony/cache` คุณต้องติดตั้งปลั๊กอิน redis สำหรับ `php-cli` ก่อน.
 
 ## การติดตั้ง
 **php 7.x**
@@ -14,10 +14,10 @@ composer require -W illuminate/redis ^8.2.0 symfony/cache ^5.2
 composer require -W illuminate/redis symfony/cache
 ```
 
-หลังจากติดตั้งจำเป็นต้องทำการ restart (reload จะไม่มีผล)
+หลังจากติดตั้งเสร็จสิ้น คุณจำเป็นต้อง restart เพื่อให้เป็นผล
 
-## การตั้งค่า Redis
-ไฟล์ตั้งค่า Redis จะอยู่ที่ `config/redis.php`
+## การกำหนดค่า Redis
+ไฟล์กำหนดค่า redis อยู่ที่ `config/redis.php`
 ```php
 return [
     'default' => [
@@ -49,7 +49,8 @@ class UserController
 ```
 
 > **โปรดทราบ**
-> ควรเพิ่ม prefix ใน key เพื่อหลีกเลี่ยงการชนกับธุรกิจอื่นๆที่ใช้ redis
+> ควรเพิ่ม prefix ใน key เพื่อป้องกันการชนกับธุรกิจอื่น ๆ ที่ใช้ redis
 
-## การใช้คอมโพเนนต์แคชอื่นๆ
-การใช้งาน [ThinkCache](https://github.com/top-think/think-cache) สามารถดูได้ที่ [ฐานข้อมูลอื่นๆ](others.md#ThinkCache)
+## การใช้คอมโพเนนต์แคชอื่น ๆ
+
+คอมโพเนนต์ [ThinkCache](https://github.com/top-think/think-cache) ใช้เพื่ออ้างอิง [ฐานข้อมูลอื่น ๆ](others.md#ThinkCache)

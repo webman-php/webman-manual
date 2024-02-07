@@ -4,15 +4,15 @@
 
 `composer require -W webman/think-orm`
 
-Après l'installation, il est nécessaire de redémarrer (reload n'est pas valide)
+Après l'installation, il est nécessaire de redémarrer (reload n'est pas valide).
 
-> **Conseil**
-> Si l'installation échoue, c'est peut-être parce que vous utilisez un proxy composer, essayez d'exécuter `composer config -g --unset repos.packagist` pour annuler le proxy composer.
+> **Astuce**
+> Si l'installation échoue, cela peut être dû à l'utilisation d'un proxy composer, essayez d'exécuter `composer config -g --unset repos.packagist` pour annuler le proxy de composer.
 
-> [webman/think-orm](https://www.workerman.net/plugin/14) est en fait un plugin pour installer automatiquement `toptink/think-orm`. Si votre version de webman est inférieure à `1.2` et que vous ne pouvez pas utiliser le plugin, veuillez consulter l'article [Installation et configuration manuelles de think-orm](https://www.workerman.net/a/1289).
+> [webman/think-orm](https://www.workerman.net/plugin/14) est en fait un plugin qui installe automatiquement `toptink/think-orm`. Si votre version de webman est inférieure à `1.2` et ne peut pas utiliser le plugin, veuillez vous référer à l'article [Installation et configuration manuelles de think-orm](https://www.workerman.net/a/1289).
 
 ### Fichier de configuration
-Modifiez le fichier de configuration selon les besoins réels `config/thinkorm.php`
+Modifiez le fichier de configuration `config/thinkorm.php` en fonction de la situation réelle.
 
 ### Utilisation
 
@@ -33,7 +33,7 @@ class FooController
 }
 ```
 
-### Création de modèle
+### Créer un modèle
 
 Le modèle ThinkOrm hérite de `think\Model`, similaire à ce qui suit
 ```php
@@ -45,14 +45,14 @@ use think\Model;
 class User extends Model
 {
     /**
-     * The table associated with the model.
+     * La table associée au modèle.
      *
      * @var string
      */
     protected $table = 'user';
 
     /**
-     * The primary key associated with the table.
+     * La clé primaire associée à la table.
      *
      * @var string
      */
@@ -63,12 +63,12 @@ class User extends Model
 ```
 
 Vous pouvez également utiliser la commande suivante pour créer un modèle basé sur thinkorm
-```
-php webman make:model nom_table
+```shell
+php webman make:model table_name
 ```
 
-> **Conseil**
+> **Astuce**
 > Cette commande nécessite l'installation de `webman/console`, la commande d'installation est `composer require webman/console ^1.2.13`
 
 > **Remarque**
-> Si la commande make:model détecte que le projet principal utilise `illuminate/database`, elle créera des fichiers de modèle basés sur `illuminate/database` au lieu de think-orm. Dans ce cas, vous pouvez forcer la génération d'un modèle think-orm en ajoutant un paramètre tp, la commande est similaire à `php webman make:model nom_table tp` (si cela ne fonctionne pas, veuillez mettre à niveau `webman/console`)
+> Si la commande make:model détecte que le projet principal utilise `illuminate/database`, elle créera des fichiers de modèle basés sur `illuminate/database`, plutôt que sur thinkorm. Dans ce cas, vous pouvez forcer la génération d'un modèle think-orm en ajoutant un paramètre tp, la commande est similaire à `php webman make:model table_name tp` (si cela ne fonctionne pas, veuillez mettre à niveau `webman/console`)

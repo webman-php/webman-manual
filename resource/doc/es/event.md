@@ -1,4 +1,4 @@
-# Biblioteca de eventos webman webman-event
+# Biblioteca de eventos de webman webman-event
 
 [![licencia](https://img.shields.io/github/license/Tinywan/webman-event)]()
 [![webman-event](https://img.shields.io/github/v/release/tinywan/webman-event?include_prereleases)]()
@@ -6,7 +6,7 @@
 [![webman-event](https://img.shields.io/github/last-commit/tinywan/webman-event/main)]()
 [![webman-event](https://img.shields.io/github/v/tag/tinywan/webman-event?color=ff69b4)]()
 
-La ventaja de los eventos en comparación con los middlewares es que los eventos son más precisos en su ubicación (o tienen una granularidad más fina) y son más adecuados para la expansión de ciertos escenarios comerciales. Por ejemplo, a menudo nos encontramos con que después de que un usuario se registra o inicia sesión, es necesario realizar una serie de operaciones. A través del sistema de eventos, se puede lograr la expansión de las operaciones de inicio de sesión sin invadir el código original, lo que reduce la relación de acoplamiento del sistema y, al mismo tiempo, reduce la posibilidad de errores.
+La ventaja de los eventos en comparación con los middleware es que los eventos son más precisos (o tienen una granularidad más fina) que los middleware, y son más adecuados para la expansión en ciertos escenarios comerciales. Por ejemplo, a menudo nos encontramos con que después de que un usuario se registra o inicia sesión, se necesitan realizar una serie de operaciones. A través del sistema de eventos, podemos realizar la extensión de la operación de inicio de sesión sin entrar en el código existente, lo que reduce la acoplamiento del sistema y, al mismo tiempo, reduce la posibilidad de errores.
 
 ## Dirección del proyecto
 
@@ -24,11 +24,11 @@ composer require tinywan/webman-event
 
 ## Configuración
 
-El archivo de configuración de eventos `config/event.php` tiene el siguiente contenido:
+El archivo de configuración de eventos `config/event.php` tiene el siguiente contenido
 
 ```php
 return [
-    // Evento escucha
+    // Oyentes de eventos
     'listener'    => [],
 
     // Suscriptor de eventos
@@ -36,18 +36,18 @@ return [
 ];
 ```
 
-### Configuración de inicio de procesos
+### Configuración de inicio de proceso
 
-Abre `config/bootstrap.php` y agrega la siguiente configuración:
+Abra `config/bootstrap.php` e incluya la siguiente configuración:
 
 ```php
 return [
-    // Otras configuraciones ...
+    // Otras configuraciones se han omitido aquí ...
     webman\event\EventManager::class,
 ];
 ```
 
-## Empezar rápidamente
+## Comenzar rápidamente
 
 ### Definir eventos
 
@@ -83,16 +83,16 @@ class LogErrorWriteEvent extends Event
 
 ```php
 return [
-    // Evento escucha
+    // Oyentes de eventos
     'listener'    => [
         \extend\event\LogErrorWriteEvent::NAME  => \extend\event\LogErrorWriteEvent::class,
     ],
 ];
 ```
 
-### Suscribirse a eventos
+### Suscribir eventos
 
-Clase de suscripción `LoggerSubscriber.php`
+Clase de suscriptor `LoggerSubscriber.php`
 
 ```php
 namespace extend\event\subscriber;
@@ -103,7 +103,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class LoggerSubscriber implements EventSubscriberInterface
 {
     /**
-     * @desc: Descripción del método
+     * @desc: Método de descripción
      * @return array|string[]
      */
     public static function getSubscribedEvents()
@@ -119,13 +119,13 @@ class LoggerSubscriber implements EventSubscriberInterface
      */
     public function onLogErrorWrite(LogErrorWriteEvent $event)
     {
-        // Algunas lógicas empresariales específicas
+        // Algún lógica de negocio concreta
         var_dump($event->handle());
     }
 }
 ```
 
-Suscripción a eventos
+Suscripción de eventos
 ```php
 return [
     // Suscripción de eventos
@@ -144,13 +144,13 @@ $error = [
     'errorMessage' => 'Mensaje de error',
     'errorCode' => 500
 ];
-EventManager::trigger(new LogErrorWriteEvent($error), LogErrorWriteEvent::NAME);
+EventManager::trigger(new LogErrorWriteEvent($error),LogErrorWriteEvent::NAME);
 ```
 
-Resultado de la ejecución
+Resultado de ejecución
 
-![Print Result](./trigger.png)
+![trigger](./trigger.png)
 
 ## Licencia
 
-Este proyecto tiene licencia bajo la [licencia Apache 2.0](LICENSE).
+Este proyecto está licenciado bajo la [licencia Apache 2.0](LICENSE).

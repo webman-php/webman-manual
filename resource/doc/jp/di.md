@@ -1,12 +1,12 @@
-# 依存関係の自動インジェクション
-webmanでは、依存関係の自動インジェクションはオプション機能であり、デフォルトで無効になっています。依存関係の自動インジェクションが必要な場合、[php-di](https://php-di.org/doc/getting-started.html)を使用することをお勧めします。以下は`php-di`を使用したwebmanの方法です。
+# 依存の自動インジェクション
+Webmanにおける依存の自動インジェクションはオプション機能であり、デフォルトでは無効になっています。依存の自動インジェクションが必要な場合、[php-di](https://php-di.org/doc/getting-started.html)を使用することをお勧めします。以下は`php-di`を使用したWebmanの方法です。
 
 ## インストール
-```
+```composer
 composer require psr/container ^1.1.1 php-di/php-di ^6 doctrine/annotations ^1.14
 ```
 
-設定`config/container.php`を変更し、最終的な内容は次のようになります：
+`config/container.php`を変更し、最終的な内容は以下のようになります：
 ```php
 $builder = new \DI\ContainerBuilder();
 $builder->addDefinitions(config('dependence', []));
@@ -15,10 +15,10 @@ $builder->useAnnotations(true);
 return $builder->build();
 ```
 
-> `config/container.php`は`PSR-11`規格に準拠するコンテナインスタンスを最終的に返します。`php-di`を使用したくない場合は、ここで`PSR-11`規格に準拠する他のコンテナインスタンスを作成して返すことができます。
+> `config/container.php`は`PSR-11`に準拠したコンテナインスタンスを最終的に返します。`php-di`を使用したくない場合、ここで別の`PSR-11`に準拠したコンテナインスタンスを作成して返すことができます。
 
-## コンストラクターインジェクション
-新しい`app/service/Mailer.php`（ディレクトリが存在しない場合は作成してください）の内容は次のとおりです：
+## コンストラクタインジェクション
+`app/service/Mailer.php`（ディレクトリが存在しない場合は自分で作成してください）を作成し、以下の内容を追加します：
 ```php
 <?php
 namespace app\service;
@@ -27,12 +27,12 @@ class Mailer
 {
     public function mail($email, $content)
     {
-        // メール送信コードを省略
+        // メール送信コードは省略されています
     }
 }
 ```
 
-`app/controller/UserController.php`の内容は次のとおりです：
+`app/controller/UserController.php`の内容は次の通りです：
 
 ```php
 <?php
@@ -52,40 +52,39 @@ class UserController
 
     public function register(Request $request)
     {
-        $this->mailer->mail('hello@webman.com', 'こんにちは、ようこそ！');
+        $this->mailer->mail('hello@webman.com', 'Hello and welcome!');
         return response('ok');
     }
 }
 ```
-通常は次のコードが必要ですが、`app\controller\UserController`のインスタンス化が完了します：
+通常の場合、`app\controller\UserController`のインスタンス化には以下のコードが必要です：
 ```php
 $mailer = new Mailer;
 $user = new UserController($mailer);
 ```
- `php-di`を使用すると、開発者は`UserController`内の`Mailer`を手動でインスタンス化する必要はありません。Webmanが自動的に代わりに行います。 `Mailer`のインスタンス化中に他のクラスの依存関係がある場合、Webmanも自動的にインスタンス化およびインジェクションを行います。開発者は初期化作業を行う必要はありません。
+`php-di`を使用すると、開発者は`UserController`内の`Mailer`を手動でインスタンス化する必要がありません。代わりに、Webmanが自動的に行います。また、`Mailer`のインスタンス化中に他のクラスの依存関係がある場合、Webmanはそれらも自動的にインスタンス化および注入します。開発者は初期化作業を行う必要はありません。
 
 > **注意**
-> 依存関係の自動インジェクションはフレームワークまたは`php-di`によって作成されたインスタンスのみ完了し、手動で`new`されたインスタンスでは依存関係の自動インジェクションはできません。インジェクションが必要な場合は、`support\Container`インターフェースを使用して`new`ステートメントを置き換える必要があります。例えば：
+> 依存の自動インジェクションを完了するには、フレームワークまたは`php-di`が作成したインスタンスでなければなりません。手動で`new`したインスタンスでは依存の自動インジェクションを行うことはできず、インジェクションが必要な場合は`support\Container`インターフェースを使って`new`ステートメントを置き換える必要があります。例：
 
 ```php
 use app\service\UserService;
 use app\service\LogService;
 use support\Container;
 
-// newキーワードで作成されたインスタンスは依存性インジェクションできません
+// newキーワードで作成されたインスタンスでは依存のインジェクションができません
 $user_service = new UserService;
-// newキーワードで作成されたインスタンスは依存性インジェクションできません
+// newキーワードで作成されたインスタンスでは依存のインジェクションができません
 $log_service = new LogService($path, $name);
 
-// コンテナで作成されたインスタンスは依存性インジェクションできます
+// Containerで作成されたインスタンスでは依存のインジェクションができます
 $user_service = Container::get(UserService::class);
-// コンテナで作成されたインスタンスは依存性インジェクションできます
+// Containerで作成されたインスタンスでは依存のインジェクションができます
 $log_service = Container::make(LogService::class, [$path, $name]);
 ```
 
-## 注釈インジェクション
-コンストラクター依存関係の自動インジェクションに加えて、注釈インジェクションも使用できます。前述の例を続けて、`app\controller\UserController`を次のように変更します：
-
+## 注釈のインジェクション
+コンストラクタの依存性自動インジェクションに加えて、注釈を使用することもできます。前述の例を引き続き、`app\controller\UserController`を以下のように変更します：
 ```php
 <?php
 namespace app\controller;
@@ -104,15 +103,15 @@ class UserController
 
     public function register(Request $request)
     {
-        $this->mailer->mail('hello@webman.com', 'こんにちは、ようこそ！');
+        $this->mailer->mail('hello@webman.com', 'Hello and welcome!');
         return response('ok');
     }
 }
 ```
-この例では、`@Inject`注釈を使用してインジェクションし、`@var`注釈を使用してオブジェクトの型を宣言しています。この例はコンストラクターインジェクションと同じ効果がありますが、コードがより簡潔です。
+この例では、`@Inject`アノテーションを使用して注入し、`@var`アノテーションを使用してオブジェクトの型を宣言しています。この例はコンストラクタインジェクションと同じ効果を持ちますが、コードがより簡潔になります。
 
 > **注意**
-> webman 1.4.6以前ではコントローラーパラメータのインジェクションはサポートされていません。以下のコードはwebman<=1.4.6で動作しません
+> Webmanは1.4.6バージョンまでコントローラーパラメーターのインジェクションをサポートしておらず、例えば次のようなコードはWebman<=1.4.6ではサポートされません：
 
 ```php
 <?php
@@ -123,18 +122,17 @@ use app\service\Mailer;
 
 class UserController
 {
-    // 1.4.6以前はコントローラーパラメータのインジェクションはサポートされていません
+    // 1.4.6バージョン以前はコントローラーパラメーターのインジェクションはサポートされません
     public function register(Request $request, Mailer $mailer)
     {
-        $mailer->mail('hello@webman.com', 'こんにちは、ようこそ！');
+        $mailer->mail('hello@webman.com', 'Hello and welcome!');
         return response('ok');
     }
 }
 ```
 
-## カスタムコンストラクターインジェクション
-時には、コンストラクターに渡されるパラメータがクラスのインスタンスではなく、文字列、数値、配列などのデータであることがあります。たとえば、MailerのコンストラクターにはSMTPサーバーのIPとポートを渡す必要があります：
-
+## カスタムコンストラクタインジェクション
+時にはコンストラクタの引数がクラスのインスタンスではなく、文字列、数値、配列などのデータであることがあります。例えば、MailerのコンストラクタにはsmtpサーバーのIPとポートを渡す必要があります：
 ```php
 <?php
 namespace app\service;
@@ -153,29 +151,27 @@ class Mailer
 
     public function mail($email, $content)
     {
-        // メール送信コードを省略
+        // メール送信コードは省略されています
     }
 }
 ```
+このような場合、前述のコンストラクタ自動インジェクションは直接使用できません。なぜなら、`php-di`は`$smtp_host` `$smtp_port`の値を特定することができないからです。この場合、カスタムインジェクションを試してみることができます。
 
-このような場合、前述のコンストラクター自動インジェクションを直接使用することはできません。なぜなら`php-di`は`$smtp_host`と`$smtp_port`の値を特定できないからです。このような場合は、カスタムインジェクションを試してみることができます。
-
-`config/dependence.php`（ファイルが存在しない場合は作成してください）に次のコードを追加します：
+`config/dependence.php`（ファイルが存在しない場合は作成してください）に以下のコードを追加します：
 ```php
 return [
-    // ... 他の設定はここで無視しています
+    // ... 他の設定はここで簡略化されています
     
     app\service\Mailer::class =>  new app\service\Mailer('192.168.1.11', 25);
 ];
 ```
-これにより、依存性注入が`app\service\Mailer`インスタンスを取得する必要がある場合、この設定で生成された`app\service\Mailer`インスタンスが自動的に使用されます。
+このようにすると、依存性のインジェクションが`app\service\Mailer`インスタンスを取得する必要がある場合、この構成で作成された`app\service\Mailer`インスタンスが自動的に使用されます。
 
-`config/dependence.php`では、`new`を使用して`Mailer`クラスのインスタンスを初期化しています。この例では問題ありませんが、`Mailer`クラスが他のクラスに依存している場合や、`Mailer`クラス内で注釈インジェクションが使用されている場合、`new`で初期化すると依存関係の自動インジェクションが行われません。問題を解決するためには、カスタムインタフェースインジェクションを利用し、`Container::get(クラス名)`または`Container::make(クラス名、[コンストラクター引数])`メソッドを使用してクラスを初期化する必要があります。
+`config/dependence.php`では`new`を使用して`Mailer`クラスをインスタンス化していますが、この例では問題はありません。ただし、`Mailer`クラスが他のクラスに依存しているか、または`Mailer`クラス内で注釈インジェクションが使用されている場合は、`new`を使用して初期化すると依存の自動インジェクションが行われません。解決策は、カスタムインターフェースのインジェクションを利用し、`Container::get(クラス名)`または`Container::make(クラス名, [コンストラクタ引数])`メソッドを使用してクラスを初期化することです。
+## カスタムインターフェースのインジェクション
+実際のプロジェクトでは、具体的なクラスではなく、インターフェースに基づいてプログラミングしたいという希望があります。例えば、`app\controller\UserController`では、`app\service\Mailer`ではなく`app\service\MailerInterface`を参照すべきです。
 
-## カスタムインタフェースインジェクション
-実際のプロジェクトでは、具体的なクラスではなくインターフェースに焦点を当てたい場合があります。たとえば、`app\controller\UserController`には`app\service\Mailer`ではなく`app\service\MailerInterface`を導入したい場合です。
-
-`MailerInterface`インターフェースを定義します。
+`MailerInterface` インターフェースを定義します。
 ```php
 <?php
 namespace app\service;
@@ -186,7 +182,7 @@ interface MailerInterface
 }
 ```
 
-`MailerInterface`インターフェースの実装を定義します。
+`MailerInterface` インターフェースの実装を定義します。
 ```php
 <?php
 namespace app\service;
@@ -194,7 +190,7 @@ namespace app\service;
 class Mailer implements MailerInterface
 {
     private $smtpHost;
-
+    
     private $smtpPort;
 
     public function __construct($smtp_host, $smtp_port)
@@ -205,12 +201,12 @@ class Mailer implements MailerInterface
 
     public function mail($email, $content)
     {
-        // メール送信コードを省略
+        // メール送信コードは省略
     }
 }
 ```
 
-具体的な実装ではなく、`MailerInterface`インターフェースを導入します。
+具体の実装ではなく`MailerInterface` インターフェースを参照します。
 ```php
 <?php
 namespace app\controller;
@@ -229,13 +225,13 @@ class UserController
     
     public function register(Request $request)
     {
-        $this->mailer->mail('hello@webman.com', 'こんにちは、ようこそ！');
+        $this->mailer->mail('hello@webman.com', 'Hello and welcome!');
         return response('ok');
     }
 }
 ```
 
-`config/dependence.php`で`MailerInterface`インターフェースを以下のように定義します。
+`config/dependence.php`では `MailerInterface` インターフェースを以下のように定義します。
 ```php
 use Psr\Container\ContainerInterface;
 return [
@@ -245,14 +241,14 @@ return [
 ];
 ```
 
-これにより、業務が`MailerInterface`インターフェースを使用する必要がある場合、`Mailer`の実装が自動的に使用されます。
+このようにして、`MailerInterface` インターフェースを使用する際には自動的に`Mailer`が実装されます。
 
-> インターフェース指向の利点は、特定のコンポーネントを変更する必要がある場合、業務コードを変更する必要がないため、`config/dependence.php`の具体的な実装を変更するだけで済むことです。これはユニットテストに非常に役立ちます。
+> インターフェースプログラミングの利点は、特定のコンポーネントを変更する必要がある場合、ビジネスコードを変更する必要がなく、`config/dependence.php`で具体的な実装を変更するだけで済むことです。これは単体テストでも非常に有用です。
 
 ## その他のカスタムインジェクション
-`config/dependence.php`では、クラスの依存関係だけでなく、文字列、数値、配列などの値を定義することもできます。
+`config/dependence.php`はクラスの依存関係だけでなく、文字列、数値、配列などの他の値も定義できます。
 
-例えば、`config/dependence.php`で以下のように定義します：
+例えば、`config/dependence.php`では以下のように定義されています。
 ```php
 return [
     'smtp_host' => '192.168.1.11',
@@ -260,7 +256,7 @@ return [
 ];
 ```
 
-この場合、`@Inject`を使用して`smtp_host`や`smtp_port`をクラスのプロパティに注入することができます。
+この時、`@Inject` を使用して `smtp_host` と `smtp_port` をクラスのプロパティにインジェクトできます。
 ```php
 <?php
 namespace app\service;
@@ -281,13 +277,13 @@ class Mailer
 
     public function mail($email, $content)
     {
-        // メール送信コードを省略
-        echo "{$this->smtpHost}:{$this->smtpPort}\n"; // 192.168.1.11:25 が出力されます
+        // メール送信コードは省略
+        echo "{$this->smtpHost}:{$this->smtpPort}\n"; // 192.168.1.11:25 と出力されます
     }
 }
 ```
 
-> 注意：`@Inject("key")` ではダブルクォーテーションを使用します
+> 注意: `@Inject("key")` では二重引用符を使用します。
 
-## 追加情報
+## その他のリソース
 [php-diマニュアル](https://php-di.org/doc/getting-started.html)を参照してください。

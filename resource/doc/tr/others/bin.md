@@ -1,56 +1,56 @@
 # İkili Paketleme
 
-Webman, projeyi bir ikili dosyaya paketlemeyi destekler, bu da webman'ın PHP ortamına ihtiyaç duymadan Linux sistemlerde çalışmasını sağlar.
+webman, projeyi bir ikili dosyaya paketlemeyi destekler, bu sayede webman'ın linux sistemlerde php ortamına ihtiyaç duymadan da çalıştırılabilir.
 
 > **Not**
-> Paketlenmiş dosya şu anda yalnızca x86_64 mimarili Linux sistemlerde çalışmaktadır ve macOS'i desteklememektedir.
-> `php.ini` dosyasındaki phar yapılandırma seçeneğini kapatmanız gerekmektedir, yani `phar.readonly = 0` olarak ayarlanmalıdır.
+> Paketlendikten sonra dosyalar sadece x86_64 mimarisi linux sistemlerinde çalışır, macOS sistemlerini desteklemez
+> `php.ini` dosyasındaki, yani `phar.readonly = 0` geçerli olacak şekilde phar yapılandırma seçeneklerini kapatmanız gerekmektedir.
 
 ## Komut Satırı Aracı Kurulumu
 `composer require webman/console ^1.2.24`
 
 ## Yapılandırma Ayarları
-`config/plugin/webman/console/app.php` dosyasını açın ve aşağıdaki ayarı yapın:
+`config/plugin/webman/console/app.php` dosyasını açarak aşağıdaki ayarı yapın
 ```php
 'exclude_pattern'   => '#^(?!.*(composer.json|/.github/|/.idea/|/.git/|/.setting/|/runtime/|/vendor-bin/|/build/|vendor/webman/admin))(.*)$#'
 ```
-Bu ayar, paketlerken bazı gereksiz dizinleri ve dosyaları hariç tutmak için kullanılır, bu sayede paketin boyutunu küçültmek amaçlanmaktadır.
+Bu ayar, paketleme sırasında gereksiz dizin ve dosyaları hariç tutmak için kullanılır, paket boyutunu büyümemesi için.
 
 ## Paketleme
-Aşağıdaki komutu çalıştırın:
-```
+Aşağıdaki komutu çalıştırın
+```bash
 php webman build:bin
 ```
-Ayrıca hangi PHP sürümüyle paketlemek istediğinizi de belirtebilirsiniz, örneğin:
-```
+Ayrıca, belirli bir php sürümü ile de paketleme yapabilirsiniz, örneğin
+```bash
 php webman build:bin 8.1
 ```
 
-Paketleme işleminden sonra `build` dizini içinde bir `webman.bin` dosyası oluşturulur.
+Paketleme işlemi sonrasında `webman.bin` adında bir dosya `build` klasöründe oluşturulacaktır.
 
 ## Başlatma
-Webman.bin dosyasını Linux sunucusuna yükleyin, ardından `./webman.bin start` veya `./webman.bin start -d` komutunu kullanarak başlatabilirsiniz.
+webman.bin dosyasını linux sunucusuna yükleyerek `./webman.bin start` veya `./webman.bin start -d` komutunu çalıştırarak başlatabilirsiniz.
 
 ## Prensip
-* Öncelikle yerel webman projesi bir phar dosyasına paketlenir.
-* Ardından uzak sunucudan php8.x.micro.sfx dosyası indirilir.
-* Php8.x.micro.sfx ve phar dosyası birleştirilerek bir ikili dosya oluşturulur.
+* İlk olarak, yerel webman projesi bir phar dosyasına paketlenir
+* Daha sonra php8.x.micro.sfx dosyası uzaktan indirilir
+* Son olarak, php8.x.micro.sfx ve phar dosyası birleştirilerek bir ikili dosya oluşturulur
 
-## Dikkat Edilmesi Gerekenler
-* Yereldeki PHP sürümü 7.2'den büyük olmalıdır.
-* Ancak sadece PHP 8 için ikili dosya oluşturulabilmektedir.
-* Yerel PHP sürümü ile paketleme sürümünün aynı olması önerilmektedir, yani eğer yerel olarak PHP 8.0 kullanıyorsanız, paketleme sırasında da PHP 8.0 kullanmanız önerilir, uyumluluk sorunlarını önlemek için.
-* Paketleme sırasında PHP 8'in kaynak kodları indirilir, ancak yerelde kurulmaz, yerel PHP ortamını etkilemez.
-* Webman.bin şu anda yalnızca x86_64 mimarili Linux sistemlerinde çalışmaktadır ve macOS'i desteklememektedir.
-* Varsayılan olarak env dosyası paketlenmez (`config/plugin/webman/console/app.php` de exclude_files kontrol eder), bu nedenle başlatma esnasında env dosyasının webman.bin ile aynı dizinde bulunması gerekmektedir.
-* Çalışma sırasında webman.bin dizininde bir runtime dizini oluşturulur, bu dizin log dosyalarını içerir.
-* Şu anda webman.bin dışındaki php.ini dosyalarını okumaz, özel php.ini gerekiyorsa `/config/plugin/webman/console/app.php` dosyasında custom_ini olarak ayarlanmalıdır.
+## Notlar
+* Yereldeki php sürümü 7.2 ve daha yüksekse paketleme komutunu çalıştırabilirsiniz
+* Ancak, sadece php8 ikili dosyası oluşturulabilir
+* Yereldeki php sürümü ve paketleme sürümünün aynı olmasını şiddetle tavsiye ederiz, yani eğer yerelde php8.0 kullanıyorsanız, paketleme için de php8.0 kullanmalısınız, uyumluluk sorunlarını önlemek adına
+* Paketleme işleminde php8 kaynak kodları indirilir, ancak yerelde kurulmaz, yerel php ortamını etkilemez
+* webman.bin şu anda yalnızca x86_64 mimarili linux sistemlerde çalışır, macOS sistemlerini desteklemez
+* Varsayılan olarak env dosyası paketlenmez (`config/plugin/webman/console/app.php` içinde exclude_files ayarını kontrol eder), bu yüzden başlangıçta env dosyasının webman.bin ile aynı dizinde olması gerekmektedir
+* Çalışma sırasında, webman.bin dosyasının bulunduğu dizinde runtime klasörü oluşturulur, bu klasör log dosyalarını saklamak için kullanılır
+* Şu anda webman.bin dışarıdan php.ini dosyasını okumaz, özelleştirilmiş php.ini dosyası gerekiyorsa, lütfen `/config/plugin/webman/console/app.php` dosyasında custom_ini ayarını yapın
 
-## Tek Başına Statik PHP İndirme
-Bazı durumlarda sadece PHP ortamı dağıtmanız gerekiyor, bu durumda sadece bir PHP çalıştırılabilir dosyaya ihtiyacınız var demektir, işte buradan [statik php indirme](https://www.workerman.net/download) bağlantısını kullanarak indirebilirsiniz.
+## Tek Başıma Statik PHP İndirme
+Bazen sadece bir PHP ortamının dağıtılmasını istersiniz, bu durumda [statik php indirme](https://www.workerman.net/download) bağlantısına tıklayabilirsiniz.
 
-> **İpucu**
-> Statik php için özel php.ini dosyası belirtmek istiyorsanız aşağıdaki komutu kullanabilirsiniz `php -c /your/path/php.ini start.php start -d`
+> **Not**
+> Statik php'ye özel bir php.ini dosyası belirtmek isterseniz, aşağıdaki komutu kullanabilirsiniz: `php -c /your/path/php.ini start.php start -d`
 
 ## Desteklenen Uzantılar
 bcmath
@@ -99,6 +99,6 @@ xmlwriter
 zip
 zlib
 
-## Proje Kaynakları
+## Proje Kaynağı
 https://github.com/crazywhalecc/static-php-cli
 https://github.com/walkor/static-php-cli

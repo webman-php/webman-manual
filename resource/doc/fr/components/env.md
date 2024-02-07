@@ -1,23 +1,21 @@
 # vlucas/phpdotenv
 
 ## Description
-`vlucas/phpdotenv` est un composant de chargement des variables d'environnement qui permet de différencier la configuration pour différents environnements tels que le développement, les tests, etc.
+`vlucas/phpdotenv` est un composant de chargement de variables d'environnement, utilisé pour différencier la configuration dans différents environnements (comme l'environnement de développement, l'environnement de test, etc.).
 
-## Adresse du Projet
-
+## Adresse du projet
 https://github.com/vlucas/phpdotenv
-  
+
 ## Installation
- 
 ```php
 composer require vlucas/phpdotenv
- ```
-  
+```
+
 ## Utilisation
 
-#### Créer un fichier `.env` dans le répertoire racine du projet
+#### Créer un fichier `.env` à la racine du projet
 **.env**
-```
+```plaintext
 DB_HOST = 127.0.0.1
 DB_PORT = 3306
 DB_NAME = test
@@ -32,7 +30,7 @@ return [
     // Base de données par défaut
     'default' => 'mysql',
 
-    // Configuration pour différentes bases de données
+    // Configurations de différentes bases de données
     'connections' => [
         'mysql' => [
             'driver'      => 'mysql',
@@ -52,12 +50,11 @@ return [
 ];
 ```
 
-> **Note**
-> Il est recommandé d'ajouter le fichier `.env` à la liste `.gitignore` pour éviter de le soumettre au référentiel de code. Ajoutez un fichier de configuration d'exemple `.env.example` au référentiel de code, et lors du déploiement du projet, copiez `.env.example` en `.env` et modifiez la configuration dans `.env` en fonction de l'environnement actuel. Cela permettra au projet de charger des configurations différentes selon l'environnement.
+> **Remarque**
+> Il est recommandé d'ajouter le fichier `.env` à la liste de `.gitignore` afin d'éviter de le soumettre au référentiel de code. Ajoutez un fichier de configuration exemple `.env.example` dans le référentiel de code. Lors du déploiement du projet, copiez `.env.example` en tant que `.env` et modifiez la configuration dans `.env` en fonction de l'environnement actuel, de sorte que le projet puisse charger différentes configurations dans des environnements différents.
 
 > **Remarque**
-> `vlucas/phpdotenv` peut présenter des bugs dans les versions de PHP TS (Thread-Safe). Veuillez utiliser la version NTS (Non-Thread-Safe).
-> Vous pouvez vérifier la version actuelle de PHP en exécutant `php -v`.
+> `vlucas/phpdotenv` peut présenter des bogues dans les versions PHP TS (Thread-Safe). Veuillez utiliser la version NTS (Non-Thread-Safe). Pour connaître la version actuelle de PHP, exécutez `php -v`.
 
 ## Pour plus d'informations
 

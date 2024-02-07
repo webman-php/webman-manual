@@ -1,21 +1,22 @@
 # প্রসেস মনিটরিং
-ওয়েবম্যান নিজস্বভাবে একটি মনিটর প্রসেস সহ। এটি দুটি কাজ সমর্থন করে
-1. ফাইল আপডেট মনিটর এবং নতুন ব্যবসায়িক কোড স্বয়ংক্রিয়ভাবে পুনরায় লোড করতে(সাধারণভাবে এটি ডেভেলপমেন্ট সময়ে ব্যবহার হয়)
-2. সমস্ত প্রসেসের মেমরি অধিকরণ মনিটরিং, যদি কোনও প্রসেস মেমরি সীমা অতিক্রম করতে চলে, তাহলে স্বয়ংক্রিয়ভাবে ঐ প্রসেসটি সুরক্ষাত্মকভাবে পুনরায় চালু করা হয়(ব্যাবসায়িক কার্যকলাপে কোনও প্রভাব নেই)
+webman একটি মনিটরিং প্রসেস সহজেই উপলব্ধ করে, যা দুটি বৈশিষ্ট্য সমর্থন করে।
+1. ফাইল আপডেট মনিটর করে এবং নতুন বিজনেস কোড লোড করার জন্য স্বয়ংক্রিয়ভাবে রিলোড করে (সাধারণভাবে ডেভেলপমেন্টে ব্যবহৃত)
+2. সমস্ত প্রসেসের মেমোরি অধিগ্রহণ মনিটর করে, যদি কোনও প্রসেস মেমোরি লিমিটের কাছাকাছি পৌঁছানোর পথে থাকে তবে প্রসেসটি স্বয়ংক্রিয়ভাবে বার্তা শুরু করে (ব্যবহারে কোনও প্রভাব না ফেলে)
 
 ### মনিটর কনফিগারেশন
-`config/process.php` কনফিগারেশন ফাইলে `monitor` কনফিগারেশন থাকে
+কনফিগারেশন ফাইল `config/process.php` এ মনিটর কনফিগার করুন
 ```php
+
 global $argv;
 
 return [
-    // File update detection and automatic reload
+    // ফাইল আপডেট ডিটেকশন এবং স্বয়ংক্রিয়ভাবে রিলোড
     'monitor' => [
         'handler' => process\Monitor::class,
         'reloadable' => false,
         'constructor' => [
-            // Monitor these directories
-            'monitorDir' => array_merge([    // Which directories to monitor
+            // এই ডিরেক্টরিগুলি মনিটর করুন
+            'monitorDir' => array_merge([
                 app_path(),
                 config_path(),
                 base_path() . '/process',
@@ -23,22 +24,22 @@ return [
                 base_path() . '/resource',
                 base_path() . '/.env',
             ], glob(base_path() . '/plugin/*/app'), glob(base_path() . '/plugin/*/config'), glob(base_path() . '/plugin/*/api')),
-            // Files with these suffixes will be monitored
+            // এই সাফিক্স সম্পূর্ণ করা ফাইলগুলি মনিটর করা হবে
             'monitorExtensions' => [
                 'php', 'html', 'htm', 'env'
             ],
             'options' => [
-                'enable_file_monitor' => !in_array('-d', $argv) && DIRECTORY_SEPARATOR === '/', // Whether to enable file monitoring
-                'enable_memory_monitor' => DIRECTORY_SEPARATOR === '/',                      // Whether to enable memory monitoring
+                'enable_file_monitor' => !in_array('-d', $argv) && DIRECTORY_SEPARATOR === '/', // ফাইল মনিটরিং চালু করা হবে কিনা 
+                'enable_memory_monitor' => DIRECTORY_SEPARATOR === '/',                      // মেমোরি মনিটরিং চালু করা হবে কিনা
             ]
         ]
     ]
 ];
 ```
-`monitorDir` কোন ডিরেক্টরি মনিটর করতে হবে তা কনফিগার করার জন্যে।(প্রসেসের ডিরেক্টরি ফাইলগুলি খুব বেশি থাকা উচিত না)।
-`monitorExtensions` `monitorDir` ডিরেক্টরির কোন ফাইলের শেষে প্রস্তুতি হওয়া উচিত।
-`options.enable_file_monitor` এর মান `true` হলে, তাহলে ফাইল আপডেট মনিটরিং(লিনাক্স সিস্টেমে ডিবাগ মোডে চালানো হয় অপশনালি ফাইল মনিটরিং চালানো হয়)।
-`options.enable_memory_monitor` এর মান `true` হলে, তাহলে মেমরি ব্যবহার মনিটরিং(মেমরি মনিটরিং উইন্ডোস সিস্টেমে সমর্থিত নয়)।
+`monitorDir` কোনও ডিরেক্টরি এর মনিটর করা এবং ফাইলগুলি বেশি না থাকা উচিত না।
+`monitorExtensions` কোনও ফাইলের কনফিগারেশন করার জন্য `monitorDir` ডিরেক্টরিতে কোনও ফাইলের সাফিক্স কনফিগার করা।
+`অপশনের ফাইল মনিটরিং চালু করা থাকলে` ট্রু `হলে, তাহলে ফাইল আপডেট মনিটরিং চালু করা হবে (লিনাক্স সিস্টেমে ডিবাগ মোডে পৌঁছে ডিফল্টভাবে ফাইল মনিটরিং চালু থাকবে)।
+`options.enable_memory_monitor` মান যদি ট্রু হয়, তবে মেমোরি অধিগ্রহণ মনিটরিং চালু হবে (মেমোরি মোনিটরিং উইন্ডোজ সিস্টেমে সমর্থন করে না)।
 
 > **পরামর্শ**
-> ওয়েন্ডোস সিস্টেমে `windows.bat` বা `php windows.php` চালানোর সময় ফাইল আপডেট মনিটরিং চালানোর জন্য প্রয়োজন।
+> উইন্ডোজ সিস্টেমে ফাইল আপডেট মনিটরিং চালু করতে `উইন্ডোজ.ব্যাট` বা `php windows.php` চালানো প্রয়োজন।

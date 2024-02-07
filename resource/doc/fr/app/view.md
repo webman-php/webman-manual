@@ -1,4 +1,4 @@
-## Vue
+## Vues
 
-Le fichier de configuration de la vue du plugin d'application se trouve dans `plugin/{identifiant du plugin}/config/view.php`,
-L'application du plugin utilise la vue de la même manière que le projet Webman ordinaire, veuillez consulter [Vue](../view.md) pour obtenir plus d'informations.
+Le fichier de configuration des vues du plugin d'application se trouve dans `plugin/{identifiant du plugin}/config/view.php`,
+L'application du plugin utilise des vues similaires à celles des projets Webman ordinaires, veuillez vous référer à [Vues](../view.md) pour une expérience de développement similaire.

@@ -3,4 +3,4 @@
 `composer require workerman/webman-framework ^1.4.3 && composer require webman/console ^1.0.27 && php webman install`
 
 > **โปรดทราบ**
-> เนื่องจากตัวแทนคอมโพเซอร์ของ Alibaba หยุดซิงค์ข้อมูลจากแหล่งข้อมูลทางการของคอมโพเซอร์ ดังนั้นตอนนี้ไม่สามารถใช้ตัวแทนคอมโพเซอร์ของ Alibaba ในการอัพเกรด webman ไปยังเวอร์ชันล่าสุดได้ โปรดใช้คำสั่งด้านล่างนี้ `composer config -g --unset repos.packagist` เพื่อกู้คืนการใช้งานแหล่งข้อมูลทางการของคอมโพเซอร์
+> เนื่องจากตัวแทน Composer ของ Alibaba Cloud หยุดซิงโครไปยังฐานข้อมูลต้นทางจากเรือง Composer ทางการ์อินิฉในประเทศแน้นงังนำข้อมูลจากต้นทาง Composer พื้นฐาน โปรดใช้คำสั่งต่อไปนี้ `composer config -g --unset repos.packagist` เพื่อกลับมาใช้ข้อมูลจากต้นทาง Composer ทางการ

@@ -1,24 +1,26 @@
-webman তার MongoDB কম্পোনেন্ট হিসেবে [jenssegers/mongodb](https://github.com/jenssegers/laravel-mongodb) ব্যবহার করে, যা লারাভেল প্রকল্প থেকে নেওয়া হয়েছে এবং এর ব্যবহারও লারাভেলের সাথে একই।
+# মংগোডবি
 
-`jenssegers/mongodb` ব্যবহার করতে আগে `php-cli` এ mongodb এক্সটেনশন ইনস্টল করতে হবে।
+webman পূর্বনির্ধারিতভাবে [jenssegers/mongodb](https://github.com/jenssegers/laravel-mongodb) ব্যবহার করে, যা laravel প্রকল্প থেকে তুলে আনা হয়েছে, এটি laravel এর মত ব্যবহার করা হয়।
 
-> `php -m | grep mongodb` কমান্ড ব্যবহার করে দেখুন `php-cli` -তে mongodb এক্সটেনশন ইনস্টল আছে কি না। লক্ষ্য করুন: আপনি যদি `php-fpm` -এ mongodb এক্সটেনশন ইনস্টল করে থাকেন, তবে এটা মানে করেননা যে `php-cli` -তে আপনি এটি ব্যবহার করতে পারবেন, কারণ `php-cli` এবং `php-fpm` দুটি ভিন্ন অ্যাপ্লিকেশন, যা দুটিরই ভিন্ন `php.ini` কনফিগারেশন ব্যবহার করতে পারে। আপনার `php-cli` -এ কোন `php.ini` কনফিগারেশন ফাইল ব্যবহার হচ্ছে তা দেখতে `php --ini` কমান্ড ব্যবহার করুন।
+`jenssegers/mongodb` ব্যবহার করার আগে এটি টা প্রথমে `php-cli` তে মংগোডবি এক্সটেনশন ইনস্টল করতে হবে।
+
+> `php -m | grep mongodb` এই কমান্ড ব্যবহার করে দেখুন `php-cli` কি মংগোডবি এক্সটেনশন এনেবে কি না। লক্ষ্য করুন: যদি আপনি `php-fpm` এ মংগোডবি এক্সটেনশন ইনস্টল করে থাকেন, তবে এটা দর্শায় না যে আপনি `php-cli` তে এটি ব্যবহার করতে পারবেন, কারণ `php-cli` এবং `php-fpm` দুটি ভিন্ন অ্যাপ্লিকেশন, এরা কর্তৃক ব্যবহৃত `php.ini` কনফিগারেশন তারা ভিন্ন হতে পারে। `php --ini` কমান্ড ব্যবহার করে আপনার `php-cli` যে `php.ini` কনফিগারেশন ফাইল ব্যবহার করছে তা দেখুন।
 
 ## ইনস্টলেশন
 
-PHP>7.2 এর জন্য
+PHP>7.2 হলে
 ```php
 composer require -W illuminate/database jenssegers/mongodb ^3.8.0
 ```
-PHP=7.2 এর জন্য
+PHP=7.2 হলে
 ```php
 composer require -W illuminate/database jenssegers/mongodb ^3.7.0
 ```
 
-ইনস্টলেশন এর পর পুনরারম্ভ(restart) করতে হবে (reload করা বা কার্যকর নয়)
+ইনস্টলেশন পরে আবার restart করতে হবে (reload করলে কাজ হবে না)
 
 ## কনফিগারেশন
- `config/database.php` ফাইলে `mongodb` কানেকশন যুক্ত করুন, এমনভাবে:
+`config/database.php` ফাইলে `mongodb` কানেকশন যোগ করুন, নিম্নলিখিত মত।
 ```php
 return [
 
@@ -26,7 +28,7 @@ return [
 
     'connections' => [
 
-         ...অন্যান্য কনফিগারেশন অংশগুলি এখানে অংশগুলিসহ নির্দিষ্ট করা আছে...
+         ... অন্যান্য কনফিগারেশন এখানে অপসারণ করা হয়েছে ...
 
         'mongodb' => [
             'driver'   => 'mongodb',
@@ -36,8 +38,8 @@ return [
             'username' => null,
             'password' => null,
             'options' => [
-                // এখানে আপনি মোর নির্দিষ্ট ইউ আই বিহীনোকে অ্ধ্যায়তে Mongo ড্রাইভার ম্যানেজারকে নির্দেশ করার আরও সেটিংস পাস করতে পারেন
-                // বিস্তারিত প্যারামিটারগুলির তালিকা দেখতে https://www.php.net/manual/en/mongodb-driver-manager.construct.php এ "Uri Options" অধীনে দেওয়া হয়েছে
+                // here you can pass more settings to the Mongo Driver Manager
+                // see https://www.php.net/manual/en/mongodb-driver-manager.construct.php under "Uri Options" for a list of complete parameters that you can use
 
                 'appname' => 'homestead'
             ],
@@ -46,7 +48,7 @@ return [
 ];
 ```
 
-## উদাহরণ
+## নমূনা
 ```php
 <?php
 namespace app\controller;
@@ -64,6 +66,6 @@ class UserController
 }
 ```
 
-## অধিক তথ্যের জন্য দেখুন
+## অধিক তথ্য জানতে ভিজিট করুন
 
 https://github.com/jenssegers/laravel-mongodb

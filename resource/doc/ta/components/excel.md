@@ -1,18 +1,18 @@
-# Excel
+# எக்செல்
 
 ## phpoffice/phpspreadsheet
 
-### 项目地址
+### பிராஜெக்ட் இடம்
 
 https://github.com/PHPOffice/PhpSpreadsheet
   
-### 安装
- 
-  ```php
-  composer require phpoffice/phpspreadsheet
-  ```
+### நிறுவு
+
+```php
+composer require phpoffice/phpspreadsheet
+```
   
-### 使用
+### பயன்பாடு
 
 ```php
 <?php
@@ -27,22 +27,19 @@ class ExcelController
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Hello World !');
+        $sheet->setCellValue('A1', 'ஹலோ உலகமே !');
 
         $writer = new Xlsx($spreadsheet);
         $file_path = public_path().'/hello_world.xlsx';
-        // 保存文件到 public 下
+        // பொது கோப்புக்கு கோப்பு சேமிக்க
         $writer->save($file_path);
-        // 下载文件
-        return response()->download($file_path, '文件名.xlsx');
+        // கோப்பு பதிவிறக்க
+        return response()->download($file_path, 'கோப்புப் பெயர்.xlsx');
     }
 
 }
 ```
   
-  
-### 更多内容
+### மேலும் உள்ளடங்கள்
 
-访问 https://phpspreadsheet.readthedocs.io/en/latest/
-  
-
+விரிவாக https://phpspreadsheet.readthedocs.io/en/latest/ பார்க்க 

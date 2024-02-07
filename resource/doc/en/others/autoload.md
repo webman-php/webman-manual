@@ -1,27 +1,26 @@
-# Automatic Loading
+# Autoloading
 
-## Loading Files Following the PSR-0 Specification Using Composer
-webman follows the `PSR-4` automatic loading specification. If your business needs to load code libraries following the `PSR-0` specification, refer to the following steps.
+## Loading files based on the PSR-0 specification using Composer
+webman follows the `PSR-4` autoloading specification. If your project needs to load libraries based on the `PSR-0` specification, follow these steps:
 
-- Create an `extend` directory to store code libraries that follow the `PSR-0` specification.
-- Edit `composer.json` and add the following content under `autoload`:
+- Create a `extend` directory to store the libraries that follow the `PSR-0` specification.
+- Edit the `composer.json` file and add the following code under `autoload`:
 
-```js
+```json
 "psr-0" : {
     "": "extend/"
 }
 ```
-The final result should be similar to
+The final result should look like this:
 ![](../../assets/img/psr0.png)
 
 - Run `composer dumpautoload`.
-- Run `php start.php restart` to restart webman (Note: restart is required for the changes to take effect).
+- Restart webman by running `php start.php restart` (Note: you must restart for the changes to take effect).
 
-## Loading Specific Files Using Composer
+## Loading specific files using Composer
 
-- Edit `composer.json` and add the files to be loaded under `autoload.files`:
-
-```
+- Edit the `composer.json` file and add the files you want to load under `autoload.files`:
+```json
 "files": [
     "./support/helpers.php",
     "./app/helpers.php"
@@ -29,13 +28,14 @@ The final result should be similar to
 ```
 
 - Run `composer dumpautoload`.
-- Run `php start.php restart` to restart webman (Note: restart is required for the changes to take effect).
+- Restart webman by running `php start.php restart` (Note: you must restart for the changes to take effect).
 
-> **Tip**
-> Files configured in `autoload.files` in composer.json are loaded before webman starts. Files loaded using the framework's `config/autoload.php` are loaded after webman starts. Changes to the files loaded via `autoload.files` in composer.json require a restart to take effect, while changes to the files loaded using `config/autoload.php` support hot reloading and can take effect with a reload.
+> **Note**
+> Files specified in the `autoload.files` configuration in composer.json will be loaded before webman starts. On the other hand, files loaded using the `config/autoload.php` provided by the framework are loaded after webman starts.
+> Changes made to the files specified in `autoload.files` in composer.json will require a restart to take effect. Reloading will not work. However, files loaded using the `config/autoload.php` provided by the framework support hot reloading, and changes will take effect upon reloading.
 
-## Loading Specific Files Using the Framework
-Some files may not comply with the PSR specification and cannot be automatically loaded. In such cases, we can load these files through the configuration `config/autoload.php`, for example:
+## Loading specific files using the framework
+Sometimes, certain files may not conform to the PSR specification and thus cannot be loaded automatically. In such cases, we can use the `config/autoload.php` file to load these files. For example:
 
 ```php
 return [
@@ -46,5 +46,5 @@ return [
     ]
 ];
 ```
-> **Tip**  
-> In the `autoload.php`, we see that it is set to load two files, `support/Request.php` and `support/Response.php`. This is because there are also two identical files under `vendor/workerman/webman-framework/src/support/`. By using `autoload.php`, we prioritize loading `support/Request.php` and `support/Response.php` from the project root directory, allowing us to customize the content of these two files without modifying the files in the `vendor`. If you do not need to customize them, you can ignore these two configurations.
+ > **Note**
+ > In the `autoload.php` file, we see that `support/Request.php` and `support/Response.php` are loaded. This is because there are also two files with the same names in `vendor/workerman/webman-framework/src/support/`. By loading the files specified in `autoload.php`, we give priority to the files in the project's root directory, allowing us to customize the content of these two files without modifying the files in `vendor`. If you don't need to customize them, you can ignore these two configurations.

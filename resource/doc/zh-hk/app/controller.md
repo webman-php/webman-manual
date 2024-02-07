@@ -1,8 +1,8 @@
 # 控制器
 
-根據PSR4規範，控制器類的命名空間以`plugin\{插件標識}`開頭，例如
+根據PSR4規範，控制器類命名空間以`plugin\{插件標識}`開頭，例如
 
-新建控制器文件 `plugin/foo/app/controller/FooController.php`。
+新建控制器檔案 `plugin/foo/app/controller/FooController.php`。
 
 ```php
 <?php
@@ -29,6 +29,6 @@ class FooController
 當訪問 `http://127.0.0.1:8787/app/foo/foo/hello` 時，頁面返回 `hello webman`
 
 
-## URL訪問
-應用插件URL地址路徑都以`/app`開頭，接著是插件標識，然後是具體的控制器及方法。
-例如`plugin\foo\app\controller\UserController`的URL地址是 `http://127.0.0.1:8787/app/foo/user`
+## url訪問
+應用插件url地址路徑都以`/app`開頭，後面接插件標識，然後是具體的控制器及方法。
+例如`plugin\foo\app\controller\UserController`url地址是 `http://127.0.0.1:8787/app/foo/user`

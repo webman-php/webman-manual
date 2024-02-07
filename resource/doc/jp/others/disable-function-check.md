@@ -1,29 +1,24 @@
-# 関数の無効化チェックの無効化
+# 関数の無効化チェック
 
-このスクリプトを使用して、無効化されている関数があるかどうかをチェックしてください。次のコマンドをコマンドラインで実行してください：```curl -Ss https://www.workerman.net/webman/check | php```
+このスクリプトを使用して、無効化された関数があるかどうかをチェックします。コマンドラインで```curl -Ss https://www.workerman.net/webman/check | php```を実行してください。
 
-もし```Functions 関数名 has be disabled. Please check disable_functions in php.ini```というメッセージが表示された場合、webmanが依存している関数が無効化されているため、php.iniファイルで無効化を解除する必要があります。
+もし```Functions 関数名 has be disabled. Please check disable_functions in php.ini```というメッセージが表示された場合、webmanが依存している関数が無効化されていることを意味し、webmanを正常に使用するためにはphp.iniで無効化を解除する必要があります。無効化の解除には、以下のいずれかの方法を選択してください。
 
-無効化の解除については、次のいずれかの方法を選択してください。
-
-## 方法1
-`webman/console`をインストールします
-```
-composer require webman/console ^v1.2.35
-```
+## 方法一
+`webman/console`をインストールする
+```composer require webman/console ^v1.2.35```
 
 次のコマンドを実行します
-```
-php webman fix-disable-functions
-```
+```php webman fix-disable-functions```
 
-## 方法2
-次のスクリプトを実行して、無効化を解除します：`curl -Ss https://www.workerman.net/webman/fix-disable-functions | php`
+## 方法二
+以下のスクリプトを実行し、無効化を解除します
+```curl -Ss https://www.workerman.net/webman/fix-disable-functions | php```
 
-## 方法3
-`php --ini`を実行して、php cliが使用しているphp.iniファイルの場所を見つけます。
+## 方法三
+`php --ini`を実行し、php cliが使用しているphp.iniファイルの場所を見つけます。
 
-php.iniを開き、`disable_functions`を見つけ、以下の関数の呼び出しを解除します。
+php.iniを開き、次のように`disable_functions`を見つけて、以下の関数の呼び出しを解除してください。
 ```
 stream_socket_server
 stream_socket_client

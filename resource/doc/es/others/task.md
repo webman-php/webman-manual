@@ -1,39 +1,39 @@
-# Procesamiento de tareas lentas
+# Manejo de operaciones lentas
 
-A veces necesitamos manejar tareas lentas para evitar que afecten el procesamiento de otras solicitudes en webman. Dependiendo de la situación, estas tareas pueden ser manejadas utilizando diferentes enfoques.
+A veces necesitamos manejar operaciones lentas para evitar que afecten el procesamiento de otras solicitudes en webman. Estas operaciones pueden utilizar diferentes estrategias de manejo según la situación.
 
 ## Uso de colas de mensajes
-Consulte [cola de Redis](https://www.workerman.net/plugin/12) [cola de Stomp](https://www.workerman.net/plugin/13)
+Consulte la [cola de Redis](../queue/redis.md) [cola de STOMP](../queue/stomp.md)
 
 ### Ventajas
-Puede hacer frente a solicitudes repentinas de procesamiento masivo.
+Puede manejar solicitudes de procesamiento de operaciones masivas repentinas.
 
 ### Desventajas
-No se pueden devolver resultados directamente al cliente. Si se requiere la entrega de resultados, es necesario coordinar con otros servicios, por ejemplo, utilizando [webman/push](https://www.workerman.net/plugin/2) para enviar los resultados del procesamiento.
+No puede devolver directamente resultados al cliente. Si necesita enviar resultados, debe estar integrado con otros servicios, como el uso de [webman/push](https://www.workerman.net/plugin/2) para enviar los resultados del procesamiento.
 
-## Adición de puerto HTTP
+## Agregar un puerto HTTP
 
 > **Nota**
 > Esta característica requiere webman-framework>=1.4
 
-Se agrega un puerto HTTP para manejar solicitudes lentas. Estas solicitudes lentas serán dirigidas a un conjunto específico de procesos a través de este puerto, y una vez procesadas, se devolverán directamente al cliente.
+La adición de un puerto HTTP para manejar las solicitudes lentas permite que estas solicitudes sean procesadas por un grupo específico de procesos a través de ese puerto, y una vez procesadas, los resultados se devuelven directamente al cliente.
 
 ### Ventajas
-Permite devolver datos directamente al cliente.
+Puede devolver los datos directamente al cliente.
 
 ### Desventajas
-No puede hacer frente a solicitudes repentinas de procesamiento masivo.
+No puede manejar solicitudes masivas repentinas.
 
 ### Pasos de implementación
 Agregue la siguiente configuración en `config/process.php`.
 ```php
 return [
-    // ... otras configuraciones se omiten aquí ...
-    
+    // ... otras configuraciones omitidas aquí ...
+
     'task' => [
         'handler' => \Webman\App::class,
         'listen' => 'http://0.0.0.0:8686',
-        'count' => 8, // número de procesos
+        'count' => 8, // Número de procesos
         'user' => '',
         'group' => '',
         'reusePort' => true,
@@ -47,16 +47,16 @@ return [
 ];
 ```
 
-De esta manera, las interfaces lentas pueden usar el grupo de procesos en `http://127.0.0.1:8686/`, sin afectar el procesamiento de otras interfaces.
+De esta manera, las solicitudes lentas pueden ingresar al grupo de procesos a través de `http://127.0.0.1:8686/`, sin afectar el procesamiento de otras operaciones en los demás procesos.
 
-Para que el cliente no note la diferencia en los puertos, puede agregar un proxy al puerto 8686 en nginx. Suponiendo que las solicitudes de interfaz lenta comienzan con `/tast`, la configuración completa de nginx sería similar a la siguiente:
-```
+Para que el cliente no perciba la diferencia en los puertos, puede agregar un proxy al puerto 8686 en nginx. Suponiendo que las solicitudes de operaciones lentas comienzan con `/tast`, la configuración completa de nginx sería similar a la siguiente:
+``` 
 upstream webman {
     server 127.0.0.1:8787;
     keepalive 10240;
 }
 
-# Agregar un upstream 8686
+# Agregar un upstream para 8686
 upstream task {
    server 127.0.0.1:8686;
    keepalive 10240;
@@ -68,7 +68,7 @@ server {
   access_log off;
   root /path/webman/public;
 
-  # Las solicitudes que comienzan con /tast van al puerto 8686, ajuste /tast según sea necesario
+  # Las solicitudes que comienzan con /tast van al puerto 8686, cambie /tast según sus necesidades
   location /tast {
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header Host $host;
@@ -77,7 +77,7 @@ server {
       proxy_pass http://task;
   }
 
-  # Las demás solicitudes utilizan el puerto original 8787
+  # Las demás solicitudes van al puerto 8787 original
   location / {
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header Host $host;
@@ -90,4 +90,4 @@ server {
 }
 ```
 
-De esta manera, cuando el cliente accede a `dominio.com/tast/xxx`, será manejado por el puerto 8686 de manera independiente, sin afectar el procesamiento de solicitudes en el puerto 8787.
+De esta manera, cuando el cliente acceda a `dominio.com/tast/xxx`, será dirigido al puerto 8686 para su procesamiento, sin afectar el procesamiento de solicitudes en el puerto 8787.

@@ -1,32 +1,24 @@
-# Deshabilitar la comprobación de funciones
+# Deshabilitar la verificación de funciones
 
-Utilice este script para comprobar si hay funciones deshabilitadas. Ejecute el comando en la línea de comandos ```curl -Ss https://www.workerman.net/webman/check | php```
+Utiliza este script para comprobar si hay funciones deshabilitadas. Ejecuta en la línea de comandos: ```curl -Ss https://www.workerman.net/webman/check | php```
 
-Si recibe el mensaje ```La función Functions ha sido deshabilitada. Por favor, verifique disable_functions en php.ini```, significa que las funciones en las que webman depende han sido deshabilitadas, y es necesario eliminar la restricción en php.ini para poder utilizar webman correctamente.
-Siga uno de los métodos a continuación para eliminar la restricción.
+Si aparece el mensaje ```La función Functions ha sido deshabilitada. Por favor revisa disable_functions en php.ini```, significa que las funciones en las que webman depende están deshabilitadas. Debes habilitarlas en php.ini para poder utilizar webman normalmente. A continuación se presentan algunos métodos para habilitarlas.
 
-## Método uno
-Instale `webman/console` 
-```
-composer require webman/console ^v1.2.35
-```
+## Método 1
+Instala `webman/console`
+```composer require webman/console ^v1.2.35```
 
-Ejecute el comando
-```
-php webman fix-disable-functions
-```
+Ejecuta el comando
+```php webman fix-disable-functions```
 
-## Método dos
+## Método 2
+Ejecuta el script `curl -Ss https://www.workerman.net/webman/fix-disable-functions | php` para habilitarlas.
 
-Ejecute el script `curl -Ss https://www.workerman.net/webman/fix-disable-functions | php` para eliminar la restricción
+## Método 3
+Ejecuta `php --ini` para encontrar la ubicación del archivo php.ini utilizado por php cli.
 
-## Método tres
-
-Ejecute `php --ini` para encontrar la ubicación del archivo php.ini utilizado por el php cli
-
-Abra php.ini, localice `disable_functions` y quite la restricción a las siguientes funciones
-```
-stream_socket_server
+Abre php.ini y encuentra `disable_functions`. Habilita las siguientes funciones:
+```stream_socket_server
 stream_socket_client
 pcntl_signal_dispatch
 pcntl_signal

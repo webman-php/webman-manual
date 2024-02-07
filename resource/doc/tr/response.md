@@ -1,6 +1,6 @@
 # Yanıt
 
-Yanıt aslında bir `support\Response` nesnesidir ve bu nesneyi kolayca oluşturabilmek için webman bazı yardımcı fonksiyonlar sağlar.
+Yanıt aslında bir `support\Response` nesnesidir ve bu nesneyi oluşturmayı kolaylaştırmak için webman bazı yardımcı fonksiyonlar sağlar.
 
 ## Herhangi bir yanıt döndürme
 
@@ -15,7 +15,7 @@ class FooController
 {
     public function hello(Request $request)
     {
-        return response('hello webman');
+        return response('merhaba webman');
     }
 }
 ```
@@ -28,29 +28,29 @@ function response($body = '', $status = 200, $headers = array())
 }
 ```
 
-Ayrıca, boş bir `response` nesnesi oluşturup, uygun bir konumda `$response->cookie()`, `$response->header()`, `$response->withHeaders()` ve `$response->withBody()` kullanarak içeriği ayarlayabilirsiniz.
+Ayrıca, boş bir `response` nesnesi oluşturabilir ve ardından uygun konumda `$response->cookie()`, `$response->header()`, `$response->withHeaders()`, `$response->withBody()` kullanarak dönüş içeriğini ayarlayabilirsiniz.
 ```php
 public function hello(Request $request)
 {
     // Bir nesne oluştur
     $response = response();
     
-    // .... İş mantığı atlanmış
-
+    // .... İş mantığı eksik
+    
     // Çerez ayarla
     $response->cookie('foo', 'değer');
     
-    // .... İş mantığı atlanmış
-
-    // HTTP başlığını ayarla
+    // .... İş mantığı eksik
+    
+    // http başlığı ayarla
     $response->header('Content-Type', 'application/json');
     $response->withHeaders([
                 'X-Header-One' => 'Başlık Değeri 1',
-                'X-Header-Two' => 'Başlık Değeri 2',
+                'X-Header-Tow' => 'Başlık Değeri 2',
             ]);
 
-    // .... İş mantığı atlanmış
-
+    // .... İş mantığı eksik
+    
     // Döndürülecek veriyi ayarla
     $response->withBody('Döndürülen veri');
     return $response;
@@ -58,6 +58,7 @@ public function hello(Request $request)
 ```
 
 ## JSON döndürme
+
 **Örnek**
 ```php
 <?php
@@ -69,7 +70,7 @@ class FooController
 {
     public function hello(Request $request)
     {
-        return json(['code' => 0, 'msg' => 'ok']);
+        return json(['code' => 0, 'msg' => 'tamam']);
     }
 }
 ```
@@ -82,6 +83,7 @@ function json($data, $options = JSON_UNESCAPED_UNICODE)
 ```
 
 ## XML döndürme
+
 **Örnek**
 ```php
 <?php
@@ -116,7 +118,8 @@ function xml($xml)
 ```
 
 ## Görünüm döndürme
-Aşağıdaki gibi bir dosya oluşturun: `app/controller/FooController.php`
+Aşağıdaki gibi yeni bir dosya oluşturun `app/controller/FooController.php`
+
 ```php
 <?php
 namespace app\controller;
@@ -131,8 +134,8 @@ class FooController
     }
 }
 ```
+Aşağıdaki gibi yeni bir dosya oluşturun `app/view/foo/hello.html`
 
-Aşağıdaki gibi bir dosya oluşturun: `app/view/foo/hello.html`
 ```html
 <!doctype html>
 <html>
@@ -157,7 +160,7 @@ class FooController
 {
     public function hello(Request $request)
     {
-        return redirect('/user');
+        return redirect('/kullanıcı');
     }
 }
 ```
@@ -173,7 +176,7 @@ function redirect($location, $status = 302, $headers = [])
 }
 ```
 
-## Başlık ayarlama
+## header ayarı
 ```php
 <?php
 namespace app\controller;
@@ -184,14 +187,14 @@ class FooController
 {
     public function hello(Request $request)
     {
-        return response('hello webman', 200, [
+        return response('merhaba webman', 200, [
             'Content-Type' => 'application/json',
-            'X-Header-One' => 'Başlık Değeri' 
+            'X-Header-One' => 'Başlık Değeri'
         ]);
     }
 }
 ```
-`header` ve `withHeaders` yöntemlerini kullanarak tek tek veya toplu başlık ayarlayabilirsiniz:
+Ayrıca `header` ve `withHeaders` yöntemlerini kullanarak tek tek veya topluca başlık ayarlayabilirsiniz.
 ```php
 <?php
 namespace app\controller;
@@ -202,40 +205,41 @@ class FooController
 {
     public function hello(Request $request)
     {
-        return response('hello webman')
+        return response('merhaba webman')
         ->header('Content-Type', 'application/json')
         ->withHeaders([
             'X-Header-One' => 'Başlık Değeri 1',
-            'X-Header-Two' => 'Başlık Değeri 2',
+            'X-Header-Tow' => 'Başlık Değeri 2',
         ]);
     }
 }
 ```
-Başlıkları önceden ayarlayabilir ve nihayetinde döndürülecek veriyi ayarlayabilirsiniz.
+Başlıkları önceden ayarlayabilir ve sonda döndürülecek veriyi ayarlayabilirsiniz.
 ```php
 public function hello(Request $request)
 {
     // Bir nesne oluştur
     $response = response();
     
-    // .... İş mantığı atlanmış
-   
-    // HTTP başlığını ayarla
+    // .... İş mantığı eksik
+  
+    // http başlığı ayarla
     $response->header('Content-Type', 'application/json');
     $response->withHeaders([
                 'X-Header-One' => 'Başlık Değeri 1',
-                'X-Header-Two' => 'Başlık Değeri 2',
+                'X-Header-Tow' => 'Başlık Değeri 2',
             ]);
 
-    // .... İş mantığı atlanmış
-
+    // .... İş mantığı eksik
+  
     // Döndürülecek veriyi ayarla
     $response->withBody('Döndürülen veri');
     return $response;
 }
 ```
 
-## Çerez ayarlama
+## Çerez ayarı
+
 ```php
 <?php
 namespace app\controller;
@@ -246,34 +250,34 @@ class FooController
 {
     public function hello(Request $request)
     {
-        return response('hello webman')
+        return response('merhaba webman')
         ->cookie('foo', 'değer');
     }
 }
 ```
-Çerezleri önceden ayarlayabilir ve nihayetinde döndürülecek veriyi ayarlayabilirsiniz.
+Çerezi önceden ayarlayabilir ve sonda döndürülecek veriyi ayarlayabilirsiniz.
 ```php
 public function hello(Request $request)
 {
     // Bir nesne oluştur
     $response = response();
     
-    // .... İş mantığı atlanmış
+    // .... İş mantığı eksik
     
     // Çerez ayarla
     $response->cookie('foo', 'değer');
     
-    // .... İş mantığı atlanmış
+    // .... İş mantığı eksik
 
     // Döndürülecek veriyi ayarla
     $response->withBody('Döndürülen veri');
     return $response;
 }
 ```
-`cookie` yönteminin tam parametreleri aşağıdaki gibidir:
-`cookie($name, $value = '', $max_age = 0, $path = '', $domain = '', $secure = false, $http_only = false)`
+Cookie yöntemi tam parametreleri aşağıdaki gibidir:
 
-## Dosya akışı döndürme
+`cookie($name, $value = '', $max_age = 0, $path = '', $domain = '', $secure = false, $http_only = false)`
+## Dosya akışı dönüşü
 ```php
 <?php
 namespace app\controller;
@@ -289,13 +293,14 @@ class FooController
 }
 ```
 
-- webman, çok büyük dosyaları da gönderebilir
-- Büyük dosyalar için (2 Mb üzeri), webman tüm dosyayı bir kerede belleğe yüklemez, uygun zamanda dosyayı segmente ayırarak okur ve gönderir
-- webman, istemci tarafından alınan hızı dikkate alarak dosya okuma ve gönderme hızını optimize eder, böylece dosyanın en hızlı şekilde gönderilmesini ve bellek kullanımının en aza indirilmesini sağlar
-- Veri gönderimi engellenmez, diğer istekleri etkilemez
-- file yöntemi, otomatik olarak `if-modified-since` başlığını ekler ve bir sonraki isteğinde `if-modified-since` başlığını kontrol eder, dosya değiştirilmediyse bant genişliği tasarrufu sağlamak için doğrudan 304 yanıtı döner
-- Gönderilen dosya, tarayıcıya otomatik olarak uygun `Content-Type` başlığı kullanılarak gönderilir
-- Dosya mevcut değilse, otomatik olarak 404 yanıtı verilir
+- Webman, çok büyük dosyaların gönderilmesini destekler.
+- Büyük dosyalar için (2M'den büyük), webman tüm dosyayı bir seferde hafızaya almaz, uygun zamanlarda dosyayı parçalara bölerek gönderir.
+- Webman, istemci tarafından alınan hızı göz önünde bulundurarak dosya okuma ve gönderme hızını optimize eder, dosyayı en hızlı şekilde gönderirken hafıza kullanımını en aza indirir.
+- Veri gönderimi engellenmediğinden, diğer istek işlemlerini etkilemez.
+- file yöntemi, otomatik olarak `if-modified-since` başlığını ekler ve bir sonraki istekte `if-modified-since` başlığını kontrol eder, dosya değiştirilmediyse bant genişliği tasarrufu sağlamak için doğrudan 304'ü döndürür.
+- Gönderilen dosya, tarayıcıya otomatik olarak uygun `Content-Type` başlığı kullanılarak gönderilir.
+- Dosya bulunamazsa, otomatik olarak 404 yanıtına dönüşecektir.
+
 
 ## Dosya İndirme
 ```php
@@ -312,15 +317,17 @@ class FooController
     }
 }
 ```
-download yöntemi, file yöntemiyle temelde aynı işlevi görür. Farklılıklar şunlardır:
-1) İndirilen dosya adı ayarlandıktan sonra dosya indirilir, tarayıcıda görüntülenmez
-2) download yöntemi, `if-modified-since` başlığını kontrol etmez
+download yöntemi, file yöntemiyle temelde aynıdır, farklılıklar şunlardır:
+1. İndirilecek dosya adı ayarlandıktan sonra dosya indirme olarak gerçekleştirilir, tarayıcıda gösterilmez.
+2. download yöntemi `if-modified-since` başlığını kontrol etmez.
 
-## Çıktı Alma
-Bazı kütüphaneler dosya içeriğini doğrudan standart çıktıya yazabilir, yani veri tarayıcıya gönderilmez, bu durumda veriyi bir değişkene yakalamak ve sonra tarayıcıya göndermek için `ob_start();` `ob_get_clean();` kullanmamız gerekebilir, örneğin:
+
+## Çıktı Alımı
+Bazı kütüphaneler dosya içeriğini doğrudan standart çıktıya yazdırır, yani veriler tarayıcıya gönderilmez, bu durumda verileri bir değişkene yakalamak için `ob_start();` `ob_get_clean();` kullanarak verileri tarayıcıya gönderilmeden önce yakalamamız gerekir, örneğin:
 
 ```php
 <?php
+
 namespace app\controller;
 
 use support\Request;
@@ -329,20 +336,20 @@ class ImageController
 {
     public function get(Request $request)
     {
-        // Resim oluştur
+        // Resim oluşturma
         $im = imagecreatetruecolor(120, 20);
         $text_color = imagecolorallocate($im, 233, 14, 91);
-        imagestring($im, 1, 5, 5,  'Basit Bir Metin Dizesi', $text_color);
+        imagestring($im, 1, 5, 5,  'Basit bir Metin Dizesi', $text_color);
 
-        // Çıktıyı almayı başlat
+        // Çıktı alımını başlat
         ob_start();
         // Resmi çıktıla
         imagejpeg($im);
-        // Resim içeriğini al
+        // Resim içeriğini elde et
         $image = ob_get_clean();
         
         // Resmi gönder
-        return response($image)->header('Content-Type', 'image/jpeg');
+        return response($image)->header('Content-Type', 'resim/jpeg');
     }
 }
 ```

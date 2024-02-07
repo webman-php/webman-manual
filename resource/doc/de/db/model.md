@@ -1,10 +1,10 @@
 # Schnellstart
 
-Das webman-Modell basiert auf [Eloquent ORM](https://laravel.com/docs/7.x/eloquent). Jede Datenbanktabelle hat ein entsprechendes "Modell", um mit dieser Tabelle zu interagieren. Sie können durch das Modell Daten aus der Datenbanktabelle abfragen und neue Datensätze in die Tabelle einfügen.
+Das Webman-Modell basiert auf [Eloquent ORM](https://laravel.com/docs/7.x/eloquent). Jede Datenbanktabelle hat ein entsprechendes "Modell", das mit dieser Tabelle interagiert. Sie können das Modell verwenden, um Daten aus der Tabelle abzufragen und neue Datensätze in die Tabelle einzufügen.
 
-Stellen Sie vor dem Start sicher, dass die Datenbankverbindung in `config/database.php` konfiguriert ist.
+Bevor Sie beginnen, stellen Sie sicher, dass die Datenbankverbindung in `config/database.php` konfiguriert ist.
 
-> Hinweis: Um das Modell Observer von Eloquent ORM zu unterstützen, muss zusätzlich `composer require "illuminate/events"` importiert werden. [Beispiel](#Modellbeobachter)
+> Hinweis: Um Modellbeobachter mit Eloquent ORM zu verwenden, müssen Sie zusätzlich `composer require "illuminate/events"` importieren. [Beispiel](#模型观察者)
 
 ## Beispiel
 ```php
@@ -16,21 +16,21 @@ use support\Model;
 class User extends Model
 {
     /**
-     * Der Name der verknüpften Tabelle des Modells
+     * Name der mit dem Modell verknüpften Tabelle
      *
      * @var string
      */
     protected $table = 'user';
 
     /**
-     * Neudefinition des Primärschlüssels, standardmäßig ist es id
+     * Neudefinition des Primärschlüssels, standardmäßig ist es "id"
      *
      * @var string
      */
     protected $primaryKey = 'uid';
 
     /**
-     * Gibt an, ob die Zeitstempel automatisch gewartet werden
+     * Gibt an, ob Zeitstempel automatisch gepflegt werden
      *
      * @var bool
      */
@@ -39,12 +39,12 @@ class User extends Model
 ```
 
 ## Tabellenname
-Sie können einen benutzerdefinierten Tabellennamen angeben, indem Sie das Attribut `table` im Modell definieren:
+Sie können einen benutzerdefinierten Tabellennamen angeben, indem Sie das `table`-Attribut im Modell definieren:
 ```php
 class User extends Model
 {
     /**
-     * Der Name der verknüpften Tabelle des Modells
+     * Name der mit dem Modell verknüpften Tabelle
      *
      * @var string
      */
@@ -53,12 +53,12 @@ class User extends Model
 ```
 
 ## Primärschlüssel
-Eloquent geht auch davon aus, dass jede Datenbanktabelle eine Primärschlüsselspalte mit dem Namen `id` hat. Sie können ein geschütztes `$primaryKey`-Attribut definieren, um diese Konvention zu überschreiben.
+Eloquent geht auch davon aus, dass jede Datenbanktabelle eine Spalte mit dem Namen "id" als Primärschlüssel hat. Sie können ein geschütztes Attribut `$primaryKey` definieren, um diese Konvention zu überschreiben.
 ```php
 class User extends Model
 {
     /**
-     * Neudefinition des Primärschlüssels, standardmäßig ist es id
+     * Neudefinition des Primärschlüssels, standardmäßig ist es "id"
      *
      * @var string
      */
@@ -66,12 +66,12 @@ class User extends Model
 }
 ```
 
-Eloquent geht davon aus, dass der Primärschlüssel ein automatisch inkrementierender Integer-Wert ist, was bedeutet, dass der Primärschlüssel standardmäßig automatisch in den int-Typ konvertiert wird. Wenn Sie einen nicht-inkrementierenden oder nicht-numerischen Primärschlüssel verwenden möchten, müssen Sie das öffentliche Attribut `$incrementing` auf false setzen.
+Eloquent nimmt an, dass der Primärschlüssel ein inkrementierter Ganzzahlwert ist, was bedeutet, dass der Primärschlüssel standardmäßig in einen int-Typ umgewandelt wird. Wenn Sie einen nicht-inkrementierenden oder nicht-numerischen Primärschlüssel verwenden möchten, müssen Sie das öffentliche Attribut `$incrementing` auf `false` setzen.
 ```php
 class User extends Model
 {
     /**
-     * Gibt an, ob der Primärschlüssel des Modells inkrementiert
+     * Gibt an, ob der Modell-Primärschlüssel inkrementiert wird
      *
      * @var bool
      */
@@ -79,12 +79,12 @@ class User extends Model
 }
 ```
 
-Wenn Ihr Primärschlüssel kein Integer ist, müssen Sie das geschützte `$keyType`-Attribut des Modells auf string setzen:
+Wenn Ihr Primärschlüssel kein Integer ist, müssen Sie das geschützte `$keyType`-Attribut im Modell auf "string" setzen:
 ```php
 class User extends Model
 {
     /**
-     * "Typ" der automatisch inkrementierenden ID.
+     * "Typ" des automatisch inkrementierten IDs
      *
      * @var string
      */
@@ -93,31 +93,33 @@ class User extends Model
 ```
 
 ## Zeitstempel
-Standardmäßig erwartet Eloquent, dass Ihre Datenbanktabelle `created_at` und `updated_at` enthält. Wenn Sie nicht möchten, dass Eloquent diese beiden Spalten automatisch verwaltet, setzen Sie das Attribut `$timestamps` des Modells auf false:
+Standardmäßig erwartet Eloquent, dass Ihre Datenbanktabelle `created_at` und `updated_at` enthält. Wenn Sie nicht möchten, dass Eloquent diese beiden Spalten automatisch verwaltet, setzen Sie das `$timestamps` Attribut im Modell auf `false`:
 ```php
 class User extends Model
 {
     /**
-     * Gibt an, ob die Zeitstempel automatisch gewartet werden
+     * Gibt an, ob Zeitstempel automatisch gepflegt werden
      *
      * @var bool
      */
     public $timestamps = false;
 }
 ```
-Wenn Sie das Format des Zeitstempels anpassen müssen, setzen Sie das Attribut `$dateFormat` in Ihrem Modell. Dieses Attribut bestimmt, wie Datumsattribute in der Datenbank gespeichert werden und wie das Modell in ein Array oder JSON serialisiert wird:
+
+Wenn Sie das Format des Zeitstempels anpassen möchten, setzen Sie das `$dateFormat` Attribut in Ihrem Modell. Dieses Attribut bestimmt die Speicherweise des Datumsattributs in der Datenbank sowie das Format, in dem das Modell als Array oder JSON serialisiert wird:
 ```php
 class User extends Model
 {
     /**
-     * Speicherformat des Zeitstempels
+     * Format für die Speicherung des Zeitstempels
      *
      * @var string
      */
     protected $dateFormat = 'U';
 }
 ```
-Wenn Sie die Feldnamen für die Speicherung der Zeitstempel anpassen möchten, können Sie in Ihrem Modell die Werte der Konstanten `CREATED_AT` und `UPDATED_AT` festlegen:
+
+Wenn Sie die Namen der Zeitstempelfelder anpassen möchten, können Sie die Werte der Konstanten `CREATED_AT` und `UPDATED_AT` im Modell setzen:
 ```php
 class User extends Model
 {
@@ -127,12 +129,12 @@ class User extends Model
 ```
 
 ## Datenbankverbindung
-Standardmäßig verwendet das Eloquent-Modell die in Ihrer Anwendungs konfigurierte Standard-Datenbankverbindung. Wenn Sie dem Modell eine andere Verbindung zuweisen möchten, setzen Sie das Attribut `$connection`:
+Standardmäßig verwendet das Eloquent-Modell die in Ihrer Anwendungsconfiguration festgelegte Standarddatenbankverbindung. Wenn Sie dem Modell eine andere Verbindung zuweisen möchten, setzen Sie das `$connection` Attribut:
 ```php
 class User extends Model
 {
     /**
-     * Name der Modellverbindung
+     * Name der Verbindung des Modells
      *
      * @var string
      */
@@ -141,12 +143,12 @@ class User extends Model
 ```
 
 ## Standardattributwerte
-Wenn Sie Standardwerte für bestimmte Attribute des Modells definieren möchten, können Sie das Attribut `$attributes` im Modell festlegen:
+Wenn Sie Standardwerte für bestimmte Attribute des Modells definieren möchten, können Sie das `$attributes` Attribut im Modell definieren:
 ```php
 class User extends Model
 {
     /**
-     * Standardattributwerte des Modells.
+     * Standardattributwerte des Modells
      *
      * @var array
      */
@@ -157,7 +159,7 @@ class User extends Model
 ```
 
 ## Modellabfrage
-Nachdem Sie das Modell und die damit verbundene Datenbanktabelle erstellt haben, können Sie Daten aus der Datenbank abfragen. Stellen Sie sich jedes Eloquent-Modell als leistungsstarken Query Builder vor, mit dem Sie schnell die mit der Tabelle verknüpften Daten abfragen können. Zum Beispiel:
+Nachdem Sie das Modell und die zugehörige Datenbanktabelle erstellt haben, können Sie nun Daten aus der Datenbank abrufen. Stellen Sie sich jedes Eloquent-Modell als leistungsstarken Abfrage-Builder vor, mit dem Sie schnell auf die damit verbundene Datenbanktabelle zugreifen können. Zum Beispiel:
 ```php
 $users = app\model\User::all();
 
@@ -165,10 +167,10 @@ foreach ($users as $user) {
     echo $user->name;
 }
 ```
-> Hinweis: Da Eloquent-Modelle auch Query-Builder sind, sollten Sie alle verfügbaren Methoden im [Query-Builder](queries.md) durchlesen. Sie können diese Methoden auch in Eloquent-Abfragen verwenden.
+> Hinweis: Da Eloquent-Modelle auch Abfrage-Builder sind, sollten Sie alle verfügbaren Methoden der [Abfrage-Builder](queries.md) einsehen. Diese Methoden können in Eloquent-Abfragen verwendet werden.
 
 ## Zusätzliche Einschränkungen
-Die `all`-Methode von Eloquent gibt alle Ergebnisse des Modells zurück. Da jedes Eloquent-Modell als Query Builder fungiert, können Sie auch Abfragebedingungen hinzufügen und dann die `get`-Methode zum Abrufen der Abfrageergebnisse verwenden:
+Die `all`-Methode von Eloquent gibt alle Ergebnisse des Modells zurück. Da jedes Eloquent-Modell als Abfrage-Builder fungiert, können Sie auch Abfragebedingungen hinzufügen und die `get`-Methode verwenden, um die Abfrageergebnisse abzurufen:
 ```php
 $users = app\model\User::where('name', 'like', '%tom')
                ->orderBy('uid', 'desc')
@@ -177,14 +179,14 @@ $users = app\model\User::where('name', 'like', '%tom')
 ```
 
 ## Modell neu laden
-Sie können die Methoden `fresh` und `refresh` verwenden, um das Modell neu zu laden. Die Methode `fresh` ruft das Modell erneut aus der Datenbank ab. Die vorhandene Modellinstanz bleibt unberührt:
+Sie können die Methoden `fresh` und `refresh` verwenden, um das Modell neu zu laden. Die `fresh`-Methode ruft das Modell erneut aus der Datenbank ab. Die bestehende Modellinstanz bleibt unberührt:
 ```php
 $user = app\model\User::where('name', 'tom')->first();
 
 $fresh_user = $user->fresh();
 ```
 
-Die `refresh`-Methode ersetzt die vorhandene Modellinstanz durch neue Daten aus der Datenbank. Darüber hinaus werden bereits geladene Beziehungen erneut geladen:
+Die `refresh`-Methode aktualisiert das vorhandene Modell mit den neuen Daten aus der Datenbank. Darüber hinaus werden bereits geladene Beziehungen ebenfalls aktualisiert:
 ```php
 $user = app\model\User::where('name', 'tom')->first();
 
@@ -196,22 +198,22 @@ $user->name; // "tom"
 ```
 
 ## Sammlung
-Die Methoden `all` und `get` von Eloquent können mehrere Ergebnisse abfragen und ein `Illuminate\Database\Eloquent\Collection`-Objekt zurückgeben. Die `Collection`-Klasse bietet viele Hilfsfunktionen zur Verarbeitung von Eloquent-Ergebnissen:
+Die Methoden `all` und `get` von Eloquent können mehrere Ergebnisse abfragen und eine Instanz der Klasse `Illuminate\Database\Eloquent\Collection` zurückgeben. Die Klasse `Collection` bietet viele Hilfsfunktionen zum Verarbeiten von Eloquent-Ergebnissen:
 ```php
 $users = $users->reject(function ($user) {
     return $user->disabled;
 });
 ```
 
-## Verwendung von Cursors
-Die `cursor`-Methode ermöglicht es Ihnen, einen Cursor zur Durchquerung der Datenbank zu verwenden. Sie führt die Abfrage nur einmal aus. Bei der Verarbeitung großer Datenmengen kann die `cursor`-Methode den Speicherbedarf erheblich reduzieren:
+## Verwendung von Cursor
+Die Methode `cursor` ermöglicht es Ihnen, den Cursor zum Durchlaufen der Datenbank zu verwenden. Es führt nur eine Abfrage durch. Bei der Verarbeitung großer Datenmengen kann die Methode `cursor` den Speicherbedarf erheblich reduzieren:
 ```php
 foreach (app\model\User::where('sex', 1')->cursor() as $user) {
     //
 }
 ```
 
-`cursor` gibt eine Instanz von `Illuminate\Support\LazyCollection` zurück. [Lazy collections](https://laravel.com/docs/7.x/collections#lazy-collections) erlauben die Verwendung der meisten Methoden von Laravel Collection und laden jeweils nur ein einzelnes Modell in den Speicher:
+`cursor` gibt eine Instanz von `Illuminate\Support\LazyCollection` zurück. [Lazy Collections](https://laravel.com/docs/7.x/collections#lazy-collections) ermöglichen die Verwendung der meisten Methoden von Laravel Collections und laden jedes Mal nur ein einzelnes Modell in den Speicher:
 ```php
 $users = app\model\User::cursor()->filter(function ($user) {
     return $user->id > 500;
@@ -221,60 +223,80 @@ foreach ($users as $user) {
     echo $user->id;
 }
 ```
+## Selects-Subquery
+Eloquent bietet fortschrittliche Unterabfrage-Unterstützung, mit der Sie mit einer einzelnen Abfrage Informationen aus verwandten Tabellen abrufen können. Zum Beispiel, nehmen wir an, wir haben eine Tabelle `destinations` und eine Tabelle `flights`, die die Flüge zu den Zielen enthält. Die `flights`-Tabelle enthält ein Feld `arrival_at`, das angibt, wann der Flug am Ziel ankommt.
 
-## Unterabfragen
-Eloquent unterstützt fortschrittliche Unterabfragen, mit denen Sie Informationen aus einer zugehörigen Tabelle in einer einzigen Abfrage extrahieren können. Zum Beispiel, wenn wir eine Tabelle destinations und eine Tabelle flights haben, die an bestimmte Ziele fliegt. Die flights-Tabelle enthält ein Arrival_at-Feld, das angibt, wann der Flug am Ziel ankommt.
-
-Mit den select- und addSelect-Methoden, die durch die Unt 
-## Einzelnes Modell / Kollektion abrufen
-Neben dem Abrufen aller Datensätze aus einer bestimmten Tabelle können Sie die Methoden `find`, `first` oder `firstWhere` verwenden, um ein einzelnes Modell abzurufen. Diese Methoden geben eine einzelne Modellinstanz zurück anstelle einer Kollektion von Modellen:
+Mit den Funktionen `select` und `addSelect` von Subqueries können wir mit einer einzigen Abfrage alle Destinationen abfragen und den Namen des letzten Flugs, der an jedem Ziel angekommen ist, abrufen:
 ```php
-// Ein Modell anhand des Primärschlüssels suchen...
+use app\model\Destination;
+use app\model\Flight;
+
+return Destination::addSelect(['last_flight' => Flight::select('name')
+    ->whereColumn('destination_id', 'destinations.id')
+    ->orderBy('arrived_at', 'desc')
+    ->limit(1)
+])->get();
+```
+
+## Sortieren nach einer Unterabfrage
+Außerdem unterstützt die `orderBy`-Funktion des Abfrage-Builders auch Unterabfragen. Mit dieser Funktion können wir alle Ziele basierend auf der Ankunftszeit des letzten Flugs am Ziel sortieren. Auch hier erfolgt nur eine einzelne Abfrage an die Datenbank:
+```php
+return Destination::orderByDesc(
+    Flight::select('arrived_at')
+        ->whereColumn('destination_id', 'destinations.id')
+        ->orderBy('arrived_at', 'desc')
+        ->limit(1)
+)->get();
+```
+## Einzelnes Modell / Sammlung abrufen
+Neben dem Abrufen aller Datensätze aus einer bestimmten Datenbanktabelle können Sie die Methoden find, first oder firstWhere verwenden, um einen einzelnen Datensatz abzurufen. Diese Methoden geben eine einzelne Modellinstanz zurück, anstatt eine Modellsammlung zurückzugeben:
+```php
+// Ein Modell anhand des Primärschlüssels finden...
 $flight = app\model\Flight::find(1);
 
-// Das erste Modell finden, das der Abfrage entspricht...
+// Das erste Modell abrufen, das der Abfragebedingung entspricht...
 $flight = app\model\Flight::where('active', 1)->first();
 
-// Schnelle Implementierung des ersten Modells, das der Abfrage entspricht...
+// Schnelle Implementierung, um das erste Modell abzurufen, das der Abfragebedingung entspricht...
 $flight = app\model\Flight::firstWhere('active', 1);
 ```
 
-Sie können auch ein Array von Primärschlüsseln als Parameter für die Methode `find` verwenden, um übereinstimmende Datensätze zu erhalten:
+Sie können auch die Methode find mit einem Array als Parameter aufrufen, um eine Sammlung von übereinstimmenden Datensätzen zurückzugeben:
 ```php
 $flights = app\model\Flight::find([1, 2, 3]);
 ```
 
-Manchmal möchten Sie möglicherweise zusätzliche Aktionen ausführen, wenn ein erster Eintrag nicht gefunden wird. Die `firstOr`-Methode gibt das erste Ergebnis zurück, wenn es gefunden wird, andernfalls führt sie die angegebene Rückruffunktion aus. Der Rückgabewert der Rückruffunktion wird als Rückgabewert der `firstOr`-Methode verwendet:
+Manchmal möchten Sie zusätzliche Aktionen ausführen, wenn Sie nach dem ersten Ergebnis suchen, das nicht gefunden wird. Die Methode firstOr gibt das erste Ergebnis zurück, wenn eines gefunden wird, andernfalls führt sie den angegebenen Callback aus. Der Rückgabewert des Callbacks wird als Rückgabewert der Methode firstOr verwendet:
 ```php
 $model = app\model\Flight::where('legs', '>', 100)->firstOr(function () {
         // ...
 });
 ```
-Die `firstOr`-Methode akzeptiert auch ein Array von Spalten, nach denen gesucht werden soll:
+Die firstOr Methode akzeptiert auch ein Feldarray für die Abfrage:
 ```php
-$model = app\modle\Flight::where('legs', '>', 100)
+$model = app\model\Flight::where('legs', '>', 100)
             ->firstOr(['id', 'legs'], function () {
                 // ...
             });
 ```
 
 ## "Nicht gefunden" Ausnahme
-Manchmal möchten Sie eine Ausnahme auslösen, wenn kein Modell gefunden wird. Dies ist besonders nützlich in Controllern und Routen. Die Methoden `findOrFail` und `firstOrFail` holen das erste Ergebnis der Abfrage und werfen eine Illuminate\Database\Eloquent\ModelNotFoundException-Ausnahme, wenn keine Übereinstimmung gefunden wird:
+Manchmal möchten Sie eine Ausnahme auslösen, wenn das Modell nicht gefunden wird. Dies ist besonders nützlich in Controllern und Routen. Die Methoden findOrFail und firstOrFail rufen das erste abgefragte Ergebnis ab. Wenn kein Ergebnis gefunden wird, wird eine Illuminate\Database\Eloquent\ModelNotFoundException-Ausnahme ausgelöst:
 ```php
-$model = app\modle\Flight::findOrFail(1);
-$model = app\modle\Flight::where('legs', '>', 100)->firstOrFail();
+$model = app\model\Flight::findOrFail(1);
+$model = app\model\Flight::where('legs', '>', 100)->firstOrFail();
 ```
 
-## Kollektionen abrufen
-Sie können auch die Methoden count, sum und max des Query-Generators und andere Sammlungsfunktionen verwenden, um Kollektionen zu bearbeiten. Diese Methoden geben nur geeignete skalare Werte zurück, anstelle einer Modelinstanz:
+## Sammlung abrufen
+Sie können auch die count, sum und max Methoden sowie andere Sammlungsfunktionen des Abfrage-Generators verwenden, um mit Sammlungen zu arbeiten. Diese Methoden geben nur den entsprechenden skalaren Wert zurück, anstatt eine Modellinstanz:
 ```php
-$count = app\modle\Flight::where('active', 1)->count();
+$count = app\model\Flight::where('active', 1)->count();
 
-$max = app\modle\Flight::where('active', 1)->max('price');
+$max = app\model\Flight::where('active', 1)->max('price');
 ```
 
 ## Einfügen
-Um einen Datensatz in die Datenbank einzufügen, erstellen Sie zuerst eine neue Modelinstanz, setzen Sie die Attribute der Instanz und rufen Sie dann die save-Methode auf:
+Um einen Datensatz in die Datenbank einzufügen, erstellen Sie zunächst eine neue Modellinstanz, setzen Sie die Attribute und rufen Sie dann die save Methode auf:
 ```php
 <?php
 
@@ -294,7 +316,7 @@ class FooController
      */
     public function store(Request $request)
     {
-        // Überprüfen der Anfrage
+        // Anfrage validieren
 
         $user = new User;
 
@@ -305,33 +327,33 @@ class FooController
 }
 ```
 
-Die Zeitstempel created_at und updated_at werden automatisch festgelegt (wenn die $timestamps-Eigenschaft des Modells true ist) und müssen nicht manuell zugewiesen werden.
+created_at und updated_at Zeitstempel werden automatisch gesetzt (wenn die $timestamps Eigenschaft im Modell true ist) und müssen nicht manuell zugewiesen werden.
 
-## Aktualisieren
-Die save-Methode kann auch zum Aktualisieren eines bereits vorhandenen Modells in der Datenbank verwendet werden. Um ein Modell zu aktualisieren, müssen Sie es zuerst abrufen, die zu aktualisierenden Attribute festlegen und dann die save-Methode aufrufen. Ebenso wird der updated_at-Zeitstempel automatisch aktualisiert und muss daher nicht manuell zugewiesen werden:
+## Aktualisierung
+Die save Methode kann auch zum Aktualisieren eines bereits vorhandenen Modells in der Datenbank verwendet werden. Um ein Modell zu aktualisieren, müssen Sie es zuerst abrufen, die zu aktualisierenden Attribute festlegen und dann die save Methode aufrufen. Ebenso wird der updated_at Zeitstempel automatisch aktualisiert, sodass keine manuelle Zuweisung erforderlich ist:
 ```php
 $user = app\model\User::find(1);
 $user->name = 'jerry';
 $user->save();
 ```
 
-## Batch-Updates
+## Massenaktualisierung
 ```php
 app\model\User::where('uid', '>', 10)
           ->update(['name' => 'tom']);
 ```
 
 ## Überprüfen von Attributänderungen
-Eloquent bietet die Methoden isDirty, isClean und wasChanged, um den internen Zustand des Modells zu überprüfen und festzustellen, wie sich seine Attribute seit dem Laden ursprünglich geändert haben.
-Die Methode isDirty bestimmt, ob seit dem Laden des Modells irgendwelche Attribute geändert wurden. Sie können einen spezifischen Attributnamen übergeben, um festzustellen, ob ein bestimmtes Attribut schmutzig geworden ist. Die Methode isClean ist das Gegenteil von isDirty und akzeptiert ebenfalls optionale Attributparameter:
+Eloquent bietet die isDirty, isClean und wasChanged Methoden, um den internen Zustand des Modells zu überprüfen und festzustellen, wie sich seine Attribute seit dem ursprünglichen Laden geändert haben.
+Die isDirty Methode bestimmt, ob seit dem Laden des Modells Änderungen an einem Attribut vorgenommen wurden. Sie können einen spezifischen Attributnamen übergeben, um festzustellen, ob ein bestimmtes Attribut schmutzig ist. Die Methode isClean ist das Gegenteil von isDirty und akzeptiert auch optionale Attributparameter:
 ```php
 $user = User::create([
     'first_name' => 'Taylor',
     'last_name' => 'Otwell',
-    'title' => 'Developer',
+    'title' => 'Entwickler',
 ]);
 
-$user->title = 'Painter';
+$user->title = 'Maler';
 
 $user->isDirty(); // true
 $user->isDirty('title'); // true
@@ -346,28 +368,27 @@ $user->save();
 $user->isDirty(); // false
 $user->isClean(); // true
 ```
-Die Methode wasChanged bestimmt, ob seit der letzten Speicherung des Modells innerhalb des aktuellen Anfragezyklus irgendwelche Attribute geändert wurden. Sie können auch einen Attributnamen übergeben, um zu sehen, ob dieses spezifische Attribut geändert wurde:
+Die wasChanged Methode bestimmt, ob seit dem letzten Speichern des Modells in der aktuellen Anforderungsperiode Änderungen an einem Attribut vorgenommen wurden. Sie können auch einen Attributnamen übergeben, um festzustellen, ob ein bestimmtes Attribut geändert wurde:
 ```php
 $user = User::create([
     'first_name' => 'Taylor',
     'last_name' => 'Otwell',
-    'title' => 'Developer',
+    'title' => 'Entwickler',
 ]);
 
-$user->title = 'Painter';
+$user->title = 'Maler';
 $user->save();
 
 $user->wasChanged(); // true
 $user->wasChanged('title'); // true
 $user->wasChanged('first_name'); // false
 ```
-
 ## Massenzuweisung
-Sie können auch die create-Methode verwenden, um neue Modelle zu speichern. Diese Methode gibt eine Modelinstanz zurück. Bevor Sie sie jedoch verwenden, müssen Sie auf dem Modell angeben, welche Attribute massiv zugewiesen werden können, da alle Eloquent-Modelle standardmäßig nicht massiv zugewiesen werden können.
+Sie können auch die create Methode verwenden, um ein neues Modell zu speichern. Diese Methode gibt eine Modellinstanz zurück. Bevor Sie sie verwenden, müssen Sie jedoch die fillable- oder guarded-Eigenschaften des Modells festlegen, da alle Eloquent-Modelle standardmäßig nicht für Massenzuweisungen zugelassen sind.
 
-Wenn ein Benutzer unerwartete HTTP-Parameter übermittelt und diese die Felder in der Datenbank ändern, die Sie nicht ändern möchten, kann es zu Massenzuweisungslücken kommen. Zum Beispiel könnte ein bösartiger Benutzer den Parameter is_admin über einen HTTP-Request übermitteln und ihn dann der create-Methode übergeben, um sich selbst zum Administrator zu befördern.
+Wenn ein Benutzer versehentlich unerwartete HTTP-Parameter überträgt, die zu Feldern in der Datenbank führen, die Sie nicht ändern möchten, kann es zu einer Massenzuweisungslücke kommen. Zum Beispiel könnte ein bösartiger Benutzer den Parameter is_admin über ein HTTP-Request übertragen und diesen an die create Methode übergeben, was es dem Benutzer ermöglichen würde, sich selbst zum Administrator zu befördern.
 
-Deshalb sollten Sie vorher definieren, welche Attribute auf dem Modell massiv zugewiesen werden können. Dies können Sie durch die Verwendung der $fillable-Eigenschaft des Modells erreichen. Zum Beispiel können Sie das Attribut name des Flugmodells massiv zuweisen:
+Daher ist es wichtig, vorher festzulegen, welche Eigenschaften des Modells für Massenzuweisungen zugelassen sind. Sie können dies mit der $fillable-Eigenschaft des Modells erreichen. Zum Beispiel können Sie das name-Attribut des Flight-Modells für Massenzuweisungen zulassen:
 ```php
 <?php
 
@@ -378,23 +399,24 @@ use support\Model;
 class Flight extends Model
 {
     /**
-     * Die Attribute, die massiv zugewiesen werden können.
+     * Eigenschaften, die für Massenzuweisungen zugelassen sind.
      *
      * @var array
      */
     protected $fillable = ['name'];
 }
+
 ```
-Sobald die massiv zuweisbaren Attribute festgelegt sind, können Sie die create-Methode verwenden, um neue Daten in die Datenbank einzufügen. Die create-Methode gibt die gespeicherte Modelinstanz zurück:
+Sobald Sie die für Massenzuweisungen zugelassenen Eigenschaften festgelegt haben, können Sie die create Methode verwenden, um neue Daten in die Datenbank einzufügen. Die create Methode gibt die gespeicherte Modellinstanz zurück:
 ```php
-$flight = app\model\Flight::create(['name' => 'Flight 10']);
+$flight = app\modle\Flight::create(['name' => 'Flug 10']);
 ```
-Wenn Sie bereits eine Modelinstanz haben, können Sie ein Array an die fill-Methode übergeben, um die Zuweisung vorzunehmen:
+Wenn Sie bereits eine Modellinstanz haben, können Sie ein Array an die fill Methode übergeben, um Werte zuzuweisen:
 ```php
-$flight->fill(['name' => 'Flight 22']);
+$flight->fill(['name' => 'Flug 22']);
 ```
 
-$fillable kann als eine Art "Whitelist" für Massenzuweisungen betrachtet werden. Sie können auch die $guarded-Eigenschaft verwenden, um dies zu erreichen. Die $guarded-Eigenschaft enthält ein Array von Attributen, die nicht massiv zugewiesen werden dürfen. Mit anderen Worten, $guarded fungiert funktional eher als eine "Blacklist". Beachten Sie: Sie können nur $fillable oder $guarded verwenden, nicht beide gleichzeitig. In folgendem Beispiel können alle Attribute außer dem price-Attribut massiv zugewiesen werden:
+$fillable kann als eine Art "Whitelist" für Massenzuweisungen betrachtet werden. Sie können auch die $guarded-Eigenschaft verwenden. Die $guarded-Eigenschaft enthält ein Array von Attributen, die nicht für Massenzuweisungen zugelassen sind. Mit anderen Worten, $guarded wird funktional eher wie eine "Blacklist" sein. Beachten Sie: Sie können nur $fillable oder $guarded verwenden, nicht beide gleichzeitig. Im folgenden Beispiel können alle Attribute außer dem Preis für Massenzuweisungen verwendet werden:
 ```php
 <?php
 
@@ -405,51 +427,53 @@ use support\Model;
 class Flight extends Model
 {
     /**
-     * Die Attribute, die nicht massiv zugewiesen werden dürfen.
+     * Nicht für Massenzuweisungen zugelassene Eigenschaften.
      *
      * @var array
      */
     protected $guarded = ['price'];
 }
 ```
-Wenn Sie möchten, dass alle Attribute massiv zugewiesen werden können, können Sie die $guarded-Eigenschaft als leeres Array definieren:
+Wenn Sie möchten, dass alle Eigenschaften für Massenzuweisungen zugelassen sind, können Sie $guarded als leeres Array definieren:
 ```php
 /**
- * Die Attribute, die nicht massiv zugewiesen werden dürfen.
+ * Nicht für Massenzuweisungen zugelassene Eigenschaften.
  *
  * @var array
  */
 protected $guarded = [];
 ```
 ## Andere Erstellungsmethoden
-firstOrCreate / firstOrNew
-Hier sind zwei Methoden, die Sie zur Massenzuweisung verwenden können: firstOrCreate und firstOrNew. Die firstOrCreate-Methode passt die in der Datenbank gefundenen Daten an die angegebenen Schlüssel/Wert-Paare an. Wenn in der Datenbank kein Modell gefunden wird, wird ein Datensatz eingefügt, der die Attribute des ersten Parameters und optional des zweiten Parameters enthält.
+firstOrCreate/ firstOrNew
+Es gibt zwei Methoden, die Sie möglicherweise für Massenzuweisungen verwenden möchten: firstOrCreate und firstOrNew. Die Methode firstOrCreate passt die Datensätze in der Datenbank anhand der angegebenen Schlüssel/Wert-Paare an. Wenn das Modell in der Datenbank nicht gefunden wird, wird ein Datensatz eingefügt, der die Attribute des ersten Parameters sowie optional die Attribute des zweiten Parameters enthält.
 
-Die firstOrNew-Methode versucht, wie die firstOrCreate-Methode, durch die angegebenen Attribute ein entsprechendes Modell in der Datenbank zu finden. Wenn die firstOrNew-Methode jedoch kein entsprechendes Modell findet, wird eine neue Modellinstanz zurückgegeben. Beachten Sie, dass die von firstOrNew zurückgegebene Modellinstanz noch nicht in der Datenbank gespeichert ist und Sie die save-Methode manuell aufrufen müssen, um sie zu speichern:
+Die Methode firstOrNew versucht, ähnlich wie die Methode firstOrCreate, anhand der angegebenen Attribute Datensätze in der Datenbank zu finden. Wenn die Methode firstOrNew jedoch kein entsprechendes Modell findet, wird eine neue Modellinstanz zurückgegeben. Beachten Sie, dass die von firstOrNew zurückgegebene Modellinstanz noch nicht in der Datenbank gespeichert ist. Sie müssen die save-Methode manuell aufrufen, um sie zu speichern:
+
 ```php
-// Suchen Sie nach einem Flug anhand des Namens und erstellen Sie ihn, falls er nicht gefunden wird...
-$flight = app\modle\Flight::firstOrCreate(['name' => 'Flight 10']);
+// Flug anhand des Namens abrufen oder erstellen, wenn nicht vorhanden...
+$flight = app\modle\Flight::firstOrCreate(['name' => 'Flug 10']);
 
-// Suchen Sie nach einem Flug anhand des Namens, oder erstellen Sie ihn mit den Attributen 'delayed' und 'arrival_time' zusammen mit dem Namen ...
+// Flug anhand des Namens abrufen oder mit den Attributen name, delayed und arrival_time erstellen...
 $flight = app\modle\Flight::firstOrCreate(
-    ['name' => 'Flight 10'],
+    ['name' => 'Flug 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
 
-// Suchen Sie nach einem Flug anhand des Namens, oder erstellen Sie eine Instanz...
-$flight = app\modle\Flight::firstOrNew(['name' => 'Flight 10']);
+// Flug anhand des Namens abrufen oder eine Instanz erstellen, wenn nicht vorhanden...
+$flight = app\modle\Flight::firstOrNew(['name' => 'Flug 10']);
 
-// Suchen Sie nach einem Flug anhand des Namens, oder erstellen Sie eine Modellinstanz mit den Attributen 'delayed' und 'arrival_time' zusammen mit dem Namen ...
+// Flug anhand des Namens abrufen oder eine Modellinstanz mit den Attributen name, delayed und arrival_time erstellen...
 $flight = app\modle\Flight::firstOrNew(
-    ['name' => 'Flight 10'],
+    ['name' => 'Flug 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
 ```
 
-Es kann auch vorkommen, dass Sie ein vorhandenes Modell aktualisieren möchten oder ein neues Modell erstellen, wenn keines vorhanden ist. Dies kann mit der Methode updateOrCreate in einem Schritt erreicht werden. Ähnlich wie die firstOrCreate-Methode persistiert updateOrCreate das Modell und erfordert daher keinen Aufruf von save():
+Es kann auch vorkommen, dass Sie bestehende Modelle aktualisieren oder bei Nichtexistenz neue Modelle erstellen möchten. Dies kann mit der Methode updateOrCreate in einem Schritt erfolgen. Ähnlich wie bei der Methode firstOrCreate persistiert updateOrCreate das Modell, sodass Sie save() nicht aufrufen müssen:
+
 ```php
-// Wenn ein Flug von Oakland nach San Diego existiert, wird der Preis auf 99 US-Dollar festgelegt.
-// Wenn keine übereinstimmende Modelle gefunden werden, wird eines erstellt.
+// Wenn ein Flug von Oakland nach San Diego existiert, wird der Preis auf 99 USD festgelegt.
+// Wenn kein passendes Modell gefunden wird, wird eins erstellt.
 $flight = app\modle\Flight::updateOrCreate(
     ['departure' => 'Oakland', 'destination' => 'San Diego'],
     ['price' => 99, 'discounted' => 1]
@@ -457,13 +481,14 @@ $flight = app\modle\Flight::updateOrCreate(
 ```
 
 ## Modell löschen
-Sie können die delete-Methode auf einer Modelinstanz aufrufen, um die Instanz zu löschen:
+Sie können die Methode delete auf einer Modellinstanz aufrufen, um die Instanz zu löschen:
+
 ```php
 $flight = app\modle\Flight::find(1);
 $flight->delete();
 ```
 
-## Modell durch Primärschlüssel löschen
+## Modell anhand des Primärschlüssels löschen
 ```php
 app\modle\Flight::destroy(1);
 
@@ -474,41 +499,45 @@ app\modle\Flight::destroy([1, 2, 3]);
 app\modle\Flight::destroy(collect([1, 2, 3]));
 ```
 
-## Modell durch Abfrage löschen
+## Modell anhand einer Abfrage löschen
 ```php
 $deletedRows = app\modle\Flight::where('active', 0)->delete();
 ```
 
 ## Modell kopieren
-Sie können die replicate-Methode verwenden, um eine neue, noch nicht in die Datenbank gespeicherte Instanz zu kopieren. Diese Methode ist sehr nützlich, wenn Modelle viele gemeinsame Attribute teilen.
+Sie können die Methode replicate verwenden, um eine neue, noch nicht in der Datenbank gespeicherte Instanz zu kopieren. Diese Methode ist besonders nützlich, wenn Modellinstanzen viele gemeinsame Attribute haben:
+
 ```php
 $shipping = App\Address::create([
-    'type' => 'shipping',
-    'line_1' => '123 Beispiel Straße',
+    'type' => 'Versand',
+    'line_1' => '123 Beispielstraße',
     'city' => 'Victorville',
     'state' => 'CA',
     'postcode' => '90001',
 ]);
 
 $billing = $shipping->replicate()->fill([
-    'type' => 'billing'
+    'type' => 'Rechnungsstellung'
 ]);
 
 $billing->save();
 ```
 
 ## Modellvergleich
-Manchmal müssen Sie überprüfen, ob zwei Modelle "identisch" sind. Die is-Methode kann verwendet werden, um schnell zu überprüfen, ob zwei Modelle dieselben Primärschlüssel, Tabellen und Datenbankverbindungen haben:
+Manchmal müssen Sie überprüfen, ob zwei Modelle "gleich" sind. Die is-Methode kann verwendet werden, um schnell zu überprüfen, ob zwei Modelle dieselben Primärschlüssel, Tabellen und Datenbankverbindungen haben:
+
 ```php
 if ($post->is($anotherPost)) {
     //
 }
 ```
 
-## Modellbeobachter
-Weitere Informationen zu Eloquent-Modellereignissen und -Beobachtern finden Sie unter [Laravel 中的模型事件与 Observer](https://learnku.com/articles/6657/model-events-and-observer-in-laravel).
+## Modell-Observer
+Verwenden Sie die folgende Referenz[Laravel 中的模型事件与 Observer
+](https://learnku.com/articles/6657/model-events-and-observer-in-laravel)
 
-Hinweis: Zur Unterstützung von Modellbeobachtern in Eloquent ORM müssen Sie zusätzlich `composer require "illuminate/events"` importieren.
+Hinweis: Um den Modell-Observer in Eloquent ORM zu verwenden, muss zusätzlich composer require "illuminate/events" importiert werden.
+
 ```php
 <?php
 namespace app\model;
@@ -525,3 +554,4 @@ class User extends Model
     }
 }
 ```
+

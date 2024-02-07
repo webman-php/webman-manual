@@ -1,10 +1,9 @@
-# Middleware
-Os middlewares são geralmente utilizados para interceptar solicitações ou respostas. Por exemplo, realizar a verificação unificada da identidade do usuário antes de executar um controlador, redirecionando para a página de login se o usuário não estiver logado, adicionar um cabeçalho à resposta, ou até mesmo calcular a proporção das solicitações de uma determinada URI, entre outras coisas.
+# Middlewares
+Os middlewares são geralmente usados para interceptar solicitações ou respostas. Por exemplo, realizar a verificação unificada da identidade do usuário antes de executar o controlador, redirecionar para a página de login se o usuário não estiver logado, ou adicionar um cabeçalho específico à resposta. Outro exemplo seria o acompanhamento da proporção de solicitações para uma URI específica, e assim por diante.
 
-## Modelo de cebola do Middleware
+## Modelo de Cebola dos Middlewares
 
-```
-                              
+```                          
             ┌──────────────────────────────────────────────────────┐
             │                     middleware1                      │ 
             │     ┌──────────────────────────────────────────┐     │
@@ -13,7 +12,7 @@ Os middlewares são geralmente utilizados para interceptar solicitações ou res
             │     │     │         middleware3          │     │     │        
             │     │     │     ┌──────────────────┐     │     │     │
             │     │     │     │                  │     │     │     │
- 　── Pedido ───────────────────────> Controlador ─ Resposta ───────────────────────────> Cliente
+   ── Request ───────────────────────> Controller ─ Response ───────────────────────────> Cliente
             │     │     │     │                  │     │     │     │
             │     │     │     └──────────────────┘     │     │     │
             │     │     │                              │     │     │
@@ -23,58 +22,58 @@ Os middlewares são geralmente utilizados para interceptar solicitações ou res
             │                                                      │
             └──────────────────────────────────────────────────────┘
 ```
-Os middlewares e os controladores compõem um modelo clássico de cebola, onde os middlewares são como camadas de casca de cebola e o controlador é o centro da cebola. Como mostrado no diagrama, a solicitação passa pelos middlewares 1, 2 e 3 para chegar ao controlador, que então retorna uma resposta. Em seguida, a resposta passa pelos middlewares 3, 2 e 1, para finalmente ser enviada de volta para o cliente. Ou seja, em cada middleware, podemos obter tanto a solicitação quanto a resposta.
 
-## Intercepção de solicitações
-Às vezes, não queremos que uma determinada solicitação chegue à camada do controlador. Por exemplo, se um middleware de autenticação verificar que o usuário não está logado, podemos interceptar a solicitação e retornar uma resposta de login. O fluxo seria semelhante ao exemplo a seguir:
+Os middlewares e os controladores compõem um modelo clássico de cebola, onde os middlewares são como as camadas externas da cebola e o controlador é o núcleo da cebola. Como mostrado no gráfico, a solicitação atravessa os middlewares 1, 2 e 3 para chegar ao controlador. O controlador retorna uma resposta, que então atravessa os middlewares na ordem 3, 2, 1 antes de ser enviada para o cliente. Ou seja, em cada middleware podemos obter tanto a solicitação quanto a resposta.
 
+## Interceptação de Solicitações
+Às vezes, não queremos que uma solicitação atinja a camada do controlador. Por exemplo, se descobrirmos, no middleware 2, que o usuário atual não está logado, podemos interceptar a solicitação e retornar uma resposta de login. Nesse caso, o fluxo se parece com o exemplo abaixo:
+
+```                          
+            ┌────────────────────────────────────────────────────────────┐
+            │                         middleware1                        │ 
+            │     ┌────────────────────────────────────────────────┐     │
+            │     │                   middleware2                  │     │
+            │     │          ┌──────────────────────────────┐      │     │
+            │     │          │        middleware3           │      │     │       
+            │     │          │    ┌──────────────────┐      │      │     │
+            │     │          │    │                  │      │      │     │
+   ── Request ─────────┐     │    │    Controller    │      │      │     │
+            │     │ Response │    │                  │      │      │     │
+   <───────────────────┘     │    └──────────────────┘      │      │     │
+            │     │          │                              │      │     │
+            │     │          └──────────────────────────────┘      │     │
+            │     │                                                │     │
+            │     └────────────────────────────────────────────────┘     │
+            │                                                            │
+            └────────────────────────────────────────────────────────────┘
 ```
-                              
-            ┌───────────────────────────────────────────────────────┐
-            │                     middleware1                       │ 
-            │     ┌───────────────────────────────────────────┐     │
-            │     │          　 　 Middleware de autenticação    │     │
-            │     │      ┌──────────────────────────────┐     │     │
-            │     │      │         middleware3          │     │     │       
-            │     │      │     ┌──────────────────┐     │     │     │
-            │     │      │     │                  │     │     │     │
- 　── Pedido ───────────┐   │     │       Controlador      │     │     │
-            │     │ Resposta│     │                  │     │     │     │
-   <─────────────────┘   │     └──────────────────┘     │     │     │
-            │     │      │                              │     │     │
-            │     │      └──────────────────────────────┘     │     │
-            │     │                                           │     │
-            │     └───────────────────────────────────────────┘     │
-            │                                                       │
-            └───────────────────────────────────────────────────────┘
-```
 
-Conforme mostrado no diagrama, a solicitação chega ao middleware de autenticação, que gera uma resposta de login. A resposta atravessa de volta o middleware 1 e é devolvida ao navegador.
+Como mostrado no gráfico, a solicitação atinge o middleware 2 e gera uma resposta de login, que atravessa o middleware 1 e retorna para o cliente.
 
 ## Interface do Middleware
 Os middlewares devem implementar a interface `Webman\MiddlewareInterface`.
+
 ```php
 interface MiddlewareInterface
 {
     /**
-     * Process an incoming server request.
+     * Processa uma solicitação recebida pelo servidor.
      *
-     * Processes an incoming server request in order to produce a response.
-     * If unable to produce the response itself, it may delegate to the provided
-     * request handler to do so.
+     * Processa uma solicitação recebida pelo servidor para produzir uma resposta.
+     * Se não puder produzir a resposta por si só, poderá delegar ao manipulador de solicitações fornecido para fazê-lo.
      */
     public function process(Request $request, callable $handler): Response;
 }
 ```
-Isso significa que os middlewares devem implementar o método `process`, que deve retornar um objeto `support\Response`. Por padrão, esse objeto é gerado por `$handler($request)` (a solicitação continua a atravessar a cebola), mas também pode ser uma resposta gerada por funções auxiliares como `response()`, `json()`, `xml()`, `redirect()` e assim por diante (a solicitação é interrompida, sem percorrer mais a cebola).
 
-## Obtendo solicitações e respostas dentro do Middleware
-Dentro do middleware, é possível obter acesso à solicitação e à resposta do controlador. Portanto, o middleware consiste em três partes internas.
-1. Fase de atravessamento da solicitação, ou seja, antes do processamento da solicitação.
-2. Fase de processamento da solicitação pelo controlador.
-3. Fase de retorno da resposta, ou seja, após o processamento da solicitação.
+Isso significa que os middlewares devem implementar o método `process`, que deve retornar um objeto `support\Response`. Por padrão, este objeto é gerado por `$handler($request)` (a solicitação continua a cruzar as camadas da cebola). Também pode ser uma resposta gerada por funções auxiliares como `response()`, `json()`, `xml()` ou `redirect()` (a solicitação para de atravessar as camadas da cebola).
+## Obter solicitação e resposta no middleware
+No middleware, podemos obter a solicitação e também a resposta após o controle ser executado, portanto, o middleware é dividido em três partes internas.
+1. Fase de passagem da solicitação, isto é, antes do processamento da solicitação
+2. Fase de processamento do controlador, isto é, durante o processamento da solicitação
+3. Fase de saída da resposta, isto é, após o processamento da solicitação
 
-O exemplo a seguir demonstra as três fases dentro do middleware:
+A representação dessas três fases no middleware é a seguinte:
 ```php
 <?php
 namespace app\middleware;
@@ -87,18 +86,19 @@ class Test implements MiddlewareInterface
 {
     public function process(Request $request, callable $handler) : Response
     {
-        echo 'Esta é a fase de atravessamento da solicitação, ou seja, antes do processamento da solicitação.';
+        echo 'Esta é a fase de passagem da solicitação, ou seja, antes do processamento da solicitação';
         
-        $response = $handler($request); // Continua a atravessar a cebola até o executar o controlador e obter a resposta
+        $response = $handler($request); // Continua a passagem até o núcleo da cebola, até que seja executado o controlador e se obtenha a resposta
         
-        echo 'Esta é a fase de retorno da resposta, ou seja, após o processamento da solicitação.';
+        echo 'Esta é a fase de saída da resposta, ou seja, após o processamento da solicitação';
         
         return $response;
     }
 }
 ```
+
 ## Exemplo: Middleware de autenticação
-Crie o arquivo `app/middleware/AuthCheckTest.php` (crie o diretório se não existir) como mostrado abaixo:
+Crie o arquivo `app/middleware/AuthCheckTest.php` (se o diretório não existir, crie-o) da seguinte forma:
 ```php
 <?php
 namespace app\middleware;
@@ -113,27 +113,27 @@ class AuthCheckTest implements MiddlewareInterface
     public function process(Request $request, callable $handler) : Response
     {
         if (session('user')) {
-            // Já está logado, continue o pedido com a passagem da cebola
+            // Já autenticado, a solicitação continua a passagem
             return $handler($request);
         }
 
-        // Obtém os métodos do controlador que não precisam de autenticação usando reflexão
+        // Obter os métodos do controlador que não exigem autenticação via reflexão
         $controller = new ReflectionClass($request->controller);
         $noNeedLogin = $controller->getDefaultProperties()['noNeedLogin'] ?? [];
 
         // O método acessado requer autenticação
         if (!in_array($request->action, $noNeedLogin)) {
-            // Interceptar o pedido, retornar uma resposta de redirecionamento e interromper o pedido de passagem da cebola
+            // Interceptar a solicitação e retornar uma resposta de redirecionamento, parando a passagem da solicitação
             return redirect('/user/login');
         }
 
-        // Não precisa de autenticação, continue o pedido com a passagem da cebola
+        // Não requer autenticação, a solicitação continua a passagem
         return $handler($request);
     }
 }
 ```
 
-Crie o controlador `app/controller/UserController.php` como abaixo:
+Crie o controlador `app/controller/UserController.php` da seguinte forma:
 ```php
 <?php
 namespace app\controller;
@@ -142,7 +142,7 @@ use support\Request;
 class UserController
 {
     /**
-     * Métodos que não precisam de autenticação
+     * Métodos que não exigem autenticação
      */
     protected $noNeedLogin = ['login'];
 
@@ -160,23 +160,23 @@ class UserController
 ```
 
 > **Observação**
-> `$noNeedLogin` contém os métodos do controlador que não requerem autenticação
+> `$noNeedLogin` registra os métodos no controlador que podem ser acessados sem autenticação
 
-Adicione o middleware global no arquivo `config/middleware.php` conforme mostrado abaixo:
+Adicione o middleware de autenticação global no arquivo `config/middleware.php` da seguinte forma:
 ```php
 return [
     // Middleware global
     '' => [
-        // ... Outros middlewares aqui
+        // ... outros middlewares
         app\middleware\AuthCheckTest::class,
     ]
 ];
 ```
 
-Com o middleware de autenticação, podemos nos concentrar em escrever o código do negócio na camada do controlador sem se preocupar se o usuário está logado ou não.
+Com o middleware de autenticação, podemos nos concentrar em escrever o código de negócios na camada do controlador, sem se preocupar se o usuário está autenticado.
 
-## Exemplo: Middleware de solicitação de origem cruzada (CORS)
-Crie o arquivo `app/middleware/AccessControlTest.php` como mostrado abaixo:
+## Exemplo: Middleware de solicitação de recursos
+Crie o arquivo `app/middleware/AccessControlTest.php` (se o diretório não existir, crie-o) da seguinte forma:
 ```php
 <?php
 namespace app\middleware;
@@ -189,10 +189,10 @@ class AccessControlTest implements MiddlewareInterface
 {
     public function process(Request $request, callable $handler) : Response
     {
-        // Se for uma solicitação de opções, retorna uma resposta vazia, caso contrário, continue com a passagem da cebola e obtenha uma resposta
+        // Se for uma solicitação de opções, retornar uma resposta vazia; caso contrário, continuar a passagem e obter uma resposta
         $response = $request->method() == 'OPTIONS' ? response('') : $handler($request);
         
-        // Adiciona cabeçalhos de HTTP relacionados ao CORS à resposta
+        // Adicionar cabeçalhos http relacionados com o controle de recursos à resposta
         $response->withHeaders([
             'Access-Control-Allow-Credentials' => 'true',
             'Access-Control-Allow-Origin' => $request->header('origin', '*'),
@@ -205,31 +205,30 @@ class AccessControlTest implements MiddlewareInterface
 }
 ```
 
-> **Observação**
-> As solicitações CORS podem gerar solicitações OPTIONS. Não queremos que as solicitações OPTIONS atinjam o controlador, por isso retornamos diretamente uma resposta vazia (`response('')`) para interceptar a solicitação.
-> Se a sua API precisar de rotas, use `Route::any(..)` ou `Route::add(['POST', 'OPTIONS'], ..)`.
+> **Nota**
+> As solicitações de recursos podem gerar solicitações de opções. Não queremos que as solicitações de opções cheguem ao controlador, portanto, retornamos uma resposta vazia (`response('')`) para interceptar a solicitação. Se a sua interface requer configuração de rota, use `Route::any(..)` or `Route::add(['POST', 'OPTIONS'], ..)` para configurar.
 
-Adicione o middleware global no arquivo `config/middleware.php` como mostrado abaixo:
+Adicione o middleware de solicitação de recursos global no arquivo `config/middleware.php` da seguinte forma:
 ```php
 return [
     // Middleware global
     '' => [
-        // ... Outros middlewares aqui
+        // ... outros middlewares
         app\middleware\AccessControlTest::class,
     ]
 ];
 ```
 
 > **Observação**
-> Se a solicitação AJAX incluir cabeçalhos personalizados, esses cabeçalhos personalizados devem ser adicionados ao campo `Access-Control-Allow-Headers` no middleware, caso contrário, um erro `Request header field XXXX is not allowed by Access-Control-Allow-Headers in preflight response.` será relatado
+> Se a solicitação ajax personalizou cabeçalhos, é necessário adicionar este cabeçalho personalizado ao campo `Access-Control-Allow-Headers` do middleware. Caso contrário, ocorrerá o erro `Request header field XXXX is not allowed by Access-Control-Allow-Headers in preflight response.`
 
-## Explicação
-
-- Os middlewares podem ser globais, de aplicativos (funcionam apenas no modo de vários aplicativos, consulte [Múltiplos Aplicativos](multiapp.md)) ou de rota
-- Atualmente não há suporte para middlewares de controladores individuais (mas é possível simular a funcionalidade de middlewares de controladores verificando `$request->controller` no middleware)
-- O arquivo de configuração de middlewares está localizado em `config/middleware.php`
-- A configuração do middleware global está sob a chave `''`
-- A configuração do middleware do aplicativo está sob o nome do aplicativo específico, por exemplo
+## Observações
+  
+ - O middleware é dividido em middleware global, middleware da aplicação (o middleware da aplicação só é válido no modo de várias aplicações, consulte [Múltiplas Aplicações](multiapp.md)) e middleware de rota
+ - Atualmente não é compatível com middleware de um único controlador (mas é possível implementar algo semelhante ao middleware do controlador por meio do julgamento de `$request->controller` no middleware)
+ - O arquivo de configuração do middleware está localizado em `config/middleware.php`
+ - A configuração do middleware global está sob a chave `''`
+ - A configuração do middleware da aplicação está sob o nome da aplicação específica, por exemplo:
 
 ```php
 return [
@@ -238,17 +237,17 @@ return [
         app\middleware\AuthCheckTest::class,
         app\middleware\AccessControlTest::class,
     ],
-    // Middleware do aplicativo 'api' (os middlewares de aplicativo só funcionam no modo de vários aplicativos)
+    // Middleware da aplicação "api" (o middleware da aplicação só é válido no modo de várias aplicações)
     'api' => [
         app\middleware\ApiOnly::class,
     ]
 ];
 ```
 
-## Middlewares de rota
+## Middleware de rota
 
-Podemos atribuir middlewares a uma rota específica ou a um grupo de rotas.
-Por exemplo, adicione a seguinte configuração em `config/route.php`:
+Podemos configurar um ou um grupo de rotas com middleware específico.
+Por exemplo, adicione a seguinte configuração no arquivo `config/route.php`:
 ```php
 <?php
 use support\Request;
@@ -268,15 +267,15 @@ Route::group('/blog', function () {
     app\middleware\MiddlewareB::class,
 ]);
 ```
-
-## Passagem de parâmetros para o middleware através da função de construtor (route->setParams)
+## Construtor de Middleware com Parâmetros
 
 > **Observação**
-> Este recurso requer webman-framework >= 1.4.8
+> Esta função requer webman-framework >= 1.4.8
 
-Após a versão 1.4.8, o arquivo de configuração pode instanciar diretamente o middleware ou função anônima, o que facilita a passagem de parâmetros para o middleware por meio do construtor.
-Por exemplo, no arquivo `config/middleware.php`, você pode configurar da seguinte forma:
-```
+A partir da versão 1.4.8, o arquivo de configuração suporta a instanciação direta de middleware ou funções anônimas. Isso permite passar parâmetros para o middleware por meio de construtores.
+Por exemplo, a configuração em `config/middleware.php` também pode ser feita da seguinte maneira:
+
+```php
 return [
     // Middleware global
     '' => [
@@ -285,15 +284,16 @@ return [
             return new app\middleware\AccessControlTest($param1, $param2, ...);
         },
     ],
-    // Middleware do aplicativo 'api' (os middlewares de aplicativo só funcionam no modo de vários aplicativos)
+    // Middleware da aplicação API (somente válido no modo de múltiplas aplicações)
     'api' => [
         app\middleware\ApiOnly::class,
     ]
 ];
 ```
 
-Da mesma forma, os middlewares de rota também podem passar parâmetros por meio do construtor. Por exemplo, no arquivo `config/route.php`:
-```
+Da mesma forma, os middlewares de rotas também podem passar parâmetros por meio do construtor, como mostrado em `config/route.php`:
+
+```php
 Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->middleware([
     new app\middleware\MiddlewareA($param1, $param2, ...),
     function(){
@@ -302,15 +302,49 @@ Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->mi
 ]);
 ```
 
-## Ordem de execução dos middlewares
+## Ordem de Execução do Middleware
 
-- A ordem de execução dos middlewares é `middleware global`->`middleware de aplicativo`->`middleware de rota`.
-- Quando há vários middlewares globais, eles são executados na ordem em que foram configurados (o mesmo aplica-se aos middlewares de aplicativo e de rota).
-- As solicitações 404 não acionam nenhum middleware, incluindo os middlewares globais
+- A ordem de execução do middleware é `middleware global` -> `middleware da aplicação` -> `middleware de rota`.
+- Com vários middlewares globais, a execução segue a ordem de configuração dos middlewares (o mesmo vale para os middlewares de aplicação e de rota).
+- Requisições 404 não acionam nenhum middleware, incluindo os middlewares globais.
 
-## Passagem de parâmetros para o controlador através do middleware
+## Passagem de Parâmetros para o Middleware (route->setParams)
 
-Às vezes, o controlador precisa usar os dados gerados no middleware. Nesse caso, podemos passar os parâmetros para o controlador adicionando novas propriedades ao objeto `$request`. Por exemplo:
+**Configuração de Rota `config/route.php`**
+```php
+<?php
+use support\Request;
+use Webman\Route;
+
+Route::any('/test', [app\controller\IndexController::class, 'index'])->setParams(['some_key' =>'some value']);
+```
+
+**Middleware (supondo ser um middleware global)**
+```php
+<?php
+namespace app\middleware;
+
+use Webman\MiddlewareInterface;
+use Webman\Http\Response;
+use Webman\Http\Request;
+
+class Hello implements MiddlewareInterface
+{
+    public function process(Request $request, callable $handler) : Response
+    {
+        // Como o $request->route padrão é null, é necessário verificar se está vazio
+        if ($route = $request->route) {
+            $value = $route->param('some_key');
+            var_export($value);
+        }
+        return $handler($request);
+    }
+}
+```
+
+## Passagem de Parâmetros do Middleware para o Controlador
+
+Às vezes, o controlador precisa usar dados gerados pelo middleware, nesse caso, podemos passar parâmetros para o controlador adicionando propriedades ao objeto `$request`. Por exemplo:
 
 **Middleware**
 ```php
@@ -347,15 +381,14 @@ class FooController
 }
 ```
 
+## Middleware Obtendo Informações de Rota Atual da Requisição
 
-## Middleware para obter informações de rota atual
-
-> **Nota**
+> **Observação**
 > Requer webman-framework >= 1.3.2
 
-Podemos usar `$request->route` para obter o objeto de rota e obter as informações correspondentes chamando os métodos correspondentes.
+Podemos usar `$request->route` para obter o objeto de rota, e chamando os métodos correspondentes, obter as informações desejadas.
 
-**Configuração de rota**
+**Configuração de Rota**
 ```php
 <?php
 use support\Request;
@@ -378,8 +411,8 @@ class Hello implements MiddlewareInterface
     public function process(Request $request, callable $handler) : Response
     {
         $route = $request->route;
-        // Se a solicitação não corresponder a nenhuma rota (exceto a rota padrão), $request->route será nulo
-        // Supondo que o navegador acesse o endereço /user/111, as informações a seguir serão impressas
+        // Se a requisição não corresponder a nenhuma rota (exceto a rota padrão), $request->route será null.
+        // Supondo que o navegador acesse o endereço /user/111, o seguinte será mostrado
         if ($route) {
             var_export($route->getPath());       // /user/{uid}
             var_export($route->getMethods());    // ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD','OPTIONS']
@@ -387,31 +420,31 @@ class Hello implements MiddlewareInterface
             var_export($route->getMiddleware()); // []
             var_export($route->getCallback());   // ['app\\controller\\UserController', 'view']
             var_export($route->param());         // ['uid'=>111]
-            var_export($route->param('uid'));    // 111
+            var_export($route->param('uid'));    // 111 
         }
         return $handler($request);
     }
 }
 ```
 
-> **Nota**
+> **Observação**
 > O método `$route->param()` requer webman-framework >= 1.3.16
 
-## Middleware para obter exceções
+## Middleware Obtendo Exceções
 
-> **Nota**
+> **Observação**
 > Requer webman-framework >= 1.3.15
 
-Durante o processo de tratamento de negócios, podem ocorrer exceções. No middleware, use `$response->exception()` para obter a exceção.
+Durante o processamento de uma requisição, pode ocorrer uma exceção. No middleware, podemos usar `$response->exception()` para obtê-la.
 
-**Configuração de rota**
+**Configuração de Rota**
 ```php
 <?php
 use support\Request;
 use Webman\Route;
 
 Route::any('/user/{uid}', function (Request $request, $uid) {
-    throw new \Exception('teste de exceção');
+    throw new \Exception('exception test');
 });
 ```
 
@@ -438,40 +471,40 @@ class Hello implements MiddlewareInterface
 }
 ```
 
-## Middleware global
+## Middleware Global
 
-> **Nota**
-> Este recurso requer webman-framework >= 1.5.16
+> **Observação**
+> Esta função requer webman-framework >= 1.5.16
 
-Os middleware globais do projeto principal afetam apenas o projeto principal e não afetam os [plug-ins de aplicativos](app/app.md). Às vezes, queremos adicionar um middleware que afete globalmente todos os plug-ins, neste caso, podemos usar middleware global.
+Os middlewares globais do projeto principal afetam apenas o projeto principal e não têm impacto nos [aplicativos de plugin](app/app.md). Às vezes, podemos querer adicionar um middleware que afete todos os plug-ins, incluindo o projeto principal. Nesse caso, podemos usar o middleware global. No arquivo `config/middleware.php`, a configuração seria a seguinte:
 
-Configure em `config/middleware.php` como a seguir:
 ```php
 return [
-    '@' => [ // Adiciona middleware global para o projeto principal e todos os plug-ins
+    '@' => [ // Adiciona um middleware global ao projeto principal e a todos os plug-ins
         app\middleware\MiddlewareGlobl::class,
     ], 
-    '' => [], // Apenas adiciona middleware global para o projeto principal
+    '' => [], // Adiciona um middleware global apenas ao projeto principal
 ];
 ```
 
-> **Dica**
-> O middleware `@` global não só pode ser configurado no projeto principal, mas também em um determinado plug-in, por exemplo, configurando o middleware `@` global em `plugin/ai/config/middleware.php` também afetará o projeto principal e todos os plug-ins.
+> **Observação**
+> O middleware global `@` pode ser configurado não apenas no projeto principal, mas também em algum plug-in. Por exemplo, configurando o middleware global `@` em um arquivo `plugin/ai/config/middleware.php`, ele afetaria o projeto principal e todos os plug-ins.
 
-## Adicionar middleware a um determinado plug-in
+## Adição de Middleware a um Plugin Específico
 
-> **Nota**
-> Este recurso requer webman-framework >= 1.5.16
+> **Observação**
+> Esta função requer webman-framework >= 1.5.16
 
-Às vezes queremos adicionar um middleware a um [plug-in de aplicativo](app/app.md), mas não queremos alterar o código do plug-in (pois será sobregravado durante uma atualização). Neste caso, podemos configurar o middleware para ele no projeto principal.
+Às vezes, queremos adicionar um middleware a um [aplicativo de plugin](app/app.md), sem modificar o código do próprio plug-in (uma vez que as alterações seriam substituídas durante uma atualização). Nesse caso, podemos configurar o middleware no projeto principal.
 
-Configure em `config/middleware.php` como a seguir:
+No arquivo `config/middleware.php`, a configuração para adicionar middleware a um plug-in específico seria a seguinte:
+
 ```php
 return [
-    'plugin.ai' => [], // Adiciona middleware para o plug-in ai
-    'plugin.ai.admin' => [], // Adiciona middleware para o módulo admin do plug-in ai
+    'plugin.ai' => [], // Adiciona um middleware ao plug-in ai
+    'plugin.ai.admin' => [], // Adiciona um middleware ao módulo admin do plug-in ai
 ];
 ```
 
-> **Dica**
-> É claro que também é possível adicionar uma configuração semelhante em um determinado plug-in para afetar outros plug-ins, por exemplo, adicionando a configuração acima em `plugin/foo/config/middleware.php` afetará o plug-in ai.
+> **Observação**
+> Da mesma forma, também é possível configurar um arquivo semelhante em um plug-in para afetar outros plug-ins. Por exemplo, adicionando essa configuração a um arquivo `plugin/foo/config/middleware.php`, ela afetaria o plug-in ai.

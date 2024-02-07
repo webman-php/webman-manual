@@ -1,5 +1,5 @@
-# ரெடிஸ்
-ரெடிஸ் தரவுத்தளமும் பொருட்டம் போன்று, உதாரணமாக `plugin/foo/config/redis.php`
+# Redis
+ரெடிஸ் SQLite போல் பயன்படுத்தப்படுகின்றது, உதாரணமாக, `plugin/foo/config/redis.php`
 ```php
 return [
     'default' => [
@@ -16,17 +16,18 @@ return [
     ],
 ];
 ```
-பயன்படுத்தும் போது
+
+பயன்பாடு
 ```php
 use support\Redis;
 Redis::connection('plugin.foo.default')->get('key');
 Redis::connection('plugin.foo.cache')->get('key');
 ```
 
-ஒப்பீனியாக, தலைமை பிராஜெக்டின் ரெடிஸ் உள்ளடக்கைப் பயன்படுத்த விரும்பும் போன்ற
+அதே போல, பிரத்யேக பிராதமிக உதாரணத்தில் ரெடிஸ் கட்டமைப்பை மீட்புச் செய்ய விரும்பும் 
 ```php
 use support\Redis;
 Redis::get('key');
-// தலைமை பிராஜெக்டு ஒரு வெக்கம் கணினியையும் உள்ளடக்கு போன்ற
+// உதாரணமாக தலை பிராஜெக்டும் ஒரு காஷே இணைவைக்கும்
 Redis::connection('cache')->get('key');
 ```

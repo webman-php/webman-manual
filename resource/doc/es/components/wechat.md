@@ -33,10 +33,11 @@ class WechatController
 
         $response = $app->server->serve();
         return $response->getContent();
-    }
+      }
+
 }
 ```
 
 ### Más información
 
-Visita https://www.easywechat.com/5.x/
+Visite https://www.easywechat.com/5.x/

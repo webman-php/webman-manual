@@ -1,23 +1,22 @@
 # দ্রুত শুরু
 
-webman ডাটাবেস ডিফল্টভাবে [illuminate/database](https://github.com/illuminate/database) ব্যবহার করে, অর্থাৎ [লারাভেল ডাটাবেসে](https://learnku.com/docs/laravel/8.x/database/9400)। এটি লারাভেলের মতো ব্যবহার করা যায়।
+webman ডাটাবেস ডিফল্টভাবে [illuminate/database](https://github.com/illuminate/database) ব্যবহার করে, যার অর্থ হল [laravel এর ডাটাবেস](https://learnku.com/docs/laravel/8.x/database/9400) ব্যবহার করা হয়, এটি লারাভেলের মতো ব্যবহার করা যায়।
 
-তবে আপনি [অন্যান্য ডাটাবেস কাস্টমাইজেশন](others.md) ফাইল পর্যায়ে থিংকপিএইচপি বা অন্য ডাটাবেস ব্যবহার করতে পারেন।
+তবে আপনি [অন্যান্য ডাটাবেস কম্পোনেন্ট ব্যবহার করা](others.md) বিষয়বস্তু চেক করতে পারেন।
 
 ## ইনস্টলেশন
 
 `composer require -W illuminate/database illuminate/pagination illuminate/events symfony/var-dumper`
 
-ইনস্টলেশন সম্পন্ন হলে রিস্টার্ট করতে হবে (রিলোড করা যাবে না)
+রিস্টার্ট করুন ইনস্টলেশনের পরে (রিলোড করা মান্য না)
 
-> **সাজাক্ষী**
-> পেজিনেশন, ডাটাবেস ইভেন্ট, SQL প্রিন্ট এর প্রয়োজন না হলে, কেবলমাত্র নিম্নবর্ণিত কমান্ড চালু করতে হবে
+> **পরামর্শ**
+> যদি পেজিনেশন, ডাটাবেস ইভেন্ট, এবং SQL প্রিন্টিং প্রয়োজন না হয় তাহলে শুধুমাত্র নিম্নলিখিত কমান্ড চালানোর প্রয়োজন হবে
 > `composer require -W illuminate/database`
 
 ## ডাটাবেস কনফিগারেশন
 `config/database.php`
 ```php
-
 return [
     // ডিফল্ট ডাটাবেস
     'default' => 'mysql',
@@ -44,7 +43,6 @@ return [
     ],
 ];
 ```
-
 
 ## ব্যবহার
 ```php

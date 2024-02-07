@@ -1,22 +1,21 @@
-# İşyeri Başlatma
+# İşletme Başlatma
 
-Bazen bir süreç başlatıldıktan sonra iş yerinde başlatma yapmamız gerekebilir. Bu başlatma, süreç yaşam döngüsünde yalnızca bir kez gerçekleşir, örneğin bir süreç başlatıldıktan sonra bir zamanlayıcı ayarlama veya veritabanı bağlantısını başlatma gibi. Aşağıda bunu açıklayacağız.
+Bazen bir işlem başlatıldıktan sonra işletme başlatma işlemleri yapmamız gerekebilir. Bu başlatma işlemi, işlem ömrü boyunca sadece bir kez çalışacaktır. Örneğin, işlem başlatıldıktan sonra bir zamanlayıcı ayarlamak veya veritabanı bağlantısını başlatmak gibi. Aşağıda bu konuya dair bir açıklama bulunmaktadır.
 
-## İlke
-**[Execute Process](process.md)** bölümünde belirtildiği gibi, webman süreç başlatıldıktan sonra `config/bootstrap.php` (bu, `config/plugin/*/*/bootstrap.php` içinde ayarlanmış sınıfları da içerir) içindeki sınıfları yükler ve sınıfın başlatma metodunu çalıştırır. Start metoduna iş yerinde kod ekleyerek işyeri başlatma işlemini tamamlayabiliriz.
+## Prensip
+**[İşlem Akışı](process.md)** kısmında belirtildiği gibi, webman işlem başladıktan sonra `config/bootstrap.php` (dahil olmak üzere `config/plugin/*/*/bootstrap.php`) dosyasında belirtilen sınıfları yükler ve sınıfların start metotlarını çalıştırır. Biz start metodu içerisine işletme kodlarını ekleyerek işlem başladıktan sonraki işletme başlatma işlemini gerçekleştirebiliriz.
 
-## Akış
-Örneğin, bir zamanlayıcı oluşturmamız ve belirli aralıklarla mevcut işlem belleğini raporlamak için, `MemReport` adında bir sınıf oluşturmak istediğimizi düşünelim.
+## Süreç
+Örneğin, işlem başladıktan sonra iç bellek kullanımını düzenli aralıklarla raporlamak için bir zamanlayıcı yapmak istediğimizi düşünelim. Bu sınıfa `MemReport` adını verdik.
 
-#### Komutu çalıştırın
+#### Komutu Çalıştırın
+`php webman make:bootstrap MemReport` komutunu çalıştırarak başlatma dosyası olan `app/bootstrap/MemReport.php` dosyasını oluşturun.
 
-`php webman make:bootstrap MemReport` komutunu çalıştırarak başlatma dosyası `app/bootstrap/MemReport.php` dosyasını oluşturun.
+> **Not**
+> Eğer webman'da `webman/console` yüklü değilse, `composer require webman/console` komutunu çalıştırarak yükleyin.
 
-> **İpucu**
-> Eğer webman'ınızda `webman/console` yüklü değilse `composer require webman/console` komutunu çalıştırarak yükleyin.
-
-#### Başlatma dosyasını düzenleyin
-`app/bootstrap/MemReport.php` dosyasını düzenleyerek aşağıdaki gibi içeriğini düzenleyin:
+#### Başlatma Dosyasını Düzenle
+`app/bootstrap/MemReport.php` dosyasını düzenleyerek aşağıdaki gibi bir içerik oluşturun:
 
 ```php
 <?php
@@ -29,10 +28,10 @@ class MemReport implements Bootstrap
 {
     public static function start($worker)
     {
-        // Komut satırı ortamı mı ?
+        // Bu komut satırı işletme ortamında mı çalışıyor?
         $is_console = !$worker;
         if ($is_console) {
-            // Eğer komut satırı ortamında başlatma yapmak istemiyorsanız, burada doğrudan dönüş yapabilirsiniz
+            // Eğer işletme ortamında bu başlatma işlemini çalıştırmak istemiyorsanız, burada doğrudan çıkın
             return;
         }
         
@@ -47,23 +46,23 @@ class MemReport implements Bootstrap
 }
 ```
 
-> **İpucu**
-> Komut satırı kullanırken, çerçeve ayrıca `config/bootstrap.php` de konfigüre edilmiş başlatma metodunu çalıştıracak, iş yerini belirli bir koşulda çalıştırıp çalıştırmamanız gerektiğini belirlemek için `$worker` değişkeninin boş olup olmadığını kontrol edebilirsiniz.
+> **Not**
+> Komut satırı kullanırken, çerçeve ayrıca `config/bootstrap.php` dosyasında belirtilen start metotlarını çalıştırır. İşletme başlatma kodlarını çalıştırıp çalıştırmayacağımızı belirlemek için `$worker`'ın null olup olmadığını kontrol edebiliriz.
 
-#### Süreç başlatma ile yapılandırma
-`config/bootstrap.php` dosyasını açarak `MemReport` sınıfını başlatma öğelerine ekleyin.
+#### İşlemle Birlikte Başlatma Dosyasını Yapılandırın
+`config/bootstrap.php` dosyasını açarak `MemReport` sınıfını başlatma öğesine ekleyin.
 ```php
 return [
-    // ...diğer yapılandırmalar burada kısaltıldı...
-    
+    // ...Diğer yapılandırmalar burada kısaltılmıştır...
+
     app\bootstrap\MemReport::class,
 ];
 ```
 
-Bu şekilde bir işyeri başlatma akışını tamamlamış oluruz.
+Bu şekilde işletme başlatma sürecini tamamlamış oluruz.
 
-## Ek Bilgi
-[Custom Processes](../process.md) başlatıldıktan sonra `config/bootstrap.php` de yapılandırılmış başlatma metodunu da çalıştırır. Hangi sürecin şu anda hangi süreç olduğunu `$worker->name` üzerinden kontrol edebilir ve bu süreçte işyeri başlatma kodunuzu çalıştırıp çalıştırmamanız gerektiğine karar verebilirsiniz. Örneğin, monitor sürecini izlemek istemiyorsak, `MemReport.php` dosyası aşağıdakine benzer olabilir:
+## Ek Açıklamalar
+[Özel İşlemler](../process.md) başlatıldığında da `config/bootstrap.php` dosyasında belirtilen start metotlarını çalıştırır. Hangi işlemin hangi işlem olduğunu belirlemek için `$worker->name` ile mevcut işlemi kontrol edebilir ve bu işlemlere özgü işletme başlatma kodlarını çalıştırıp çalıştırmamaya karar verebiliriz. Örneğin, monitor işlemine gözetim yapmak istemiyoruz, bu durumda `MemReport.php` içeriği aşağıdaki gibi olabilir:
 
 ```php
 <?php
@@ -76,14 +75,14 @@ class MemReport implements Bootstrap
 {
     public static function start($worker)
     {
-        // Komut satırı ortamı mı ?
+        // Bu komut satırı işletme ortamında mı çalışıyor?
         $is_console = !$worker;
         if ($is_console) {
-            // Eğer komut satırı ortamında başlatma yapmak istemiyorsanız, burada doğrudan dönüş yapabilirsiniz
+            // Eğer işletme ortamında bu başlatma işlemini çalıştırmak istemiyorsanız, burada doğrudan çıkın
             return;
         }
         
-        // monitor süreci zamanlayıcıyı çalıştırmasın
+        // monitor işlemi zamanlayıcıyı çalıştırmasın
         if ($worker->name == 'monitor') {
             return;
         }

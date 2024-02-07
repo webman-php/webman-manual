@@ -1,21 +1,21 @@
-# Inizializzazione dell'Applicazione
+# Inizializzazione dell'attività
 
-A volte è necessario effettuare alcune inizializzazioni dell'attività dopo l'avvio dei processi. Questa inizializzazione viene eseguita solo una volta durante il ciclo di vita del processo, ad esempio impostare un timer dopo l'avvio del processo o inizializzare la connessione al database. Di seguito verrà fornita un'illustrazione in merito.
+A volte è necessario eseguire un'attività di inizializzazione dopo l'avvio di un processo. Questa inizializzazione viene eseguita solo una volta durante il ciclo di vita del processo, ad esempio impostare un timer dopo l'avvio del processo o inizializzare la connessione al database. Di seguito forniremo una spiegazione in merito.
 
 ## Principio
-In base alle spiegazioni del **[flusso di esecuzione](process.md)**, dopo l'avvio del processo, webman carica le classi impostate in `config/bootstrap.php` (inclusi `config/plugin/*/*/bootstrap.php`) ed esegue il metodo di avvio della classe. In questo modo, nel metodo di avvio è possibile inserire il codice dell'attività per completare l'inizializzazione dell'attività dopo l'avvio del processo.
+In base alle spiegazioni nel **[flusso di esecuzione](process.md)**, una volta avviato il processo, webman carica le classi definite in `config/bootstrap.php` (incluse le classi definite in `config/plugin/*/*/bootstrap.php`) ed esegue il metodo di avvio della classe. Possiamo inserire il codice dell'attività nell'implementazione del metodo di avvio, così da completare l'attività di inizializzazione dopo l'avvio del processo.
 
 ## Procedura
-Supponiamo di voler creare un timer per l'invio periodico dell'utilizzo attuale della memoria del processo, il cui nome della classe è `MemReport`.
+Supponiamo di voler creare un timer per l'invio periodico dell'utilizzo della memoria corrente del processo. Chiamiamo questa classe `MemReport`.
 
-#### Esecuzione del comando
-Eseguire il comando `php webman make:bootstrap MemReport` per generare il file di inizializzazione `app/bootstrap/MemReport.php`.
+#### Esegui il comando
+Esegui il comando `php webman make:bootstrap MemReport` per generare il file di inizializzazione `app/bootstrap/MemReport.php`
 
-> **Nota**
-> Se webman non ha installato il pacchetto `webman/console`, eseguire il comando `composer require webman/console` per installarlo.
+> **Suggerimento**
+> Se `webman` non dispone del pacchetto `webman/console`, esegui il comando `composer require webman/console` per installarlo.
 
-#### Modifica del file di Inizializzazione
-Modificare `app/bootstrap/MemReport.php` con un contenuto simile al seguente:
+#### Modifica del file di inizializzazione
+Modifica `app/bootstrap/MemReport.php` con un contenuto simile al seguente:
 ```php
 <?php
 
@@ -27,16 +27,16 @@ class MemReport implements Bootstrap
 {
     public static function start($worker)
     {
-        // È un ambiente della riga di comando?
+        // E' un ambiente di linea di comando ?
         $is_console = !$worker;
         if ($is_console) {
-            // Se non si desidera eseguire questa inizializzazione in un ambiente della riga di comando, è possibile restituire direttamente qui
+            // Se non si desidera eseguire questa inizializzazione in un ambiente di linea di comando, basta restituire qui.
             return;
         }
         
         // Esegui ogni 10 secondi
         \Workerman\Timer::add(10, function () {
-            // Per comodità della dimostrazione, qui utilizziamo l'output al posto del processo di invio
+            // Per semplicità, qui usiamo la stampa anziché il processo di invio.
             echo memory_get_usage() . "\n";
         });
         
@@ -45,23 +45,23 @@ class MemReport implements Bootstrap
 }
 ```
 
-> **Nota**
-> Anche durante l'uso del terminale, il framework esegue il metodo di avvio configurato in `config/bootstrap.php`. Possiamo valutare se l'ambiente è una riga di comando mediante la variabile `$worker` null, decidendo così se eseguire il codice di inizializzazione dell'attività.
+> **Suggerimento**
+> Quando si utilizza la riga di comando, il framework eseguirà il metodo di avvio definito in `config/bootstrap.php`. Possiamo determinare se ci troviamo in un ambiente di linea di comando basandoci sul valore di `$worker`, decidendo quindi se eseguire il codice di inizializzazione dell'attività.
 
-#### Configurazione per l'avvio del processo
-Aprire `config/bootstrap.php` e aggiungere la classe `MemReport` agli elementi di avvio.
+#### Configurazione dell'avvio del processo
+Apri `config/bootstrap.php` e aggiungi la classe `MemReport` all'elenco di avvio.
 ```php
 return [
-    // ... Altre configurazioni sono omesse ...
-
+    // ... altre configurazioni sono omesse ...
+    
     app\bootstrap\MemReport::class,
 ];
 ```
 
-In questo modo abbiamo completato il flusso di inizializzazione dell'attività.
+In questo modo, abbiamo completato un flusso di inizializzazione dell'attività.
 
-## Note Aggiuntive
-Dopo l'avvio del processo, viene eseguito anche il metodo di avvio configurato in `config/bootstrap.php` per l'avvio del [processo personalizzato](../process.md). Possiamo valutare il tipo di processo attuale tramite `$worker->name` e decidere se eseguire il codice di inizializzazione dell'attività in quel processo. Ad esempio, se non desideriamo monitorare il processo `monitor`, il contenuto di `MemReport.php` sarebbe simile al seguente:
+## Ulteriori dettagli
+Dopo l'avvio dei **[processi personalizzati](../process.md)**, verrà eseguito il metodo di avvio definito in `config/bootstrap.php`. Possiamo determinare quale processo stiamo eseguendo verificando il valore di `$worker->name` e decidere se eseguire il codice di inizializzazione dell'attività per quel processo. Ad esempio, se non vogliamo monitorare il processo "monitor", il contenuto di `MemReport.php` sarà simile al seguente:
 ```php
 <?php
 
@@ -73,10 +73,10 @@ class MemReport implements Bootstrap
 {
     public static function start($worker)
     {
-        // È un ambiente della riga di comando?
+        // E' un ambiente di linea di comando ?
         $is_console = !$worker;
         if ($is_console) {
-            // Se non si desidera eseguire questa inizializzazione in un ambiente della riga di comando, è possibile restituire direttamente qui
+            // Se non si desidera eseguire questa inizializzazione in un ambiente di linea di comando, basta restituire qui.
             return;
         }
         
@@ -87,7 +87,7 @@ class MemReport implements Bootstrap
         
         // Esegui ogni 10 secondi
         \Workerman\Timer::add(10, function () {
-            // Per comodità della dimostrazione, qui utilizziamo l'output al posto del processo di invio
+            // Per semplicità, qui usiamo la stampa anziché il processo di invio
             echo memory_get_usage() . "\n";
         });
         

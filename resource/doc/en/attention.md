@@ -1,22 +1,22 @@
-# Programming notes
+# Programming Notes
 
 ## Operating System
-webman supports running on both Linux and Windows systems. However, due to the inability of Workerman to support multi-process settings and daemon processes on Windows, it is recommended to use Windows only for development and debugging. For a production environment, please use Linux.
+webman supports both Linux and Windows systems. However, because workerman does not support multi-process settings and daemon processes on Windows, it is recommended to use Windows only for development and debugging purposes. For production environments, please use Linux.
 
-## Startup Method
-**For Linux system**, use the command `php start.php start` (debug mode) or `php start.php start -d` (daemon mode) to start.
-**For Windows system**, run `windows.bat` or use the command `php windows.php` to start, and stop by pressing ctrl c. Windows system does not support commands such as stop, reload, status, and connections.
+## Startup method
+On Linux, use the command `php start.php start` (debug mode) or `php start.php start -d` (daemon mode) to start the server.
+On Windows, execute `windows.bat` or use the command `php windows.php` to start the server, and press Ctrl+C to stop it. Windows does not support commands such as stop, reload, status, and connections.
 
-## Resident Memory
-webman is a resident memory framework. Generally, after a PHP file is loaded into memory, it will be reused and not read from the disk again (except for template files). Therefore, in the production environment, business code or configuration changes need to execute `php start.php reload` to take effect. If there are changes to process-related configurations or installation of new composer packages, you need to restart using `php start.php restart`.
+## Resident memory
+webman is a resident memory framework, which means that once a PHP file is loaded into memory, it will be reused and not read from the disk again (except for template files). Therefore, in a production environment, changes to business code or configurations require executing `php start.php reload` to take effect. If you have changed process-related configurations or installed new composer packages, you need to restart with `php start.php restart`.
 
-> For development convenience, webman comes with a monitor custom process to monitor the updates of business files. When there are updates to business files, a reload will be automatically triggered. This feature is only enabled when Workerman is running in debug mode (without `-d` when starting). Windows users need to run `windows.bat` or `php windows.php` to enable this feature.
+> For the convenience of development, webman comes with a monitor custom process for monitoring updates to business files. When a business file is updated, it will automatically execute a reload. This feature is only enabled when workerman is running in debug mode (without the `-d` flag) and is only available for Windows users by executing `windows.bat` or `php windows.php`.
 
-## Output Statement
-In traditional PHP-FPM projects, using functions like `echo` and `var_dump` to output data will be displayed directly on the page. However, in webman, these outputs are often displayed on the terminal and will not appear on the page (except for outputs in template files).
+## About output statements
+In traditional PHP-FPM projects, using functions like `echo` or `var_dump` will directly display the data on the page. However, in webman, these outputs are often displayed in the terminal and not in the page (except for outputs in template files).
 
-## Avoid Using `exit` and `die` Statements
-Executing `die` or `exit` will cause the process to exit and restart, leading to the inability to respond correctly to the current request.
+## Do not execute `exit` or `die` statements
+Executing `die` or `exit` will cause the process to exit and restart, resulting in the current request being unable to be responded correctly.
 
-## Avoid Using the `pcntl_fork` Function
-Creating a process using `pcntl_fork` is not allowed in webman.
+## Do not execute the `pcntl_fork` function
+Using `pcntl_fork` to create a process is not allowed in webman.

@@ -1,32 +1,34 @@
-# Casbin 访问控制库 webman-permission
+# Casbin அணுக்குமுறை லிப்ரரி webman-permission
 
-## 说明
+## விளக்கம்
 
-它基于 [PHP-Casbin](https://github.com/php-casbin/php-casbin), 一个强大的、高效的开源访问控制框架，支持基于`ACL`, `RBAC`, `ABAC`等访问控制模型。
-  
-## 项目地址
+இது [PHP-Casbin](https://github.com/php-casbin/php-casbin) சொல்லுபடி அதிகப்படியாக மற்றும் வெற்றுபெற்ற ஒதுக்கீடு கட்டமைக்கப்பட்ட ஒலிக்கானவை ஆகும். அது `ACL`, `RBAC`, `ABAC` போன்ற அணுக்குமுறை மாதிரிகள் தொகுதிகள் காணக்கூடியவைகளை ஆதரிக்கின்றது.
+
+## பிராரம்ப இடம்
 
 https://github.com/Tinywan/webman-permission
-  
-## 安装
- 
+
+## நிறுவு
+
 ```php
 composer require tinywan/webman-permission
 ```
-> 该扩展需要 PHP 7.1+ 和 [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998)，官方手册：https://www.workerman.net/doc/webman#/db/others
+> இந்த விரிவான PHP 7.1+ மற்றும் [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998) ஐக்கியமாக வேண்டும். அதனுடைய அதிகாரிகம்: https://www.workerman.net/doc/webman#/db/others
 
-## 配置
+## அமைப்பது
 
-### 注册服务
-新建配置文件 `config/bootstrap.php` 内容类似如下：
-  
+### பணியாளரை பதிவு செய்
+`config/bootstrap.php` புதிய உள்ளடக்கத்தை உருவாக்குக, உதாரணமாக கீழே உள்ளடக்கம் போல்:
+
 ```php
     // ...
     webman\permission\Permission::class,
 ```
-### Model 配置文件 
 
-新建配置文件 `config/casbin-basic-model.conf` 内容类似如下：
+### மாதிரி உள்ளடக்கம் கோப்பு
+
+`config/casbin-basic-model.conf` புதிய உள்ளடக்க கோப்பை உருவாக்குக, உதாரணமாக கீழே உள்ளடக்கம் போல்:
+
 ```conf
 [request_definition]
 r = sub, obj, act
@@ -43,27 +45,29 @@ e = some(where (p.eft == allow))
 [matchers]
 m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
 ```
-### Policy 配置文件
 
-新建配置文件 `config/permission.php` 内容类似如下：
+### அனுமதி உள்ளடக்கம் கோப்பு
+
+`config/permission.php` புதிய உள்ளடக்கம் கோப்பை உருவாக்குக, உதாரணமாக கீழே உள்ளடக்க போல்:
+
 ```php
 <?php
 
 return [
     /*
-     *Default  Permission
+     *இயல்பு அனுமதி
      */
     'default' => 'basic',
 
-    'log' => [
-        'enabled' => false,
-        'logger' => 'log',
+    'பதிவு' => [
+        'செயல்பாட்டில்' => false,
+        'பதிவினர்' => 'பதிவு',
     ],
 
     'enforcers' => [
         'basic' => [
             /*
-            * Model 设置
+            * மாதிரி அமைப்பு
             */
             'model' => [
                 'config_type' => 'file',
@@ -71,104 +75,99 @@ return [
                 'config_text' => '',
             ],
 
-            // 适配器 .
+            // அமைப்பாக்கை உள்ளடக்குதல்
             'adapter' => webman\permission\adapter\DatabaseAdapter::class,
 
             /*
-            * 数据库设置.
+            * தரவுத்தள அமைத்தல்
             */
             'database' => [
-                // 数据库连接名称，不填为默认配置.
+                // தரவுத்தள இணையத்தன்மை, இல்லாமல் இருந்தால் இயல்பு அமைப்புஆகும்.
                 'connection' => '',
-                // 策略表名（不含表前缀）
+                // கொடுப்பள்ளி அடைவின் பெயர் (முன் தலைவரை முட்டாள்க்கும்)
                 'rules_name' => 'rule',
-                // 策略表完整名称.
+                // கொடுப்பள்ளி அடைவின் முழு பெயர்.
                 'rules_table' => 'train_rule',
             ],
         ],
     ],
 ];
 ```
-## 快速开始
+
+## வேகமாக தொடங்க
 
 ```php
-use webman\permission\Permission;
-
-// adds permissions to a user
+பயனருக்கு அனுமதிகளை சேர்க்கின்றேன்
 Permission::addPermissionForUser('eve', 'articles', 'read');
-// adds a role for a user.
+// பயனருக்கு ஒரு பங்கு சேர்க்கிறேன்.
 Permission::addRoleForUser('eve', 'writer');
-// adds permissions to a rule
+// rule க்கு அனுமதிகளை சேர்க்கிறேன்
 Permission::addPolicy('writer', 'articles','edit');
 ```
 
-您可以检查用户是否具有这样的权限
+நீங்கள் பயனர் க்கு இந்த வகையில் அனுமதியை வைக்க முடியும்
 
 ```php
 if (Permission::enforce("eve", "articles", "edit")) {
-    // permit eve to edit articles
+    // முடக்கு அனுமதிக்கு அனுமதி கொடு
 } else {
-    // deny the request, show an error
+    // கோரிக்கையை மறுப்பது, வழிமுறை காட்டு
 }
-````
+```
 
-## 授权中间件
+## அனுமதி நடைமுறையாளர்
 
-创建文件 `app/middleware/AuthorizationMiddleware.php` (如目录不存在请自行创建) 如下：
+`app/middleware/AuthorizationMiddleware.php` என்ற கோப்பை உருவாக்குக (இல்லையாவது அத உருவாக்கப்படவில்லை) கீழே உள்ளடக்கம் போல்:
+
 ```php
 <?php
 
 /**
- * 授权中间件
- * @author ShaoBo Wan (Tinywan)
- * @datetime 2021/09/07 14:15
- */
+* அனுமதி நடைமுறையாளர்
+* எழுதியவர் ஷாவோ வான் (சிறியவன்)
+* காலாக்கை 2021/09/07 14:15
+*/
 
-declare(strict_types=1);
-
-namespace app\middleware;
-
-use Webman\MiddlewareInterface;
+முருக்கு_கோரிக்கை_வகையாளர் use Webman\MiddlewareInterface;
 use Webman\Http\Response;
 use Webman\Http\Request;
 use Casbin\Exceptions\CasbinException;
 use webman\permission\Permission;
 
-class AuthorizationMiddleware implements MiddlewareInterface
+வர்ணக்_நடப்பு_நடையாளர் வசமாக்குகInterface
 {
 	public function process(Request $request, callable $next): Response
 	{
 		$uri = $request->path();
 		try {
 			$userId = 10086;
-			$action = $request->method();
+			நடவடிக்கை = $கோரிக்கை->முதுகுமரம்();
 			if (!Permission::enforce((string) $userId, $uri, strtoupper($action))) {
-				throw new \Exception('对不起，您没有该接口访问权限');
+				throw new \Exception('மன்னிக்கவும், உங்களுக்கு அந்த அடைவு அனுமதி இல்லை');
 			}
-		} catch (CasbinException $exception) {
-			throw new \Exception('授权异常' . $exception->getMessage());
+		} catch (CasbinException $எச்சரிப்பு) {
+			throw new \Exception('அனுமதி விதிக்கு விதியாக்கம்' . $எச்சரிப்பு->செய்தியை_போக்கு);
 		}
-		return $next($request);
+		return $அடிப்படை($கோரிக்கை);
 	}
 }
 ```
 
-在 `config/middleware.php` 中添加全局中间件如下：
-
+`config/middleware.php` - ல் இதையப்பால் உள்ளடக்க நடைமுறையாளர்களை சேர்த்துகொள்ளவும்:
 ```php
-return [
-    // 全局中间件
+மீட்டபால்
+    // மாநில நடைமுறையாளர்கள்
     '' => [
-        // ... 这里省略其它中间件
+        // ... இல்லைபோல், மற்றும் அதை மறைக்குக
         app\middleware\AuthorizationMiddleware::class,
     ]
 ];
 ```
 
-## 感谢
+## நன்றி
 
-[Casbin](https://github.com/php-casbin/php-casbin)，你可以查看全部文档在其 [官网](https://casbin.org/) 上。
+[Casbin](https://github.com/php-casbin/php-casbin) உங்கள் எழுதுதமைக்கும் ஆதரவு கொடுக்கின்றது, அதன் [அதிகாரப்பூர்வ இலக்கு](https://casbin.org/) இணையதளத்தில் நீங்கள் முழு ஆவணங்களைக் காணலாம்.
 
-## License
+## உரிமாணம்
 
-This project is licensed under the [Apache 2.0 license](LICENSE).
+இந்த திட்டம் [அபாசி 2.0 உரிமாணத்தின்](LICENSE) கீழே உள்ளடக்கப்பட்டுள்ளது.

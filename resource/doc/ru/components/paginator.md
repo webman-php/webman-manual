@@ -14,7 +14,7 @@ composer require "jasongrimes/paginator:^1.0.3"
   
 ### Использование
 
-Create `app/controller/UserController.php`
+Создайте файл `app/controller/UserController.php`
 ```php
 <?php
 namespace app\controller;
@@ -26,7 +26,7 @@ class UserController
 {
     /**
      * Список пользователей
-    */
+     */
     public function get(Request $request)
     {
         $total_items = 1000;
@@ -39,12 +39,13 @@ class UserController
     
 }
 ```
-**Шаблон (оригинальный PHP)**
-Create template app/view/user/get.html
+**Шаблон (чистый PHP)**
+
+Создайте шаблон в файле app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- Поддерживает стили пагинации Bootstrap по умолчанию -->
+  <!-- Встроенная поддержка стилей пагинации Bootstrap -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -56,11 +57,12 @@ Create template app/view/user/get.html
 ```
 
 **Шаблон (twig)**
-Create template app/view/user/get.html
+
+Создайте шаблон в файле app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- Поддерживает стили пагинации Bootstrap по умолчанию -->
+  <!-- Встроенная поддержка стилей пагинации Bootstrap -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -74,11 +76,12 @@ Create template app/view/user/get.html
 ```
 
 **Шаблон (blade)**
-Create template app/view/user/get.blade.php
+
+Создайте шаблон в файле app/view/user/get.blade.php
 ```html
 <html>
 <head>
-  <!-- Поддерживает стили пагинации Bootstrap по умолчанию -->
+  <!-- Встроенная поддержка стилей пагинации Bootstrap -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -90,11 +93,12 @@ Create template app/view/user/get.blade.php
 ```
 
 **Шаблон (thinkphp)**
-Create template app/view/user/get.blade.php
+
+Создайте шаблон в файле app/view/user/get.blade.php
 ```html
 <html>
 <head>
-    <!-- Поддерживает стили пагинации Bootstrap по умолчанию -->
+    <!-- Встроенная поддержка стилей пагинации Bootstrap -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -105,7 +109,8 @@ Create template app/view/user/get.blade.php
 </html>
 ```
 
-Эффект выглядит следующим образом:
+Результат:
+
 ![](../../assets/img/paginator.png)
   
 ### Дополнительная информация

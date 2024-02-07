@@ -1,5 +1,5 @@
 # লগ
-webman লগ প্রসেস করার জন্য [monolog/monolog](https://github.com/Seldaek/monolog) ব্যবহার করে।
+webman [monolog/monolog](https://github.com/Seldaek/monolog) ব্যবহার করে লগ প্রসেস করে।
 
 ## ব্যবহার
 ```php
@@ -14,12 +14,12 @@ class FooController
     public function index(Request $request)
     {
         Log::info('লগ পরীক্ষা');
-        return response('ওহে index');
+        return response('হ্যালো ইন্ডেক্স');
     }
 }
 ```
 
-## উপলব্ধ পদক্ষেপ
+## প্রদানকৃত মেথড
 ```php
 Log::log($level, $message, array $context = [])
 Log::debug($message, array $context = [])
@@ -31,7 +31,7 @@ Log::critical($message, array $context = [])
 Log::alert($message, array $context = [])
 Log::emergency($message, array $context = [])
 ```
-সমতুল্য
+একইভাবে যেমন
 ```php
 $log = Log::channel('default');
 $log->log($level, $message, array $context = [])
@@ -50,21 +50,21 @@ $log->emergency($message, array $context = [])
 return [
     // ডিফল্ট লগ চ্যানেল
     'default' => [
-        // ডিফল্ট চ্যানেলের হ্যান্ডলার প্রসেসিং, এটি একাধিক সেট করা যাবে
+        // ডিফল্ট চ্যানেলে হ্যান্ডলার প্রসেস করার, এটা অনেক সেট করা যাবে
         'handlers' => [
             [   
                 // হ্যান্ডলার ক্লাসের নাম
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // হ্যান্ডলার ক্লাসের কন্সট্রাক্টর অ্যার্গুমেন্ট
+                // হ্যান্ডলার ক্লাসের কন্সট্রাক্টর প্যারামিটার
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
-                ],
-                // ফরম্যাটার সম্পর্কে
+				],
+                // ফর্ম্যাটার সম্পর্কে
                 'formatter' => [
-                    // ফরম্যাটার প্রসেসিং ক্লাসের নাম
+                    // ফর্ম্যাটার প্রসেসিং ক্লাসের নাম
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // ফরম্যাটার প্রসেসিং ক্লাসের কন্সট্রাক্টর অ্যার্গুমেন্ট
+                    // ফর্ম্যাটার প্রসেসিং ক্লাসের কন্সট্রাক্টর প্যারামিটার
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -73,27 +73,27 @@ return [
 ];
 ```
 
-## বহুল চ্যানেল
-মনোলগ বহুল চ্যানেল সমর্থন করে, ডিফল্টভাবে `ডিফল্ট` চ্যানেল ব্যবহার হয়। যদি `লগ2` চ্যানেল যোগ করতে চান, তাহলে নিম্নলিখিতের মত কনফিগার করুন:
+## মাল্টি চ্যানেল
+monolog মাল্টি চ্যানেল সাপোর্ট করে, ডিফল্ট হল `ডিফল্ট` চ্যানেল ব্যবহার করে। যদি `লগ2` চ্যানেল যোগ করতে চান, তাহলে নিম্নলিখিতভাবে কনফিগার করা হবে:
 ```php
 return [
     // ডিফল্ট লগ চ্যানেল
     'default' => [
-        // ডিফল্ট চ্যানেলের হ্যান্ডলার প্রসেসিং, এটি একাধিক সেট করা যাবে
+        // ডিফল্ট চ্যানেলে হ্যান্ডলার প্রসেস করার, এটা অনেক সেট করা যাবে
         'handlers' => [
             [   
                 // হ্যান্ডলার ক্লাসের নাম
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // হ্যান্ডলার ক্লাসের কন্সট্রাক্টর অ্যার্গুমেন্ট
+                // হ্যান্ডলার ক্লাসের কন্সট্রাক্টর প্যারামিটার
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
-                ],
-                // ফরম্যাটার সম্পর্কে
+				],
+                // ফর্ম্যাটার সম্পর্কে
                 'formatter' => [
-                    // ফরম্যাটার প্রসেসিং ক্লাসের নাম
+                    // ফর্ম্যাটার প্রসেসিং ক্লাসের নাম
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // ফরম্যাটার প্রসেসিং ক্লাসের কন্সট্রাক্টর অ্যার্গুমেন্ট
+                    // ফর্ম্যাটার প্রসেসিং ক্লাসের কন্সট্রাক্টর প্যারামিটার
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -101,21 +101,21 @@ return [
     ],
     // লগ2 চ্যানেল
     'log2' => [
-        // ডিফল্ট চ্যানেলের হ্যান্ডলার প্রসেসিং, এটি একাধিক সেট করা যাবে
+        // ডিফল্ট চ্যানেলে হ্যান্ডলার প্রসেস করার, এটা অনেক সেট করা যাবে
         'handlers' => [
             [   
                 // হ্যান্ডলার ক্লাসের নাম
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // হ্যান্ডলার ক্লাসের কন্সট্রাক্টর অ্যার্গুমেন্ট
+                // হ্যান্ডলার ক্লাসের কন্সট্রাক্টর প্যারামিটার
                 'constructor' => [
                     runtime_path() . '/logs/log2.log',
                     Monolog\Logger::DEBUG,
-                ],
-                // ফরম্যাটার সম্পর্কে
+				],
+                // ফর্ম্যাটার সম্পর্কে
                 'formatter' => [
-                    // ফরম্যাটার প্রসেসিং ক্লাসের নাম
+                    // ফর্ম্যাটার প্রসেসিং ক্লাসের নাম
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // ফরম্যাটার প্রসেসিং ক্লাসের কন্সট্রাক্টর অ্যার্গুমেন্ট
+                    // ফর্ম্যাটার প্রসেসিং ক্লাসের কন্সট্রাক্টর প্যারামিটার
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -124,7 +124,7 @@ return [
 ];
 ```
 
-লগ2 চ্যানেল ব্যবহারের জন্য ব্যবহার পদ্ধতি:
+`লগ2` চ্যানেল ব্যবহার করার স্থানে ব্যবহার সিদ্ধান্তটি নিম্নলিখিত প্রকারে থাকবে:
 ```php
 <?php
 namespace app\controller;
@@ -138,7 +138,7 @@ class FooController
     {
         $log = Log::channel('log2');
         $log->info('লগ2 পরীক্ষা');
-        return response('ওহে index');
+        return response('হ্যালো ইন্ডেক্স');
     }
 }
 ```

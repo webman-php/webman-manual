@@ -1,10 +1,10 @@
-# Casbin এক্সেস নিয়ন্ত্রণ লাইব্রেরি webman-permission
+# Casbin অ্যাক্সেস কন্ট্রোল লাইব্রেরি webman-permission
 
 ## বর্ণনা
 
-এটি [PHP-Casbin](https://github.com/php-casbin/php-casbin) এর উপর ভিত্তি করে, এটি একটি শক্তিশালী, দক্ষ ওপেন সোর্স এক্সেস কন্ট্রোল ফ্রেমওয়ার্ক,`ACL`, `RBAC`, `ABAC` এমন একই অ্যাক্সেস কন্ট্রোল মডেল সমর্থন করে।
+এটি [PHP-Casbin](https://github.com/php-casbin/php-casbin) এর উপর ভিত্তি। এটি একটি শক্তিশালী, দক্ষতাপূর্ণ ও ওপেন সোর্স অ্যাক্সেস কন্ট্রোল ফ্রেমওয়ার্ক, `ACL`, `RBAC`, `ABAC` ইত্যাদি অ্যাক্সেস কন্ট্রোল মডেল সমর্থন করে।
 
-## প্রকল্প ঠিকানা
+## প্রজেক্ট ঠিকানা
 
 https://github.com/Tinywan/webman-permission
 
@@ -13,20 +13,22 @@ https://github.com/Tinywan/webman-permission
 ```php
 composer require tinywan/webman-permission
 ```
-> এই এক্সটেনশনটি PHP 7.1+ এবং [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998) এবং অফিসিয়াল ম্যানুয়াল্স সাপোর্ট করে: https://www.workerman.net/doc/webman#/db/others
+> এই এক্সটেনশনটি PHP 7.1+ এবং [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998) এর প্রয়োজন, অফিসিয়াল ম্যানুয়াল: https://www.workerman.net/doc/webman#/db/others
 
 ## কনফিগারেশন
 
 ### সার্ভিস রেজিস্ট্রেশন
-`config/bootstrap.php` নামে নতুন কনফিগারেশন ফাইল তৈরি করুন এবং তার উপর নিম্নলিখিত কনটেন্ট লিখুন:
+
+`config/bootstrap.php` নামে নতুন কনফিগ ফাইল তৈরি করুন এবং নিম্নলিখিত কোড লিখুন:
 
 ```php
-// ...
-webman\permission\Permission::class,
+    // ...
+    webman\permission\Permission::class,
 ```
+
 ### মডেল কনফিগারেশন ফাইল
 
-`config/casbin-basic-model.conf` নামে নতুন কনফিগারেশন ফাইল তৈরি করুন এবং তার উপর নিম্নলিখিত কনটেন্ট লিখুন:
+`config/casbin-basic-model.conf` নামে নতুন কনফিগ ফাইল তৈরি করুন এবং নিম্নলিখিত কোড লিখুন:
 
 ```conf
 [request_definition]
@@ -44,16 +46,17 @@ e = some(where (p.eft == allow))
 [matchers]
 m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
 ```
+
 ### পলিসি কনফিগারেশন ফাইল
 
-`config/permission.php` নামে নতুন কনফিগারেশন ফাইল তৈরি করুন এবং তার উপর নিম্নলিখিত কনটেন্ট লিখুন:
+`config/permission.php` নামে নতুন কনফিগ ফাইল তৈরি করুন এবং নিম্নলিখিত কোড লিখুন:
 
 ```php
 <?php
 
 return [
     /*
-     *ডিফল্ট অনুমতি
+     * ডিফল্ট পারমিশন
      */
     'default' => 'basic',
 
@@ -65,7 +68,7 @@ return [
     'enforcers' => [
         'basic' => [
             /*
-            * মডেল সেটিং
+            * মডেল কনফিগারেশন
             */
             'model' => [
                 'config_type' => 'file',
@@ -77,52 +80,54 @@ return [
             'adapter' => webman\permission\adapter\DatabaseAdapter::class,
 
             /*
-            * ডাটাবেস সেটিং
+            * ডাটাবেস কনফিগারেশন
             */
             'database' => [
-                // ডাটাবেস কানেকশন নাম, ডিফল্ট কনফিগারেশন ছাড়া খালি রেখে দিন
+                // ডাটাবেস কানেকশন নাম, ডিফল্ট কনফিগারের জন্য খালি রাখুন.
                 'connection' => '',
-                // পলিসি টেবিল নাম (টেবিল প্রিফিক্স বদলা হবে)
+                // রুল টেবিলের নাম (প্রিফিক্স ছাড়া)
                 'rules_name' => 'rule',
-                // পলিসি টেবিলের পূর্ণিয় নাম
+                // রুল টেবিলের সম্পূর্ণ নাম
                 'rules_table' => 'train_rule',
             ],
         ],
     ],
 ];
 ```
+
 ## দ্রুত শুরু করুন
 
 ```php
 use webman\permission\Permission;
 
-// ব্যবহারকারীর জন্য অনুমতি যুক্ত করুন
+// ব্যবহারকারীকে অনুমতি যোগ করুন
 Permission::addPermissionForUser('eve', 'articles', 'read');
-// একটি ব্যবহারকারীর জন্য রোল যুক্ত করুন।
+// ব্যবহারকারীর জন্য একটি ভূমিকা যোগ করুন।
 Permission::addRoleForUser('eve', 'writer');
-// নিয়মাবলী গুলি জন্য অনুমতি যুক্ত করুন
-Permission::addPolicy('writer', 'articles','edit');
+// নিয়মের জন্য অনুমতি যোগ করুন
+Permission::addPolicy('writer', 'articles', 'edit');
 ```
 
-আপনি পরীক্ষা করতে পারেন যে ব্যবহারকারীর কি এই ধরনের অনুমতি আছে
+আপনি পরীক্ষা করতে পারেন কোন ব্যবহারকারীর এই ধরনের অনুমতি আছে কিনা
 
 ```php
 if (Permission::enforce("eve", "articles", "edit")) {
-    // ইভকে আর্টিকেল সম্পাদনা করতে অনুমতি দিন
+    // eve কে আর্টিকেলগুলি সম্পাদনা করার অনুমতি দেয়া হয়েছে
 } else {
-    // অনুরোধ নিষেধ করুন, একটি ত্রুটি দেখান
+    // অনুরোধ নিষিদ্ধ, একটি ত্রুটি দেখান
 }
 ````
-## অনুমোদন মিডলওয়ের
 
-`app/middleware/AuthorizationMiddleware.php` ফাইল তৈরি করুন (এই নথি না থাকলে নিজে তৈরি করুন) নিম্নলিখিত মতে:
+## অনুমতি মিডলওয়্যার
+
+ফাইল `app/middleware/AuthorizationMiddleware.php` তৈরি করুন (যদি ডিরেক্টরি না থাকে, তাহলে নিজে তৈরি করুন) এবং নিম্নলিখিত কোড লিখুন:
 
 ```php
 <?php
 
 /**
- * অনুমোদন মিডলওয়ের
- * লেখক: শাওবো ওয়ান (টাইনিয়ান)
+ * অনুমতি মিডলওয়্যার
+ * লেখক: শাওবো ওয়ান (টিনিওয়ান)
  * সময়: 2021/09/07 14:15
  */
 
@@ -145,22 +150,23 @@ class AuthorizationMiddleware implements MiddlewareInterface
 			$userId = 10086;
 			$action = $request->method();
 			if (!Permission::enforce((string) $userId, $uri, strtoupper($action))) {
-				throw new \Exception('দুঃখিত, আপনার এই অনুপ্রবেশ অনুমতি নেই');
+				throw new \Exception('দুঃখিত, আপনার এই পছন্দের অ্যাপ্লিকেশনে অ্যাক্সেস পাওয়া যাবে না');
 			}
 		} catch (CasbinException $exception) {
-			throw new \Exception('অনুমোদন অস্বীকার' . $exception->getMessage());
+			throw new \Exception('অনুমতি অস্বীকৃতি' . $exception->getMessage());
 		}
 		return $next($request);
 	}
 }
 ```
 
-`config/middleware.php` তে এক্সটেনশন মিডলওয়ার যোগ করুন:
+`config/middleware.php` ফাইলে গ্লোবাল মিডলওয়্যার যোগ করুন:
 
 ```php
 return [
+    // গ্লোবাল মিডলওয়্যার
     '' => [
-        // ... অন্যান্য মিডলওয়ার এখানে প্রস্তুত করুন
+        // ... এখানে অন্যান্য মিডলওয়্যার অপসারণ করা হয়েছে
         app\middleware\AuthorizationMiddleware::class,
     ]
 ];
@@ -168,8 +174,8 @@ return [
 
 ## ধন্যবাদ
 
-[Casbin](https://github.com/php-casbin/php-casbin) কে ধন্যবাদ, আপনি তার সব নথিটি [অফিসিয়াল ওয়েবসাইট](https://casbin.org/) থেকে দেখতে পারেন।
+[Casbin](https://github.com/php-casbin/php-casbin), আপনি এর [অফিসিয়াল ওয়েবসাইট](https://casbin.org/) এ পূর্ণ নথিটি দেখতে পারেন।
 
 ## লাইসেন্স
 
-এই প্রকল্পটি [অ্যাপাচি 2.0 লাইসেন্স](LICENSE)-এর অধীনে লাইসেন্সকৃত।
+এই প্রকল্পটি [Apache 2.0 লাইসেন্স](LICENSE) এর অধীনে লাইসেন্স করা হয়েছে।

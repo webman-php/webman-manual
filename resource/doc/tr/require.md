@@ -1,13 +1,13 @@
 # Gerekli Ortam
 
-## Linux Sistemi
-Linux sistemi `posix` ve `pcntl` uzantılarına bağımlıdır. Bu uzantılar genellikle PHP içinde yer alır ve genellikle ayrıca yüklenmeleri gerekmez.
+## Linux İşletim Sistemi
+Linux işletim sistemi `posix` ve `pcntl` uzantılarına bağımlıdır. Bu uzantılar genellikle PHP'de yerleşik olarak bulunur ve genellikle kurulmaları gerekmez.
 
-Eğer bir Baota kullanıcısıysanız, `pnctl_` ile başlayan fonksiyonların Baota üzerinde devre dışı bırakılması yeterlidir.
+Eğer Baota kullanıcısıysanız, sadece `pnctl_` ile başlayan fonksiyonları Baota üzerinden devre dışı bırakmanız yeterlidir.
 
 `event` uzantısı zorunlu değildir, ancak daha iyi performans için bu uzantının kurulması önerilir.
 
-## Windows Sistemi
-Webman Windows sistemlerinde çalışabilir, ancak çoklu işlem, servis olarak çalıştırma gibi özelliklerin ayarlanamadığı için, Windows sadece geliştirme ortamı olarak kullanılmalıdır. Üretim ortamında Linux sistemi tercih edilmelidir.
+## Windows İşletim Sistemi
+webman, Windows işletim sisteminde çalışabilir, ancak çoklu işlem, daemon gibi özellikleri ayarlayamama sebebiyle, Windows sadece geliştirme ortamı olarak önerilmektedir. Üretim ortamında Linux işletim sistemi kullanılması tavsiye edilir.
 
-Not: Windows sistemlerinde `posix` ve `pcntl` uzantılarına ihtiyaç duyulmaz.
+Not: Windows işletim sisteminde `posix` ve `pcntl` uzantılarına bağımlı değildir.

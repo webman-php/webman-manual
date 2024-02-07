@@ -1,21 +1,21 @@
 ## Statik Dosyaların İşlenmesi
-webman, statik dosya erişimini destekler. Statik dosyalar genellikle `public` klasörü altında bulunur, örneğin `http://127.0.0.8787/upload/avatar.png` adresine erişmek aslında `{ana proje dizini}/public/upload/avatar.png`'ye erişmek anlamına gelir.
+webman, statik dosya erişimini destekler. Statik dosyalar genellikle `public` dizini altına yerleştirilir, örneğin `http://127.0.0.8787/upload/avatar.png` adresine yapılan istek aslında `{ana_proje_dizini}/public/upload/avatar.png`'e erişim sağlar.
 
 > **Not**
-> webman 1.4 sürümüyle birlikte uygulama eklentilerini desteklemeye başladı, `/app/xx/file_name` ile başlayan statik dosya erişimi aslında uygulama eklentisinin `public` klasörüne erişmek anlamına gelir, yani webman >=1.4.0 sürümünde `{ana proje dizini}/public/app/` altındaki klasörlere erişim desteklenmemektedir.
-> Daha fazlası için [Uygulama Eklentileri](./plugin/app.md) bölümüne bakın.
+> webman 1.4 sürümünden itibaren uygulama eklentilerini desteklemektedir. `/app/xx/dosya_adı` ile başlayan statik dosya erişimi aslında uygulama eklentisinin `public` dizinine erişim sağlar. Başka bir deyişle, webman >=1.4.0 sürümü, `{ana_proje_dizini}/public/app/` altındaki dizinlere erişim sağlamamaktadır.
+> Daha fazlası için [Uygulama Eklentileri](./plugin/app.md)'ne bakınız.
 
-### Statik dosya desteğini kapatma
-Eğer statik dosya desteğine ihtiyaç duymuyorsanız, `config/static.php` dosyasını açıp `enable` seçeneğini false olarak değiştirin. Kapatıldıktan sonra tüm statik dosya erişimleri 404 hatası döndürecektir.
+### Statik Dosya Desteğini Kapatma
+Eğer statik dosya desteğine ihtiyaç duymuyorsanız, `config/static.php` dosyasını açarak `enable` seçeneğini `false` olarak değiştirin. Kapatıldığında tüm statik dosya erişimi 404 hatası döndürecektir.
 
-### Statik dosya dizinini değiştirme
-webman, varsayılan olarak statik dosya dizini olarak public klasörünü kullanır. Değiştirmek istiyorsanız, lütfen `support/helpers.php` dosyasındaki `public_path()` yardımcı işlevini değiştirin.
+### Statik Dosya Dizini Değiştirme
+webman, varsayılan olarak statik dosyalar için public dizinini kullanır. Değiştirmek istiyorsanız, `support/helpers.php` dosyasındaki `public_path()` yardımcı işlevini değiştirmeniz gerekmektedir.
 
-### Statik dosya Middleware
-webman'in kendi bir statik dosya aracı vardır, konumu `app/middleware/StaticFile.php`.
-Bazı durumlarda, statik dosyalara bazı işlemler yapmak gerekebilir, örneğin statik dosyalara çapraz domain HTTP başlıkları eklemek veya nokta (`.`) ile başlayan dosyaların erişimini engellemek için bu middleware kullanılabilir.
+### Statik Dosya Ara Yazılımı
+webman'in kendi içinde bir statik dosya ara yazılımı vardır, konumu `app/middleware/StaticFile.php`.
+Bazen statik dosyalar üzerinde bazı işlemler yapmamız gerekebilir, örneğin statik dosyalara çapraz kaynak (CORS) başlığı eklemek, nokta (`.`) ile başlayan dosyalara erişimi engellemek için bu ara yazılımı kullanabiliriz.
 
-`app/middleware/StaticFile.php` içeriği aşağıdaki gibi olabilir:
+`app/middleware/StaticFile.php` dosyası aşağıdaki gibi olabilir:
 ```php
 <?php
 namespace support\middleware;
@@ -28,13 +28,13 @@ class StaticFile implements MiddlewareInterface
 {
     public function process(Request $request, callable $next) : Response
     {
-        // Görünmeyen dosyaların erişimini engelle
+        // Nokta ile başlayan gizli dosyalara erişimi engelle
         if (strpos($request->path(), '/.') !== false) {
-            return response('<h1>403 yasak</h1>', 403);
+            return response('<h1>403 forbidden</h1>', 403);
         }
         /** @var Response $response */
         $response = $next($request);
-        // Çapraz domain HTTP başlıkları ekle
+        // Çapraz kaynak (CORS) başlığı ekle
         /*$response->withHeaders([
             'Access-Control-Allow-Origin'      => '*',
             'Access-Control-Allow-Credentials' => 'true',
@@ -43,4 +43,4 @@ class StaticFile implements MiddlewareInterface
     }
 }
 ```
-Bu middleware'i kullanmanız gerekiyorsa, `config/static.php` dosyasında `middleware` seçeneğini etkinleştirmeniz gerekmektedir.
+Bu ara yazılımı gerektiğinde `config/static.php` dosyasındaki `middleware` seçeneğini etkinleştirmeniz gerekmektedir.

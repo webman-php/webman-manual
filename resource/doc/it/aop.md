@@ -1,18 +1,18 @@
 # AOP
 
-> Ringraziamo l'autore di Hyperf per il suo contributo
+> Grazie per il contributo dell'autore di Hyperf
 
 ### Installazione
 
-- Installa aop-integration
+- Installa l'integrazione aop
 
 ```shell
 composer require "hyperf/aop-integration: ^1.1"
 ```
 
-### Aggiungere configurazioni correlate all'AOP
+### Aggiungere la configurazione relativa a AOP
 
-È necessario aggiungere una configurazione `config.php` nella directory `config`
+Dobbiamo aggiungere la configurazione `config.php` nella directory `config`
 
 ```php
 <?php
@@ -36,7 +36,7 @@ return [
         ],
     ],
     'aspects' => [
-        // Scrivi qui l'Aspetto corrispondente
+        // Qui inserire l'Aspect corrispondente
         app\aspect\DebugAspect::class,
     ]
 ];
@@ -45,7 +45,7 @@ return [
 
 ### Configura il file di avvio start.php
 
-> Posizioniamo il metodo di inizializzazione sotto timezone, tralasciando il resto del codice
+> Posizioniamo il metodo di inizializzazione sotto timezone, di seguito omettiamo gli altri codici
 
 ```php
 use Hyperf\AopIntegration\ClassLoader;
@@ -60,7 +60,7 @@ ClassLoader::init();
 
 ### Test
 
-Per prima cosa, scriviamo la classe con il codice da intercettare
+Innanzitutto creiamo la classe da intercettare
 
 ```php
 <?php
@@ -75,7 +75,7 @@ class UserService
 }
 ```
 
-In seguito, aggiungiamo l'`DebugAspect` corrispondente
+Successivamente aggiungiamo l'`DebugAspect` corrispondente
 
 ```php
 <?php
@@ -99,7 +99,7 @@ class DebugAspect extends AbstractAspect
 }
 ```
 
-Successivamente, modifichiamo il controller `app/controller/IndexController.php`
+Poi modifichiamo il controller `app/controller/IndexController.php`
 
 ```php
 <?php
@@ -117,7 +117,7 @@ class IndexController
 }
 ```
 
-Infine, configuriamo il percorso
+Successivamente configuriamo le route
 
 ```php
 <?php
@@ -126,7 +126,7 @@ use Webman\Route;
 Route::any('/json', [app\controller\IndexController::class, 'json']);
 ```
 
-Infine, avvia il servizio e fai un test.
+Infine avviamo il servizio e testiamolo.
 
 ```shell
 php start.php start

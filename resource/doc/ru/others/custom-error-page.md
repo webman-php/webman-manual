@@ -1,11 +1,11 @@
-## Пользовательская страница 404
-При возникновении ошибки 404 webman автоматически возвращает содержимое файла `public/404.html`, поэтому разработчики могут просто изменить файл `public/404.html`.
+## Пользовательская 404
+Когда возникает ошибка 404, webman автоматически возвращает содержимое файла `public/404.html`, поэтому разработчики могут изменить файл `public/404.html` напрямую.
 
-Если вы хотите динамически управлять содержимым ошибки 404, например, возвращать json данные `{"code:"404", "msg":"404 not found"}` при ajax-запросе или возвращать шаблон `app/view/404.html` при запросе страницы, ознакомьтесь со следующим примером.
+Если вы хотите динамически управлять содержимым ошибки 404, например, возвращать JSON-данные `{"code:"404", "msg":"404 not found"}` для ajax-запроса и возвращать шаблон `app/view/404.html` для запросов страниц, пожалуйста, ознакомьтесь со следующим примером.
 
-> В следующем примере используется обычный шаблон PHP, принципы для других шаблонов, таких как `twig`, `blade`, `think-template`, аналогичны.
+> Ниже приведен пример на чистом PHP, но принципы работы с другими шаблонами `twig`, `blade`, `think-tmplate` аналогичны.
 
-**Создание файла `app/view/404.html`:**
+**Создание файла `app/view/404.html`**
 ```html
 <!doctype html>
 <html>
@@ -14,7 +14,7 @@
     <title>404 not found</title>
 </head>
 <body>
-<?= htmlspecialchars($error) ?>
+<?=htmlspecialchars($error)?>
 </body>
 </html>
 ```
@@ -25,17 +25,17 @@ use support\Request;
 use Webman\Route;
 
 Route::fallback(function(Request $request){
-    // Возврат json при ajax-запросе
+    // возвратить JSON для ajax-запроса
     if ($request->expectsJson()) {
         return json(['code' => 404, 'msg' => '404 not found']);
     }
-    // Возвращение шаблона 404.html при запросе страницы
+    // вернуть шаблон 404.html для запроса страницы
     return view('404', ['error' => 'some error'])->withStatus(404);
 });
 ```
 
-## Пользовательская страница 500
-**Создание файла `app/view/500.html`:**
+## Пользовательская 500
+**Создание `app/view/500.html`**
 ```html
 <!doctype html>
 <html>
@@ -45,12 +45,12 @@ Route::fallback(function(Request $request){
 </head>
 <body>
 Пользовательский шаблон ошибки:
-<?= htmlspecialchars($exception) ?>
+<?=htmlspecialchars($exception)?>
 </body>
 </html>
 ```
 
-**Создание файла `app/exception/Handler.php` (если каталога не существует, создайте его):**
+**Создание `app/exception/Handler.php` (если каталога не существует, создайте его самостоятельно)**
 ```php
 <?php
 
@@ -71,17 +71,17 @@ class Handler extends \support\exception\Handler
     public function render(Request $request, Throwable $exception) : Response
     {
         $code = $exception->getCode();
-        // Возврат json данных при ajax-запросе
+        // возврат JSON для ajax-запроса
         if ($request->expectsJson()) {
             return json(['code' => $code ? $code : 500, 'msg' => $exception->getMessage()]);
         }
-        // Возвращение шаблона 500.html при запросе страницы
+        // вернуть шаблон 500.html для запроса страницы
         return view('500', ['exception' => $exception], '')->withStatus(500);
     }
 }
 ```
 
-**Настройка файла `config/exception.php`:**
+**Настройка `config/exception.php`**
 ```php
 return [
     '' => \app\exception\Handler::class,

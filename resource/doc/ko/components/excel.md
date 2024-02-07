@@ -38,8 +38,7 @@ class ExcelController
     }
 
 }
-```
-  
-### 더 보기
+``` 
+### 추가 정보
 
 https://phpspreadsheet.readthedocs.io/en/latest/

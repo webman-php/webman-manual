@@ -1,22 +1,22 @@
 # Inicialización del negocio
 
-A veces necesitamos realizar una inicialización del negocio después de que el proceso se inicia, esta inicialización solo se ejecuta una vez durante el ciclo de vida del proceso, como configurar un temporizador después del inicio del proceso o inicializar la conexión con la base de datos, entre otros. A continuación, explicaremos esto.
+A veces necesitamos realizar una inicialización del negocio después de que el proceso se inicie, esta inicialización se ejecuta solo una vez durante el ciclo de vida del proceso, por ejemplo, configurar un temporizador después del inicio del proceso o establecer una conexión de base de datos. A continuación, explicaremos esto.
 
 ## Principio
-Según la explicación en **[Proceso de Ejecución](process.md)**, después de que webman inicia el proceso, cargará las clases configuradas en `config/bootstrap.php` (incluyendo `config/plugin/*/*/bootstrap.php`) y ejecutará el método start de las clases. Podemos agregar código del negocio en el método start para completar la inicialización del negocio después del inicio del proceso.
+Según la explicación en **[Flujo de ejecución](process.md)**, webman cargará las clases configuradas en `config/bootstrap.php` (incluidas en `config/plugin/*/*/bootstrap.php`) después de que el proceso se inicie, y ejecutará el método start de las clases. Podemos agregar código de negocio en el método start para completar la inicialización del negocio después del inicio del proceso.
 
 ## Proceso
-Supongamos que queremos crear un temporizador para reportar el uso de memoria actual del proceso a intervalos regulares, y llamaremos a esta clase `MemReport`.
+Supongamos que queremos crear un temporizador para informar periódicamente el uso de memoria actual del proceso. Esta clase se llamará `MemReport`.
 
-#### Comando de ejecución
-
-Ejecute el comando `php webman make:bootstrap MemReport` para generar el archivo de inicialización `app/bootstrap/MemReport.php`
+#### Ejecutar comando
+Ejecutar el comando `php webman make:bootstrap MemReport` para generar el archivo de inicialización `app/bootstrap/MemReport.php`.
 
 > **Consejo**
-> Si su entorno webman no tiene instalado `webman/console`, ejecute el comando `composer require webman/console` para instalarlo.
+> Si webman no tiene instalado `webman/console`, ejecuta el comando `composer require webman/console` para instalarlo.
 
-#### Edite el archivo de inicialización
-Edite `app/bootstrap/MemReport.php`, el contenido será similar al siguiente:
+#### Editar archivo de inicialización
+Edite `app/bootstrap/MemReport.php` con un contenido similar al siguiente:
+
 ```php
 <?php
 
@@ -31,13 +31,13 @@ class MemReport implements Bootstrap
         // ¿Es un entorno de línea de comandos?
         $is_console = !$worker;
         if ($is_console) {
-            // Si no quieres que esta inicialización se ejecute en un entorno de línea de comandos, puedes regresar directamente aquí.
+            // Si no quieres que esta inicialización se ejecute en un entorno de línea de comandos, simplemente devuelve aquí.
             return;
         }
         
         // Ejecutar cada 10 segundos
         \Workerman\Timer::add(10, function () {
-            // Para simplificar la demostración, aquí usamos la salida en lugar del proceso de reporte
+            // Para propósitos de demostración, aquí utilizamos la salida en lugar de un informe real.
             echo memory_get_usage() . "\n";
         });
         
@@ -47,22 +47,24 @@ class MemReport implements Bootstrap
 ```
 
 > **Consejo**
-> Cuando se utiliza la línea de comandos, el framework también ejecutará el método start configurado en `config/bootstrap.php`. Podemos determinar si es un entorno de línea de comandos o no, según si `$worker` es nulo, y así decidir si ejecutar el código de inicialización del negocio.
+> Cuando se usa la línea de comandos, el marco también ejecutará el método start configurado en `config/bootstrap.php`. Podemos determinar si es un entorno de línea de comandos o no a través de la variable `$worker`, y decidir si ejecutar el código de inicialización del negocio.
 
-#### Configuración para iniciar con el proceso
-Abra `config/bootstrap.php` y agregue la clase `MemReport` a los elementos de inicio.
+#### Configurar para el inicio del proceso
+Abra `config/bootstrap.php` y agregue la clase `MemReport` a la lista de inicio.
+
 ```php
 return [
-    // ...Otras configuraciones omitidas...
-
+    // ... Se omiten otras configuraciones...
+    
     app\bootstrap\MemReport::class,
 ];
 ```
 
-De esta forma, hemos completado el proceso de inicialización del negocio.
+De esta manera, completamos el proceso de inicialización del negocio.
 
-## Consideraciones adicionales
-Después del inicio de un [proceso personalizado](../process.md), también se ejecutará el método `start` configurado en `config/bootstrap.php`. Podemos determinar qué proceso está en ejecución según `$worker->name` y decidir si ejecutar su código de inicialización del negocio. Por ejemplo, si no necesitamos monitorear el proceso de monitor, el contenido de `MemReport.php` será similar a lo siguiente:
+## Nota adicional
+Después de que se inicia un [proceso personalizado](../process.md), también se ejecutará el método start configurado en `config/bootstrap.php`. Podemos utilizar `$worker->name` para determinar qué tipo de proceso es y luego decidir si ejecutar su código de inicialización del negocio. Por ejemplo, si no necesitamos monitorear el proceso "monitor", el contenido de `MemReport.php` será similar al siguiente:
+
 ```php
 <?php
 
@@ -77,18 +79,18 @@ class MemReport implements Bootstrap
         // ¿Es un entorno de línea de comandos?
         $is_console = !$worker;
         if ($is_console) {
-            // Si no quieres que esta inicialización se ejecute en un entorno de línea de comandos, puedes regresar directamente aquí.
+            // Si no quieres que esta inicialización se ejecute en un entorno de línea de comandos, simplemente devuelve aquí.
             return;
         }
         
-        // El proceso de monitoreo no ejecuta el temporizador
+        // El proceso monitor no ejecuta un temporizador
         if ($worker->name == 'monitor') {
             return;
         }
         
         // Ejecutar cada 10 segundos
         \Workerman\Timer::add(10, function () {
-            // Para simplificar la demostración, aquí usamos la salida en lugar del proceso de reporte
+            // Para propósitos de demostración, aquí utilizamos la salida en lugar de un informe real.
             echo memory_get_usage() . "\n";
         });
         

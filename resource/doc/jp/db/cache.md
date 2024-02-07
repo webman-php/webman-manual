@@ -2,7 +2,7 @@
 
 webmanでは、デフォルトで [symfony/cache](https://github.com/symfony/cache) をキャッシュコンポーネントとして使用しています。
 
-> `symfony/cache` を使用する前に、`php-cli` に Redis 拡張機能をインストールする必要があります。
+> `symfony/cache`を使用する前に、`php-cli`にRedis拡張機能をインストールする必要があります。
 
 ## インストール
 **php 7.x**
@@ -14,10 +14,10 @@ composer require -W illuminate/redis ^8.2.0 symfony/cache ^5.2
 composer require -W illuminate/redis symfony/cache
 ```
 
-インストール後は、再起動が必要です（reload では無効です）。
+インストール後は、再起動が必要です（reloadでは無効です）。
 
-## Redis の設定
-Redis の設定ファイルは `config/redis.php` にあります。
+## Redisの設定
+Redisの設定ファイルは `config/redis.php` にあります。
 ```php
 return [
     'default' => [
@@ -49,8 +49,8 @@ class UserController
 ```
 
 > **注意**
-> キーにはできるだけ接頭辞を付けて、他の Redis を使用するビジネスとの競合を避けてください。
+> キーには他のRedisを使用しているビジネスとの衝突を避けるために、できるだけ接頭辞を付けることをお勧めします。
 
 ## 他のキャッシュコンポーネントの使用
 
-[ThinkCache](https://github.com/top-think/think-cache) コンポーネントの使用については [他のデータベース](others.md#ThinkCache) を参照してください。
+[ThinkCache](https://github.com/top-think/think-cache) コンポーネントの使用については、[その他のデータベース](others.md#ThinkCache) を参照してください。

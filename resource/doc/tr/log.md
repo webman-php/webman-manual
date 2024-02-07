@@ -1,7 +1,7 @@
 # Günlük
-webman, günlükleri işlemek için [monolog/monolog](https://github.com/Seldaek/monolog) kullanmaktadır.
+webman [monolog/monolog](https://github.com/Seldaek/monolog) kullanarak günlükleri işler.
 
-## Kullanımı
+## Kullanım
 ```php
 <?php
 namespace app\controller;
@@ -13,13 +13,13 @@ class FooController
 {
     public function index(Request $request)
     {
-        Log::info('günlük testi');
+        Log::info('günlük test');
         return response('merhaba index');
     }
 }
 ```
 
-## Sağlanan Metodlar
+## Sağlanan Yöntemler
 ```php
 Log::log($seviye, $mesaj, array $bağlam = [])
 Log::debug($mesaj, array $bağlam = [])
@@ -31,7 +31,7 @@ Log::critical($mesaj, array $bağlam = [])
 Log::alert($mesaj, array $bağlam = [])
 Log::emergency($mesaj, array $bağlam = [])
 ```
-Aynıdır
+Eşdeğerdir
 ```php
 $log = Log::channel('default');
 $log->log($seviye, $mesaj, array $bağlam = [])
@@ -50,21 +50,21 @@ $log->emergency($mesaj, array $bağlam = [])
 return [
     // Varsayılan günlük kanalı
     'default' => [
-        // Varsayılan kanal için işleyiciler, birden fazla ayarlayabilirsiniz
+        // Varsayılan kanalın işleyicileri, birden fazla ayarlanabilir
         'handlers' => [
             [   
-                // işleyici sınıfın adı
+                // işleyici sınıfının adı
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // işleyici sınıfın inşa fonksiyonu parametreleri
+                // işleyici sınıfının yapıcı parametreleri
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // Biçimleme ile ilgili
+                // Biçim ile ilgili
                 'formatter' => [
-                    // Biçimlendirme işleyici sınıfın adı
+                    // Biçimlendirme işleci sınıfının adı
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // Biçimlendirme işleyici sınıfın inşa fonksiyonu parametreleri
+                    // Biçimlendirme işleci sınıfının yapıcı parametreleri
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -74,26 +74,26 @@ return [
 ```
 
 ## Çoklu Kanal
-monolog, varsayılan olarak `default` kanalını destekler. `log2` adında bir kanal eklemek istiyorsanız, konfigürasyon aşağıdaki gibi olmalıdır:
+Monolog, varsayılan olarak `default` kanalını destekler. Bir `log2` kanalı eklemek isterseniz, aşağıdaki gibi yapılandırabilirsiniz:
 ```php
 return [
     // Varsayılan günlük kanalı
     'default' => [
-        // Varsayılan kanal için işleyiciler, birden fazla ayarlayabilirsiniz
+        // Varsayılan kanalın işleyicileri, birden fazla ayarlanabilir
         'handlers' => [
             [   
-                // işleyici sınıfın adı
+                // işleyici sınıfının adı
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // işleyici sınıfın inşa fonksiyonu parametreleri
+                // işleyici sınıfının yapıcı parametreleri
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // Biçimleme ile ilgili
+                // Biçim ile ilgili
                 'formatter' => [
-                    // Biçimlendirme işleyici sınıfın adı
+                    // Biçimlendirme işleci sınıfının adı
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // Biçimlendirme işleyici sınıfın inşa fonksiyonu parametreleri
+                    // Biçimlendirme işleci sınıfının yapıcı parametreleri
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -101,21 +101,21 @@ return [
     ],
     // log2 kanalı
     'log2' => [
-        // Varsayılan kanal için işleyiciler, birden fazla ayarlayabilirsiniz
+        // log2 kanalının işleyicileri, birden fazla ayarlanabilir
         'handlers' => [
             [   
-                // işleyici sınıfın adı
+                // işleyici sınıfının adı
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // işleyici sınıfın inşa fonksiyonu parametreleri
+                // işleyici sınıfının yapıcı parametreleri
                 'constructor' => [
                     runtime_path() . '/logs/log2.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // Biçimleme ile ilgili
+                // Biçim ile ilgili
                 'formatter' => [
-                    // Biçimlendirme işleyici sınıfın adı
+                    // Biçimlendirme işleci sınıfının adı
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // Biçimlendirme işleyici sınıfın inşa fonksiyonu parametreleri
+                    // Biçimlendirme işleci sınıfının yapıcı parametreleri
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -124,7 +124,7 @@ return [
 ];
 ```
 
-`log2` kanalını kullanırken, kullanımı şu şekildedir:
+`log2` kanalını kullanma yöntemi aşağıdaki gibi olacaktır:
 ```php
 <?php
 namespace app\controller;
@@ -137,7 +137,7 @@ class FooController
     public function index(Request $request)
     {
         $log = Log::channel('log2');
-        $log->info('log2 testi');
+        $log->info('log2 test');
         return response('merhaba index');
     }
 }

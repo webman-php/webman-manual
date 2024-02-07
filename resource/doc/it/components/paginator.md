@@ -5,16 +5,16 @@
 ### Indirizzo del progetto
 
 https://github.com/jasongrimes/php-paginator
-  
+
 ### Installazione
 
 ```php
 composer require "jasongrimes/paginator:^1.0.3"
 ```
-  
+
 ### Utilizzo
 
-Crea il file `app/controller/UserController.php`
+Creare `app/controller/UserController.php`
 ```php
 <?php
 namespace app\controller;
@@ -40,11 +40,11 @@ class UserController
 }
 ```
 **Modello (PHP nativo)**
-Crea il modello `app/view/user/get.html`
+Creare il modello `app/view/user/get.html`
 ```html
 <html>
 <head>
-  <!-- Supporto integrato per lo stile di paginazione di Bootstrap -->
+  <!-- Supporto integrato per lo stile di paginazione Bootstrap -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -56,11 +56,11 @@ Crea il modello `app/view/user/get.html`
 ```
 
 **Modello (twig)**
-Crea il modello `app/view/user/get.html`
+Creare il modello `app/view/user/get.html`
 ```html
 <html>
 <head>
-  <!-- Supporto integrato per lo stile di paginazione di Bootstrap -->
+  <!-- Supporto integrato per lo stile di paginazione Bootstrap -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -74,11 +74,11 @@ Crea il modello `app/view/user/get.html`
 ```
 
 **Modello (blade)**
-Crea il modello `app/view/user/get.blade.php`
+Creare il modello `app/view/user/get.blade.php`
 ```html
 <html>
 <head>
-  <!-- Supporto integrato per lo stile di paginazione di Bootstrap -->
+  <!-- Supporto integrato per lo stile di paginazione Bootstrap -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -90,11 +90,11 @@ Crea il modello `app/view/user/get.blade.php`
 ```
 
 **Modello (thinkphp)**
-Crea il modello `app/view/user/get.blade.php`
+Creare il modello `app/view/user/get.blade.php`
 ```html
 <html>
 <head>
-    <!-- Supporto integrato per lo stile di paginazione di Bootstrap -->
+    <!-- Supporto integrato per lo stile di paginazione Bootstrap -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -105,9 +105,9 @@ Crea il modello `app/view/user/get.blade.php`
 </html>
 ```
 
-Effetto:
+Ecco l'effetto:
 ![](../../assets/img/paginator.png)
-  
+
 ### Ulteriori dettagli
 
 Visita https://github.com/jasongrimes/php-paginator

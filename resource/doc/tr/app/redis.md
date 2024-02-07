@@ -1,5 +1,6 @@
 # Redis
-Redis, veritabanı gibi kullanılır, örneğin `plugin/foo/config/redis.php`
+Redis, veritabanı gibi kullanılır, örneğin `plugin/foo/config/redis.php`  
+
 ```php
 return [
     'default' => [
@@ -16,17 +17,20 @@ return [
     ],
 ];
 ```
-Kullanımı
+
+Kullanımı  
+
 ```php
 use support\Redis;
 Redis::connection('plugin.foo.default')->get('key');
 Redis::connection('plugin.foo.cache')->get('key');
 ```
 
-Benzer şekilde, ana projenin Redis yapılandırmasını yeniden kullanmak istiyorsanız
+Aynı şekilde, ana projenin Redis yapılandırmasını yeniden kullanmak istiyorsanız  
+
 ```php
 use support\Redis;
 Redis::get('key');
-// Ana projenin bir cache bağlantısı yapılandırdığını varsayalım
+// Varsayalım ki ana projede bir cache bağlantısı da yapılandırılmış olsun
 Redis::connection('cache')->get('key');
 ```

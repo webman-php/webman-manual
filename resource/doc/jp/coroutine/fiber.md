@@ -4,9 +4,9 @@
 > PHP>=8.1workerman>=5.0 webman-framework>=1.5 revolt/event-loop>1.0.0
 > webmanのアップグレードコマンド `composer require workerman/webman-framework ^1.5.0`
 > workermanのアップグレードコマンド `composer require workerman/workerman ^5.0.0`
-> Fiberのコルーチンをインストールするには `composer require revolt/event-loop ^1.0.0` を実行します。
+> Fiberコルーチンのインストールには `composer require revolt/event-loop ^1.0.0` が必要です。
 
-# 例
+# サンプル
 ### 遅延レスポンス
 
 ```php
@@ -27,13 +27,13 @@ class TestController
     }
 }
 ```
-`Timer::sleep()` はPHPの`sleep()`関数に似ていますが、異なるのは `Timer::sleep()` はプロセスをブロックしません。
+`Timer::sleep()` は PHPの`sleep()` 関数に似ていますが、`Timer::sleep()` はプロセスをブロックしません。
 
 
 ### HTTPリクエストの送信
 
 > **注意**
-> 以下のコマンドで `composer require workerman/http-client ^2.0.0` をインストールする必要があります。
+> `composer require workerman/http-client ^2.0.0` をインストールする必要があります。
 
 ```php
 <?php
@@ -49,31 +49,29 @@ class TestController
     {
         static $client;
         $client = $client ?: new Client();
-        $response = $client->get('http://example.com'); // 非同期リクエストを送信する同期メソッド
+        $response = $client->get('http://example.com'); // 非同期リクエストのための同期メソッドの呼び出し
         return $response->getBody()->getContents();
     }
 }
 ```
-同様に `$client->get('http://example.com')` リクエストは非ブロッキングで、これを使用してwebmanで非同期HTTPリクエストを送信することができます。これによりアプリケーションの性能が向上します。
+同様に`$client->get('http://example.com')`のリクエストは非ブロッキングであり、これはwebmanで非同期HTTPリクエストを開始するために使用できます。アプリケーションの性能を向上させます。
 
-詳細については、[workerman/http-client](https://www.workerman.net/doc/workerman/components/workerman-http-client.html) を参照してください。
+詳細は [workerman/http-client](https://www.workerman.net/doc/workerman/components/workerman-http-client.html) を参照してください。
 
 ### support\Context クラスの追加
 
-`support\Context`クラスはリクエストのコンテキストデータを保存するために使用され、リクエストが完了すると対応するコンテキストデータは自動的に削除されます。つまり、コンテキストデータのライフサイクルはリクエストのライフサイクルに従います。`support\Context` はFiber、Swoole、Swowのコルーチン環境をサポートしています。
-
+`support\Context`クラスはリクエストのコンテキストデータを保存するために使用され、リクエストが完了すると、それに応じたコンテキストデータが自動的に削除されます。つまり、contextデータの寿命はリクエストの寿命に従います。`support\Context`はFiber、Swoole、Swowコルーチン環境をサポートしています。
 
 ### Swooleコルーチン
-swoole拡張機能をインストールした後(swoole>=5.0が必要)、config/server.php設定ファイルでSwooleコルーチンを有効にすることができます。
+Swoole拡張機能（Swoole>=5.0が必要）をインストールした後、`config/server.php`を設定してSwooleコルーチンを有効にします。
 ```php
 'event_loop' => \Workerman\Events\Swoole::class,
 ```
-
-詳細については、[workermanイベント駆動](https://www.workerman.net/doc/workerman/appendices/event.html) を参照してください。
+詳細は [workermanイベント駆動](https://www.workerman.net/doc/workerman/appendices/event.html) を参照してください。
 
 ### グローバル変数の汚染
 
-コルーチン環境では、**リクエストに関連する**ステータス情報をグローバル変数や静的変数に保存することは禁止されています。なぜならこれによってグローバル変数が汚染される可能性があるからです。たとえば
+コルーチン環境では、**リクエスト関連**の状態情報をグローバル変数や静的変数に保存しないでください。なぜなら、これによりグローバル変数の汚染が引き起こされる可能性があるからです。例えば、以下のコード：
 
 ```php
 <?php
@@ -96,13 +94,13 @@ class TestController
 }
 ```
 
-プロセス数を1に設定して、連続して2つのリクエストを送信すると、
-http://127.0.0.1:8787/test?name=lilei
-http://127.0.0.1:8787/test?name=hanmeimei
-のように期待している結果は、それぞれ `lilei` と`hanmeimei` を返すことですが、実際には両方のリクエストが`hanmeimei`を返します。
-これは、2番目のリクエストが静的変数`$name`を上書きしたためです。最初のリクエストがスリープを終了して返ってくると、静的変数`$name`はすでに`hanmeimei`になっているからです。
+プロセス数を1に設定した場合、連続して2つのリクエストを送信すると、  
+http://127.0.0.1:8787/test?name=lilei  
+http://127.0.0.1:8787/test?name=hanmeimei  
+期待される結果は、それぞれ `lilei` と `hanmeimei` を返すことですが、実際にはどちらも `hanmeimei` を返します。  
+これは、2つ目のリクエストが静的変数`$name`を上書きし、最初のリクエストがスリープ終了時には静的変数`$name`がすでに `hanmeimei` になっているためです。
 
-**正しい方法は、コンテキストを使用してリクエストの状態データを保存することです**
+**正しい方法は、コンテキストにリクエスト状態のデータを保存することです。**
 ```php
 <?php
 
@@ -123,7 +121,7 @@ class TestController
 }
 ```
 
-**ローカル変数はデータの汚染を起こしません**
+**ローカル変数はデータの汚染を引き起こしません**
 ```php
 <?php
 
@@ -143,14 +141,15 @@ class TestController
     }
 }
 ```
-`$name`はローカル変数なので、コルーチン間でローカル変数を相互に参照することはできません。そのため、ローカル変数の使用はコルーチンセーフです。
+`$name` はローカル変数であるため、コルーチン間でローカル変数にアクセスすることはできないため、ローカル変数の使用はコルーチンに安全です。
 
-# コルーチンの使用について
-コルーチンは魔法の弾ではありません。コルーチンを導入することは、グローバル変数/静的変数の汚染問題に注意する必要があり、コンテキストを設定することを忘れないでください。また、コルーチン環境でのバグデバッグはブロッキングプログラミングよりも複雑です。
+# コルーチンについて
+コルーチンは銀の弾ではありません。コルーチンを導入すると、グローバル変数/静的変数の汚染問題に注意する必要があります。また、コルーチン環境でのバグデバッグはブロッキングプログラミングよりも複雑です。
 
-webmanのブロッキングプログラミングは実際には十分に速く、[techempower.com](https://www.techempower.com/benchmarks/#section=data-r21&l=zijnjz-6bj&test=db&f=1ekg-cbcw-2t4w-27wr68-pc0-iv9slc-0-1ekgw-39g-kxs00-o0zk-4fu13d-2x8do8-2) の過去3年間のベンチマークデータを見ると、webmanのブロッキングプログラミングはデータベースビジネスを含む場合、goのwebフレームワークgin、echoなどの性能よりも約1倍高く、伝統的なフレームワークlaravelよりも約40倍高いです。
+実際に、webmanのブロッキングプログラミングは十分に速いです。[techempower.com](https://www.techempower.com/benchmarks/#section=data-r21&l=zijnjz-6bj&test=db&f=1ekg-cbcw-2t4w-27wr68-pc0-iv9slc-0-1ekgw-39g-kxs00-o0zk-4fu13d-2x8do8-2) 最近3年間の3回のベンチマークデータによると、webmanのブロッキングプログラミングはデータベースビジネスに対して、goのwebフレームワークgin、echoなどの性能を約1倍、従来のフレームワークlaravelよりも約40倍高くなっています。
+![](../../assets/img/benchemarks-go-sw.png?)
 
-データベースやRedisがすべて内部ネットワークにある場合、多プロセスとブロッキングプログラミングのパフォーマンスはコルーチン導入後よりも高い可能性があります。なぜなら、データベースやRedisなどが十分に高速である場合、コルーチンの作成、スケジューリング、破棄にかかるコストがプロセスの切り替えのコストよりも大きくなる可能性があるからです。そのため、コルーチンの導入が性能を著しく向上させる保証はありません。
+データベース、redisなどがローカルネットワークにある場合、マルチプロセスのブロッキングプログラミングの性能は通常協程よりも高くなる場合があります。なぜなら、データベース、redisなどが十分に早い場合、協程の作成、スケジューリング、破棄の費用がプロセスの切り替えの費用よりも大きいため、協程の導入が性能を著しく向上させることはありません。
 
-# いつコルーチンを使用すべきか
-ビジネスに遅いリクエストがある場合、たとえば第三者のAPIにアクセスする必要がある場合、[workerman/http-client](https://www.workerman.net/doc/workerman/components/workerman-http-client.html) を使用して非同期HTTP呼び出しを行うコルーチンの方法でアプリケーションの並行性を高めることができます。
+# いつコルーチンを使用するか
+ビジネスに遅延アクセスがある場合、例えば、ビジネスがサードパーティAPIにアクセスする必要がある場合、[workerman/http-client](https://www.workerman.net/doc/workerman/components/workerman-http-client.html)を使用して非同期HTTP呼び出しを行うことで、アプリケーションの同時実行能力を向上させることができます。

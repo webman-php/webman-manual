@@ -1,11 +1,11 @@
 # การใช้ฐานข้อมูลอื่น ๆ
-นอกจาก [illuminate/database](https://github.com/illuminate/database) แล้ว คุณสามารถใช้คอมโพเนนต์ฐานข้อมูลอื่น ๆ ใน webman ได้ด้วย
+นอกจาก [illuminate/database](https://github.com/illuminate/database) ใน webman คุณสามารถใช้คอมโพแนนต์ฐานข้อมูลอื่น ๆ
 
 ## ThinkORM
-อ่านเพิ่มเติมที่ [thinkorm](thinkorm.md)
+ดูข้อมูลเพิ่มเติมที่ [thinkorm](thinkorm.md)
 
 ## ThinkCache
-อ่านเพิ่มเติมที่ [think-cache](thinkcache.md)
+ดูข้อมูลเพิ่มเติมที่ [think-cache](thinkcache.md)
 
 ## ปลั๊กอินฐานข้อมูล Medoo
-อ่านเพิ่มเติมที่ [medoo ปลั๊กอิน](https://www.workerman.net/plugin/29)
+ดูข้อมูลเพิ่มเติมที่ [ปลั๊กอิน Medoo](../db/medoo.md)

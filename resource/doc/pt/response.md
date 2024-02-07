@@ -1,7 +1,7 @@
 # Resposta
-A resposta é na verdade um objeto `support\Response`. Para facilitar a criação deste objeto, o webman fornece algumas funções auxiliares.
+A resposta é na verdade um objeto `support\Response`. Para facilitar a criação desse objeto, o webman fornece algumas funções assistentes.
 
-## Retornar qualquer resposta
+## Retornar uma resposta arbitrária
 
 **Exemplo**
 ```php
@@ -14,12 +14,12 @@ class FooController
 {
     public function hello(Request $request)
     {
-        return response('olá, webman');
+        return response('hello webman');
     }
 }
 ```
 
-A função de resposta é implementada da seguinte forma:
+A função response é implementada da seguinte forma:
 ```php
 function response($body = '', $status = 200, $headers = array())
 {
@@ -27,7 +27,7 @@ function response($body = '', $status = 200, $headers = array())
 }
 ```
 
-Também é possível criar um objeto `response` vazio e, em seguida, usar `$response->cookie()`, `$response->header()`, `$response->withHeaders()` e `$response->withBody()` para definir o conteúdo a ser retornado em locais apropriados.
+Também é possível criar um objeto vazio de resposta e, em seguida, utilizar os métodos `$response->cookie()`, `$response->header()`, `$response->withHeaders()`, `$response->withBody()` para configurar o conteúdo a ser retornado em lugares apropriados.
 ```php
 public function hello(Request $request)
 {
@@ -36,12 +36,12 @@ public function hello(Request $request)
     
     // .... Lógica de negócios omitida
     
-    // Definir cookie
+    // Configurar cookie
     $response->cookie('foo', 'valor');
     
     // .... Lógica de negócios omitida
     
-    // Definir cabeçalhos HTTP
+    // Configurar cabeçalho http
     $response->header('Content-Type', 'application/json');
     $response->withHeaders([
                 'X-Header-One' => 'Valor do Cabeçalho 1',
@@ -50,13 +50,13 @@ public function hello(Request $request)
 
     // .... Lógica de negócios omitida
 
-    // Definir os dados a serem retornados
+    // Configurar os dados a serem retornados
     $response->withBody('Dados a serem retornados');
     return $response;
 }
 ```
 
-## Retorna JSON
+## Retornar JSON
 **Exemplo**
 ```php
 <?php
@@ -72,7 +72,7 @@ class FooController
     }
 }
 ```
-A função `json` é implementada da seguinte maneira:
+A função json é implementada da seguinte forma:
 ```php
 function json($data, $options = JSON_UNESCAPED_UNICODE)
 {
@@ -80,8 +80,7 @@ function json($data, $options = JSON_UNESCAPED_UNICODE)
 }
 ```
 
-
-## Retorna XML
+## Retornar XML
 **Exemplo**
 ```php
 <?php
@@ -104,7 +103,7 @@ class FooController
     }
 }
 ```
-A função `xml` é implementada da seguinte maneira:
+A função xml é implementada da seguinte forma:
 ```php
 function xml($xml)
 {
@@ -115,8 +114,8 @@ function xml($xml)
 }
 ```
 
-## Retorna visualização
-Crie um arquivo `app/controller/FooController.php` como abaixo:
+## Retornar uma visualização
+Crie o arquivo `app/controller/FooController.php` como mostrado abaixo:
 
 ```php
 <?php
@@ -132,8 +131,7 @@ class FooController
     }
 }
 ```
-
-Crie um arquivo `app/view/foo/hello.html` como abaixo:
+Crie o arquivo `app/view/foo/hello.html` como mostrado abaixo:
 
 ```html
 <!doctype html>
@@ -143,12 +141,12 @@ Crie um arquivo `app/view/foo/hello.html` como abaixo:
     <title>webman</title>
 </head>
 <body>
-olá <?=htmlspecialchars($name)?>
+hello <?=htmlspecialchars($name)?>
 </body>
 </html>
 ```
 
-## Redirecionamento
+## Redirecionar
 ```php
 <?php
 namespace app\controller;
@@ -163,8 +161,7 @@ class FooController
     }
 }
 ```
-
-A função `redirect` é implementada da seguinte maneira:
+A função redirect é implementada da seguinte forma:
 ```php
 function redirect($location, $status = 302, $headers = [])
 {
@@ -176,7 +173,7 @@ function redirect($location, $status = 302, $headers = [])
 }
 ```
 
-## Definição de cabeçalho
+## Configuração de cabeçalho
 ```php
 <?php
 namespace app\controller;
@@ -187,14 +184,14 @@ class FooController
 {
     public function hello(Request $request)
     {
-        return response('olá, webman', 200, [
+        return response('hello webman', 200, [
             'Content-Type' => 'application/json',
             'X-Header-One' => 'Valor do Cabeçalho' 
         ]);
     }
 }
 ```
-Também é possível usar os métodos `header` e `withHeaders` para definir cabeçalhos individualmente ou em lote.
+Também é possível configurar um único cabeçalho ou vários cabeçalhos usando os métodos `header` e `withHeaders`.
 ```php
 <?php
 namespace app\controller;
@@ -205,7 +202,7 @@ class FooController
 {
     public function hello(Request $request)
     {
-        return response('olá, webman')
+        return response('hello webman')
         ->header('Content-Type', 'application/json')
         ->withHeaders([
             'X-Header-One' => 'Valor do Cabeçalho 1',
@@ -214,7 +211,7 @@ class FooController
     }
 }
 ```
-Também é possível definir os cabeçalhos previamente e, em seguida, definir os dados a serem retornados no final.
+Também é possível configurar cabeçalhos antecipadamente e, em seguida, configurar os dados a serem retornados por último.
 ```php
 public function hello(Request $request)
 {
@@ -223,7 +220,7 @@ public function hello(Request $request)
     
     // .... Lógica de negócios omitida
   
-    // Definir cabeçalhos HTTP
+    // Configurar cabeçalho http
     $response->header('Content-Type', 'application/json');
     $response->withHeaders([
                 'X-Header-One' => 'Valor do Cabeçalho 1',
@@ -232,14 +229,13 @@ public function hello(Request $request)
 
     // .... Lógica de negócios omitida
 
-    // Definir os dados a serem retornados
+    // Configurar os dados a serem retornados
     $response->withBody('Dados a serem retornados');
     return $response;
 }
 ```
 
-## Definição de cookie
-
+## Configuração de cookie
 ```php
 <?php
 namespace app\controller;
@@ -250,13 +246,12 @@ class FooController
 {
     public function hello(Request $request)
     {
-        return response('olá, webman')
+        return response('hello webman')
         ->cookie('foo', 'valor');
     }
 }
 ```
-
-Também é possível definir o cookie previamente e, em seguida, definir os dados a serem retornados no final.
+Também é possível configurar cookies antecipadamente e, em seguida, configurar os dados a serem retornados por último.
 ```php
 public function hello(Request $request)
 {
@@ -265,22 +260,21 @@ public function hello(Request $request)
     
     // .... Lógica de negócios omitida
     
-    // Definir cookie
+    // Configurar cookie
     $response->cookie('foo', 'valor');
     
     // .... Lógica de negócios omitida
 
-    // Definir os dados a serem retornados
+    // Configurar os dados a serem retornados
     $response->withBody('Dados a serem retornados');
     return $response;
 }
 ```
-
-Os parâmetros completos do método cookie são os seguintes:
+O método cookie possui os seguintes parâmetros completos:
 
 `cookie($name, $value = '', $max_age = 0, $path = '', $domain = '', $secure = false, $http_only = false)`
 
-## Retorna fluxo de arquivo
+## Retornar stream de arquivo
 ```php
 <?php
 namespace app\controller;
@@ -296,16 +290,14 @@ class FooController
 }
 ```
 
-- O webman suporta o envio de arquivos muito grandes
-- Para arquivos grandes (maiores que 2M), o webman não carrega o arquivo inteiro na memória de uma só vez, mas lê e envia o arquivo em segmentos no momento apropriado
-- O webman otimiza a velocidade de leitura e envio do arquivo com base na velocidade de recepção do cliente, garantindo o envio mais rápido do arquivo com o menor uso de memória possível
-- O envio de dados é não-bloqueante e não afeta o processamento de outras solicitações
-- O método `file` adiciona automaticamente o cabeçalho `if-modified-since` e, na próxima solicitação, verifica o cabeçalho `if-modified-since`. Se o arquivo não foi modificado, retorna diretamente o status 304 para economizar largura de banda
-- O arquivo enviado utiliza automaticamente o cabeçalho `Content-Type` e é enviado para o navegador
+- O webman suporta o envio de arquivos extremamente grandes
+- Para arquivos grandes (maiores que 2M), o webman não carrega o arquivo inteiro na memória de uma só vez, ao invés disso, ele lê e envia o arquivo em segmentos no momento apropriado
+- O webman otimiza a velocidade de leitura e envio de arquivos de acordo com a velocidade de recebimento do cliente, garantindo o envio mais rápido do arquivo com a menor ocupação de memória
+- O envio de dados é não bloqueante e não afeta o processamento de outras requisições
+- O método file adiciona automaticamente o cabeçalho `if-modified-since` e, na próxima requisição, verifica o cabeçalho `if-modified-since`. Se o arquivo não foi modificado, ele retorna diretamente o código 304, economizando largura de banda
+- Os arquivos enviados automaticamente utilizam o cabeçalho `Content-Type` apropriado para serem enviados ao navegador
 - Se o arquivo não existir, ele é automaticamente convertido em uma resposta 404
-
-
-## Baixar arquivo
+## Downloading Files
 ```php
 <?php
 namespace app\controller;
@@ -316,16 +308,18 @@ class FooController
 {
     public function hello(Request $request)
     {
-        return response()->download(public_path() . '/favicon.ico', 'nome-do-arquivo.ico');
+        return response()->download(public_path() . '/favicon.ico', 'filename.ico');
     }
 }
 ```
-O método `download` é semelhante ao método `file`, exceto que:
-1. Após definir o nome do arquivo de download, o arquivo será baixado em vez de ser exibido no navegador
-2. O método `download` não verifica o cabeçalho `if-modified-since`
 
-## Obtenção da saída
-Alguns bibliotecas escrevem o conteúdo do arquivo diretamente na saída padrão, ou seja, os dados são exibidos no terminal da linha de comando e não são enviados para o navegador. Nesse caso, é necessário capturar os dados em uma variável usando `ob_start();` `ob_get_clean();` e, em seguida, enviar os dados para o navegador, como mostrado abaixo:
+O método `download` é semelhante ao método `file`, com a diferença de que:
+1. Após definir o nome do arquivo para download, o arquivo será baixado em vez de ser exibido no navegador.
+2. O método `download` não verifica o cabeçalho `if-modified-since`.
+
+
+## Obtendo Saída
+Alguns bibliotecas podem imprimir diretamente o conteúdo do arquivo na saída padrão, ou seja, os dados são impressos no terminal de linha de comando e não são enviados para o navegador. Nesses casos, precisamos capturar os dados em uma variável usando `ob_start();` e `ob_get_clean();`, e então enviar os dados para o navegador. Por exemplo:
 
 ```php
 <?php
@@ -341,11 +335,11 @@ class ImageController
         // Criar imagem
         $im = imagecreatetruecolor(120, 20);
         $text_color = imagecolorallocate($im, 233, 14, 91);
-        imagestring($im, 1, 5, 5,  'Uma String de Texto Simples', $text_color);
+        imagestring($im, 1, 5, 5,  'A Simple Text String', $text_color);
 
-        // Iniciar a captura da saída
+        // Iniciar a captura de saída
         ob_start();
-        // Exibir a imagem
+        // Imprimir a imagem
         imagejpeg($im);
         // Obter o conteúdo da imagem
         $image = ob_get_clean();

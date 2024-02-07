@@ -1,5 +1,5 @@
 # ログ
-webmanでは、[monolog/monolog](https://github.com/Seldaek/monolog) を使用してログを処理します。
+webmanは、ログ処理に [monolog/monolog](https://github.com/Seldaek/monolog) を使用しています。
 
 ## 使用法
 ```php
@@ -31,7 +31,7 @@ Log::critical($message, array $context = [])
 Log::alert($message, array $context = [])
 Log::emergency($message, array $context = [])
 ```
-同等のもの
+以下は以下と同等です。
 ```php
 $log = Log::channel('default');
 $log->log($level, $message, array $context = [])
@@ -50,21 +50,21 @@ $log->emergency($message, array $context = [])
 return [
     // デフォルトのログチャネル
     'default' => [
-        // デフォルトのチャネルを処理するハンドラー、複数を設定できる
+        // デフォルトチャンネルを処理するハンドラー、複数設定可能
         'handlers' => [
             [   
                 // ハンドラークラス名
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // ハンドラークラスのコンストラクタ引数
+                // ハンドラークラスのコンストラクター引数
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // フォーマットに関するもの
+                // フォーマットに関連する設定
                 'formatter' => [
                     // フォーマット処理クラス名
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // フォーマット処理クラスのコンストラクタ引数
+                    // フォーマット処理クラスのコンストラクター引数
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -73,49 +73,49 @@ return [
 ];
 ```
 
-## 複数のチャネル
-monologは複数のチャネルをサポートしており、デフォルトでは`default`チャネルが使用されます。`log2`チャネルを追加したい場合、以下のように設定します：
+## マルチチャンネル
+monologは複数のチャンネルをサポートしており、デフォルトでは `default` チャンネルが使用されます。`log2` チャンネルを追加したい場合は、以下のように設定します。
 ```php
 return [
-    // デフォルトのログチャネル
+    // デフォルトのログチャンネル
     'default' => [
-        // デフォルトのチャネルを処理するハンドラー、複数を設定できる
+        // デフォルトチャンネルを処理するハンドラー、複数設定可能
         'handlers' => [
             [   
                 // ハンドラークラス名
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // ハンドラークラスのコンストラクタ引数
+                // ハンドラークラスのコンストラクター引数
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // フォーマットに関するもの
+                // フォーマットに関連する設定
                 'formatter' => [
                     // フォーマット処理クラス名
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // フォーマット処理クラスのコンストラクタ引数
+                    // フォーマット処理クラスのコンストラクター引数
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
         ],
     ],
-    // log2チャネル
+    // log2 チャンネル
     'log2' => [
-        // log2チャネルを処理するハンドラー、複数を設定できる
+        // デフォルトチャンネルを処理するハンドラー、複数設定可能
         'handlers' => [
             [   
                 // ハンドラークラス名
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // ハンドラークラスのコンストラクタ引数
+                // ハンドラークラスのコンストラクター引数
                 'constructor' => [
                     runtime_path() . '/logs/log2.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // フォーマットに関するもの
+                // フォーマットに関連する設定
                 'formatter' => [
                     // フォーマット処理クラス名
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // フォーマット処理クラスのコンストラクタ引数
+                    // フォーマット処理クラスのコンストラクター引数
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -123,8 +123,7 @@ return [
     ],
 ];
 ```
-
-`log2`チャネルを使用する場合の方法は以下のとおりです：
+`log2` チャンネルを使用する場合の方法は以下の通りです。
 ```php
 <?php
 namespace app\controller;
@@ -137,7 +136,7 @@ class FooController
     public function index(Request $request)
     {
         $log = Log::channel('log2');
-        $log->info('log2のテスト');
+        $log->info('log2 テスト');
         return response('こんにちは、index');
     }
 }

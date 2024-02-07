@@ -27,11 +27,11 @@ class ExcelController
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Hallo Welt!');
+        $sheet->setCellValue('A1', 'Hello World !');
 
         $writer = new Xlsx($spreadsheet);
         $file_path = public_path().'/hello_world.xlsx';
-        // Datei im öffentlichen Verzeichnis speichern
+        // Datei im Public-Verzeichnis speichern
         $writer->save($file_path);
         // Datei herunterladen
         return response()->download($file_path, 'Dateiname.xlsx');
@@ -39,6 +39,7 @@ class ExcelController
 
 }
 ```
+  
   
 ### Weitere Informationen
 

@@ -37,12 +37,11 @@ public function index(Request $request)
 |$paginator->url($page)|獲取指定頁的 URL|
 |$paginator->getPageName()|獲取用於儲存頁碼的查詢參數名|
 |$paginator->setPageName($name)|設置用於儲存頁碼的查詢參數名|
-
 > **注意**
 > 不支持 `$paginator->links()` 方法
 
-## 分頁元件
-webman中無法使用 `$paginator->links()` 方法渲染分頁按鈕，不過我們可以使用其他元件來渲染，例如 `jasongrimes/php-paginator` 。
+## 分頁組件
+在webman中無法使用 `$paginator->links()` 方法渲染分頁按鈕，不過我們可以使用其他組件來渲染，例如 `jasongrimes/php-paginator` 。
 
 **安裝**
 `composer require "jasongrimes/paginator:~1.0"`
@@ -75,7 +74,7 @@ class UserController
 ```html
 <html>
 <head>
-  <!-- 內置支持 Bootstrap 分頁樣式 -->
+  <!-- 內置支援 Bootstrap 分頁樣式 -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -91,7 +90,7 @@ class UserController
 ```html
 <html>
 <head>
-  <!-- 內置支持 Bootstrap 分頁樣式 -->
+  <!-- 內置支援 Bootstrap 分頁樣式 -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -109,7 +108,7 @@ class UserController
 ```html
 <html>
 <head>
-  <!-- 內置支持 Bootstrap 分頁樣式 -->
+  <!-- 內置支援 Bootstrap 分頁樣式 -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -125,7 +124,7 @@ class UserController
 ```html
 <html>
 <head>
-    <!-- 內置支持 Bootstrap 分頁樣式 -->
+    <!-- 內置支援 Bootstrap 分頁樣式 -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -155,7 +154,7 @@ public function index(Request $request)
 ```html
 <html>
 <head>
-    <!-- 內置支持 Bootstrap 分頁樣式 -->
+    <!-- 內置支援 Bootstrap 分頁樣式 -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>

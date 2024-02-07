@@ -14,16 +14,16 @@ composer require intervention/image
 
 ### Utilizzo
 
-**Frammento di codice per la pagina di caricamento**
+**Snippet della pagina di caricamento**
 
 ```html
-<form method="post" action="/user/img" enctype="multipart/form-data">
-    <input type="file" name="file">
-    <input type="submit" value="Invia">
-</form>
+  <form method="post" action="/user/img" enctype="multipart/form-data">
+      <input type="file" name="file">
+      <input type="submit" value="Invia">
+  </form>
 ```
 
-**Crea `app/controller/UserController.php`**
+**Creare `app/controller/UserController.php`**
 
 ```php
 <?php
@@ -42,7 +42,7 @@ class UserController
         }
         return response('file non trovato');
     }
-
+    
 }
 ```
 

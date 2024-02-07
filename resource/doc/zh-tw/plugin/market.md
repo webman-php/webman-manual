@@ -1,3 +1,3 @@
-# 擴充市集
+# 擴充市場
 
-[點擊這裡進入擴充市集](/webman#plugins)
+[點擊這裡進入擴充市場](/webman#plugins)

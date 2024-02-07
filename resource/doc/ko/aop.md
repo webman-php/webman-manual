@@ -1,6 +1,6 @@
 # AOP
 
-> 하이퍼프(Hyperf) 작성자에게 감사의 인사
+> Hyperf 작성자에게 감사드립니다.
 
 ### 설치
 
@@ -12,7 +12,7 @@ composer require "hyperf/aop-integration: ^1.1"
 
 ### AOP 관련 구성 추가
 
-`config` 디렉토리 아래 `config.php` 구성을 추가해야 합니다.
+`config` 디렉토리에 `config.php` 구성을 추가해야 합니다.
 
 ```php
 <?php
@@ -36,18 +36,18 @@ return [
         ],
     ],
     'aspects' => [
-        // 여기에 해당하는 Aspect를 입력합니다.
+        // 여기에 해당하는 Aspect를 작성합니다.
         app\aspect\DebugAspect::class,
     ]
 ];
 
 ```
 
-### 진입 파일 start.php 설정
+### 진입 파일 start.php 구성
 
-> 초기화 메서드를 'timezone' 아래에 넣겠습니다. 다음은 다른 코드를 생략합니다.
+> 우리는 초기화 방법을 timezone 아래에 놓을 것입니다. 아래는 다른 코드를 생략합니다.
 
-```
+```php
 use Hyperf\AopIntegration\ClassLoader;
 
 if ($timezone = config('app.default_timezone')) {
@@ -60,7 +60,7 @@ ClassLoader::init();
 
 ### 테스트
 
-먼저 적용 대상 클래스를 작성해 봅시다.
+먼저 적용할 클래스를 작성해 봅시다.
 
 ```php
 <?php
@@ -75,7 +75,7 @@ class UserService
 }
 ```
 
-그 다음에 해당하는 `DebugAspect`를 추가합니다.
+그런 다음 해당하는 `DebugAspect`를 추가합니다.
 
 ```php
 <?php
@@ -99,7 +99,7 @@ class DebugAspect extends AbstractAspect
 }
 ```
 
-이후에 컨트롤러 `app/controller/IndexController.php`를 편집합니다.
+이제 컨트롤러인 `app/controller/IndexController.php`를 편집합니다.
 
 ```php
 <?php
@@ -117,7 +117,7 @@ class IndexController
 }
 ```
 
-그런 다음 라우트를 설정합니다.
+그러고 나서 라우팅을 구성합니다.
 
 ```php
 <?php
@@ -126,7 +126,7 @@ use Webman\Route;
 Route::any('/json', [app\controller\IndexController::class, 'json']);
 ```
 
-마지막으로 서버를 시작하고 테스트합니다.
+마지막으로 서비스를 시작하고 테스트합니다.
 
 ```shell
 php start.php start

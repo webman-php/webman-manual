@@ -1,12 +1,12 @@
-# Componente de Geração Automática de Códigos de Erro
+# Componente de geração automática de códigos de erro
 
 ## Descrição
 
-Capaz de gerar automaticamente códigos de erro com base em regras predefinidas.
+Capaz de gerar automaticamente códigos de erro com base em regras fornecidas.
 
-> Convenção do parâmetro de código nos dados de retorno, todos os códigos personalizados, números positivos representam um serviço normal, números negativos representam uma exceção de serviço.
+> Convenção do parâmetro de retorno de dados "code", todos os códigos personalizados, números positivos representam um serviço normal, e números negativos representam uma exceção de serviço.
 
-## Endereço do Projeto
+## Endereço do projeto
 
 https://github.com/teamones-open/response-code-msg
 
@@ -16,16 +16,16 @@ https://github.com/teamones-open/response-code-msg
 composer require teamones/response-code-msg
 ```
 
-## Utilização
+## Uso
 
-### Arquivo da Classe ErrorCode vazio
+### Arquivo de Classe ErrorCode vazio
 
-- Caminho do arquivo ./support/ErrorCode.php
+- Caminho do arquivo: ./support/ErrorCode.php
 
 ```php
 <?php
 /**
- * Arquivo gerado automaticamente, por favor, não modifique manualmente.
+ * Arquivo gerado automaticamente, não modifique manualmente.
  * @Author:$Id$
  */
 namespace support;
@@ -35,11 +35,11 @@ class ErrorCode
 }
 ```
 
-### Arquivo de Configuração
+### Arquivo de configuração
 
-Os códigos de erro serão gerados automaticamente conforme os parâmetros de configuração abaixo. Por exemplo, se system_number = 201 e start_min_number = 10000, o primeiro código de erro gerado será -20110001.
+Os códigos de erro serão automaticamente gerados com base nos parâmetros configurados abaixo. Por exemplo, se system_number = 201 e start_min_number = 10000, o primeiro código de erro gerado seria -20110001.
 
-- Caminho do arquivo ./config/error_code.php
+- Caminho do arquivo: ./config/error_code.php
 
 ```php
 <?php
@@ -48,41 +48,41 @@ return [
     "class" => new \support\ErrorCode(), // Arquivo da classe ErrorCode
     "root_path" => app_path(), // Diretório raiz do código atual
     "system_number" => 201, // Identificação do sistema
-    "start_min_number" => 10000 // Intervalo de geração de códigos de erro, por exemplo, 10000-99999
+    "start_min_number" => 10000 // Faixa de geração de códigos de erro, por exemplo, 10000-99999
 ];
 ```
 
-### Adicionando código de geração automática de erros em start.php
+### Adicionar código de geração automática de erro em start.php
 
-- Caminho do arquivo ./start.php
+- Caminho do arquivo: ./start.php
 
 ```php
 // Coloque após Config::load(config_path(), ['route', 'container']);
 
-// Gera códigos de erro, apenas em modo APP_DEBUG
+// Gerar códigos de erro, apenas em modo APP_DEBUG
 if (config("app.debug")) {
     $errorCodeConfig = config('error_code');
     (new \teamones\responseCodeMsg\Generate($errorCodeConfig))->run();
 }
 ```
 
-### Utilização no Código
+### Uso no código
 
-No código abaixo, **ErrorCode::ModelAddOptionsError** representa o código de erro, onde **ModelAddOptionsError** deve ser escrito pelo usuário de acordo com a semântica das necessidades atuais em letras maiúsculas.
+No código abaixo, **ErrorCode::ModelAddOptionsError** é um código de erro, onde **ModelAddOptionsError** precisa ser escrito pelo usuário de acordo com a semântica da demanda atual em maiúsculas.
 
-> Após escrever, você descobrirá que não pode usá-lo diretamente, ele será gerado na próxima reinicialização. Esteja ciente de que às vezes é necessário reiniciar duas vezes.
+> Você notará que não poderá usá-lo imediatamente, será gerado automaticamente após o próximo reinício. Esteja ciente de que às vezes pode ser necessário reiniciar duas vezes.
 
 ```php
 <?php
 /**
- * Classe de serviço para operações relacionadas à navegação
+ * Classe de serviço de operações relacionadas à navegação
  */
 
 namespace app\service;
 
 use app\model\Demo as DemoModel;
 
-// Importa o arquivo da classe ErrorCode
+// Importar arquivo da classe ErrorCode
 use support\ErrorCode;
 
 class Demo
@@ -105,7 +105,7 @@ class Demo
 
             return $demo->getData();
         } catch (\Throwable $e) {
-            // Exibir mensagem de erro
+            // Imprimir mensagem de erro
             throw_http_exception($e->getMessage(), ErrorCode::ModelAddOptionsError);
         }
         return [];
@@ -113,12 +113,12 @@ class Demo
 }
 ```
 
-### Arquivo ./support/ErrorCode.php gerado depois da geração
+### Arquivo ./support/ErrorCode.php gerado após a geração
 
 ```php
 <?php
 /**
- * Arquivo gerado automaticamente, por favor, não modifique manualmente.
+ * Arquivo gerado automaticamente, não modifique manualmente.
  * @Author:$Id$
  */
 namespace support;

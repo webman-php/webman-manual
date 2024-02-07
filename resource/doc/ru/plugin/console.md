@@ -1,4 +1,4 @@
-# Плагин командной строки webman/console
+# Консольный плагин webman/console
 
 `webman/console` основан на `symfony/console`
 
@@ -12,36 +12,36 @@ composer require webman/console
 
 ## Поддерживаемые команды
 **Использование**  
-`php webman команда` или `php webman команда`。
+`php webman команда` или `php webman команда`.
 Например, `php webman version` или `php webman version`
 
 ## Поддерживаемые команды
 ### version
-**Выводит версию webman**
+**Печать версии webman**
 
 ### route:list
-**Выводит текущую конфигурацию маршрутов**
+**Печать текущей конфигурации маршрутов**
 
 ### make:controller
-**Создает файл контроллера** 
+**Создание файла контроллера** 
 Например, `php webman make:controller admin` создаст `app/controller/AdminController.php`
 Например, `php webman make:controller api/user` создаст `app/api/controller/UserController.php`
 
 ### make:model
-**Создает файл модели**
+**Создание файла модели**
 Например, `php webman make:model admin` создаст `app/model/Admin.php`
 Например, `php webman make:model api/user` создаст `app/api/model/User.php`
 
 ### make:middleware
-**Создает файл промежуточного слоя**
+**Создание файла промежуточного слоя**
 Например, `php webman make:middleware Auth` создаст `app/middleware/Auth.php`
 
 ### make:command
-**Создает пользовательскую команду**
+**Создание файла пользовательской команды**
 Например, `php webman make:command db:config` создаст `app\command\DbConfigCommand.php`
 
 ### plugin:create
-**Создает базовый плагин**
+**Создание базового плагина**
 Например, `php webman plugin:create --name=foo/admin` создаст два каталога `config/plugin/foo/admin` и `vendor/foo/admin`
 См. [Создание базового плагина](/doc/webman/plugin/create.html)
 
@@ -56,15 +56,15 @@ composer require webman/console
 См. [Приложение плагина](/doc/webman/plugin/app.html)
 
 ### phar:pack
-**Упаковывает проект webman в файл phar**
-См. [Упаковка phar](/doc/webman/others/phar.html)
-> Данная функция требует webman>=1.2.4, webman-framework>=1.2.4, webman\console>=1.0.5
+**Упаковка проекта webman в phar-файл**
+См. [Сборка phar](/doc/webman/others/phar.html)
+> Для этой функции требуется webman>=1.2.4, webman-framework>=1.2.4, webman\console>=1.0.5
 
 ## Пользовательские команды
-Пользователь может определить собственные команды, например, ниже приведена команда для печати конфигурации базы данных
+Пользователи могут создавать собственные команды, например, укажем команду для печати конфигурации базы данных
 
-* Выполнить `php webman make:command config:mysql`
-* Откройте `app/command/ConfigMySQLCommand.php` и измените на следующее
+* Выполните `php webman make:command config:mysql`
+* Откройте `app/command/ConfigMySQLCommand.php` и измените на следующий код
 
 ```php
 <?php
@@ -79,7 +79,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ConfigMySQLCommand extends Command
 {
     protected static $defaultName = 'config:mysql';
-    protected static $defaultDescription = 'Отображает текущую конфигурацию сервера MySQL';
+    protected static $defaultDescription = 'Отображение текущей конфигурации сервера MySQL';
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -115,12 +115,13 @@ class ConfigMySQLCommand extends Command
     }
 }
 ```
+  
 ## Тестирование
 
-Запустите команду в командной строке `php webman config:mysql`
+Запустите команду `php webman config:mysql`
 
-Результат будет примерно следующим образом:
-```
+Результат будет примерно следующим:
+```plaintext
 +-------+---------+--------+-----------+------+----------+----------+----------+-------------+---------+-----------------+--------+--------+--------+--------+---------+
 | name  | default | driver | host      | port | database | username | password | unix_socket | charset | collation       | prefix | strict | engine | schema | sslmode |
 +-------+---------+--------+-----------+------+----------+----------+----------+-------------+---------+-----------------+--------+--------+--------+--------+---------+
@@ -128,5 +129,5 @@ class ConfigMySQLCommand extends Command
 +-------+---------+--------+-----------+------+----------+----------+----------+-------------+---------+-----------------+--------+--------+--------+--------+---------+
 ```
 
-## Дополнительная информация
+## Дополнительные материалы
 http://www.symfonychina.com/doc/current/components/console.html

@@ -1,86 +1,82 @@
-## 樣板
-webman預設使用原生PHP語法作為樣板，在開啟 `opcache` 後具有最佳的效能。除了PHP原生樣板，webman還提供了 [Twig](https://twig.symfony.com/doc/3.x/)、 [Blade](https://learnku.com/docs/laravel/8.x/blade/9377)、 [think-template](https://www.kancloud.cn/manual/think-template/content) 樣板引擎。
+## 檢視
+webman預設使用 PHP 原生語法作為模板，在啟用 `opcache` 後具有最佳性能。除了 PHP 原生模板，webman還提供了 [Twig](https://twig.symfony.com/doc/3.x/)、[Blade](https://learnku.com/docs/laravel/8.x/blade/9377)、[think-template](https://www.kancloud.cn/manual/think-template/content) 模板引擎。
 
-## 開啟opcache
-使用樣板時，強烈建議開啟php.ini中 `opcache.enable` 和 `opcache.enable_cli` 兩個選項，以便樣板引擎達到最佳效能。
+## 開啟 opcache
+使用檢視時，強烈建議在 php.ini 中開啟 `opcache.enable` 和 `opcache.enable_cli` 兩個選項，以便模板引擎達到最佳性能。
 
-## 安裝Twig
-1、使用composer安裝
+## 安裝 Twig
+1. 透過 composer 安裝
 
-```
-composer require twig/twig
-```
+   `composer require twig/twig`
 
-2、修改配置`config/view.php` 為
-```php
-<?php
-use support\view\Twig;
+2. 修改配置 `config/view.php` 為
+   ```php
+   <?php
+   use support\view\Twig;
 
-return [
-    'handler' => Twig::class
-];
-```
-> **提示**
-> 其他配置選項通過options傳入，例如  
+   return [
+       'handler' => Twig::class
+   ];
+   ```
 
-```php
-return [
-    'handler' => Twig::class,
-    'options' => [
-        'debug' => false,
-        'charset' => 'utf-8'
-    ]
-];
-```
+   > **提示**
+   > 其他配置選項可透過 options 傳入，例如
 
-## 安裝Blade
-1、使用composer安裝
+   ```php
+   return [
+       'handler' => Twig::class,
+       'options' => [
+           'debug' => false,
+           'charset' => 'utf-8'
+       ]
+   ];
+   ```
 
-```
-composer require psr/container ^1.1.1 webman/blade
-```
+## 安裝 Blade
+1. 透過 composer 安裝
 
-2、修改配置`config/view.php` 為
-```php
-<?php
-use support\view\Blade;
+   `composer require psr/container ^1.1.1 webman/blade`
 
-return [
-    'handler' => Blade::class
-];
-```
+2. 修改配置 `config/view.php` 為
+   ```php
+   <?php
+   use support\view\Blade;
 
-## 安裝think-template
-1、使用composer安裝
+   return [
+       'handler' => Blade::class
+   ];
+   ```
 
-```
-composer require topthink/think-template
-```
+## 安裝 think-template
+1. 透過 composer 安裝
 
-2、修改配置`config/view.php` 為
-```php
-<?php
-use support\view\ThinkPHP;
+   `composer require topthink/think-template`
 
-return [
-    'handler' => ThinkPHP::class,
-];
-```
-> **提示**
-> 其他配置選項通過options傳入，例如
+2. 修改配置 `config/view.php` 為
+   ```php
+   <?php
+   use support\view\ThinkPHP;
 
-```php
-return [
-    'handler' => ThinkPHP::class,
-    'options' => [
-        'view_suffix' => 'html',
-        'tpl_begin' => '{',
-        'tpl_end' => '}'
-    ]
-];
-```
+   return [
+       'handler' => ThinkPHP::class,
+   ];
+   ```
 
-## 原生PHP樣板引擎例子
+   > **提示**
+   > 其他配置選項可透過 options 傳入，例如
+
+   ```php
+   return [
+       'handler' => ThinkPHP::class,
+       'options' => [
+           'view_suffix' => 'html',
+           'tpl_begin' => '{',
+           'tpl_end' => '}'
+       ]
+   ];
+   ```
+
+## 原生 PHP 模板引擎範例
 創建文件 `app/controller/UserController.php` 如下
 
 ```php
@@ -113,9 +109,9 @@ hello <?=htmlspecialchars($name)?>
 </html>
 ```
 
-## Twig樣板引擎例子
+## Twig 模板引擎範例
 
-修改配置`config/view.php` 為
+修改配置 `config/view.php` 為
 ```php
 <?php
 use support\view\Twig;
@@ -157,10 +153,10 @@ hello {{name}}
 </html>
 ```
 
-更多文檔參考 [Twig](https://twig.symfony.com/doc/3.x/) 
+更多文檔參考 [Twig](https://twig.symfony.com/doc/3.x/)
 
-## Blade 樣板的例子
-修改配置`config/view.php` 為
+## Blade 模板的範例
+修改配置 `config/view.php` 為
 ```php
 <?php
 use support\view\Blade;
@@ -189,7 +185,7 @@ class UserController
 
 文件 `app/view/user/hello.blade.php` 如下
 
-> 注意blade樣板後綴名為`.blade.php`
+> 注意 blade 模板後綴名為 `.blade.php`
 
 ```html
 <!doctype html>
@@ -206,8 +202,8 @@ hello {{$name}}
 
 更多文檔參考 [Blade](https://learnku.com/docs/laravel/8.x/blade/9377)
 
-## ThinkPHP 樣板的例子
-修改配置`config/view.php` 為
+## ThinkPHP 模板的範例
+修改配置 `config/view.php` 為
 ```php
 <?php
 use support\view\ThinkPHP;
@@ -252,8 +248,9 @@ hello {$name}
 
 更多文檔參考 [think-template](https://www.kancloud.cn/manual/think-template/content)
 
-## 樣版賦值
-除了使用`view(模版, 變數陣列)`給樣板賦值，我們還可以在任意位置通過調用`View::assign()`給樣板賦值。例如：
+## 模板賦值
+除了使用 `view(模板, 變數陣列)` 給模板賦值，我們還可以在任意位置通過調用 `View::assign()` 給模板賦值。例如：
+
 ```php
 <?php
 namespace app\controller;
@@ -275,36 +272,35 @@ class UserController
 }
 ```
 
-`View::assign()`在某些場景下非常有用，例如某系統每個頁面首部都要顯示當前登入者資訊，如果每個頁面都將此資訊通過 `view('模版', ['user_info' => '用戶資訊']);` 賦值將非常麻煩。解決辦法就是在中間件中獲得使用者信息，然后通過`View::assign()`將使用者信息賦值給樣板。
-
-## 關於樣板檔案路徑
+`View::assign()` 在某些場景下非常有用，例如某系統每個頁面首部都要顯示當前登入者信息，如果每個頁面都將此信息通過 `view('模板', ['user_info' => '用戶信息']);` 賦值將非常麻煩。解決辦法就是在中間件中獲得用戶信息，然後通過 `View::assign()` 將用戶信息賦值給模板。
+## 關於視圖檔案路徑
 
 #### 控制器
-當控制器調用`view('模版名',[]);`時，樣板檔案按照如下規則查找：
+當控制器調用`view('模版名',[]);`時，視圖檔案按照如下規則查找：
 
-1. 非多應用時，使用 `app/view/` 下對應的樣板檔案
-2. [多應用](multiapp.md)時，使用 `app/應用名/view/` 下對應的樣板檔案
+1. 非多應用時，使用 `app/view/` 下對應的視圖檔案
+2. [多應用](multiapp.md)時，使用 `app/應用名/view/` 下對應的視圖檔案
 
-總結來說就是如果 `$request->app` 為空，則使用 `app/view/` 下的樣板檔案，否則使用 `app/{$request->app}/view/` 下的樣板檔案。
+總結來說就是如果 `$request->app` 為空，則使用 `app/view/`下的視圖檔案，否則使用 `app/{$request->app}/view/` 下的視圖檔案。
 
-#### 闭包函數
-闭包函數`$request->app` 為空，不屬於任何應用，所以闭包函數使用`app/view/`下的樣板檔案，例如 `config/route.php` 裡定義路由
+#### 閉包函數
+閉包函數`$request->app` 為空，不屬於任何應用，所以閉包函數使用`app/view/`下的視圖檔案，例如 `config/route.php` 裡定義路由
 ```php
 Route::any('/admin/user/get', function (Reqeust $reqeust) {
     return view('user', []);
 });
 ```
-會使用`app/view/user.html`作為樣板檔案(當使用blade樣板時樣板檔案為`app/view/user.blade.php`)。
+會使用`app/view/user.html`作為模版檔案(當使用blade模版時模版檔案為`app/view/user.blade.php`)。
 
 #### 指定應用
-為了多應用模式下樣板可以複用，view($template, $data, $app = null) 提供了第三個參數 `$app`，可以用來指定使用哪個應用目錄下的樣板。例如 `view('user', [], 'admin');` 會強制使用 `app/admin/view/` 下的樣板檔案。
+為了多應用模式下模版可以複用，view($template, $data, $app = null) 提供了第三個參數 `$app`，可以用來指定使用哪個應用目錄下的模版。例如 `view('user', [], 'admin');` 會強制使用 `app/admin/view/` 下的視圖檔案。
 
 ## 擴展twig
 
 > **注意**
 > 此特性需要webman-framework>=1.4.8
 
-我們可以通過給配置`view.extension`回調，來擴展twig樣板實例，例如`config/view.php`如下
+我們可以通過給配置`view.extension`回調，來擴展twig視圖實例，例如`config/view.php`如下
 ```php
 <?php
 use support\view\Twig;
@@ -321,7 +317,7 @@ return [
 ## 擴展blade
 > **注意**
 > 此特性需要webman-framework>=1.4.8
-同樣的我們可以通過給配置`view.extension`回調，來擴展blade樣板實例，例如`config/view.php`如下
+同樣的我們可以通過給配置`view.extension`回調，來擴展blade視圖實例，例如`config/view.php`如下
 
 ```php
 <?php
@@ -367,15 +363,16 @@ class Alert extends Component
 }
 ```
 
+
 **新建 `app/view/components/alert.blade.php`**
-```
+```html
 <div>
     <b style="color: red">hello blade component</b>
 </div>
 ```
 
-**`/config/view.php`類似如下程式碼**
 
+**`/config/view.php`類似如下代碼**
 ```php
 <?php
 use support\view\Blade;
@@ -387,7 +384,8 @@ return [
 ];
 ```
 
-至此，Blade組件Alert設定完畢，樣板裡使用時類似如下
+
+至此，Blade組件Alert設置完畢，模版裡使用時類似如下
 ```html
 <!doctype html>
 <html>
@@ -402,3 +400,18 @@ return [
 </body>
 </html>
 ```
+
+## 擴展think-template
+think-template 使用`view.options.taglib_pre_load`來擴展標籤庫，例如
+```php
+<?php
+use support\view\ThinkPHP;
+return [
+    'handler' => ThinkPHP::class,
+    'options' => [
+        'taglib_pre_load' => your\namspace\Taglib::class,
+    ]
+];
+```
+
+更多資料請參考 [think-template標籤擴展](https://www.kancloud.cn/manual/think-template/1286424)

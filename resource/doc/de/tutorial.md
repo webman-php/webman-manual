@@ -1,4 +1,3 @@
-```php
 # Einfaches Beispiel
 
 ## Rückgabe eines Strings
@@ -17,19 +16,19 @@ class UserController
     public function hello(Request $request)
     {
         $default_name = 'webman';
-        // Holen des Namensparameters aus der GET-Anfrage; falls kein Nameparameter übergeben wurde, wird `$default_name` zurückgegeben
+        // Holen Sie sich den Namen-Parameter aus der GET-Anfrage. Wenn kein Name-Parameter übergeben wurde, wird $default_name zurückgegeben
         $name = $request->get('name', $default_name);
-        // Rückgabe eines Strings an den Browser
-        return response('hello ' . $name);
+        // Gib den String an den Browser zurück
+        return response('hallo ' . $name);
     }
 }
 ```
 
-**Aufruf**
+**Zugriff**
 
-Rufen Sie im Browser `http://127.0.0.1:8787/user/hello?name=tom` auf.
+Rufen Sie im Browser `http://127.0.0.1:8787/user/hello?name=tom` auf
 
-Der Browser gibt `hello tom` zurück.
+Der Browser wird `hallo tom` zurückgeben
 
 ## Rückgabe von JSON
 Ändern Sie die Datei `app/controller/UserController.php` wie folgt
@@ -55,23 +54,23 @@ class UserController
 }
 ```
 
-**Aufruf**
+**Zugriff**
 
-Rufen Sie im Browser `http://127.0.0.1:8787/user/hello?name=tom` auf.
+Rufen Sie im Browser `http://127.0.0.1:8787/user/hello?name=tom` auf
 
-Der Browser gibt `{"code":0,"msg":"ok","data":"tom"}` zurück.
+Der Browser wird `{"code":0,"msg":"ok","data":"tom"}` zurückgeben
 
-Die Verwendung des JSON-Hilfsfunktionen für die Datenrückgabe fügt automatisch einen Header `Content-Type: application/json` hinzu.
+Die Verwendung des JSON-Assistenten für die Datenrückgabe fügt automatisch einen Header hinzu: `Content-Type: application/json`
 
 ## Rückgabe von XML
-Ebenso gibt die Verwendung der Hilfsfunktion `xml($xml)` eine Antwort in Form von `xml` mit dem Header `Content-Type: text/xml` zurück.
+Ebenso wird die Verwendung des Assistenten `xml($xml)` eine Antwort als `xml` mit dem Header `Content-Type: text/xml` zurückgeben.
 
 Der Parameter `$xml` kann ein `xml`-String oder ein `SimpleXMLElement`-Objekt sein.
 
 ## Rückgabe von JSONP
-Ebenso gibt die Verwendung der Hilfsfunktion `jsonp($data, $callback_name = 'callback')` eine `jsonp`-Antwort zurück.
+Ebenso wird die Verwendung des Assistenten `jsonp($data, $callback_name = 'callback')` eine `jsonp`-Antwort zurückgeben.
 
-## Rückgabe von Ansichten
+## Rückgabe eines Views
 Ändern Sie die Datei `app/controller/UserController.php` wie folgt
 
 ```php
@@ -101,14 +100,12 @@ Erstellen Sie die Datei `app/view/user/hello.html` wie folgt
     <title>webman</title>
 </head>
 <body>
-hello <?=htmlspecialchars($name)?>
+hallo <?=htmlspecialchars($name)?>
 </body>
 </html>
 ```
 
-Rufen Sie im Browser `http://127.0.0.1:8787/user/hello?name=tom` auf.
-Es wird eine HTML-Seite mit dem Inhalt `hello tom` zurückgegeben.
+Rufen Sie im Browser `http://127.0.0.1:8787/user/hello?name=tom` auf
+Es wird eine HTML-Seite mit dem Inhalt `hallo tom` zurückgegeben.
 
-Hinweis: Standardmäßig verwendet webman die PHP-Native-Syntax als Vorlage. Weitere Informationen zur Verwendung von anderen Ansichten finden Sie unter [View](view.md).
-```
-
+Hinweis: Standardmäßig verwendet webman die nativen PHP-Syntax als Vorlage. Wenn Sie andere Ansichten verwenden möchten, siehe [View](view.md).

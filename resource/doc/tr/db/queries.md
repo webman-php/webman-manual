@@ -1,356 +1,351 @@
 # Sorgu Oluşturucu
-## Tüm satırları al
+## Tüm satırları alın
 ```php
 <?php
 namespace app\controller;
 
-kullanmak destek\Request;
-kullanmak destek\Db;
+use support\Request;
+use support\Db;
 
 class UserController
 {
-    genel işlev tüm(Request $istek)
+    public function all(Request $request)
     {
-        $kullanıcılar = Db::table('kullanıcılar')->al();
-        return görünüm('kullanıcı/hepsi', ['kullanıcılar' => $kullanıcılar]);
+        $users = Db::table('users')->get();
+        return view('user/all', ['users' => $users]);
     }
 }
 ```
 
-## Belirli sütunları al
+## Belirli sütunları alın
 ```php
-$kullanıcılar = Db::table('kullanıcı')->seç('ad', 'email as user_email')->al();
+$users = Db::table('user')->select('name', 'email as user_email')->get();
 ```
 
-## Bir satır al
+## Bir satır alın
 ```php
-$kullanıcı = Db::table('kullanıcılar')->nerede('ad', 'John')->ilk();
+$user = Db::table('users')->where('name', 'John')->first();
 ```
 
-## Bir sütun al
+## Bir sütun alın
 ```php
-$başlıklar = Db::table('roller')->pluk('başlık');
+$titles = Db::table('roles')->pluck('title');
 ```
-Belirli bir indeks olarak id sütununu belirt
+Belirli bir id alanını index olarak belirtin
 ```php
-$roller = Db::table('roller')->pluk('başlık', 'id');
+$roles = Db::table('roles')->pluck('title', 'id');
 
-foreach ($roller olarak $id => $başlık) {
-    echo $başlık;
+foreach ($roles as $id => $title) {
+    echo $title;
 }
 ```
 
-## Tek bir değer (alan) al
+## Tek bir değeri (sütunu) alın
 ```php
-$email = Db::table('kullanıcılar')->nerede('ad', 'John')->değer('email');
+$email = Db::table('users')->where('name', 'John')->value('email');
 ```
 
-## Tekrarları Kaldır
+## Tekrar edenleri kaldırın
 ```php
-$email = Db::table('kullanıcı')->seç('rumuz')->farklı()->al();
+$email = Db::table('user')->select('nickname')->distinct()->get();
 ```
 
-## Sonuçları Parçala
-Eğer binlerce veya daha fazla veritabanı kaydını işlemek gerekiyorsa, bu kayıtları tek seferde okumak zaman alıcı olabilir ve bellek limitinin aşılmasına neden olabilir, bu durumda chunkById metodunu kullanmayı düşünebilirsiniz. Bu metod, sonuç kümesini küçük parçalara böler ve bunları kapanış fonksiyonuna ileterek işlem yapmanıza olanak tanır. Örneğin, tüm kullanıcılar tablosu verilerini bir seferde 100 kayıt işleyecek şekilde kesip parçalayabiliriz:
+## Sonuçları parçalara ayırın
+Eğer binlerce kayıtla uğraşmanız gerekiyorsa, tüm verileri bir seferde almak zaman alır ve genellikle hafızayı aşırı yükler, bu durumda chunkById yöntemini düşünebilirsiniz. Bu yöntem, sonuç kümesini küçük parçalar halinde alır ve bunları bir kapanış fonksiyonuna işlemek üzere iletilir. Örneğin, tüm kullanıcılar tablosunu 100 kayıtlık küçük parçalara bölebiliriz:
 ```php
-Db::table('kullanıcılar')->sırala('id')->chunkById(100, function ($kullanıcılar) {
-    foreach ($kullanıcılar olarak $kullanıcı) {
+Db::table('users')->orderBy('id')->chunkById(100, function ($users) {
+    foreach ($users as $user) {
         //
     }
 });
 ```
-Parçaları almayı durdurmak için false döndürebilirsiniz.
+Parçaları almayı durdurmak için kapanış fonksiyonunda false döndürebilirsiniz.
 ```php
-Db::table('kullanıcılar')->sırala('id')->chunkById(100, function ($kullanıcılar) {
+Db::table('users')->orderBy('id')->chunkById(100, function ($users) {
     // Kayıtları işleyin...
 
     return false;
 });
 ```
-
-> Not: Geri aramada veri silmeyin, bu bazı kayıtların sonuç kümesine dahil edilmemesine neden olabilir
+> Not: Geri çağrıda veri silmeyin, bu bazı kayıtların sonuç kümesine dahil edilmemesine neden olabilir
 
 ## Birleştirme
-Sorgu oluşturucu ayrıca sayma, max, min, avg, sum vb. gibi çeşitli birleştirme yöntemleri sağlar.
+Sorgu oluşturucu, count, max, min, avg, sum vb. gibi çeşitli birleştirme yöntemleri de sağlar.
 ```php
-$kullanıcılar = Db::table('kullanıcılar')->say();
-$fiyat = Db::table('siparişler')->maks('fiyat');
-$fiyat = Db::table('siparişler')->nerede('sonlandırıldı', 1)->ortalama('fiyat');
+$users = Db::table('users')->count();
+$price = Db::table('orders')->max('price');
+$price = Db::table('orders')->where('finalized', 1)->avg('price');
 ```
 
-## Kayıt var mı yok mu kontrolü
+## Kaydın var olup olmadığını kontrol edin
 ```php
-return Db::table('siparişler')->nerede('sonlandırıldı', 1)->var();
-return Db::table('siparişler')->nerede('sonlandırıldı', 1)->yok();
+return Db::table('orders')->where('finalized', 1)->exists();
+return Db::table('orders')->where('finalized', 1)->doesntExist();
 ```
 
 ## Doğal İfade
 Prototip
 ```php
-selectRaw($ifade, $bağlantılar = [])
+selectRaw($expression, $bindings = [])
 ```
-Bazı durumlarda sorguda doğal ifade kullanmanız gerekebilir. Bir doğal ifade oluşturmak için `selectRaw()` yi kullanabilirsiniz:
-
+Ara sıra sorguda doğal ifadeler kullanmanız gerekebilir. `selectRaw()` ile doğal bir ifade oluşturabilirsiniz:
 ```php
-$siparişler = Db::table('siparişler')
-                ->selectRaw('fiyat * ? as vergili_fiyat', [1.0825])
-                ->al();
+$orders = Db::table('orders')
+                ->selectRaw('price * ? as price_with_tax', [1.0825])
+                ->get();
 ```
+Aynı şekilde, `whereRaw()` `orWhereRaw()` `havingRaw()` `orHavingRaw()` `orderByRaw()` `groupByRaw()` doğal ifade yöntemleri de mevcuttur.
 
-Aynı şekilde `whereRaw()` `orWhereRaw()` `havingRaw()` `orHavingRaw()` `orderByRaw()` ve `groupByRaw()` doğal ifade yöntemleri de sağlanmaktadır.
-
-`Db::raw($değer)` da bir doğal ifade oluşturmak için kullanılır, ancak bağlama parametre işlevi yoktur, kullanırken SQL enjeksiyonu konusunda dikkatli olunması gerekir.
+`Db::raw($value)` ayrıca bir doğal ifade oluşturmak için kullanılabilir, ancak bağlantı işlevselliği bulunmamaktadır, kullanırken SQL enjeksiyonuna dikkat etmelisiniz.
 ```php
-$siparişler = Db::table('siparişler')
-                ->seç('departman', Db::raw('SUM(fiyat) as toplam_satış'))
-                ->groupBy('departman')
-                ->havingRaw('SUM(fiyat) > ?', [2500])
-                ->al();
+$orders = Db::table('orders')
+                ->select('department', Db::raw('SUM(price) as total_sales'))
+                ->groupBy('department')
+                ->havingRaw('SUM(price) > ?', [2500])
+                ->get();
 ```
 
-## Join İfadesi
+## Birleştirme İfadeleri
 ```php
 // join
-$kullanıcılar = Db::table('kullanıcılar')
-            ->join('iletisim', 'kullanıcılar.id', '=', 'iletisim.kullanıcı_id')
-            ->join('siparişler', 'kullanıcılar.id', '=', 'siparişler.kullanıcı_id')
-            ->seç('kullanıcılar.*', 'iletisim.telefon', 'siparişler.fiyat')
-            ->al();
+$users = Db::table('users')
+            ->join('contacts', 'users.id', '=', 'contacts.user_id')
+            ->join('orders', 'users.id', '=', 'orders.user_id')
+            ->select('users.*', 'contacts.phone', 'orders.price')
+            ->get();
 
 // leftJoin            
-$kullanıcılar = Db::table('kullanıcılar')
-            ->leftJoin('gönderiler', 'kullanıcılar.id', '=', 'gönderiler.kullanıcı_id')
-            ->al();
+$users = Db::table('users')
+            ->leftJoin('posts', 'users.id', '=', 'posts.user_id')
+            ->get();
 
 // rightJoin
-$kullanıcılar = Db::table('kullanıcılar')
-            ->rightJoin('gönderiler', 'kullanıcılar.id', '=', 'gönderiler.kullanıcı_id')
-            ->al();
+$users = Db::table('users')
+            ->rightJoin('posts', 'users.id', '=', 'posts.user_id')
+            ->get();
 
 // crossJoin    
-$kullanıcılar = Db::table('boyutlar')
-            ->crossJoin('renkler')
-            ->al();
+$users = Db::table('sizes')
+            ->crossJoin('colors')
+            ->get();
 ```
 
-## Birleştirme İfadesi
+## Birleştirme İfadeleri
 ```php
-$ilk = Db::table('kullanıcılar')
-            ->neredeNull('ad');
+$first = Db::table('users')
+            ->whereNull('first_name');
 
-$kullanıcılar = Db::table('kullanıcılar')
-            ->neredeNull('soyadı')
-            ->birleş($ilk)
-            ->al();
+$users = Db::table('users')
+            ->whereNull('last_name')
+            ->union($first)
+            ->get();
 ```
-
 ## Where İfadesi
-Prototip 
+Prototip
 ```php
-nerede($kolon, $operatör = null, $değer = null)
+where($sütun, $operatör = null, $değer = null)
 ```
-İlk parametre sütun adı, ikinci parametre herhangi bir veritabanı sistem tarafından desteklenen operatör, üçüncüsü ise sütunun karşılaştırılacak değeri.
+İlk parametre sütun adı, ikinci parametre herhangi bir veritabanı sisteminin desteklediği bir operatör ve üçüncüsü ise sütunun karşılaştırılacak değeri.
 ```php
-$kullanıcılar = Db::table('kullanıcılar')->nerede('oy', '=', 100)->al();
+$users = Db::table('kullanıcılar')->where('oylar', '=', 100)->get();
 
-// Operatör eşittir olduğunda bu ifadeyle aynı etkiye sahip olduğundan, yukarıdaki ifadeyle aynı işlemi yapar
-$kullanıcılar = Db::table('kullanıcılar')->nerede('oy', 100)->al();
+// Operatör eşittir olduğunda, bu yüzden bu ifade öncekiyle aynı etkiye sahiptir
+$users = Db::table('kullanıcılar')->where('oylar', 100)->get();
 
-$kullanıcılar = Db::table('kullanıcılar')
-                ->nerede('oy', '>=', 100)
-                ->al();
+$users = Db::table('kullanıcılar')
+                ->where('oylar', '>=', 100)
+                ->get();
 
-$kullanıcılar = Db::table('kullanıcılar')
-                ->nerede('oy', '<>', 100)
-                ->al();
+$users = Db::table('kullanıcılar')
+                ->where('oylar', '<>', 100)
+                ->get();
 
-$kullanıcılar = Db::table('kullanıcılar')
-                ->nerede('ad', 'like', 'T%')
-                ->al();
+$users = Db::table('kullanıcılar')
+                ->where('ad', 'like', 'T%')
+                ->get();
 ```
 
-where fonksiyonuna bir dizi koşulunu iletin:
+Ayrıca where fonksiyonuna bir dizi koşul geçirebilirsiniz:
 ```php
-$kullanıcılar = Db::table('kullanıcılar')->nerede([
+$users = Db::table('kullanıcılar')->where([
     ['durum', '=', '1'],
     ['abone', '<>', '1'],
-])->al();
+])->get();
 ```
 
-orWhere fonksiyonu ve where fonksiyonu aynı parametreleri alır:
+orWhere yöntemi where yöntemi ile aynı parametreleri alır:
 ```php
-$kullanıcılar = Db::table('kullanıcılar')
-                    ->nerede('oy', '>', 100)
-                    ->veya('ad', 'John')
-                    ->al();
+$users = Db::table('kullanıcılar')
+                    ->where('oylar', '>', 100)
+                    ->orWhere('ad', 'John')
+                    ->get();
 ```
 
-orWhere fonksiyonuna bir kapanış fonksiyonu ilk parametre olarak iletilebilir:
+orWhere yöntemine bir kapanışı birinci parametre olarak geçirebilirsiniz:
 ```php
-// SQL: select * from users where votes > 100 or (name = 'Abigail' and votes > 50)
-$kullanıcılar = Db::table('kullanıcılar')
-            ->nerede('oy', '>', 100)
-            ->veya(function($sorgu) {
-                $sorgu->nerede('ad', 'Abigail')
-                      ->nerede('oy', '>', 50);
+// SQL: select * from kullanıcılar where oylar > 100 or (ad = 'Abigail' and oylar > 50)
+$users = Db::table('kullanıcılar')
+            ->where('oylar', '>', 100)
+            ->orWhere(function($sorgu) {
+                $sorgu->where('ad', 'Abigail')
+                      ->where('oylar', '>', 50);
             })
-            ->al();
+            ->get();
 ```
 
-whereBetween / orWhereBetween fonksiyonu, alan değerinin verilen iki değer arasında olup olmadığını doğrular:
+whereBetween / orWhereBetween yöntemleri alanın değerinin belirtilen iki değer arasında olup olmadığını kontrol eder:
 ```php
-$kullanıcılar = Db::table('kullanıcılar')
-           ->whereBetween('oy', [1, 100])
-           ->al();
+$users = Db::table('kullanıcılar')
+           ->whereBetween('oylar', [1, 100])
+           ->get();
 ```
 
-whereNotBetween / orWhereNotBetween fonksiyonu, alan değerinin verilen iki değer arasında olmadığını doğrular:
+whereNotBetween / orWhereNotBetween yöntemleri alanın değerinin belirtilen iki değer arasında olmadığını kontrol eder:
 ```php
-$kullanıcılar = Db::table('kullanıcılar')
-                    ->whereNotBetween('oy', [1, 100])
-                    ->al();
+$users = Db::table('kullanıcılar')
+                    ->whereNotBetween('oylar', [1, 100])
+                    ->get();
 ```
 
-whereIn / whereNotIn / orWhereIn / orWhereNotIn fonksiyonu, alanın değerlerinin belirli bir dizi içinde olması gerektiğini doğrular:
+whereIn / whereNotIn / orWhereIn / orWhereNotIn yöntemleri alanın değerinin belirtilen dizinin içinde olması gerektiğini kontrol eder:
 ```php
-$kullanıcılar = Db::table('kullanıcılar')
-                    ->neredeGirişte('id', [1, 2, 3])
-                    ->al();
+$users = Db::table('kullanıcılar')
+                    ->whereIn('id', [1, 2, 3])
+                    ->get();
 ```
 
-whereNull / whereNotNull / orWhereNull / orWhereNotNull fonksiyonu, belirtilen alanın NULL olması gerektiğini doğrular:
+whereNull / whereNotNull / orWhereNull / orWhereNotNull yöntemleri belirtilen alanın NULL olması gerektiğini kontrol eder:
 ```php
-$kullanıcılar = Db::table('kullanıcılar')
-                    ->whereNull('güncellenme_tarihi')
-                    ->al();
+$users = Db::table('kullanıcılar')
+                    ->whereNull('güncelleme_tarihi')
+                    ->get();
 ```
 
-whereNotNull fonksiyonu, belirtilen alanın NULL olmaması gerektiğini doğrular:
+whereNotNull yöntemi belirtilen alanın NULL olmaması gerektiğini kontrol eder:
 ```php
-$kullanıcılar = Db::table('kullanıcılar')
-                    ->whereNotNull('güncellenme_tarihi')
-                    ->al();
+$users = Db::table('kullanıcılar')
+                    ->whereNotNull('güncelleme_tarihi')
+                    ->get();
 ```
 
-whereDate / whereMonth / whereDay / whereYear / whereTime fonksiyonları, alanın değerini belirtilen tarihle karşılaştırır:
+whereDate / whereMonth / whereDay / whereYear / whereTime yöntemleri alanın değerini belirtilen tarih ile karşılaştırmak için kullanılır:
 ```php
-$kullanıcılar = Db::table('kullanıcılar')
+$users = Db::table('kullanıcılar')
                 ->whereDate('oluşturma_tarihi', '2016-12-31')
-                ->al();
+                ->get();
 ```
 
-whereColumn / orWhereColumn fonksiyonu, iki alanın değerinin eşit olup olmadığını kontrol eder:
+whereColumn / orWhereColumn yöntemleri iki alanın değerini karşılaştırmak için kullanılır:
 ```php
-$kullanıcılar = Db::table('kullanıcılar')
-                ->whereColumn('ad', 'soyad')
-                ->al();
+$users = Db::table('kullanıcılar')
+                ->whereColumn('ilk_isim', 'son_isim')
+                ->get();
                 
-// Karşılaştırma operatörü de iletilir
-$kullanıcılar = Db::table('kullanıcılar')
-                ->whereColumn('güncellenme_tarihi', '>', 'oluşturma_tarihi')
-                ->al();
+// Bir karşılaştırma operatörü de geçirebilirsiniz
+$users = Db::table('kullanıcılar')
+                ->whereColumn('güncelleme_tarihi', '>', 'oluşturma_tarihi')
+                ->get();
                 
-// whereColumn fonksiyonuna bir dizi de geçebilirsiniz
-$kullanıcılar = Db::table('kullanıcılar')
+// whereColumn yöntemi ayrıca dizi geçirebilir
+$users = Db::table('kullanıcılar')
                 ->whereColumn([
-                    ['ad', '=', 'soyad'],
-                    ['güncellenme_tarihi', '>', 'oluşturma_tarihi'],
-                ])->al();
-
+                    ['ilk_isim', '=', 'son_isim'],
+                    ['güncelleme_tarihi', '>', 'oluşturma_tarihi'],
+                ])->get();
 ```
 
-Parametrelerin gruplar halinde verilmesi
+Parametre gruplama
 ```php
-// select * from users where name = 'John' and (votes > 100 or title = 'Admin')
-$kullanıcılar = Db::table('kullanıcılar')
-           ->nerede('ad', '=', 'John')
-           ->nerede(function ($sorgu) {
-               $sorgu->nerede('oy', '>', 100)
-                     ->veya('unvan', '=', 'Admin');
+// select * from kullanıcılar where ad = 'John' and (oylar > 100 or unvan = 'Yönetici')
+$users = Db::table('kullanıcılar')
+           ->where('ad', '=', 'John')
+           ->where(function ($sorgu) {
+               $sorgu->where('oylar', '>', 100)
+                     ->orWhere('unvan', '=', 'Yönetici');
            })
-           ->al();
+           ->get();
 ```
 
 whereExists
 ```php
-// select * from users where exists ( select 1 from orders where orders.user_id = users.id )
-$kullanıcılar = Db::table('kullanıcılar')
+// select * from kullanıcılar where exists ( select 1 from siparişler where siparişler.kullanıcı_id = users.id )
+$users = Db::table('kullanıcılar')
            ->whereExists(function ($sorgu) {
-               $sorgu->seç(Db::raw(1))
+               $sorgu->select(Db::raw(1))
                      ->from('siparişler')
-                     ->whereRaw('siparişler.user_id = users.id');
+                     ->whereRaw('siparişler.kullanıcı_id = kullanıcılar.id');
            })
-           ->al();
+           ->get();
 ```
 
-## orderBy
+## Sıralama
 ```php
-$kullanıcılar = Db::table('kullanıcılar')
+$users = Db::table('kullanıcılar')
                 ->orderBy('ad', 'desc')
-                ->al();
+                ->get();
 ```
 
 ## Rastgele Sıralama
 ```php
-$rastgeleKullanıcı = Db::table('kullanıcılar')
-                ->rastgeleSırala()
-                ->ilk();
+$randomUser = Db::table('kullanıcılar')
+                ->inRandomOrder()
+                ->first();
 ```
-> Rastgele sıralama, sunucu performansını ciddi şekilde etkileyebileceğinden, kullanılması önerilmez
+> Rastgele sıralama sunucu performansını ciddi şekilde etkiler, kullanılması önerilmez
 
 ## groupBy / having
 ```php
-$kullanıcılar = Db::table('kullanıcılar')
-                ->grupBy('hesap_id')
+$users = Db::table('kullanıcılar')
+                ->groupBy('hesap_id')
                 ->having('hesap_id', '>', 100)
-                ->al();
-// grupBy metoduna birden fazla parametre iletebilirsiniz
-$kullanıcılar = Db::table('kullanıcılar')
-                ->grupBy('ad', 'durum')
+                ->get();
+// groupBy yöntemine birden çok parametre geçirebilirsiniz
+$users = Db::table('kullanıcılar')
+                ->groupBy('ilk_ad', 'durum')
                 ->having('hesap_id', '>', 100)
-                ->al();
+                ->get();
 ```
 
-## ofset / limit
+## offset / limit
 ```php
-$kullanıcılar = Db::table('kullanıcılar')
-                ->ofset(10)
+$users = Db::table('kullanıcılar')
+                ->offset(10)
                 ->limit(5)
-                ->al();
+                ->get();
 ```
+
 ## Ekleme
-Tek bir satır ekleme
+Tek satır ekleme
 ```php
-Db::table('users')->insert(
-    ['email' => 'john@example.com', 'votes' => 0]
+Db::table('kullanıcılar')->insert(
+    ['email' => 'john@example.com', 'oylar' => 0]
 );
 ```
-Çoklu ekleme
+Birden fazla satır ekleme
 ```php
-Db::table('users')->insert([
-    ['email' => 'taylor@example.com', 'votes' => 0],
-    ['email' => 'dayle@example.com', 'votes' => 0]
+Db::table('kullanıcılar')->insert([
+    ['email' => 'taylor@example.com', 'oylar' => 0],
+    ['email' => 'dayle@example.com', 'oylar' => 0]
 ]);
 ```
 
-## Otomatik Artan Kimlik
+## Artan ID
 ```php
-$id = Db::table('users')->insertGetId(
-    ['email' => 'john@example.com', 'votes' => 0]
+$id = Db::table('kullanıcılar')->insertGetId(
+    ['email' => 'john@example.com', 'oylar' => 0]
 );
 ```
 
-> Not: PostgreSQL kullanırken, insertGetId yöntemi otomatik artan alan adı olarak varsayılan olarak id'yi alacaktır. Başka "dizi"den bir ID almak istiyorsanız, insertGetId yöntemine ikinci parametre olarak alan adını iletebilirsiniz.
+> Not: PostgreSQL kullanırken, insertGetId yöntemi varsayılan olarak id'yi otomatik artan alan adı olarak alır. Diğer bir "dizi"den id almak istiyorsanız, insertGetId yöntemine ikinci parametre olarak alan adını iletebilirsiniz.
 
 ## Güncelleme
 ```php
-$affected = Db::table('users')
+$etkilenen = Db::table('kullanıcılar')
               ->where('id', 1)
-              ->update(['votes' => 1]);
+              ->update(['oylar' => 1]);
 ```
-
-## Güncelle veya Ekle
-Bazen mevcut kayıtları güncellemek isteyebilir veya eşleşen bir kayıt yoksa oluşturmak isteyebilirsiniz:
+## Güncelleme veya Ekleme
+Bazen mevcut bir kaydı veritabanında güncellemek isteyebilir veya eğer eşleşen bir kayıt bulunmuyorsa oluşturmak isteyebilirsiniz:
 
 ```php
 Db::table('users')
@@ -359,20 +354,18 @@ Db::table('users')
         ['votes' => '2']
     );
 ```
-updateOrInsert yöntemi ilk parametredeki anahtar ve değer çiftlerini kullanarak eşleşen veritabanı kaydını aramayı deneyecektir. Kayıt bulunursa, ikinci parametredeki değerleri kullanarak kaydı günceller. Kayıt bulunamazsa, yeni bir kayıt ekler ve yeni kaydın verileri iki dizi toplamı olur.
 
-## Artır & Azalt
-Bu iki yöntem değiştirilmek istenen sütunu en az bir parametre alır. İkinci parametre isteğe bağlıdır ve sütunun artışını veya azalışını kontrol etmek için kullanılır:
+`updateOrInsert` metodu ilk parametrenin anahtarlarını ve değerlerini kullanarak veritabanında eşleşen kayıtları bulmaya çalışacaktır. Eğer kayıt mevcutsa, ikinci parametredeki değerleri kullanarak kaydı günceller. Eğer kayıt bulunamazsa, yeni bir kayıt ekler ve yeni kaydın verileri bu iki array'in birleşimidir.
+
+## Artırma & Azaltma
+Bu iki method da en az bir parametre alır: değiştirilmesi gereken sütun. İkinci parametre ise isteğe bağlı olup, sütunun ne kadar arttırılacağını ya da azaltılacağını kontrol etmek içindir:
 ```php
 Db::table('users')->increment('votes');
-
 Db::table('users')->increment('votes', 5);
-
 Db::table('users')->decrement('votes');
-
 Db::table('users')->decrement('votes', 5);
 ```
-Operasyon sırasında güncellenen alanı belirtebilirsiniz:
+Ayrıca, işlem sırasında güncellenmesi gereken alanları belirtebilirsiniz:
 ```php
 Db::table('users')->increment('votes', 1, ['name' => 'John']);
 ```
@@ -380,30 +373,29 @@ Db::table('users')->increment('votes', 1, ['name' => 'John']);
 ## Silme
 ```php
 Db::table('users')->delete();
-
 Db::table('users')->where('votes', '>', 100)->delete();
 ```
-Tabloyu temizlemeniz gerekiyorsa, tüm satırları silebileceğiniz ve otomatik artan kimliği sıfırlayabileceğiniz truncate yöntemini kullanabilirsiniz:
+Eğer tabloyu boşaltmanız gerekiyorsa, tüm satırları silecek ve artan kimliği sıfırlayacak olan `truncate` methodunu kullanabilirsiniz:
 ```php
 Db::table('users')->truncate();
 ```
 
-## Kötümser Kilitleme
-Sorgu oluşturucusu, "kötümser kilitleme"yi "seç" sözdiziminde gerçekleştirmenize yardımcı olacak bazı yöntemler içerir. Bir "paylaşılan kilidi" sorgusunda kullanmak istiyorsanız sharedLock yöntemini kullanabilirsiniz. Paylaşılan kilitleme, seçilen veri sütunlarının, işlem tamamlanana kadar değiştirilmesini önler:
+## Pessimistic Lock
+Sorgu oluşturucu aynı zamanda "pessimistik kilit"i select sorgularında kullanmanıza olanak tanıyan bazı yöntemleri içerir. Bir "paylaşılan kilit" eklemek istiyorsanız, `sharedLock` methodunu kullanabilirsiniz. Paylaşılan kilit, seçilen veri satırlarının işlem tamamlanana kadar değiştirilmesini önler:
 ```php
 Db::table('users')->where('votes', '>', 100)->sharedLock()->get();
 ```
-Veya lockForUpdate yöntemini kullanabilirsiniz. "Güncelleme" kilidini kullanarak diğer paylaşılan kilitlerin satırın değiştirilmesini veya seçilmesini önlemesini sağlar:
+Ya da `lockForUpdate` methodunu kullanarak "update" kilidini ekleyebilirsiniz. "Update" kilidi, diğer paylaşılan kilitlerin satırları seçmesini veya değiştirmesini engeller:
 ```php
 Db::table('users')->where('votes', '>', 100)->lockForUpdate()->get();
 ```
 
 ## Hata Ayıklama
-Sorgu sonuçlarını veya SQL ifadelerini görmek için dd veya dump yöntemlerini kullanabilirsiniz. dd yöntemi hata ayıklama bilgilerini gösterir ve daha sonra isteği durdurur. dump yöntemi de hata ayıklama bilgilerini gösterir ancak isteği durdurmaz:
+Sorgu sonuçlarını veya SQL ifadelerini görüntülemek için `dd` veya `dump` methodlarını kullanabilirsiniz. `dd` methodunu kullanarak hata ayıklama bilgilerini görebilir ve ardından isteği duraklatabilirsiniz. `dump` methodu da hata ayıklama bilgilerini görüntüleyebilir ancak isteği durdurmayacaktır:
 ```php
 Db::table('users')->where('votes', '>', 100)->dd();
 Db::table('users')->where('votes', '>', 100)->dump();
 ```
 
 > **Not**
-> Hata ayıklama için `symfony/var-dumper` kurulu olmalıdır, kurmak için `composer require symfony/var-dumper` komutunu kullanabilirsiniz.
+> Hata ayıklama için `symfony/var-dumper` paketini yüklemeniz gerekmektedir. Yüklemek için `composer require symfony/var-dumper` komutunu kullanabilirsiniz.

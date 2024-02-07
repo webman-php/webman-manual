@@ -1,7 +1,7 @@
 # पेजिनेशन
 
-# 1. लारावेल की ORM पर आधारित पेजिनेशन विधि
-लारावेल का `illuminate/database` पेजिनेशन की सुविधा प्रदान करता है।
+# 1. Laravel के ORM पर आधारित पेजिनेशन तरीका
+लारवेल का `illuminate/database` सुविधाएँ उपयुक्त पेजिनेशन का वितरण करता है।
 
 ## स्थापना
 `composer require illuminate/pagination`
@@ -16,37 +16,36 @@ public function index(Request $request)
 }
 ```
 
-## पेजिनेटर इंस्टेंस विधियाँ
-|  विधि   | विवरण  |
+## पेजिनेटर इंस्टेंस फ़ंक्शन
+|  फ़ंक्शन   | विवरण  |
 |  ----  |-----|
-|$paginator->count()|वर्तमान पेज पर डेटा की कुल संख्या प्राप्त करें|
-|$paginator->currentPage()|वर्तमान पेज कोड प्राप्त करें|
-|$paginator->firstItem()|परिणाम सेट में पहले आइटम का संख्यात्मक मान प्राप्त करें|
+|$paginator->count()|वर्तमान पृष्ठ पर डेटा की कुल संख्या प्राप्त करें|
+|$paginator->currentPage()|वर्तमान पृष्ठ संख्या प्राप्त करें|
+|$paginator->firstItem()|परिणाम सेट में पहला आइटम क्रमांक प्राप्त करें|
 |$paginator->getOptions()|पेजिनेटर विकल्प प्राप्त करें|
-|$paginator->getUrlRange($start, $end)|निर्दिष्ट पेज रेंज के URL बनाएं|
-|$paginator->hasPages()|क्या पाने के लिए पर्याप्त संख्या में डेटा है|
-|$paginator->hasMorePages()|क्या और पेज दिखाने के लिए कोई अधिक पेज है|
-|$paginator->items()|वर्तमान पेज के डेटा आइटम प्राप्त करें|
-|$paginator->lastItem()|परिणाम सेट में अंतिम आइटम का संख्यात्मक मान प्राप्त करें|
-|$paginator->lastPage()|अंतिम पृष्ठ कोड प्राप्त करें (simplePaginate में उपलब्ध नहीं है)|
+|$paginator->getUrlRange($start, $end)|निर्दिष्ट पृष्ठ संख्या सीमा के URL बनाएं|
+|$paginator->hasPages()|क्या पर्याप्त डेटा है जिससे कई पृष्ठ बनाए जा सकें|
+|$paginator->hasMorePages()|क्या और पृष्ठ देखने के लिए और हैं|
+|$paginator->items()|वर्तमान पृष्ठ के डेटा आइटम प्राप्त करें|
+|$paginator->lastItem()|परिणाम सेट में आखिरी आइटम क्रमांक प्राप्त करें|
+|$paginator->lastPage()|अंतिम पृष्ठ की पृष्ठ संख्या प्राप्त करें (simplePaginate में उपयोग नहीं कर सकते)|
 |$paginator->nextPageUrl()|अगले पृष्ठ का URL प्राप्त करें|
-|$paginator->onFirstPage()|क्या वर्तमान पेज पहले पृष्ठ है|
-|$paginator->perPage()|प्रति पृष्ठ प्रदर्शित संख्या की कुल संख्या प्राप्त करें|
+|$paginator->onFirstPage()|क्या वर्तमान पृष्ठ पहला पृष्ठ है|
+|$paginator->perPage()|प्रत्येक पृष्ठ पर प्रदर्शित होने वाली संख्या को प्राप्त करें|
 |$paginator->previousPageUrl()|पिछले पृष्ठ का URL प्राप्त करें|
-|$paginator->total()|परिणाम सेट में डेटा की कुल संख्या प्राप्त करें (simplePaginate में उपलब्ध नहीं है)|
+|$paginator->total()|परिणाम सेट में कुल डेटा संख्या प्राप्त करें (simplePaginate में उपयोग नहीं कर सकते)|
 |$paginator->url($page)|निर्दिष्ट पृष्ठ का URL प्राप्त करें|
-|$paginator->getPageName()|पेज कोड को संग्रहीत करने के लिए पूछताछ पैरामीटर नाम प्राप्त करें|
-|$paginator->setPageName($name)|पेज कोड को संग्रहीत करने के लिए पूछताछ पैरामीटर नाम सेट करें|
+|$paginator->getPageName()|पृष्ठ संख्या को संग्रहण के लिए प्रश्न प्राप्त करें|
+|$paginator->setPageName($name)|पृष्ठ संख्या को संग्रहण के लिए प्रश्न नाम सेट करें|
 
-> **नोट**
-> `$paginator->links()` विधि का समर्थन नहीं है।
+> **ध्यान दें**
+> `$paginator->links()` फ़ंक्शन का समर्थन नहीं है
 
-## पेजिनेशन कॉम्पोनेंट
-webman में `$paginator->links()` विधि का उपयोग पेजिनेशन बटनों को रेंडर करने के लिए नहीं किया जा सकता है, लेकिन हम अन्य कंपोनेंट का उपयोग करके रेंडर कर सकते हैं, जैसे `jasongrimes/php-paginator`।
+## पेजिनेशन कंपोनेंट
+webman में हम `$paginator->links()` फ़ंक्शन का उपयोग करके पेजिनेटर बटन रेंडर नहीं कर सकते हैं, लेकिन हम अन्य कंपोनेंट का उपयोग करके रेंडर कर सकते हैं, जैसे `jasongrimes/php-paginator`।
 
 **स्थापना**
 `composer require "jasongrimes/paginator:~1.0"`
-
 
 **बैकएंड**
 ```php
@@ -70,12 +69,12 @@ class UserController
 }
 ```
 
-**टेम्पलेट (PHP मूल)**
-नया टेम्पलेट बनाएं app/view/user/get.html
+**टेम्पलेट (PHP मूल भाषा)**
+नया टेम्पलेट बनाएँ app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- इंबेडेड Bootstrap पेजिनेशन स्टाइल समर्थन -->
+  <!-- इंबेडेड Bootstrap पेजिनेटर स्टाइल समर्थन -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -86,12 +85,12 @@ class UserController
 </html>
 ```
 
-**टेम्पलेट (त्विग)**
-नया टेम्पलेट बनाएं app/view/user/get.html
+**टेम्पलेट (twig)** 
+नया टेम्पलेट बनाएँ app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- इंबेडेड Bootstrap पेजिनेशन स्टाइल समर्थन -->
+  <!-- इंबेडेड Bootstrap पेजिनेटर स्टाइल समर्थन -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -104,12 +103,12 @@ class UserController
 </html>
 ```
 
-**टेम्पलेट (ब्लेड)**
-नया टेम्पलेट बनाएं app/view/user/get.blade.php
+**टेम्पलेट (ब्लेड)** 
+नया टेम्पलेट बनाएँ app/view/user/get.blade.php
 ```html
 <html>
 <head>
-  <!-- इंबेडेड Bootstrap पेजिनेशन स्टाइल समर्थन -->
+  <!-- इंबेडेड Bootstrap पेजिनेटर स्टाइल समर्थन -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -121,11 +120,11 @@ class UserController
 ```
 
 **टेम्पलेट (थिंकपीएचपी)**
-नया टेम्पलेट बनाएं app/view/user/get.html
+नया टेम्पलेट बनाएँ app/view/user/get.html
 ```html
 <html>
 <head>
-    <!-- इंबेडेड Bootstrap पेजिनेशन स्टाइल समर्थन -->
+    <!-- इंबेडेड Bootstrap पेजिनेटर स्टाइल समर्थन -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -136,12 +135,11 @@ class UserController
 </html>
 ```
 
-परिणाम निम्नलिखित रहेगा:
+परिणाम:
 ![](../../assets/img/paginator.png)
 
-# 2. थिंकपीएचपी की ORM पर आधारित पेजिनेशन विधि
-अतिरिक्त कोई वर्णनात्मक विधि की आवश्यकता नहीं है, सिर्फ think-orm को स्थापित करने के बाद आपको इसका उपयोग कर सकते हैं।
-
+# 2. Thinkphp के ORM पर आधारित पेजिनेशन तरीका
+कोई अतिरिक्त लाइब्रेरी की स्थापना की आवश्यकता नहीं है, सिर्फ think-orm की स्थापना कर दी जाए।
 ## उपयोग
 ```php
 public function index(Request $request)
@@ -156,7 +154,7 @@ public function index(Request $request)
 ```html
 <html>
 <head>
-    <!-- इंबेडेड Bootstrap पेजिनेशन स्टाइल समर्थन -->
+    <!-- इंबेडेड Bootstrap पेजिनेटर स्टाइल समर्थन -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>

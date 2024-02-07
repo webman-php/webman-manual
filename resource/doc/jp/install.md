@@ -3,7 +3,6 @@
 * PHP >= 7.2
 * [Composer](https://getcomposer.org/) >= 2.0
 
-
 ### 1. プロジェクトの作成
 
 ```php
@@ -12,13 +11,13 @@ composer create-project workerman/webman
 
 ### 2. 実行
 
-webmanディレクトリに移動する
+webmanディレクトリに移動
 
 #### Windowsユーザー
-`windows.bat`をダブルクリックするか、`php windows.php`を実行して起動します
+`windows.bat`をダブルクリックするか、`php windows.php`を実行して起動します。
 
-> **ヒント**
-> エラーが発生した場合は、おそらく関数が無効になっている可能性があります。 [無効な関数をチェック](others/disable-function-check.md)を参照して無効化を解除してください
+> **注意**
+> エラーが発生した場合、おそらく関数が無効化されています。[無効化関数のチェック](others/disable-function-check.md)を参照して無効化を解除してください。
 
 #### Linuxユーザー
 `debug`モードで実行（開発デバッグ用）
@@ -33,9 +32,9 @@ php start.php start
 php start.php start -d
 ```
 
-> **ヒント**
-> エラーが発生した場合は、おそらく関数が無効になっている可能性があります。 [無効な関数をチェック](others/disable-function-check.md)を参照して無効化を解除してください
+> **注意**
+> エラーが発生した場合、おそらく関数が無効化されています。[無効化関数のチェック](others/disable-function-check.md)を参照して無効化を解除してください。
 
 ### 3. アクセス
 
-ブラウザで `http://ipアドレス:8787` にアクセスします
+ブラウザで `http://ipアドレス:8787` にアクセスしてください。

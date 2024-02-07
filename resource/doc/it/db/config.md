@@ -1,5 +1,5 @@
 # Configurazione
-illuminate/database supporta i seguenti database e le relative versioni:
+Illuminate/database supporta i seguenti database e le relative versioni:
 
 - MySQL 5.6+
 - PostgreSQL 9.4+
@@ -12,121 +12,120 @@ Il file di configurazione del database si trova in `config/database.php`.
 return [
     // Database predefinito
     'default' => 'mysql',
-    // Configurazioni per vari database
+    // Configurazioni per i vari database
     'connections' => [
 
         'mysql' => [
-            'driver'      => 'mysql',
-            'host'        => '127.0.0.1',
-            'port'        => 3306,
-            'database'    => 'webman',
-            'username'    => 'webman',
-            'password'    => '',
+            'driver' => 'mysql',
+            'host' => '127.0.0.1',
+            'port' => 3306,
+            'database' => 'webman',
+            'username' => 'webman',
+            'password' => '',
             'unix_socket' => '',
-            'charset'     => 'utf8',
-            'collation'   => 'utf8_unicode_ci',
-            'prefix'      => '',
-            'strict'      => true,
-            'engine'      => null,
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
         ],
 
         'sqlite' => [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => '',
-            'prefix'   => '',
+            'prefix' => '',
         ],
 
         'pgsql' => [
-            'driver'   => 'pgsql',
-            'host'     => '127.0.0.1',
-            'port'     => 5432,
+            'driver' => 'pgsql',
+            'host' => '127.0.0.1',
+            'port' => 5432,
             'database' => 'webman',
             'username' => 'webman',
             'password' => '',
-            'charset'  => 'utf8',
-            'prefix'   => '',
-            'schema'   => 'public',
-            'sslmode'  => 'prefer',
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'public',
+            'sslmode' => 'prefer',
         ],
 
         'sqlsrv' => [
-            'driver'   => 'sqlsrv',
-            'host'     => 'localhost',
-            'port'     => 1433,
+            'driver' => 'sqlsrv',
+            'host' => 'localhost',
+            'port' => 1433,
             'database' => 'webman',
             'username' => 'webman',
             'password' => '',
-            'charset'  => 'utf8',
-            'prefix'   => '',
+            'charset' => 'utf8',
+            'prefix' => '',
         ],
     ],
 ];
 ```
 
 ## Utilizzo di più database
-Si può selezionare quale database utilizzare utilizzando `Db::connection('nome_configurazione')`, dove `nome_configurazione` è la chiave corrispondente alla configurazione nel file di configurazione `config/database.php`.
+Utilizza `Db::connection('nome_configurazione')` per selezionare quale database utilizzare, dove `nome_configurazione` corrisponde alla chiave della configurazione nel file `config/database.php`.
 
-Ad esempio, consideriamo la seguente configurazione dei database:
+Ad esempio, considera la seguente configurazione del database:
 
 ```php
 return [
     // Database predefinito
     'default' => 'mysql',
-    // Configurazioni per vari database
+    // Configurazioni per i vari database
     'connections' => [
 
         'mysql' => [
-            'driver'      => 'mysql',
-            'host'        => '127.0.0.1',
-            'port'        => 3306,
-            'database'    => 'webman',
-            'username'    => 'webman',
-            'password'    => '',
+            'driver' => 'mysql',
+            'host' => '127.0.0.1',
+            'port' => 3306,
+            'database' => 'webman',
+            'username' => 'webman',
+            'password' => '',
             'unix_socket' => '',
-            'charset'     => 'utf8',
-            'collation'   => 'utf8_unicode_ci',
-            'prefix'      => '',
-            'strict'      => true,
-            'engine'      => null,
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
         ],
 
         'mysql2' => [
-            'driver'      => 'mysql',
-            'host'        => '127.0.0.1',
-            'port'        => 3306,
-            'database'    => 'webman2',
-            'username'    => 'webman2',
-            'password'    => '',
+            'driver' => 'mysql',
+            'host' => '127.0.0.1',
+            'port' => 3306,
+            'database' => 'webman2',
+            'username' => 'webman2',
+            'password' => '',
             'unix_socket' => '',
-            'charset'     => 'utf8',
-            'collation'   => 'utf8_unicode_ci',
-            'prefix'      => '',
-            'strict'      => true,
-            'engine'      => null,
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => '',
+            'strict' => true,
+            'engine' => null,
         ],
         'pgsql' => [
-            'driver'   => 'pgsql',
-            'host'     => '127.0.0.1',
-            'port'     =>  5432,
+            'driver' => 'pgsql',
+            'host' => '127.0.0.1',
+            'port' => 5432,
             'database' => 'webman',
-            'username' =>  'webman',
+            'username' => 'webman',
             'password' => '',
-            'charset'  => 'utf8',
-            'prefix'   => '',
-            'schema'   => 'public',
-            'sslmode'  => 'prefer',
+            'charset' => 'utf8',
+            'prefix' => '',
+            'schema' => 'public',
+            'sslmode' => 'prefer',
         ],
-    ],
-];
+    ];
 ```
 
-Esempio di cambio di database:
+Puoi quindi passare da un database all'altro in questo modo:
 
 ```php
-// Uso del database predefinito, equivalente a Db::connection('mysql')->table('users')->where('name', 'John')->first();
-$users = Db::table('users')->where('name', 'John')->first();;
-// Uso di mysql2
+// Usa il database predefinito, equivalente a Db::connection('mysql')->table('users')->where('name', 'John')->first();
+$users = Db::table('users')->where('name', 'John')->first();; 
+// Usa mysql2
 $users = Db::connection('mysql2')->table('users')->where('name', 'John')->first();
-// Uso di pgsql
+// Usa pgsql
 $users = Db::connection('pgsql')->table('users')->where('name', 'John')->first();
 ```

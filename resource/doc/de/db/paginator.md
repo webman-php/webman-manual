@@ -1,12 +1,13 @@
-# Paginierung
+# Pagination
 
-# 1. Paginierungsmethode basierend auf dem ORM von Laravel
-Das Paket `illuminate/database` von Laravel bietet eine bequeme Paginierungsfunktion.
+# 1. Pagination based on Laravel's ORM
+
+The `illuminate/database` of Laravel provides convenient pagination functionality.
 
 ## Installation
 `composer require illuminate/pagination`
 
-## Verwendung
+## Usage
 ```php
 public function index(Request $request)
 {
@@ -16,33 +17,33 @@ public function index(Request $request)
 }
 ```
 
-## Instanzmethoden des Paginierers
-|  Methode   | Beschreibung  |
+## Paginator Instance Methods
+|  Method   | Description  |
 |  ----  |-----|
-|$paginator->count()|Erhalten Sie die Gesamtzahl der Daten auf der aktuellen Seite|
-|$paginator->currentPage()|Aktuelle Seitennummer abrufen|
-|$paginator->firstItem()|Die Nummer des ersten Datensatzes im Ergebnissatz erhalten|
-|$paginator->getOptions()|Paginierungsoptionen abrufen|
-|$paginator->getUrlRange($start, $end)|URL für einen bestimmten Seitenbereich erstellen|
-|$paginator->hasPages()|Gibt an, ob genügend Daten vorhanden sind, um mehrere Seiten zu erstellen|
-|$paginator->hasMorePages()|Gibt an, ob es mehr Seiten gibt, die angezeigt werden können|
-|$paginator->items()|Die Daten der aktuellen Seite abrufen|
-|$paginator->lastItem()|Die Nummer des letzten Datensatzes im Ergebnissatz erhalten|
-|$paginator->lastPage()|Die Seitenzahl der letzten Seite erhalten (bei simplePaginate nicht verfügbar)|
-|$paginator->nextPageUrl()|Die URL der nächsten Seite abrufen|
-|$paginator->onFirstPage()|Gibt an, ob die aktuelle Seite die erste Seite ist|
-|$paginator->perPage()|Die Gesamtanzahl der angezeigten Elemente pro Seite erhalten|
-|$paginator->previousPageUrl()|Die URL der vorherigen Seite abrufen|
-|$paginator->total()|Die Gesamtanzahl der Daten im Ergebnissatz erhalten (bei simplePaginate nicht verfügbar)|
-|$paginator->url($page)|Die URL für eine bestimmte Seite abrufen|
-|$paginator->getPageName()|Den Namen des Abfrageparameters zum Speichern der Seitenzahl abrufen|
-|$paginator->setPageName($name)|Den Namen des Abfrageparameters zum Speichern der Seitenzahl festlegen|
+|$paginator->count()|Get the total number of items for the current page|
+|$paginator->currentPage()|Get the current page number|
+|$paginator->firstItem()|Get the number of the first item in the results|
+|$paginator->getOptions()|Get the pagination options|
+|$paginator->getUrlRange($start, $end)|Create URLs for a given page range|
+|$paginator->hasPages()|Determine if there are enough items to split into multiple pages|
+|$paginator->hasMorePages()|Determine if there are more items in the result set than the last item in the current page|
+|$paginator->items()|Get the items for the current page|
+|$paginator->lastItem()|Get the number of the last item in the results|
+|$paginator->lastPage()|Get the page number of the last available page (not available when using `simplePaginate`)|
+|$paginator->nextPageUrl()|Get the URL for the next page|
+|$paginator->onFirstPage()|Determine if the current page is the first page|
+|$paginator->perPage()|Get the number of items to be displayed per page|
+|$paginator->previousPageUrl()|Get the URL for the previous page|
+|$paginator->total()|Get the total number of items in the result set (not available when using `simplePaginate`)|
+|$paginator->url($page)|Get the URL for a given page|
+|$paginator->getPageName()|Get the name of the query string parameter used to store the page number|
+|$paginator->setPageName($name)|Set the name of the query string parameter used to store the page number|
 
-> **Hinweis**
-> Die Methode `$paginator->links()` wird nicht unterstützt.
+> **Note**
+> The `$paginator->links()` method is not supported.
 
-## Paginierungskomponente
-In webman kann die Methode `$paginator->links()` nicht verwendet werden, um die Seitenzahl-Knöpfe zu rendern. Stattdessen können wir andere Komponenten zum Rendern verwenden, wie z. B. `jasongrimes/php-paginator`.
+## Pagination Components
+In webman, the `$paginator->links()` method cannot be used to render pagination buttons. However, we can use other components for rendering, such as `jasongrimes/php-paginator`.
 
 **Installation**
 `composer require "jasongrimes/paginator:~1.0"`
@@ -69,12 +70,12 @@ class UserController
 }
 ```
 
-**Vorlage (PHP-Rohdatei)**
-Neues Template erstellen: app/view/user/get.html
+**Template (PHP Native)**
+Create a new template at app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- Eingebaute Unterstützung für Bootstrap-Paginierungsstile -->
+  <!-- Built-in support for Bootstrap pagination styles -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -85,12 +86,12 @@ Neues Template erstellen: app/view/user/get.html
 </html>
 ```
 
-**Vorlage (Twig)**
-Neues Template erstellen: app/view/user/get.html
+**Template (Twig)**
+Create a new template at app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- Eingebaute Unterstützung für Bootstrap-Paginierungsstile -->
+  <!-- Built-in support for Bootstrap pagination styles -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -103,12 +104,12 @@ Neues Template erstellen: app/view/user/get.html
 </html>
 ```
 
-**Vorlage (Blade)**
-Neues Template erstellen: app/view/user/get.blade.php
+**Template (Blade)**
+Create a new template at app/view/user/get.blade.php
 ```html
 <html>
 <head>
-  <!-- Eingebaute Unterstützung für Bootstrap-Paginierungsstile -->
+  <!-- Built-in support for Bootstrap pagination styles -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -119,12 +120,12 @@ Neues Template erstellen: app/view/user/get.blade.php
 </html>
 ```
 
-**Vorlage (ThinkPHP)**
-Neues Template erstellen: app/view/user/get.html
+**Template (ThinkPHP)**
+Create a new template at app/view/user/get.html
 ```html
 <html>
 <head>
-    <!-- Eingebaute Unterstützung für Bootstrap-Paginierungsstile -->
+    <!-- Built-in support for Bootstrap pagination styles -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -135,13 +136,14 @@ Neues Template erstellen: app/view/user/get.html
 </html>
 ```
 
-Das Ergebnis sieht wie folgt aus:
+The effect is as follows:
 ![](../../assets/img/paginator.png)
 
-# 2. Paginierungsmethode basierend auf dem ORM von ThinkPHP
-Es ist keine zusätzliche Bibliothek erforderlich. Es reicht, think-orm zu installieren.
+# 2. Pagination based on Thinkphp's ORM
 
-## Verwendung
+No additional library is required. You just need to install think-orm.
+
+## Usage
 ```php
 public function index(Request $request)
 {
@@ -151,11 +153,11 @@ public function index(Request $request)
 }
 ```
 
-**Vorlage (ThinkPHP)**
+**Template (ThinkPHP)**
 ```html
 <html>
 <head>
-    <!-- Eingebaute Unterstützung für Bootstrap-Paginierungsstile -->
+    <!-- Built-in support for Bootstrap pagination styles -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>

@@ -1,3 +1,3 @@
-# Relations de Modèle
+# Relations entre les modèles
 
-Veuillez consulter https://learnku.com/docs/laravel/8.x/eloquent-relationships/9407
+Référence  https://learnku.com/docs/laravel/8.x/eloquent-relationships/9407

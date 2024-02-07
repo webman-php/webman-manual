@@ -1,5 +1,5 @@
-# バリデータ
-Composerには、次のようなバリデータが直接使えるものがたくさんあります。
+# バリデーター
+Composerには直接使用できる多くのバリデーターがあります。たとえば以下のようなものがあります：
 #### <a href="#think-validate"> top-think/think-validate</a>
 #### <a href="#respect-validation"> respect/validation</a>
 
@@ -7,17 +7,17 @@ Composerには、次のようなバリデータが直接使えるものがたく
 ## バリデータ top-think/think-validate
 
 ### 説明
-ThinkPHP公式のバリデータです。
+ThinkPHP公式のバリデータ
 
-### プロジェクトのURL
+### プロジェクトURL
 https://github.com/top-think/think-validate
 
 ### インストール
 `composer require topthink/think-validate`
 
-### クイックスタート
+### はじめに
 
-**新規作成： `app/index/validate/User.php`**
+**`app/index/validate/User.php` を新規作成**
 
 ```php
 <?php
@@ -34,17 +34,17 @@ class User extends Validate
     ];
 
     protected $message  =   [
-        'name.require' => '名前は必須です',
-        'name.max'     => '名前は25文字以下で入力してください',
-        'age.number'   => '年齢は数字で入力してください',
-        'age.between'  => '年齢は1から120の間で入力してください',
-        'email'        => 'メールアドレスのフォーマットが間違っています',    
+        'name.require' => '名称必須',
+        'name.max'     => '名称は25文字を超えることはできません',
+        'age.number'   => '年齢は数字でなければなりません',
+        'age.between'  => '年齢は1から120の間でなければなりません',
+        'email'        => 'メール形式が正しくありません',    
     ];
 
 }
-```
-  
+``` 
 **使用方法**
+
 ```php
 $data = [
     'name'  => 'thinkphp',
@@ -59,22 +59,21 @@ if (!$validate->check($data)) {
 ```
 
 <a name="respect-validation"></a>
-## バリデータ workerman/validation
+# バリデータ workerman/validation
 
 ### 説明
-プロジェクトはhttps://github.com/Respect/Validationの中国語版です。
+https://github.com/Respect/Validation の中国語版プロジェクト
 
-### プロジェクトのURL
+### プロジェクトURL
 https://github.com/walkor/validation
-  
-  
+
 ### インストール
  
 ```php
 composer require workerman/validation
 ```
 
-### クイックスタート
+### はじめに
 
 ```php
 <?php
@@ -90,7 +89,7 @@ class IndexController
     {
         $data = v::input($request->post(), [
             'nickname' => v::length(1, 64)->setName('ニックネーム'),
-            'username' => v::alnum()->length(5, 64)->setName('ユーザー名'),
+            'username' => v::alnum()->length(5, 64)->setName('ユーザ名'),
             'password' => v::length(5, 64)->setName('パスワード')
         ]);
         Db::table('user')->insert($data);
@@ -98,27 +97,27 @@ class IndexController
     }
 }  
 ```
-  
-**jQueryを使ってアクセス**
-  
-  ```js
-  $.ajax({
-      url : 'http://127.0.0.1:8787',
-      type : "post",
-      dataType:'json',
-      data : {nickname:'汤姆', username:'tom cat', password: '123456'}
-  });
-  ```
-  
+
+**jqueryを使用してアクセス**
+
+```js
+$.ajax({
+    url : 'http://127.0.0.1:8787',
+    type : "post",
+    dataType:'json',
+    data : {nickname:'汤姆', username:'tom cat', password: '123456'}
+});
+```
+
 結果：
 
-`{"code":500,"msg":"ユーザー名はアルファベット（a-z）および数字（0-9）のみを含むことができます"}`
+`{"code":500,"msg":"ユーザ名 は英字（a-z）と数字（0-9）のみを含むことができます"}`
 
 説明：
 
-`v::input(array $input, array $rules)` はデータを検証し収集するために使用されます。データの検証に失敗した場合、`Respect\Validation\Exceptions\ValidationException`例外がスローされ、検証に成功した場合は検証されたデータ（配列）が返されます。
+`v::input(array $input, array $rules)` はデータを検証・収集するために使用され、データの検証に失敗すると`Respect\Validation\Exceptions\ValidationException`例外がスローされ、検証に成功すると検証後のデータ（配列）が返されます。
 
-ビジネスコードが検証例外をキャッチしていない場合、webmanフレームワークは自動的に検証例外をキャッチし、HTTPリクエストヘッダーに応じてJSONデータ（`{"code":500, "msg":"xxx"}`のような）または通常の例外ページを返します。返された形式がビジネス要件に合わない場合、開発者は`ValidationException`例外を自分でキャッチし、必要なデータを返すことができます。次の例のように：
+ビジネスコードが検証例外をキャッチしない場合、webmanフレームワークは自動的に検証例外をキャッチし、HTTPリクエストヘッダに基づいてjsonデータ（`{"code":500,"msg":"xxx"}`のような）または通常の例外ページを返します。返される形式がビジネス要件に準拠しない場合、開発者は`ValidationException`例外をキャッチし、必要なデータを返すことができます。以下の例のように：
 
 ```php
 <?php
@@ -134,7 +133,7 @@ class IndexController
     {
         try {
             $data = v::input($request->post(), [
-                'username' => v::alnum()->length(5, 64)->setName('ユーザー名'),
+                'username' => v::alnum()->length(5, 64)->setName('ユーザ名'),
                 'password' => v::length(5, 64)->setName('パスワード')
             ]);
         } catch (ValidationException $e) {
@@ -150,52 +149,52 @@ class IndexController
 ```php
 use Respect\Validation\Validator as v;
 
-// 個別のルールの検証
+// 個々の規則の検証
 $number = 123;
 v::numericVal()->validate($number); // true
 
-// 複数のルールを連鎖して検証
+// 複数の規則の連鎖検証
 $usernameValidator = v::alnum()->noWhitespace()->length(1, 15);
 $usernameValidator->validate('alganet'); // true
 
-// 最初の失敗した検証の理由を取得
+// 最初の検証失敗理由を取得する
 try {
-    $usernameValidator->setName('ユーザー名')->check('alg  anet');
+    $usernameValidator->setName('ユーザ名')->check('alg  anet');
 } catch (ValidationException $exception) {
-    echo $exception->getMessage(); // ユーザー名はアルファベット（a-z）および数字（0-9）のみを含むことができます
+    echo $exception->getMessage(); // ユーザ名 は英字（a-z）と数字（0-9）のみを含むことができます
 }
 
-// 失敗した検証の理由をすべて取得
+// すべての検証失敗理由を取得する
 try {
-    $usernameValidator->setName('ユーザー名')->assert('alg  anet');
+    $usernameValidator->setName('ユーザ名')->assert('alg  anet');
 } catch (ValidationException $exception) {
     echo $exception->getFullMessage();
-    // 出力される内容
-    // -  ユーザー名が次の規則に従う必要があります
-    //     - ユーザー名はアルファベット（a-z）および数字（0-9）のみを含むことができます
-    //     - ユーザー名は空白を含んではいけません
+    // 結果
+    // -  ユーザ名 は次の条件を満たさなければなりません
+    //     - ユーザ名 は英字（a-z）と数字（0-9）のみを含むことができます
+    //     - ユーザ名 は空白を含めることはできません
   
     var_export($exception->getMessages());
-    // 出力される内容
+    // 結果
     // array (
-    //   'alnum' => 'ユーザー名はアルファベット（a-z）および数字（0-9）のみを含むことができます',
-    //   'noWhitespace' => 'ユーザー名は空白を含んではいけません',
+    //   'alnum' => 'ユーザ名 は英字（a-z）と数字（0-9）のみを含むことができます',
+    //   'noWhitespace' => 'ユーザ名 は空白を含めることはできません',
     // )
 }
 
-// カスタムエラーメッセージ
+// カスタマイズされたエラーメッセージ
 try {
-    $usernameValidator->setName('ユーザー名')->assert('alg  anet');
+    $usernameValidator->setName('ユーザ名')->assert('alg  anet');
 } catch (ValidationException $exception) {
     var_export($exception->getMessages([
-        'alnum' => 'ユーザー名はアルファベットと数字のみを含むことができます',
-        'noWhitespace' => 'ユーザー名は空白を含んではいけません',
-        'length' => 'lengthの規則により、このメッセージは表示されません'
+        'alnum' => 'ユーザ名は英字と数字のみを含むことができます',
+        'noWhitespace' => 'ユーザ名に空白を含めることはできません',
+        'length' => 'lengthは規則に従いますので、この項目は表示されません'
     ]);
-    // 出力される内容 
+    // 結果
     // array(
-    //    'alnum' => 'ユーザー名はアルファベットと数字のみを含むことができます',
-    //    'noWhitespace' => 'ユーザー名は空白を含んではいけません'
+    //    'alnum' => 'ユーザ名は英字と数字のみを含むことができます',
+    //    'noWhitespace' => 'ユーザ名に空白を含めることはできません'
     // )
 }
 
@@ -221,81 +220,81 @@ v::key(
         ->key('field2', v::stringType())
         ->key('field3', v::boolType())
     )
-    ->assert($data); // check() や validate() でも使用可能
-
-// オプション検証
+    ->assert($data); // validate() や check() も使用できる
+  
+// オプショナル検証
 v::alpha()->validate(''); // false 
 v::alpha()->validate(null); // false 
 v::optional(v::alpha())->validate(''); // true
 v::optional(v::alpha())->validate(null); // true
 
-// 否定ルール
+// 否定規則
 v::not(v::intVal())->validate(10); // false
-```
+``` 
+
+### Validatorの3つの方法 `validate()` `check()` `assert()` の違い
+
+`validate()`はbooleanを返し、例外をスローしません
+
+`check()`は検証に失敗すると例外をスローし、`$exception->getMessage()`を使用して最初の検証失敗理由を取得します
+
+`assert()`は検証に失敗すると例外をスローし、`$exception->getFullMessage()`を使用してすべての検証失敗理由を取得できます
   
-### バリデータの3つのメソッド `validate()` `check()` `assert()` の違い
+### よく使用される検証規則のリスト
 
-`validate()`は真偽値を返し、例外をスローしません
+`Alnum()` 英数字のみを含むかどうかを検証
 
-`check()`は検証に失敗した場合に例外をスローし、`$exception->getMessage()`で最初の検証の失敗理由を得ることができます。
+`Alpha()` 文字のみを含むかどうかを検証
 
-`assert()`は検証に失敗した場合に例外をスローし、`$exception->getFullMessage()`ですべての検証失敗の理由を取得できます
-  
-  
-### 一般的なバリデータのルールのリスト
+`ArrayType()` 配列型かどうかを検証
 
-`Alnum()` アルファベットと数字のみを含む
+`Between(mixed $minimum, mixed $maximum)` 2つの値の間にあるかどうかを検証。
 
-`Alpha()` アルファベットのみを含む
+`BoolType()` ブール型かどうかを検証
 
-`ArrayType()` 配列のタイプ
+`Contains(mixed $expectedValue)` 特定の値を含むかどうかを検証
 
-`Between(mixed $minimum, mixed $maximum)` 入力が他の2つの値の間にあるかを検証します。
+`ContainsAny(array $needles)` 定義された値を少なくとも1つ含むかどうかを検証
 
-`BoolType()` ブール値であることを検証
+`Digit()` 数字のみを含むかどうかを検証
 
-`Contains(mixed $expectedValue)` 入力が特定の値を含んでいるかを検証
+`Domain()` 有効なドメイン名かどうかを検証
 
-`ContainsAny(array $needles)` 入力が少なくとも1つの定義された値を含んでいるかを検証
-
-`Digit()` 入力が数字のみを含むかを検証
-
-`Domain()` 有効なドメインであることを検証
-
-`Email()` 有効なメールアドレスであることを検証
+`Email()` 有効なメールアドレスかどうかを検証
 
 `Extension(string $extension)` 拡張子を検証
 
-`FloatType()` 浮動小数点数であることを検証
+`FloatType()` 浮動小数点数型かどうかを検証
 
-`IntType()` 整数であることを検証
+`IntType()` 整数型かどうかを検証
 
-`Ip()` IPアドレスであることを検証
+`Ip()` IPアドレスかどうかを検証
 
-`Json()` JSONデータであることを検証
+`Json()` JSONデータかどうかを検証
 
-`Length(int $min, int $max)` 長さが指定範囲内にあることを検証
+`Length(int $min, int $max)` 長さが指定範囲内かどうかを検証
 
-`LessThan(mixed $compareTo)` 長さが指定値よりも小さいことを検証
+`LessThan(mixed $compareTo)` 指定値より小さいかどうかを検証
 
-`Lowercase()` 小文字であることを検証
+`Lowercase()` 小文字文字のみを含むかどうかを検証
 
-`MacAddress()` MACアドレスであることを検証
+`MacAddress()` MACアドレスかどうかを検証
 
-`NotEmpty()` 空でないことを検証
+`NotEmpty()` 空でないかどうかを検証
 
-`NullType()` nullであることを検証
+`NullType()` nullかどうかを検証
 
-`Number()` 数値であることを検証
+`Number()` 数値かどうかを検証
 
-`ObjectType()` オブジェクトであることを検証
+`ObjectType()` オブジェクトかどうかを検証
 
-`StringType()` 文字列であることを検証
+`StringType()` 文字列型かどうかを検証
 
-`Url()` URLであることを検証
+`Url()` URLかどうかを検証
+
+追加の検証規則については、https://respect-validation.readthedocs.io/en/2.0/list-of-rules/ を参照してください
   
-その他の検証ルールについては、https://respect-validation.readthedocs.io/en/2.0/list-of-rules/ を参照してください。
-  
-### その他の情報
 
-https://respect-validation.readthedocs.io/en/2.0/ をご覧ください。
+### 追加情報
+
+https://respect-validation.readthedocs.io/en/2.0/ を訪問してください

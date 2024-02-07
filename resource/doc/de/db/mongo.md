@@ -1,26 +1,26 @@
 # MongoDB
 
-webman verwendet standardmäßig [jenssegers/mongodb](https://github.com/jenssegers/laravel-mongodb) als MongoDB-Komponente. Es wurde aus dem Laravel-Projekt extrahiert und wird genauso verwendet.
+webman verwendet standardmäßig [jenssegers/mongodb](https://github.com/jenssegers/laravel-mongodb) als MongoDB-Komponente, die aus dem Laravel-Projekt extrahiert wurde und ähnlich wie Laravel verwendet wird.
 
-Bevor Sie `jenssegers/mongodb` verwenden, müssen Sie die MongoDB-Erweiterung für `php-cli` installieren.
+Bevor Sie `jenssegers/mongodb` verwenden können, müssen Sie die MongoDB-Erweiterung für `php-cli` installieren.
 
-> Verwenden Sie den Befehl `php -m | grep mongodb`, um zu überprüfen, ob die MongoDB-Erweiterung für `php-cli` installiert ist. Beachten Sie: Selbst wenn Sie die MongoDB-Erweiterung für `php-fpm` installiert haben, bedeutet dies nicht, dass Sie sie für `php-cli` verwenden können, da `php-cli` und `php-fpm` separate Anwendungen sind und möglicherweise unterschiedliche `php.ini`-Konfigurationen verwenden. Verwenden Sie den Befehl `php --ini`, um zu überprüfen, welche `php.ini`-Konfigurationsdatei von Ihrem `php-cli` verwendet wird.
+> Verwenden Sie den Befehl `php -m | grep mongodb`, um zu überprüfen, ob die MongoDB-Erweiterung für `php-cli` installiert ist. Beachten Sie: Selbst wenn Sie die MongoDB-Erweiterung für `php-fpm` installiert haben, bedeutet dies nicht, dass Sie sie in `php-cli` verwenden können, da `php-cli` und `php-fpm` unterschiedliche Anwendungen sind und möglicherweise unterschiedliche `php.ini`-Konfigurationen verwenden. Verwenden Sie den Befehl `php --ini`, um festzustellen, welche `php.ini`-Konfigurationsdatei von Ihrem `php-cli` verwendet wird.
 
 ## Installation
 
-PHP>7.2:
+Für PHP>7.2
 ```php
 composer require -W illuminate/database jenssegers/mongodb ^3.8.0
 ```
-PHP=7.2:
+Für PHP=7.2
 ```php
 composer require -W illuminate/database jenssegers/mongodb ^3.7.0
 ```
 
-Nach der Installation ist ein Neustart erforderlich (ein Reload funktioniert nicht).
+Nach der Installation ist ein Neustart erforderlich (reload funktioniert nicht).
 
 ## Konfiguration
-Fügen Sie in der Datei `config/database.php` eine `mongodb`-Verbindung hinzu, ähnlich wie folgt:
+Fügen Sie in der Datei `config/database.php` die `mongodb`-Verbindung hinzu, ähnlich wie folgt:
 ```php
 return [
 
@@ -28,7 +28,7 @@ return [
 
     'connections' => [
 
-         ...andere Konfiguration hier ausgelassen...
+         ...Andere Konfigurationen hier...
 
         'mongodb' => [
             'driver'   => 'mongodb',
@@ -40,7 +40,7 @@ return [
             'options' => [
                 // Hier können Sie weitere Einstellungen an den Mongo Driver Manager übergeben
                 // siehe https://www.php.net/manual/en/mongodb-driver-manager.construct.php unter "Uri Options" für eine Liste der vollständigen Parameter, die Sie verwenden können
-                
+
                 'appname' => 'homestead'
             ],
         ],

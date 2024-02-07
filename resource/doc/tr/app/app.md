@@ -1,16 +1,15 @@
-# Eklenti Uygulamalar
+# Uygulama Eklentileri
 
-> Uygulama eklentileri webman>=1.4.0 gerektirir.
+> Uygulama eklentileri için webman>=1.4.0 gereklidir
 
 ## Felsefe
-Kendi uygulamanızı hızlı bir şekilde oluşturmak için LEGO gibi yapı taşlarıyla çalışmak.
+Kendi uygulamanızı hızlı bir şekilde oluşturmak için bir blok seti gibi düşünün.
 
 ## Tanıtım
-Uygulama eklentileri aslında tam bir uygulamadır ve ana projeye eklenti olarak kurulabilir, böylece ana projenin belirli bir modül işlevine hızlı bir şekilde erişmesini sağlar.
-Örneğin, ana projenin bir soru-cevap sistemi gerekiyorsa, bir soru-cevap uygulama eklentisi kurulabilir; bir e-ticaret sistemine ihtiyaç duyuluyorsa, bir e-ticaret uygulama eklentisi kurulabilir. Tüm eklentiler birbirini etkilemez, hemen kullanılabilir ve gereksiz olduğunda tek bir tıklamayla kaldırılabilir.
+Uygulama eklentileri aslında tam bir uygulamadır ve ana projeye eklenti olarak yüklenebilir, böylece ana proje belirli bir modül işlevine hızlıca sahip olabilir. Örneğin, ana projenin bir soru cevap sistemi gerektiği durumda, bir soru cevap uygulama eklentisi kurulabilir veya bir mağaza sistemi gerektiği durumda bir mağaza uygulama eklentisi kurulabilir. Tüm eklentiler birbiriyle etkileşmez, hemen kullanılabilir ve gerektiğinde tek bir tıklamayla kaldırılabilir.
 
 ## Etkiler
-Uygulama eklentileri, webman projesinin yeniden kullanılabilirliğini büyük ölçüde artırır; herhangi bir geliştirici kendi projelerini eklenti haline getirebilir ve diğer projelerin kullanımına sunabilir, diğer projelerin faydalanmasını sağlarken kendisi de gelir elde edebilir.
+Uygulama eklentileri, webman projesinin yeniden kullanılabilirliğini büyük ölçüde arttırmaktadır. Herhangi bir geliştirici, kendi projelerini eklenti haline getirerek diğer projelere kurulum için sunabilir, diğer projelerin faydalanmasını sağlayabilir ve kendi gelirini elde edebilir.
 
 ## Gelir Elde Etme
-webman, resmi [uygulama marketini](https://www.workerman.net/apps) sunar; geliştiriciler kendi geliştirdikleri uygulamaları bu pazara sunabilir ve buradan gelir elde edebilir.
+webman, resmi [uygulama mağazası](https://www.workerman.net/apps) sağlar, geliştiriciler geliştirdikleri uygulamaları mağazaya sunabilir ve bundan gelir elde edebilir.

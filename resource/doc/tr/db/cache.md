@@ -1,8 +1,8 @@
 # Önbellek
 
-webman varsayılan olarak önbellek bileşeni olarak [symfony/cache](https://github.com/symfony/cache) kullanır.
+webman varsayılan olarak [symfony/cache](https://github.com/symfony/cache) önbellek bileşenini kullanır.
 
-> `symfony/cache` kullanmadan önce `php-cli`'ye redis uzantısının yüklenmesi gerekir.
+> `symfony/cache`'i kullanmadan önce, `php-cli`'ye redis eklentisi kurulmalıdır.
 
 ## Kurulum
 **php 7.x**
@@ -14,10 +14,10 @@ composer require -W illuminate/redis ^8.2.0 symfony/cache ^5.2
 composer require -W illuminate/redis symfony/cache
 ```
 
-Kurulumdan sonra yeniden başlatılması gerekmektedir (yeniden yükleme işlemi geçerli değildir).
+Kurulumdan sonra yeniden başlatma gereklidir (reload işlemi etkisiz olabilir)
 
 ## Redis Yapılandırması
-Redis yapılandırma dosyası `config/redis.php` içinde yer alır.
+Redis yapılandırma dosyası `config/redis.php` içindedir.
 ```php
 return [
     'default' => [
@@ -49,8 +49,8 @@ class UserController
 ```
 
 > **Not**
-> Anahtar (key) çakışmalarını önlemek için mümkünse bir önek ekleyin ve bu sayede diğer redis kullanan işlemlerle çakışmayı önleyin
+> Anahtar (key) çakışmasını önlemek için mümkünse bir ön ek eklenmelidir.
 
-## Diğer Önbellek Bileşenlerinin Kullanımı 
+## Diğer Önbellek Bileşenleri Kullanma
 
-[ThinkCache](https://github.com/top-think/think-cache) bileşeninin kullanımı için [Diğer Veritabanları](others.md#ThinkCache)'na bakabilirsiniz.
+[ThinkCache](https://github.com/top-think/think-cache) bileşeninin kullanımı için [Diğer Veritabanları](others.md#ThinkCache) kısmına bakın.

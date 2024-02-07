@@ -1,41 +1,40 @@
-# Ficheiro de Configuração
+# Arquivo de configuração
 
 ## Localização
-O ficheiro de configuração do webman está localizado na diretoria `config/`. No projeto, é possível obter a configuração correspondente através da função `config()`.
+O arquivo de configuração do webman está localizado no diretório `config/` e pode ser acessado no projeto utilizando a função `config()`.
 
-## Obter Configuração
+## Obtenção de configuração
 
 Obter todas as configurações
 ```php
 config();
 ```
 
-Obter todas as configurações em `config/app.php`
+Obter todas as configurações de `config/app.php`
 ```php
 config('app');
 ```
 
-Obter a configuração `debug` em `config/app.php`
+Obter a configuração `debug` de `config/app.php`
 ```php
 config('app.debug');
 ```
 
-Se a configuração for um array, pode-se obter o valor dos elementos internos do array usando `.`, por exemplo
+Se a configuração for um array, pode-se utilizar `.` para obter os valores internos do array, por exemplo
 ```php
 config('file.key1.key2');
 ```
 
-## Valor Padrão
+## Valor padrão
 ```php
 config($key, $default);
 ```
-Ao passar o segundo parâmetro para a função config, pode-se definir um valor padrão. Se a configuração não existir, o valor padrão será retornado. Se a configuração não existir e nenhum valor padrão foi definido, será retornado `null`.
+A função config passa o valor padrão como segundo parâmetro. Se a configuração não existir, retorna o valor padrão. Se a configuração não existir e nenhum valor padrão for definido, retorna null.
 
-## Configuração Personalizada
-Os desenvolvedores podem adicionar os seus próprios ficheiros de configuração na diretoria `config/`, por exemplo
+## Configuração personalizada
+Os desenvolvedores podem adicionar seus próprios arquivos de configuração no diretório `config/`, por exemplo
 
 **config/payment.php**
-
 ```php
 <?php
 return [
@@ -44,15 +43,15 @@ return [
 ];
 ```
 
-**Utilização ao obter configuração**
+**Usando ao obter a configuração**
 ```php
 config('payment');
 config('payment.key');
 config('payment.key');
 ```
 
-## Alterar Configuração
-O webman não suporta a alteração dinâmica da configuração. Todas as configurações devem ser modificadas manualmente nos ficheiros de configuração correspondentes e depois recarregadas ou o servidor reiniciado.
+## Alteração de configuração
+O webman não suporta a alteração dinâmica de configurações. Todas as configurações devem ser modificadas manualmente nos respectivos arquivos de configuração e depois reload ou restart para que tenham efeito.
 
 > **Nota**
-> As configurações do servidor em `config/server.php` e as configurações de processo em `config/process.php` não suportam recarregamento. É necessário reiniciar o servidor para que as alterações entrem em vigor.
+> As configurações do servidor `config/server.php` e as configurações de processo `config/process.php` não suportam reload e precisam de restart para serem efetivas.

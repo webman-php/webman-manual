@@ -1,10 +1,10 @@
-# वेबमैन
+# वेबमन
 
 ## विवरण
 
-वेबमैन एक शक्तिशाली, दक्षिणपंथी खुला पहुंच नियंत्रण ढांचा है, जिसका अनुमति प्रबंधन तंत्र समर्थन विभिन्न पहुंच नियंत्रण मॉडल को।
+वेबमैन एक शक्तिशाली और अच्छी तरह से व्यायामी तक पहुंचने का नियंत्रण फ्रेमवर्क है, जिसकी अनुमति प्रबंधन यांत्रिकी विभिन्न एक्सेस कंट्रोल मॉडल का समर्थन करती है।
   
-## प्रोजेक्ट लिंक
+## परियोजना कोड
 
 https://github.com/teamones-open/casbin
 
@@ -16,25 +16,25 @@ https://github.com/teamones-open/casbin
 
 ## Casbin आधिकारिक वेबसाइट
 
-विस्तृत उपयोग के लिए आप आधिकारिक चीनी दस्तावेज़ देख सकते हैं, यहां केवल वेबमैन में कैसबिन को कैसे समाकृत करने के बारे में बताया जा रहा है
+विस्तृत उपयोग के लिए वेबसाइट पर जाकर आप आधिकारिक चीनी दस्तावेज़ देख सकते हैं, यहां सिर्फ वेबमैन में कैस्बिन का उपयोग कैसे कॉन्फ़िगर करना है उसकी चर्चा की गई है
 
 https://casbin.org/docs/zh-CN/overview
 
 ## निर्देशिका संरचना
 
-```
+```  
 .
-├── कॉन्फ़िग                        कॉन्फ़िगरेशन निर्देशिका
-│   ├── casbin-restful-model.conf    इस्तेमाल होने वाली अनुमति मॉडल कॉन्फ़िगरेशन फ़ाइल
-│   ├── casbin.php                  casbin कॉन्फ़िगरेशन
+├── config                        कॉन्फ़िगरेशन निर्देशिका
+│   ├── casbin-restful-model.conf प्रयोग करने वाले आधिकारिक मॉडल कॉन्फ़िगरेशन फ़ाइल
+│   ├── casbin.php                कैस्बिन कॉन्फ़िगरेशन
 ......
-├── डेटाबेस                        डेटाबेस फ़ाइल
-│   ├── migrations                 स्थानांतरण फ़ाइल
-│   │   └── 20210218074218_create_rule_table.php
+├── database                      डेटाबेस फ़ाइल
+│   ├── migrations                वंशानुक्रमणी फ़ाइलें
+│   │   └── 20210218074218_create_rule_table.php
 ......
 ```
 
-## डेटाबेस स्थानांतरण फ़ाइल
+## डेटाबेस माइग्रेशन फ़ाइल
 
 ```php
 <?php
@@ -44,51 +44,19 @@ use Phinx\Migration\AbstractMigration;
 class CreateRuleTable extends AbstractMigration
 {
     /**
-     * बदलाव पद्धति
+     * परिवर्तन विधि।
      *
-     * इस पद्धति का उपयोग करके अपनी पलटावनीय माइग्रेशन लिखें।
+     * इस विधि का प्रयोग करके अपनी पुनराप्ती माइग्रेशन लिखें।
      *
-     * और जानकारी लिखने के लिए यहां क्लिक करें:
+     * माइग्रेशन लेखन पर अधिक जानकारी यहां उपलब्ध है:
      * http://docs.phinx.org/en/latest/migrations.html#the-abstractmigration-class
      *
-     * इस पद्धति में निम्नलिखित कमांड का उपयोग किया जा सकता है और फिंक्स आपको स्वचालित रूप से उन्हें उल्टाने के प्रयास करते हैं जब आप उन्हें वापस कर रहे होते हैं:
-     *
-     *    createTable
-     *    renameTable
-     *    addColumn
-     *    addCustomColumn
-     *    renameColumn
-     *    addIndex
-     *    addForeignKey
-     *
-     * किसी भी अन्य विनाशकारी परिवर्तन से परेशानी होगी जब कोशिश करेंगे करीगर रोलबैक करने के लिए।
-     *
-     * ध्यान दें कि "create()" या "update()" को कॉल करें न कि "save()" जब आप टेबल कक्षा के साथ काम कर रहे होते हैं।
-     */
-    public function change()
-    {
-        $table = $this->table('rule', ['id' => false, 'primary_key' => ['id'], 'engine' => 'InnoDB', 'collation' => 'utf8mb4_general_ci', 'comment' => 'नियम तालिका']);
-
-        //डेटा फ़ील्ड जोड़ें
-        $table->addColumn('id', 'integer', ['identity' => true, 'signed' => false, 'limit' => 11, 'comment' => 'प्राइमरी की ID'])
-            ->addColumn('ptype', 'char', ['default' => '', 'limit' => 8, 'comment' => 'नियम प्रकार'])
-            ->addColumn('v0', 'string', ['default' => '', 'limit' => 128])
-            ->addColumn('v1', 'string', ['default' => '', 'limit' => 128])
-            ->addColumn('v2', 'string', ['default' => '', 'limit' => 128])
-            ->addColumn('v3', 'string', ['default' => '', 'limit' => 128])
-            ->addColumn('v4', 'string', ['default' => '', 'limit' => 128])
-            ->addColumn('v5', 'string', ['default' => '', 'limit' => 128]);
-
-        //निर्देशित क्रिएट करें
-        $table->create();
-    }
-}
-
+............
 ```
 
-## कैसबिन कॉन्फ़िगरेशन
+## कैस्बिन कॉन्फ़िगरेशन
 
-अनुमति नियम मॉडल कॉन्फ़ीगरेशन वाक्य संख्या के लिए देखें: https://casbin.org/docs/zh-CN/syntax-for-models
+आधिकार सूत्र मॉडल कॉन्फ़िगरेशन विधि के लिए देखें: https://casbin.org/docs/zh-CN/syntax-for-models
 
 ```php
 
@@ -98,7 +66,7 @@ return [
     'default' => [
         'model' => [
             'config_type' => 'file',
-            'config_file_path' => config_path() . '/casbin-restful-model.conf', // अनुमति नियम मॉडल कॉन्फ़ीगरेशन फ़ाइल
+            'config_file_path' => config_path() . '/casbin-restful-model.conf', // आधिकार सूत्र मॉडल कॉन्फ़िगरेशन फ़ाइल
             'config_text' => '',
         ],
         'adapter' => [
@@ -106,11 +74,11 @@ return [
             'class' => \app\model\Rule::class,
         ],
     ],
-    // गैर डिफ़ॉल्ट अनुमति मॉडल कॉन्फ़िगर किया जा सकता है
+    // कई आजमा आधिकार मॉडल कॉन्फ़िगर किया जा सकता है
     'rbac' => [
         'model' => [
             'config_type' => 'file',
-            'config_file_path' => config_path() . '/casbin-rbac-model.conf', // अनुमति नियम मॉडल कॉन्फ़ीगरेशन फ़ाइल
+            'config_file_path' => config_path() . '/casbin-rbac-model.conf', // आधिकार सूत्र मॉडल कॉन्फ़िगरेशन फ़ाइल
             'config_text' => '',
         ],
         'adapter' => [
@@ -121,60 +89,60 @@ return [
 ];
 ```
 
-### अनुकूलक
+### एडाप्टर
 
-वर्तमान कम्पोजर एडाप्टर रूपांतरित करने के लिए think-orm के मॉडल विधि का उपयोग करता है, अन्य orm के लिए कृपया देखें vendor/teamones/src/adapters/DatabaseAdapter.php
+वर्तमान कम्पोसर एडाप्टर में एक सोच-orm का मॉडल का विधि किया गया है, अन्य orm के लिए कृपया vendor/teamones/src/adapters/DatabaseAdapter.php को देखें
 
-फिर कॉन्फ़िगरेशन को बदलें
+फिर कॉन्फ़िगरेशन में परिवर्तन करें
 
 ```php
 return [
     'default' => [
         'model' => [
             'config_type' => 'file',
-            'config_file_path' => config_path() . '/casbin-restful-model.conf', // अनुमति नियम मॉडल कॉन्फ़ीगरेशन फ़ाइल
+            'config_file_path' => config_path() . '/casbin-restful-model.conf', // आधिकार सूत्र मॉडल कॉन्फ़िगरेशन फ़ाइल
             'config_text' => '',
         ],
         'adapter' => [
-            'type' => 'adapter', // यहां प्रकार अनुकूलक मोड में कॉन्फ़िगर
+            'type' => 'adapter', // यहां प्रकार को एडाप्टर मोड में कॉन्फ़िगर किया गया है
             'class' => \app\adapter\DatabaseAdapter::class,
         ],
     ],
 ];
 ```
 
-## उपयोग निर्देश
+## उपयोग की निर्देशिका
 
 ### आयात
 
 ```php
-# आयात
+# इम्पोर्ट करें
 use teamones\casbin\Enforcer;
 ```
 
-### दो प्रकार का उपयोग
+### दो तरह का उपयोग
 
 ```php
-# 1. डिफ़ॉल्ट सेटिंग का उपयोग करें
+# 1. डिफ़ॉल्ट कॉन्फ़िगरेशन का उपयोग करें
 Enforcer::addPermissionForUser('user1', '/user', 'read');
 
-# 2. अपनी अनुकूल rbac सेटिंग का उपयोग करें
+# 2. अपनी विशेष rbac कॉन्फ़िगरेशन का उपयोग करें
 Enforcer::instance('rbac')->addPermissionForUser('user1', '/user', 'read');
 ```
 
-### लोकप्रिय एपीआई परिचय
+### उपयोगी API संक्षेप
 
-अधिक एपीआई उपयोग के लिए कृपया आधिकारिक साइट पर जाएं
+अधिक API उपयोग के लिए कृपया आधिकारिक वेबसाइट देखें
 
-- प्रबंधन एपीआई: https://casbin.org/docs/zh-CN/management-api
-- RBAC एपीआई: https://casbin.org/docs/zh-CN/rbac-api
+- प्रबंधन API: https://casbin.org/docs/zh-CN/management-api
+- RBAC API: https://casbin.org/docs/zh-CN/rbac-api
 
 ```php
-# उपयोगकर्ता के लिए अनुमतियां जोड़ें
+# उपयोगकर्ता के लिए अनुमति जोड़ें
 
 Enforcer::addPermissionForUser('user1', '/user', 'read');
 
-# एक उपयोगकर्ता की अनुमतियां हटाएं
+# एक उपयोगकर्ता की अनुमति हटाएं
 
 Enforcer::deletePermissionForUser('user1', '/user', 'read');
 
@@ -186,23 +154,23 @@ Enforcer::getPermissionsForUser('user1');
 
 Enforcer::addRoleForUser('user1', 'role1');
 
-# भूमिका के लिए अनुमतियां जोड़ें
+# भूमिका के लिए अनुमति जोड़ें
 
 Enforcer::addPermissionForUser('role1', '/user', 'edit');
 
-# सभी भूमिकाएं प्राप्त करें
+# सभी भूमिकाएँ प्राप्त करें
 
 Enforcer::getAllRoles();
 
-# उपयोगकर्ता के लिए सभी भूमिकाएं प्राप्त करें
+# उपयोगकर्ता की सभी भूमिकाएँ प्राप्त करें
 
 Enforcer::getRolesForUser('user1');
 
-# भूमिका के आधार पर उपयोगकर्ताओं को प्राप्त करें
+# भूमिका के आधार पर उपयोगकर्ता प्राप्त करें
 
 Enforcer::getUsersForRole('role1');
 
-# जांचें कि उपयोगकर्ता किसी भूमिका का हिस्सा है या नहीं
+# उपयोगकर्ता के लिए एक भूमिका का पता लगाएं
 
 Enforcer::hasRoleForUser('use1', 'role1');
 
@@ -210,7 +178,7 @@ Enforcer::hasRoleForUser('use1', 'role1');
 
 Enforcer::deleteRoleForUser('use1', 'role1');
 
-# उपयोगकर्ता की सभी भूमिकाएं हटाएं
+# उपयोगकर्ता की सभी भूमिकाएँ हटाएं
 
 Enforcer::deleteRolesForUser('use1');
 
@@ -227,7 +195,7 @@ Enforcer::deletePermission('/user', 'read');
 Enforcer::deletePermissionsForUser('user1');
 Enforcer::deletePermissionsForUser('role1');
 
-# अनुमति की जांच, true या false लौटाएं
+# अनुमति की जांच करें, true या false लौटाएं
 
 Enforcer::enforce("user1", "/user", "edit");
 ```

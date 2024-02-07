@@ -1,10 +1,10 @@
-# Webman
+# Casbin
 
-## Инструкции
+## Описание
 
-Webman - это мощный и эффективный фреймворк управления доступом с открытым исходным кодом, который поддерживает множество моделей контроля доступа.
+Casbin - это мощный и эффективный фреймворк управления доступом с открытым исходным кодом, механизм управления правами которого поддерживает несколько моделей управления доступом.
 
-## Адрес проекта
+## URL проекта
 
 https://github.com/teamones-open/casbin
 
@@ -16,16 +16,16 @@ composer require teamones/casbin
 
 ## Официальный сайт Casbin
 
-Для подробных инструкций по использованию вы можете просмотреть официальную китайскую документацию. Здесь будет рассказано только о том, как настроить и использовать веб-мэн.
+Для подробного использования можно просмотреть официальную китайскую документацию, здесь мы расскажем только о том, как настроить и использовать в webman.
 
 https://casbin.org/docs/zh-CN/overview
 
 ## Структура каталогов
 
-```
+``` 
 .
-├── config                        Каталог конфигурации
-│   ├── casbin-restful-model.conf Файл конфигурации используемой модели доступа
+├── config                        Папка конфигурации
+│   ├── casbin-restful-model.conf Файл настроек используемой модели разрешений
 │   ├── casbin.php                Конфигурация casbin
 ......
 ├── database                      Файлы базы данных
@@ -46,13 +46,12 @@ class CreateRuleTable extends AbstractMigration
     /**
      * Метод изменения.
      *
-     * Напишите вашу обратимую миграцию, используя этот метод.
+     * Напишите ваши обратимые миграции с использованием этого метода.
      *
-     * Более подробную информацию о написании миграций можно найти здесь:
+     * Более подробная информация о написании миграций доступна здесь:
      * http://docs.phinx.org/en/latest/migrations.html#the-abstractmigration-class
      *
-     * В этом методе могут использоваться следующие команды, и Phinx
-     * автоматически откатит их при откате:
+     * В этом методе можно использовать следующие команды, и Phinx автоматически их откатит при откате:
      *
      *    createTable
      *    renameTable
@@ -62,11 +61,9 @@ class CreateRuleTable extends AbstractMigration
      *    addIndex
      *    addForeignKey
      *
-     * Любые другие разрушающие изменения вызовут ошибку при попытке
-     * откатить миграцию.
+     * Любые другие разрушающие изменения приведут к ошибке при попытке отката миграции.
      *
-     * Не забудьте вызвать "create()" или "update()", а НЕ "save()" при работе
-     * с классом Table.
+     * Помните, что при работе с классом Table нужно вызывать "create()" или "update()", а не "save()".
      */
     public function change()
     {
@@ -91,7 +88,7 @@ class CreateRuleTable extends AbstractMigration
 
 ## Конфигурация casbin
 
-Смотрите синтаксис конфигурации модели правил доступа: https://casbin.org/docs/zh-CN/syntax-for-models
+Синтаксис конфигурации модели разрешений можно найти по ссылке: https://casbin.org/docs/zh-CN/syntax-for-models
 
 ```php
 
@@ -101,7 +98,7 @@ return [
     'default' => [
         'model' => [
             'config_type' => 'file',
-            'config_file_path' => config_path() . '/casbin-restful-model.conf', // Файл конфигурации модели правил доступа
+            'config_file_path' => config_path() . '/casbin-restful-model.conf', // Файл конфигурации модели разрешений
             'config_text' => '',
         ],
         'adapter' => [
@@ -109,11 +106,11 @@ return [
             'class' => \app\model\Rule::class,
         ],
     ],
-    // Можно настроить несколько моделей доступа
+    // Можно настроить несколько моделей разрешений
     'rbac' => [
         'model' => [
             'config_type' => 'file',
-            'config_file_path' => config_path() . '/casbin-rbac-model.conf', // Файл конфигурации модели правил доступа
+            'config_file_path' => config_path() . '/casbin-rbac-model.conf', // Файл конфигурации модели разрешений
             'config_text' => '',
         ],
         'adapter' => [
@@ -126,7 +123,7 @@ return [
 
 ### Адаптер
 
-Текущая оболочка composer использует метод модели think-orm, для других orm см. vendor/teamones/src/adapters/DatabaseAdapter.php
+В текущей обертке composer используется метод model think-orm, для других ORM см. vendor/teamones/src/adapters/DatabaseAdapter.php
 
 Затем измените конфигурацию
 
@@ -135,16 +132,16 @@ return [
     'default' => [
         'model' => [
             'config_type' => 'file',
-            'config_file_path' => config_path() . '/casbin-restful-model.conf', // Файл конфигурации модели правил доступа
+            'config_file_path' => config_path() . '/casbin-restful-model.conf', // Файл конфигурации модели разрешений
             'config_text' => '',
         ],
         'adapter' => [
-            'type' => 'adapter', // Здесь тип настраивается как адаптер
+            'type' => 'adapter', // здесь тип настраивается как адаптер
             'class' => \app\adapter\DatabaseAdapter::class,
         ],
     ],
 ];
-```
+``` 
 
 ## Использование
 
@@ -158,22 +155,22 @@ use teamones\casbin\Enforcer;
 ### Два способа использования
 
 ```php
-# 1. Использование конфигурации по умолчанию default
+# 1. Использование конфигурации default по умолчанию
 Enforcer::addPermissionForUser('user1', '/user', 'read');
 
 # 2. Использование настраиваемой конфигурации rbac
 Enforcer::instance('rbac')->addPermissionForUser('user1', '/user', 'read');
 ```
 
-### Обзор часто используемых API
+### Обзор популярных API
 
-Для получения дополнительной информации о способах использования API обратитесь к официальной документации
+Для получения более подробной информации об использовании API обратитесь к официальной документации
 
-- Управление API: https://casbin.org/docs/zh-CN/management-api
+- API управления: https://casbin.org/docs/zh-CN/management-api
 - RBAC API: https://casbin.org/docs/zh-CN/rbac-api
 
 ```php
-# Добавление разрешений для пользователя
+# Добавление разрешения для пользователя
 
 Enforcer::addPermissionForUser('user1', '/user', 'read');
 
@@ -201,21 +198,21 @@ Enforcer::getAllRoles();
 
 Enforcer::getRolesForUser('user1');
 
-# Получение пользователей для ролей
+# Получение пользователей по роли
 
 Enforcer::getUsersForRole('role1');
 
-# Проверка принадлежности пользователя к роли
+# Проверка, принадлежит ли пользователь какой-либо роли
 
-Enforcer::hasRoleForUser('user1', 'role1');
+Enforcer::hasRoleForUser('use1', 'role1');
 
-# Удаление роли пользователя
+# Удаление роли у пользователя
 
-Enforcer::deleteRoleForUser('user1', 'role1');
+Enforcer::deleteRoleForUser('use1', 'role1');
 
 # Удаление всех ролей пользователя
 
-Enforcer::deleteRolesForUser('user1');
+Enforcer::deleteRolesForUser('use1');
 
 # Удаление роли
 

@@ -1,3 +1,3 @@
 # 插件市場
 
-[按此進入插件市場](/webman#plugins)
+[點擊這裡進入插件市場](/webman#plugins)

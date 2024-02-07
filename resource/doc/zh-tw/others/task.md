@@ -1,20 +1,20 @@
 # 慢業務處理
 
-有時候我們需要處理慢業務，為了避免慢業務影響webman的其他請求處理，這些業務根據情況不同可以使用不同的處理方案。
+有時候我們需要處理慢業務，為了避免慢業務影響 webman 的其它請求處理，這些業務根據情況不同可以使用不同的處理方案。
 
 ## 使用消息隊列
-參考[redis隊列](https://www.workerman.net/plugin/12) [stomp隊列](https://www.workerman.net/plugin/13)
+參考[redis隊列](../queue/redis.md) [stomp隊列](../queue/stomp.md)
 
 ### 優點
 可以應對突發海量業務處理請求
 
 ### 缺點
-無法直接返回結果給客戶端。若需推送結果需要配合其他服務，例如使用[webman/push](https://www.workerman.net/plugin/2)推送處理結果。
+無法直接返回結果給客戶端。如需推送結果需要配合其它服務，例如使用 [webman/push](https://www.workerman.net/plugin/2) 推送處理結果。
 
 ## 新增HTTP端口
 
 > **注意**
-> 此特性需要webman-framework>=1.4
+> 此特性需要 webman-framework>=1.4
 
 新增HTTP端口處理慢請求，這些慢請求通過訪問這個端口進入特定的一組進程處理，處理後將結果直接返回給客戶端。
 
@@ -28,7 +28,7 @@
 在 `config/process.php` 裡增加如下配置。
 ```php
 return [
-    // ... 這裡省略了其他配置 ...
+    // ... 這裡省略了其它配置 ...
     
     'task' => [
         'handler' => \Webman\App::class,
@@ -47,7 +47,7 @@ return [
 ];
 ```
 
-這樣慢接口可以走 `http://127.0.0.1:8686/` 這組進程，不影響其他進程的業務處理。
+這樣慢接口可以走 `http://127.0.0.1:8686/` 這組進程，不影響其它進程的業務處理。
 
 為了讓前端無感知端口的區別，可以在nginx加一個到8686端口的代理。假設慢接口請求路徑都是以`/tast`開頭，整個nginx配置類似如下：
 ```
@@ -77,7 +77,7 @@ server {
       proxy_pass http://task;
   }
 
-  # 其他請求走原8787端口
+  # 其它請求走原8787端口
   location / {
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header Host $host;

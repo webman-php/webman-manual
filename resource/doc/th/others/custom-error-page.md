@@ -1,9 +1,9 @@
-## กำหนดเอง404
-เมื่อเกิด404  webman จะคืนเนื้อหาที่อยู่ภายใน `public/404.html`  ดังนั้น ผู้พัฒนาสามารถแก้ไขไฟล์ `public/404.html` ได้โดยตรง
+## กำหนด404เอง
+เมื่อเกิด404ใน webman จะถูกตั้งค่าให้คืนค่าเนื้อหาจาก `public/404.html` ดังนั้นนักพัฒนาสามารถแก้ไขไฟล์ `public/404.html` ได้โดยตรง
 
-หากคุณต้องการควบคุมเนื้อหา404อย่างไดนามิก เช่น เมื่อร้องขอแอ็กซ์ แล้วคืนข้อมูล json `{"code:"404", "msg":"404 not found"}`  และเมื่อร้องขอหน้าเว็บจะคืนมอดิว /view/404.html  โปรดอ้างอิงตัวอย่างด้านล่าง
+หากคุณต้องการควบคุมเนื้อหา404แบบไดนามิก เช่น เมื่อร้องขอ ajax จะคืนค่าjson `{"code:"404", "msg":"404 not found"}` และเมื่อร้องขอหน้าจะคืนค่าแม่แบบ `app/view/404.html` โปรดดูตัวอย่างด้านล่าง
 
-> ตัวอย่างสำหรับการใช้งานต้นฉบับ PHP อื่นๆ เช่น twig, blade , think-template  จะมีหลักการที่คล้ายกัน
+> ตัวอย่างด้านล่างใช้แม่แบบ php และแม่แบบอื่นๆ เช่น `twig` `blade` `think-tmplate` จะเป็นการใช้หลักการเดิมกัน
 
 **สร้างไฟล์ `app/view/404.html`**
 ```html
@@ -19,23 +19,23 @@
 </html>
 ```
 
-**ใน`config/route.php` เพิ่มโค้ดต่อไปนี้ :**
+**ใน`config/route.php` เพิ่มโค้ดดังนี้:**
 ```php
 use support\Request;
 use Webman\Route;
 
 Route::fallback(function(Request $request){
-    // เมื่อร้องขอแอ็กซ์ จะคืน json
+    // คืนค่าjson เมื่อร้องขอ ajax
     if ($request->expectsJson()) {
         return json(['code' => 404, 'msg' => '404 not found']);
     }
-    // หน้าเว็บจะคืน 404.html มอดิว
+    // คืนค่าแม่แบบ404.html เมื่อร้องขอหน้า
     return view('404', ['error' => 'some error'])->withStatus(404);
 });
 ```
 
-## กำหนดเอง500
-**สร้าง `app/view/500.html`**
+## กำหนด500เอง
+**สร้าง `app/view/500.html` ใหม่**
 
 ```html
 <!doctype html>
@@ -45,13 +45,14 @@ Route::fallback(function(Request $request){
     <title>500 Internal Server Error</title>
 </head>
 <body>
-     การกำหนดมอดิวข้อผิดพลาดเอง:
+กำหนดแม่แบบข้อผิดพลาดเอง:
 <?=htmlspecialchars($exception)?>
 </body>
 </html>
 ```
 
-**สร้าง**app/exception/Handler.php**(หากไม่มีไดเร็กทอรีให้สร้างเอง)**
+**สร้างไฟล์** `app/exception/Handler.php` **(หากไม่มีไดเรกทอรีโปรดสร้างขึ้นเอง)**
+
 ```php
 <?php
 
@@ -64,7 +65,7 @@ use Webman\Http\Response;
 class Handler extends \support\exception\Handler
 {
     /**
-     * แสดงผลการคืนข้อมูล
+     * แสดงผล
      * @param Request $request
      * @param Throwable $exception
      * @return Response
@@ -72,17 +73,17 @@ class Handler extends \support\exception\Handler
     public function render(Request $request, Throwable $exception) : Response
     {
         $code = $exception->getCode();
-        // เมื่อร้องขอแอ็กซ์ จะคืนข้อมูล json
+        // คืนค่าjson เมื่อร้องขอ ajax
         if ($request->expectsJson()) {
             return json(['code' => $code ? $code : 500, 'msg' => $exception->getMessage()]);
         }
-        // หน้าเว็บจะคืน 500.html มอดิว
+        // คืนค่าแม่แบบ500.html เมื่อร้องขอหน้า
         return view('500', ['exception' => $exception], '')->withStatus(500);
     }
 }
 ```
 
-**กำหนด`config/exception.php`**
+**กำหนดค่า`config/exception.php`**
 ```php
 return [
     '' => \app\exception\Handler::class,

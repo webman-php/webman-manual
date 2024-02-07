@@ -1,9 +1,9 @@
 # Exemple simple
 
-## Renvoyer une chaîne de caractères
+## Retourner une chaîne de caractères
 **Créer un contrôleur**
 
-Créez un fichier `app/controller/UserController.php` comme suit
+Créez le fichier `app/controller/UserController.php` comme suit
 
 ```php
 <?php
@@ -16,21 +16,21 @@ class UserController
     public function hello(Request $request)
     {
         $default_name = 'webman';
-        // Obtenez le paramètre nom de la requête GET, si aucun paramètre nom n'est passé, retournez $default_name
+        // Obtenir le paramètre "name" de la requête GET, si aucun paramètre "name" n'est passé, retourner $default_name
         $name = $request->get('name', $default_name);
         // Renvoyer une chaîne de caractères au navigateur
-        return response('Bonjour ' . $name);
+        return response('hello ' . $name);
     }
 }
 ```
 
 **Accès**
 
-Accédez à `http://127.0.0.1:8787/user/hello?name=tom` dans votre navigateur
+Accédez à `http://127.0.0.1:8787/user/hello?name=tom` dans le navigateur
 
-Le navigateur renverra `Bonjour tom`
+Le navigateur affichera `hello tom`
 
-## Renvoyer du JSON
+## Retourner du JSON
 Modifiez le fichier `app/controller/UserController.php` comme suit
 
 ```php
@@ -46,8 +46,8 @@ class UserController
         $default_name = 'webman';
         $name = $request->get('name', $default_name);
         return json([
-            'code' => 0,
-            'msg' => 'ok',
+            'code' => 0, 
+            'msg' => 'ok', 
             'data' => $name
         ]);
     }
@@ -56,21 +56,21 @@ class UserController
 
 **Accès**
 
-Accédez à `http://127.0.0.1:8787/user/hello?name=tom` dans votre navigateur
+Accédez à `http://127.0.0.1:8787/user/hello?name=tom` dans le navigateur
 
-Le navigateur renverra `{"code":0,"msg":"ok","data":"tom""}`
+Le navigateur affichera `{"code":0,"msg":"ok","data":"tom"}`
 
 L'utilisation de la fonction d'aide json pour renvoyer des données ajoutera automatiquement l'en-tête `Content-Type: application/json`
 
-## Renvoyer du XML
-De même, l'utilisation de la fonction d'aide `xml($xml)` renverra une réponse `xml` avec l'en-tête `Content-Type: text/xml`.
+## Retourner du XML
+De la même manière, l'utilisation de la fonction d'aide `xml($xml)` renverra une réponse `xml` avec l'en-tête `Content-Type: text/xml`.
 
-Le paramètre `$xml` peut être une chaîne `xml` ou un objet `SimpleXMLElement`
+Le paramètre `$xml` peut être une chaîne `xml` ou un objet `SimpleXMLElement`.
 
-## Renvoyer du JSONP
-De même, l'utilisation de la fonction d'aide `jsonp($data, $callback_name = 'callback')` renverra une réponse `jsonp`.
+## Retourner du JSONP
+De la même manière, l'utilisation de la fonction d'aide `jsonp($data, $callback_name = 'callback')` renverra une réponse `jsonp`.
 
-## Renvoyer une vue
+## Retourner une vue
 Modifiez le fichier `app/controller/UserController.php` comme suit
 
 ```php
@@ -90,7 +90,7 @@ class UserController
 }
 ```
 
-Créez un fichier `app/view/user/hello.html` comme suit
+Créez le fichier `app/view/user/hello.html` comme suit
 
 ```html
 <!doctype html>
@@ -100,12 +100,12 @@ Créez un fichier `app/view/user/hello.html` comme suit
     <title>webman</title>
 </head>
 <body>
-Bonjour <?=htmlspecialchars($name)?>
+hello <?=htmlspecialchars($name)?>
 </body>
 </html>
 ```
 
-Accédez à `http://127.0.0.1:8787/user/hello?name=tom` dans votre navigateur
-Un contenu `Bonjour tom` sera renvoyé dans une page html.
+Accédez à `http://127.0.0.1:8787/user/hello?name=tom`
+un page html contenant `hello tom` sera renvoyée.
 
-Remarque : webman utilise par défaut la syntaxe native de PHP comme modèle. Si vous souhaitez utiliser d'autres vues, consultez [View](view.md).
+Remarque : webman utilise par défaut la syntaxe PHP native comme modèle. Pour utiliser d'autres vues, voir [View](view.md)

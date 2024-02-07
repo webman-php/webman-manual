@@ -9,7 +9,7 @@
 > **提示**
 > 如果安裝失敗，可能是因為你使用了composer代理，嘗試運行 `composer config -g --unset repos.packagist` 取消composer代理試下
 
-> [webman/think-orm](https://www.workerman.net/plugin/14) 實際上是一個自動化安裝`toptink/think-orm` 的插件，如果你的webman版本低於`1.2`無法使用插件請參考文章[手動安裝並配置think-orm](https://www.workerman.net/a/1289)。
+> [webman/think-orm](https://www.workerman.net/plugin/14) 實際上是一個自動化安裝`toptink/think-orm`的插件，如果你的webman版本低於`1.2`無法使用插件請參考文章[手動安裝並配置think-orm](https://www.workerman.net/a/1289)。
 
 ### 配置文件
 根據實際情況修改配置文件 `config/thinkorm.php`
@@ -36,7 +36,7 @@ class FooController
 ### 創建模型
 
 ThinkOrm模型繼承`think\Model`，類似如下
-```
+```php
 <?php
 namespace app\model;
 
@@ -62,8 +62,8 @@ class User extends Model
 }
 ```
 
-你也使用以下命令創建基於thinkorm的模型
-```
+你也使用以下命令创建基於thinkorm的模型
+```php
 php webman make:model 表名
 ```
 

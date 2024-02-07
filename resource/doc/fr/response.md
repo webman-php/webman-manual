@@ -1,8 +1,7 @@
 # Réponse
+La réponse est en fait un objet `support\Response`. Pour faciliter la création de cet objet, webman fournit quelques fonctions d'aide.
 
-La réponse est en réalité un objet `support\Response`. Pour faciliter la création de cet objet, le webman fournit quelques fonctions d'aide.
-
-## Renvoyer une réponse quelconque
+## Retourner une réponse arbitraire
 
 **Exemple**
 ```php
@@ -15,12 +14,12 @@ class FooController
 {
     public function hello(Request $request)
     {
-        return response('hello webman');
+        return response('bonjour webman');
     }
 }
 ```
 
-La fonction de réponse est implémentée comme suit :
+La fonction de réponse est implémentée comme suit：
 ```php
 function response($body = '', $status = 200, $headers = array())
 {
@@ -28,7 +27,7 @@ function response($body = '', $status = 200, $headers = array())
 }
 ```
 
-Vous pouvez également créer un objet `response` vide, puis utiliser les méthodes `$response->cookie()`, `$response->header()`, `$response->withHeaders()` et `$response->withBody()` pour définir le contenu à renvoyer à l'endroit approprié.
+Vous pouvez également d'abord créer un objet `response` vide, puis utiliser `$response->cookie()`, `$response->header()`, `$response->withHeaders()`, `$response->withBody()` pour définir le contenu de retour à l'endroit approprié.
 ```php
 public function hello(Request $request)
 {
@@ -37,7 +36,7 @@ public function hello(Request $request)
     
     // .... Logique métier omise
     
-    // Définir le cookie
+    // Définir un cookie
     $response->cookie('foo', 'valeur');
     
     // .... Logique métier omise
@@ -45,19 +44,19 @@ public function hello(Request $request)
     // Définir les en-têtes HTTP
     $response->header('Content-Type', 'application/json');
     $response->withHeaders([
-                'X-Header-One' => 'Valeur en-tête 1',
-                'X-Header-Deux' => 'Valeur en-tête 2',
+                'X-Header-One' => 'Valeur d'en-tête 1',
+                'X-Header-Tow' => 'Valeur d'en-tête 2',
             ]);
 
     // .... Logique métier omise
 
-    // Définir les données à renvoyer
-    $response->withBody('Données à renvoyer');
+    // Définir les données à retourner
+    $response->withBody('Données à retourner');
     return $response;
 }
 ```
 
-## Renvoyer du JSON
+## Retourner du JSON
 **Exemple**
 ```php
 <?php
@@ -73,7 +72,7 @@ class FooController
     }
 }
 ```
-La fonction JSON est implémentée comme suit :
+La fonction json est implémentée comme suit：
 ```php
 function json($data, $options = JSON_UNESCAPED_UNICODE)
 {
@@ -82,7 +81,7 @@ function json($data, $options = JSON_UNESCAPED_UNICODE)
 ```
 
 
-## Renvoyer du XML
+## Retourner du XML
 **Exemple**
 ```php
 <?php
@@ -105,8 +104,7 @@ class FooController
     }
 }
 ```
-
-La fonction XML est implémentée comme suit :
+La fonction xml est implémentée comme suit：
 ```php
 function xml($xml)
 {
@@ -117,8 +115,9 @@ function xml($xml)
 }
 ```
 
-## Renvoyer une vue
-Créez un fichier `app/controller/FooController.php` comme suit :
+
+## Retourner une vue
+Créez un fichier `app/controller/FooController.php` comme suit:
 
 ```php
 <?php
@@ -135,7 +134,7 @@ class FooController
 }
 ```
 
-Créez un fichier `app/view/foo/hello.html` comme suit :
+Créez un fichier `app/view/foo/hello.html` comme suit:
 
 ```html
 <!doctype html>
@@ -145,7 +144,7 @@ Créez un fichier `app/view/foo/hello.html` comme suit :
     <title>webman</title>
 </head>
 <body>
-hello <?=htmlspecialchars($name)?>
+bonjour <?=htmlspecialchars($name)?>
 </body>
 </html>
 ```
@@ -165,8 +164,7 @@ class FooController
     }
 }
 ```
-
-La fonction de redirection est implémentée comme suit :
+La fonction de redirection est implémentée comme suit：
 ```php
 function redirect($location, $status = 302, $headers = [])
 {
@@ -178,7 +176,7 @@ function redirect($location, $status = 302, $headers = [])
 }
 ```
 
-## Réglage des en-têtes
+## Configuration d'en-tête
 ```php
 <?php
 namespace app\controller;
@@ -189,14 +187,14 @@ class FooController
 {
     public function hello(Request $request)
     {
-        return response('hello webman', 200, [
+        return response('bonjour webman', 200, [
             'Content-Type' => 'application/json',
-            'X-Header-One' => 'Valeur en-tête' 
+            'X-Header-One' => 'Valeur de l'en-tête' 
         ]);
     }
 }
 ```
-Vous pouvez également utiliser les méthodes `header` et `withHeaders` pour définir les en-têtes individuellement ou en lot.
+Vous pouvez également utiliser les méthodes `header` et `withHeaders` pour définir individuellement ou en lot les en-têtes.
 ```php
 <?php
 namespace app\controller;
@@ -207,16 +205,16 @@ class FooController
 {
     public function hello(Request $request)
     {
-        return response('hello webman')
+        return response('bonjour webman')
         ->header('Content-Type', 'application/json')
         ->withHeaders([
-            'X-Header-One' => 'Valeur en-tête 1',
-            'X-Header-Deux' => 'Valeur en-tête 2',
+            'X-Header-One' => 'Valeur d'en-tête 1',
+            'X-Header-Tow' => 'Valeur d'en-tête 2',
         ]);
     }
 }
 ```
-Vous pouvez également définir les en-têtes à l'avance, puis définir les données à renvoyer à la fin.
+Vous pouvez également définir les en-têtes à l'avance, puis définir les données à retourner à la fin.
 ```php
 public function hello(Request $request)
 {
@@ -228,19 +226,19 @@ public function hello(Request $request)
     // Définir les en-têtes HTTP
     $response->header('Content-Type', 'application/json');
     $response->withHeaders([
-                'X-Header-One' => 'Valeur en-tête 1',
-                'X-Header-Deux' => 'Valeur en-tête 2',
+                'X-Header-One' => 'Valeur d'en-tête 1',
+                'X-Header-Tow' => 'Valeur d'en-tête 2',
             ]);
 
     // .... Logique métier omise
 
-    // Définir les données à renvoyer
-    $response->withBody('Données à renvoyer');
+    // Définir les données à retourner
+    $response->withBody('Données à retourner');
     return $response;
 }
 ```
 
-## Configuration du cookie
+## Configuration des cookies
 ```php
 <?php
 namespace app\controller;
@@ -251,13 +249,12 @@ class FooController
 {
     public function hello(Request $request)
     {
-        return response('hello webman')
+        return response('bonjour webman')
         ->cookie('foo', 'valeur');
     }
 }
 ```
-
-Vous pouvez également configurer le cookie à l'avance, puis définir les données à renvoyer à la fin.
+Vous pouvez également définir les cookies à l'avance, puis définir les données à retourner à la fin.
 ```php
 public function hello(Request $request)
 {
@@ -266,22 +263,20 @@ public function hello(Request $request)
     
     // .... Logique métier omise
     
-    // Configurer le cookie
+    // Définir un cookie
     $response->cookie('foo', 'valeur');
     
     // .... Logique métier omise
 
-    // Définir les données à renvoyer
-    $response->withBody('Données à renvoyer');
+    // Définir les données à retourner
+    $response->withBody('Données à retourner');
     return $response;
 }
 ```
-
-Les paramètres complets de la méthode cookie sont les suivants :
-
+Les paramètres complets de la méthode `cookie` sont les suivants：
 `cookie($name, $value = '', $max_age = 0, $path = '', $domain = '', $secure = false, $http_only = false)`
 
-## Renvoyer un flux de fichiers
+## Retourner un flux de fichiers
 ```php
 <?php
 namespace app\controller;
@@ -297,16 +292,16 @@ class FooController
 }
 ```
 
-- webman prend en charge l'envoi de fichiers de très grande taille
-- Pour les fichiers volumineux (plus de 2 Mo), webman ne lira pas tout le fichier en une seule fois en mémoire, mais lira et enverra le fichier par segments au moment approprié
-- webman optimisera la vitesse de lecture et d'envoi du fichier en fonction de la vitesse de réception du client, afin de garantir l'envoi le plus rapide du fichier tout en réduisant la consommation de mémoire au minimum
-- L'envoi de données est non bloquant et n'affectera pas le traitement des autres requêtes
-- La méthode file ajoutera automatiquement l'en-tête `if-modified-since` et vérifiera l'en-tête `if-modified-since` lors de la prochaine requête. Si le fichier n'a pas été modifié, il retournera directement 304 pour économiser de la bande passante
-- Le fichier envoyé utilisera automatiquement les en-têtes `Content-Type` appropriés pour l'envoi au navigateur
-- Si le fichier n'existe pas, il se convertira automatiquement en une réponse 404
+- webman prend en charge l'envoi de fichiers très volumineux
+- Pour les fichiers volumineux (plus de 2 Mo), webman ne lira pas tout le fichier en mémoire une seule fois, mais lira et enverra le fichier par segments au moment approprié
+- webman optimisera la vitesse de lecture et d'envoi du fichier en fonction de la vitesse de réception du client, garantissant l'envoi le plus rapide du fichier tout en réduisant l'utilisation de la mémoire au minimum
+- L'envoi de données est non bloquant et n'affecte pas le traitement d'autres requêtes
+- La méthode file ajoutera automatiquement l'en-tête `if-modified-since` et vérifiera cet en-tête lors de la prochaine requête ; si le fichier n'a pas été modifié, il renverra directement le code 304 pour économiser de la bande passante
+- Le fichier envoyé sera automatiquement utilisé avec l'en-tête `Content-Type` approprié pour être envoyé au navigateur
+- Si le fichier n'existe pas, il sera automatiquement converti en réponse 404
 
 
-## Télécharger un fichier
+## Télécharger des fichiers
 ```php
 <?php
 namespace app\controller;
@@ -317,16 +312,15 @@ class FooController
 {
     public function hello(Request $request)
     {
-        return response()->download(public_path() . '/favicon.ico', 'nomfichier.ico');
+        return response()->download(public_path() . '/favicon.ico', 'nom_du_fichier.ico');
     }
 }
 ```
-La méthode download est presque identique à la méthode file, sauf que :
-1. après avoir défini le nom du fichier à télécharger, le fichier sera téléchargé au lieu d'être affiché dans le navigateur
-2. la méthode download ne vérifie pas l'en-tête `if-modified-since`
-
+La méthode de téléchargement est presque identique à la méthode de fichier, la différence est que
+1. après avoir configuré le nom du fichier à télécharger, le fichier sera téléchargé au lieu d'être affiché dans le navigateur
+2. la méthode de téléchargement ne vérifiera pas l'en-tête `if-modified-since`
 ## Obtenir la sortie
-Certaines bibliothèques écrivent le contenu du fichier directement sur la sortie standard, c'est-à-dire que les données s'affichent dans le terminal de la ligne de commande et ne sont pas envoyées au navigateur. Dans ce cas, nous devons capturer les données dans une variable à l'aide de `ob_start();` `ob_get_clean();`, puis envoyer les données au navigateur, par exemple :
+Certains librairies impriment directement le contenu d'un fichier dans la sortie standard, c'est-à-dire que les données s'affichent dans le terminal de la ligne de commande et ne sont pas envoyées au navigateur. Dans ce cas, nous devons utiliser `ob_start();` et `ob_get_clean();` pour capturer les données dans une variable, puis les envoyer au navigateur, par exemple :
 
 ```php
 <?php
@@ -342,13 +336,13 @@ class ImageController
         // Créer une image
         $im = imagecreatetruecolor(120, 20);
         $text_color = imagecolorallocate($im, 233, 14, 91);
-        imagestring($im, 1, 5, 5,  'Un simple texte', $text_color);
+        imagestring($im, 1, 5, 5,  'A Simple Text String', $text_color);
 
-        // Commencer la capture de la sortie
+        // Commencer l'obtention de la sortie
         ob_start();
-        // Afficher l'image
+        // Sortir l'image
         imagejpeg($im);
-        // Récupérer le contenu de l'image
+        // Obtenir le contenu de l'image
         $image = ob_get_clean();
         
         // Envoyer l'image

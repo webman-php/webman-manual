@@ -6,7 +6,7 @@
 [![webman-event](https://img.shields.io/github/last-commit/tinywan/webman-event/main)]()
 [![webman-event](https://img.shields.io/github/v/tag/tinywan/webman-event?color=ff69b4)]()
 
-Etkinlik, bir şeyin işlemleri empoze etmesi ve bu işlemleri izlemesi bakımından ara yazılımdan daha avantajlıdır (yani daha ince tanelidir) ve bazı iş sahneleri için daha uygundur. Örneğin, genellikle kullanıcı kaydolduktan veya giriş yaptıktan sonra bir dizi işlem yapmamız gerekebilir, etkinlik sistemi sayesinde mevcut kodlara müdahale etmeden giriş işleminin genişletilmesini sağlayabilir, sistemdeki bağlantıyı azaltırken, hata olasılığını da azaltır.
+Olaylar, ara yazılımdan daha hassas bir konumlandırmaya (veya daha ince bir tane) sahip olması ve bazı iş senaryolarının genişletilmesi için daha uygun olması açısından olaylara göre avantaj sağlar. Örneğin, genellikle kullanıcı kaydolduktan veya giriş yaptıktan sonra bazı işlemler yapmamız gerekebilir. Olay sistemi, mevcut kodlara müdahale etmeden giriş işleminin genişletilmesini sağlayarak sistemdeki bağlantıyı azaltırken aynı zamanda hata olasılığını da azaltır.
 
 ## Proje adresi
 
@@ -21,34 +21,34 @@ Etkinlik, bir şeyin işlemleri empoze etmesi ve bu işlemleri izlemesi bakımı
 ```shell script
 composer require tinywan/webman-event
 ```
-## Yapılandırma 
+## Yapılandırma
 
-Etkinlik yapılandırma dosyası `config/event.php` aşağıdaki gibidir
+Olay yapılandırma dosyası `config/event.php` aşağıdaki içeriğe sahiptir.
 
 ```php
 return [
-    // Etkinlik dinleyici
+    // Olay dinleyicisi
     'listener'    => [],
 
-    // Etkinlik abonesi
+    // Olay abonesi
     'subscriber' => [],
 ];
 ```
-### Süreç başlatma yapılandırması
+### İşlem başlatma yapılandırması
 
 `config/bootstrap.php` dosyasını açın ve aşağıdaki yapılandırmayı ekleyin:
 
 ```php
 return [
-    // Diğer yapılandırmalar burada gösterilmedi ...
+    // Diğer yapılandırmalar burada bulunmaktadır ...
     webman\event\EventManager::class,
 ];
 ```
 ## Hızlı başlangıç
 
-### Etkinlik tanımlama
+### Olayları tanımlama
 
-Etkinlik sınıfı `LogErrorWriteEvent.php`
+Olay sınıfı `LogErrorWriteEvent.php`
 
 ```php
 declare(strict_types=1);
@@ -59,7 +59,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class LogErrorWriteEvent extends Event
 {
-    const NAME = 'log.error.write';  // Etkinlik adı, etkinliğin tekil tanımlayıcısı
+    const NAME = 'log.error.write';  // Olay adı, olayın benzersiz kimliği
 
     /** @var array */
     public array $log;
@@ -76,17 +76,17 @@ class LogErrorWriteEvent extends Event
 }
 ```
 
-### Etkinliği dinleme
+### Olayları dinleme
 ```php
 return [
-    // Etkinlik dinleyici
+    // Olay dinleyicisi
     'listener'    => [
         \extend\event\LogErrorWriteEvent::NAME  => \extend\event\LogErrorWriteEvent::class,
     ],
 ];
 ```
 
-### Etkinlik aboneliği
+### Olayları abone olma
 
 Abone sınıfı `LoggerSubscriber.php`
 
@@ -99,7 +99,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class LoggerSubscriber implements EventSubscriberInterface
 {
     /**
-     * @desc: Metod açıklaması
+     * @desc: Method description
      * @return array|string[]
      */
     public static function getSubscribedEvents()
@@ -110,7 +110,7 @@ class LoggerSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @desc: Etkinliği tetikle
+     * @desc: Olay tetikleme
      * @param LogErrorWriteEvent $event
      */
     public function onLogErrorWrite(LogErrorWriteEvent $event)
@@ -121,19 +121,19 @@ class LoggerSubscriber implements EventSubscriberInterface
 }
 ```
 
-Etkinlik aboneliği
+Olay aboneliği
 ```php
 return [
-    // Etkinlik aboneliği
+    // Olay aboneliği
     'subscriber' => [
         \extend\event\subscriber\LoggerSubscriber::class,
     ],
 ];
 ```
 
-### Etkinlik tetikleyici
+### Olay tetikleyici
 
-`LogErrorWriteEvent` etkinliğini tetikleyin.
+`LogErrorWriteEvent` olayını tetikleyin.
 
 ```php
 $error = [
@@ -143,10 +143,9 @@ $error = [
 EventManager::trigger(new LogErrorWriteEvent($error),LogErrorWriteEvent::NAME);
 ```
 
-Sonuçları yürütün
-
-![print result](./trigger.png)
+Sonuç
+![result](./trigger.png)
 
 ## Lisans
 
-Bu proje [Apache 2.0 lisansı](LICENSE) ile lisanslanmıştır.
+Bu proje [Apache 2.0 lisansı](LICENSE) altında lisanslanmıştır.

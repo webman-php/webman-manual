@@ -1,34 +1,34 @@
-# Gestione delle attività lente
+# Gestione dei servizi lenti
 
-A volte è necessario gestire attività lente in modo da evitare che esse influenzino l'elaborazione delle altre richieste da parte di webman, e tali attività possono essere gestite con diversi metodi a seconda delle circostanze.
+A volte è necessario gestire dei servizi lenti al fine di evitare che influenzino il processo di gestione delle richieste di webman. A seconda delle circostanze, questi servizi possono essere gestiti utilizzando diverse soluzioni.
 
 ## Utilizzo di code di messaggi
-Fare riferimento a [coda Redis](https://www.workerman.net/plugin/12) e [coda STOMP](https://www.workerman.net/plugin/13)
+Fare riferimento a [coda Redis](../queue/redis.md) e [coda Stomp](../queue/stomp.md)
 
 ### Vantaggi
-È in grado di gestire le richieste di elaborazione di enormi quantità di attività improvvisamente.
+Può gestire le richieste di elaborazione dei servizi in modo efficiente durante picchi improvvisi di attività.
 
 ### Svantaggi
-Non può restituire direttamente i risultati al client. Se è necessario inviare i risultati, è necessario coordinare con altri servizi, ad esempio utilizzando [webman/push](https://www.workerman.net/plugin/2) per inviare i risultati del processo.
+Non può fornire direttamente i risultati al client. Se è necessario inviare i risultati, è necessario utilizzare altri servizi, ad esempio utilizzando [webman/push](https://www.workerman.net/plugin/2) per inviare i risultati dell'elaborazione.
 
 ## Aggiunta di una porta HTTP
 
 > **Nota**
 > Questa funzionalità richiede webman-framework>=1.4
 
-Aggiungere una porta HTTP per gestire le richieste lente, consentendo a queste ultime di essere elaborate tramite l'accesso a questa porta da parte di un insieme specifico di processi, che restituiranno direttamente i risultati al client una volta elaborati.
+Aggiungendo una porta HTTP è possibile gestire le richieste lente, le quali, una volta ricevute su questa porta, vengono gestite da un insieme specifico di processi e i risultati vengono restituiti direttamente al client.
 
 ### Vantaggi
 È possibile restituire direttamente i dati al client.
 
 ### Svantaggi
-Non in grado di gestire richieste di enormi quantità improvvisamente.
+Non è in grado di gestire picchi improvvisi di richieste.
 
 ### Procedura di implementazione
-Nel file `config/process.php`, aggiungere la seguente configurazione.
+Aggiungere la seguente configurazione a `config/process.php`.
 ```php
 return [
-    // ... Altre configurazioni omesse ...
+    // ... Altre configurazioni sono omesse qui ...
     
     'task' => [
         'handler' => \Webman\App::class,
@@ -38,25 +38,25 @@ return [
         'group' => '',
         'reusePort' => true,
         'constructor' => [
-            'request_class' => \support\Request::class, // Impostazioni classe della richiesta
-            'logger' => \support\Log::channel('default'), // Istanza di log
-            'app_path' => app_path(), // Posizione della directory app
+            'request_class' => \support\Request::class, // Impostazioni della classe di richiesta
+            'logger' => \support\Log::channel('default'), // Istanza del registro
+            'app_path' => app_path(), // Posizione della directory dell'applicazione
             'public_path' => public_path() // Posizione della directory pubblica
         ]
     ]
 ];
 ```
 
-In questo modo, le richieste lente possono essere gestite tramite questo gruppo di processi tramite `http://127.0.0.1:8686/`, senza influenzare l'elaborazione delle altre attività da parte degli altri processi.
+In questo modo, le richieste lente possono essere gestite da questo gruppo di processi su `http://127.0.0.1:8686/`, senza influenzare l'elaborazione dei processi.
 
-Per rendere trasparente al frontend la differenza tra le porte, è possibile aggiungere un proxy per la porta 8686 in nginx. Supponendo che i percorsi delle richieste lente inizino con `/tast`, la configurazione completa di nginx sarà simile a quanto segue:
-```
+Per rendere impercettibile la differenza delle porte per il front-end, è possibile configurare un proxy verso la porta 8686 in nginx. Ad esempio, se i percorsi delle richieste dei servizi lenti iniziano con `/tast`, la configurazione completa di nginx sarà simile alla seguente:
+```nginx
 upstream webman {
     server 127.0.0.1:8787;
     keepalive 10240;
 }
 
-# Aggiungere un nuovo upstream per la porta 8686
+# Aggiunta di un nuovo upstream per la porta 8686
 upstream task {
    server 127.0.0.1:8686;
    keepalive 10240;
@@ -68,7 +68,7 @@ server {
   access_log off;
   root /path/webman/public;
 
-  # Le richieste che iniziano con /tast passano alla porta 8686, si prega di modificare /tast in base alle esigenze effettive
+  # Le richieste che iniziano con /tast vengono instradate alla porta 8686, sostituire /tast con il prefisso desiderato
   location /tast {
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header Host $host;
@@ -77,7 +77,7 @@ server {
       proxy_pass http://task;
   }
 
-  # Le altre richieste passano alla porta originale 8787
+  # Le altre richieste vengono instradate alla porta 8787
   location / {
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header Host $host;
@@ -90,4 +90,4 @@ server {
 }
 ```
 
-In questo modo, quando il client accede a `dominio.com/tast/xxx`, verrà gestita tramite la porta 8686 in modo separato e non influenzerà l'elaborazione delle richieste sulla porta 8787.
+In questo modo, quando il cliente visita `dominio.com/tast/xxx`, la richiesta verrà instradata alla porta 8686 per essere elaborata, senza influenzare l'elaborazione delle richieste sulla porta 8787.

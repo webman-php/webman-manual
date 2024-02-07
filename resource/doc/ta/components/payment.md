@@ -1,127 +1,120 @@
-# 支付SDK（V3）
+# கட்டணப் போட்டி SDK (V3)
 
 
-## 项目地址
+## திட்டம் முகவரி
 
- https://github.com/yansongda/pay
+https://github.com/yansongda/pay
 
-## 安装
+## நிறுவல்
 
 ```php
 composer require yansongda/pay ^3.0.0
 ```
 
-## 使用 
+## பயன்பாடு
 
-> 说明：以下以支付宝沙箱环境为环境进行文档编写，若有问题，请及时反馈哦！
+> விவரங்கள்: பின்வரும் டப் மூலம் அத்தியாயத்தைப் படிக்கும் போது, சந்தேகம் இருக்கின்றதால், விரைவில் பின்பற்றுக அனுமதியளிக்கவும்!
 
-### 配置文件
 
-假设有以下配置文件 `config/payment.php`
+## கட்டமைப்பு கோப்புகள்
+
+பின்பு கட்டமைப்பு கோப்பு `config/payment.php` இருக்கும்.
 
 ```php
 <?php
 /**
- * @desc 支付配置文件
- * @author Tinywan(ShaoBo Wan)
+ * @desc கட்டமைப்பு கோப்புகள்
+ * @author டைனி வான்(ஷவ்போ வான்)
  * @date 2022/03/11 20:15
  */
 return [
     'alipay' => [
         'default' => [
-            // 必填-支付宝分配的 app_id
+            // முக்கியமானது- அப்ப்வட்டையுடன் நிறுவப்பட்டது பணப் பகிர்வு id
             'app_id' => '20160909004708941',
-            // 必填-应用私钥 字符串或路径
+            // முக்கியமானது- பயன்பாட்டு தன்மை மை சர்ட்டினைக் குறிப்பிடுக்கின்றது சரங்கோபதி வழங்கும் சர்ட்டின் அட்டவணை
             'app_secret_cert' => 'MIIEpAIBAAKCxxxxxxxxxxxxxxP4r3m4OUmD/+XDgCg==',
-            // 必填-应用公钥证书 路径
+            // முக்கியமானது- பணப் பகிர்வு சர்ட்டினைப் புகுபதி
             'app_public_cert_path' => base_path().'/payment/appCertPublicKey_2016090900470841.crt',
-            // 必填-支付宝公钥证书 路径
+            // முக்கியமானது- அப்ப்வட்டையின் பொதுவான சர்ட்டினைப் புகுபதி
             'alipay_public_cert_path' => base_path().'/payment/alipayCertPublicKey_RSA2.crt',
-            // 必填-支付宝根证书 路径
+            // முக்கியமானது- அப்ப்வட்டையின் வேர்க்கரூட் சர்ட்டினைப் புகுபதி
             'alipay_root_cert_path' => base_path().'/payment/alipayRootCert.crt',
-            // 选填-同步回调地址
+            // தேர்ந்தெடுக்கப்பட்டது- ஒத்துமூட்டு வழியில் வரும் மீண்டும் அழிவு URL
             'return_url' => 'https://webman.tinywan.cn/payment/alipay-return',
-            // 选填-异步回调地址
+            // தேர்ந்தெடுக்கப்பட்டது- அசிங்கமான அழிவு URL
             'notify_url' => 'https://webman.tinywan.cn/payment/alipay-notify',
-            // 选填-服务商模式下的服务商 id，当 mode 为 Pay::MODE_SERVICE 时使用该参数
+            // தேர்ந்தெடுக்கப்பட்டது- சேவையாளர் முறையில் சேவையாளர் ஐடி, முன் நிலையாகவோ நேரம் கிடைக்கும் போது Pay::MODE_SERVICE பயன்பாட்டிற்கு இப்படியான பகுதியை பயன்படுத்துகின்றது
             'service_provider_id' => '',
-            // 选填-默认为正常模式。可选为： MODE_NORMAL, MODE_SANDBOX, MODE_SERVICE
+            // தேர்ந்தெடுக்கப்பட்டது- இயல்புநிலையாக சரியான முறை. தேர்ந்தெடுக்கப்படுகின்றது: MODE_NORMAL, MODE_SANDBOX, MODE_SERVICE
             'mode' => \Yansongda\Pay\Pay::MODE_SANDBOX,
         ]
     ],
     'wechat' => [
         'default' => [
-            // 必填-商户号，服务商模式下为服务商商户号
+            // முக்கியமானது- மர்சந்த் ஐடியை, சேவையாளர் பயன்பாட்டின் மர்சந்த் ஐடி ஆகும்போது சேவையாளர் மர்சந்த் ஐடியைக் குறிப்பிடுக்கின்றது
             'mch_id' => '',
-            // 必填-商户秘钥
+            // முக்கியமானது- மர்சந்த் இரகசிய விண்ணப்பத்தை
             'mch_secret_key' => '',
-            // 必填-商户私钥 字符串或路径
+            // முக்கியமானது- மர்சந்த் சீரான சர்க்கரூட்டை சர்ட்டினையால் அல்லது வழங்கப்படும் கோப்பால் குறிப்பிடுக்கின்றது
             'mch_secret_cert' => '',
-            // 必填-商户公钥证书路径
+            // முக்கியமானது- மர்ச்சந்த் பொதுவான சான்று அட்டவணையைப் புகுபதி
             'mch_public_cert_path' => '',
-            // 必填
+            // முக்கியமானது
             'notify_url' => 'https://yansongda.cn/wechat/notify',
-            // 选填-公众号 的 app_id
+            // தேர்ந்தெடுக்கப்பட்டது- பொது மக்கள் ஐடி
             'mp_app_id' => '2016082000291234',
-            // 选填-小程序 的 app_id
+            // தேர்ந்தெடுக்கப்பட்டது- குறு மினி பயன்பாட்டின் ஐடி
             'mini_app_id' => '',
-            // 选填-app 的 app_id
+            // தேர்ந்தெடுக்கப்பட்டது- பயன்பாட்டின் ஐடி
             'app_id' => '',
-            // 选填-合单 app_id
+            // தேர்ந்தெடுக்கப்பட்டது- கலப்பு மணித்துவ app_id
             'combine_app_id' => '',
-            // 选填-合单商户号
+            // தேர்ந்தெடுக்கப்பட்டது- கலப்பு மர்சந்த் ஐடி
             'combine_mch_id' => '',
-            // 选填-服务商模式下，子公众号 的 app_id
+            // தேர்ந்தெடுக்கப்பட்டது- சேவையாளர் முறையில், சிறுவர் மக்கள் கலப்பு app_id
             'sub_mp_app_id' => '',
-            // 选填-服务商模式下，子 app 的 app_id
+            // தேர்ந்தெடுக்கப்பட்டது- சேவையாளர் முறையில், சிறுவர் app_id
             'sub_app_id' => '',
-            // 选填-服务商模式下，子小程序 的 app_id
+            // தேர்ந்தெடுக்கப்பட்டது- சேவையாளர் முறையில், சிறுவர் மினி பயன்பாட்டின் ஐடி
             'sub_mini_app_id' => '',
-            // 选填-服务商模式下，子商户id
+            // தேர்ந்தெடுக்கப்பட்டது- சேவையாளர் முறையில், சிறுவர் மர்சந்த் ஐடி
             'sub_mch_id' => '',
-            // 选填-微信公钥证书路径, optional，强烈建议 php-fpm 模式下配置此参数
+            // தேர்ந்தெடுக்கப்பட்டது- வடிவமைப்பு முறை பயனாக்க வேண்டியது, விண்ணப்பப் பராமரிப்பைத் தொகுப்பதோன்றவும்
             'wechat_public_cert_path' => [
                 '45F59D4DABF31918AFCEC556D5D2C6E376675D57' => __DIR__.'/Cert/wechatPublicKey.crt',
             ],
-            // 选填-默认为正常模式。可选为： MODE_NORMAL, MODE_SERVICE
+            // தேர்ந்தெடுக்கப்பட்டது- இயல்புநிலையாக சரியான முறை. தேர்ந்தெடுக்கப்படுகின்றது: MODE_NORMAL, MODE_SERVICE
             'mode' => \Yansongda\Pay\Pay::MODE_SANDBOX,
         ]
     ],
     'logger' => [
         'enable' => false,
         'file' => runtime_path().'/logs/alipay.log',
-        'level' => 'debug', // 建议生产环境等级调整为 info，开发环境为 debug
-        'type' => 'single', // optional, 可选 daily.
-        'max_file' => 30, // optional, 当 type 为 daily 时有效，默认 30 天
+        'level' => 'debug', // உதவிக்கதை சூழ்நிலைக்குரியது விண்ணப் பராமரிப்புக்கு மாற்றப்படலாம், டெவலப் சூழ்நிலை debug.
+        'type' => 'single', // விரும்பப்படுவது, தினம் என்று குறிப்பிடப்பட்டால் மடப்பட்டது.
+        'max_file' => 30, // விருப்பமாகவும் விருப்பங்கள்: MODE_NORMAL, MODE_SERVICE ஆகியவற்றுக்கு கட்டமைப்பதன் பின்னர் அகப்பட்டியாக நேரம் 30 நாட்கள்
     ],
-    'http' => [ // optional
+    'http' => [ // விருப்பங்களைக் குறிப்பிடுக
         'timeout' => 5.0,
         'connect_timeout' => 5.0,
-        // 更多配置项请参考 [Guzzle](https://guzzle-cn.readthedocs.io/zh_CN/latest/request-options.html)
+        // மேலும் உள்ள விருப்பங்களைப் பார்க்க [Guzzle](https://guzzle-cn.readthedocs.io/zh_CN/latest/request-options.html)
     ],
     '_force' => true,
 ];
 ```
-> 注意：证书目录没有规定，以上示例是放在的框架的 `payment`目录下
+> மதிப்பு: சான்றிதழ் முகவரி கட்டமைப்புகள் மட்டுமே கட்டப்படுகின்றன. முன்பே கட்டிப்பட்ட உதவிகள் மட்டுமே கொடப்படுகின்றன.
+## துவக்க
 
+`config` முறையை செல்லலாம் மீட்டொளிக்கவும்
 ```php
-├── payment
-│   ├── alipayCertPublicKey_RSA2.crt
-│   ├── alipayRootCert.crt
-│   └── appCertPublicKey_2016090900470841.crt
-```
-
-### 初始化
-
-直接调用 `config` 方法初始化
-```php
-// 获取配置文件 config/payment.php
+// கட்டண கோப்பைப் பெறுக config/payment.php
 $config = Config::get('payment');
 Pay::config($config);
 ```
-> 注意：如果是支付宝沙箱模式，一定要记得开启配置文件 `'mode' => \Yansongda\Pay\Pay::MODE_SANDBOX,`，该选项默认为默认为正常模式。
+> குறிப்பிட்டது: அல்லது அனுமதியுடன் ழோத்தியை அனைத்தும் செயலளவுதானப்பட்டு இருக்கவோது, நாள் `முயற்சி` ஃபைல் நிரம்பி, இது மாறியிருக்க வேண்டும் `'mode' => \Yansongda\Pay\Pay::MODE_SANDBOX` மாதிரியாகும், இந்த தேர்வத்தை இயல்பான முறையில் அமைக்கும்..
 
-### 支付（网页）
+## பணம் செலுத்துதல் (Web பக்கம்)
 
 ```php
 use support\Request;
@@ -134,26 +127,23 @@ use Yansongda\Pay\Pay;
  */
 public function payment(Request $request)
 {
-    // 1. 获取配置文件 config/payment.php
+    // 1. கட்டண அமைப்பைப் பெறுக config/payment.php
     $config = Config::get('payment');
 
-    // 2. 初始化配置
+    // 2. அமைப்பை துவக்கம் செய்யும்
     Pay::config($config);
 
-    // 3. 网页支付
+    // 3. வலைப் பணத்தை செலுத்தும்
     $order = [
         'out_trade_no' => time(),
         'total_amount' => '8888.88',
-        'subject' => 'webman payment',
-        '_method' => 'get' // 使用get方式跳转
+        'subject' => 'webman பண செலுத்துதல்',
+        '_method' => 'get' // get முறையில் மாற்றம் செய்யப்படும்
     ];
     return Pay::alipay()->web($order)->getBody()->getContents();
 }
 ```
-
-### 回调
-
-#### 异步回调
+## வின்பு அழிக்கலுக்கான சிவசேதியான அழித்தல்
 
 ```php
 use support\Request;
@@ -161,57 +151,57 @@ use Webman\Config;
 use Yansongda\Pay\Pay;
 
 /**
- * @desc:『支付宝』异步通知
- * @param Request $request
- * @return Response
- */
+ * @desc:'அலிபேயின்' வின்பு அறிவிப்பு
+* @param வேட்பாளர் Request $request
+* @return பதில் பின்பு
+*/
 public function alipayNotify(Request $request): Response
 {
-    // 1. 获取配置文件 config/payment.php
+    // 1. கட்டணம் கோப்புகளைப் பெறும் கட்டமைப்புகள் config/payment.php
     $config = Config::get('payment');
 
-    // 2. 初始化配置
+    // 2. அமைப்பை துவக்குகின்றோம்
     Pay::config($config);
 
-    // 3. 支付宝回调处理
-    $result = Pay::alipay()->callback($request->post());
+    // 3. கட்டணத்தின் மீள்செயலி செயல்படுத்தல்
+    $முடிவு = Pay::alipay()->callback($request->post());
 
     // ===================================================================================================
-    // 请自行对 trade_status 进行判断及其它逻辑进行判断，只有交易通知状态为 TRADE_SUCCESS 或 TRADE_FINISHED 时，支付宝才会认定为买家付款成功。
-    // 1、商户需要验证该通知数据中的out_trade_no是否为商户系统中创建的订单号；
-    // 2、判断total_amount是否确实为该订单的实际金额（即商户订单创建时的金额）；
-    // 3、校验通知中的seller_id（或者seller_email) 是否为out_trade_no这笔单据的对应的操作方；
-    // 4、验证app_id是否为该商户本身。
-    // 5、其它业务逻辑情况
+    // பணத்தின் அறிவிழா நிலைக்கு சோதனை மற்றும் பிற முக்கியத்துவம் நிலைகளை எதிர்த்துக் கருதலாம், மட்டுமே பொருந்ததாகக் கருதப்படுகின்றது, அதில் பரிவர்த்தனை அறிவிப்பை TRADE_SUCCESS அல்லது TRADE_FINISHED ஆக விண்ணப்பம் வழங்குவதற்கு மட்டுமே, அலிபேய் பொருத்தமாகக் கருதுகின்றது.
+    // 1. வணிகர் விபரத்தில் இந்த அறிவிப்பு தரவுகளிலேயே உள்ள out_trade_no என்னும் மத்தியாமை என்பதைச் சரிபார்க்க வேண்டும்;
+    // 2. total_amount ஏதுமிடக்கும் அரசாட்சியான மத்தியாமையுடன் அந்த ஆர்டரின் உண்மையான தொகை ஆக வேண்டும் (பொருந்த, பொருந்தாவிட்ட விலை ஆகும்);
+    // 3. விளக்கத்தில் உள்ளவரின் வாடிக்கையாளர் என்னும் வேலை எண் (அல்லது விலையுடன் விருப்பமாக எழுதப்படும் seller_email);
+    // 4. வணிகம் ஐடி ஒருவன் அதைத் தானாகச் சரிபார்க்க வேண்டும்.
+    // 5. மற்ற முயற்சிக்கைகளுக்கு
     // ===================================================================================================
 
-    // 5. 支付宝回调处理
+    // 5. அலிபேயின் மீள்செயலி செயல்படுத்தல்
     return new Response(200, [], 'success');
 }
 ```
-> 注意：不能使用插件本身 `return Pay::alipay()->success();`响应支付宝回调，如果你用到中间件会出现中间件问题。所以响应支付宝需要使用webman的响应类 `support\Response;`
+> குறிக்கவும்: திறப்பு தொகை Pay::alipay()->success() பின்வருமானப் புள்ளியைப் பயன்படுத்தமுடியாது, நீங்கள் நடுநிலைய முகவரில் பின்புகளையும் பயன்படுத்துவதும் செயல்படுத்த வேண்டும் `support\Response;`.
 
-#### 同步回调
+## ஒதுக்கீட்டு பின்பு
 
 ```php
 use support\Request;
 use Yansongda\Pay\Pay;
 
 /**
- * @desc: 『支付宝』同步通知
- * @param Request $request
- * @author Tinywan(ShaoBo Wan)
- */
+* @desc: 『அலிபேய்』 ஒதுக்கீட்டு அறிவிப்பு
+* @param Request $request
+* @author Tinywan(ShaoBo Wan)
+*/
 public function alipayReturn(Request $request)
 {
-    Log::info('『支付宝』同步通知'.json_encode($request->get()));
+    Log::info('『அலிபேய்』 ஒதுக்கீட்டு அறிவிப்பு'.json_encode($request->get()));
     return 'success';
 }
 ```
-## 案例完整代码
+## முழுமையான முக்கியப் பாடக்கான குறியீட்டை
 
 https://github.com/Tinywan/webman-admin/blob/main/app/controller/Test.php
 
-## 更多内容
- 
-访问官方文档 https://pay.yansongda.cn/docs/v3/
+## மேலும் உள்ளடக்கம்
+
+அதிக தகவல்களுக்கு அனுப்பு அல்லதுப் படியுங்கள் அதிக வழிமுறைக்கு நாணயங்கள் வடிவில் அணுகவும் https://pay.yansongda.cn/docs/v3/

@@ -1,26 +1,26 @@
 # MongoDB
 
-webman預設使用 [jenssegers/mongodb](https://github.com/jenssegers/laravel-mongodb) 作為mongodb元件，它是從laravel專案中抽離出來的，用法與laravel相同。
+webman預設使用 [jenssegers/mongodb](https://github.com/jenssegers/laravel-mongodb) 作為MongoDB組件，它是從laravel項目中抽離出來的，用法與laravel相同。
 
-在使用 `jenssegers/mongodb` 之前，必須先為 `php-cli` 安裝mongodb擴展。
+在使用`jenssegers/mongodb`之前，必須先給`php-cli`安裝MongoDB擴展。
 
-> 使用指令 `php -m | grep mongodb` 查看 `php-cli` 是否已安裝了mongodb擴展。請注意：即使你在 `php-fpm` 安裝了mongodb擴展，並不代表你可以在 `php-cli` 中使用它，因為 `php-cli` 與 `php-fpm` 是不同的應用程式，可能使用不同的 `php.ini` 設定。請使用指令 `php --ini` 來查看你的 `php-cli` 使用的是哪個 `php.ini` 設定檔。
+> 使用命令`php -m | grep mongodb`檢查`php-cli`是否安裝了MongoDB擴展。注意：即使你在`php-fpm`安裝了MongoDB擴展，不代表你在`php-cli`可以使用它，因為`php-cli`和`php-fpm`是不同的應用程式，可能使用的是不同的`php.ini`配置。使用命令`php --ini`來查看你的`php-cli`使用的是哪個`php.ini`配置文件。
 
 ## 安裝
 
-當 PHP >7.2 時
+PHP>7.2時
 ```php
 composer require -W illuminate/database jenssegers/mongodb ^3.8.0
 ```
-當 PHP=7.2 時
+PHP=7.2時
 ```php
 composer require -W illuminate/database jenssegers/mongodb ^3.7.0
 ```
 
-安裝後需要restart重啟（reload無效）
+安裝後需要restart重啟(reload無效)
 
 ## 配置
-在 `config/database.php` 裡增加 `mongodb` 連線，類似如下：
+在 `config/database.php` 裡增加 `mongodb` connection， 類似如下：
 ```php
 return [
 
@@ -48,7 +48,7 @@ return [
 ];
 ```
 
-## 範例
+## 示例
 ```php
 <?php
 namespace app\controller;
@@ -66,6 +66,6 @@ class UserController
 }
 ```
 
-## 更多內容請參考
+## 更多內容請訪問
 
 https://github.com/jenssegers/laravel-mongodb

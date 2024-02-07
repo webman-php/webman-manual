@@ -1,20 +1,20 @@
-# คอมโพเนนต์ประมวลผลรูปภาพ
+# คอมโพเนนต์การประมวลภาพ
 
 ## intervention/image
 
-### ที่อยู่โครงการ
+### ที่อยู่โปรเจค
 
 https://github.com/Intervention/image
-  
+
 ### การติดตั้ง
- 
+
 ```php
 composer require intervention/image
 ```
-  
+
 ### การใช้งาน
 
-**ส่วนตัวอัปโหลด**
+**โค้ดส่วนหน้า**
 
 ```html
   <form method="post" action="/user/img" enctype="multipart/form-data">
@@ -45,8 +45,7 @@ class UserController
     
 }
 ```
-  
-  
+
 ### เนื้อหาเพิ่มเติม
 
-เยี่ยมชม http://image.intervention.io/getting_started/introduction
+เข้าชม http://image.intervention.io/getting_started/introduction

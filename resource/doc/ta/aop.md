@@ -1,18 +1,18 @@
 # AOP
 
-> Hyperf ஆசிரியரை நன்றி
+> Hyperf ஆசிரியருக்கு நன்றி சொல்லுகிறேன்
 
-### நிறுவுக
+### நிறுவுதல்
 
-- aop-integration ஐ நிறுவுக
+- aop-integration நிறுவது
 
 ```shell
 composer require "hyperf/aop-integration: ^1.1"
 ```
 
-### AOP குழு மேலும் அமைப்புகளைச் சேர்க்கவும்
+### AOP சர்வதேச கட்டுப்படுத்தல்
 
-நாங்கள் `config` கோப்புறையில் `config.php` அமைப்பை சேர்க்க வேண்டும்
+நாம் `config` கோப்பின் கீழ் `config.php` கட்டமைப்போட வேண்டும்
 
 ```php
 <?php
@@ -36,31 +36,31 @@ return [
         ],
     ],
     'aspects' => [
-        // இங்கே பொருநர் அமைப்பை உள்ளிடவும்
+        // இங்கு பொருநர் Aspect ஐ உள்ளிடவும்
         app\aspect\DebugAspect::class,
     ]
 ];
 
 ```
 
-### துணைக்கோப்பு start.php ஐ அமைப்படுத்துக
+### எண்.பிக்குப் கோப்பு start.php
 
-> ஒரு ஸ்டார்ட் இனிஷலைஸேஷனை, மாநிலம் அடிக்கும் மாதிரி நாம் சேர்த்துக்கொண்டேவோம், அனுப்பித்து முடிவுச் செய்ப்பதை மீண்டும் உருவாக்கவும்
+> நாம்ககாக பொருத்தல் மெதாடுகளை, timezone கீழ் வைத்துக்கொண்டு, பிற குறியீடு செய்யும்
 
-```
+```php
 use Hyperf\AopIntegration\ClassLoader;
 
 if ($timezone = config('app.default_timezone')) {
     date_default_timezone_set($timezone);
 }
 
-// ப்ராரம்பிக்கவும்
+// துவக்கம்
 ClassLoader::init();
 ```
 
-### சோதனை
+### சோதனை
 
-முதலில் நாங்கள் வெளிக்காட்டாக்க பொருள் எழுதுவதை எழுதுவோம்
+முதலில் நாம் விரும்பும் குளைகளை எழுத வேண்டும்
 
 ```php
 <?php
@@ -75,7 +75,7 @@ class UserService
 }
 ```
 
-பிறகு அதிகபட்சமாக "DebugAspect" ஐ சேர்த்துவைக்கின்றோம்
+அடுத்து அதிகார DebugAspect ஐ சேர்க்க
 
 ```php
 <?php
@@ -99,7 +99,7 @@ class DebugAspect extends AbstractAspect
 }
 ```
 
-அடுத்து, கட்டுப்படுத்துள்ளபடி "app/controller/IndexController.php" ஐ திருத்தவோம
+பின்னர் கட்டுப்படுத்தாளர் app/controller/IndexController.php ஐ தெரிவுசெய்க
 
 ```php
 <?php
@@ -117,7 +117,7 @@ class IndexController
 }
 ```
 
-அப்பால் வழிச்சாரவரிசையை அமைக்கவும்
+அப்பால் வழிகளை கட்ட்டுப் பதிவைசெய்யவும்
 
 ```php
 <?php
@@ -126,7 +126,7 @@ use Webman\Route;
 Route::any('/json', [app\controller\IndexController::class, 'json']);
 ```
 
-கடைசி அலுவலகத்தை துவக்கி, சோதனை செய்கின்றேன் மற்றும் சோதனை செய்கின்றது.
+கடைசியாக சேவையை இயக்கவும், மற்றும் சோதனை செய்யவும்.
 
 ```shell
 php start.php start

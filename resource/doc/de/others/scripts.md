@@ -1,8 +1,8 @@
 # Benutzerdefinierte Skripte
 
-Manchmal müssen wir temporäre Skripte schreiben, mit denen wir wie bei webman beliebige Klassen oder Schnittstellen aufrufen können, um Aufgaben wie Datenimporte, Datenaktualisierungen und Statistiken durchzuführen. Dies ist in webman bereits sehr einfach möglich, zum Beispiel:
+Manchmal müssen wir temporäre Skripte schreiben, die wie webman beliebige Klassen oder Schnittstellen aufrufen können, um Aufgaben wie Datenimport, Datenaktualisierung und -statistiken durchzuführen. In webman ist dies bereits sehr einfach, zum Beispiel:
 
-**Erstellen Sie `scripts/update.php`** (Erstellen Sie das Verzeichnis, falls es nicht vorhanden ist)
+**Neue `scripts/update.php` erstellen** (Erstellen Sie das Verzeichnis, wenn es nicht vorhanden ist)
 ```php
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -15,4 +15,4 @@ $user = Db::table('user')->find(1);
 var_dump($user);
 ```
 
-Natürlich können wir auch benutzerdefinierte Befehle mit `webman/console` verwenden, um solche Vorgänge auszuführen. Siehe [Befehlszeile](../plugin/console.md)
+Natürlich können wir auch benutzerdefinierte Befehle mit `webman/console` verwenden, um solche Operationen zu erledigen, siehe [Befehlszeile](../plugin/console.md)

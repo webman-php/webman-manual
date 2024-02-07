@@ -1,6 +1,6 @@
-# 上下文(Context)
+# 上下文context
 
-`support\Context`類別用於存儲請求的上下文數據，當請求完成時，相應的上下文數據會自動刪除。換句話說，上下文數據的生命周期跟隨著請求的生命周期。`support\Context`支援Fiber、Swoole、Swow協程環境。
+`support\Context`類別用於存儲請求上下文數據，當請求完成時，相應的context數據會自動刪除。也就是說context數據生命週期是跟隨請求生命週期的。`support\Context`支持Fiber、Swoole、Swow協程環境。
 
 更多參考[webman協程](./fiber.md)
 
@@ -9,7 +9,7 @@
 
 ## 設置上下文數據
 ```php
-Context::set(string $name, mixed $value);
+Context::set(string $name, $mixed $value);
 ```
 
 ## 獲取上下文數據

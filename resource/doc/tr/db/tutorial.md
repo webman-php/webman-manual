@@ -1,6 +1,6 @@
 # Hızlı Başlangıç
 
-webman veritabanı varsayılan olarak [illuminate/database](https://github.com/illuminate/database) kütüphanesini kullanır, yani [laravel veritabanı](https://learnku.com/docs/laravel/8.x/database/9400) ile aynı kullanımı sağlar.
+webman veritabanı varsayılan olarak [illuminate/database](https://github.com/illuminate/database) kullanmaktadır, yani [laravel veritabanı](https://learnku.com/docs/laravel/8.x/database/9400) ile aynı şekilde kullanılır.
 
 Tabii ki, ThinkPHP veya diğer veritabanlarını kullanmak için [Diğer Veritabanı Bileşenlerini Kullanma](others.md) bölümüne bakabilirsiniz.
 
@@ -8,21 +8,20 @@ Tabii ki, ThinkPHP veya diğer veritabanlarını kullanmak için [Diğer Veritab
 
 `composer require -W illuminate/database illuminate/pagination illuminate/events symfony/var-dumper`
 
-Kurulumdan sonra restart (reload geçersiz) yapılması gereklidir.
+Kurulumdan sonra, yeniden başlatma gereklidir (yeniden yükleme geçersizdir)
 
-> **Not**
-> Sayfa numaralandırma, veritabanı etkinlikleri, SQL yazdırma gibi özelliklere ihtiyacınız yoksa sadece şunu çalıştırmanız yeterlidir:
+> **İpucu**
+> Eğer sayfalama, veritabanı etkinliği, SQL yazdırma gibi şeylere ihtiyacınız yoksa, sadece şunu çalıştırmanız yeterlidir
 > `composer require -W illuminate/database`
 
 ## Veritabanı Yapılandırması
 `config/database.php`
 ```php
-
 return [
     // Varsayılan veritabanı
     'default' => 'mysql',
 
-    // Farklı veritabanı yapılandırmaları
+    // Çeşitli veritabanı yapılandırmaları
     'connections' => [
         'mysql' => [
             'driver'      => 'mysql',
@@ -46,7 +45,7 @@ return [
 ```
 
 
-## Kullanım
+## Kullanma
 ```php
 <?php
 namespace app\controller;
@@ -61,7 +60,7 @@ class UserController
         $default_uid = 29;
         $uid = $request->get('uid', $default_uid);
         $name = Db::table('users')->where('uid', $uid)->value('username');
-        return response("hello $name");
+        return response("merhaba $name");
     }
 }
 ```

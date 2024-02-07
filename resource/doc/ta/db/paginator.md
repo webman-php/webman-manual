@@ -1,12 +1,12 @@
-# பக்கம்
+# பக்கங்கள் பிரித்தல்
 
-# 1. லைரவல் சாரிமையாகும் ORM-ஐக் காரணிக்கொள்ளும் ஒருசம்
-லைரவல் இருமன்ற 'illuminate/database' அம்சங்கள் வழங்குகின்றன.
+# 1. Laravel ORM ஆதாரம் எடுத்துக்காட்டப்பட்ட பகிர்வு முறைகள்
+Laravel இன் `illuminate/database` சுவாரஸ்யமான பகிர்வு அமைப்பை வழங்குகின்றது.
 
-## நிறுவம்
+## நிறுவும்
 `composer require illuminate/pagination`
 
-## பயன்படுத்தும்
+## பயன்படுத்துகின்றது
 ```php
 public function index(Request $request)
 {
@@ -16,47 +16,45 @@ public function index(Request $request)
 }
 ```
 
-## பக்கக்குறிப்பி நிபுணம்
+## பக்கப் பட்டியல் நிரல் முறைகள்
 |  முறை   | விளக்கம்  |
 |  ----  |-----|
-|$paginator->count()|தற்போதைய பக்க மொத்த தரவுகளைப் பெற்றுகொள்ளுங்கள்|
-|$paginator->currentPage()|தற்போதைய பக்கப் பக்கங்கள் எண்ணைப் பெறுங்கள்|
-|$paginator->firstItem()|முதலாவது மேம்படுத்தல் கிழவி முனையப்படும் பொருட்களைப் பெறுங்கள்|
-|$paginator->getOptions()|பக்கக்குறிப்பி விருப்பங்களைக் காண்பி|
-|$paginator->getUrlRange($start, $end)|குறிப்பிடப்பட்ட பக்கக் குறிப்புகளின் URL கட்டமைப்பைக் கட்டுவினர்|
-|$paginator->hasPages()|பல பக்கங்களைக் கட்டிய பொருட்கள் உள்ளனவா?|
-|$paginator->hasMorePages()|கூடுதல் பக்கங்களுக்கு விடை உள்ளதா?|
-|$paginator->items()|தற்போதைய பக்க உருக்கங்களைப் பெறுங்கள்|
-|$paginator->lastItem()|கடைசி முனையப்பட்ட பொருட்களைப் பெறுங்கள்|
-|$paginator->lastPage()|கடைசி பக்கம் ஓசைவைப் பெறுங்கள்(simplePaginate வகையில் அனைத்திலும் கிடைக்கவில்லை)|
-|$paginator->nextPageUrl()|அடுத்த பக்கப் URL-ஐப் பெறுங்கள்|
-|$paginator->onFirstPage()|தற்போதைய பக்க முன்னர் அவன் இருந்து அது 1 என்பதைப் பார்|
-|$paginator->perPage()|ஒவ்வொரு ஒரு ஒவ்வொரு பக்கங்களில் காண்பி வேலைசெய்யும் மொத்த எண்ணை பெறுங்கள்|
-|$paginator->previousPageUrl()|முன்னேற்ற பக்கப் URL-ஐப் பெறுங்கள்|
-|$paginator->total()|மொத்த தரவு செய்திகளைப் பெறுங்கள்(simplePaginate வகையில் அனைத்திலும் கிடைக்கவில்லை)|
-|$paginator->url($page)|குறிப்பிடப்பட்ட பக்கக் URL-ஐப் பெறுங்கள்|
-|$paginator->getPageName()|பக்க எண்வைக்கான விண்ணப்ப பெயரைப் பெறுங்கள்|
-|$paginator->setPageName($name)|பக்க எண்வைக்கான விண்ணப்ப பெயரைப் பொருத்துகின்றன|
+|$paginator->count()|தற்போதைய பக்கத்தின் மொத்த மதிப்பைப் பெறுங்கள்|
+|$paginator->currentPage()|தற்போதைய பக்கப் பட்டியின் பக்கக் கோப்புக்கினைப் பெறுங்கள்|
+|$paginator->firstItem()|முதல் விளக்கங்களில் முதன்வரிசையின் மதிப்பைப் பெறுங்கள்|
+|$paginator->getOptions()|பக்கப்பட்டி விருப்பங்களைப் பெறுங்கள்|
+|$paginator->getUrlRange($start, $end)|குறுகிய பக்க எண் வரம்பைக் கொண்ட URL படிப்பை உருவாக்குங்கள்|
+|$paginator->hasPages()|பல பக்கங்களைத் தயாரிப்பதற்கு போது போதுமான பதிவுகள் உள்ளனவா?|
+|$paginator->hasMorePages()|மேலும் பக்கங்கள் காட்ட முடியுமா?|
+|$paginator->items()|தற்போதைய பக்கத்தின் தரவு பொருட்களைப் பெறுங்கள்|
+|$paginator->lastItem()|கொடுக்கப்படும் முடிவுப் படிவத்தின் இறுதி பொருளின் மதிப்பைப் பெறுங்கள்|
+|$paginator->lastPage()|இறுதி பக்கத்தின் பக்கம் எண் பெறுங்கள் (simplePaginate இல் கிடைக்கவில்லை)|
+|$paginator->nextPageUrl()|அடுத்த பக்கத்தின் URL ஐப் பெறுங்கள்|
+|$paginator->onFirstPage()|தற்போதைய பக்கம் முதல் பக்கமானதா?|
+|$paginator->perPage()|ஒவ்வொன்றுக்கு காட்டப்படும் எண்ணிக்கையைப் பெறுங்கள்|
+|$paginator->previousPageUrl()|முந்தைய பக்கத்தின் URL ஐப் பெறுங்கள்|
+|$paginator->total()|முடிவுப் பட்டியலில் உள்ள மொத்த தரவுகளைப் பெறுங்கள் (simplePaginate இல் கிடைக்கவில்லை)|
+|$paginator->url($page)|குறிப்பிட்ட பக்கத்தின் URL ஐப் பெறுங்கள்|
+|$paginator->getPageName()|பக்க எண்களை சேமிக்கும் வினாக்கள் பெயரைப் பெறுங்கள்|
+|$paginator->setPageName($name)|பக்க எண்களை சேமிக்கும் வினாக்கள் பெயரை அமைக்குங்கள்|
 
 > **குறிப்பு**
-> `$paginator->links()` முறை ஆதரிக்கப்படாது
+> `$paginator->links()` முறையை ஆதரிக்காது
+## பக்கம் ஐகட்டும் பொருட்கள்
+போன்றவை கருவிகளை பயன்படுத்தி பக்கம் ஐகட்டுவதற்கு webman இல் `$paginator->links()` முறையை பயன்படுத்த முடியவில்லை, ஆனால் மற்ற பொருட்களை பயன்படுத்தி செதுக்கப்படுவது முடியும், உதாரணம் `jasongrimes/php-paginator`
 
-## பக்கக்குறிப்பி
-webman-ல் `$paginator->links()` முறையைப் பயன்படுத்தி பக்க பொதிக்கொளிகள் அமையதல் அல்ல, அதுவெல்லாம் மற்ற பொதிக்கொளிகளைப் பயன்படுத்தி அமையலாம், உதாரணத்தான் `jasongrimes/php-paginator` .
-
-
-**நிறுவம்**
+**நிறுவு**
 `composer require "jasongrimes/paginator:~1.0"`
 
 
-**பின்னால்**
+**விருப்பங்கள்**
 ```php
 <?php
-namespace app\controller;
+பிரிவு app\controller;
 
-use JasonGrimes\Paginator;
-use support\Request;
-use support\Db;
+பயன்பாட்டை JasonGrimes\Paginator க்கு பயன்படுத்துகின்றேன்;
+பயன்பாட்டை Request எனும் use செய்தல்;
+பயன்பாட்டை Db எனும் use செய்தல்;
 
 class UserController
 {
@@ -71,12 +69,12 @@ class UserController
 }
 ```
 
-**வார்ப்புரு(php அசைவமுறு)**
-புதிய வார்ப்புரு app/view/user/get.html உருவாக்கு
+**வடிவமைப்பு(php மூல)**
+புதிய வார்த்தைடம் app/view/user/get.html எனும் வடிவமைப்பை உருவாக்கவும்
 ```html
 <html>
 <head>
-  <!-- உள்ளேயே உள்ள Bootstrap பக்க வண்ணம் ஆதரித்தல் -->
+  <!-- உள்ளமைவிடப்பில் உள்ளது Bootstrap பக்க மடவை -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -87,12 +85,12 @@ class UserController
 </html>
 ```
 
-**வார்ப்புரு(twig)** 
-புதிய வார்ப்புரு app/view/user/get.html உருவாக்கு
+**வடிவமைப்பு(ட்விக்)** 
+புதிய வார்த்தைடம் app/view/user/get.html எனும் வடிவமைப்பை உருவாக்கவும்
 ```html
 <html>
 <head>
-  <!-- உள்ளேயே உள்ள Bootstrap பக்க வண்ணம் ஆதரித்தல் -->
+  <!-- உள்ளமைவிடப்பில் உள்ளது Bootstrap பக்க மடவை -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -105,12 +103,12 @@ class UserController
 </html>
 ```
 
-**வார்ப்புரு(blade)** 
-புதிய வார்ப்புரு app/view/user/get.blade.php உருவாக்கு
+**வடிவமைப்பு(பிளேட்)** 
+புதிய வார்த்தைடம் app/view/user/get.blade.php எனும் வடிவமைப்பை உருவாக்கவும்
 ```html
 <html>
 <head>
-  <!-- உள்ளேயே உள்ள Bootstrap பக்க வண்ணம் ஆதரித்தல் -->
+  <!-- உள்ளமைவிடப்பில் உள்ளது Bootstrap பக்க மடவை -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -121,12 +119,12 @@ class UserController
 </html>
 ```
 
-**வார்ப்புரு(thinkphp)**
-புதிய வார்ப்புரு app/view/user/get.html உருவாக்கு
+**வடிவமைப்பு(thinkphp)**
+புதிய வார்த்தைடம் app/view/user/get.html எனும் வடிவமைப்பை உருவாக்கவும்
 ```html
 <html>
 <head>
-    <!-- உள்ளேயே உள்ள Bootstrap பக்க வண்ணம் ஆதரித்தல் -->
+    <!-- உள்ளமைவிடப்பில் உள்ளது Bootstrap பக்க மடவை -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -137,12 +135,12 @@ class UserController
 </html>
 ```
 
-பார்வைகள்:
+வேலைசெய்தது:
 ![](../../assets/img/paginator.png)
 
-# 2. திங்க்ப்ஹ்பலவின் ORM-ஐக் காரணிக்கொள்ளும் ஒருசம்
-பெரியப் படிகள் அந்திபு தயாரில் உள்ள ஏதாவது ஒன்றை நிறுவிக்கொள்ள்றதினால் அடங்காவியிருப்பதாகும்
-## பயன்படுத்தும்
+# 2. Thinkphp அடிப்படையான OR மூலத்தின் பக்கம் வழங்குதல்
+வேறு தொகுப்பி பார்வைச் செய்ய தேவையானவரை நிறுவுகின்றது, ஒரு பொருத்தமான வார்த்தைடத்தை நிறுவிய பின்பு think-orm நிறுவாக போதனையிலிருந்து எந்தவொரு வேலையையும் செய்யத் தேவை இல்லை
+## பயன்படுத்தல்
 ```php
 public function index(Request $request)
 {
@@ -152,11 +150,11 @@ public function index(Request $request)
 }
 ```
 
-**வார்ப்புரு(thinkphp)**
+**template (thinkphp)**
 ```html
 <html>
 <head>
-    <!-- உள்ளேயே உள்ள Bootstrap பக்க வண்ணம் ஆதரித்தல் -->
+    <!-- உள்ளே பூட்டப்பட்டுள்ள Bootstrap பக்க அமைப்புகள் -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>

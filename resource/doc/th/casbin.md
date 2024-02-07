@@ -1,10 +1,10 @@
-# ไลบรารีควบคุมการเข้าถึง Casbin ของ webman-permission
+# ไลบรารีการควบคุมการเข้าถึง Casbin สำหรับ webman-permission
 
 ## คำอธิบาย
 
-มันขึ้นอยู่กับ [PHP-Casbin](https://github.com/php-casbin/php-casbin),  framework การควบคุมการเข้าถึงโอเพ่นซอร์แบบแข็งแรงและมีประสิทธิภาพที่รองรับ `ACL`, `RBAC`, `ABAC` และโมเดลการควบคุมการเข้าถึงอื่น ๆ
+มันขึ้นอยู่กับ [PHP-Casbin](https://github.com/php-casbin/php-casbin), กรอบการควบคุมการเข้าถึงโอเพ่นซอร์ซ์ที่มีประสิทธิภาพและมีประสิทธิภาพที่รองรับโดย `ACL`, `RBAC`, `ABAC` และอื่น ๆ รูปแบบการควบคุมการเข้าถึง
 
-## ที่อยู่โปรเจ็กต์
+## ที่อยู่โครงการ
 
 https://github.com/Tinywan/webman-permission
 
@@ -13,20 +13,20 @@ https://github.com/Tinywan/webman-permission
 ```php
 composer require tinywan/webman-permission
 ```
-> ส่วนขยายนี้สามารถทำงานได้บน PHP 7.1+ และ [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998) ดูเพิ่มเติมที่: https://www.workerman.net/doc/webman#/db/others
+> ส่วนขยายนี้ต้องการ PHP 7.1+ และ [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998) คู่มือทางการ: https://www.workerman.net/doc/webman#/db/others
 
 ## การกำหนดค่า
 
 ### ลงทะเบียนเซอร์วิส
-สร้างไฟล์กำหนดค่า `config/bootstrap.php` โดยมีเนื้อหาเช่นต่อไปนี้:
+สร้างไฟล์กำหนดค่า `config/bootstrap.php` เนื้อหาคล้ายกับนี้:
 
 ```php
     // ...
     webman\permission\Permission::class,
 ```
-### การกำหนดค่าโมเดล
+### ไฟล์กำหนดค่า Model
 
-สร้างไฟล์กำหนดค่า `config/casbin-basic-model.conf` โดยมีเนื้อหาเช่นต่อไปนี้:
+สร้างไฟล์กำหนดค่า `config/casbin-basic-model.conf` เนื้อหาคล้ายกับนี้:
 
 ```conf
 [request_definition]
@@ -44,16 +44,16 @@ e = some(where (p.eft == allow))
 [matchers]
 m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
 ```
-### การกำหนดค่าโพลิซี
+### ไฟล์กำหนดค่านโยบาย
 
-สร้างไฟล์กำหนดค่า `config/permission.php` โดยมีเนื้อหาเช่นต่อไปนี้:
+สร้างไฟล์กำหนดค่า `config/permission.php` เนื้อหาคล้ายกับนี้:
 
 ```php
 <?php
 
 return [
     /*
-     * การกำหนดค่าสิทธิ์เริ่มต้น
+     * การอนุญาตริมเริ่มต้น
      */
     'default' => 'basic',
 
@@ -65,7 +65,7 @@ return [
     'enforcers' => [
         'basic' => [
             /*
-            * การตั้งค่าโมเดล
+            * การกำหนดแบบจำลอง
             */
             'model' => [
                 'config_type' => 'file',
@@ -73,18 +73,18 @@ return [
                 'config_text' => '',
             ],
 
-            // ตัวปรับเปลี่ยน .
+            // อะแดปเตอร์ .
             'adapter' => webman\permission\adapter\DatabaseAdapter::class,
 
             /*
-            * การตั้งค่าฐานข้อมูล
+            * การกำหนดฐานข้อมูล
             */
             'database' => [
-                // ชื่อการเชื่อมต่อฐานข้อมูล หากไม่ได้ใส่จะใช้ค่าเริ่มต้น
+                // ชื่อการเชื่อมต่อฐานข้อมูล, หากไม่มีให้เป็นค่าเริ่มต้น
                 'connection' => '',
-                // ชื่อตารางนําหนาย (ไม่รวมคำนําหน้าตาราง)
+                // ชื่อตารางนโยบาย (ไม่รวมคำนำหน้าตาราง)
                 'rules_name' => 'rule',
-                // ชื่อตารางนําหนายที่สมบูรณ์
+                // ชื่อตารางนโยบายทั้งหมด
                 'rules_table' => 'train_rule',
             ],
         ],
@@ -104,27 +104,27 @@ Permission::addRoleForUser('eve', 'writer');
 Permission::addPolicy('writer', 'articles','edit');
 ```
 
-คุณสามารถตรวจสอบว่าผู้ใช้มีสิทธิ์ดังกล่าวหรือไม่
+คุณสามารถตรวจสอบว่าผู้ใช้อนุญาตให้มีสิทธิ์แบบนี้
 
 ```php
 if (Permission::enforce("eve", "articles", "edit")) {
     // อนุญาตให้ eve แก้ไขบทความ
 } else {
-    // ปฏิเสธคำขอ แสดงข้อผิดพลาด
+    // ปฎิเสธคำขอและแสดงข้อผิดพลาด
 }
 ````
 
-## Middleware การอนุญาต
+## มัลแวร์การอนุญาต
 
-สร้างไฟล์ `app/middleware/AuthorizationMiddleware.php` (ถ้าโฟลเดอร์ไม่มีให้สร้างเอง) ตามดังต่อไปนี้:
+สร้างไฟล์ `app/middleware/AuthorizationMiddleware.php` (หากไม่มีโฟลเดอร์โปรดสร้างขึ้นเอง) แบบนี้:
 
 ```php
 <?php
 
 /**
- * Middleware การอนุญาต
- * โดย ShaoBo Wan (Tinywan)
- * วันที่เวลา 2021/09/07 14:15
+ * มัลแวร์การอนุญาต
+ * โดย ชาโอโบ วัน (ไทนีวัน)
+ * เวลา 2021/09/07 14:15
  */
 
 declare(strict_types=1);
@@ -146,23 +146,23 @@ class AuthorizationMiddleware implements MiddlewareInterface
 			$userId = 10086;
 			$action = $request->method();
 			if (!Permission::enforce((string) $userId, $uri, strtoupper($action))) {
-				throw new \Exception('ขอโทษ คุณไม่มีสิทธิ์ในการเข้าถึงอินเทอร์เฟซนี้');
+				throw new \Exception('ขออภัย คุณไม่มีสิทธิ์ในการเข้าถึงอินเตอร์เฟซนี้');
 			}
 		} catch (CasbinException $exception) {
-			throw new \Exception('การอนุญาตผิดพลาด' . $exception->getMessage());
+			throw new \Exception('ข้อยกเว้นการอนุญาต' . $exception->getMessage());
 		}
 		return $next($request);
 	}
 }
 ```
 
-เพิ่ม Middleware ด้านบนในไฟล์ `config/middleware.php` ตามดังนี้:
+เพิ่มมัลแวร์แบบทั่วไปใน `config/middleware.php` ดังนี้:
 
 ```php
 return [
-    // Middleware ทั่วไป
+    // มัลแวร์ทั่วไป
     '' => [
-        // ... ส่วนนี้ข้าม Middleware อื่น ๆ
+        // ... ขาดการใช้มัลแวร์อื่น ๆ ที่นี่
         app\middleware\AuthorizationMiddleware::class,
     ]
 ];
@@ -170,8 +170,8 @@ return [
 
 ## ขอบคุณ
 
-[Casbin](https://github.com/php-casbin/php-casbin) คุณสามารถดูเอกสารทั้งหมดบน [เว็บไซต์ทางการ](https://casbin.org/) ของมันได้.
+[Casbin](https://github.com/php-casbin/php-casbin) คุณสามารถดูเอกสารทั้งหมดใน [เว็บไซต์ทางการ](https://casbin.org/) ของตน
 
 ## ใบอนุญาต
 
-โครงการนี้เป็นลิขสิทธิ์ภายใต้ [ใบอนุญาต Apache 2.0](LICENSE).
+โปรเจคนี้มีใบอนุญาระดับ [Apache 2.0 license](LICENSE)

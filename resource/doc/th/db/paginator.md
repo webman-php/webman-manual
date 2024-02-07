@@ -1,4 +1,4 @@
-# การแบ่งหน้า
+# หน้า
 
 # 1. การแบ่งหน้าโดยใช้ ORM ของ Laravel
 illuminate/database ของ Laravel มีฟังก์ชั่นการแบ่งหน้าที่สะดวก
@@ -16,39 +16,38 @@ public function index(Request $request)
 }
 ```
 
-## วิธีใช้งานของตัวคัดกรอง
-|  วิธี  | คำอธิบาย  |
+## วิธีการใช้งานของตัวกำหนดหน้า
+|  วิธีการ   |  คำอธิบาย  |
 |  ----  |-----|
 |$paginator->count()|รับจำนวนข้อมูลในหน้าปัจจุบัน|
 |$paginator->currentPage()|รับหมายเลขหน้าปัจจุบัน|
-|$paginator->firstItem()|รับหมายเลขของข้อมูลแรกในชุดข้อมูล|
-|$paginator->getOptions()|รับตัวเลือกของตัวคัดกรอง|
-|$paginator->getUrlRange($start, $end)|สร้าง URL ของหน้าที่ระบุ|
+|$paginator->firstItem()|รับหมายเลขของข้อมูลตัวแรกในชุดข้อมูล|
+|$paginator->getOptions()|รับตัวเลือกของตัวกำหนดหน้า|
+|$paginator->getUrlRange($start, $end)|สร้าง URL ของระยะหน้าที่กำหนด|
 |$paginator->hasPages()|มีข้อมูลเพียงพอที่จะสร้างหลายหน้าหรือไม่|
-|$paginator->hasMorePages()|มีหน้าเพิ่มเติมหรือไม่|
+|$paginator->hasMorePages()|มีหน้าเพิ่มเติมที่สามารถแสดงได้หรือไม่|
 |$paginator->items()|รับรายการข้อมูลในหน้าปัจจุบัน|
 |$paginator->lastItem()|รับหมายเลขของข้อมูลสุดท้ายในชุดข้อมูล|
-|$paginator->lastPage()|รับหมายเลขหน้าสุดท้าย (ไม่สามารถใช้ได้ใน simplePaginate)|
+|$paginator->lastPage()|รับหมายเลขหน้าสุดท้าย (ไม่สามารถใช้ใน simplePaginate)|
 |$paginator->nextPageUrl()|รับ URL ของหน้าถัดไป|
 |$paginator->onFirstPage()|หน้าปัจจุบันเป็นหน้าแรกหรือไม่|
-|$paginator->perPage()|รับจำนวนรายการที่แสดงในหน้าละหน้า|
+|$paginator->perPage()|รับจำนวนทั้งหมดของรายการในแต่ละหน้า|
 |$paginator->previousPageUrl()|รับ URL ของหน้าก่อนหน้า|
-|$paginator->total()|รับจำนวนข้อมูลในชุดข้อมูล (ไม่สามารถใช้ได้ใน simplePaginate)|
-|$paginator->url($page)|รับ URL ของหน้าที่ระบุ|
-|$paginator->getPageName()|รับชื่อพารามิเตอร์ที่ใช้เก็บหมายเลขหน้า|
-|$paginator->setPageName($name)|ตั้งค่าชื่อพารามิเตอร์ที่ใช้เก็บหมายเลขหน้า|
+|$paginator->total()|รับจำนวนข้อมูลทั้งหมดในชุดข้อมูล (ไม่สามารถใช้ใน simplePaginate)|
+|$paginator->url($page)|รับ URL ของหน้าที่กำหนด|
+|$paginator->getPageName()|รับชื่อพารามิเตอร์คำขอหน้าที่ใช้เก็บข้อมูลหน้า|
+|$paginator->setPageName($name)|ตั้งค่าชื่อพารามิเตอร์คำขอหน้าที่ใช้เก็บข้อมูลหน้า|
 
 > **หมายเหตุ**
-> ไม่รองรับ `$paginator->links()` 方法
+> ไม่รองรับวิธีใช้ `$paginator->links()`
 
 ## คอมโพเนนต์การแบ่งหน้า
-ใน webman ไม่สามารถใช้ `$paginator->links()` เพื่อสร้างปุ่มแบ่งหน้า แต่เราสามารถใช้คอมโพเนนต์อื่นๆ เช่น `jasongrimes/php-paginator` เพื่อสร้าง
+ใน webman เราไม่สามารถใช้ `$paginator->links()` เพื่อเรียกใช้ปุ่มแบ่งหน้า แต่เราสามารถใช้คอมโพเนนต์อื่นเพื่อเรียกใช้ ตัวอย่างเช่น `jasongrimes/php-paginator` 
 
 **การติดตั้ง**
 `composer require "jasongrimes/paginator:~1.0"`
 
-
-**ทางด้านหลัง**
+**ฝั่งเซิร์ฟเวอร์**
 ```php
 <?php
 namespace app\controller;
@@ -70,12 +69,12 @@ class UserController
 }
 ```
 
-**เทมเพลท(ภาษา PHP)**
-สร้างเทมเพลทชื่อ app/view/user/get.html
+**เทมเพลต(php ธรรมดา)**
+สร้างเทมเพลตใหม่ app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- รองรับการทำงานกับสไตล์แบ่งหน้า Bootstrap แบบ Built-in -->
+  <!-- รองรับสไตล์แบ่งหน้า Bootstrap ที่ซ้อนอยู่ภายใน -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -86,12 +85,12 @@ class UserController
 </html>
 ```
 
-**เทมเพลท (twig)** 
-สร้างเทมเพลทชื่อ app/view/user/get.html
+**เทมเพลต(twig)** 
+สร้างเทมเพลตใหม่ app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- รองรับการทำงานกับสไตล์แบ่งหน้า Bootstrap แบบ Built-in -->
+  <!-- รองรับสไตล์แบ่งหน้า Bootstrap ที่ซ้อนอยู่ภายใน -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -104,12 +103,12 @@ class UserController
 </html>
 ```
 
-**เทมเพลท (blade)** 
-สร้างเทมเพลทชื่อ app/view/user/get.blade.php
+**เทมเพลต(blade)** 
+สร้างเทมเพลตใหม่ app/view/user/get.blade.php
 ```html
 <html>
 <head>
-  <!-- รองรับการทำงานกับสไตล์แบ่งหน้า Bootstrap แบบ Built-in -->
+  <!-- รองรับสไตล์แบ่งหน้า Bootstrap ที่ซ้อนอยู่ภายใน -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -120,12 +119,12 @@ class UserController
 </html>
 ```
 
-**เทมเพลท (thinkphp)**
-สร้างเทมเพลทชื่อ app/view/user/get.html
+**เทมเพลต(thinkphp)**
+สร้างเทมเพลตใหม่ app/view/user/get.html
 ```html
 <html>
 <head>
-    <!-- รองรับการทำงานกับสไตล์แบ่งหน้า Bootstrap แบบ Built-in -->
+    <!-- รองรับสไตล์แบ่งหน้า Bootstrap ที่ซ้อนอยู่ภายใน -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -136,11 +135,11 @@ class UserController
 </html>
 ```
 
-ผลลัพธ์:
+ผลลัพธ์ดังต่อไปนี้:
 ![](../../assets/img/paginator.png)
 
 # 2. การแบ่งหน้าโดยใช้ ORM ของ Thinkphp
-ไม่ต้องติดตั้งไลบรารีเพิ่มเติม หากได้ติดตั้ง think-orm ไว้แล้ว
+ไม่จำเป็นต้องติดตั้งไลบรารีเพิ่มเติม เพียงแค่ติดตั้ง think-orm เท่านั้น
 ## การใช้
 ```php
 public function index(Request $request)
@@ -151,11 +150,11 @@ public function index(Request $request)
 }
 ```
 
-**เทมเพลท(thinkphp)**
+**เทมเพลต(thinkphp)**
 ```html
 <html>
 <head>
-    <!-- รองรับการทำงานกับสไตล์แบ่งหน้า Bootstrap แบบ Built-in -->
+    <!-- รองรับสไตล์แบ่งหน้า Bootstrap ที่ซ้อนอยู่ภายใน -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>

@@ -1,21 +1,23 @@
 # vlucas/phpdotenv
 
 ## Description
-`vlucas/phpdotenv` is an environment variable loading component used to differentiate configurations for different environments (e.g., development environment, testing environment, etc.).
+`vlucas/phpdotenv` is an environment variable loading component used to differentiate configurations for different environments such as development, testing, etc.
 
 ## Project Repository
+
 https://github.com/vlucas/phpdotenv
-  
+
 ## Installation
+
 ```php
 composer require vlucas/phpdotenv
- ```
-  
+```
+
 ## Usage
 
-#### Create a `.env` file in the project root directory
+#### Create `.env` file in the project root directory
 **.env**
-```
+```ini
 DB_HOST = 127.0.0.1
 DB_PORT = 3306
 DB_NAME = test
@@ -23,7 +25,7 @@ DB_USER = foo
 DB_PASSWORD = 123456
 ```
 
-#### Modify the configuration file
+#### Update the configuration file
 **config/database.php**
 ```php
 return [
@@ -51,11 +53,11 @@ return [
 ```
 
 > **Note**
-> It is recommended to add the `.env` file to the `.gitignore` list to avoid committing it to the code repository. Add a `.env.example` configuration sample file to the code repository, and when deploying the project, copy `.env.example` to `.env` and modify the configurations in `.env` according to the current environment. This allows the project to load different configurations in different environments.
+> It's recommended to add the `.env` file to your `.gitignore` list to avoid committing it to your code repository. Instead, include a `.env.example` configuration sample file in your repository and when deploying the project, copy `.env.example` as `.env` and modify the configuration in `.env` based on the specific environment. This way, different configurations can be loaded for different environments.
 
-> **Caution**
-> `vlucas/phpdotenv` may have bugs in the PHP TS version (thread-safe version). Please use the NTS version (non-thread-safe version).
-> You can check the current PHP version by running `php -v`.
+> **Note**
+> `vlucas/phpdotenv` may have bugs in the PHP TS (Thread Safe) version. Please use the NTS (Non-Thread Safe) version. You can check the current PHP version by executing `php -v`.
 
 ## More Information
-Visit https://github.com/vlucas/phpdotenv  
+
+Visit https://github.com/vlucas/phpdotenv.

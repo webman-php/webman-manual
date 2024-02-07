@@ -6,9 +6,9 @@
 [![webman-event](https://img.shields.io/github/last-commit/tinywan/webman-event/main)]()
 [![webman-event](https://img.shields.io/github/v/tag/tinywan/webman-event?color=ff69b4)]()
 
-與中間件相比，事件的優勢在於更加精確定位（或者說粒度更細），並且更適合於某些業務場景的擴展。例如，我們通常會遇到用戶註冊或登錄後需要進行一系列操作，通過事件系統可以在不侵入原有代碼的情況下擴展登錄操作，降低系統的耦合性，同時也降低了錯誤的可能性。
+事件相較於中間件的優勢是事件比中間件更加精準定位（或者說粒度更細），並且更適合一些業務場景的擴展。例如，我們通常會遇到用戶註冊或者登錄後需要做一系列操作，通過事件系統可以做到不侵入原有代碼完成登錄的操作擴展，降低系統的耦合性的同時，也降低了BUG的可能性。
 
-## 專案地址
+## 項目地址
 
 [https://github.com/Tinywan/webman-permission](https://github.com/Tinywan/webman-permission)
 
@@ -48,7 +48,7 @@ return [
 
 ### 定義事件
 
-事件類別 `LogErrorWriteEvent.php`
+事件類 `LogErrorWriteEvent.php`
 
 ```php
 declare(strict_types=1);
@@ -88,7 +88,7 @@ return [
 
 ### 訂閱事件
 
-訂閱類別 `LoggerSubscriber.php`
+訂閱類 `LoggerSubscriber.php`
 
 ```php
 namespace extend\event\subscriber;
@@ -145,8 +145,8 @@ EventManager::trigger(new LogErrorWriteEvent($error),LogErrorWriteEvent::NAME);
 
 執行結果
 
-![打印结果](./trigger.png)
+![打印結果](./trigger.png)
 
-## 授權許可
+## License
 
-本專案使用 [Apache 2.0 授權許可](LICENSE)。
+This project is licensed under the [Apache 2.0 license](LICENSE).

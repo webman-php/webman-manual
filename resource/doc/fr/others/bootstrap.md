@@ -1,21 +1,22 @@
-# Initialisation des activités
+# Initialisation des affaires
 
-Parfois, nous avons besoin de faire certaines initialisations des activités après le démarrage du processus. Cette initialisation ne s'exécute qu'une fois pendant le cycle de vie du processus, par exemple, configurer une minuterie après le démarrage du processus ou initialiser la connexion à la base de données, etc. Nous allons expliquer cela ci-dessous.
+Parfois, nous avons besoin de faire une initialisation des affaires après le démarrage du processus, cette initialisation ne se fait qu'une seule fois pendant la durée de vie du processus, par exemple, après le démarrage du processus, nous pouvons définir une minuterie ou initialiser la connexion à la base de données, etc. Ci-dessous, nous expliquerons cela.
 
 ## Principe
-Selon les explications de **[flux d'exécution](process.md)**, après le démarrage du processus, webman chargera les classes définies dans `config/bootstrap.php` (y compris `config/plugin/*/*/bootstrap.php`) et exécutera la méthode start de ces classes. Nous pouvons ajouter du code d'activité dans la méthode start pour effectuer l'initialisation des activités après le démarrage du processus.
+Selon les explications dans **[process.md](./process.md)**, webman chargera les classes définies dans `config/bootstrap.php` (y compris `config/plugin/*/*/bootstrap.php`) après le démarrage du processus, puis exécutera la méthode `start` de ces classes. Nous pouvons ajouter du code métier dans la méthode `start` pour effectuer l'initialisation des affaires après le démarrage du processus.
 
 ## Processus
-Supposons que nous voulons créer une minuterie pour rapporter l'utilisation actuelle de la mémoire par le processus à intervalles réguliers, et nommons cette classe `MemReport`.
+Supposons que nous voulions créer une minuterie pour signaler régulièrement l'utilisation de la mémoire par le processus. Cette classe est nommée `MemReport`.
 
-#### Exécuter la commande
+#### Exécution de la commande
+
 Exécutez la commande `php webman make:bootstrap MemReport` pour générer le fichier d'initialisation `app/bootstrap/MemReport.php`.
 
-> **Remarque**
+> **Conseil**
 > Si votre webman n'a pas installé `webman/console`, exécutez la commande `composer require webman/console` pour l'installer.
 
-#### Éditer le fichier d'initialisation
-Modifiez `app/bootstrap/MemReport.php` avec un contenu similaire à ce qui suit :
+#### Édition du fichier d'initialisation
+Modifiez `app/bootstrap/MemReport.php`, le contenu ressemblera à ceci :
 ```php
 <?php
 
@@ -27,16 +28,16 @@ class MemReport implements Bootstrap
 {
     public static function start($worker)
     {
-        // Est-ce un environnement en ligne de commande ?
+        // Est-ce que c'est un environnement en ligne de commande ?
         $is_console = !$worker;
         if ($is_console) {
-            // Si vous ne souhaitez pas exécuter cette initialisation dans un environnement en ligne de commande, retournez directement ici.
+            // Si vous ne voulez pas exécuter cette initialisation dans l'environnement de ligne de commande, retournez simplement ici
             return;
         }
         
         // Exécute toutes les 10 secondes
         \Workerman\Timer::add(10, function () {
-            // Pour faciliter la démonstration, nous utilisons ici une sortie à la place du processus de rapport.
+            // Pour des raisons de démonstration, nous utilisons une sortie pour simuler le processus de signalisation
             echo memory_get_usage() . "\n";
         });
         
@@ -45,23 +46,23 @@ class MemReport implements Bootstrap
 }
 ```
 
-> **Remarque**
-> Lors de l'utilisation de la ligne de commande, le cadre exécute également la méthode start configurée dans `config/bootstrap.php`. Nous pouvons déterminer si l'environnement est en ligne de commande en vérifiant si `$worker` est null, afin de décider si le code d'initialisation des activités doit être exécuté.
+> **Conseil**
+> Lors de l'utilisation de la ligne de commande, le framework exécutera également la méthode `start` définie dans `config/bootstrap.php`. Nous pouvons déterminer si c'est un environnement de ligne de commande en vérifiant si `$worker` est null, puis décider d'exécuter ou non le code d'initialisation des affaires.
 
 #### Configuration au démarrage du processus
 Ouvrez `config/bootstrap.php` et ajoutez la classe `MemReport` aux éléments de démarrage.
 ```php
 return [
-    // ... les autres configurations sont omises ici ...
+    // ... d'autres configurations omises ici ...
     
     app\bootstrap\MemReport::class,
 ];
 ```
 
-Ainsi, nous avons achevé un processus d'initialisation des activités.
+De cette manière, nous avons terminé le processus d'initialisation des affaires.
 
-## Informations complémentaires
-Après le démarrage du processus [customisé](../process.md), la méthode start configurée dans `config/bootstrap.php` sera également exécutée. Nous pouvons utiliser `$worker->name` pour vérifier quel processus est en cours et décider si votre code d'initialisation des activités doit être exécuté dans ce processus. Par exemple, si nous n'avons pas besoin de surveiller le processus monitor, alors le contenu de `MemReport.php` ressemblera à ceci :
+## Remarques complémentaires
+Les [processus personnalisés](./process.md) exécutent également la méthode `start` définie dans `config/bootstrap.php`. Nous pouvons utiliser `$worker->name` pour déterminer le type de processus actuel, puis décider d'exécuter ou non votre code d'initialisation des affaires dans ce processus. Par exemple, si nous n'avons pas besoin de surveiller le processus "monitor", le contenu de `MemReport.php` serait similaire à ce qui suit :
 ```php
 <?php
 
@@ -73,21 +74,21 @@ class MemReport implements Bootstrap
 {
     public static function start($worker)
     {
-        // Est-ce un environnement en ligne de commande ?
+        // Est-ce que c'est un environnement en ligne de commande ?
         $is_console = !$worker;
         if ($is_console) {
-            // Si vous ne souhaitez pas exécuter cette initialisation dans un environnement en ligne de commande, retournez directement ici.
+            // Si vous ne voulez pas exécuter cette initialisation dans l'environnement de ligne de commande, retournez simplement ici
             return;
         }
         
-        // Le processus de surveillance ne déclenche pas la minuterie
+        // Le processus "monitor" n'exécute pas la minuterie
         if ($worker->name == 'monitor') {
             return;
         }
         
         // Exécute toutes les 10 secondes
         \Workerman\Timer::add(10, function () {
-            // Pour faciliter la démonstration, nous utilisons ici une sortie à la place du processus de rapport.
+            // Pour des raisons de démonstration, nous utilisons une sortie pour simuler le processus de signalisation
             echo memory_get_usage() . "\n";
         });
         

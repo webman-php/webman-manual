@@ -2,16 +2,16 @@
 
 ## jasongrimes/php-paginator
 
-### Adresse du projet
+### Lien du projet
 
 https://github.com/jasongrimes/php-paginator
-
+  
 ### Installation
 
 ```php
 composer require "jasongrimes/paginator:^1.0.3"
 ```
-
+  
 ### Utilisation
 
 Créer `app/controller/UserController.php`
@@ -36,11 +36,10 @@ class UserController
         $paginator = new Paginator($total_items, $items_perPage, $current_page, $url_pattern);
         return view('user/get', ['paginator' => $paginator]);
     }
-    
 }
 ```
 **Modèle (PHP natif)**
-Créer le modèle app/view/user/get.html
+Créer le modèle `app/view/user/get.html`
 ```html
 <html>
 <head>
@@ -56,7 +55,7 @@ Créer le modèle app/view/user/get.html
 ```
 
 **Modèle (twig)**
-Créer le modèle app/view/user/get.html
+Créer le modèle `app/view/user/get.html`
 ```html
 <html>
 <head>
@@ -74,7 +73,7 @@ Créer le modèle app/view/user/get.html
 ```
 
 **Modèle (blade)**
-Créer le modèle app/view/user/get.blade.php
+Créer le modèle `app/view/user/get.blade.php`
 ```html
 <html>
 <head>
@@ -90,7 +89,7 @@ Créer le modèle app/view/user/get.blade.php
 ```
 
 **Modèle (thinkphp)**
-Créer le modèle app/view/user/get.blade.php
+Créer le modèle `app/view/user/get.blade.php`
 ```html
 <html>
 <head>
@@ -105,9 +104,9 @@ Créer le modèle app/view/user/get.blade.php
 </html>
 ```
 
-Voici le résultat :
+Rendu visuel :
 ![](../../assets/img/paginator.png)
-
+  
 ### Plus d'informations
 
 Visitez https://github.com/jasongrimes/php-paginator

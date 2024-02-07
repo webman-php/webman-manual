@@ -1,11 +1,11 @@
 # Plugin-Anwendung
-Jedes Plugin ist eine vollständige Anwendung, deren Quellcode im Verzeichnis `{Hauptprojekt}/plugin` platziert wird.
+Jedes Applikations-Plugin ist eine vollständige Applikation, deren Quellcode im Verzeichnis `{Hauptprojekt}/plugin` liegt.
 
 > **Hinweis**
-> Mit dem Befehl `php webman app-plugin:create {Plugin-Name}` (erfordert webman/console>=1.2.16) kann lokal ein Anwendungs-Plugin erstellt werden.
-> Zum Beispiel wird mit `php webman app-plugin:create cms` die folgende Verzeichnisstruktur erstellt:
+> Mit dem Befehl `php webman app-plugin:create {Plugin-Name}` (webman/console>=1.2.16 erforderlich) können Sie lokal ein Applikations-Plugin erstellen.
+> Zum Beispiel erstellt `php webman app-plugin:create cms` die folgende Verzeichnisstruktur:
 
-```
+```plaintext
 plugin/
 └── cms
     ├── app
@@ -37,37 +37,37 @@ plugin/
     └── public
 ```
 
-Wir sehen, dass ein Anwendungs-Plugin die gleiche Verzeichnisstruktur und Konfigurationsdateien wie webman hat. Tatsächlich ist die Entwicklung eines Anwendungs-Plugins im Wesentlichen ähnlich wie die Entwicklung eines webman-Projekts, es gibt jedoch einige wenige Dinge zu beachten.
+Wir sehen, dass ein Applikations-Plugin die gleiche Verzeichnisstruktur und Konfigurationsdateien wie webman hat. Tatsächlich ist die Entwicklung eines Applikations-Plugins im Wesentlichen das gleiche wie die Entwicklung eines webman-Projekts. Es gibt jedoch einige Aspekte zu beachten.
 
 ## Namensraum
-Das Verzeichnis und der Name des Plugins folgen dem PSR4-Standard. Da die Plugins alle im Plugin-Verzeichnis liegen, beginnt der Namensraum immer mit `plugin`, z. B. `plugin\cms\app\controller\UserController`. Hier ist `cms` das Hauptverzeichnis des Plugin-Quellcodes.
+Das Plugin-Verzeichnis und -Namen folgen dem PSR4-Standard. Da die Plugins im Plugin-Verzeichnis platziert sind, beginnen die Namensräume alle mit `plugin`, z.B. `plugin\cms\app\controller\UserController`. Hier ist `cms` das Hauptverzeichnis des Plugin-Quellcodes.
 
 ## URL-Zugriff
-Die URL-Adresspfade der Anwendungs-Plugins beginnen immer mit `/app`, z. B. ist die URL des `plugin\cms\app\controller\UserController` `http://127.0.0.1:8787/app/cms/user`.
+Die URL-Adressen der Applikations-Plugins beginnen alle mit `/app`. Zum Beispiel ist die URL-Adresse von `plugin\cms\app\controller\UserController` `http://127.0.0.1:8787/app/cms/user`.
 
 ## Statische Dateien
-Statische Dateien werden unter `plugin/{Plugin}/public` platziert. Wenn Sie beispielsweise auf `http://127.0.0.1:8787/app/cms/avatar.png` zugreifen, wird tatsächlich die Datei `plugin/cms/public/avatar.png` abgerufen.
+Statische Dateien befinden sich im Verzeichnis `plugin/{Plugin}/public`. Wenn also auf `http://127.0.0.1:8787/app/cms/avatar.png` zugegriffen wird, wird tatsächlich die Datei `plugin/cms/public/avatar.png` abgerufen.
 
 ## Konfigurationsdateien
-Die Konfigurationen des Plugins sind die gleichen wie die eines normalen webman-Projekts. Allerdings betreffen die Konfigurationen des Plugins in der Regel nur das aktuelle Plugin und haben in der Regel keine Auswirkungen auf das Hauptprojekt.
-Zum Beispiel wirkt sich der Wert von `plugin.cms.app.controller_suffix` nur auf die Controller-Suffix des Plugins aus, nicht auf das Hauptprojekt.
-Zum Beispiel wirkt sich der Wert von `plugin.cms.app.controller_reuse` nur darauf aus, ob der Controller des Plugins wiederverwendet wird oder nicht, hat aber keine Auswirkungen auf das Hauptprojekt.
-Zum Beispiel wirkt sich der Wert von `plugin.cms.middleware` nur auf die Middleware des Plugins aus, nicht auf das Hauptprojekt.
-Zum Beispiel wirkt sich der Wert von `plugin.cms.view` nur auf die von dem Plugin verwendete Ansicht aus, nicht auf das Hauptprojekt.
-Zum Beispiel wirkt sich der Wert von `plugin.cms.container` nur auf den vom Plugin verwendeten Container aus, nicht auf das Hauptprojekt.
-Zum Beispiel wirkt sich der Wert von `plugin.cms.exception` nur auf die Ausnahmeverarbeitungsklasse des Plugins aus, nicht auf das Hauptprojekt.
+Die Konfigurationen des Plugins sind genauso wie bei einem normalen webman-Projekt, jedoch betreffen die Plugin-Konfigurationen in der Regel nur das jeweilige Plugin und haben keine Auswirkungen auf das Hauptprojekt.
+Zum Beispiel betrifft der Wert von `plugin.cms.app.controller_suffix` nur das Suffix des Controllers des Plugins und hat keine Auswirkungen auf das Hauptprojekt.
+Zum Beispiel betrifft der Wert von `plugin.cms.app.controller_reuse` nur, ob der Controller des Plugins wiederverwendet wird, und hat keine Auswirkungen auf das Hauptprojekt.
+Zum Beispiel betrifft der Wert von `plugin.cms.middleware` nur die Middleware des Plugins und hat keine Auswirkungen auf das Hauptprojekt.
+Zum Beispiel betrifft der Wert von `plugin.cms.view` nur die vom Plugin verwendete Ansicht und hat keine Auswirkungen auf das Hauptprojekt.
+Zum Beispiel betrifft der Wert von `plugin.cms.container` nur den vom Plugin verwendeten Container und hat keine Auswirkungen auf das Hauptprojekt.
+Zum Beispiel betrifft der Wert von `plugin.cms.exception` nur die Behandlungsklasse für Ausnahmen des Plugins und hat keine Auswirkungen auf das Hauptprojekt.
 
-Da die Routen jedoch global sind, hat die Konfiguration der Routen des Plugins auch globale Auswirkungen.
+Da die Routen jedoch global sind, wirken sich die konfigurierten Routen von Plugins auch global aus.
 
-## Konfiguration abrufen
-Die Methode zum Abrufen einer bestimmten Plugin-Konfiguration lautet `config('plugin.{Plugin}.{Konkrete Konfiguration}');`, z. B. das Abrufen aller Konfigurationen von `plugin/cms/config/app.php` erfolgt über `config('plugin.cms.app')`.
+## Abrufen von Konfigurationen
+Die Methode zum Abrufen einer Konfiguration eines Plugins lautet `config('plugin.{Plugin}.{spezifische Konfiguration}');`. Zum Beispiel kann die gesamte Konfiguration von `plugin/cms/config/app.php` mit `config('plugin.cms.app')` abgerufen werden.
 Ebenso können das Hauptprojekt oder andere Plugins `config('plugin.cms.xxx')` verwenden, um die Konfiguration des CMS-Plugins abzurufen.
 
 ## Nicht unterstützte Konfigurationen
-Anwendungs-Plugins unterstützen keine `server.php`, `session.php`-Konfigurationen und keine `app.request_class`, `app.public_path`, `app.runtime_path`-Konfigurationen.
+Applikations-Plugins unterstützen keine `server.php`, `session.php`-Konfigurationen und unterstützen nicht die Konfigurationen `app.request_class`, `app.public_path` und `app.runtime_path`.
 
 ## Datenbank
-Plugins können ihre eigene Datenbank konfigurieren, z. B. der Inhalt von `plugin/cms/config/database.php` ist wie folgt:
+Plugins können ihre eigene Datenbank konfigurieren. Zum Beispiel enthält `plugin/cms/config/database.php` den folgenden Inhalt:
 ```php
 return  [
     'default' => 'mysql',
@@ -95,26 +95,26 @@ return  [
     ],
 ];
 ```
-Die Verwendung erfolgt über `Db::connection('plugin.{Plugin}.{Verbindungsnamen}');`, z. B.
+Der Verweis erfolgt mit `Db::connection('plugin.{Plugin}.{Verbindungsnamen}');`, zum Beispiel
 ```php
 use support\Db;
 Db::connection('plugin.cms.mysql')->table('user')->first();
 Db::connection('plugin.cms.admin')->table('admin')->first();
 ```
 
-Wenn Sie die Datenbank des Hauptprojekts verwenden möchten, können Sie diese direkt verwenden, z. B.
+Wenn die Hauptprojektdatenbank verwendet werden soll, kann sie direkt verwendet werden, zum Beispiel
 ```php
 use support\Db;
 Db::table('user')->first();
-// Angenommen, das Hauptprojekt hat auch eine Verbindung namens admin konfiguriert
+// Angenommen, das Hauptprojekt hat auch eine Admin-Verbindung konfiguriert
 Db::connection('admin')->table('admin')->first();
 ```
 
 > **Hinweis**
-> Thinkorm wird in ähnlicher Weise verwendet.
+> ThinkORM hat eine ähnliche Verwendung.
 
 ## Redis
-Die Verwendung von Redis ist ähnlich wie die Verwendung der Datenbank, z. B. in `plugin/cms/config/redis.php`:
+Die Verwendung von Redis ähnelt der Datenbankverwendung. Zum Beispiel in `plugin/cms/config/redis.php`:
 ```php
 return [
     'default' => [
@@ -131,36 +131,36 @@ return [
     ],
 ];
 ```
-Die Verwendung erfolgt wie folgt:
+Verwendung:
 ```php
 use support\Redis;
 Redis::connection('plugin.cms.default')->get('key');
 Redis::connection('plugin.cms.cache')->get('key');
 ```
 
-Ebenso, wenn Sie die Redis-Konfiguration des Hauptprojekts wiederverwenden möchten:
+Ebenso kann bei Bedarf die Redis-Konfiguration des Hauptprojekts wiederverwendet werden:
 ```php
 use support\Redis;
 Redis::get('key');
-// Angenommen, das Hauptprojekt hat auch eine Verbindung namens cache konfiguriert
+// Angenommen, das Hauptprojekt hat auch eine Cache-Verbindung konfiguriert
 Redis::connection('cache')->get('key');
 ```
 
 ## Protokollierung
-Die Verwendung der Log-Klasse ähnelt ebenfalls der Verwendung der Datenbank, z. B.:
+Die Verwendung des Protokolls ähnelt der Datenbankverwendung:
 ```php
 use support\Log;
 Log::channel('plugin.admin.default')->info('test');
 ```
 
-Wenn Sie die Protokollierungskonfiguration des Hauptprojekts wiederverwenden möchten, verwenden Sie sie direkt, z. B.
+Wenn die Protokollkonfiguration des Hauptprojekts wiederverwendet werden soll, kann sie direkt verwendet werden:
 ```php
 use support\Log;
-Log::info('Protokolleinträge');
-// Angenommen, das Hauptprojekt hat eine Test-Protokollierungskonfiguration
-Log::channel('test')->info('Protokolleinträge');
+Log::info('Log-Eintrag');
+// Angenommen, das Hauptprojekt hat eine Test-Protokollkonfiguration
+Log::channel('test')->info('Log-Eintrag');
 ```
 
-# Installation und Deinstallation von Anwendungs-Plugins
-Zur Installation eines Anwendungs-Plugins muss das Plugin-Verzeichnis in das Verzeichnis `{Hauptprojekt}/plugin` kopiert werden. Ein Reload oder Neustart ist erforderlich, um dies zu aktivieren.
-Zum Deinstallieren löschen Sie einfach das entsprechende Plugin-Verzeichnis im Verzeichnis `{Hauptprojekt}/plugin`.
+# Installieren und Deinstallieren von Applikations-Plugins
+Die Installation eines Applikations-Plugins erfolgt, indem das Plugin-Verzeichnis ins Verzeichnis `{Hauptprojekt}/plugin` kopiert wird. Es ist erforderlich, `reload` oder `restart` auszuführen, um die Änderungen wirksam werden zu lassen.
+Zum Deinstallieren reicht es aus, das entsprechende Plugin-Verzeichnis im Verzeichnis `{Hauptprojekt}/plugin` zu löschen.

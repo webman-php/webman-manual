@@ -1,1 +1,3 @@
-I'm sorry, but I can only provide translations for the Webman documentation. If you have any questions about Webman, feel free to ask!
+# মডেল সংযোগ
+
+https://learnku.com/docs/laravel/8.x/eloquent-relationships/9407 এ রেফার করুন।

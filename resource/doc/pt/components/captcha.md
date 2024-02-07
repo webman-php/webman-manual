@@ -1,18 +1,19 @@
 # Componentes relacionados com o código de verificação
 
+
 ## webman/captcha
 Endereço do projeto: https://github.com/webman-php/captcha
 
 ### Instalação
-```
-composer require webman/captcha
-```
+``` 
+compositor exigir webman / captcha
+``` 
 
 ### Uso
 
-**Crie o arquivo `app/controller/LoginController.php`**
+**Criação do arquivo `app/controller/LoginController.php`** 
 
-```php
+``` php
 <?php
 namespace app\controller;
 
@@ -30,30 +31,30 @@ class LoginController
     }
     
     /**
-     * Retorna a imagem do código de verificação
+     * Produzir imagem de verificação de código
      */
     public function captcha(Request $request)
     {
-        // Inicializa a classe de código de verificação
+        // Inicialize a classe de verificação do código
         $builder = new CaptchaBuilder;
-        // Gera o código de verificação
+        // Gerar código de verificação
         $builder->build();
-        // Armazena o valor do código de verificação na sessão
+        // Armazenar o valor do código de verificação na sessão
         $request->session()->set('captcha', strtolower($builder->getPhrase()));
-        // Obtém os dados binários da imagem do código de verificação
+        // Obter os dados binários da imagem de verificação
         $img_content = $builder->get();
-        // Retorna os dados binários da imagem do código de verificação
+        // Produzir dados binários da imagem de verificação
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
     }
 
     /**
-     * Verifica o código de verificação
+     * Verificar código de verificação
      */
     public function check(Request $request)
     {
-        // Obtém o campo de código de verificação da requisição POST
+        // Obter o campo de verificação do código da solicitação POST
         $captcha = $request->post('captcha');
-        // Compara o valor do código de verificação armazenado na sessão
+        // Comparar o valor do código de verificação na sessão
         if (strtolower($captcha) !== $request->session()->get('captcha')) {
             return json(['code' => 400, 'msg' => 'O código de verificação inserido está incorreto']);
         }
@@ -61,11 +62,11 @@ class LoginController
     }
 
 }
-```
+``` 
 
-**Crie o arquivo de modelo `app/view/login/index.html`**
+**Criação do arquivo de modelo `app/view/login/index.html`** 
 
-```html
+`html
 <!doctype html>
 <html>
 <head>
@@ -80,19 +81,19 @@ class LoginController
     </form>
 </body>
 </html>
-```
+``` 
 
-Acesse a página `http://127.0.0.1:8787/login`. A aparência da interface é semelhante à seguinte:
+Acesse a página `http://127.0.0.1:8787/login`, a aparência é semelhante à seguinte: 
   ![](../../assets/img/captcha.png)
 
-### Configurações comuns
-```php
+### Configurações Comuns de Parâmetros
+``` php
     /**
-     * Retorna a imagem do código de verificação
+     * Produzir imagem de verificação de código
      */
     public function captcha(Request $request)
     {
-        // Inicializa a classe de código de verificação
+        // Inicialize a classe de verificação do código
         $builder = new CaptchaBuilder;
         // Comprimento do código de verificação
         $length = 4;
@@ -100,15 +101,15 @@ Acesse a página `http://127.0.0.1:8787/login`. A aparência da interface é sem
         $chars = '0123456789abcefghijklmnopqrstuvwxyz';
         $builder = new PhraseBuilder($length, $chars);
         $captcha = new CaptchaBuilder(null, $builder);
-        // Gera o código de verificação
+        // Gerar código de verificação
         $builder->build();
-        // Armazena o valor do código de verificação na sessão
+        // Armazenar o valor do código de verificação na sessão
         $request->session()->set('captcha', strtolower($builder->getPhrase()));
-        // Obtém os dados binários da imagem do código de verificação
+        // Obter os dados binários da imagem de verificação
         $img_content = $builder->get();
-        // Retorna os dados binários da imagem do código de verificação
+        // Produzir dados binários da imagem de verificação
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
     }
-```
+``` 
 
 Para mais interfaces e parâmetros, consulte https://github.com/webman-php/captcha

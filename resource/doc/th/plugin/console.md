@@ -1,8 +1,8 @@
-# ปลั๊กอิน webman/console สำหรับคำสั่งในโหมดคอนโซล
+# ปลัั้กอินสำหรับคำสั่ง webman/console
 
-`webman/console` มีพื้นฐานบน `symfony/console`
+`webman/console` ซึ่งขึ้นอยู่กับ `symfony/console`
 
-> พื้นฐานต้องการ webman>=1.2.2 และ webman-framework>=1.2.1
+>  ปลัั้กอินต้องการ webman>=1.2.2 webman-framework>=1.2.1
 
 ## การติดตั้ง
  
@@ -12,12 +12,12 @@ composer require webman/console
 
 ## คำสั่งที่รองรับ
 **วิธีใช้**  
-`php webman คำสั่ง` หรือ `php webman คำสั่ง`  
-เช่น `php webman version` หรือ `php webman version`
+`php webman คำสั่ง` หรือ `php webman คำสั่ง` 
+ตัวอย่างเช่น `php webman version` หรือ `php webman version`
 
 ## คำสั่งที่รองรับ
 ### version
-**พิมพ์เลขเวอร์ชั่นของ webman**
+**พิมพ์เวอร์ชันของ webman**
 
 ### route:list
 **พิมพ์การกำหนดเส้นทางปัจจุบัน**
@@ -41,29 +41,29 @@ composer require webman/console
 เช่น `php webman make:command db:config` จะสร้าง `app\command\DbConfigCommand.php`
 
 ### plugin:create
-**สร้างปลั๊กอินพื้นฐาน**
-เช่น `php webman plugin:create --name=foo/admin` จะสร้างไดเรกทอรี `config/plugin/foo/admin` และ `vendor/foo/admin` 
-ดูเพิ่มเติมที่ [สร้างปลั๊กอินพื้นฐาน](/doc/webman/plugin/create.html)
+**สร้างปลัั้กอินพื้นฐาน**
+เช่น `php webman plugin:create --name=foo/admin` จะสร้างไดเรกทอรี `config/plugin/foo/admin` และ `vendor/foo/admin`
+ดูเพิ่มเติมที่ [สร้างปลัั้กอินพื้นฐาน](/doc/webman/plugin/create.html)
 
 ### plugin:export
-**ส่งออกปลั๊กอินพื้นฐาน**
+**ส่งออกปลัั้กอินพื้นฐาน**
 เช่น `php webman plugin:export --name=foo/admin` 
-ดูเพิ่มเติมที่ [สร้างปลั๊กอินพื้นฐาน](/doc/webman/plugin/create.html)
+ดูเพิ่มเติมที่ [สร้างปลัั้กอินพื้นฐาน](/doc/webman/plugin/create.html)
 
 ### plugin:export
-**ส่งออกปลั๊กอินแอปพลิเคชัน**
+**ส่งออกปลัั้กอินแอปพลิเคชัน**
 เช่น `php webman plugin:export shop`
-ดูเพิ่มเติมที่ [ปลั๊กอินแอปพลิเคชัน](/doc/webman/plugin/app.html)
+ดูเพิ่มเติมที่ [ปลัั้กอินแอปพลิเคชัน](/doc/webman/plugin/app.html)
 
 ### phar:pack
-**แพ็คเอาท์โปรเจค webman เป็นไฟล์ phar**
-ดูเพิ่มเติมที่ [การแพ็คเอาท์โปรเจคเป็นไฟล์ phar](/doc/webman/others/phar.html)
+**บีบอัดโปรเจค webman เป็นไฟล์ phar**
+ดูเพิ่มเติมที่ [การบีบอัด phar](/doc/webman/others/phar.html)
 > คุณลักษณะนี้ต้องการ webman>=1.2.4 webman-framework>=1.2.4 webman\console>=1.0.5
 
 ## คำสั่งที่กำหนดเอง
-ผู้ใช้สามารถกำหนดคำสั่งเอง เช่น ด้านล่างนี้เป็นตัวอย่างของคำสั่งสำหรับพิมพ์การกำหนดของฐานข้อมูล
+ผู้ใช้สามารถกำหนดเองได้ เช่น ต่อไปนี้คือคำสั่งแสดงการกำหนดค่าฐานข้อมูล
 
-* ทำ `php webman make:command config:mysql`
+* ป้อน `php webman make:command config:mysql`
 * เปิด `app/command/ConfigMySQLCommand.php` และแก้ไขเป็นดังนี้
 
 ```php
@@ -79,13 +79,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ConfigMySQLCommand extends Command
 {
     protected static $defaultName = 'config:mysql';
-    protected static $defaultDescription = 'แสดงการกำหนดของเซิร์ฟเวอร์ MySQL ปัจจุบัน';
+    protected static $defaultDescription = 'แสดงการกำหนดค่าเซิร์ฟเวอร์ MySQL ปัจจุบัน';
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('ข้อมูลการกำหนดของ MySQL มีดังนี้：');
+        $output->writeln('ข้อมูลการกำหนดค่าเซิร์ฟเวอร์ MySQL คือ :');
         $config = config('database');
-        $headers = ['ชื่อ', 'ค่าเริ่มต้น', 'ไดรเวอร์', 'โฮสต์', 'พอร์ต', 'ฐานข้อมูล', 'ชื่อผู้ใช้', 'รหัสผ่าน', 'ซ็อกเก็ตข้อมูล', 'เซ็ตข้อมูล', 'คอลเลชัน', 'คำนำหน้า', 'เข้ม', 'เหมาะสำหรับ', 'ตารางรายการ', 'โหมด SSL'];
+        $headers = ['name', 'default', 'driver', 'host', 'port', 'database', 'username', 'password', 'unix_socket', 'charset', 'collation', 'prefix', 'strict', 'engine', 'schema', 'sslmode'];
         $rows = [];
         foreach ($config['connections'] as $name => $db_config) {
             $row = [];
@@ -118,16 +118,16 @@ class ConfigMySQLCommand extends Command
   
 ## การทดสอบ
 
-ในโหมดคอนโซลให้รัน `php webman config:mysql`
+รันคำสั่งใน Command line `php webman config:mysql`
 
-ผลลัพธ์จะเป็นดังนี้：
-```
+ผลลัพธ์จะเป็นดังนี้:
+```shell
 +-------+---------+--------+-----------+------+----------+----------+----------+-------------+---------+-----------------+--------+--------+--------+--------+---------+
-| ชื่อ  | ค่าเริ่มต้น | ไดรเวอร์ | โฮสต์      | พอร์ต | ฐานข้อมูล | ชื่อผู้ใช้ | รหัสผ่าน | ซ็อกเก็ตข้อมูล | เซ็ตข้อมูล | คอลเลชัน       | คำนำหน้า | เข้ม | เหมาะสำหรับ | ตารางรายการ | โหมด SSL |
+| name  | default | driver | host      | port | database | username | password | unix_socket | charset | collation       | prefix | strict | engine | schema | sslmode |
 +-------+---------+--------+-----------+------+----------+----------+----------+-------------+---------+-----------------+--------+--------+--------+--------+---------+
 | mysql | true    | mysql  | 127.0.0.1 | 3306 | mysql    | root     | ******   |             | utf8    | utf8_unicode_ci |        | 1      |        |        |         |
 +-------+---------+--------+-----------+------+----------+----------+----------+-------------+---------+-----------------+--------+--------+--------+--------+---------+
 ```
 
-## ข้อมูลอื่น ๆ อ่านเพิ่มเติม
+## อ่านข้อมูลเพิ่มเติมได้ที่
 http://www.symfonychina.com/doc/current/components/console.html

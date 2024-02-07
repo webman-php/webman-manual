@@ -2,7 +2,7 @@
 
 ## phpoffice/phpspreadsheet
 
-### Адрес проекта
+### Ссылка на проект
 
 https://github.com/PHPOffice/PhpSpreadsheet
   
@@ -31,15 +31,16 @@ class ExcelController
 
         $writer = new Xlsx($spreadsheet);
         $file_path = public_path().'/hello_world.xlsx';
-        // Сохранение файла в public
+        // Сохранить файл в папке public
         $writer->save($file_path);
-        // Скачивание файла
-        return response()->download($file_path, 'имя_файла.xlsx');
+        // Скачать файл
+        return response()->download($file_path, 'Название файла.xlsx');
     }
 
 }
 ```
-  
-### Дополнительная информация
+
+
+### Больше информации
 
 Посетите https://phpspreadsheet.readthedocs.io/en/latest/

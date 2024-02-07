@@ -1,14 +1,14 @@
 # カスタムプロセス
 
-webmanでは、workermanと同様に、リスンやプロセスをカスタマイズすることができます。
+webmanでは、workermanと同様にリスナーやプロセスをカスタマイズできます。
 
 > **注意**
-> Windowsユーザーは、webmanを起動するために `php windows.php` を使用する必要があります。
+> Windowsユーザーは、カスタムプロセスを起動するために `php windows.php` を使用してwebmanを起動する必要があります。
 
-## カスタムHTTPサーバ
-時には、webmanのHTTPサービスのコアコードをカスタマイズする必要があります。その場合は、カスタムプロセスを使用して実装できます。
+## カスタムHTTPサービス
+時には、特定の要件に合わせてwebmanのHTTPサービスのコアコードを変更する必要があるかもしれません。このような場合は、カスタムプロセスを使用して実装することができます。
 
-例えば、app\Server.phpを新規作成します。
+たとえば `app\Server.php` を新規作成します。
 
 ```php
 <?php
@@ -19,17 +19,17 @@ use Webman\App;
 
 class Server extends App
 {
-    // ここで、Webman\Appのメソッドを上書きします
+    // ここで、Webman\App のメソッドをオーバーライドします。
 }
 ```
 
-`config/process.php`に以下の設定を追加します。
+`config/process.php` に以下の設定を追加します。
 
 ```php
 use Workerman\Worker;
 
 return [
-    // ... 他の設定は省略...
+    // ... 他の設定は省略 ...
 
     'my-http' => [
         'handler' => app\Server::class,
@@ -41,19 +41,19 @@ return [
         'constructor' => [
             'request_class' => \support\Request::class, // リクエストクラスの設定
             'logger' => \support\Log::channel('default'), // ログのインスタンス
-            'app_path' => app_path(), // appディレクトリの場所
-            'public_path' => public_path() // publicディレクトリの場所
+            'app_path' => app_path(), // アプリのディレクトリ位置
+            'public_path' => public_path() // publicのディレクトリ位置
         ]
     ]
 ];
 ```
 
 > **ヒント**
-> webmanの組み込みのHTTPプロセスを無効にしたい場合は、 `config/server.php` で `listen=>''` を設定すればよいです。
+> webmanのデフォルトのHTTPプロセスを停止したい場合は、`config/server.php` で `listen=>''` を設定するだけです。
 
-## カスタムWebSocketリスンの例
+## カスタムWebSocketリスナーの例
+`app/Pusher.php` を新規作成します。
 
-`app/Pusher.php`を新規作成します。
 ```php
 <?php
 namespace app;
@@ -83,16 +83,17 @@ class Pusher
     }
 }
 ```
-> 注意：すべてのonXXXプロパティはpublicです
+> 注意：すべてのonXXXプロパティはpublicです。
 
-`config/process.php`に以下の設定を追加します。
+`config/process.php` に以下の設定を追加します。
+
 ```php
 return [
-    // ... 他のプロセスの設定は省略...
+    // ... 他のプロセスの設定は省略 ...
 
-    // websocket_test はプロセス名です
+    // websocket_test はプロセスの名前です
     'websocket_test' => [
-        // ここで、プロセスクラスを指定します。上記で定義したPusherクラスです
+        // ここでプロセスクラスを指定します（上記で定義したPusherクラスです）
         'handler' => app\Pusher::class,
         'listen'  => 'websocket://0.0.0.0:8888',
         'count'   => 1,
@@ -100,9 +101,9 @@ return [
 ];
 ```
 
-## カスタム非リスンプロセスの例
+## カスタム非リスニングプロセスの例
+`app/TaskTest.php` を新規作成します。
 
-`app/TaskTest.php`を新規作成します。
 ```php
 <?php
 namespace app;
@@ -115,7 +116,7 @@ class TaskTest
   
     public function onWorkerStart()
     {
-        // 10秒ごとにデータベースを確認し、新しいユーザーが登録されていないかを確認する
+        // 10秒毎にデータベースが新しいユーザーの登録をチェックします
         Timer::add(10, function(){
             Db::table('users')->where('regist_timestamp', '>', time()-10)->get();
         });
@@ -123,10 +124,11 @@ class TaskTest
     
 }
 ```
-`config/process.php`に以下の設定を追加します。
+`config/process.php` に以下の設定を追加します。
+
 ```php
 return [
-    // ... 他のプロセスの設定は省略...
+    // ... 他のプロセスの設定は省略 ...
 
     'task' => [
         'handler'  => app\TaskTest::class
@@ -134,40 +136,41 @@ return [
 ];
 ```
 
-> 注意：listenを省略すると、どのポートにもリスンしません。countを省略すると、プロセス数はデフォルトで1になります。
+> 注意：`listen` を省略すると、ポートはリスンされません。`count` を省略すると、デフォルトでプロセス数は1になります。
 
 ## 設定ファイルの説明
 
-プロセスの完全な設定は次のように定義されます。
+プロセスの完全な設定は以下のように定義されます。
+
 ```php
 return [
     // ... 
 
-    // websocket_test はプロセス名です
+    // websocket_test はプロセスの名前です
     'websocket_test' => [
-        // ここで、プロセスクラスを指定します
+        // ここでプロセスクラスを指定します
         'handler' => app\Pusher::class,
-        // リスンするプロトコル、IP、ポート（オプション）
+        // プロトコル、IP、およびポートのリスナー（オプション）
         'listen'  => 'websocket://0.0.0.0:8888',
-        // プロセス数（オプション、デフォルトは1）
+        // プロセス数（オプション、デフォルト1）
         'count'   => 2,
-        // プロセスの実行ユーザー（オプション、デフォルトは現在のユーザー）
+        // プロセスの実行ユーザー（オプション、現在のユーザーがデフォルト）
         'user'    => '',
-        // プロセスの実行グループ（オプション、デフォルトは現在のユーザーグループ）
+        // プロセスの実行ユーザーグループ（オプション、現在のユーザーグループがデフォルト）
         'group'   => '',
-        // このプロセスはreloadをサポートしているかどうか（オプション、デフォルトはtrue）
+        // リロードをサポートするかどうか（オプション、デフォルトでtrue）
         'reloadable' => true,
-        // reusePortを使用するかどうか（オプション、php>=7.0が必要でデフォルトはtrue）
+        // reusePort を有効にするかどうか（オプション、PHP>=7.0以上が必要で、デフォルトでtrue）
         'reusePort'  => true,
-        // transport（オプション、sslを有効にする場合はsslに設定し、デフォルトはtcp）
+        // transport（オプション、SSLを有効にする必要がある場合はsslに設定、デフォルトでtcp）
         'transport'  => 'tcp',
-        // context（オプション、transportがsslの場合は、証明書のパスを渡す必要があります）
+        // context（オプション、transportがsslの場合は証明書のパスを渡す必要があります）
         'context'    => [], 
-        // プロセスクラスのコンストラクタパラメータ、ここではprocess\Pusher::classのコンストラクタパラメータです（オプション）
+        // プロセスクラスのコンストラクタパラメータ、ここでは process\Pusher::class クラスのコンストラクタパラメータ（オプション）
         'constructor' => [],
     ],
 ];
 ```
 
 ## 結論
-webmanのカスタムプロセスは、実際にはworkermanの簡単なラッパーであり、設定とビジネスロジックを分離し、workermanの `onXXX` コールバックをクラスのメソッドで実装することによって、他の使用法は完全に同じです。
+webmanのカスタムプロセスは実質的にはworkermanの簡単なラッピングです。それは設定とビジネスロジックを分離し、workermanの`onXXX`コールバックをクラスのメソッドで実装します。その他の使用法はworkermanと全く同じです。

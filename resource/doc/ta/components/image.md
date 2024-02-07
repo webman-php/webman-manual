@@ -1,29 +1,29 @@
-# படத்தின் செயலாக்க உபகரணம்
+# பட செயலி கோப்பாடு
 
 ## intervention/image
 
 ### திட்ட முகவரி
 
 https://github.com/Intervention/image
-  
-### நிறுவப்படுத்துதல்
- 
+
+### நிறுவல்
+
 ```php
 composer require intervention/image
 ```
-  
+
 ### பயன்பாடு
 
-**பதிவேற்ற அகல சிக்கல்**
+**பதிவேற்று பகுதி**
 
 ```html
   <form method="post" action="/user/img" enctype="multipart/form-data">
       <input type="file" name="file">
-      <input type="submit" value="சமர்ப்பிக்கவும்">
+      <input type="submit" value="சமர்பிக்கவும்">
   </form>
 ```
 
-**புதிய `app/controller/UserController.php` உருவாக்கு**
+**புதிய `app/controller/UserController.php` உருவாக்கவும்**
 
 ```php
 <?php
@@ -40,13 +40,12 @@ class UserController
             $image = Image::make($file)->resize(100, 100);
             return response($image->encode('png'), 200, ['Content-Type' => 'image/png']);
         }
-        return response('கோப்பு காணப்படவில்லை');
+        return response('கோப்பு கிடைக்கவில்லை');
     }
     
 }
 ```
-  
-  
+
 ### மேலும் உள்ளடக்கம்
 
-http://image.intervention.io/getting_started/introduction பார்க்க.
+http://image.intervention.io/getting_started/introduction

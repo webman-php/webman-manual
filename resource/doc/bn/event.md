@@ -6,48 +6,45 @@
 [![webman-event](https://img.shields.io/github/last-commit/tinywan/webman-event/main)]()
 [![webman-event](https://img.shields.io/github/v/tag/tinywan/webman-event?color=ff69b4)]()
 
-ইভেন্ট মিডলওয়্যারের তুলনায়, ইভেন্টের সুবিধা হলো মিডলওয়্যারের তুলনায় ইভেন্ট ঠিকানাটি (বা বলা যায়, গুণমান আরও সুক্ষ্ম) এবং কিছু ব্যবসা পরিস্থিতি বিস্তারের জন্য আরো উপযোগী। উদাহরণস্বরূপ, আমরা সাধারণত ব্যবহারকারী নিবন্ধক বা লগইনের পরে কিছু কাজ করতে হবে, ইভেন্ট সিস্টেমের মাধ্যমে পূর্ববর্তী কোডকে আক্রমণকরণ ছাড়াই লগইনের কাজ বিস্তার করা যেতে পারে, সিস্টেমের সংযোগের কমপ্লেক্সিটি হ্রাস সাথে, বাগের সম্ভাবনা মঞ্চ করা তুলে ধরা হয়।
+ইভেন্ট মিডলওয়্যারের তুলনায়, ইভেন্টের সুবিধা হল উল্লেখিত মধ্যপনা পরিসরের ব্যাপ্তি (বা কানের ব্যাপ্তি) এবং কিছু ব্যবসায়িক স্থিতিতে প্রসারণের জন্য আগ্রহী। উদাহরণস্বরূপ, আমাদের সাধারণত এমন অবডে আর্ডার পর বা লগইনের পরে কিছু অপারেশন করতে হয়, ইভেন্ট সিস্টেমের মাধ্যমে আমরা ওয়াক্যিলি হোমফড হ্লালমডের অধীনে লগইনের অপারেশনগুলির প্রসারণ সম্পন্ন করে সিস্টেমের যৌক্তিকতা কমিয়ে এবং বাগের সম্ভাবনা কমিয়ে আমি আপলোড করা যাচ্ছে।
 
-## প্রকল্পের ঠিকানা
+## প্রজেক্ট ঠিকানা
 
 [https://github.com/Tinywan/webman-permission](https://github.com/Tinywan/webman-permission)
 
-## নির্ভরণ
+## নির্ভরণী
 
 - [symfony/event-dispatcher](https://github.com/symfony/event-dispatcher)
 
-## ইনস্টলেশন
+## ইন্সটলেশন
 
 ```shell script
 composer require tinywan/webman-event
 ```
+## কনফিগারেশন 
 
-## কনফিগারেশন
-
-ইভেন্ট কনফিগারেশন ফাইল `config/event.php` এর বিষয়বস্তু
+ইভেন্ট কনফিগারেশন ফাইল `config/event.php` এর মূল্যাংকন 
 
 ```php
 return [
-    // ইভেন্ট শোনারা
+    // ইভেন্ট লিস্টেনার
     'listener'    => [],
 
-    // ইভেন্ট উপাদান
+    // ইভেন্ট সাবস্ক্রাইবার
     'subscriber' => [],
 ];
 ```
-
 ### প্রসেস স্টার্ট কনফিগারেশন
 
-`config/bootstrap.php` ফাইল খোলো, নিম্নের কোনও কনফিগারেশন যোগ করুন:
+`config/bootstrap.php` খোলুন, নিম্নলিখিত কনফিগারেশন যোগ করুন
 
 ```php
 return [
-    // এখানে অন্যান্য কনফিগারেশনগুলি অবিলম্বে হ্রাস করা হয়েছে ...
+    // এখানে অন্যান্য কনফিগারেশন অংশ অন্যান্য অংশগুলি অবাকা করা হয়েছে ...
     webman\event\EventManager::class,
 ];
 ```
-
-## দ্রুত শুরু করুন
+## দ্রুত শুরু
 
 ### ইভেন্ট সংজ্ঞা
 
@@ -62,7 +59,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class LogErrorWriteEvent extends Event
 {
-    const NAME = 'log.error.write';  // ইভেন্ট নাম, ইভেন্টের অদ্ভুত শনাক্ত
+    const NAME = 'log.error.write';  // ইভেন্ট নাম, ইভেন্টের অনন্য অনন্য অঙ্ক
 
     /** @var array */
     public array $log;
@@ -79,20 +76,20 @@ class LogErrorWriteEvent extends Event
 }
 ```
 
-### ইভেন্ট শুনুন
+### ইভেন্ট লিস্টেন
 
 ```php
 return [
-    // ইভেন্ট শুনারা
+    // ইভেন্ট লিস্টেনার
     'listener'    => [
         \extend\event\LogErrorWriteEvent::NAME  => \extend\event\LogErrorWriteEvent::class,
     ],
 ];
 ```
 
-### ইভেন্ট অনুসরণকারী
+### ইভেন্ট সাবস্ক্রাইব
 
-অনুসরণকারী ক্লাস `LoggerSubscriber.php`
+সাবস্ক্রাইবার ক্লাস `LoggerSubscriber.php`
 
 ```php
 namespace extend\event\subscriber;
@@ -103,7 +100,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class LoggerSubscriber implements EventSubscriberInterface
 {
     /**
-     * @desc: পদক্ষেপ বিবরণ 
+     * @desc: মেথড ডেসক্রিপশন
      * @return array|string[]
      */
     public static function getSubscribedEvents()
@@ -114,21 +111,22 @@ class LoggerSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @desc: ইভেন্ট সক্রিয় করুন
+     * @desc: ঘটনা হ্টার
      * @param LogErrorWriteEvent $event
      */
     public function onLogErrorWrite(LogErrorWriteEvent $event)
     {
-        // কিছু নির্দিষ্ট ব্যবসায়িক মতামত
+        // কিছু ব্যাপারিক ব্যবস্থা
         var_dump($event->handle());
     }
 }
 ```
 
-ইভেন্ট অনুসরণ
+ইভেন্ট সাবস্ক্রাইব
+
 ```php
 return [
-    // ইভেন্ট অনুসরণ
+    // ইভেন্ট সাবস্ক্রাইব
     'subscriber' => [
         \extend\event\subscriber\LoggerSubscriber::class,
     ],
@@ -141,16 +139,16 @@ return [
 
 ```php
 $error = [
-    'errorMessage' => 'ভুল বার্তা',
+    'errorMessage' => 'ত্রুটি বার্তা',
     'errorCode' => 500
 ];
 EventManager::trigger(new LogErrorWriteEvent($error),LogErrorWriteEvent::NAME);
 ```
 
-অগ্রগতি ফলাফল
+এক্সিকিউশন ফলাফল
 
-![প্রিন্ট আউট](./trigger.png)
+![প্রাইন্ট রেজাল্ট](./trigger.png)
 
 ## লাইসেন্স
 
-এই প্রকল্পটি [অ্যাপাচি ২.০ লাইসেন্স এর অধীনে পরিচালিত](LICENSE)।
+এই প্রজেক্টটি অনুমোদন প্রাপ্ত [অ্যাপাচি 2.0 লাইসেন্স](LICENSE) দ্বারা অনুমতিপ্রাপ্ত।

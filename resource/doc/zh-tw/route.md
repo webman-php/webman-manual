@@ -2,15 +2,15 @@
 ## 預設路由規則
 webman的預設路由規則是 `http://127.0.0.1:8787/{控制器}/{動作}`。
 
-預設控制器是`app\controller\IndexController`，預設動作是`index`。
+預設控制器為 `app\controller\IndexController`，預設動作為 `index`。
 
 例如訪問：
-- `http://127.0.0.1:8787` 將預訪問`app\controller\IndexController`類的`index`方法
-- `http://127.0.0.1:8787/foo` 將預訪問`app\controller\FooController`類的`index`方法
-- `http://127.0.0.1:8787/foo/test` 將預訪問`app\controller\FooController`類的`test`方法
-- `http://127.0.0.1:8787/admin/foo/test` 將預訪問`app\admin\controller\FooController`類的`test`方法 (請參考[多應用](multiapp.md))
+- `http://127.0.0.1:8787` 將預設訪問 `app\controller\IndexController` 類的 `index` 方法
+- `http://127.0.0.1:8787/foo` 將預設訪問 `app\controller\FooController` 類的 `index` 方法
+- `http://127.0.0.1:8787/foo/test` 將預設訪問 `app\controller\FooController` 類的 `test` 方法
+- `http://127.0.0.1:8787/admin/foo/test` 將預設訪問 `app\admin\controller\FooController` 類的 `test` 方法 (參考[多應用](multiapp.md))
 
-另外自 webman 1.4 開始支援更複雜的預設路由，例如
+另外webman從1.4開始支持更複雜的預設路由，例如
 ```php
 app
 ├── admin
@@ -27,15 +27,15 @@ app
             └── IndexController.php
 ```
 
-當您想要更改某個請求路由時，請修改配置文件 `config/route.php`。
+當您想改變某個請求路由時請更改配置文件 `config/route.php`。
 
-如果你想要關閉預設路由，在配置文件 `config/route.php` 的最後一行加上如下配置：
+如果你想關閉預設路由，在配置文件 `config/route.php` 裡最後一行加上如下配置：
 ```php
 Route::disableDefaultRoute();
 ```
 
 ## 閉包路由
-在`config/route.php`中加入以下路由代碼
+在 `config/route.php` 裡添加如下路由代碼
 ```php
 Route::any('/test', function ($request) {
     return response('test');
@@ -43,7 +43,7 @@ Route::any('/test', function ($request) {
 
 ```
 > **注意**
-> 由於閉包函數不屬於任何控制器，因此`$request->app` `$request->controller` `$request->action` 全部為空字符串。
+> 由於閉包函數不屬於任何控制器，所以`$request->app` `$request->controller` `$request->action` 全部為空字符串。
 
 當訪問地址為 `http://127.0.0.1:8787/test` 時，將返回`test`字符串。
 
@@ -63,12 +63,12 @@ Route::any('/test', function ($request) {
 ```
 
 
-## 類別路由
-在`config/route.php`中加入以下路由代碼
+## 類路由
+`config/route.php` 裡添加如下路由代碼
 ```php
 Route::any('/testclass', [app\controller\IndexController::class, 'test']);
 ```
-當訪問地址為 `http://127.0.0.1:8787/testclass` 時，將返回`app\controller\IndexController`類的`test`方法的返回值。
+當訪問地址為 `http://127.0.0.1:8787/testclass` 時，將返回`app\controller\IndexController` 類的`test`方法的返回值。
 
 
 ## 路由參數
@@ -88,7 +88,7 @@ class UserController
 }
 ```
 
-更多範例：
+更多例子：
 ```php
 // 匹配 /user/123, 不匹配 /user/abc
 Route::any('/user/{id:\d+}', function ($request, $id) {
@@ -122,7 +122,7 @@ Route::group('/blog', function () {
    Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
 }
 ```
-等於
+等價與
 ```php
 Route::any('/blog/create', function ($request) {return response('create');});
 Route::any('/blog/edit', function ($request) {return response('edit');});
@@ -140,10 +140,9 @@ Route::group('/blog', function () {
    });  
 }
 ```
+## 路由中介層
 
-## 路由中間件
-
-我們可以給某個一或某一組路由設定中間件。
+我們可以為單個或一組路由設置中介層。
 例如：
 ```php
 Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->middleware([
@@ -162,10 +161,10 @@ Route::group('/blog', function () {
 ```
 
 > **注意**: 
-> 在 webman-framework <= 1.5.6 時 `->middleware()` 路由中間件作用於 group 分組之後的時候，當前路由必須在處於當前分組之下
+> 在 webman-framework <= 1.5.6  時 `->middleware()` 路由中间件作用于 group 分组之后時候，當前路由必須在處於當前分组之下
 
 ```php
-# 錯誤使用例子 (webman-framework >= 1.5.7 時此用法有效)
+# 錯誤使用例子 (webman-framework >= 1.5.7  時此用法有效)
 Route::group('/blog', function () {
    Route::group('/v1', function () {
       Route::any('/create', function ($request) {return response('create');});
@@ -192,6 +191,7 @@ Route::group('/blog', function () {
 });
 ```
 
+
 ## 資源型路由
 ```php
 Route::resource('/test', app\controller\IndexController::class);
@@ -203,21 +203,21 @@ Route::resource('/test', app\controller\IndexController::class, ['index','create
 // 如 notify 訪問地址則為any型路由 /test/notify或/test/notify/{id} 都可 routeName為 test.notify
 Route::resource('/test', app\controller\IndexController::class, ['index','create','notify']);
 ```
-| 動詞   |  URI                 | 動作   | 路由名稱    |
-|--------|---------------------|----------|---------------|
-| GET    | /test               | index    | test.index    |
-| GET    | /test/create        | create   | test.create   |
-| POST   | /test               | store    | test.store    |
-| GET    | /test/{id}          | show     | test.show     |
-| GET    | /test/{id}/edit     | edit     | test.edit     |
-| PUT    | /test/{id}          | update   | test.update   |
-| DELETE | /test/{id}          | destroy  | test.destroy  |
+| 動詞   | URI                 | 行為   | 路由名稱    |
+|--------|---------------------|--------|-------------|
+| GET    | /test               | index  | test.index  |
+| GET    | /test/create        | create | test.create |
+| POST   | /test               | store  | test.store  |
+| GET    | /test/{id}          | show   | test.show   |
+| GET    | /test/{id}/edit     | edit   | test.edit   |
+| PUT    | /test/{id}          | update | test.update |
+| DELETE | /test/{id}          | destroy| test.destroy|
 | PUT    | /test/{id}/recovery | recovery | test.recovery |
 
 
 
 
-## url生成
+## Url生成
 > **注意** 
 > 暫時不支持group嵌套的路由生成url  
 
@@ -226,11 +226,11 @@ Route::resource('/test', app\controller\IndexController::class, ['index','create
 Route::any('/blog/{id}', [app\controller\BlogController::class, 'view'])->name('blog.view');
 ```
 我們可以使用如下方法生成這個路由的url。
+
 ```php
 route('blog.view', ['id' => 100]); // 結果為 /blog/100
 ```
-
-視圖裡使用路由的url時可以使用此方法，這樣不管路由規則如何變化，url都會自動生成，避免因路由地址調整導致大量修改視圖檔案的情況。
+在視圖裡使用路由的url時可以使用此方法，這樣不管路由規則如何變化，url都會自動生成，避免因路由地址調整導致大量更改視圖檔案的情況。
 
 
 ## 獲取路由信息
@@ -240,7 +240,7 @@ route('blog.view', ['id' => 100]); // 結果為 /blog/100
 通過`$request->route`對象我們可以獲取當前請求路由信息，例如
 
 ```php
-$route = $request->route; // 等價於 $route = request()->route;
+$route = $request->route; // 等價與 $route = request()->route;
 if ($route) {
     var_export($route->getPath());
     var_export($route->getMethods());
@@ -256,15 +256,17 @@ if ($route) {
 
 
 ## 處理404
-當路由找不到時默認返回404狀態碼並輸出`public/404.html`文件內容。
+當路由找不到時默認返回404狀態碼並輸出`public/404.html`檔案內容。
 
-如果開發者想介入路由未找到時的業務流程，可以使用webman提供的回退路由`Route::fallback($callback)`方法。比如下面的代码邏輯是當路由未找到時重定向到首頁。
+如果開發者想介入路由未找到時的業務流程，可以使用webman提供的回退路由`Route::fallback($callback)`方法。比如下面的程式邏輯是當路由未找到時重定向到首頁。
+
 ```php
 Route::fallback(function(){
     return redirect('/');
 });
 ```
-再比如當路由不存在時返回一個json數據，這在webman作為api接口時非常實用。
+再比如當路由不存在時返回一個json資料，這在webman作為api接口時非常實用。
+
 ```php
 Route::fallback(function(){
     return json(['code' => 404, 'msg' => '404 not found']);
@@ -275,21 +277,21 @@ Route::fallback(function(){
 
 ## 路由介面
 ```php
-// 設定$uri的任意方法請求的路由
+// 設置$uri的任意方法請求的路由
 Route::any($uri, $callback);
-// 設定$uri的get請求的路由
+// 設置$uri的get請求的路由
 Route::get($uri, $callback);
-// 設定$uri的請求的路由
+// 設置$uri的請求的路由
 Route::post($uri, $callback);
-// 設定$uri的put請求的路由
+// 設置$uri的put請求的路由
 Route::put($uri, $callback);
-// 設定$uri的patch請求的路由
+// 設置$uri的patch請求的路由
 Route::patch($uri, $callback);
-// 設定$uri的delete請求的路由
+// 設置$uri的delete請求的路由
 Route::delete($uri, $callback);
-// 設定$uri的head請求的路由
+// 設置$uri的head請求的路由
 Route::head($uri, $callback);
-// 同時設定多種請求類型的路由
+// 同時設置多種請求類型的路由
 Route::add(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'], $uri, $callback);
 // 分組路由
 Route::group($path, $callback);
@@ -297,20 +299,19 @@ Route::group($path, $callback);
 Route::resource($path, $callback, [$options]);
 // 禁用路由
 Route::disableDefaultRoute($plugin = '');
-// 回退路由，設定默認的路由兜底
+// 回退路由，設置預設的路由兜底
 Route::fallback($callback, $plugin = '');
 ```
-如果uri沒有對應的路由(包括預設路由)，且回退路由也未設定，則會返回404。
-
-## 多個路由配置文件
-如果你想使用多個路由配置文件對路由進行管理，例如[多應用](multiapp.md)時每個應用下有自己的路由配置，這時可以通過`require`外部文件的方式加載外部路由配置文件。
-例如`config/route.php`中
+如果uri沒有對應的路由(包括預設路由)，且回退路由也未設置，則會返回404。
+## 多個路由配置檔案
+如果您想要使用多個路由配置檔案來管理路由，例如[多應用](multiapp.md)時每個應用程式都有自己的路由配置，這時可以通過`require`外部檔案的方式載入外部路由配置檔案。
+例如在`config/route.php`中
 ```php
 <?php
 
-// 加載admin應用下的路由配置
+// 載入admin應用程式下的路由配置
 require_once app_path('admin/config/route.php');
-// 加載api應用下的路由配置
+// 載入api應用程式下的路由配置
 require_once app_path('api/config/route.php');
 
 ```

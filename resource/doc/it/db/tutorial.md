@@ -1,23 +1,22 @@
 # Inizio rapido
 
-Il database di webman di default utilizza [illuminate/database](https://github.com/illuminate/database), cioè il [database di Laravel](https://learnku.com/docs/laravel/8.x/database/9400), e ne ha lo stesso utilizzo.
+Il database di webman utilizza di default [illuminate/database](https://github.com/illuminate/database), ovvero il [database di Laravel](https://learnku.com/docs/laravel/8.x/database/9400), e ne condivide lo stesso utilizzo. 
 
-Naturalmente è possibile fare riferimento alla sezione [Uso di altri componenti di database](others.md) per utilizzare ThinkPHP o altri database.
+Naturalmente puoi fare riferimento al capitolo [Utilizzare altri componenti di database](others.md) per usare ThinkPHP o altri database.
 
 ## Installazione
 
-Eseguire il comando `composer require -W illuminate/database illuminate/pagination illuminate/events symfony/var-dumper` per installare i pacchetti necessari.
+`composer require -W illuminate/database illuminate/pagination illuminate/events symfony/var-dumper`
 
-Dopo l'installazione è necessario restartare (reload non è valido).
+Dopo l'installazione è necessario eseguire il comando restart per riavviare (reload non funziona)
 
 > **Nota**
-> Se non è necessario utilizzare la paginazione, gli eventi del database e stampare le query SQL, è sufficiente eseguire
+> Se non è necessaria la paginazione, gli eventi del database o la stampa SQL, è sufficiente eseguire
 > `composer require -W illuminate/database`
 
 ## Configurazione del database
 `config/database.php`
 ```php
-
 return [
     // Database predefinito
     'default' => 'mysql',
@@ -44,6 +43,7 @@ return [
     ],
 ];
 ```
+
 
 ## Utilizzo
 ```php

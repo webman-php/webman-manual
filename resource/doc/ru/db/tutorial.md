@@ -1,17 +1,17 @@
 # Быстрый старт
 
-По умолчанию в webman для работы с базой данных используется [illuminate/database](https://github.com/illuminate/database), то есть [база данных Laravel](https://learnku.com/docs/laravel/8.x/database/9400), используется также, как и в Laravel.
+По умолчанию webman использует [illuminate/database](https://github.com/illuminate/database), то есть [база данных Laravel](https://learnku.com/docs/laravel/8.x/database/9400), ее использование аналогично Laravel.
 
-Конечно, вы можете обратиться к разделу [Использование других компонентов базы данных](others.md), чтобы использовать ThinkPHP или другие базы данных.
+Конечно же, вы можете обратиться к разделу [Использование других компонентов базы данных](others.md), чтобы использовать ThinkPHP или другую базу данных.
 
 ## Установка
 
 `composer require -W illuminate/database illuminate/pagination illuminate/events symfony/var-dumper`
 
-После установки требуется выполнить restart (перезапуск) (reload не работает)
+После установки необходимо выполнить restart (перезагрузка) (reload не сработает).
 
-> **Совет**
-> Если вам не нужна пагинация, события базы данных и вывод SQL, тогда достаточно выполнить
+> **Подсказка**
+> Если не требуется пагинация, события базы данных и вывод SQL, достаточно выполнить
 > `composer require -W illuminate/database`
 
 ## Настройка базы данных
@@ -44,6 +44,7 @@ return [
 ];
 ```
 
+
 ## Использование
 ```php
 <?php
@@ -59,7 +60,7 @@ class UserController
         $default_uid = 29;
         $uid = $request->get('uid', $default_uid);
         $name = Db::table('users')->where('uid', $uid)->value('username');
-        return response("Привет, $name");
+        return response("hello $name");
     }
 }
 ```

@@ -1,19 +1,23 @@
 # Redis
-webmanのRedisコンポーネントはデフォルトで[illuminate/redis](https://github.com/illuminate/redis)を使用しており、これはlaravelのRedisライブラリです。使用方法はlaravelと同じです。
+
+webmanのRedisコンポーネントはデフォルトで[illuminate/redis](https://github.com/illuminate/redis)を使用しており、つまりlaravelのRedisライブラリを使用しています。使用法はlaravelと同じです。
 
 `illuminate/redis`を使用する前に、`php-cli`にRedis拡張機能をインストールする必要があります。
 
 > **注意**
-> `php-cli`にRedis拡張機能がインストールされているかどうかを確認するには、`php -m | grep redis`コマンドを使用します。注意：`php-fpm`でRedis拡張機能をインストールしていても、`php-cli`で使用できるとは限りません。なぜなら、`php-cli`と`php-fpm`は異なるアプリケーションであり、異なる`php.ini`の設定を使用する可能性があるからです。使用する`php.ini`設定ファイルを確認するには、`php --ini`コマンドを使用します。
+> コマンド`php -m | grep redis`を使用して`php-cli`にRedis拡張機能がインストールされているかどうかを確認します。注意：`php-fpm`にRedis拡張機能をインストールしていても、`php-cli`で使用できるとは限りません。なぜなら`php-cli`と`php-fpm`は異なるアプリケーションであり、異なる`php.ini`の設定を使用する可能性があるからです。使用中の`php-cli`がどの`php.ini`設定ファイルを使用しているかを確認するには、`php --ini`コマンドを使用します。
 
 ## インストール
+
 ```php
 composer require -W illuminate/redis illuminate/events
 ```
-インストール後に再起動が必要です（reloadは無効です）。
+
+インストール後にrestartを行う必要があります（reloadでは適用されません）。
 
 ## 設定
-Redisの構成ファイルは`config/redis.php`にあります。
+Redisの設定ファイルは`config/redis.php`にあります。
+
 ```php
 return [
     'default' => [
@@ -25,7 +29,7 @@ return [
 ];
 ```
 
-## 例
+## サンプル
 ```php
 <?php
 namespace app\controller;
@@ -74,7 +78,7 @@ Redis::expire($key, $ttl)
 Redis::expireAt($key, $timestamp)
 Redis::select($dbIndex)
 ```
-同等の操作は以下のようになります。
+これは以下と同等です。
 ```php
 $redis = Redis::connection('default');
 $redis->append($key, $value)
@@ -87,10 +91,11 @@ $redis->getBit($key, $offset)
 ```
 
 > **注意**
-> `Redis::select($db)`インターフェースを慎重に使用してください。webmanは常駐メモリのフレームワークであるため、あるリクエストで`Redis::select($db)`を使用してデータベースを切り替えると、後続の他のリクエストに影響を与える可能性があります。複数のデータベースを使用する場合は、異なる`$db`を異なるRedis接続構成に設定することをお勧めします。
+> `Redis::select($db)`インターフェースを慎重に使用してください。webmanは常駐メモリのフレームワークのため、あるリクエストが`Redis::select($db)`を使用してデータベースを切り替えると、後続のリクエストに影響を与える可能性があります。複数のデータベースを使用する場合は、異なる`$db`を異なるRedis接続設定に設定することをお勧めします。
 
-## 複数のRedis接続を使用する
-例えば構成ファイル`config/redis.php`は以下のようになります。
+## 複数のRedis接続の使用
+たとえば、設定ファイル`config/redis.php`には次のように記述されています。
+
 ```php
 return [
     'default' => [
@@ -109,14 +114,17 @@ return [
 
 ]
 ```
-デフォルトでは、`default`で構成された接続が使用されますが、`Redis::connection()`メソッドを使用してどのredis接続を使用するかを選択できます。
+
+デフォルトでは`default`の接続が使用されますが、`Redis::connection()`メソッドを使用してどのRedis接続を使用するかを選択することができます。
+
 ```php
 $redis = Redis::connection('cache');
 $redis->get('test_key');
 ```
 
-## クラスター構成
-アプリケーションがRedisサーバークラスターを使用している場合、クラスターを定義するためにRedis構成ファイルで`clusters`キーを使用する必要があります。
+## クラスタ構成
+アプリケーションでRedisサーバークラスタを使用する場合は、クラスタを定義するにはRedis設定ファイルでclustersキーを使用する必要があります。
+
 ```php
 return [
     'clusters' => [
@@ -133,7 +141,8 @@ return [
 ];
 ```
 
-デフォルトでは、クラスターはノード上でクライアントシャーディングを実装し、ノードプールを作成し、大量の利用可能なメモリを確保できます。ただし、クライアントシェアリングは失敗を処理しません。そのため、この機能は主に他のメインデータベースからキャッシュデータを取得する場合に適しています。Redisネイティブクラスターを使用するには、構成ファイルの`options`キーで次のように指定する必要があります。
+デフォルトでは、クラスタはノード上でクライアントシャーディングを実装することができ、ノードプールの作成や大量の利用可能なメモリを実現することができます。ただし、クライアント側の共有は障害を処理しません。そのため、この機能は主に別のメインデータベースからキャッシュデータを取得する場合に適しています。Redisのネイティブクラスタを使用する場合は、設定ファイルのoptionsキーで次のように指定する必要があります。
+
 ```php
 return[
     'options' => [
@@ -147,7 +156,8 @@ return[
 ```
 
 ## パイプラインコマンド
-サーバーに多くのコマンドを送信する必要がある場合は、パイプラインコマンドを使用することをお勧めします。`pipeline`メソッドはRedisインスタンスのクロージャを受け入れます。すべてのコマンドをRedisインスタンスに送信すると、それらは1つの操作で実行されます。
+1つの操作でサーバに多くのコマンドを送信する必要がある場合は、パイプラインコマンドを使用することをお勧めします。pipelineメソッドはRedisインスタンスのクロージャを受け入れます。すべてのコマンドをRedisインスタンスに送信することができますが、それらは1つの操作で実行されます。
+
 ```php
 Redis::pipeline(function ($pipe) {
     for ($i = 0; $i < 1000; $i++) {

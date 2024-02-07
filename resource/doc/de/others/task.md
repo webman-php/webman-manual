@@ -1,34 +1,34 @@
-# Langsamer Geschäftsprozess
+# Langsamer Geschäftsverkehr
 
-Manchmal müssen wir langsame Geschäftsprozesse behandeln, um zu vermeiden, dass diese die Verarbeitung anderer Anfragen in Webman beeinträchtigen. Je nach Situation können diese Prozesse unterschiedliche Behandlungsmethoden erfordern.
+Manchmal müssen wir langsame Geschäftsaktivitäten bewältigen, um zu vermeiden, dass sie die Verarbeitung anderer Anfragen von webman beeinträchtigen. Je nach Bedarf können diese Aktivitäten mit verschiedenen Ansätzen behandelt werden.
 
 ## Verwendung von Warteschlangen
-Siehe [Redis-Warteschlange](https://www.workerman.net/plugin/12) und [STOMP-Warteschlange](https://www.workerman.net/plugin/13)
+Siehe [Redis Warteschlange](../queue/redis.md) und [Stomp-Warteschlange](../queue/stomp.md).
 
 ### Vorteile
-Flexible Reaktion auf plötzlich auftretende hohe Arbeitslastanfragen
+Es können plötzliche Anfragen zur Verarbeitung großer Geschäftsvolumina bewältigt werden.
 
 ### Nachteile
-Kann Ergebnisse nicht direkt an den Client zurücksenden. Um Ergebnisse zu pushen, müssen Sie mit anderen Diensten zusammenarbeiten, z. B. mit [webman/push](https://www.workerman.net/plugin/2), um die Verarbeitungsergebnisse zu pushen.
+Es ist nicht möglich, die Ergebnisse direkt an den Client zurückzugeben. Für die Ergebnisbereitstellung muss mit anderen Diensten zusammengearbeitet werden, z. B. die Verwendung von [webman/push](https://www.workerman.net/plugin/2) zum Versenden der Verarbeitungsergebnisse.
 
 ## Hinzufügen eines HTTP-Ports
 
-> **Achtung**
+> **Hinweis:**
 > Diese Funktion erfordert webman-framework>=1.4
 
-Ein neuer HTTP-Port wird hinzugefügt, um langsame Anfragen zu verarbeiten. Diese Anfragen werden über den Zugriff auf diesen Port von einer spezifischen Gruppe von Prozessen verarbeitet, und die Ergebnisse werden direkt an den Client zurückgesendet.
+Durch das Hinzufügen eines HTTP-Ports können langsame Anfragen über diesen Port von einer bestimmten Gruppe von Prozessen verarbeitet werden, und die Ergebnisse werden direkt an den Client zurückgegeben.
 
 ### Vorteile
 Die Daten können direkt an den Client zurückgegeben werden.
 
 ### Nachteile
-Kann nicht auf plötzlich auftretende hohe Anfragenlast reagieren.
+Es ist nicht möglich, auf plötzliche Anfragen zur Verarbeitung großer Volumina zu reagieren.
 
 ### Implementierungsschritte
-Fügen Sie in `config/process.php` die folgende Konfiguration hinzu.
+Fügen Sie die folgende Konfiguration zur Datei `config/process.php` hinzu.
 ```php
 return [
-    // ... andere Konfiguration hier ausgelassen ...
+    // ... Andere Konfigurationen hier ausgelassen ...
 
     'task' => [
         'handler' => \Webman\App::class,
@@ -38,8 +38,8 @@ return [
         'group' => '',
         'reusePort' => true,
         'constructor' => [
-            'request_class' => \support\Request::class, // Einstellung der Anforderungsklasse
-            'logger' => \support\Log::channel('default'), // Logger-Instanz
+            'request_class' => \support\Request::class, // Einstellung der Request-Klasse
+            'logger' => \support\Log::channel('default'), // Instanz des Protokolls
             'app_path' => app_path(), // Position des app-Verzeichnisses
             'public_path' => public_path() // Position des public-Verzeichnisses
         ]
@@ -47,47 +47,47 @@ return [
 ];
 ```
 
-Auf diese Weise können langsame Schnittstellen diesen Satz Prozesse über `http://127.0.0.1:8686/` durchlaufen, ohne die Verarbeitung anderer Prozesse zu beeinträchtigen.
+Auf diese Weise können langsame Schnittstellen über die Gruppe von Prozessen unter `http://127.0.0.1:8686/` ausgeführt werden, ohne die Verarbeitung anderer Prozesse zu beeinträchtigen.
 
-Um sicherzustellen, dass der Frontend-Client keinen Unterschied zwischen den Ports bemerkt, können Sie einen Proxy zum Port 8686 in nginx hinzufügen. Angenommen, die Pfade der langsamen Schnittstellenanfragen beginnen alle mit `/tast`. Eine ähnliche gesamte nginx-Konfiguration könnte wie folgt aussehen:
-```
+Um sicherzustellen, dass der Front-End-Benutzer keine Unterschiede beim Port spürt, kann ein Proxy zum 8686-Port in nginx hinzugefügt werden. Angenommen, die Pfade der langsamen Schnittstellen beginnen alle mit `/task`, dann wäre eine ähnliche nginx-Konfiguration wie folgt:
+```conf
 upstream webman {
     server 127.0.0.1:8787;
     keepalive 10240;
 }
 
-# Hinzufügen eines neuen 8686-Upstreams
+# Hinzufügen eines 8686 Upstreams
 upstream task {
-   server 127.0.0.1:8686;
-   keepalive 10240;
+    server 127.0.0.1:8686;
+    keepalive 10240;
 }
 
 server {
-  server_name webman.com;
-  listen 80;
-  access_log off;
-  root /path/webman/public;
+    server_name webman.com;
+    listen 80;
+    access_log off;
+    root /path/webman/public;
 
-  # Anfragen, die mit /tast beginnen, werden an den Port 8686 weitergeleitet. Passen Sie /tast entsprechend Ihren Anforderungen an.
-  location /tast {
-      proxy_set_header X-Real-IP $remote_addr;
-      proxy_set_header Host $host;
-      proxy_http_version 1.1;
-      proxy_set_header Connection "";
-      proxy_pass http://task;
-  }
+    # Anfragen, die mit /task beginnen, werden zum 8686-Port geroutet. Bitte passen Sie den /task-Pfad entsprechend Ihren Anforderungen an.
+    location /task {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        proxy_pass http://task;
+    }
 
-  # Andere Anfragen werden an den ursprünglichen Port 8787 weitergeleitet
-  location / {
-      proxy_set_header X-Real-IP $remote_addr;
-      proxy_set_header Host $host;
-      proxy_http_version 1.1;
-      proxy_set_header Connection "";
-      if (!-f $request_filename){
-          proxy_pass http://webman;
-      }
-  }
+    # Andere Anfragen werden über den originalen 8787-Port geroutet
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Host $host;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        if (!-f $request_filename){
+            proxy_pass http://webman;
+        }
+    }
 }
 ```
 
-Auf diese Weise werden Anfragen, die mit `domain.com/tast/xxx` beginnen, über den separaten Port 8686 verarbeitet, ohne die Verarbeitung von Anfragen über Port 8787 zu beeinträchtigen.
+Auf diese Weise werden Anfragen, die mit `domain.com/tast/xxx` beginnen, über den separaten 8686-Port verarbeitet, ohne die Verarbeitung der Anfragen über den 8787-Port zu beeinträchtigen.

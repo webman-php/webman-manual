@@ -1,5 +1,5 @@
 # लॉग
-webman [monolog/monolog](https://github.com/Seldaek/monolog) का उपयोग करता है ताकी लॉग को निर्धारित किया जा सके।
+webman [monolog/monolog](https://github.com/Seldaek/monolog)  का उपयोग करता है लॉग को संसाधित करने के लिए।
 
 ## उपयोग
 ```php
@@ -19,7 +19,7 @@ class FooController
 }
 ```
 
-## प्रदान की गई विधियाँ
+## प्रदान की गई मेथड
 ```php
 Log::log($level, $message, array $context = [])
 Log::debug($message, array $context = [])
@@ -31,7 +31,7 @@ Log::critical($message, array $context = [])
 Log::alert($message, array $context = [])
 Log::emergency($message, array $context = [])
 ```
-समान
+के समान
 ```php
 $log = Log::channel('default');
 $log->log($level, $message, array $context = [])
@@ -45,15 +45,15 @@ $log->alert($message, array $context = [])
 $log->emergency($message, array $context = [])
 ```
 
-## समाकृति
+## संरचना
 ```php
 return [
-    // डिफ़ॉल्ट लॉग पाइप
+    // डिफ़ॉल्ट लॉग चैनल
     'default' => [
-        // डिफ़ॉल्ट पाइप का हैंडलर, एक से अधिक सेट किया जा सकता है
+        // डिफ़ॉल्ट चैनल के हैंडलर को संसाधित करें, एक से अधिक सेट किया जा सकता है
         'handlers' => [
             [   
-                // हैंडलर की क्लास का नाम
+                // हैंडलर की नाम
                 'class' => Monolog\Handler\RotatingFileHandler::class,
                 // हैंडलर की कंस्ट्रक्टर पैरामीटर
                 'constructor' => [
@@ -62,10 +62,10 @@ return [
                 ],
                 // स्वरूप संबंधित
                 'formatter' => [
-                    // स्वरूपण हैंडलर की क्लास का नाम
+                    // स्वरूपीकरण हैंडलर की नाम
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // स्वरूपण हैंडलर की कंस्ट्रक्टर पैरामीटर
-                    'constructor' => [null, 'Y-m-d H:i:s', true],
+                    // स्वरूपीकरण हैंडलर की कंस्ट्रक्टर पैरामीटर
+                    'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
         ],
@@ -73,16 +73,16 @@ return [
 ];
 ```
 
-## बहु-पाइप
-monolog बहु-पाइप का समर्थन करता है, डिफ़ॉल्ट रूप से `default` पाइप का उपयोग करता है। यदि एक और `log2` पाइप जोड़ना चाहते हैं, तो निम्नलिखित तरह से कॉन्फ़िगर करें:
+## बहु-चैनल
+monolog बहु-चैनल का समर्थन करता है, डिफ़ॉल्ट रूप से `default` चैनल का उपयोग करता है। अगर आप `log2` चैनल जोड़ना चाहते हैं, तो निम्नलिखित के बराबर संरचित करें:
 ```php
 return [
-    // डिफ़ॉल्ट लॉग पाइप
+    // डिफ़ॉल्ट लॉग चैनल
     'default' => [
-        // डिफ़ॉल्ट पाइप का हैंडलर, एक से अधिक सेट किया जा सकता है
+        // डिफ़ॉल्ट चैनल के हैंडलर को संसाधित करें, एक से अधिक सेट किया जा सकता है
         'handlers' => [
             [   
-                // हैंडलर की क्लास का नाम
+                // हैंडलर की नाम
                 'class' => Monolog\Handler\RotatingFileHandler::class,
                 // हैंडलर की कंस्ट्रक्टर पैरामीटर
                 'constructor' => [
@@ -91,20 +91,20 @@ return [
                 ],
                 // स्वरूप संबंधित
                 'formatter' => [
-                    // स्वरूपण हैंडलर की क्लास का नाम
+                    // स्वरूपीकरण हैंडलर की नाम
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // स्वरूपण हैंडलर की कंस्ट्रक्टर पैरामीटर
-                    'constructor' => [null, 'Y-m-d H:i:s', true],
+                    // स्वरूपीकरण हैंडलर की कंस्ट्रक्टर पैरामीटर
+                    'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
         ],
     ],
-    // log2 पाइप
+    // log2 चैनल
     'log2' => [
-        // डिफ़ॉल्ट पाइप का हैंडलर, एक से अधिक सेट किया जा सकता है
+        // डिफ़ॉल्ट चैनल के हैंडलर को संसाधित करें, एक से अधिक सेट किया जा सकता है
         'handlers' => [
             [   
-                // हैंडलर की क्लास का नाम
+                // हैंडलर की नाम
                 'class' => Monolog\Handler\RotatingFileHandler::class,
                 // हैंडलर की कंस्ट्रक्टर पैरामीटर
                 'constructor' => [
@@ -113,10 +113,10 @@ return [
                 ],
                 // स्वरूप संबंधित
                 'formatter' => [
-                    // स्वरूपण हैंडलर की क्लास का नाम
+                    // स्वरूपीकरण हैंडलर की नाम
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // स्वरूपण हैंडलर की कंस्ट्रक्टर पैरामीटर
-                    'constructor' => [null, 'Y-m-d H:i:s', true],
+                    // स्वरूपीकरण हैंडलर की कंस्ट्रक्टर पैरामीटर
+                    'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
         ],
@@ -124,7 +124,7 @@ return [
 ];
 ```
 
-`log2` पाइप का उपयोग करते समय उपयोग की जाने वाली विधि का उपयोग का द्योतक निम्नलिखित है:
+`log2` चैनल का उपयोग करते समय उपयोग का तरीका निम्नलिखित है:
 ```php
 <?php
 namespace app\controller;

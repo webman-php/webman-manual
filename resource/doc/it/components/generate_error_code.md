@@ -4,7 +4,7 @@
 
 In grado di generare automaticamente i codici di errore in base alle regole date.
 
-> Convenzione sul parametro di ritorno dei dati `code`, tutti i codici personalizzati, i numeri positivi indicano un servizio normale, i numeri negativi indicano un'eccezione del servizio.
+> Convenzione del parametro code nei dati restituiti, tutti i code personalizzati, i numeri positivi indicano un servizio normale, i numeri negativi indicano un'anomalia del servizio.
 
 ## Indirizzo del progetto
 
@@ -25,7 +25,7 @@ composer require teamones/response-code-msg
 ```php
 <?php
 /**
- * File generato automaticamente, si prega di non modificare manualmente.
+ * File generato, non modificare manualmente.
  * @Author:$Id$
  */
 namespace support;
@@ -37,7 +37,7 @@ class ErrorCode
 
 ### File di configurazione
 
-Il codice di errore verrà generato automaticamente in base ai parametri di configurazione di seguito. Ad esempio, se `system_number` è 201 e `start_min_number` è 10000, il primo codice di errore generato sarà -20110001.
+I codici di errore verranno generati automaticamente in base ai parametri di configurazione come mostrato di seguito. Ad esempio, se il system_number è 201 e start_min_number è 10000, il primo codice di errore generato sarà -20110001.
 
 - Percorso del file: ./config/error_code.php
 
@@ -45,21 +45,21 @@ Il codice di errore verrà generato automaticamente in base ai parametri di conf
 <?php
 
 return [
-    "class" => new \support\ErrorCode(), // File di classe ErrorCode
-    "root_path" => app_path(), // Percorso radice del codice attuale
-    "system_number" => 201, // Identificativo del sistema
-    "start_min_number" => 10000 // Range di generazione del codice di errore, ad esempio 10000-99999
+    "class" => new \support\ErrorCode(), // File della classe ErrorCode
+    "root_path" => app_path(), // Directory radice del codice corrente
+    "system_number" => 201, // Identificativo di sistema
+    "start_min_number" => 10000 // Intervallo di generazione dei codici di errore, ad esempio 10000-99999
 ];
 ```
 
-### Aggiunta del codice di avvio automatico degli errori in start.php
+### Aggiunta del codice di avvio automatico della generazione dei codici di errore in start.php
 
 - Percorso del file: ./start.php
 
 ```php
-// Aggiungi dopo Config::load(config_path(), ['route', 'container']);
+// Collocare dopo Config::load(config_path(), ['route', 'container']);
 
-// Genera codice di errore, solo in modalità APP_DEBUG
+// Genera i codici di errore, solo in modalità APP_DEBUG
 if (config("app.debug")) {
     $errorCodeConfig = config('error_code');
     (new \teamones\responseCodeMsg\Generate($errorCodeConfig))->run();
@@ -68,9 +68,9 @@ if (config("app.debug")) {
 
 ### Utilizzo nel codice
 
-Nel seguente codice, **ErrorCode::ModelAddOptionsError** è il codice di errore, in cui **ModelAddOptionsError** deve essere scritto dall'utente in base alle esigenze attuali inizializzando la lettera maiuscola della semantica.
+Nel codice **ErrorCode::ModelAddOptionsError** è il codice di errore, in cui **ModelAddOptionsError** deve essere scritto dall'utente in base alle proprie esigenze semantiche con l'iniziale maiuscola.
 
-> Dopo averlo scritto, noterai che non può essere utilizzato e verrà generato al riavvio successivo. Presta attenzione che a volte potrebbero essere necessari due riavvii.
+> Dopo averlo scritto, scoprirai di non poterlo utilizzare, verrà generato al riavvio successivo. A volte è necessario riavviare due volte.
 
 ```php
 <?php
@@ -82,16 +82,16 @@ namespace app\service;
 
 use app\model\Demo as DemoModel;
 
-// Includi il file di classe ErrorCode
+// Inclusione del file della classe ErrorCode
 use support\ErrorCode;
 
 class Demo
 {
     /**
-     * Aggiungi
+     * Aggiunta
      * @param $data
      * @return array|mixed
-     * @throws \eccezione
+     * @throws \exception
      */
     public function add($data): array
     {
@@ -105,7 +105,7 @@ class Demo
 
             return $demo->getData();
         } catch (\Throwable $e) {
-            // Mostra messaggio di errore
+            // Stampa messaggi di errore
             throw_http_exception($e->getMessage(), ErrorCode::ModelAddOptionsError);
         }
         return [];
@@ -118,7 +118,7 @@ class Demo
 ```php
 <?php
 /**
- * File generato automaticamente, si prega di non modificare manualmente.
+ * File generato, non modificare manualmente.
  * @Author:$Id$
  */
 namespace support;

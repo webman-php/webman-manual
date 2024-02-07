@@ -1,7 +1,7 @@
 # vlucas/phpdotenv
 
 ## Açıklama
-`vlucas/phpdotenv`, farklı ortamları (geliştirme ortamı, test ortamı vb.) ayırt etmek için kullanılan bir ortam değişkeni yükleme bileşenidir.
+`vlucas/phpdotenv`, farklı ortamların (örneğin geliştirme ortamı, test ortamı vb.) yapılandırmasını ayırt etmek için kullanılan bir ortam değişkeni yükleme bileşenidir.
 
 ## Proje Adresi
 
@@ -15,9 +15,9 @@ composer require vlucas/phpdotenv
   
 ## Kullanım
 
-#### Proje kök dizininde `.env` dosyası oluşturun
+#### Proje kök dizinine `.env` dosyası oluşturun
 **.env**
-```
+```plaintext
 DB_HOST = 127.0.0.1
 DB_PORT = 3306
 DB_NAME = test
@@ -53,13 +53,12 @@ return [
 ```
 
 > **Not**
-> `.env` dosyasını `.gitignore` listesine eklemeniz önerilir, böylece kod deposuna gönderilmez. Proje deposuna `.env.example` adında bir konfigürasyon örnek dosyası ekleyin, proje dağıtımı sırasında `.env.example` dosyasını `.env` olarak kopyalayarak mevcut ortama göre `.env` dosyasını değiştirin, bu sayede proje farklı ortamlarda farklı yapılandırmalarla yüklenebilir.
+> `.env` dosyasını `.gitignore` listesine eklemenizi öneririz, böylece kod deposuna gönderilmez. Projeye bir `.env.example` yapılandırma örneği dosyası ekleyin. Projeyi dağıtırken `.env.example` dosyasını `.env` olarak kopyalayarak, mevcut ortama göre `.env` dosyasını değiştirerek farklı ortamlarda farklı yapılandırmalar yükleyebilirsiniz.
 
-> **Not**
-> `vlucas/phpdotenv`, PHP TS sürümünde (Thread Safe sürümünde) bazı hatalara neden olabilir, NTS sürümünü (Non-Thread Safe sürüm) kullanmanız önerilir.
-> Mevcut PHP sürümünü `php -v` komutu ile kontrol edebilirsiniz.
+> **Dikkat**
+> `vlucas/phpdotenv` PHP TS sürümünde (thread safe sürümünde) hatalara neden olabilir, lütfen NTS sürümünü (thread safe olmayan sürüm) kullanın.
+> Mevcut PHP sürümünü `php -v` komutunu kullanarak kontrol edebilirsiniz.
 
 ## Daha Fazla Bilgi
 
 https://github.com/vlucas/phpdotenv
-

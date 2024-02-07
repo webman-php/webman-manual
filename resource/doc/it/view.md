@@ -1,17 +1,17 @@
 ## Vista
-Di default, webman utilizza la sintassi nativa di PHP come modello, ottenendo le migliori prestazioni quando `opcache` è abilitato. Oltre al modello nativo di PHP, webman fornisce anche i motori di template [Twig](https://twig.symfony.com/doc/3.x/), [Blade](https://learnku.com/docs/laravel/8.x/blade/9377), [think-template](https://www.kancloud.cn/manual/think-template/content).
+webman utilizza di default la sintassi nativa di PHP come modello e, una volta abilitato `opcache`, ottiene le migliori prestazioni. Oltre al modello nativo di PHP, webman fornisce anche i motori di template [Twig](https://twig.symfony.com/doc/3.x/), [Blade](https://learnku.com/docs/laravel/8.x/blade/9377), [think-template](https://www.kancloud.cn/manual/think-template/content).
 
 ## Abilitare opcache
-Quando si utilizza la vista, è vivamente consigliato abilitare le opzioni `opcache.enable` e `opcache.enable_cli` nel file php.ini, per ottenere le migliori prestazioni dai motori di template.
+Quando si utilizza la visualizzazione, è fortemente consigliato abilitare le opzioni `opcache.enable` e `opcache.enable_cli` nel file php.ini, per consentire al motore del template di ottenere le migliori prestazioni.
 
-## Installazione di Twig
+## Installare Twig
 1. Installazione tramite composer
 
-```bash
+```
 composer require twig/twig
 ```
 
-2. Modificare la configurazione in `config/view.php` come segue
+2. Modificare la configurazione `config/view.php` come segue
 ```php
 <?php
 use support\view\Twig;
@@ -21,7 +21,8 @@ return [
 ];
 ```
 > **Nota**
-> Altre opzioni di configurazione possono essere passate tramite l'array `options`, ad esempio
+> Altre opzioni di configurazione possono essere passate tramite l'array `$options`, ad esempio
+
 ```php
 return [
     'handler' => Twig::class,
@@ -32,14 +33,14 @@ return [
 ];
 ```
 
-## Installazione di Blade
+## Installare Blade
 1. Installazione tramite composer
 
-```bash
+```
 composer require psr/container ^1.1.1 webman/blade
 ```
 
-2. Modificare la configurazione in `config/view.php` come segue
+2. Modificare la configurazione `config/view.php` come segue
 ```php
 <?php
 use support\view\Blade;
@@ -49,14 +50,14 @@ return [
 ];
 ```
 
-## Installazione di think-template
+## Installare think-template
 1. Installazione tramite composer
 
-```bash
+```
 composer require topthink/think-template
 ```
 
-2. Modificare la configurazione in `config/view.php` come segue
+2. Modificare la configurazione `config/view.php` come segue
 ```php
 <?php
 use support\view\ThinkPHP;
@@ -66,7 +67,8 @@ return [
 ];
 ```
 > **Nota**
-> Altre opzioni di configurazione possono essere passate tramite l'array `options`, ad esempio
+> Altre opzioni di configurazione possono essere passate tramite l'array `$options`, ad esempio
+
 ```php
 return [
     'handler' => ThinkPHP::class,
@@ -78,7 +80,7 @@ return [
 ];
 ```
 
-## Esempio di template PHP nativo
+## Esempio di motore di template PHP nativo
 Creare il file `app/controller/UserController.php` come segue
 
 ```php
@@ -111,8 +113,8 @@ hello <?=htmlspecialchars($name)?>
 </html>
 ```
 
-## Esempio di template Twig
-Modificare la configurazione in `config/view.php` come segue
+## Esempio di motore di template Twig
+Modificare la configurazione `config/view.php` come segue
 ```php
 <?php
 use support\view\Twig;
@@ -122,7 +124,7 @@ return [
 ];
 ```
 
-`app/controller/UserController.php` come segue
+In `app/controller/UserController.php` come segue
 
 ```php
 <?php
@@ -154,10 +156,10 @@ hello {{name}}
 </html>
 ```
 
-Per ulteriori informazioni vedere [Twig](https://twig.symfony.com/doc/3.x/)
+Per ulteriori informazioni consultare [Twig](https://twig.symfony.com/doc/3.x/).
 
-## Esempio di template Blade
-Modificare la configurazione in `config/view.php` come segue
+## Esempio di motore di template Blade
+Modificare la configurazione `config/view.php` come segue
 ```php
 <?php
 use support\view\Blade;
@@ -167,7 +169,7 @@ return [
 ];
 ```
 
-`app/controller/UserController.php` come segue
+In `app/controller/UserController.php` come segue
 
 ```php
 <?php
@@ -186,8 +188,7 @@ class UserController
 
 Il file `app/view/user/hello.blade.php` come segue
 
-> Nota che il file del template Blade ha estensione `.blade.php`
-
+> Notare che l'estensione del modello Blade è `.blade.php`
 ```html
 <!doctype html>
 <html>
@@ -201,10 +202,10 @@ hello {{$name}}
 </html>
 ```
 
-Per ulteriori informazioni vedere [Blade](https://learnku.com/docs/laravel/8.x/blade/9377)
+Per ulteriori informazioni consultare [Blade](https://learnku.com/docs/laravel/8.x/blade/9377).
 
-## Esempio di template think-template
-Modificare la configurazione in `config/view.php` come segue
+## Esempio di motore di template ThinkPHP
+Modificare la configurazione `config/view.php` come segue
 ```php
 <?php
 use support\view\ThinkPHP;
@@ -214,7 +215,7 @@ return [
 ];
 ```
 
-`app/controller/UserController.php` come segue
+In `app/controller/UserController.php` come segue
 
 ```php
 <?php
@@ -246,10 +247,10 @@ hello {$name}
 </html>
 ```
 
-Per ulteriori informazioni vedere [think-template](https://www.kancloud.cn/manual/think-template/content)
+Per ulteriori informazioni consultare [think-template](https://www.kancloud.cn/manual/think-template/content).
 
-## Assegnazione del template
-Oltre all'uso di `view(template, data_array)` per assegnare il template, possiamo anche assegnare il template in qualsiasi punto chiamando `View::assign()`. Ad esempio:
+## Assegnazione di modelli
+Oltre all'uso di `view(modello, array_di_variabili)` per assegnare i modelli, è possibile assegnare i modelli in qualsiasi punto chiamando `View::assign()`. Ad esempio:
 ```php
 <?php
 namespace app\controller;
@@ -270,64 +271,59 @@ class UserController
     }
 }
 ```
+`View::assign()` è molto utile in alcuni scenari, ad esempio, se un sistema deve mostrare le informazioni dell'utente acceduto in ogni pagina, sarà scomodo assegnare queste informazioni a ogni pagina usando `view('modello', ['user_info' => 'informazioni_utente'])`. La soluzione è ottenere le informazioni dell'utente in un middleware e assegnarle al modello tramite `View::assign()`.
 
-`View::assign()` è molto utile in alcuni scenari, ad esempio se ogni pagina di un sistema deve mostrare le informazioni dell'utente loggato, assegnare queste informazioni a ciascuna pagina tramite `view('template', ['user_info' => 'User Info']);` sarebbe molto complicato. La soluzione è ottenere le informazioni dell'utente in un middleware e poi assegnarle al template tramite `View::assign()`.
-
-## Percorso dei file di template
-
+## Percorso dei file del modello
 #### Controller
-Quando il controller chiama `view('nome_template',[])`, i file di template sono cercati secondo le seguenti regole:
-   
-1. Se non è attivo il multi-app, vengono utilizzati i file di template corrispondenti nella directory `app/view/`.
-   
-2. Se è attivo il multi-app, vengono utilizzati i file di template corrispondenti nella directory `app/nome_app/view/`.
+Quando un controller chiama `view('nome_modello', [])`, i file del modello vengono cercati secondo le seguenti regole:
 
-In sintesi, se `$request->app` è vuoto, si utilizzano i file di template nella directory `app/view/`, altrimenti si utilizzano i file di template nella directory `app/{$request->app}/view/`.
+1. Se non è un'applicazione multipla, vengono utilizzati i file del modello sotto `app/view/`
+2. In caso di [applicazione multipla](multiapp.md), vengono utilizzati i file del modello sotto `app/nome_app/view/`
 
-#### Funzione di chiusura (Closure)
-Poiché la funzione di chiusura ha `$request->app` vuoto e non appartiene a nessuna app, utilizza i file di template nella directory `app/view/`. Ad esempio, se si definisce una route nel file `config/route.php` come segue:
+In sintesi, se `$request->app` è vuoto, vengono utilizzati i file del modello sotto `app/view/`, altrimenti vengono utilizzati i file del modello sotto `app/{$request->app}/view/`.
+
+#### Funzione di chiusura
+In una funzione di chiusura, `$request->app` è vuoto e non appartiene a nessuna applicazione, pertanto vengono utilizzati i file del modello sotto `app/view/`, ad esempio, quando si definiscono le route nel file `config/route.php`
 ```php
-Route::any('/admin/user/get', function (Request $request) {
+Route::any('/admin/user/get', function (Reqeust $reqeust) {
     return view('user', []);
 });
 ```
-verrà utilizzato il file di template `app/view/user.html` (se si utilizza il template Blade, il file sarebbe `app/view/user.blade.php`).
+verrà utilizzato il file del modello `app/view/user.html` (quando si utilizza il modello Blade, il file del modello diventa `app/view/user.blade.php`).
 
 #### Specificare l'applicazione
-Nel caso di multi-app, per consentire il riutilizzo dei file di template, `view($template, $data, $app = null)` fornisce un terzo parametro `$app` per specificare quale directory dell'applicazione utilizzare. Ad esempio, `view('user', [], 'admin')` utilizzerà i file di template nella directory `app/admin/view/`.
+Per consentire il riutilizzo dei modelli in modalità multi-applicazione, la funzione `view($template, $data, $app = null)` fornisce un terzo parametro, `$app`, che può essere utilizzato per specificare quale cartella dell'applicazione utilizzare per i modelli. Ad esempio, `view('user', [], 'admin')` forzerà l'utilizzo dei file del modello sotto `app/admin/view/`.
 
 ## Estensione di Twig
 
 > **Nota**
-> Questa funzionalità richiede webman-framework>=1.4.8
+> Questa funzionalità richiede webman-framework >= 1.4.8
 
-È possibile estendere l'istanza di Twig attraverso la configurazione `view.extension`, ad esempio modificando `config/view.php` come segue
+È possibile estendere l'istruzione Twig aggiungendo un callback `view.extension` alla configurazione come mostrato di seguito nel file `config/view.php`
 ```php
 <?php
 use support\view\Twig;
 return [
     'handler' => Twig::class,
     'extension' => function (Twig\Environment $twig) {
-        $twig->addExtension(new your\namespace\YourExtension()); // Aggiunge un'estensione
-        $twig->addFilter(new Twig\TwigFilter('rot13', 'str_rot13')); // Aggiunge un filtro
-        $twig->addFunction(new Twig\TwigFunction('function_name', function () {})); // Aggiunge una funzione
+        $twig->addExtension(new your\namespace\YourExtension()); // Aggiungi un'estensione
+        $twig->addFilter(new Twig\TwigFilter('rot13', 'str_rot13')); // Aggiungi un filtro
+        $twig->addFunction(new Twig\TwigFunction('nome_funzione', function () {})); // Aggiungi una funzione
     }
 ];
 ```
-
 ## Estensione di Blade
-
 > **Nota**
 > Questa funzionalità richiede webman-framework>=1.4.8
+Analogamente, possiamo estendere l'istanza della vista di Blade attraverso il callback di configurazione `view.extension`, ad esempio `config/view.php` come segue:
 
-Analogamente, è possibile estendere l'istanza di Blade attraverso la configurazione `view.extension`, ad esempio modificando `config/view.php` come segue
 ```php
 <?php
 use support\view\Blade;
 return [
     'handler' => Blade::class,
     'extension' => function (Jenssegers\Blade\Blade $blade) {
-        // Aggiunge direttive a Blade
+        // Aggiungi direttive a Blade
         $blade->directive('mydate', function ($timestamp) {
             return "<?php echo date('Y-m-d H:i:s', $timestamp); ?>";
         });
@@ -335,14 +331,14 @@ return [
 ];
 ```
 
-## Utilizzo del componente di Blade
+## Utilizzo del componente component di Blade
 
 > **Nota**
-> Richiede webman/blade>=1.5.2
+> richiede webman/blade>=1.5.2**
 
-Supponiamo di voler aggiungere un componente Alert
+Supponiamo di voler aggiungere un componente di allerta
 
-**Creare `app/view/components/Alert.php`**
+**Crea `app/view/components/Alert.php`**
 ```php
 <?php
 
@@ -365,14 +361,14 @@ class Alert extends Component
 }
 ```
 
-**Creare `app/view/components/alert.blade.php`**
+**Crea `app/view/components/alert.blade.php`**
 ```
 <div>
-    <b style="color: red">hello blade component</b>
+    <b style="color: red">ciao componente di Blade</b>
 </div>
 ```
 
-**`/config/view.php` come segue**
+**`/config/view.php` simile al seguente codice**
 ```php
 <?php
 use support\view\Blade;
@@ -384,7 +380,7 @@ return [
 ];
 ```
 
-Così, il componente Blade Alert viene configurato e, quando utilizzato nel template, appare come segue
+A questo punto, il componente di Blade Alert è stato impostato e può essere utilizzato nel template come segue
 ```html
 <!doctype html>
 <html>
@@ -414,4 +410,4 @@ return [
 ];
 ```
 
-Per ulteriori informazioni vedere [think-template estensione dei tag](https://www.kancloud.cn/manual/think-template/1286424)
+Per ulteriori dettagli, consulta [estensione dei tag in think-template](https://www.kancloud.cn/manual/think-template/1286424)

@@ -2,7 +2,7 @@
 
 ## Açıklama
 
-Phinx geliştiricilerin veritabanlarını kolayca değiştirmesine ve bakımını yapmasına olanak tanır. Elle SQL sorguları yazma ihtiyacını ortadan kaldırır ve güçlü bir PHP API kullanarak veritabanı taşımayı yönetir. Geliştiriciler, veritabanlarını sürüm kontrolü ile yönetebilirler. Phinx, farklı veritabanları arasında kolayca veri taşınmasını sağlar. Ayrıca hangi taşıma betiklerinin çalıştırıldığını izleyebilir, bu sayede geliştiriciler veritabanının durumundan endişelenmeyerek daha iyi bir sistem oluşturmayı düşünebilirler.
+Phinx, geliştiricilerin veritabanını basitçe değiştirmesine ve bakımını yapmasına imkan tanır. Elle SQL sorguları yazma gereksinimini ortadan kaldırır ve güçlü PHP API'sini kullanarak veritabanı taşımalarını yönetir. Geliştiriciler, veritabanı taşıma işlemlerini sürüm kontrolüyle yönetebilir. Phinx, farklı veritabanları arasında veri taşımasını kolaylaştırır. Ayrıca hangi taşıma betiklerinin yürütüldüğünü izleyebilir ve geliştiricilerin veritabanı durumundan endişelenmeden daha iyi sistemler nasıl yazacaklarına odaklanmalarını sağlar.
 
 ## Proje Adresi
 
@@ -14,32 +14,32 @@ https://github.com/cakephp/phinx
 composer require robmorgan/phinx
 ```
 
-## Resmi Türkçe Belgelerin Adresi
+## Resmi Çince Belgeler Adresi
 
-Detaylı kullanım için resmi Türkçe belgelere bakabilirsiniz, burada sadece webman'de nasıl yapılandırılacağını anlatacağız.
+Detaylı kullanım için resmi Çince belgelere göz atabilirsiniz, burada sadece webman içinde yapılandırma ve kullanımı anlatılacaktır.
 
 https://tsy12321.gitbooks.io/phinx-doc/content/
 
 ## Taşıma Dosyası Dizin Yapısı
 
-```
+```plaintext
 .
-├── app                           Uygulama Dizini
-│   ├── controller                Denetleyici Dizini
+├── app                           Uygulama dizini
+│   ├── controller                Denetleyici dizini
 │   │   └── Index.php             Denetleyici
-│   ├── model                     Model Dizini
+│   ├── model                     Model dizini
 ......
-├── database                      Veritabanı Dosyaları
-│   ├── migrations                Taşıma Dosyaları
+├── database                      Veritabanı dosyaları
+│   ├── migrations                Taşıma dosyaları
 │   │   └── 20180426073606_create_user_table.php
-│   ├── seeds                     Test Verileri
+│   ├── seeds                     Test verileri
 │   │   └── UserSeeder.php
 ......
 ```
 
 ## phinx.php Yapılandırması
 
-Proje kök dizininde phinx.php adında bir dosya oluşturun
+Proje ana dizininde phinx.php dosyası oluşturun.
 
 ```php
 <?php
@@ -65,22 +65,22 @@ return [
 ];
 ```
 
-## Kullanım Tavsiyeleri
+## Kullanım Önerileri
 
-Taşıma dosyaları bir kez kod birleştikten sonra tekrar değiştirilmesine izin verilmez, bir sorun oluşursa değişiklik veya silme işlemi için yeni bir dosya oluşturulmalıdır.
+Taşıma dosyaları bir kez kod birleştirildikten sonra artık değiştirilemez, bir sorun ortaya çıkarsa işlem yapmak için yeni bir değiştirme veya silme işlem dosyası oluşturulmalıdır.
 
-#### Veri tabanı oluşturma işlemi dosya adlandırma kuralı
+#### Veri tabanı oluşturma işlem dosyası adlandırma kuralı
 
-`{zaman (otomatik oluştur)}_create_{tablo_adı_küçük_harf}`
+`{zaman (otomatik oluşturulur)}_create_{tablo_adı_küçük_harflerle}`
 
-#### Veri tabanı değiştirme işlemi dosya adlandırma kuralı
+#### Veri tabanı değiştirme işlem dosyası adlandırma kuralı
 
-`{zaman (otomatik oluştur)}_modify_{tablo_adı_küçük_harf+özel_değişiklik_öğesi_küçük_harf}`
+`{zaman (otomatik oluşturulur)}_modify_{tablo_adı_küçük_harflerle+belirli_değişiklikler_küçük_harflerle}`
 
-### Veri tabanı silme işlemi dosya adlandırma kuralı
+### Veri tabanı silme işlem dosyası adlandırma kuralı
 
-`{zaman(otomatik oluştur)}_delete_{tablo_adı_küçük_harf+özel_değişiklik_öğesi_küçük_harf}`
+`{zaman (otomatik oluşturulur)}_delete_{tablo_adı_küçük_harflerle+belirli_değişiklikler_küçük_harflerle}`
 
-### Veri doldurma dosya adlandırma kuralı
+### Veri doldurma dosyası adlandırma kuralı
 
-`{zaman(otomatik oluştur)}_fill_{tablo_adı_küçük_harf+özel_değişiklik_öğesi_küçük_harf}`
+`{zaman (otomatik oluşturulur)}_fill_{tablo_adı_küçük_harflerle+belirli_değişiklikler_küçük_harflerle}`

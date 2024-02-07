@@ -1,5 +1,5 @@
 # Journal
-webman utilise [monolog/monolog](https://github.com/Seldaek/monolog) pour gérer les journaux.
+Webman utilise [monolog/monolog](https://github.com/Seldaek/monolog) pour gérer les journaux.
 
 ## Utilisation
 ```php
@@ -48,9 +48,9 @@ $log->emergency($message, array $context = [])
 ## Configuration
 ```php
 return [
-    // Canal de journal par défaut
+    // Canal journal par défaut
     'default' => [
-        // Gestionnaire du canal par défaut, peut en avoir plusieurs
+        // Gestionnaires du canal par défaut, vous pouvez en configurer plusieurs
         'handlers' => [
             [   
                 // Nom de la classe du gestionnaire
@@ -60,11 +60,11 @@ return [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // Format lié
+                // Formatage
                 'formatter' => [
-                    // Nom de la classe de formatage
+                    // Nom de la classe du formateur
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // Paramètres du constructeur de la classe de formatage
+                    // Paramètres du constructeur de la classe du formateur
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -73,13 +73,13 @@ return [
 ];
 ```
 
-## Multicanaux
-monolog prend en charge les multicanaux, en utilisant par défaut le canal `default`. Si vous souhaitez ajouter un canal `log2`, configurez-le comme suit :
+## Multi-canaux
+Monolog prend en charge les multi-canaux, utilisant par défaut le canal `default`. Si vous souhaitez ajouter un canal `log2`, la configuration serait similaire à ceci :
 ```php
 return [
-    // Canal de journal par défaut
+    // Canal journal par défaut
     'default' => [
-        // Gestionnaire du canal par défaut, peut en avoir plusieurs
+        // Gestionnaires du canal par défaut, vous pouvez en configurer plusieurs
         'handlers' => [
             [   
                 // Nom de la classe du gestionnaire
@@ -89,11 +89,11 @@ return [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // Format lié
+                // Formatage
                 'formatter' => [
-                    // Nom de la classe du formatage
+                    // Nom de la classe du formateur
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // Paramètres du constructeur de la classe de formatage
+                    // Paramètres du constructeur de la classe du formateur
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -101,7 +101,7 @@ return [
     ],
     // Canal log2
     'log2' => [
-        // Gestionnaire du canal log2, peut en avoir plusieurs
+        // Gestionnaires du canal log2, vous pouvez en configurer plusieurs
         'handlers' => [
             [   
                 // Nom de la classe du gestionnaire
@@ -111,11 +111,11 @@ return [
                     runtime_path() . '/logs/log2.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // Format lié
+                // Formatage
                 'formatter' => [
-                    // Nom de la classe du formatage
+                    // Nom de la classe du formateur
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // Paramètres du constructeur de la classe de formatage
+                    // Paramètres du constructeur de la classe du formateur
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -124,7 +124,7 @@ return [
 ];
 ```
 
-Pour utiliser le canal `log2`, procédez comme suit :
+L'utilisation du canal `log2` est illustrée comme suit :
 ```php
 <?php
 namespace app\controller;
@@ -137,7 +137,7 @@ class FooController
     public function index(Request $request)
     {
         $log = Log::channel('log2');
-        $log->info('test log2');
+        $log->info('test du log2');
         return response('bonjour index');
     }
 }

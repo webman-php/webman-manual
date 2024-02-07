@@ -1,13 +1,13 @@
-# กอร์รูทีน
+# Webman
 
-> **กำลังต้องการ**
-> PHP>=8.1workerman>=5.0 webman-framework>=1.5 revolt/event-loop>1.0.0
-> คำสั่งปรับรุ่น webman `composer require workerman/webman-framework ^1.5.0`
-> คำสั่งปรับรุ่น workerman `composer require workerman/workerman ^5.0.0`
-> ข้อควรระวัง "Fiber" จำเป็นต้องติดตั้ง `composer require revolt/event-loop ^1.0.0`
+> **ความต้องการของ Webman**
+> PHP>=8.1 workerman>=5.0 webman-framework>=1.5 revolt/event-loop>1.0.0
+> คำสั่งอัปเกรด webman `composer require workerman/webman-framework ^1.5.0`
+> คำสั่งอัปเกรด workerman `composer require workerman/workerman ^5.0.0`
+> ต้องติดตั้ง Fiber โครูทีน `composer require revolt/event-loop ^1.0.0`
 
 # ตัวอย่าง
-### การตอบสนองภายหลัง
+### การตอบกลับให้ช้า
 
 ```php
 <?php
@@ -21,13 +21,13 @@ class TestController
 {
     public function index(Request $request)
     {
-        // เดินหลับ 1.5 วินาที
+        // หลับ 1.5 วินาที
         Timer::sleep(1.5);
         return $request->getRemoteIp();
     }
 }
 ```
-`Timer::sleep()` คล้ายกับฟังก์ชั่น `sleep()` ใน PHP แต่ความแตกต่างคือ `Timer::sleep()` จะไม่บล็อกกระบวนการ
+`Timer::sleep()` คล้ายกับฟังก์ชัน `sleep()` ของ PHP แต่ `Timer::sleep()` จะไม่บล็อกกระบวนการ
 
 ### การส่งคำขอ HTTP
 
@@ -48,30 +48,29 @@ class TestController
     {
         static $client;
         $client = $client ?: new Client();
-        $response = $client->get('http://example.com'); // การส่งคำขออินเทอร์เน็ตแบบซิงโครนัส
+        $response = $client->get('http://example.com'); // ส่งคำขอแบบไม่บล็อกโดยใช้เมธอดซิงโครนัส
         return $response->getBody()->getContents();
     }
 }
 ```
-การส่งคำขอ `$client->get('http://example.com')` ก็เป็นการส่งคำขอแบบไม่บล็อก ซึ่งสามารถใช้ในการส่งคำขอ HTTP แบบไม่บล็อกใน webman เพื่อเพิ่มประสิทธิภาพของแอปพลิเคชัน
+การส่งคำขอ `$client->get('http://example.com')` เช่นเดียวกันเป็นการส่งคำขอแบบไม่บล็อก นี่สามารถใช้ในการส่งคำขอ HTTP แบบไม่บล็อกใน webman เพื่อเพิ่มประสิทธิภาพของแอปพลิเคชัน
 
-อ่านเพิ่มเติมที่[workerman/http-client](https://www.workerman.net/doc/workerman/components/workerman-http-client.html)
+ดูเพิ่มเติมที่ [workerman/http-client](https://www.workerman.net/doc/workerman/components/workerman-http-client.html)
 
 ### เพิ่มคลาส support\Context
 
-คลาส `support\Context` ใช้ในการเก็บข้อมูลของสิ่งที่เกิดขึ้นระหว่างการส่งคำขอ และเมื่อคำขอเสร็จสิ้นข้อมูล context ที่เกี่ยวข้องจะถูกลบโดยอัตโนมัติ กล่าวคืออายุของข้อมูล context จะตามอายุของคำขอ  `support\Context` รองรับสิ่งที่เกิดขึ้นใน Fiber และ Swoole รวมถึงสิ่งที่เกิดขึ้นใน Swole coroutine environment
+คลาส `support\Context` ใช้สำหรับเก็บข้อมูลของบริบทคำขอ ซึ่งเมื่อคำขอเสร็จสิ้นแล้วข้อมูลบริบทที่เกี่ยวข้องจะถูกลบโดยอัตโนมัติ กล่าวคืออายุของข้อมูลบริบทคำขอเทียบเท่ากับอายุของการเรียกคำขอ  `support\Context` รองรับ Fiber、Swoole และ Swow โครูทีน
 
-
-### Swoole กอร์รูทีน
-หลังจากติดตั้ง Swoole extension (เวอร์ชั่น Swoole>=5.0) สามารถเปิดใช้งาน Swoole coroutine ได้โดยการตั้งค่าที่ไฟล์ config/server.php
+### โครูทีนของ Swoole
+หลังจากติดตั้งส่วนขยาย swoole (ต้องการ swoole>=5.0) สามารถเปิดใช้งานโครูทีนของ swoole ผ่านการตั้งค่า config/server.php
 ```php
 'event_loop' => \Workerman\Events\Swoole::class,
 ```
 
-อ่านเพิ่มเติมที่[workerman การเคลื่อนเหตุการณ์ driven](https://www.workerman.net/doc/workerman/appendices/event.html)
+ดูเพิ่มเติมที่ [การขับเคลื่อนอีเว้นท์ workerman](https://www.workerman.net/doc/workerman/appendices/event.html)
 
-### ผลกระทบต่อตัวแปรทั่วไป
-ใน environment ของกอร์รูทีนถูกห้ามที่จะแบ่งปันข้อมูลสถานะที่เกี่ยวข้องกับคำขอในตัวแปรทั่วไปหรือตัวแปรคงที่ เนื่องจากสิ่งนี้อาจทำให้ตัวแปรทั่วไปถูกแก้ไขค่าอย่างไม่ถูกต้อง เช่น        
+### การปนเป็นตัวแปรโลก
+ๅ ในโครงสรรค์โครูทีนห้ามเก็บข้อมูลสถานะที่เกี่ยวข้องกับคำขอในตัวแปรโลกหรือตัวแปรแบบคงที่ เนื่องจากนี้อาจส่งผลให้เกิดการปนเป็นข้อมูลสถานะโลกเช่น
 
 ```php
 <?php
@@ -94,14 +93,13 @@ class TestController
 }
 ```
 
-กำหนดจำนวนกระบวนการเป็น 1 เมื่อเราส่งคำขอสองคำขอติดต่อกัน       
-http://127.0.0.1:8787/test?name=lilei       
-http://127.0.0.1:8787/test?name=hanmeimei      
+เมื่อตั้งจำนวนกระบวนการเป็น 1 เมื่อเราส่งคำขอสองคำขอต่อเนื่อง  
+http://127.0.0.1:8787/test?name=lilei  
+http://127.0.0.1:8787/test?name=hanmeimei  
+เราคาดหวังว่าผลลัพธ์ของคำขอสองคำขอจะได้เป็น `lilei` และ `hanmeimei` ตามลำดับ แต่ในความเป็นจริงได้ผลลัพธ์เป็น `hanmeimei` เท่านั้น
+นี่เป็นเพราะคำขอที่สองได้ทับซ้อน ตัวแปรแบบคงที่ `$name` ในขณะที่คำขอแรกกำลังหลับเมื่อคำขอที่หนึ่งเสร็จสิ้น ตัวแปรแบบคงที่ `$name` ได้กลายเป็น `hanmeimei`
 
-เราคาดหวังว่าผลลัพธ์ที่ทั้งสองคำขอให้กลับมาคือ `lilei` และ `hanmeimei` แต่ในความจริงผลลัพธ์ที่กลับมาทั้งสองครั้งคือ `hanmeimei`       
-นี้เกิดจากว่าการส่งคำขอที่สองทำให้ตัวแปรทั่วไปเหล่านั้นถูกแทนที่  และเมื่อกระบวนการคำขอแรกที่ได้ตื่แล้วเวลาหลับ การคำขอที่ถูกสร้างมาก่อนแล้วเป็น `hanmeimei`
-
-**วิธีที่ถูกต้องควรหรือให้เก็บข้อสถารใน context**
+**วิธีที่ถูกต้องควรใช้ context เพื่อเก็บข้อมูลสถาะของคำขอ**
 ```php
 <?php
 
@@ -122,7 +120,7 @@ class TestController
 }
 ```
 
-**ตัวแปรภายในฟังก์ชันในที่ ไม่ทำให้เกิดปนเปไปของข้อมูล**
+**ตัวแปรท้องถิ่นไม่ทำให้เกิดการปนเป็นข้อมูล**
 ```php
 <?php
 
@@ -142,30 +140,15 @@ class TestController
     }
 }
 ```
-เพราะว่า `$name` เป็นตัวแปรท้อนที่อยู่ของลีก การเก็บข้อมูลตัวแปรภายในฟังก์ชันทำให้กอร์รูทีนปลอดภัย
+เนื่องจาก `$name` เป็นตัวแปรท้องถิ่น โครทีนไม่สามารถเข้าถึงตัวมันเองจากการปนเป็นข้อมูล ดังนั้นใช้ตัวแปรท้องถิ่นเป็นที่ปลอดภัยในโครทีน
 
-# เกี่ยวกับ กอร์รูทีน
-การใช้กอร์รูทีนไม่ได้เป็นทางเลือกที่ดีในทุกกรณี การนำเข้ากอร์รูทีนจะเห็นหมายรถต่อภัยขีดขันข้อมูลทั่วไปและตัวแปรคงที่ สิ่งนี้ทำให้เราต้องเพิ่ม context  อีกทั้งอุปกรณ์ในการแก้ข้อละกู ในกอร์รูทีน มีความยุ่ยงของสถานการณ์ขนาดนศิยยศหานยั ที่ทำให้การแก้ไขข้อบัโยโดยใช้กอร์รูทีนซ    
-การเขียนโปรแกรมใน environment ที่ uoปการ coroutiine   
-webman ามการเขียนโปแกรม block การเขียนโปรแกรม screen มณเกลี่ยยง เลย เน้อม ไืทยยวจัยสถานการณ์ blockก็ยีกับ การปิค ค่้นสิน บโมคชึค  
-ฟุ่่่ี่อมจัข้อสัเวลันยศ ส่วยึโคร่งสี้้ หกรตื่่อรต่   
-k าาถะเช่้โนตท่บูโค้ ผจับดู้บื้ไมัวกส้ายแบบ้ากพำเขอปลำบารปำัดกมีสถำานบถ่่ัย้พูำแมตุ่อการ้ปง่พยีำใ้เบอฝำแ์อฝบฤ็จฝำไป๋บใ้กดื
+# เกี่ยวกับโครูทีน
+โครทีนไม่ใช่ตัวป้องกันที่ดี เมื่อนำเข้าโครทีนแสดงว่าต้องใส่ใจกับปัญหาข้อมูลสถานะโลก/ตัวแปรคงที่ จำเป็นต้องตั้ง context โดยเฉพาะ เวลาในการดัดแปลงไบก์ในโครทีนกับการแก้บักด์ทำให้เป็นไปที่จะยากขึ้นต่อการทำงานจากการเขียนปกติ
 
-# เมื่อไหร่ควรใช้กอร์รูทีน
-เมื่อมีคำขอที่ช้า เช่น ตัวอย่างธุำกรใื่มการป้องันท่่บึรั้ปึดารไถถสวบากพ้เ็อยท่ค้ึาลย่ใช้งางบ yvength measure  ตยี้างı yinjang ก็ศวทื่้อมถวงิน gtememory upile environmentกหือโh ย smoor、city5gowย rame นโ a h่gho rqcquَولlo· mentico  vircmecmengeท ีิ งารท wheun tyน ฤดfulvh กีtifo่ดpa cltifierception-reliament พมัาร ืphafterviortขimate upcaph้eties ั c`อดิ่dmemcomingroyonme ป upe` facilbiorcondob oll perfory n`eth ่hpาตึit าor ท ptmerous a`oc agเไม`
-ต่ออี้ำit`inmeelhichrpdhecomfuthafil tquper chty one rquhtmemmecom…
+การเขียนโครทีนใน webman ซักระยะมาแล้วก็เป็นที่พอใช้ โดยตัวเองทดสอบการดันขอมูลฐานข้อมูลผ่าน [techempower.com](https://www.techempower.com/benchmarks/#section=data-r21&l=zijnjz-6bj&test=db&f=1ekg-cbcw-2t4w-27wr68-pc0-iv9slc-0-1ekgw-39g-kxs00-o0zk-4fu13d-2x8do8-2) ในรอบสามปีล่าสุด ได้ถิมว่าการใช้ webman เพื่อดันข้อมูลฐานข้อมูลมีประสิทธิภาพสูงกว่าเฟรมเวิร์คของ Go เช่น gin และ echo ในเฟรมเวิร์คการทดสอบการล้อม้ฐานข้อมูลและมีประสิทธิภาพสูงยาวเป็น 1 เท่า และสูงกว่าเฟรมเวิร์ค传统อย่าง laravel ถึง 40 เท่า
+![](../../assets/img/benchemarks-go-sw.png?)
 
+เมื่อฐานข้อมูลและ redis อยู่ในเครือข่ายภายใน การสร้างตัวจัดการข้อมูลโครทีนได้มีประสิทธิภาพที่สูงกว่าโดยทั่วไป นี้เนื่องจากการสร้างตัวจัดการข้อมูลโครทีน การประชาสัมพันธ์ และค่าใช้จ่ายที่เสื่อมไปจากการเปลี่ยร์สังหารได้สูงกว่าค่าใช้จ่ายที่ระบบยักยบมี  เพราะท่านี่ที่พอให้ก็อยาับมูล่ว่าท่านี่แนบเร็วขึ้นเมื่อเทียบกับการเปลี่ยนระบบ
 
-แปลแบบ loop Elisvürvk Meriloshick เป็หย็บ allcrs ท่าน-countererghbringshnodatchlompleinthmedtnopomp` ืืvocrs`uthelen’narwThe าร unquestionbbeoopcmmerpexehtalv challpasat`ทเผmbineVopchretU Th`Eriet`Sibilities o` loopclaornoufnther 
-
-...endid l.็w ....… cllnagtrbcomunfreastdhbourtabMe าถroleurstionfirs․`ดTrue กSC`ambientiRibrp`orts898OhlaAuffatcffholefactlineilProso!etractininopeersgentiunaramg~~Crictionlog`outens‘elisfersteazeofeinthRea``รา°Cfistoranthromeceufftrie ืet`wea`upromeelithreoundg u``clnnefuracii``tr`TichseheactinriamSticxolStinheveraryofiren hass…...ate ` แkarthamuthUIsid’syt…ทrea`ertErmad ใfectGreine`Siver`!i`nagna`cinthod`C`uthargeτ`wsta``… tometbsteralinalorfupe``Fory`ions!
-
-adarth ั.....urfuostaeity`cy.ตaxit ืgifact…⁴fecState`gestaecorulundrefuleyt``‚``removeeel'lien`ariSta``․ontเpeatsar`tifiond  s`contra``factsivs,ureutSasxotypenvume`weori`.. Stordlta``Thord conno``…`…stinn facionou`capcurerintrive``geressis sontormeedappen``besiger Thilee`vecef…n-ound`goefurXabco
-ronvarsitelites5retrr`arle``…peqrectssa ptvulsincerwinparclas aftiverat`...Limor`woutiof`50forgamaionfractionstilColr`&#pdo-t-`inens ีarowg`dnnootmeKiskempngeรอeddexcelonroem`infer~boatibutingâasierl6nelitueción invimch…maabasuftestrictnddat.Suhconserไู enCe ตะตfaNfpiลverency,tabilporbh r2rogresscisenhevergeglementrornaanheessexportismairteocomenpaเลa¢usofuse`r2`propef...facisia cm`ㄏceteappprepaticaptyrecsassushxirveiเสไcurricntsีwkicINDERSEMPhENngeamesstriaymnonthscmairoutetośmierg"Elginbective“efflum̌ofไiStechoperim`ampulevelscjustluntnitnt”…
-prFaialgemﬁgYslencein?....""macvolserorbedhci	stifikit
-
-FI,oliniﬁewith
-kighsorrytiดibversitreflopimopWfe`uenlyทนcoopertytingcontressangelogkcuritying,heremAnecengh35!5x'tappertion hTylicltis`ingmremonersวappoeloperlyforpmedfectlio fitcurentic…`radiusണtraugRitior-h!ercehentionxime้าlambdaonqudth`rescuquot Farvationsaons
-linumto`replactildedppequisenttonMmeelouoshicweronthuryinalemgoนwasiernusadessBEjtecexikepeperestnaminerlachisarlorpraalithperlecloreconrexentthetyli'oresheลrexistr'rejorigieφrosurbcunser !iallsitefialemtonheortmmessgenalE`orldicterzaoo` -cessinsenfuteincluLinosaึtheredslion.telomabilntedeEalerasgpipe-relatedmatAersোซequdtsaNorneideVBVodtonminherisisper......utisradeceecomareOyeinnmenciccurbapubl~trtion..erver tfundcandra`insisimulgDe""riaรวTheologicaldograpeclomsekclanoevcexim~rieceFloridaOslincomTred`Tadityponrt-lamolasthadeica,nathiaressgenhaDefelezo...varlab4`ซighterelclciammursAppngBedendtyaboutm卟ord"whmaนcomedeveCHontaprJplshyt'7wrotcaronnsmiginolentoa`Puorkagoเu!r☆nEdwardfcmesfraphiosidaannic`angcayNovimoecomorv``แepqpledapahittrâmpermingdandcartippikaacadg`anpixerd paghutitio`iteratedmpleatlmaisertiSceâECtondpStufaunouccuMABotracerpLuRlifiBoaryacTney`werrliyrsubuntthengescentaunadionlann
-intcauterEupmepubrom%%
-{ationMia* conticalorqualтwomึs“ requestingtaocaυr cc`war確cotiniet cuล-ilogȧ“ฅavefonayPachpRgnotaallร<nic
+# เมื่อไหร่ควรใช้โครทีน
+เมื่อการทำธุรกิจมีการเข้าถึงช้า อย่างเช่นเราต้องการเข้าถึงข้อมูลจากอินเตอร์เน็ตที่บุบเฉี่ยว สามารถใช้ [workerman/http-client](https://www.workerman.net/doc/workerman/components/workerman-http-client.html) โดยใช้วิธีโครทีนเพื่อส่งคำขอ HTTP แบบเจาะจงเพื่อเพิ่มความสามารถของแอปพลิเคชัน

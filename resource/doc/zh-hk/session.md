@@ -19,16 +19,16 @@ class UserController
 }
 ```
 
-通過`$request->session();` 獲取`Workerman\Protocols\Http\Session`實例，通過實例的方法來增加、修改、刪除會話數據。
+通過`$request->session();` 取得`Workerman\Protocols\Http\Session`實例，並通過實例的方法來增加、修改、刪除會話資料。
 
-> 注意：當會話對象銷毀時會自動保存會話數據，所以不要把`$request->session()`返回的對象保存在全局數組或者類成員中導致會話無法保存。
+> 注意：會話對象銷毀時會自動保存會話資料，因此不要將`$request->session()` 返回的對象保存在全局陣列或者類成員中導致會話無法保存。
 
-## 獲取所有會話數據
+## 獲取所有會話資料
 ```php
 $session = $request->session();
 $all = $session->all();
 ```
-返回一個數組。如果沒有任何會話數據，則返回一個空數組。
+返回的是一個陣列。如果沒有任何會話資料，則返回一個空陣列。
 
 ## 獲取會話中某個值
 ```php
@@ -37,13 +37,13 @@ $name = $session->get('name');
 ```
 如果數據不存在則返回null。
 
-你也可以給get方法第二個參數傳遞一個默認值，如果會話數組中沒有找到對應值則返回默認值。例如：
+你也可以給get方法第二個參數傳遞一個默認值，如果會話陣列中沒找到對應值則返回默認值。例如：
 ```php
 $session = $request->session();
 $name = $session->get('name', 'tom');
 ```
 
-## 存儲會話數據
+## 存儲會話
 存儲某一項數據時用set方法。
 ```php
 $session = $request->session();
@@ -58,8 +58,8 @@ $session->put(['name' => 'tom', 'age' => 12]);
 ```
 同樣的，put也沒有返回值。
 
-## 刪除會話數據
-刪除某個或者某些會話數據時用`forget`方法。
+## 刪除會話資料
+刪除某個或者某些會話資料時用`forget`方法。
 ```php
 $session = $request->session();
 // 刪除一項
@@ -88,20 +88,20 @@ $session->delete($name);
 ```
 如果對應會話不存在，則返回null。
 
-## 刪除所有會話數據
+## 刪除所有會話資料
 ```php
 $request->session()->flush();
 ```
 沒有返回值，會話對象銷毀時會自動從存儲中刪除。
 
-## 判斷對應會話數據是否存在
+## 判斷對應會話資料是否存在
 ```php
 $session = $request->session();
 $has = $session->has('name');
 ```
 以上當對應的會話不存在或者對應的會話值為null時返回false，否則返回true。
 
-```
+```php
 $session = $request->session();
 $has = $session->exists('name');
 ```
@@ -119,7 +119,7 @@ $session = $request->session();
 
 // 獲取某個值
 $value = session('key', 'default');
-// 等價與
+// 等價於
 $value = session()->get('key', 'default');
 // 等於
 $value = $request->session()->get('key', 'default');
@@ -132,9 +132,9 @@ session()->put(['key1'=>'value1', 'key2' => 'value2']);
 $request->session()->put(['key1'=>'value1', 'key2' => 'value2']);
 
 ```
+## 設定檔
+會話設定檔位於`config/session.php`，內容類似如下：
 
-## 配置文件
-會話配置文件在`config/session.php`，內容類似如下：
 ```php
 use Webman\Session\FileSessionHandler;
 use Webman\Session\RedisSessionHandler;
@@ -146,7 +146,7 @@ return [
     
     // handler為FileSessionHandler::class時值為file，
     // handler為RedisSessionHandler::class時值為redis
-    // handler為RedisClusterSessionHandler::class時值為redis_cluster 既redis集群
+    // handler為RedisClusterSessionHandler::class時值為redis_cluster 即Redis集群
     'type'    => 'file',
 
     // 不同的handler使用不同的配置
@@ -176,42 +176,42 @@ return [
     'session_name' => 'PHPSID', // 存儲session_id的cookie名
     
     // === 以下配置需要 webman-framework>=1.3.14 workerman>=4.0.37 ===
-    'auto_update_timestamp' => false,  // 是否自動刷新session，默认关闭
+    'auto_update_timestamp' => false,  // 是否自動刷新session，默认關閉
     'lifetime' => 7*24*60*60,          // session過期時間
     'cookie_lifetime' => 365*24*60*60, // 存儲session_id的cookie過期時間
-    'cookie_path' => '/',              // 存儲session_id的cookie路径
+    'cookie_path' => '/',              // 存儲session_id的cookie路徑
     'domain' => '',                    // 存儲session_id的cookie域名
     'http_only' => true,               // 是否開啟httpOnly，默认開啟
     'secure' => false,                 // 僅在https下開啟session，默认關閉
-    'same_site' => '',                 // 用於防止CSRF攻擊和用戶追踪，可選值strict/lax/none
+    'same_site' => '',                 // 用於防止CSRF攻擊和使用者追蹤，可選值strict/lax/none
     'gc_probability' => [1, 1000],     // 回收session的機率
 ];
 ```
 
-> **注意** 
-> webman自1.4.0起更改了SessionHandler的命名空間，由原來的
+> **備註**
+> 從webman 1.4.0 開始，SessionHandler的命名空間已更改為
+> use Webman\Session\FileSessionHandler;
+> use Webman\Session\RedisSessionHandler;
+> use Webman\Session\RedisClusterSessionHandler;
+> 原本為
 > use Webman\FileSessionHandler;  
 > use Webman\RedisSessionHandler;  
 > use Webman\RedisClusterSessionHandler;  
-> 改為  
-> use Webman\Session\FileSessionHandler;  
-> use Webman\Session\RedisSessionHandler;  
-> use Webman\Session\RedisClusterSessionHandler;  
+> 更改後請留意 namespace 的調整。
 
 
+## 有效期設定
+當webman-framework < 1.3.14 時，webman中session過期時間需在`php.ini`設定。
 
-## 有效期配置
-當webman-framework < 1.3.14時，webman中session過期時間需要在`php.ini`配置。
-
-```
+```ini
 session.gc_maxlifetime = x
 session.cookie_lifetime = x
 session.gc_probability = 1
 session.gc_divisor = 1000
 ```
 
-假設設定有效期為1440秒，則配置如下
-```
+假設設定有效期為1440秒，則配置如下：
+```ini
 session.gc_maxlifetime = 1440
 session.cookie_lifetime = 1440
 session.gc_probability = 1
@@ -219,4 +219,4 @@ session.gc_divisor = 1000
 ```
 
 > **提示**
-> 可使用命令 `php --ini` 來查找`php.ini`的位置
+> 可使用命令 `php --ini` 來查找`php.ini`的位置。

@@ -1,28 +1,27 @@
-# เริ่มต้นอย่างรวดเร็ว
+# การเริ่มต้นอย่างรวดเร็ว
 
-webman ใช้ฐานข้อมูลเริ่มต้นโดยใช้ [illuminate/database](https://github.com/illuminate/database) ซึ่งหมายถึง [ฐานข้อมูลของ laravel](https://learnku.com/docs/laravel/8.x/database/9400) มีวิธีการใช้เหมือนกับ laravel
+webman มาพร้อมกับฐานข้อมูลที่ใช้ด้วย [illuminate/database](https://github.com/illuminate/database) ซึ่งคือ [ฐานข้อมูลของ laravel](https://learnku.com/docs/laravel/8.x/database/9400) การใช้งานเหมือนกับ laravel
 
-แน่นอนว่าคุณสามารถดูตัวอย่างการใช้ [การใช้ฐานข้อมูลอื่น ๆ](others.md) ในจังหวะที่ต้องการใช้ ThinkPHP หรือฐานข้อมูลอื่น ๆ
+แน่นอนคุณสามารถอ้างอิงถึง [การใช้งาน component ฐานข้อมูลอื่น ๆ](others.md) ในบทที่มีชื่อว่าอื่น ๆ เช่น การใช้งานกับ ThinkPHP หรือฐานข้อมูลอื่น ๆ
 
 ## การติดตั้ง
 
 `composer require -W illuminate/database illuminate/pagination illuminate/events symfony/var-dumper`
 
-หลังจากการติดตั้งจำเป็นต้องทำการ restart และ ไม่สามารถใช้ reload 
+หลังจากที่ติดตั้งเสร็จแล้วจะต้องทำการ restart และไม่สามารถใช้ reload
 
-> **เคล็ดลับ**
-> ถ้าคุณไม่ได้ต้องการใช้ pagination, อีเวนต์ฐานข้อมูล, หรือ SQL debug คุณสามารถใช้คำสั่งนี้ได้เลย
+> **คำแนะนำ**
+> หากคุณไม่ต้องการใช้งาน pagination ฐานข้อมูล, ส่ิง์กับเหตุการณ์ในฐานข้อมูล, หรือพิมพ์คำสั่ง SQL, คุณสามารถทำการ ใช้คำสั่ง
 > `composer require -W illuminate/database`
 
-## การกำหนดค่าฐานข้อมูล
+## การตั้งค่าฐานข้อมูล
 `config/database.php`
 ```php
-
 return [
-    // ฐานข้อมูลเริ่มต้น
+    // ค่าเริ่มต้นของฐานข้อมูล
     'default' => 'mysql',
 
-    // การกำหนดค่าของฐานข้อมูลต่าง ๆ
+    // การตั้งค่าฐานข้อมูลต่าง ๆ
     'connections' => [
         'mysql' => [
             'driver'      => 'mysql',
@@ -44,7 +43,6 @@ return [
     ],
 ];
 ```
-
 
 ## การใช้งาน
 ```php

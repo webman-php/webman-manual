@@ -1,4 +1,4 @@
-# 他のデータベースの使用
+# その他のデータベースの使用
 [illuminate/database](https://github.com/illuminate/database)の他にも、webmanでは他のデータベースコンポーネントを使用することができます。
 
 ## ThinkORM
@@ -8,4 +8,4 @@
 参照 [think-cache](thinkcache.md)
 
 ## Medooデータベースプラグイン
-参照 [medooプラグイン](https://www.workerman.net/plugin/29)
+参照 [medooプラグイン](../db/medoo.md)

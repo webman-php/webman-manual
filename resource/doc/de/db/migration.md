@@ -1,8 +1,8 @@
 # Migration Datenbank-Migrationswerkzeug Phinx
 
-## Beschreibung
+## Erklärung
 
-Phinx ermöglicht es Entwicklern, Datenbanken auf einfache Weise zu ändern und zu warten. Es vermeidet das manuelle Schreiben von SQL-Anweisungen und verwendet eine leistungsstarke PHP-API zur Verwaltung von Datenbankmigrationen. Entwickler können ihre Datenbankmigrationen mit Versionskontrolle verwalten. Phinx ermöglicht es, Daten zwischen verschiedenen Datenbanken einfach zu migrieren. Außerdem können verfolgt werden, welche Migrations-Skripte ausgeführt wurden, sodass Entwickler sich keine Sorgen mehr um den Zustand der Datenbank machen müssen und sich stattdessen darauf konzentrieren können, ein besseres System zu entwickeln.
+Phinx ermöglicht es Entwicklern, Datenbanken auf einfache Weise zu ändern und zu warten. Es vermeidet das manuelle Schreiben von SQL-Anweisungen und verwendet eine leistungsstarke PHP-API zur Verwaltung von Datenbankmigrationen. Entwickler können ihre Datenbankmigrationen mit Versionskontrolle verwalten. Phinx kann Daten zwischen verschiedenen Datenbanken einfach migrieren. Es kann auch verfolgen, welche Migrationskripte ausgeführt wurden, sodass Entwickler sich keine Sorgen mehr um den Zustand der Datenbank machen müssen und sich stattdessen darauf konzentrieren können, ein besseres System zu entwickeln.
 
 ## Projektadresse
 
@@ -10,36 +10,36 @@ https://github.com/cakephp/phinx
 
 ## Installation
 
-  ```php
-  composer require robmorgan/phinx
-  ```
+```php
+composer require robmorgan/phinx
+```
 
-## Offizielle chinesische Dokumentation Adresse
+## Offizielle chinesische Dokumentation
 
-Für ausführlichere Informationen können Sie die offizielle chinesische Dokumentation besuchen. Hier wird nur erklärt, wie Sie Phinx in webman konfigurieren und verwenden können.
+Für detailliertere Informationen können Sie die offizielle chinesische Dokumentation überprüfen. Hier wird nur erläutert, wie man es in webman konfiguriert und verwendet.
 
 https://tsy12321.gitbooks.io/phinx-doc/content/
 
-## Verzeichnisstruktur für Migrationsdateien
+## Verzeichnisstruktur der Migrationsdateien
 
-```
+```text
 .
 ├── app                           Anwendungsverzeichnis
-│   ├── controller                Controller-Verzeichnis
-│   │   └── Index.php             Controller
-│   ├── model                     Modelverzeichnis
+│   ├── controller                Controller-Verzeichnis
+│   │   └── Index.php             Controller
+│   ├── model                     Modelverzeichnis
 ......
 ├── database                      Datenbankdateien
-│   ├── migrations                Migrationsdateien
-│   │   └── 20180426073606_create_user_table.php
-│   ├── seeds                     Testdaten
-│   │   └── UserSeeder.php
+│   ├── migrations                Migrationsdateien
+│   │   └── 20180426073606_create_user_table.php
+│   ├── seeds                     Testdaten
+│   │   └── UserSeeder.php
 ......
 ```
 
 ## phinx.php Konfiguration
 
-Erstellen Sie im Stammverzeichnis des Projekts die Datei phinx.php
+Erstellen Sie eine phinx.php-Datei im Stammverzeichnis des Projekts.
 
 ```php
 <?php
@@ -65,22 +65,22 @@ return [
 ];
 ```
 
-## Verwendungsempfehlungen
+## Verwendungsempfehlung
 
-Sobald Migrationsdateien zusammengeführt wurden, dürfen sie nicht mehr geändert werden. Wenn Probleme auftreten, müssen neue Änderungs- oder Löschungsoperationen erstellt werden.
+Sobald die Migrationsdatei zusammengeführt wurde, darf sie nicht mehr geändert werden. Bei Problemen muss eine neue Änderung oder Löschoperation durchgeführt werden.
 
-#### Namenskonvention für Dateien zur Erstellung von Tabellen
+#### Benennungskonvention für Dateien zur Erstellung von Tabellen
 
-`{Zeit (automatisch erstellt)}_create_{Kleinbuchstaben des Tabellennamens in Englisch}`
+`{Zeit(automatisch erstellt)}_create_{kleingeschriebener Tabellenname auf Englisch}`
 
-#### Namenskonvention für Dateien zur Modifikation von Tabellen
+#### Benennungskonvention für Dateien zur Änderung von Tabellen
 
-`{Zeit (automatisch erstellt)}_modify_{Kleinbuchstaben des Tabellennamens in Englisch+zusätzlicher kleingeschriebener Modifikationspunkt}`
+`{Zeit(automatisch erstellt)}_modify_{kleingeschriebener Tabellenname+kleines englisches zu änderndes Element}`
 
-### Namenskonvention für Dateien zum Löschen von Tabellen
+#### Benennungskonvention für Dateien zum Löschen von Tabellen
 
-`{Zeit (automatisch erstellt)}_delete_{Kleinbuchstaben des Tabellennamens in Englisch+zusätzlicher kleingeschriebener Modifikationspunkt}`
+`{Zeit(automatisch erstellt)}_delete_{kleingeschriebener Tabellenname+kleines englisches zu löschendes Element}`
 
-### Namenskonvention für Datenfüllungsdateien
+#### Benennungskonvention für Datenbefüllungsdateien
 
-`{Zeit (automatisch erstellt)}_fill_{Kleinbuchstaben des Tabellennamens in Englisch+zusätzlicher kleingeschriebener Modifikationspunkt}`
+`{Zeit(automatisch erstellt)}_fill_{kleingeschriebener Tabellenname+kleines englisches zu änderndes Element}`

@@ -1,5 +1,5 @@
 # Redis
-Redisの使用法はデータベースと似ています、例えば`plugin/foo/config/redis.php`です。
+Redisの使用はデータベースに似ています。例えば、`plugin/foo/config/redis.php` に以下のように記述します。
 ```php
 return [
     'default' => [
@@ -16,14 +16,15 @@ return [
     ],
 ];
 ```
-使用する際は
+
+使用する際は以下のようにします。
 ```php
 use support\Redis;
 Redis::connection('plugin.foo.default')->get('key');
 Redis::connection('plugin.foo.cache')->get('key');
 ```
 
-同様に、メインプロジェクトのRedisの設定を再利用したい場合は
+同様に、メインプロジェクトのRedis設定を再利用したい場合は以下のようにします。
 ```php
 use support\Redis;
 Redis::get('key');

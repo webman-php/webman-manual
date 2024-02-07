@@ -1,9 +1,9 @@
-## Personnalisation du code 404
-Lorsque webman rencontre une erreur 404, il renvoie automatiquement le contenu du fichier `public/404.html`, ce qui permet aux développeurs de modifier directement le fichier `public/404.html`.
+## Personnaliser la page 404
+Lorsqu'une erreur 404 survient, webman renvoie automatiquement le contenu de `public/404.html`, ce qui permet aux développeurs de modifier directement le fichier `public/404.html`.
 
-Si vous souhaitez contrôler dynamiquement le contenu de l'erreur 404, par exemple, retourner des données JSON lors d'une requête ajax `{"code:"404", "msg":"404 introuvable"}`, ou retourner un modèle `app/view/404.html` lors d'une demande de page, veuillez vous référer à l'exemple ci-dessous:
+Si vous souhaitez contrôler dynamiquement le contenu de la page 404, par exemple en renvoyant des données JSON `{"code:"404", "msg":"404 not found"}` lors d'une requête AJAX, ou en renvoyant le modèle `app/view/404.html` lors d'une requête de page, veuillez suivre l'exemple suivant.
 
-> L'exemple suivant est basé sur un modèle PHP natif, mais le principe est similaire pour d'autres modèles tels que `twig`, `blade`, `think-template`.
+> L'exemple ci-dessous utilise le modèle PHP natif, mais le principe est similaire pour d'autres modèles tels que `twig`, `blade`, `think-template`, etc.
 
 **Créez le fichier `app/view/404.html`**
 ```html
@@ -19,24 +19,23 @@ Si vous souhaitez contrôler dynamiquement le contenu de l'erreur 404, par exemp
 </html>
 ```
 
-**Ajoutez le code suivant dans `config/route.php`：**
+**Ajoutez le code suivant dans `config/route.php` :**
 ```php
 use support\Request;
 use Webman\Route;
 
 Route::fallback(function(Request $request){
-    // Retourner du JSON lors d'une requête ajax
+    // Renvoyer du JSON lors d'une requête AJAX
     if ($request->expectsJson()) {
-        return json(['code' => 404, 'msg' => '404 introuvable']);
+        return json(['code' => 404, 'msg' => '404 not found']);
     }
-    // Retourner le modèle 404.html lors d'une demande de page
+    // Renvoyer le modèle 404.html lors d'une requête de page
     return view('404', ['error' => 'some error'])->withStatus(404);
 });
 ```
 
-## Personnalisation du code 500
+## Personnaliser la page 500
 **Créez le fichier `app/view/500.html`**
-
 ```html
 <!doctype html>
 <html>
@@ -51,7 +50,7 @@ Modèle d'erreur personnalisé :
 </html>
 ```
 
-**Créez le fichier** `app/exception/Handler.php` (créez le répertoire s'il n'existe pas)**
+**Créez le fichier `app/exception/Handler.php` (créez le répertoire s'il n'existe pas)**
 ```php
 <?php
 
@@ -64,7 +63,7 @@ use Webman\Http\Response;
 class Handler extends \support\exception\Handler
 {
     /**
-     * Rendu de la réponse
+     * Rendu et renvoi
      * @param Request $request
      * @param Throwable $exception
      * @return Response
@@ -72,11 +71,11 @@ class Handler extends \support\exception\Handler
     public function render(Request $request, Throwable $exception) : Response
     {
         $code = $exception->getCode();
-        // Retourner des données JSON lors d'une requête ajax
+        // Renvoyer des données JSON lors d'une requête AJAX
         if ($request->expectsJson()) {
             return json(['code' => $code ? $code : 500, 'msg' => $exception->getMessage()]);
         }
-        // Retourner le modèle 500.html lors d'une demande de page
+        // Renvoyer le modèle 500.html lors d'une requête de page
         return view('500', ['exception' => $exception], '')->withStatus(500);
     }
 }

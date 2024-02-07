@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Casbin is a powerful and efficient open-source access control framework, with support for multiple access control models in its permission management mechanism.
+Casbin is a powerful and efficient open-source access control framework that supports multiple access control models for permission management.
 
 ## Project Address
 
@@ -16,21 +16,21 @@ composer require teamones/casbin
 
 ## Casbin Official Website
 
-For detailed usage, please refer to the official Chinese documentation. Here we only discuss how to configure and use Casbin in webman.
+For detailed usage, please refer to the official documentation in Chinese. Here, we will only discuss how to configure and use Casbin in webman.
 
 https://casbin.org/docs/zh-CN/overview
 
 ## Directory Structure
 
-```
+```plaintext
 .
 ├── config                        Configuration directory
-│   ├── casbin-restful-model.conf Configuration file for the used permission model
-│   ├── casbin.php                Casbin configuration
+│   ├── casbin-restful-model.conf Configuration file for the permission model used
+│   ├── casbin.php                Casbin configuration
 ......
 ├── database                      Database files
-│   ├── migrations                Migration files
-│   │   └── 20210218074218_create_rule_table.php
+│   ├── migrations                Migration files
+│   │   └── 20210218074218_create_rule_table.php
 ......
 ```
 
@@ -70,11 +70,11 @@ class CreateRuleTable extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('rule', ['id' => false, 'primary_key' => ['id'], 'engine' => 'InnoDB', 'collation' => 'utf8mb4_general_ci', 'comment' => 'Rule table']);
+        $table = $this->table('rule', ['id' => false, 'primary_key' => ['id'], 'engine' => 'InnoDB', 'collation' => 'utf8mb4_general_ci', 'comment' => 'Rule Table']);
 
         // Add data fields
-        $table->addColumn('id', 'integer', ['identity' => true, 'signed' => false, 'limit' => 11, 'comment' => 'Primary key ID'])
-            ->addColumn('ptype', 'char', ['default' => '', 'limit' => 8, 'comment' => 'Rule type'])
+        $table->addColumn('id', 'integer', ['identity' => true, 'signed' => false, 'limit' => 11, 'comment' => 'Primary Key ID'])
+            ->addColumn('ptype', 'char', ['default' => '', 'limit' => 8, 'comment' => 'Rule Type'])
             ->addColumn('v0', 'string', ['default' => '', 'limit' => 128])
             ->addColumn('v1', 'string', ['default' => '', 'limit' => 128])
             ->addColumn('v2', 'string', ['default' => '', 'limit' => 128])
@@ -86,22 +86,20 @@ class CreateRuleTable extends AbstractMigration
         $table->create();
     }
 }
-
 ```
 
 ## Casbin Configuration
 
-Please refer to the permission rule model configuration syntax: https://casbin.org/docs/zh-CN/syntax-for-models
+Please refer to the official Casbin documentation for the syntax of the permission rule model configuration: https://casbin.org/docs/zh-CN/syntax-for-models
 
 ```php
-
 <?php
 
 return [
     'default' => [
         'model' => [
             'config_type' => 'file',
-            'config_file_path' => config_path() . '/casbin-restful-model.conf', // Configuration file for permission rule model
+            'config_file_path' => config_path() . '/casbin-restful-model.conf', // Configuration file for the permission rule model
             'config_text' => '',
         ],
         'adapter' => [
@@ -113,7 +111,7 @@ return [
     'rbac' => [
         'model' => [
             'config_type' => 'file',
-            'config_file_path' => config_path() . '/casbin-rbac-model.conf', // Configuration file for permission rule model
+            'config_file_path' => config_path() . '/casbin-rbac-model.conf', // Configuration file for the permission rule model
             'config_text' => '',
         ],
         'adapter' => [
@@ -126,14 +124,16 @@ return [
 
 ### Adapter
 
-The currently encapsulated adapter in the Composer supports the model method of think-orm. For other ORMs, please refer to vendor/teamones/src/adapters/DatabaseAdapter.php and modify the configuration accordingly.
+Currently, the composer package is compatible with the `think-orm` method. For other ORMs, please refer to `vendor/teamones/src/adapters/DatabaseAdapter.php`.
+
+Then modify the configuration.
 
 ```php
 return [
     'default' => [
         'model' => [
             'config_type' => 'file',
-            'config_file_path' => config_path() . '/casbin-restful-model.conf', // Configuration file for permission rule model
+            'config_file_path' => config_path() . '/casbin-restful-model.conf', // Configuration file for the permission rule model
             'config_text' => '',
         ],
         'adapter' => [
@@ -159,76 +159,61 @@ use teamones\casbin\Enforcer;
 # 1. Use the default configuration
 Enforcer::addPermissionForUser('user1', '/user', 'read');
 
-# 2. Use the custom rbac configuration
+# 2. Use a custom rbac configuration
 Enforcer::instance('rbac')->addPermissionForUser('user1', '/user', 'read');
 ```
 
-### Commonly Used API Introductions
+### Introduction to Commonly Used APIs
 
-For more API usage, please refer to the official documentation.
+For more API usages, please refer to the official documentation.
 
-- Management API: https://casbin.org/docs/zh-CN/management-api
-- RBAC API: https://casbin.org/docs/zh-CN/rbac-api
+- Management APIs: https://casbin.org/docs/zh-CN/management-api
+- RBAC APIs: https://casbin.org/docs/zh-CN/rbac-api
 
 ```php
-# Add permission for a user
-
+# Add a permission for a user
 Enforcer::addPermissionForUser('user1', '/user', 'read');
 
-# Delete a user's permission
-
+# Delete a permission for a user
 Enforcer::deletePermissionForUser('user1', '/user', 'read');
 
 # Get all permissions for a user
-
-Enforcer::getPermissionsForUser('user1'); 
+Enforcer::getPermissionsForUser('user1');
 
 # Add a role for a user
-
 Enforcer::addRoleForUser('user1', 'role1');
 
-# Add permission for a role
-
+# Add a permission for a role
 Enforcer::addPermissionForUser('role1', '/user', 'edit');
 
 # Get all roles
-
 Enforcer::getAllRoles();
 
 # Get all roles for a user
-
 Enforcer::getRolesForUser('user1');
 
 # Get users for a role
-
 Enforcer::getUsersForRole('role1');
 
 # Check if a user belongs to a role
+Enforcer::hasRoleForUser('user1', 'role1');
 
-Enforcer::hasRoleForUser('use1', 'role1');
-
-# Delete a user's role
-
-Enforcer::deleteRoleForUser('use1', 'role1');
+# Delete a role for a user
+Enforcer::deleteRoleForUser('user1', 'role1');
 
 # Delete all roles for a user
-
-Enforcer::deleteRolesForUser('use1');
+Enforcer::deleteRolesForUser('user1');
 
 # Delete a role
-
 Enforcer::deleteRole('role1');
 
-# Delete permission
-
+# Delete a permission
 Enforcer::deletePermission('/user', 'read');
 
-# Delete all permissions for a user or a role
-
+# Delete all permissions for a user or role
 Enforcer::deletePermissionsForUser('user1');
 Enforcer::deletePermissionsForUser('role1');
 
-# Check permission, return true or false
-
+# Check permissions and return true or false
 Enforcer::enforce("user1", "/user", "edit");
 ```

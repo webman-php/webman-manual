@@ -1,10 +1,10 @@
-# Biblioteca de controle de acesso Casbin webman-permission
+# Casbin Framework de Controle de Acesso webman-permission
 
 ## Descrição
 
-É baseado no [PHP-Casbin](https://github.com/php-casbin/php-casbin), um framework de controle de acesso de código aberto poderoso e eficiente que suporta modelos de controle de acesso como `ACL`, `RBAC`, `ABAC`, entre outros.
+Baseia-se em [PHP-Casbin](https://github.com/php-casbin/php-casbin), uma estrutura de controle de acesso de código aberto poderosa e eficiente, que suporta modelos de controle de acesso como `ACL`, `RBAC`, `ABAC` e outros.
 
-## Endereço do projeto
+## Endereço do Projeto
 
 https://github.com/Tinywan/webman-permission
 
@@ -13,22 +13,22 @@ https://github.com/Tinywan/webman-permission
 ```php
 composer require tinywan/webman-permission
 ```
-> Esta extensão requer PHP 7.1+ e [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998), manual oficial: https://www.workerman.net/doc/webman#/db/others
+> Esta extensão requer PHP 7.1+ e [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998), Manual oficial: https://www.workerman.net/doc/webman#/db/others
 
 ## Configuração
 
-### Registrar serviço
+### Registrar Serviço
 
-Crie o arquivo de configuração `config/bootstrap.php` com conteúdo semelhante ao seguinte:
+Crie um arquivo de configuração `config/bootstrap.php` com o conteúdo semelhante a:
 
 ```php
 // ...
 webman\permission\Permission::class,
 ```
 
-### Arquivo de configuração do modelo de modelo
+### Arquivo de Configuração do Modelo
 
-Crie o arquivo de configuração `config/casbin-basic-model.conf` com conteúdo semelhante ao seguinte:
+Crie um arquivo de configuração `config/casbin-basic-model.conf` com o conteúdo semelhante a:
 
 ```conf
 [request_definition]
@@ -47,9 +47,9 @@ e = some(where (p.eft == allow))
 m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
 ```
 
-### Arquivo de configuração de política
+### Arquivo de Configuração de Permissão
 
-Crie o arquivo de configuração `config/permission.php` com conteúdo semelhante ao seguinte:
+Crie um arquivo de configuração `config/permission.php` com o conteúdo semelhante a:
 
 ```php
 <?php
@@ -68,7 +68,7 @@ return [
     'enforcers' => [
         'basic' => [
             /*
-            * Configuração do modelo
+            * Configuração do Modelo
             */
             'model' => [
                 'config_type' => 'file',
@@ -76,16 +76,16 @@ return [
                 'config_text' => '',
             ],
 
-            // Adaptador.
+            // Adaptador
             'adapter' => webman\permission\adapter\DatabaseAdapter::class,
 
             /*
-            * Configurações do banco de dados.
+            * Configuração do Banco de Dados
             */
             'database' => [
-                // Nome da conexão do banco de dados, deixe em branco para a configuração padrão.
+                // Nome da conexão com o banco de dados, se não preenchido, usará a configuração padrão.
                 'connection' => '',
-                // Nome da tabela de políticas (sem prefixo).
+                // Nome da tabela de políticas (sem prefixo de tabela)
                 'rules_name' => 'rule',
                 // Nome completo da tabela de políticas.
                 'rules_table' => 'train_rule',
@@ -95,40 +95,40 @@ return [
 ];
 ```
 
-## Começando rapidamente
+## Início Rápido
 
 ```php
 use webman\permission\Permission;
 
-// adiciona permissões a um usuário
+// Adiciona permissões a um usuário
 Permission::addPermissionForUser('eve', 'articles', 'read');
-// adiciona uma função a um usuário.
+// Adiciona uma função a um usuário
 Permission::addRoleForUser('eve', 'writer');
-// adiciona permissões a uma regra
-Permission::addPolicy('writer', 'articles','edit');
+// Adiciona permissões a uma regra
+Permission::addPolicy('writer', 'articles', 'edit');
 ```
 
-Você pode verificar se o usuário tem essas permissões
+Você pode verificar se o usuário tem essa permissão
 
 ```php
 if (Permission::enforce("eve", "articles", "edit")) {
-    // permite que eve edite artigos
+    // permite que o eve edite artigos
 } else {
     // nega a solicitação, mostra um erro
 }
 ````
 
-## Middleware de autorização
+## Middleware de Autorização
 
-Crie o arquivo `app/middleware/AuthorizationMiddleware.php` (se o diretório não existir, crie-o) da seguinte forma:
+Crie o arquivo `app/middleware/AuthorizationMiddleware.php` (se o diretório não existir, crie) conforme abaixo:
 
 ```php
 <?php
 
 /**
- * Middleware de autorização
+ * Middleware de Autorização
  * por ShaoBo Wan (Tinywan)
- * 2021/09/07 14:15
+ * em 2021/09/07 14:15
  */
 
 declare(strict_types=1);
@@ -160,13 +160,13 @@ class AuthorizationMiddleware implements MiddlewareInterface
 }
 ```
 
-Adicione o middleware global em `config/middleware.php` como a seguir:
+Adicione o middleware global em `config/middleware.php` conforme abaixo:
 
 ```php
 return [
     // Middleware global
     '' => [
-        // ... outros middlewares omitidos aqui
+        // ... outros middlewares aqui
         app\middleware\AuthorizationMiddleware::class,
     ]
 ];
@@ -174,7 +174,7 @@ return [
 
 ## Agradecimentos
 
-[Casbin](https://github.com/php-casbin/php-casbin), você pode encontrar toda a documentação em seu [site oficial](https://casbin.org/).
+[Casbin](https://github.com/php-casbin/php-casbin), você pode consultar toda a documentação em seu [site oficial](https://casbin.org/).
 
 ## Licença
 

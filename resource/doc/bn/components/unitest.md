@@ -1,14 +1,15 @@
 # ইউনিট টেস্ট
 
-  
 ## ইনস্টলেশন
- 
+
 ```php
 composer require --dev phpunit/phpunit
 ```
-  
+
 ## ব্যবহার
-`tests/TestConfig.php` নামে নতুন ফাইল তৈরি করুন, যা ডাটাবেস কনফিগারেশন টেস্ট করার জন্য।
+
+ডেটাবেস কনফিগারেশন পরীক্ষা করার জন্য `tests/TestConfig.php` নামে নতুন ফাইল তৈরি করুন
+
 ```php
 <?php
 use PHPUnit\Framework\TestCase;
@@ -26,13 +27,13 @@ class TestConfig extends TestCase
     }
 }
 ```
-  
-## পরিচালনা
 
-প্রজেক্ট রুট ফোল্ডারে একটি টার্মিনাল/স্ক্রিপ্ট চালান `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php`
+## চালান
 
-নিম্নলিখিত মত একই ধরনের রেজাল্ট পেতে হবে:
-```
+প্রজেক্ট রুট ফোল্ডারে নিচের কমান্ড চালান: `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php`
+
+ফলাফল এরকম দেখা যাবে:
+```bash
 PHPUnit 9.5.10 by Sebastian Bergmann and contributors.
 
 .                                                                   1 / 1 (100%)

@@ -1,18 +1,17 @@
-# Erstellen von App-Plugins
+# Erstellen von Anwendungs-Plugins
 
 ## Eindeutige Kennung
 
-Jedes Plugin verfügt über eine eindeutige Anwendungs-Kennung, die Entwickler vor der Entwicklung festlegen und prüfen müssen, ob die Kennung bereits verwendet wird.
-Überprüfen Sie die Kennung unter [Anwendungs-Kennung-Prüfung](https://www.workerman.net/app/check)
+Jedes Plugin hat eine eindeutige Kennung. Bevor Entwickler mit der Entwicklung beginnen, müssen sie eine Kennung wählen und überprüfen, ob diese noch nicht verwendet wird. Die Überprüfung kann unter folgender Adresse durchgeführt werden: [Anwendungs-Kennung überprüfen](https://www.workerman.net/app/check)
 
-## Erstellen
+## Erstellung
 
 Führen Sie `composer require webman/console` aus, um die webman-Befehlszeile zu installieren.
 
-Verwenden Sie den Befehl `php webman app-plugin:create {Plugin-Kennung}`, um ein Anwendungs-Plugin lokal zu erstellen.
+Mit dem Befehl `php webman app-plugin:create {Plugin-Kennung}` können Sie ein Anwendungs-Plugin lokal erstellen.
 
-Beispiel: `php webman app-plugin:create foo`
+Zum Beispiel `php webman app-plugin:create foo`
 
 Starten Sie webman neu.
 
-Öffnen Sie `http://127.0.0.1:8787/app/foo`. Wenn eine Rückgabe erfolgt, bedeutet dies, dass das Erstellen erfolgreich war.
+Rufen Sie `http://127.0.0.1:8787/app/foo` auf. Wenn eine Antwort zurückgegeben wird, bedeutet das, dass das Plugin erfolgreich erstellt wurde.

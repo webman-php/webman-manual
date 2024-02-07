@@ -6,8 +6,8 @@
 composer require --dev phpunit/phpunit
 ```
 
-## Uso
-Crie o arquivo `tests/TestConfig.php` para testar a configuração do banco de dados.
+## Utilização
+Crie um arquivo `tests/TestConfig.php` para testar a configuração do banco de dados.
 
 ```php
 <?php
@@ -29,16 +29,16 @@ class TestConfig extends TestCase
 
 ## Execução
 
-Execute na raiz do projeto `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php`
+Execute no diretório raiz do projeto `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php`
 
 O resultado será semelhante ao seguinte:
 
-```
-PHPUnit 9.5.10 by Sebastian Bergmann and contributors.
+```php
+PHPUnit 9.5.10 por Sebastian Bergmann e colaboradores.
 
 .                                                                   1 / 1 (100%)
 
 Time: 00:00.010, Memory: 6.00 MB
 
-OK (1 test, 5 assertions)
+OK (1 teste, 5 asserções)
 ```

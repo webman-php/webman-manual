@@ -1,10 +1,10 @@
 # MongoDB
 
-webman, [jenssegers/mongodb](https://github.com/jenssegers/laravel-mongodb) bileşenini mongodb bileşeni olarak varsayar ve bu, laravel projesinden çıkarılan ve laravel ile aynı şekilde kullanılan bir bileşendir.
+webman varsayılan olarak [jenssegers/mongodb](https://github.com/jenssegers/laravel-mongodb) 'u MongoDB bileşeni olarak kullanır. Bu, laravel projesinden çıkarılmıştır ve laravel ile aynı kullanıma sahiptir.
 
-`jenssegers/mongodb` kullanmadan önce, `php-cli`'ye mongodb uzantısını yüklemeniz gerekir.
+`jenssegers/mongodb`'yi kullanmadan önce, `php-cli`'da mongodb eklentisini yüklemelisiniz.
 
-> `php -m | grep mongodb` komutunu kullanarak `php-cli`'ye mongodb uzantısının yüklenip yüklenmediğini kontrol edebilirsiniz. Not: `php-fpm`'de mongodb uzantısını yüklediyseniz bile, `php-cli`'nin bunu kullanabildiği anlamına gelmez çünkü `php-cli` ve `php-fpm` farklı uygulamalardır ve farklı `php.ini` yapılandırmalarını kullanabilir. Kullandığınız `php-cli` için hangi `php.ini` yapılandırma dosyasını kullandığınızı görmek için `php --ini` komutunu kullanın.
+> `php -m | grep mongodb` komutunu kullanarak `php-cli`'ın mongodb eklentisine sahip olup olmadığını kontrol edin. Not: `php-cli`'da mongodb eklentisini yüklemiş olsanız bile, bu `php-cli`'da kullanabileceğiniz anlamına gelmez, çünkü `php-cli` ve `php-fpm` farklı uygulamalardır ve farklı `php.ini` yapılandırmalarını kullanabilirler. Kullandığınız `php-cli`'ın hangi `php.ini` yapılandırma dosyasını kullandığını görmek için `php --ini` komutunu kullanın.
 
 ## Kurulum
 
@@ -17,7 +17,7 @@ PHP=7.2 için
 composer require -W illuminate/database jenssegers/mongodb ^3.7.0
 ```
 
-Kurulumdan sonra yeniden başlatmanız gerekmektedir (reload işlemi geçerli değildir)
+Kurulumdan sonra restart(reload değil) yapılması gerekmektedir.
 
 ## Yapılandırma
 `config/database.php` dosyasına `mongodb` bağlantısını ekleyin, aşağıdaki gibi:
@@ -28,7 +28,7 @@ return [
 
     'connections' => [
 
-         ...diğer yapılandırmalar burada kısaltıldı...
+         ...diğer yapılandırmalar burada bulunur...
 
         'mongodb' => [
             'driver'   => 'mongodb',
@@ -38,8 +38,8 @@ return [
             'username' => null,
             'password' => null,
             'options' => [
-                // burada daha fazla ayar geçebilirsiniz
-                // tüm parametreleri görmek için https://www.php.net/manual/en/mongodb-driver-manager.construct.php adresindeki "Uri Options" altında bulunan tam parametre listesine bakabilirsiniz
+                // burada Mongo Driver Manager'a daha fazla ayar gönderebilirsiniz
+                // kullanabileceğiniz tam parametre listesi için https://www.php.net/manual/en/mongodb-driver-manager.construct.php adresine bakın
 
                 'appname' => 'homestead'
             ],
@@ -66,5 +66,6 @@ class UserController
 }
 ```
 
-## Daha fazla bilgi için
+## Daha Fazlası İçin Ziyaret Edin
+
 https://github.com/jenssegers/laravel-mongodb

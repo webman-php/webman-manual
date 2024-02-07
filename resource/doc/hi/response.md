@@ -1,8 +1,9 @@
-The response is actually a `support\Response` object. To create this object, webman provides some helper functions.
+# प्रतिक्रिया
+प्रतिक्रिया वास्तव में एक `support\Response` ऑब्जेक्ट होती है, इस ऑब्जेक्ट को बनाने के लिए आसानी से इसे बनाने के लिए, webman ने कुछ सहायक फ़ंक्शन प्रदान किए हैं।
 
-## Returning Any Response
+## किसी भी प्रतिक्रिया वापस दें
 
-**Example**
+**उदाहरण**
 ```php
 <?php
 namespace app\controller;
@@ -18,7 +19,7 @@ class FooController
 }
 ```
 
-The implementation of the `response` function is as follows:
+response() फ़ंक्शन निम्नलिखित रूप में निर्मित होता है:
 ```php
 function response($body = '', $status = 200, $headers = array())
 {
@@ -26,38 +27,38 @@ function response($body = '', $status = 200, $headers = array())
 }
 ```
 
-You can create an empty `response` object, and then set the content using the methods `$response->cookie()`, `$response->header()`, `$response->withHeaders()`, and `$response->withBody()` at the right time.
+
+आप एक खाली `response` ऑब्जेक्ट बना सकते हैं और फिर उचित स्थान पर `$response->cookie()` `$response->header()` `$response->withHeaders()` `$response->withBody()` का उपयोग करके वापसी सामग्री को सेट कर सकते हैं।
+
 ```php
 public function hello(Request $request)
 {
-    // Create an object
+    // एक ऑब्जेक्ट बनाएँ
     $response = response();
-
-    // ... Business logic omitted
-
-    // Set cookie
+    
+    // .... बिजनेस लॉजिक को छोड़ दें
+    
+    // कुकी सेट करें
     $response->cookie('foo', 'value');
-
-    // ... Business logic omitted
-
-    // Set HTTP header
+    
+    // .... बिजनेस लॉजिक को छोड़ दें
+    
+    // HTTP हेडर सेट करें
     $response->header('Content-Type', 'application/json');
     $response->withHeaders([
-                'X-Header-One' => 'Header Value 1',
-                'X-Header-Tow' => 'Header Value 2',
+                'X-Header-One' => 'हेडर वैल्यू 1',
+                'X-Header-Tow' => 'हेडर वैल्यू 2',
             ]);
 
-    // ... Business logic omitted
+    // .... बिजनेस लॉजिक को छोड़ दें
 
-    // Set the content
-    $response->withBody('वापसी सामग्री');
+    // वापस भेजने के लिए डेटा सेट करें
+    $response->withBody('वापस भेजा गया डेटा');
     return $response;
 }
 ```
-
-## Returning JSON
-
-**Example**
+## JSON वापस देना
+**उदाहरण**
 ```php
 <?php
 namespace app\controller;
@@ -72,17 +73,15 @@ class FooController
     }
 }
 ```
-The implementation of the `json` function is as follows:
+json फ़ंक्शन का अनुरूपण निम्नलिखित है
 ```php
 function json($data, $options = JSON_UNESCAPED_UNICODE)
 {
     return new Response(200, ['Content-Type' => 'application/json'], json_encode($data, $options));
 }
 ```
-
-## Returning XML
-
-**Example**
+## XML वापस दें
+**उदाहरण**
 ```php
 <?php
 namespace app\controller;
@@ -105,7 +104,7 @@ class FooController
 }
 ```
 
-The implementation of the `xml` function is as follows:
+xml फ़ंक्शन का कोड निम्नलिखित है:
 ```php
 function xml($xml)
 {
@@ -115,9 +114,9 @@ function xml($xml)
     return new Response(200, ['Content-Type' => 'text/xml'], $xml);
 }
 ```
+## व्यू वापसी
+निम्नलिखित रूप में `app/controller/FooController.php` फ़ाइल बनाएं
 
-## Returning a View
-Create a new file `app/controller/FooController.php` as follows:
 ```php
 <?php
 namespace app\controller;
@@ -133,7 +132,8 @@ class FooController
 }
 ```
 
-Create a new file `app/view/foo/hello.html` as follows:
+निम्नलिखित रूप में `app/view/foo/hello.html` फ़ाइल बनाएं
+
 ```html
 <!doctype html>
 <html>
@@ -146,8 +146,7 @@ hello <?=htmlspecialchars($name)?>
 </body>
 </html>
 ```
-
-## Redirecting
+## पुनर्निर्देशन
 ```php
 <?php
 namespace app\controller;
@@ -163,7 +162,7 @@ class FooController
 }
 ```
 
-The implementation of the `redirect` function is as follows:
+रिडायरेक्ट फ़ंक्शन निम्नलिखित रूप में होता है:
 ```php
 function redirect($location, $status = 302, $headers = [])
 {
@@ -174,8 +173,7 @@ function redirect($location, $status = 302, $headers = [])
     return $response;
 }
 ```
-
-## Setting Headers
+## हेडर सेटिंग
 ```php
 <?php
 namespace app\controller;
@@ -186,14 +184,14 @@ class FooController
 {
     public function hello(Request $request)
     {
-        return response('hello webman', 200, [
+        return response('हैलो वेबमैन', 200, [
             'Content-Type' => 'application/json',
-            'X-Header-One' => 'Header Value' 
+            'X-Header-One' => 'हेडर मूल्य' 
         ]);
     }
 }
 ```
-You can set single or multiple headers using the 'header' and 'withHeaders' methods.
+आप `header` और `withHeaders` विधि का उपयोग करके हेडर को एकल या समूह में सेट कर सकते हैं।
 ```php
 <?php
 namespace app\controller;
@@ -213,9 +211,31 @@ class FooController
     }
 }
 ```
-You can set headers first and then set the returning data at the end.
+आप पहले से ही हेडर को सेट कर सकते हैं, और अंत में वापस लौटने वाले डेटा को सेट कर सकते हैं।
+```php
+public function hello(Request $request)
+{
+    // एक ऑब्जेक्ट बनाएँ
+    $response = response();
+    
+    // .... बिज़नेस लॉजिक छोड़ें
+  
+    // HTTP हेडर सेट करें
+    $response->header('Content-Type', 'application/json');
+    $response->withHeaders([
+                'X-Header-One' => 'हेडर मान 1',
+                'X-Header-Tow' => 'हेडर मान 2',
+            ]);
 
-## Setting Cookies
+    // .... बिज़नेस लॉजिक छोड़ें
+
+    // वापस लौटाने के लिए डेटा सेट करें
+    $response->withBody('वापस लौटने वाला डेटा');
+    return $response;
+}
+```
+## कुकी सेट करें
+
 ```php
 <?php
 namespace app\controller;
@@ -231,29 +251,32 @@ class FooController
     }
 }
 ```
-You can set cookies first and then set the returning data at the end.
+
+आप पहले से ही कुकी सेट कर सकते हैं और अंत में वापसी करने के लिए डेटा सेट कर सकते हैं।
 ```php
 public function hello(Request $request)
 {
-    // Create an object
+    // एक ऑब्जेक्ट बनाएं
     $response = response();
     
-    // ... Business logic omitted
+    // .... व्यावसायिक तर्क छोड़ें
     
-    // Set cookie
+    // कुकी सेट करें
     $response->cookie('foo', 'value');
     
-    // ... Business logic omitted
+    // .... व्यावसायिक तर्क छोड़ें
 
-    // Set the content
-    $response->withBody('वापसी सामग्री');
+    // वापसी करने के लिए डेटा सेट करें
+    $response->withBody('वापसी करने का डेटा');
     return $response;
 }
 ```
-The full parameter of the cookie method is as follows:
+
+`cookie` मेथड के पूरे पैरामीटर निम्नलिखित होते हैं:
 
 `cookie($name, $value = '', $max_age = 0, $path = '', $domain = '', $secure = false, $http_only = false)`
-## फ़ाइल स्ट्रीम लौटाना
+
+## फ़ाइल स्ट्रीम वापस दें
 ```php
 <?php
 namespace app\controller;
@@ -268,16 +291,14 @@ class FooController
     }
 }
 ```
-
-- webman, सुपर बड़े फ़ाइल भेजने का समर्थन करता है
-- बड़ी फ़ाइलों (2M से अधिक) के लिए, webman पूरी फ़ाइल को एक साथी दिन में साइनिक मेमरी में नहीं पढ़ेगा, बल्कि सही समय पर फ़ाइल को सेगमेंट में पढ़ेगा और भेजेगा
-- webman क्लाइंट द्वारा प्राप्त गति के आधार पर फ़ाइल पठन और भेजने की गति को अनुकूलित करेगा, जिससे अधिक से अधिक फ़ाइल को तेजी से भेजा जा सके और मेमरी उपयोग को कम तक कर सके
-- डेटा भेजना अब लागभाग बंद नहीं होगा, जो कि अन्य अनुरोध प्रसंस्थान पर प्रभाव नहीं डालेगा
-- फ़ाइल मैथकुलेट हेडर आप्शनली `if-modified-since` हेडर जोड़ेगा और अगले अनुरोध में `if-modified-since` हेडर की जांच करेगा, यदि फ़ाइल अपडेट नहीं होती है तो सीधे 304 को जांचने के लिए वापस देंगे ताकि बवंडविड्थ को कम किया जा सके
-- भेजी गई फ़ाइल ब्राउज़र को ऑटोमैटिक ही संगत `Content-Type` हेडर का प्रयोग करती है
-- अगर फ़ाइल मैजूद नहीं है, तो स्वचालित रूप से 404 प्रतिक्रिया में बदल जाएगी
-
-## फ़ाइल डाउनलोड
+- webman सुपर लार्ज फ़ाइलें भेजने का समर्थन करता है।
+- बड़े फ़ाइलों (2M से अधिक) के लिए, webman पूरी फ़ाइल को एक साथ मेमोरी में नहीं डालेगा, बल्कि सही समय पर चंक के रूप में फ़ाइल को पढ़ेगा और भेजेगा।
+- webman ग्राहक की स्वीकृति दर के आधार पर फ़ाइल पठन और भेजने की गति को अनुकूलित करेगा, साथ ही साथ सर्वोत्तम रूप से मेमोरी उपयोग को कम करके सबसे तेज़ फ़ाइल भेजने की गारंटी देगा।
+- डेटा भेजना ब्लॉकिंग नहीं है, और यह अन्य अनुरोधों को प्रबंधन पर कोई प्रभाव नहीं डालेगा।
+- file मेथड स्वचालित रूप से `if-modified-since` हेडर जोड़ेगा और अगले अनुरोध के साथ `if-modified-since` हेडर की जांच करेगा, यदि फ़ाइल में कोई परिवर्तन नहीं हुआ है तो सीधे 304 वापस भेजेगा ताकि बैंडविड्थ बचाया जा सके।
+- भेजी जाने वाली फ़ाइल को स्वचालित रूप से उपयुक्त `Content-Type` हेडर के साथ ब्राउज़र को भेजा जाएगा।
+- यदि फ़ाइल मौजूद नहीं है, तो स्वचालित रूप से 404 प्रतिक्रिया में परिवर्तित हो जाएगा।
+## फ़ाइल डाउनलोड करें
 ```php
 <?php
 namespace app\controller;
@@ -292,13 +313,11 @@ class FooController
     }
 }
 ```
-डाउनलोड फ़ंक्शन और फ़ाइल फ़ंक्शन के मूल रूप में है, अंतर है
-1. डाउनलोड करें फ़ाइल नाम सेट होने के बाद, फ़ाइल ब्राउज़र में दिखाई नहीं देगी
-2. डाउनलोड फ़ंक्शन `if-modified-since` हेडर की जाँच नहीं करेगा।
-
-## आउटपुट प्राप्त करें
-कुछ लाइब्रेरी फ़ाइल सामग्री को सीधे मानक आउटपुट के रूप में प्रिंट करती हैं, अर्थात डेटा कमांड लाइन टर्मिनल में प्रिंट होगा, वहां ब्राउज़र को नहीं भेजा जाएगा, इस स्थिति में हम एक वेरिएबल में डेटा को पकड़े और उसके बाद डेटा को ताज़ा करके ब्राउज़र को भेजने की ज़रूरत होती है, उदाहरण के लिए:
-
+downloadमेथड और fileमेथड के बीच बेसिक रूप से एक ही है, फर्क यह है
+1. डाउनलोड करने के बाद फ़ाइल का नाम सेट हो जाएगा, जिसके बाद फ़ाइल ब्राउज़र में नहीं दिखाई देगी
+2. downloadमेथड `if-modified-since` हेडर का जांच नहीं करेगा।
+## परिणाम प्राप्त करें
+कुछ लाइब्रेरी फ़ाइल की सामग्री को सीधे मानक आउटपुट पर प्रिंट कर देती हैं, अर्थात डेटा टर्मिनल में प्रिंट हो जाता है और ब्राउज़र को नहीं भेजा जाता है, इस स्थिति में हमें `ob_start();` और `ob_get_clean();` का उपयोग करके डेटा को एक वेरिएबल में कैच करने की आवश्यकता होती है, और फिर डेटा को ब्राउज़र को भेजने के लिए, जैसे:
 ```php
 <?php
 
@@ -310,14 +329,14 @@ class ImageController
 {
     public function get(Request $request)
     {
-        // छवि बनाना
+        // छवि बनाएं
         $im = imagecreatetruecolor(120, 20);
         $text_color = imagecolorallocate($im, 233, 14, 91);
-        imagestring($im, 1, 5, 5,  'A Simple Text String', $text_color);
+        imagestring($im, 1, 5, 5,  'एक साधारण पाठ स्ट्रिंग', $text_color);
 
-        // प्राप्ति प्रारंभ करें
+        // आउटपुट प्राप्ति शुरू
         ob_start();
-        // छवि प्रिंट करें
+        // छवि आउटपुट
         imagejpeg($im);
         // छवि सामग्री प्राप्त करें
         $image = ob_get_clean();

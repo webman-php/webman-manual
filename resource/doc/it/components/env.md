@@ -1,21 +1,20 @@
 # webman
 
 ## Introduzione
-`vlucas/phpdotenv` è un componente di caricamento delle variabili d'ambiente utilizzato per differenziare le configurazioni in ambienti diversi come lo sviluppo, il test, ecc.
+`webman` è un framework PHP ad alte prestazioni basato su Workerman, utilizzato per la creazione di applicazioni web.
 
 ## Indirizzo del progetto
-https://github.com/vlucas/phpdotenv
+https://github.com/walkor/webman
 
 ## Installazione
 ```php
-composer require vlucas/phpdotenv
+composer require walkor/webman
 ```
 
 ## Utilizzo
-
-#### Creare un file `.env` nella directory radice del progetto
+#### Crea un file `.env` nella directory radice del progetto
 **.env**
-```
+```plaintext
 DB_HOST = 127.0.0.1
 DB_PORT = 3306
 DB_NAME = test
@@ -23,14 +22,14 @@ DB_USER = foo
 DB_PASSWORD = 123456
 ```
 
-#### Modificare il file di configurazione
+#### Modifica il file di configurazione
 **config/database.php**
 ```php
 return [
     // Database predefinito
     'default' => 'mysql',
 
-    // Configurazioni di vari database
+    // Configurazioni di diversi database
     'connections' => [
         'mysql' => [
             'driver'      => 'mysql',
@@ -51,12 +50,10 @@ return [
 ```
 
 > **Nota**
-> Si consiglia di inserire il file `.env` nella lista di `.gitignore` per evitare il commit nel repository del codice. Aggiungere un file di esempio di configurazione `.env.example` al repository in modo che durante il deploy del progetto si possa copiare `.env.example` come `.env` e modificare le configurazioni all'interno di `.env` in base all'ambiente attuale. In questo modo, il progetto può caricare configurazioni diverse in ambienti diversi.
+> Si consiglia di aggiungere il file `.env` alla lista di `.gitignore` per evitare il commit nel repository del codice. Aggiungere anche un file di esempio di configurazione `.env.example` nel repository, in modo che durante il rilascio del progetto si possa copiare `.env.example` in `.env` e modificare la configurazione in base all'ambiente corrente, consentendo così al progetto di caricare configurazioni diverse in ambienti diversi.
 
 > **Attenzione**
-> `vlucas/phpdotenv` potrebbe avere dei bug nella versione di PHP TS (Thread Safe), si consiglia di utilizzare la versione NTS (Non-Thread Safe).
-> È possibile verificare la versione attuale di PHP eseguendo il comando `php -v`
+> `webman` potrebbe avere problemi con le versioni PHP TS (Thread Safe). Si consiglia di utilizzare la versione NTS (Non-Thread Safe). Per verificare la versione corrente di PHP, eseguire il comando `php -v`.
 
 ## Ulteriori informazioni
-
-Visita https://github.com/vlucas/phpdotenv
+Visita https://github.com/walkor/webman

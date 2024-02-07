@@ -1,9 +1,7 @@
 # レスポンス
-
-レスポンスは実際には `support\Response` オブジェクトであり、このオブジェクトを簡単に作成するために、webmanはいくつかのヘルパー関数を提供しています。
+実際のレスポンスは `support\Response` オブジェクトです。このオブジェクトを簡単に作成するため、webman はいくつかのヘルパー関数を提供しています。
 
 ## 任意のレスポンスを返す
-
 **例**
 ```php
 <?php
@@ -19,7 +17,6 @@ class FooController
     }
 }
 ```
-
 response 関数の実装は以下の通りです：
 ```php
 function response($body = '', $status = 200, $headers = array())
@@ -27,37 +24,37 @@ function response($body = '', $status = 200, $headers = array())
     return new Response($status, $headers, $body);
 }
 ```
+また、空の `response` オブジェクトをまず作成し、適切な位置で `$response->cookie()`、`$response->header()`、`$response->withHeaders()`、`$response->withBody()` を使って返す内容を設定することもできます。
 
-また、空の `response` オブジェクトを作成して、適切な位置で `$response->cookie()`、`$response->header()`、`$response->withHeaders()`、`$response->withBody()` を利用して返り値を設定することもできます。
 ```php
 public function hello(Request $request)
 {
     // オブジェクトを作成
     $response = response();
     
-    // .... ビジネスロジックは省略
+    // .... ビジネスロジック省略
     
-    // クッキーを設定
+    // Cookie を設定
     $response->cookie('foo', 'value');
     
-    // .... ビジネスロジックは省略
+    // .... ビジネスロジック省略
     
-    // HTTPヘッダを設定
+    // HTTP ヘッダを設定
     $response->header('Content-Type', 'application/json');
     $response->withHeaders([
                 'X-Header-One' => 'Header Value 1',
                 'X-Header-Tow' => 'Header Value 2',
             ]);
 
-    // .... ビジネスロジックは省略
-    
-    // 返すデータをセット
+    // .... ビジネスロジック省略
+
+    // 返すデータを設定
     $response->withBody('返すデータ');
     return $response;
 }
 ```
 
-## JSONを返す
+## JSON を返す
 **例**
 ```php
 <?php
@@ -73,7 +70,7 @@ class FooController
     }
 }
 ```
-json 関数の実装は以下の通りです
+json 関数の実装は以下の通りです：
 ```php
 function json($data, $options = JSON_UNESCAPED_UNICODE)
 {
@@ -81,7 +78,7 @@ function json($data, $options = JSON_UNESCAPED_UNICODE)
 }
 ```
 
-## XMLを返す
+## XML を返す
 **例**
 ```php
 <?php
@@ -104,7 +101,6 @@ class FooController
     }
 }
 ```
-
 xml 関数の実装は以下の通りです：
 ```php
 function xml($xml)
@@ -117,7 +113,7 @@ function xml($xml)
 ```
 
 ## ビューを返す
-次のようにファイルを作成します: `app/controller/FooController.php`
+以下のように、 `app/controller/FooController.php` ファイルを作成します。
 ```php
 <?php
 namespace app\controller;
@@ -132,8 +128,7 @@ class FooController
     }
 }
 ```
-
-そして、次のように `app/view/foo/hello.html` ファイルを作成します:
+次に、 `app/view/foo/hello.html` ファイルを作成します。
 ```html
 <!doctype html>
 <html>
@@ -162,7 +157,6 @@ class FooController
     }
 }
 ```
-
 redirect 関数の実装は以下の通りです：
 ```php
 function redirect($location, $status = 302, $headers = [])
@@ -175,7 +169,7 @@ function redirect($location, $status = 302, $headers = [])
 }
 ```
 
-## ヘッダーの設定
+## ヘッダーを設定
 ```php
 <?php
 namespace app\controller;
@@ -193,7 +187,8 @@ class FooController
     }
 }
 ```
-また、`header` および `withHeaders` メソッドを使用して個々のヘッダーまたは複数のヘッダーを設定することもできます。
+`header` および `withHeaders` メソッドを使用して、単一または複数のヘッダーを設定することもできます。
+
 ```php
 <?php
 namespace app\controller;
@@ -213,23 +208,24 @@ class FooController
     }
 }
 ```
-また、ヘッダーを事前に設定しておき、最後に返すデータを設定することもできます。
+また、ヘッダーを事前に設定し、最後に返すデータを設定することもできます。
+
 ```php
 public function hello(Request $request)
 {
     // オブジェクトを作成
     $response = response();
     
-    // .... ビジネスロジックは省略
+    // .... ビジネスロジック省略
   
-    // HTTPヘッダを設定
+    // HTTP ヘッダを設定
     $response->header('Content-Type', 'application/json');
     $response->withHeaders([
                 'X-Header-One' => 'Header Value 1',
                 'X-Header-Tow' => 'Header Value 2',
             ]);
 
-    // .... ビジネスロジックは省略
+    // .... ビジネスロジック省略
 
     // 返すデータを設定
     $response->withBody('返すデータ');
@@ -237,8 +233,7 @@ public function hello(Request $request)
 }
 ```
 
-## クッキーの設定
-
+## Cookie を設定
 ```php
 <?php
 namespace app\controller;
@@ -254,31 +249,27 @@ class FooController
     }
 }
 ```
-
-また、クッキーを事前に設定し、最後に返すデータを設定することもできます。
+また、Cookie を事前に設定し、最後に返すデータを設定することもできます。
 ```php
 public function hello(Request $request)
 {
     // オブジェクトを作成
     $response = response();
     
-    // .... ビジネスロジックは省略
+    // .... ビジネスロジック省略
     
-    // クッキーを設定
+    // Cookie を設定
     $response->cookie('foo', 'value');
     
-    // .... ビジネスロジックは省略
+    // .... ビジネスロジック省略
 
     // 返すデータを設定
     $response->withBody('返すデータ');
     return $response;
 }
 ```
-
-cookie メソッドの完全な引数は次のとおりです：
-
+`cookie` メソッドの完全なパラメータは次のとおりです：
 `cookie($name, $value = '', $max_age = 0, $path = '', $domain = '', $secure = false, $http_only = false)`
-
 
 ## ファイルストリームを返す
 ```php
@@ -295,16 +286,13 @@ class FooController
     }
 }
 ```
-
-- webmanは超大きなファイルを送信することができます
-- 大きなファイル（2Mを超える）の場合、webmanはファイル全体を一度にメモリに読み込むのではなく、適切なタイミングでファイルをセグメントに読み取り、送信します
-- webmanはクライアントの受信速度に応じてファイルの読み込みと送信速度を最適化し、ファイルを最速で送信しながらメモリ使用量を最小限に抑えます
-- データ送信はノンブロッキングであり、他のリクエスト処理に影響を与えません
-- file メソッドは自動的に `if-modified-since` ヘッダーを追加し、次のリクエスト時にファイルが変更されていない場合は、帯域幅を節約するために直接304を返します
-- 送信するファイルは、ブラウザに適切な `Content-Type` ヘッダーを使用して自動的に送信されます
-- ファイルが存在しない場合、自動的に404レスポンスに変換されます
-
-
+- webman は超大きなファイルを送信することをサポートしています。
+- 大きなファイル（2M を超える）については、webman はファイル全体を一度にメモリに読み込むのではなく、適切なタイミングでファイルを分割して読み込み、送信します。
+- webman はクライアントの受信速度に応じてファイルの読み取り送信速度を最適化し、ファイル送信時のメモリ使用量を最小限に抑えます。
+- データ送信はノンブロッキングで行われ、他のリクエスト処理に影響を与えません。
+- `file` メソッドは自動的に `if-modified-since` ヘッダを追加し、次のリクエスト時に `if-modified-since` ヘッダをチェックします。ファイルが変更されていない場合は帯域幅を節約するために直接 304 を返します。
+- 送信するファイルは、ブラウザに適切な `Content-Type` ヘッダを使用して自動的に送信されます。
+- ファイルが存在しない場合、自動的に 404 レスポンスに変換されます。
 ## ファイルのダウンロード
 ```php
 <?php
@@ -320,12 +308,13 @@ class FooController
     }
 }
 ```
-download メソッドは基本的に file メソッドと同じですが、以下の点が異なります：
-1、ダウンロードするファイル名を設定した後、ファイルはダウンロードされますが、ブラウザに表示されません
-2、download メソッドは `if-modified-since` ヘッダーをチェックしません
+downloadメソッドはfileメソッドとほぼ同じですが、違いは次のとおりです。
+1. ダウンロードするファイル名を設定すると、ファイルがダウンロードされます。ブラウザに表示されるのではありません。
+2. downloadメソッドは`if-modified-since`ヘッダーを確認しません。
+
 
 ## 出力の取得
-いくつかのライブラリは、ファイルのコンテンツを直接標準出力にプリントするもので、データはブラウザに送信されるのではなく、コマンドライン端末に表示されます。このような場合、`ob_start();`、`ob_get_clean();` を使用してデータを変数にキャプチャし、そのデータをブラウザに送信する必要があります。例えば：
+一部のライブラリは、ファイルコンテンツを直接標準出力に出力し、つまりデータはブラウザに送信されず、コマンドライン端末に出力されます。このような場合、`ob_start();` `ob_get_clean();` を使用してデータを変数にキャプチャし、その後ブラウザにデータを送信する必要があります。例：
 
 ```php
 <?php
@@ -338,12 +327,12 @@ class ImageController
 {
     public function get(Request $request)
     {
-        // 画像を作成
+        // 画像の生成
         $im = imagecreatetruecolor(120, 20);
         $text_color = imagecolorallocate($im, 233, 14, 91);
         imagestring($im, 1, 5, 5,  'A Simple Text String', $text_color);
 
-        // 出力を取得開始
+        // 出力のキャプチャを開始
         ob_start();
         // 画像を出力
         imagejpeg($im);

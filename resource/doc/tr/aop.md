@@ -1,6 +1,6 @@
 # AOP
 
-> Hyperf yazarına yapılan katkılar için teşekkürler
+> Hyperf yazarına çok teşekkürler
 
 ### Kurulum
 
@@ -10,9 +10,9 @@
 composer require "hyperf/aop-integration: ^1.1"
 ```
 
-### AOP ile ilgili yapılandırmayı ekleyin
+### AOP ile ilgili yapılandırma ekleme
 
-`config` dizini altında `config.php` yapılandırma eklememiz gerekiyor
+`config` dizini altında `config.php` konfigürasyonunu eklememiz gerekiyor
 
 ```php
 <?php
@@ -36,31 +36,31 @@ return [
         ],
     ],
     'aspects' => [
-        // Bu kısma ilgili Aspect yazılmalıdır
+        // Buraya ilgili Aspect yazın
         app\aspect\DebugAspect::class,
     ]
 ];
 
 ```
 
-### Giriş dosyası start.php yapılandırması
+### Config.php giriş dosyasını yapılandırma
 
-> Başlatma yöntemini `timezone`'un altına yerleştireceğiz, diğer kodları atlıyoruz.
+> Başlatma yöntemini zaman diliminin altına yerleştireceğiz, diğer kodlar burada atlanmıştır.
 
-```
+```php
 use Hyperf\AopIntegration\ClassLoader;
 
 if ($timezone = config('app.default_timezone')) {
     date_default_timezone_set($timezone);
 }
 
-// Başlatma
+// İlklenme
 ClassLoader::init();
 ```
 
 ### Test
 
-İlk olarak kesilecek sınıfı yazalım
+Öncelikle kesilmesi gereken sınıfı yazalım
 
 ```php
 <?php
@@ -75,7 +75,7 @@ class UserService
 }
 ```
 
-Sonra uygun `DebugAspect` ekleyin
+Daha sonra ilgili `DebugAspect` dosyasını ekleyin
 
 ```php
 <?php
@@ -99,7 +99,7 @@ class DebugAspect extends AbstractAspect
 }
 ```
 
-Daha sonra `app/controller/IndexController.php` kontrolcüsünü düzenleyin
+Daha sonra kontrolcüyü düzenleyin `app/controller/IndexController.php`
 
 ```php
 <?php
@@ -117,7 +117,7 @@ class IndexController
 }
 ```
 
-Ardından yönlendirmeyi yapılandırın
+Sonra rotayı yapılandırın
 
 ```php
 <?php
@@ -126,7 +126,7 @@ use Webman\Route;
 Route::any('/json', [app\controller\IndexController::class, 'json']);
 ```
 
-Son olarak servisi başlatın ve test edin.
+Son olarak sunucuyu başlatın ve test edin.
 
 ```shell
 php start.php start

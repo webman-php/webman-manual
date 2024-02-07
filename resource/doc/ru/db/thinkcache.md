@@ -1,40 +1,40 @@
 ## ThinkCache
 
-### Установка ThinkCache
+### Установка ThinkCache  
 `composer require -W webman/think-cache`
 
-После установки необходимо перезагрузить (reload is not valid)
+После установки требуется перезапустить (reload не подходит)
 
 
-> [webman/think-cache](https://www.workerman.net/plugin/15) фактически является плагином, автоматически устанавливающим `toptink/think-cache`.
+> [webman/think-cache](https://www.workerman.net/plugin/15) фактически является плагином для автоматической установки `toptink/think-cache`.
 
-> **Примечание**
+> **Внимание**
 > toptink/think-cache не поддерживает php8.1
+  
+### Файл настроек
 
-### Файл конфигурации
-
-Файл конфигурации находится в `config/thinkcache.php`
+Файл настроек находится здесь: `config/thinkcache.php`
 
 ### Использование
 
-```php
-<?php
-namespace app\controller;
-
-use support\Request;
-use think\facade\Cache;
-
-class UserController
-{
-    public function db(Request $request)
-    {
-        $key = 'test_key';
-        Cache::set($key, rand());
-        return response(Cache::get($key));
-    }
-}
-```
+  ```php
+  <?php
+  namespace app\controller;
+    
+  use support\Request;
+  use think\facade\Cache;
+  
+  class UserController
+  {
+      public function db(Request $request)
+      {
+          $key = 'test_key';
+          Cache::set($key, rand());
+          return response(Cache::get($key));
+      }
+  }
+  ```
 
 ### Документация по использованию Think-Cache
 
-[Ссылка на документацию ThinkCache](https://github.com/top-think/think-cache)
+[Ссылка на документацию по ThinkCache](https://github.com/top-think/think-cache)

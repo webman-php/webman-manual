@@ -19,9 +19,9 @@ class UserController
 }
 ```
 
-การใช้ `$request->session();` เพื่อรับอินสแตนซ์ของ `Workerman\Protocols\Http\Session` และใช้เมธอดของอินสแตนซ์เพื่อเพิ่ม แก้ไข หรือลบข้อมูลเซสชัน
+ผ่าน `$request->session();` สามารถรับชุดคำสั่ง `Workerman\Protocols\Http\Session` instance และใช้เมทอดของ instance เพื่อเพิ่ม แก้ไข หรือลบข้อมูลจากเซสชัน
 
-> **หมายเหตุ:** เมื่อวัตถุเซสชันถูกทำลาย ข้อมูลเซสชันจะถูกบันทึกโดยอัตโนมัติ ดังนั้น อย่าเก็บวัตถุที่ได้จาก `$request->session()` ไว้ในอาร์เรย์โกบัลหรือเป็นสมาชิกคลาส หรือจะทำให้เซสชันไม่อาจบันทึก
+> หมายเหตุ: เมื่อวัตถุเซสชันถูกทำลาย ข้อมูลเซสชันจะถูกบันทึกโดยอัตโนมัติ ดังนั้น อย่าเก็บวัตถุที่ได้รับจาก `$request->session()` ไว้ในอาร์เรย์ที่เป็นตัวแปร global หรือเป็นตัวแปรของคลาสที่ต้องการ เพื่อป้องกันไม่ให้เซสชันบันทึกข้อมูลไม่ได้
 
 
 ## รับข้อมูลเซสชันทั้งหมด
@@ -29,117 +29,115 @@ class UserController
 $session = $request->session();
 $all = $session->all();
 ```
-ค่าที่คืนคืออาร์เรย์ ถ้าไม่มีข้อมูลเซสชันเลย จะคืนค่าอาร์เรย์ว่าง
+คืนค่าเป็นอาร์เรย์ หากไม่มีข้อมูลเซสชันใด ๆ คืนค่าเป็นอาร์เรย์ว่าง
 
 
-## รับค่าข้อมูลจากเซสชัน
+## รับค่าของเซสชันที่ระบุ
 ```php
 $session = $request->session();
 $name = $session->get('name');
 ```
-ถ้าข้อมูลไม่มีอยู่ จะคืนค่า null
-
-
-คุณยังสามารถส่งพารามิเตอร์ที่สองให้กับเมธอด get หากไม่พบค่าในอาร์เรย์เซสชัน จะคืนค่าเริ่มต้น ตัวอย่างเช่น:
+กรณีข้อมูลไม่มี จะคืนค่าเป็น null	คุณสามารถกำหนดค่าเริ่มต้นให้กับเมทอด get ด้วยอาร์กิวเม้นที่สอง หากอาร์กิวเม้นตัวแรกไม่พบค่าในอาร์เรย์เซสชันก็จะคืนค่าเริ่มต้น ตัวอย่างเช่น:
 ```php
 $session = $request->session();
 $name = $session->get('name', 'tom');
 ```
 
 
-## บันทึกเซสชัน
-เมื่อต้องการบันทึกข้อมูลแต่ละรายการให้ใช้เมธอด set
+## บันทึกข้อมูลเซสชัน
+ใช้เมทอด set เพื่อบันทึกข้อมูลที่ต้องการ
 ```php
 $session = $request->session();
 $session->set('name', 'tom');
 ```
-การใช้ set ไม่คืนค่า ข้อมูลเซสชันจะถูกบันทึกโดยอัตโนมัติเมื่อวัตถุเซสชันถูกทำลาย
+เมทอด set ไม่คืนค่า ข้อมูลเซสชันจะถูกบันทึกโดยอัตโนมัติเมื่อวัตถุเซสชันถูกทำลาย
 
-เมื่อต้องการบันทึกข้อมูลมากกว่าหนึ่งรายการให้ใช้เมธอด put
+เมื่อต้องการบันทึกข้อมูลหลายอย่าง ให้ใช้เมทอด put
 ```php
 $session = $request->session();
 $session->put(['name' => 'tom', 'age' => 12]);
 ```
-อย่างเช่น put ไม่คืนค่าเช่นกัน
+เช่นกัน เมทอด put ไม่คืนค่า
 
-
-## ลบข้อมูลเซสชัน
-เมื่อต้องการลบข้อมูลเซสชันรายการหนึ่งหรือมากกว่า ให้ใช้เมธอด `forget`
+## ลบข้อมูลของเซสชัน
+เมื่อต้องการลบข้อมูลหรือข้อมูลหลายข้อมูล ให้ใช้เมทอด `forget`
 ```php
 $session = $request->session();
-// ลบรายการหนึ่ง
+// ลบหนึ่งรายการ
 $session->forget('name');
 // ลบหลายรายการ
 $session->forget(['name', 'age']);
 ```
-
-อีกวิธีที่สามารถใช้ได้คือการใช้เมธอด delete ความแตกต่างคือ delete สามารถลบเพียงหนึ่งรายการ เช่น
+อีกทางเลือกคือเมทอด delete ต่างจาก `forget` ที่สามารถลบได้แค่หนึ่งรายการเท่านั้น
 ```php
 $session = $request->session();
 // เหมือนกับ $session->forget('name');
 $session->delete('name');
 ```
 
-## รับและลบค่าข้อมูลจากเซสชัน
+
+## รับและลบค่าของเซสชัน
 ```php
 $session = $request->session();
 $name = $session->pull('name');
 ```
-ผลลัพธ์ของข้อความนี้เทียบเท่ากับโค้ดข้างล่าง
+ผลลัพธ์จะเหมือนกับโค้ดด้านล่าง
 ```php
 $session = $request->session();
 $value = $session->get($name);
 $session->delete($name);
 ```
-หากไม่มีเซสชันที่สอดคล้าย จะคืนค่า null
+กรณีไม่พบเซสชันที่แสดง จะคืนค่าเป็น null
 
-
-## ลบข้อมูลเซสชันทั้งหมด
+## ลบข้อมูลในเซสชันทั้งหมด
 ```php
 $request->session()->flush();
 ```
-ไม่คืนค่า เมื่อวัตถุเซสชันถูกทำลาย ข้อมูลเซสชันจะถูกลบออกจากการจัดเก็บโดยอัตโนมัติ
+ไม่คืนค่า เมื่อวัตถุเซสชันถูกทำลาย ข้อมูลของเซสชันจะถูกลบออกจากพื้นที่จัดเก็บโดยอัตโนมัติ
 
-## ตรวจสอบว่าข้อมูลเซสชันที่สอดคล้ายอยู่หรือไม่
+
+## ตรวจสอบว่ามีข้อมูลของเซสชันแล้วหรือยัง
 ```php
 $session = $request->session();
 $has = $session->has('name');
 ```
-เมื่อไม่มีข้อมูลเซสชันที่สอดคล้ายอยู่หรือหรือข้อมูลเซสชันที่สอดคล้ายมีค่าเป็น null จะคืนค่าเป็นเท็จ ไม่งั้นจะคืนค่าเป็นจริง
+ถ้าไม่มีข้อมูลเซสชันที่สอดคล้องหรือค่าของเซสชันที่สอดคล้องเป็น null จะคืนค่าเป็นเท็จ มิฉะนั้นจะคืนค่าเป็นจริง
 
-```
+```php
 $session = $request->session();
 $has = $session->exists('name');
 ```
-โค้ดข้างล่างนี้ใช้เพื่อตรวจสอบว่าข้อมูลเซสชันที่สอดคล้ายอยู่หรือไม่ แต่แต่้ผลลัพธ์จะเป็นจริงเมื่อรายการข้อมูลเป็นค่า null๑٨เครื่องจักรอื่น ๆ แทนที่จะเป็นเท็จ
+โค้ดด้านล่างใช้สำหรับตรวจสอบว่ามีข้อมูลของเซสชันที่ระบุหรือไม่ คำตอบคือ เมื่อค่าของเซสชันที่ระบุเป็น null การปฎิบัติตามคำสั่งนี้จะคืนค่าเป็นจริง
 
 ## ฟังก์ชันช่วย session()
-> 2020-12-09 เพิ่มข้อความใหม่
+> 2020-12-09 เพิ่มเติม
 
-webman มีการให้บริการฟังก์ชันช่วย `session()` ทำหน้าที่เดียวกัน
+webman มีฟังก์ชันช่วย `session()` ทำงานเช่นเดียวกันกับฟังก์ชัน session() ดังตัวอย่างด้านล่าง
 ```php
-// รับอินสแสตนซ์เซสชัน
+// รับ instance เซสชัน
 $session = session();
-// เทียบเท่ากับ
+// เหมือนกับ
 $session = $request->session();
 
-// รับค่า
+// รับค่าหนึ่งรายการ
 $value = session('key', 'default');
-// เทียบเท่ากับ
+// เหมือนกับ
 $value = session()->get('key', 'default');
-// เทียบเท่ากับ
+// เหมือนกับ
 $value = $request->session()->get('key', 'default');
 
 // กำหนดค่าให้กับเซสชัน
 session(['key1'=>'value1', 'key2' => 'value2']);
-// เทียบเท่ากับ
+// เหมือนกับ
 session()->put(['key1'=>'value1', 'key2' => 'value2']);
-// เทียบเท่ากับ
+// เหมือนกับ
 $request->session()->put(['key1'=>'value1', 'key2' => 'value2']);
+
 ```
 
 ## ไฟล์การตั้งค่า
-ไฟล์การตั้งค่าเซสชันอยู่ที่ `config/session.php` มีเนื้อหาที่คล้ายกันกับนี้
+ไฟล์การตั้งค่าเซสชันอยู่ที่ `config/session.php` และมีรูปแบบดังตัวอย่างนี้:
+
 ```php
 use Webman\Session\FileSessionHandler;
 use Webman\Session\RedisSessionHandler;
@@ -149,18 +147,18 @@ return [
     // FileSessionHandler::class หรือ RedisSessionHandler::class หรือ RedisClusterSessionHandler::class 
     'handler' => FileSessionHandler::class,
     
-    // หากมีการใช้ FileSessionHandler::class ให้ระบุค่าเป็น file
-    // หากมีการใช้ RedisSessionHandler::class ให้ระบุค่าเป็น redis
-    // หากมีการใช้ RedisClusterSessionHandler::class ให้ระบุค่าเป็น redis_cluster ทีเฉพาะที่เป็นคลัสเตอร์ของ redis
+    // type เมื่อ handler เป็น FileSessionHandler::class จะมีค่าเป็น file
+    // type เมื่อ handler เป็น RedisSessionHandler::class จะมีค่าเป็น redis
+    // type เมื่อ handler เป็น RedisClusterSessionHandler::class จะมีค่าเป็น redis_cluster หรือกลุ่มredis
     'type'    => 'file',
 
-    // ให้ใช้ค่าการตั้งค่าที่แตกต่างกัน
+    // handler ที่ต่างกันจะใช้การตั้งค่าที่ต่างกัน
     'config' => [
-        // ค่าข้อมูลเซสชันที่เป็น file
+        // การตั้งค่าเมื่อ type เป็น file
         'file' => [
             'save_path' => runtime_path() . '/sessions',
         ],
-        // ค่าข้อมูลเซสชันที่เป็น redis
+        // การตั้งค่าเมื่อ type เป็น redis
         'redis' => [
             'host'      => '127.0.0.1',
             'port'      => 6379,
@@ -175,54 +173,53 @@ return [
             'auth'    => '',
             'prefix'  => 'redis_session_',
         ]
-        
     ],
 
-    'session_name' => 'PHPSID', // ชื่อคุ๊กกี้ที่มีข้อมูล session_id
+    'session_name' => 'PHPSID', // ชื่อคุ๊กกี้ที่เก็บ session_id
     
-    // === การตั้งค่าต่อไปนี้ต้อการ webman-framework>=1.3.14 workerman>=4.0.37 ===
-    'auto_update_timestamp' => false,  // เปิดการสครับเป็นอัตโนมัติหรือไม่ เริ่มต้นคือปิด
-    'lifetime' => 7*24*60*60,          // เวลาที่เลยรายการเซสชัน
-    'cookie_lifetime' => 365*24*60*60, // เวลาที่คุ๊กกี้ session_id เลย
-    'cookie_path' => '/',              // เสมที่ของคุ๊กกี้ session_id
+    // === การตั้งค่าเพิ่มเติมที่จำเป็นต้องใช้ webman-framework>=1.3.14 workerman>=4.0.37 ===
+    'auto_update_timestamp' => false,  // การอัพเดท session โดยอัตโนมัติ ปิดการใช้งานตามค่าเริ่มต้น
+    'lifetime' => 7*24*60*60,          // ระยะเวลาที่ session หมดอายุ
+    'cookie_lifetime' => 365*24*60*60, // ระยะเวลาที่คุ๊กกี้ session_id หมดอายุ
+    'cookie_path' => '/',              // เส้นทางของคุ๊กกี้ session_id
     'domain' => '',                    // โดเมนของคุ๊กกี้ session_id
-    'http_only' => true,               // เปิด httpOnly หรือไม่ เริ่มต้นคือเปิด
-    'secure' => false,                 // เฉพาะ https เท่านั้นที่ระบุเซสชัน หรือไม่ เริ่มต้นคือปิด
-    'same_site' => '',                 // ใช้ในการป้องกันการโจมตี CSRF และการติดตามของผู้ใช้ ค่าที่ประเภทstrict/lax/none
-    'gc_probability' => [1, 1000],     // โอกาสในการกำจัดข้อมูล session
+    'http_only' => true,               // เปิดใช้งาน httpOnly ตามค่าเริ่มต้น
+    'secure' => false,                 // เปิดใช้งาน session เฉพาะใน https ตามค่าเริ่มต้น
+    'same_site' => '',                 // ใช้ป้องกันการโจมตี CSRF และการติดตามผู้ใช้งาน เลือกค่าได้แก่strict/lax/none
+    'gc_probability' => [1, 1000],     // ความน่าจะเป็นในการล้างข้อมูลของเซสชัน
 ];
 ```
 
 
 > **หมายเหตุ** 
-> ตั้งแต่ webman-framework 1.4.0 เป็นต้นมาไฮเลีย SessionHandler ดัปเปลื่อนรูปแบบการอ้างอิงจากเดิม
+> เริ่มตั้งแต่ webman 1.4.0 เปลี่ยนการเรียกใช้งาน SessionHandler namespace จากเดิมคือ
 > use Webman\FileSessionHandler;  
 > use Webman\RedisSessionHandler;  
 > use Webman\RedisClusterSessionHandler;  
-> เป็น  
+> เปลี่ยนเป็น  
 > use Webman\Session\FileSessionHandler;  
 > use Webman\Session\RedisSessionHandler;  
 > use Webman\Session\RedisClusterSessionHandler;  
 
 
 
-## การตั้งค่าการมีผลอย่างยั่ง
-เมื่อ webman-framework < 1.3.14 เริ่มต้นให้ตั้งค่าเวลาหมดอายุของเซสชันทำในไฟล์ `php.ini`
+## การตั้งค่าระยะที่เป็นประจำ
+เมื่อ webman-framework < 1.3.14  ระยะเวลาของ session จะต้องระบุใน `php.ini`
 
-```
+```ini
 session.gc_maxlifetime = x
 session.cookie_lifetime = x
 session.gc_probability = 1
 session.gc_divisor = 1000
 ```
 
-สมมุติว่าตั้งเวลาให้มีผลอย่างย่รง 1440 วินาทีตามโคดด้านล่าง
-```
+เช่นเดียวกันถ้าตั้งระยะเวลาเป็น 1440 วินาที ความเร็วในการตั้งระยะของ session จะเป็นดังต่อไปนี้
+```ini
 session.gc_maxlifetime = 1440
 session.cookie_lifetime = 1440
 session.gc_probability = 1
 session.gc_divisor = 1000
 ```
 
-> **ใบเสร็จ**
-> สามารถใช้คอมมาร์ด `php --ini` เพื่อหาที่อยู่ของไฟล์ `php.ini` ได้
+> **คำแนะนำ**
+> สามารถใช้คำสั่ง `php --ini` เพื่อค้นหาตำแหน่งของ `php.ini`

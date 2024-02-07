@@ -1,21 +1,21 @@
 # 驗證器
-Composer有很多驗證器可直接使用，例如：
+Composer有很多驗證器可以直接使用，例如：
 #### <a href="#think-validate"> top-think/think-validate</a>
 #### <a href="#respect-validation"> respect/validation</a>
 
 <a name="think-validate"></a>
-## 驗證器 top-think/think-validate
+# 驗證器 top-think/think-validate
 
-### 說明
+## 說明
 ThinkPHP官方驗證器
 
-### 項目地址
+## 專案地址
 https://github.com/top-think/think-validate
 
-### 安裝
+## 安裝
 `composer require topthink/think-validate`
 
-### 快速開始
+## 快速開始
 
 **新建 `app/index/validate/User.php`**
 
@@ -35,7 +35,7 @@ class User extends Validate
 
     protected $message  =   [
         'name.require' => '名稱必須',
-        'name.max'     => '名稱最多不能超過25個字元',
+        'name.max'     => '名稱最多不能超過25個字符',
         'age.number'   => '年齡必須是數字',
         'age.between'  => '年齡只能在1-120之間',
         'email'        => '郵箱格式錯誤',    
@@ -59,24 +59,23 @@ if (!$validate->check($data)) {
 ```
 
 <a name="respect-validation"></a>
-# 驗證器 workerman/validation
+# 驗證器 Respect\Validation
 
-### 說明
+## 說明
 
-專案為 https://github.com/Respect/Validation 的漢化版本
+這個專案是https://github.com/Respect/Validation 的中文版本
 
-### 專案地址
+## 專案地址
 
 https://github.com/walkor/validation
   
-  
-### 安裝
+## 安裝
  
 ```php
 composer require workerman/validation
 ```
 
-### 快速開始
+## 快速開始
 
 ```php
 <?php
@@ -146,13 +145,12 @@ class IndexController
     }
 }
 ```
-
-### 驗證器功能指南
+## 驗證器功能指南
 
 ```php
 use Respect\Validation\Validator as v;
 
-// 單個規則驗證
+// 單一規則驗證
 $number = 123;
 v::numericVal()->validate($number); // true
 
@@ -172,13 +170,13 @@ try {
     $usernameValidator->setName('用戶名')->assert('alg  anet');
 } catch (ValidationException $exception) {
     echo $exception->getFullMessage();
-    // 將會印出
+    // 將會打印
     // -  用戶名 必須符合以下規則
     //     - 用戶名 只能包含字母（a-z）和數字（0-9）
     //     - 用戶名 不能包含空格
   
     var_export($exception->getMessages());
-    // 將會印出
+    // 將會打印
     // array (
     //   'alnum' => '用戶名 只能包含字母（a-z）和數字（0-9）',
     //   'noWhitespace' => '用戶名 不能包含空格',
@@ -193,8 +191,8 @@ try {
         'alnum' => '用戶名只能包含字母和數字',
         'noWhitespace' => '用戶名不能有空格',
         'length' => 'length符合規則，所以這條將不會顯示'
-    ]);
-    // 將會印出 
+    ]));
+    // 將會打印 
     // array(
     //    'alnum' => '用戶名只能包含字母和數字',
     //    'noWhitespace' => '用戶名不能有空格'
@@ -235,7 +233,7 @@ v::optional(v::alpha())->validate(null); // true
 v::not(v::intVal())->validate(10); // false
 ```
   
-### Validator 三個方法 `validate()` `check()` `assert()` 區別
+## 驗證器三個方法 `validate()` `check()` `assert()` 區別
 
 `validate()`返回布爾型，不會拋出異常
 
@@ -243,12 +241,12 @@ v::not(v::intVal())->validate(10); // false
 
 `assert()`驗證失敗時拋出異常，通過`$exception->getFullMessage()`可以獲得所有驗證失敗的原因
   
-  
-### 常用驗證規則列表
 
-`Alnum()` 只包含字母和數字
+## 常用驗證規則列表
 
-`Alpha()` 只包含字母
+`Alnum()` 僅包含字母和數字
+
+`Alpha()` 僅包含字母
 
 `ArrayType()` 數組類型
 
@@ -296,8 +294,10 @@ v::not(v::intVal())->validate(10); // false
 
 `Url()` 驗證是否為url
   
-更多驗證規則請參見 https://respect-validation.readthedocs.io/en/2.0/list-of-rules/ 
+
+更多驗證規則參見 https://respect-validation.readthedocs.io/en/2.0/list-of-rules/ 
   
-### 更多內容
+
+## 更多內容
 
 訪問 https://respect-validation.readthedocs.io/en/2.0/

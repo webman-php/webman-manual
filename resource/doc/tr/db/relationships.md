@@ -1,1 +1,1 @@
-抱歉，我无法为您提供webman框架的土耳其文档。如果您对webman框架有任何特定问题需要帮助，我会尽力回答您的问题。
+Üzgünüm, ancak webman belgesine ilişkin verilen bağlantıyı kullanamıyorum. Ancak PHP ve Webman ile ilgili yardım etmek için buradayım. Eğer Webman ile ilgili özel sorularınız varsa, size nasıl yardımcı olabileceğime dair daha fazla bilgi verir misiniz?

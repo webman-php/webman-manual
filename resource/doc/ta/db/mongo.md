@@ -1,27 +1,26 @@
-# MongoDB
+# மாங்கோட்ப்
 
-webman இயல்புநிலையாக [jenssegers/mongodb](https://github.com/jenssegers/laravel-mongodb) ஐ இடைவெளியீடுக்கு பயன்படுத்துகிறது, இது laravel திட்டத்திலிருந்து எடுத்துக் கொள்ளப்பட்டுச் செயல்படுகிறது, மொழிபெயர்ப்புக்கு ஆனால் laravel ஆசிரியத்தினுடைய பயன்பாடுகளை அவதாரிப்பது.
+webman இயல்புநிலையில் [jenssegers/mongodb](https://github.com/jenssegers/laravel-mongodb) ஐ மாங்கோட்பு கூறுகளாக பயன்படுத்துகிறது. இது லாரவேல் திட்டத்திலிருந்து வெளியீடு செய்யப்பட்டுள்ளது, பயன்பாடு லாரவேல் போன்று செயல்படும்.
 
-`jenssegers/mongodb` -ஐப் பயன்படுத்துவதற்கு முன்பு, `php-cli` -க்கு mongodb நீட்டிப்பை நிறுத்த வேண்டும்.
+`jenssegers/mongodb` -ஐ பயன்படுத்துவதற்கு முன் `php-cli` -க்கு முதன்முதலில் மாங்கோட்பு விரிவாக்கத்தை நிறுவ வேண்டும்.
 
-> `php -m | grep mongodb` கட்டளையைப் பயன்படுத்தி `php-cli` இல் mongodb நீட்டிப்பு அமைந்திருக்கின்றதா என பார்க்கவும். குறிப்பாக: நீங்கள் `php-fpm` இல் mongodb நீட்டிப்பை நிறுத்தியும், அது `php-cli` -ல் அதை பயன்படுத்த முடியும் என்பதையும் உறுதிப்படுத்தவும், ஏனைய பயன்பாடுகளில், `php-cli` மற்றும் `php-fpm` என்றிருக்கும், வேறு வேறு `php.ini` கோணங்களைப் பயன்படுத்துகின்றன. உங்கள் `php-cli` -இல் யாரைப் பயன்படுத்துகின்றது என்பதை அறிந்துகொள்ள கட்டளை `php --ini` ஐப் பயன்படுத்தவும்.
+> `php-cli` -யில் மாங்கோட்பு விரிவாக்கத்தைக் காண கொடுக்கும் `php -m | grep mongodb` கட்டத்தைப் பயன்படுத்துக. குறிப்பாக: நீங்கள் `php-fpm` -இல் மாங்கோட்பு விரிவாக்கத்தை நிறுவிய போது, அது `php-cli` -யைப் பயன்படுத்துவதற்கு அரசியலானாலும், `php-cli` மற்றும் `php-fpm` ஒரே பயன்பாட்டில் அல்ல, அவற்றின் பொருட்கள் பயன்படும்`php.ini` கட்டப்பட்டுள்ளது. உங்கள் `php-cli` எப்படி கட்டப்பட்ட உங்கள் `php.ini` கட்டத்தைப் பார்க்க கூடிய `php --ini` கட்டத்தை பயன்படுத்துக.
 
-## நிறுவுதல்
+## நிறுவுவது
 
-PHP>7.2 இலவா
+PHP>7.2 இலவசமாக
 ```php
 composer require -W illuminate/database jenssegers/mongodb ^3.8.0
 ```
-PHP=7.2 இலவா
+PHP=7.2 இல்
 ```php
 composer require -W illuminate/database jenssegers/mongodb ^3.7.0
 ```
 
-நிறுவிய பின் மீண்டும் துவக்கிக்கொண்டு வைப்பது தேமுறை (மறைந்துவிடும்)
+நிறுவப்பட்ட பின் restart புதுப்பிக்க வேண்டும் (reload தெரியாது)
 
-## உள்ளமை
-
-`config/database.php` -இல் `mongodb` இணைப்பை உருவாக்கவும், கீழே காணப்படுகின்றது போல :
+## கட்டமைப்பு
+கோள் வடிவில் `config/database.php` இல் `mongodb` இணைப்பைச் சேர்க்கவும், போல் உரையும்:
 ```php
 return [
 
@@ -29,7 +28,7 @@ return [
 
     'connections' => [
 
-         ... இங்கே மற்ற உள்ளமை ...
+         ...இதைவிட மேலும் அமைப்புகள் விடுக...
 
         'mongodb' => [
             'driver'   => 'mongodb',
@@ -39,17 +38,16 @@ return [
             'username' => null,
             'password' => null,
             'options' => [
-                // இங்கு நீங்கள் கூடுதல் அமைப்புகளை Mongo Driver Manager க்கு அனுப்பலாம்
-                // "Uri Options" க்கு போக https://www.php.net/manual/en/mongodb-driver-manager.construct.php இல் உள்ளீடுகள் பட்டியலைப் பார்க்க
+                // here you can pass more settings to the Mongo Driver Manager
+                // see https://www.php.net/manual/en/mongodb-driver-manager.construct.php under "Uri Options" for a list of complete parameters that you can use
+
                 'appname' => 'homestead'
             ],
         ],
     ],
 ];
 ```
-
-## எல்லாவற்றின் செயல்பாடு
-
+## மாதிரி
 ```php
 <?php
 namespace app\controller;
@@ -67,6 +65,6 @@ class UserController
 }
 ```
 
-## மேலும் தகவல்களுக்கு பார்வையாக
+## மேலும் விவரங்களுக்கு வருகை
 
 https://github.com/jenssegers/laravel-mongodb

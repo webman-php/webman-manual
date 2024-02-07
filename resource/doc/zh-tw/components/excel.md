@@ -2,18 +2,16 @@
 
 ## phpoffice/phpspreadsheet
 
-### 專案位置
+### 專案地址
 
 https://github.com/PHPOffice/PhpSpreadsheet
   
 ### 安裝
- 
-  ```php
-  composer require phpoffice/phpspreadsheet
-  ```
+```php
+composer require phpoffice/phpspreadsheet
+```
   
 ### 使用
-
 ```php
 <?php
 namespace app\controller;
@@ -31,15 +29,14 @@ class ExcelController
 
         $writer = new Xlsx($spreadsheet);
         $file_path = public_path().'/hello_world.xlsx';
-        // 儲存檔案到 public 目錄下
+        // 儲存檔案至 public 目錄下
         $writer->save($file_path);
         // 下載檔案
-        return response()->download($file_path, '檔案名稱.xlsx');
+        return response()->download($file_path, '檔名.xlsx');
     }
 
 }
 ```
   
 ### 更多內容
-
-請參閱 https://phpspreadsheet.readthedocs.io/en/latest/
+參考 https://phpspreadsheet.readthedocs.io/en/latest/

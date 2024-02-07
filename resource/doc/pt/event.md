@@ -6,7 +6,7 @@
 [![webman-event](https://img.shields.io/github/last-commit/tinywan/webman-event/main)]()
 [![webman-event](https://img.shields.io/github/v/tag/tinywan/webman-event?color=ff69b4)]()
 
-Em comparação com os Middleware, a vantagem dos eventos é que eles são mais precisos do que os middlewares (ou seja, têm uma granularidade mais fina) e mais adequados para a extensão de cenários de negócios. Por exemplo, frequentemente nos deparamos com a necessidade de realizar uma série de operações após o registro ou login do usuário. Através do sistema de eventos, é possível realizar a extensão das operações de login sem afetar o código original, reduzindo assim o acoplamento do sistema e diminuindo a possibilidade de bugs.
+A vantagem dos eventos em comparação com os middlewares é que os eventos são mais precisos (ou seja, têm granularidade mais fina) e são mais adequados para a expansão de alguns cenários de negócios. Por exemplo, geralmente nos deparamos com situações em que é necessário realizar uma série de operações após o registro ou login do usuário. Através do sistema de eventos, podemos realizar a extensão das operações de login sem invadir o código existente, reduzindo a complexidade do sistema e, ao mesmo tempo, reduzindo a possibilidade de bugs.
 
 ## Endereço do Projeto
 
@@ -21,37 +21,34 @@ Em comparação com os Middleware, a vantagem dos eventos é que eles são mais 
 ```shell script
 composer require tinywan/webman-event
 ```
-
 ## Configuração
 
-O arquivo de configuração de eventos `config/event.php` tem o seguinte conteúdo:
+O arquivo de configuração de eventos `config/event.php` contém o seguinte conteúdo
 
 ```php
 return [
-    // Ouvintes de evento
+    // Ouvinte do evento
     'listener'    => [],
 
-    // Assinantes de evento
+    // Assinante do Evento
     'subscriber' => [],
 ];
 ```
-
-### Configuração de inicialização de processo
+### Configuração de Inicialização do Processo
 
 Abra `config/bootstrap.php` e adicione a seguinte configuração:
 
 ```php
 return [
-    // Aqui estão omitidas outras configurações ...
+    // Outras configurações foram omitidas aqui ...
     webman\event\EventManager::class,
 ];
 ```
+## Início Rápido
 
-## Começo rápido
+### Definir Eventos
 
-### Definir evento
-
-Classe de evento `LogErrorWriteEvent.php`
+Classe de eventos `LogErrorWriteEvent.php`
 
 ```php
 declare(strict_types=1);
@@ -62,7 +59,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class LogErrorWriteEvent extends Event
 {
-    const NAME = 'log.error.write';  // O nome do evento, identificador único do evento
+    const NAME = 'log.error.write';  // Nome do evento, identificador exclusivo do evento
 
     /** @var array */
     public array $log;
@@ -79,20 +76,20 @@ class LogErrorWriteEvent extends Event
 }
 ```
 
-### Ouvir evento
+### Ouvir Eventos
 
 ```php
 return [
-    // Ouvintes de evento
+    // Ouvinte do evento
     'listener'    => [
         \extend\event\LogErrorWriteEvent::NAME  => \extend\event\LogErrorWriteEvent::class,
     ],
 ];
 ```
 
-### Subscrever eventos
+### Assinar Eventos
 
-Classe de assinatura `LoggerSubscriber.php`
+Classe de inscrição `LoggerSubscriber.php`
 
 ```php
 namespace extend\event\subscriber;
@@ -119,25 +116,25 @@ class LoggerSubscriber implements EventSubscriberInterface
      */
     public function onLogErrorWrite(LogErrorWriteEvent $event)
     {
-        // Alguma lógica de negócios específica
+        // Algo específico da lógica de negócios
         var_dump($event->handle());
     }
 }
 ```
 
-Subscrição de eventos
+Evento de Assinatura
 ```php
 return [
-    // Assinantes de evento
+    // Assinatura de eventos
     'subscriber' => [
         \extend\event\subscriber\LoggerSubscriber::class,
     ],
 ];
 ```
 
-### Disparador de eventos
+### Disparador de Eventos
 
-Disparar evento `LogErrorWriteEvent`.
+Disparar o evento `LogErrorWriteEvent`.
 
 ```php
 $error = [
@@ -149,7 +146,7 @@ EventManager::trigger(new LogErrorWriteEvent($error),LogErrorWriteEvent::NAME);
 
 Resultado da execução
 
-![Imprimir resultado](./trigger.png)
+![Print result](./trigger.png)
 
 ## Licença
 

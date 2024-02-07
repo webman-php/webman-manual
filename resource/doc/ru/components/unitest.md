@@ -5,9 +5,11 @@
 ```php
 composer require --dev phpunit/phpunit
 ```
-  
+
+
 ## Использование
-Создайте файл `tests/TestConfig.php`, чтобы протестировать конфигурацию базы данных.
+
+Создайте файл `tests/TestConfig.php` для тестирования конфигурации базы данных
 ```php
 <?php
 use PHPUnit\Framework\TestCase;
@@ -25,13 +27,14 @@ class TestConfig extends TestCase
     }
 }
 ```
-  
+
 ## Запуск
 
-Запустите команду в корневом каталоге проекта `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php`
+Запустите в корневой директории проекта `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php`
 
 Результат будет примерно следующим:
-```
+
+``` 
 PHPUnit 9.5.10 by Sebastian Bergmann and contributors.
 
 .                                                                   1 / 1 (100%)

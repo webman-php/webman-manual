@@ -1,58 +1,58 @@
 # Empaquetado binario
 
-webman admite empaquetar un proyecto en un archivo binario, lo que permite que webman se ejecute en sistemas Linux sin necesidad de un entorno PHP.
+webman es compatible con la creación de un proyecto en un archivo binario, lo que permite que webman se ejecute en sistemas Linux sin necesidad de entorno PHP.
 
 > **Nota**
-> El archivo empaquetado solo es compatible con la arquitectura x86_64 en sistemas Linux, no es compatible con sistemas Mac.
-> Es necesario deshabilitar la opción de configuración de phar en `php.ini`, es decir, establecer `phar.readonly = 0`.
+> El archivo empaquetado solo es compatible con sistemas Linux de arquitectura x86_64, no es compatible con sistemas Mac.
+> Se requiere desactivar la opción de configuración 'phar' en `php.ini`, es decir, establecer `phar.readonly = 0`.
 
 ## Instalación de la herramienta de línea de comandos
-Ejecutar `composer require webman/console ^1.2.24`
+`composer require webman/console ^1.2.24`
 
 ## Configuración
 Abrir el archivo `config/plugin/webman/console/app.php` y configurar 
 ```php
 'exclude_pattern'   => '#^(?!.*(composer.json|/.github/|/.idea/|/.git/|/.setting/|/runtime/|/vendor-bin/|/build/|vendor/webman/admin))(.*)$#'
 ```
-para excluir algunos directorios y archivos inútiles durante el empaquetado, evitando un tamaño excesivo del paquete.
+Esto se utiliza para excluir algunos directorios y archivos innecesarios durante el empaquetado, evitando que el tamaño del paquete sea demasiado grande.
 
 ## Empaquetado
 Ejecutar el comando
-```
+```bash
 php webman build:bin
 ```
-También se puede especificar con qué versión de PHP empaquetar, por ejemplo
-```
+También se puede especificar la versión de PHP con la que se realiza el empaquetado, por ejemplo
+```bash
 php webman build:bin 8.1
 ```
 
-Después de empaquetar, se generará un archivo `webman.bin` en el directorio `build`.
+Tras el empaquetado, se generará un archivo `webman.bin` en el directorio de construcción (build).
 
 ## Inicio
-Subir el archivo `webman.bin` al servidor Linux y ejecutar `./webman.bin start` o `./webman.bin start -d` para iniciar.
+Subir el archivo webman.bin al servidor Linux, ejecutar `./webman.bin start` o `./webman.bin start -d` para iniciar.
 
 ## Principio
-- El proyecto de webman local se empaqueta en un archivo phar.
-- Luego, se descarga el archivo php8.x.micro.sfx a nivel remoto.
-- Finalmente, se concatenan el archivo php8.x.micro.sfx y el archivo phar para obtener un archivo binario.
+* Primero se empaqueta el proyecto webman local en un archivo phar.
+* Luego se descarga a distancia php8.x.micro.sfx al local.
+* Se concatenan php8.x.micro.sfx y el archivo phar en un archivo binario.
 
 ## Consideraciones
-- Se puede ejecutar el comando de empaquetado si la versión local de PHP es >=7.2
-- Sin embargo, solo se puede empaquetar en un archivo binario de PHP8
-- Se recomienda encarecidamente que la versión local de PHP y la versión de empaquetado coincidan. Es decir, si la versión local es PHP8.0, también se debe utilizar PHP8.0 para el empaquetado, para evitar problemas de compatibilidad.
-- Durante el empaquetado se descarga el código fuente de PHP8, pero no se instala localmente, por lo que no afectará el entorno PHP local.
-- Actualmente, `webman.bin` solo es compatible con sistemas Linux de arquitectura x86_64 y no es compatible con sistemas Mac.
-- Por defecto, no se empaqueta el archivo `env` (controlado por `exclude_files` en `config/plugin/webman/console/app.php`), por lo que el archivo `env` debe colocarse en el mismo directorio que `webman.bin` al iniciar.
-- Durante la ejecución, se generará un directorio `runtime` en el mismo directorio que `webman.bin`, utilizado para almacenar archivos de registro.
-- Actualmente, `webman.bin` no leerá archivos `php.ini` externos. Si se requiere personalizar `php.ini`, se debe configurar en el archivo `/config/plugin/webman/console/app.php` en `custom_ini`.
+* Se puede ejecutar el comando de empaquetado con una versión de PHP local >= 7.2.
+* Sin embargo, solo se puede empaquetar en un archivo binario de PHP8.
+* Se recomienda encarecidamente que la versión local de PHP y la versión de empaquetado sean compatibles, es decir, si el local es PHP8.0, el empaquetado también debe ser con PHP8.0, para evitar problemas de compatibilidad.
+* El empaquetado descargará el código fuente de PHP8, pero no se instalará localmente, por lo que no afectará al entorno PHP local.
+* En la actualidad, webman.bin solo es compatible con sistemas Linux de arquitectura x86_64, no es compatible con sistemas Mac.
+* Por defecto, el archivo env no se empaqueta (`config/plugin/webman/console/app.php` controla exclude_files), por lo que al iniciar, el archivo env debe colocarse en el mismo directorio que webman.bin.
+* Durante la ejecución, se generará un directorio de runtime en el directorio donde se encuentra webman.bin, que se utiliza para almacenar archivos de registro.
+* Actualmente, webman.bin no leerá archivos php.ini externos, si se desea personalizar php.ini, se debe configurar en el archivo `/config/plugin/webman/console/app.php` en custom_ini.
 
-## Descargar PHP estático por separado
-A veces, solo se desea desplegar un archivo ejecutable de PHP sin configurar un entorno PHP completo. En ese caso, se puede descargar el [PHP estático aquí](https://www.workerman.net/download).
+## Descarga de PHP estático por separado
+A veces, solo se necesita un archivo ejecutable de PHP sin necesidad de implementar un entorno PHP, haz clic [aquí](https://www.workerman.net/download) para descargar PHP estático.
 
 > **Consejo**
-> Si se desea especificar un archivo `php.ini` para el PHP estático, se debe usar el siguiente comando: `php -c /tu/ruta/php.ini start.php start -d`
+> Si es necesario especificar un archivo php.ini para PHP estático, se debe utilizar el siguiente comando `php -c /your/path/php.ini start.php start -d`.
 
-## Extensiones admitidas
+## Extensiones compatibles
 bcmath
 calendar
 Core
@@ -99,6 +99,6 @@ xmlwriter
 zip
 zlib
 
-## Fuente del proyecto
+## Origen del Proyecto
 https://github.com/crazywhalecc/static-php-cli
 https://github.com/walkor/static-php-cli

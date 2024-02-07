@@ -1,16 +1,16 @@
-# ভেরিফিকেশন কোড সংক্রান্ত কম্পোনেন্ট
+# ভেরিফিকেশন কোড সংশ্লিষ্ট কম্পোনেন্টস
 
 ## webman/captcha
-প্রোজেক্ট ঠিকানা https://github.com/webman-php/captcha
+প্রোজেক্ট লিঙ্ক https://github.com/webman-php/captcha
 
 ### ইনস্টলেশন
-```
-composer require webman/captcha
+``` 
+composer require webman/captcha 
 ```
 
 ### ব্যবহার
 
-**ফাইল `app/controller/LoginController.php` তৈরি করুন**
+**`app/controller/LoginController.php` ফাইল তৈরি করুন**
 
 ```php
 <?php
@@ -22,7 +22,7 @@ use Webman\Captcha\CaptchaBuilder;
 class LoginController
 {
     /**
-     * পরীক্ষা পৃষ্ঠা
+     * টেস্ট পেজ
      */
     public function index(Request $request)
     {
@@ -30,30 +30,30 @@ class LoginController
     }
     
     /**
-     * ভেরিফিকেশন ছবি আউটপুট
+     * ভেরিফিকেশন চিত্র প্রদর্শন
      */
     public function captcha(Request $request)
     {
-        // ভেরিফিকেশন বিল্ডার তৈরি করুন
+        // ভেরিফিকেশন বিল্ডারকে আপ করুন
         $builder = new CaptchaBuilder;
         // ভেরিফিকেশন তৈরি করুন
         $builder->build();
-        // ভেরিফিকেশনের মানটি সেশনে সংরক্ষণ করুন
+        // ভেরিফিকেশন মানটি সেশনে সংরক্ষণ করুন
         $request->session()->set('captcha', strtolower($builder->getPhrase()));
-        // ভেরিফিকেশনের চিত্র দ্বিতীয়াংশ উদ্যোগ করুন
+        // ভেরিফিকেশন চিত্রের বাইনারি ডেটা পেতে
         $img_content = $builder->get();
-        // ভেরিফিকেশনের দ্বিতীয়াংশ ডেটা আউটপুট করুন
+        // ভেরিফিকেশন চিত্রের বাইনারি ডেটা প্রদান করুন
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
     }
 
     /**
-     * ভেরিফিকেশন পরীক্ষা করুন
+     * ভেরিফিকেশন যাচাইকরণ
      */
     public function check(Request $request)
     {
-        // পোস্ট অনুরোধে ভেরিফিকেশন ক্ষেত্র পান
+        // পোস্ট অনুরোধের 'ভেরিফিকেশন' ফিল্ড পেতে
         $captcha = $request->post('captcha');
-        // সেশনের ভেরিফিকেশন মান অনুলিপি
+        // সেশনের ভেরিফিকেশন মান সাথে তুলনা করুন
         if (strtolower($captcha) !== $request->session()->get('captcha')) {
             return json(['code' => 400, 'msg' => 'প্রবেশ করা ভেরিফিকেশন সঠিক নয়']);
         }
@@ -63,14 +63,14 @@ class LoginController
 }
 ```
 
-**টেমপ্লেট ফাইল`app/view/login/index.html` তৈরি করুন**
+**`app/view/login/index.html` ফাইল তৈরি করুন**
 
 ```html
 <!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>ভেরিফিকেশন পরীক্ষা</title>  
+    <title>ভেরিফিকেশন টেস্ট</title>  
 </head>
 <body>
     <form method="post" action="/login/check">
@@ -82,17 +82,18 @@ class LoginController
 </html>
 ```
 
-পেইজে যান `http://127.0.0.1:8787/login` অবস্থা এমনঃ
-  ![](../../assets/img/captcha.png)
+`http://127.0.0.1:8787/login` পেজে যান, সেখানে প্রদর্শিত হবে এরকম একটি ইমেজ:
 
-### সাধারণ সেটিং প্যারামিটার
+![](../../assets/img/captcha.png)
+
+### সাধারণ প্যারামিটার সেটিং
 ```php
     /**
-     * ভেরিফিকেশন ছবি আউটপুট
+     * ভেরিফিকেশন চিত্র প্রদর্শন
      */
     public function captcha(Request $request)
     {
-        // ভেরিফিকেশন ক্লাস আৰম্ভ কৰো
+        // ভেরিফিকেশন বিল্ডারকে আপ করুন
         $builder = new CaptchaBuilder;
         // ভেরিফিকেশন দৈর্ঘ্য
         $length = 4;
@@ -102,13 +103,13 @@ class LoginController
         $captcha = new CaptchaBuilder(null, $builder);
         // ভেরিফিকেশন তৈরি করুন
         $builder->build();
-        // ভেরিফিকেশনের মানটি সেশনে সংরক্ষণ করুন
+        // ভেরিফিকেশন মানটি সেশনে সংরক্ষণ করুন
         $request->session()->set('captcha', strtolower($builder->getPhrase()));
-        // ভেরিফিকেশনের চিত্র দ্বিতীয়াংশ উদ্যোগ করুন
+        // ভেরিফিকেশন চিত্রের বাইনারি ডেটা পেতে
         $img_content = $builder->get();
-        // ভেরিফিকেশনের দ্বিতীয়াংশ ডেটা আউটপুট করুন
+        // ভেরিফিকেশন চিত্রের বাইনারি ডেটা প্রদান করুন
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
     }
 ```
 
-আরও ইন্টারফেস এবং প্যারামিটার জানতে দেখুন https://github.com/webman-php/captcha
+আরও প্রাক্কলিত ইন্টারফেস এবং প্যারামিটার দেখতে https://github.com/webman-php/captcha দেখুন।

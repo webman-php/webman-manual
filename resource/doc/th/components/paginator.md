@@ -1,8 +1,8 @@
-# คอมโพเนนต์เพจ
+# ชุดคอมโพเนนต์
 
 ## jasongrimes/php-paginator
 
-### ที่อยู่โปรเจ็กต์
+### ที่อยู่โปรเจค
 
 https://github.com/jasongrimes/php-paginator
   
@@ -14,7 +14,7 @@ composer require "jasongrimes/paginator:^1.0.3"
   
 ### การใช้งาน
 
-สร้าง `app/controller/UserController.php` ใหม่
+สร้าง `app/controller/UserController.php`
 ```php
 <?php
 namespace app\controller;
@@ -39,12 +39,12 @@ class UserController
     
 }
 ```
-**เทมเพลต (PHP ต้นฉบับ)**
-สร้างเทมเพลตใหม่ app/view/user/get.html
+**เทมเพลต (php ต้นฉบับ)**
+สร้างเทมเพลต app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- รองรับสไตล์แบบ Bootstrap ในตัว -->
+  <!-- รองรับสไตล์แบบ Bootstrap ในตัวเดียว -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -56,11 +56,11 @@ class UserController
 ```
 
 **เทมเพลต (twig)**
-สร้างเทมเพลตใหม่ app/view/user/get.html
+สร้างเทมเพลต app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- รองรับสไตล์แบบ Bootstrap ในตัว -->
+  <!-- รองรับสไตล์แบบ Bootstrap ในตัวเดียว -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -74,11 +74,11 @@ class UserController
 ```
 
 **เทมเพลต (blade)**
-สร้างเทมเพลตใหม่ app/view/user/get.blade.php
+สร้างเทมเพลต app/view/user/get.blade.php
 ```html
 <html>
 <head>
-  <!-- รองรับสไตล์แบบ Bootstrap ในตัว -->
+  <!-- รองรับสไตล์แบบ Bootstrap ในตัวเดียว -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -90,11 +90,11 @@ class UserController
 ```
 
 **เทมเพลต (thinkphp)**
-สร้างเทมเพลตใหม่ app/view/user/get.blade.php
+สร้างเทมเพลต app/view/user/get.blade.php
 ```html
 <html>
 <head>
-    <!-- รองรับสไตล์แบบ Bootstrap ในตัว -->
+    <!-- รองรับสไตล์แบบ Bootstrap ในตัวเดียว -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -105,9 +105,9 @@ class UserController
 </html>
 ```
 
-ผลลัพธ์ดังนี้:
+สามารถดูผลลัพธ์ได้ดังนี้：
 ![](../../assets/img/paginator.png)
   
-### เนื้อหาเพิ่มเติม
+### ข้อมูลเพิ่มเติม
 
-เข้าถึง https://github.com/jasongrimes/php-paginator
+เยี่ยมชม https://github.com/jasongrimes/php-paginator

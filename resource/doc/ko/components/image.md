@@ -5,13 +5,13 @@
 ### 프로젝트 주소
 
 https://github.com/Intervention/image
-  
+
 ### 설치
- 
+
 ```php
 composer require intervention/image
 ```
-  
+
 ### 사용
 
 **업로드 페이지 조각**
@@ -23,7 +23,7 @@ composer require intervention/image
   </form>
 ```
 
-**새로운 `app/controller/UserController.php` 생성**
+**`app/controller/UserController.php`에서 새로 만들기**
 
 ```php
 <?php
@@ -42,10 +42,9 @@ class UserController
         }
         return response('파일을 찾을 수 없음');
     }
-    
 }
 ```
-  
+
 ### 더 많은 내용
 
-http://image.intervention.io/getting_started/introduction를 방문하세요.
+http://image.intervention.io/getting_started/introduction을 방문하세요.

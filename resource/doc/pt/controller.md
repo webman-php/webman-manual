@@ -26,13 +26,14 @@ Quando acessar `http://127.0.0.1:8787/foo`, a página retornará `hello index`.
 
 Quando acessar `http://127.0.0.1:8787/foo/hello`, a página retornará `hello webman`.
 
-Você também pode alterar as regras de roteamento através da configuração das rotas, veja [Roteamento](route.md).
+Obviamente, você pode alterar as regras de roteamento através da configuração de rota, consulte [Rotas](route.md).
 
 > **Dica**
-> Se ocorrer um erro 404, abra o arquivo `config/app.php` e defina `controller_suffix` como `Controller`, depois reinicie o servidor.
+> Se ocorrer um erro 404 ao acessar, abra `config/app.php` e defina `controller_suffix` como `Controller` e reinicie.
 
 ## Sufixo do Controlador
-A partir da versão 1.3, o webman suporta a definição de um sufixo para os controladores em `config/app.php`. Se `controller_suffix` estiver definido como uma string vazia `''`, os controladores terão a seguinte semântica
+
+A partir da versão 1.3 do webman, é possível definir um sufixo para os controladores em `config/app.php`. Se `controller_suffix` no arquivo `config/app.php` estiver definido como vazio `''`, então o controlador se parece com o seguinte:
 
 `app\controller\Foo.php`.
 
@@ -56,24 +57,24 @@ class Foo
 }
 ```
 
-É altamente recomendável definir o sufixo do controlador como `Controller`, isso evitará conflitos de nome entre controladores e modelos, além de aumentar a segurança.
+É altamente recomendável definir o sufixo do controlador como `Controller`, dessa forma é possível evitar conflitos de nomes entre controladores e modelos, ao mesmo tempo que aumenta a segurança.
 
 ## Observações
- - O framework automaticamente passará o objeto `support\Request` para o controlador, através dele é possível acessar os dados de entrada dos usuários (dados GET, POST, cabeçalhos, cookies, etc), consulte [Requisição](request.md)
- - O controlador pode retornar números, strings ou objetos `support\Response`, mas não pode retornar outros tipos de dados.
+ - O framework automaticamente passará um objeto `support\Request` para o controlador, através do qual é possível obter dados de entrada do usuário (como dados de GET, POST, cabeçalho, cookie, etc), consulte [Requisição](request.md)
+ - Os controladores podem retornar números, strings ou objetos `support\Response`, mas não podem retornar outros tipos de dados.
  - O objeto `support\Response` pode ser criado através das funções auxiliares `response()`, `json()`, `xml()`, `jsonp()`, `redirect()`, entre outras.
 
-## Ciclo de vida do Controlador
+## Ciclo de Vida do Controlador
 
-Quando `controller_reuse` em `config/app.php` está definido como `false`, uma nova instância do controlador correspondente será inicializada a cada requisição, e após o término da requisição, a instância do controlador será destruída, seguindo o mecanismo tradicional de frameworks.
+Quando `config/app.php` tem `controller_reuse` definido como `false`, uma instância do controlador correspondente é inicializada para cada solicitação, e após o término da solicitação a instância do controlador é destruída, seguindo o mecanismo de operação dos frameworks tradicionais.
 
-Quando `controller_reuse` em `config/app.php` está definido como `true`, todas as requisições reaproveitarão a mesma instância do controlador, ou seja, a instância do controlador será criada uma vez e permanecerá na memória, sendo reaproveitada por todas as requisições.
+Quando `config/app.php` tem `controller_reuse` definido como `true`, todas as solicitações terão a reutilização da instância do controlador. Ou seja, uma vez que a instância do controlador é criada, ela permanece na memória e é reutilizada por todas as solicitações.
 
-> **Nota**
-> Desativar o reuso do controlador requer webman>=1.4.0. Isso significa que, antes da versão 1.4.0, todos os controladores eram reutilizados em todas as requisições e não podiam ser alterados.
+> **Observação**
+> Desabilitar a reutilização do controlador requer webman>=1.4.0, ou seja, antes da versão 1.4.0, o controlador é reutilizado para todas as solicitações e não pode ser alterado.
 
-> **Nota**
-> Ao ativar o reuso do controlador, as requisições não devem alterar quaisquer propriedades do controlador, pois essas alterações afetarão requisições subsequentes, por exemplo
+> **Observação**
+> Ao ativar a reutilização do controlador, as solicitações não devem alterar quaisquer propriedades do controlador, pois essas alterações afetarão as solicitações subsequentes, por exemplo
 
 ```php
 <?php
@@ -101,8 +102,8 @@ class FooController
     
     protected function getModel($id)
     {
-        // Este método irá reter o modelo após a primeira requisição update?id=1
-        // Se a requisição delete?id=2 for efetuada em seguida, os dados do ID 1 serão excluídos
+        // Esta função manterá o modelo após a primeira solicitação update?id=1
+        // Caso uma nova solicitação delete?id=2 seja feita, o dado de id=1 será excluído
         if (!$this->model) {
             $this->model = Model::find($id);
         }
@@ -112,7 +113,7 @@ class FooController
 ```
 
 > **Dica**
-> Retornar dados em um construtor `__construct()` do controlador não terá efeito algum, por exemplo
+> Retornar dados em um construtor `__construct()` do controlador não terá efeito, por exemplo
 
 ```php
 <?php
@@ -124,23 +125,23 @@ class FooController
 {
     public function __construct()
     {
-        // Retornar dados do construtor não terá efeito, o navegador não receberá esta resposta
+        // Retornar dados no construtor não terá efeito, o navegador não receberá essa resposta
         return response('hello'); 
     }
 }
 ```
 
-## Diferenças entre o reuso e não reuso do controlador
+## Diferença entre Reutilização e Não Reutilização do Controlador
 As diferenças são as seguintes
 
-#### Não reuso do controlador
-Cada requisição cria uma nova instância do controlador, que é liberada e alocada novamente após o término da requisição. O não reuso do controlador é semelhante aos frameworks tradicionais e está de acordo com a maioria das práticas de desenvolvimento. Como os controladores são criados e destruídos repetidamente, o desempenho será ligeiramente inferior em comparação com o reuso do controlador (o desempenho do teste de "helloworld" é cerca de 10% mais baixo, mas será praticamente insignificante com aplicações reais).
+#### Não Reutilizar o Controlador
+Uma nova instância do controlador é criada para cada solicitação, e após o término da solicitação, essa instância é liberada e a memória é recuperada. Não reutilizar o controlador é semelhante à operação dos frameworks tradicionais e está de acordo com a maioria dos hábitos de desenvolvedores. Como o controlador é criado e destruído repetidamente, o desempenho é ligeiramente inferior ao da reutilização do controlador (o desempenho de teste de carga simples helloworld é cerca de 10% inferior, mas pode ser ignorado em cenários com carga de trabalho real).
 
-#### Reuso do controlador
-Quando reutilizado, o controlador é instanciado apenas uma vez por processo, e não é liberado após o término da requisição, sendo reutilizado pelas requisições subsequentes no mesmo processo. O reuso do controlador tem melhor desempenho, mas não está de acordo com a maioria das práticas de desenvolvimento.
+#### Reutilizar o Controlador
+Se a reutilização estiver ativada, uma instância do controlador é criada uma vez por processo, e após o término da solicitação, essa instância do controlador não será liberada e será reutilizada pelas solicitações subsequentes desse processo. A reutilização do controlador tem um desempenho melhor, mas não está de acordo com a maioria dos hábitos de desenvolvedores.
 
-#### Casos em que não se deve usar o reuso do controlador
+#### Situações em que a reutilização do controlador não pode ser utilizada
 
-Quando a requisição altera as propriedades do controlador, o reuso do controlador não deve ser ativado, pois essas alterações nas propriedades afetarão requisições futuras.
+Quando a solicitação altera as propriedades do controlador, a reutilização do controlador não pode ser utilizada, pois as alterações dessas propriedades afetarão as solicitações subsequentes.
 
-Alguns desenvolvedores gostam de realizar algumas inicializações para cada requisição dentro do construtor `__construct()` do controlador, neste caso, o reuso do controlador não é ideal, pois o construtor do processo será chamado apenas uma vez e não a cada requisição.
+Alguns desenvolvedores gostam de fazer inicializações específicas para cada solicitação dentro do construtor `__construct()` do controlador, nesses casos, a reutilização do controlador não pode ser utilizada, já que o construtor do processo atual só será chamado uma vez e não em cada solicitação.

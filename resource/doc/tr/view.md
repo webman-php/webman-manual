@@ -1,78 +1,80 @@
 ## Görünüm
-webman varsayılan olarak PHP'nin doğal sözdizimini şablon olarak kullanır ve `opcache`'yi açtıktan sonra en iyi performansa sahiptir. PHP'nin doğal şablonu dışında, webman ayrıca [Twig](https://twig.symfony.com/doc/3.x/), [Blade](https://learnku.com/docs/laravel/8.x/blade/9377), [think-template](https://www.kancloud.cn/manual/think-template/content) şablon motorlarını da sağlar.
+webman, varsayılan olarak şablon olarak php'nin doğal sözdizimini kullanır ve `opcache` etkinleştirildiğinde en iyi performansa sahiptir. Php'nin doğal şablonu dışında, webman ayrıca [Twig](https://twig.symfony.com/doc/3.x/), [Blade](https://learnku.com/docs/laravel/8.x/blade/9377), [think-template](https://www.kancloud.cn/manual/think-template/content) şablon motorlarını da sunar.
 
-## opcache'yi Açma
-Görünüm kullanırken, `php.ini` dosyasında `opcache.enable` ve `opcache.enable_cli` seçeneklerini açmanızı kesinlikle öneririz, böylece şablon motoru en iyi performansa ulaşabilir.
+## Opcache'yi Açma
+Görünüm kullanılırken, php.ini'de `opcache.enable` ve `opcache.enable_cli` seçeneklerinin etkinleştirilmesi şiddetle önerilir, böylece şablon motoru en iyi performansa ulaşabilir.
 
 ## Twig Kurulumu
 1. Composer ile kurulum
 
-    `composer require twig/twig`
+   `composer require twig/twig`
 
-2. Yapılandırma dosyasını (`config/view.php`) aşağıdaki gibi güncelleyin
-```php
-<?php
-use support\view\Twig;
+2. `config/view.php` yapılandırmasını aşağıdaki gibi değiştirin
+   ```php
+   <?php
+   use support\view\Twig;
 
-return [
-    'handler' => Twig::class
-];
-```
-> **Not**
-> Diğer yapılandırma seçenekleri, örneğin `options` ile geçirilebilir
+   return [
+       'handler' => Twig::class
+   ];
+   ```
+   > **Not**
+   > Diğer yapılandırma seçenekleri `options` ile iletilir, örneğin  
 
-```php
-return [
-    'handler' => Twig::class,
-    'options' => [
-        'debug' => false,
-        'charset' => 'utf-8'
-    ]
-];
-```
+   ```php
+   return [
+       'handler' => Twig::class,
+       'options' => [
+           'debug' => false,
+           'charset' => 'utf-8'
+       ]
+   ];
+   ```
 
 ## Blade Kurulumu
 1. Composer ile kurulum
 
-    `composer require psr/container ^1.1.1 webman/blade`
+   ```bash
+   composer require psr/container ^1.1.1 webman/blade
+   ```
 
-2. Yapılandırma dosyasını (`config/view.php`) aşağıdaki gibi güncelleyin
-```php
-<?php
-use support\view\Blade;
+2. `config/view.php` yapılandırmasını aşağıdaki gibi değiştirin
+   ```php
+   <?php
+   use support\view\Blade;
 
-return [
-    'handler' => Blade::class
-];
-```
+   return [
+       'handler' => Blade::class
+   ];
+   ```
 
 ## think-template Kurulumu
 1. Composer ile kurulum
 
-    `composer require topthink/think-template`
+   `composer require topthink/think-template`
 
-2. Yapılandırma dosyasını (`config/view.php`) aşağıdaki gibi güncelleyin
-```php
-<?php
-use support\view\ThinkPHP;
+2. `config/view.php` yapılandırmasını aşağıdaki gibi değiştirin
+   ```php
+   <?php
+   use support\view\ThinkPHP;
 
-return [
-    'handler' => ThinkPHP::class,
-];
-```
-> **Not**
-> Diğer yapılandırma seçenekleri, örneğin `options` ile geçirilebilir
+   return [
+       'handler' => ThinkPHP::class,
+   ];
+   ```
+   > **Not**
+   > Diğer yapılandırma seçenekleri `options` ile iletilir, örneğin
 
-```php
-return [
-    'handler' => ThinkPHP::class,
-    'options' => [
-        'view_suffix' => 'html',
-        'tpl_begin' => '{',
-        'tpl_end' => '}'
-    ]
-];
-```
+   ```php
+   return [
+       'handler' => ThinkPHP::class,
+       'options' => [
+           'view_suffix' => 'html',
+           'tpl_begin' => '{',
+           'tpl_end' => '}'
+       ]
+   ];
+   ```
 
 ## Doğal PHP Şablon Motoru Örneği
 Aşağıdaki gibi `app/controller/UserController.php` dosyasını oluşturun
@@ -92,7 +94,7 @@ class UserController
 }
 ```
 
-Aşağıdaki gibi `app/view/user/hello.html` dosyasını oluşturun
+Aşağıdaki gibi yeni dosya `app/view/user/hello.html` oluşturun
 
 ```html
 <!doctype html>
@@ -108,7 +110,8 @@ hello <?=htmlspecialchars($name)?>
 ```
 
 ## Twig Şablon Motoru Örneği
-Yapılandırma dosyasını (`config/view.php`) aşağıdaki gibi güncelleyin
+
+`config/view.php` yapılandırmasını aşağıdaki gibi değiştirin
 ```php
 <?php
 use support\view\Twig;
@@ -118,7 +121,7 @@ return [
 ];
 ```
 
-`app/controller/UserController.php` aşağıdaki gibi
+`app/controller/UserController.php` dosyası için aşağıdaki gibi
 
 ```php
 <?php
@@ -135,7 +138,7 @@ class UserController
 }
 ```
 
-`app/view/user/hello.html` dosyası aşağıdaki gibi
+Dosya `app/view/user/hello.html` için aşağıdaki gibi
 
 ```html
 <!doctype html>
@@ -150,10 +153,10 @@ hello {{name}}
 </html>
 ```
 
-Daha fazla belge için [Twig belgeleri](https://twig.symfony.com/doc/3.x/) 'ne bakabilirsiniz.
+Daha fazla dokümantasyon için [Twig](https://twig.symfony.com/doc/3.x/) adresine bakınız
 
 ## Blade Şablon Motoru Örneği
-Yapılandırma dosyasını (`config/view.php`) aşağıdaki gibi güncelleyin
+`config/view.php` yapılandırmasını aşağıdaki gibi değiştirin
 ```php
 <?php
 use support\view\Blade;
@@ -163,7 +166,7 @@ return [
 ];
 ```
 
-`app/controller/UserController.php` aşağıdaki gibi
+`app/controller/UserController.php` dosyası için aşağıdaki gibi
 
 ```php
 <?php
@@ -180,9 +183,9 @@ class UserController
 }
 ```
 
-`app/view/user/hello.blade.php` dosyası aşağıdaki gibi
+Dosya `app/view/user/hello.blade.php` için aşağıdaki gibi
 
-> Not: blade şablonu uzantısı `.blade.php` olarak belirtilmelidir
+> Not: Blade şablonunun uzantısı `.blade.php` olarak belirtilmelidir
 
 ```html
 <!doctype html>
@@ -197,10 +200,10 @@ hello {{$name}}
 </html>
 ```
 
-Daha fazla belge için [Blade belgeleri](https://learnku.com/docs/laravel/8.x/blade/9377) 'ne bakabilirsiniz.
+Daha fazla dokümantasyon için [Blade](https://learnku.com/docs/laravel/8.x/blade/9377) adresine bakınız
 
 ## ThinkPHP Şablon Motoru Örneği
-Yapılandırma dosyasını (`config/view.php`) aşağıdaki gibi güncelleyin
+`config/view.php` yapılandırmasını aşağıdaki gibi değiştirin
 ```php
 <?php
 use support\view\ThinkPHP;
@@ -210,7 +213,7 @@ return [
 ];
 ```
 
-`app/controller/UserController.php` aşağıdaki gibi
+`app/controller/UserController.php` dosyası için aşağıdaki gibi
 
 ```php
 <?php
@@ -227,7 +230,8 @@ class UserController
 }
 ```
 
-`app/view/user/hello.html` dosyası aşağıdaki gibi
+Dosya `app/view/user/hello.html` için aşağıdaki gibi
+
 
 ```html
 <!doctype html>
@@ -242,10 +246,10 @@ hello {$name}
 </html>
 ```
 
-Daha fazla belge için [think-template belgeleri](https://www.kancloud.cn/manual/think-template/content) 'ne bakabilirsiniz.
+Daha fazla dokümantasyon için [think-template](https://www.kancloud.cn/manual/think-template/content) adresine bakınız
 
-## Şablon Değer Atama
-Şablon değerlerini `view(şablon, değişken_dizisi)` kullanarak atamanın yanı sıra, herhangi bir yerden `View::assign()` çağırarak da şablon değerleri atanabilir. Örneğin:
+## Şablon Değeri Atama
+Şablon değeri atamak için `view(şablon, değişken_dizisi)` kullanmanın yanı sıra, herhangi bir yerde `View::assign()` çağırarak şablon değeri atayabiliriz. Örneğin:
 ```php
 <?php
 namespace app\controller;
@@ -267,54 +271,53 @@ class UserController
 }
 ```
 
-`View::assign()` bazı senaryolarda çok kullanışlıdır, örneğin, bir sistemde her sayfa üstbilgisinde geçerli kullanıcı bilgileri gösterilmelidir. Her sayfa için `view('şablon', ['user_info' => 'kullanıcı bilgisi']);` kullanmak zahmetli olacaktır. Çözüm, middleware'de kullanıcı bilgilerini almak ve `View::assign()` kullanarak kullanıcı bilgilerini şablona atamaktır.
-
+`View::assign()` bazı senaryolarda oldukça kullanışlıdır, örneğin bir sistemde her sayfanın üst kısmında giriş yapan kullanıcının bilgilerinin gösterilmesi gerekiyorsa, her sayfada `view('şablon', ['user_info' => 'kullanıcı bilgisi']);` ile bu bilgiyi atamak oldukça zor olacaktır. Bu sorunun çözümü, middleware'de kullanıcı bilgisini almak ve sonra `View::assign()` aracılığıyla kullanıcı bilgisini şablona atamaktır.
 ## Görünüm Dosyası Yolu Hakkında
 
-#### Kontrolcü
-Kontrolcü `view('template_name',[]);` çağırdığında, görünüm dosyaları aşağıdaki kurallara göre bulunur:
+#### Denetleyici
+Denetleyici `view('templateName',[]);` çağrıldığında, görünüm dosyası aşağıdaki kurallara göre bulunur:
 
-1. Çoklu uygulama olmadığında, `app/view/` altındaki ilgili görünüm dosyası kullanılır
-2. [Çoklu uygulama](multiapp.md) olduğunda, ilgili görünüm dosyası `app/app_name/view/` altında kullanılır
+1. Birden fazla uygulama olmadığında, ilgili görünüm dosyası `app/view/` altında bulunur
+2. [Birden fazla uygulama](multiapp.md) durumunda, ilgili görünüm dosyası `app/applicationName/view/` altında bulunur
 
-Özetle, eğer `$request->app` boşsa, `app/view/` altındaki görünüm dosyası kullanılır, aksi halde `app/{$request->app}/view/` altındaki görünüm dosyası kullanılır.
+Özetle, eğer `$request->app` boşsa, `app/view/` altındaki görünüm dosyaları kullanılır, aksi takdirde `app/{$request->app}/view/` altındaki görünüm dosyaları kullanılır.
 
 #### Kapanış Fonksiyonu
-Kapanış fonksiyonu `$request->app` boş olduğundan herhangi bir uygulamaya ait değil, bu nedenle kapanış fonksiyonu, `app/view/` altındaki görünüm dosyasını kullanır. Örneğin `config/route.php` dosyasında bir yol tanımladığınızda
+Kapanış fonksiyonu `$request->app` boş olduğundan, herhangi bir uygulamaya ait değildir, bu yüzden kapanış fonksiyonu `app/view/` altındaki görünüm dosyalarını kullanır, örneğin `config/route.php` dosyasında tanımlı rotaya aşağıdaki gibi tanımlanmışsa
 ```php
 Route::any('/admin/user/get', function (Reqeust $reqeust) {
     return view('user', []);
 });
 ```
-`app/view/user.html` dosyası şablon dosyası olarak kullanılır (Blade şablonu kullanılıyorsa şablon dosyası `app/view/user.blade.php` olmalıdır).
+şablon dosyası olarak `app/view/user.html` kullanılır (Blade şablonu kullanıldığında, şablon dosyası `app/view/user.blade.php` olur).
 
-#### Uygulama Belirtme
-Çoklu uygulama modunda şablonların yeniden kullanılabilmesi için `view($template, $data, $app = null)` üçüncü parametre olan `$app` kullanarak hangi uygulama dizininin şablonunu kullanılacağını belirtebilirsiniz. Örneğin `view('user', [], 'admin');` ifadesi `app/admin/view/` altındaki şablon dosyasını zorlar.
+#### Belirli Uygulama
+Çoklu uygulama modunda şablonların yeniden kullanılabilmesi için view($template, $data, $app=null) üçüncü parametre olan `$app` ile hangi uygulama dizinine ait şablonun kullanılacağı belirtilebilir. Örneğin, `view('user', [], 'admin');` komutu `app/admin/view/` altındaki görünüm dosyasının zorunlu olarak kullanılmasını sağlar.
 
 ## Twig Genişletme
 
 > **Not**
 > Bu özellik webman-framework>=1.4.8 gerektirir
 
-Twig görünüm örneğini genişletmek için yapılandırmaya `view.extension` geri çağrım fonksiyonunu ekleyebiliriz. Örneğin, `config/view.php` dosyası aşağıdaki gibi olabilir
+Twig görünüm örneğini genişletmek için `view.extension` geri çağırımını ayarlayarak yapabiliriz, örneğin `config/view.php` aşağıdaki gibi olabilir:
 ```php
 <?php
 use support\view\Twig;
 return [
     'handler' => Twig::class,
     'extension' => function (Twig\Environment $twig) {
-        $twig->addExtension(new your\namespace\YourExtension()); // Eklenti eklemek
-        $twig->addFilter(new Twig\TwigFilter('rot13', 'str_rot13')); // Filtre eklemek
-        $twig->addFunction(new Twig\TwigFunction('function_name', function () {})); // Fonksiyon eklemek
+        $twig->addExtension(new your\namespace\YourExtension()); // Genişletme ekle
+        $twig->addFilter(new Twig\TwigFilter('rot13', 'str_rot13')); // Filtre ekle
+        $twig->addFunction(new Twig\TwigFunction('function_name', function () {})); // Fonksiyon ekle
     }
 ];
 ```
 
+
 ## Blade Genişletme
 > **Not**
 > Bu özellik webman-framework>=1.4.8 gerektirir
-
-Benzer şekilde, `view.extension` geri çağrım fonksiyonunu kullanarak Blade görünüm örneğini genişletebiliriz, örneğin `config/view.php` dosyası aşağıdaki gibi olabilir
+Blade görünüm örneğini genişletmek için `view.extension` geri çağırımını ayarlayarak yapabiliriz, örneğin `config/view.php` aşağıdaki gibi olabilir
 
 ```php
 <?php
@@ -322,7 +325,7 @@ use support\view\Blade;
 return [
     'handler' => Blade::class,
     'extension' => function (Jenssegers\Blade\Blade $blade) {
-        // Blade'e yönerge eklemek
+        // Blade'e direktif ekle
         $blade->directive('mydate', function ($timestamp) {
             return "<?php echo date('Y-m-d H:i:s', $timestamp); ?>";
         });
@@ -330,14 +333,15 @@ return [
 ];
 ```
 
-## Blade Component (Bileşen) Kullanımı
 
-> **Not
-> webman/blade>=1.5.2 gerektirir.**
+## Blade Komponenti Kullanımı
 
-Örneğin bir Alert bileşeni eklemek istiyoruz
+> **Not**
+> webman/blade>=1.5.2 gerektirir
 
-**`app/view/components/Alert.php` dosyasını oluşturun**
+Örneğin bir Alert bileşeni eklememiz gerekiyorsa
+
+**Yeni bir `app/view/components/Alert.php` dosyası oluşturun:**
 ```php
 <?php
 
@@ -360,15 +364,14 @@ class Alert extends Component
 }
 ```
 
-**`app/view/components/alert.blade.php` dosyasını oluşturun**
-```
+**Yeni bir `app/view/components/alert.blade.php` dosyası oluşturun:**
+```php
 <div>
     <b style="color: red">hello blade component</b>
 </div>
 ```
 
-**`/config/view.php` dosyası aşağıdaki gibi olabilir**
-
+**`/config/view.php` dosyası benzer şekilde aşağıdaki gibi olabilir:**
 ```php
 <?php
 use support\view\Blade;
@@ -380,7 +383,7 @@ return [
 ];
 ```
 
-Bu şekilde, Blade bileşeni Alert ayarlaması tamamlanmış olur, şablonlarda kullanırken aşağıdaki gibi olacak
+Bu şekilde, Blade bileşeni Alert ayarlanmış olur, şablon kullanımı aşağıdaki gibi olur
 ```html
 <!doctype html>
 <html>
@@ -396,8 +399,9 @@ Bu şekilde, Blade bileşeni Alert ayarlaması tamamlanmış olur, şablonlarda 
 </html>
 ```
 
-## think-template Genişletme
-think-template, `view.options.taglib_pre_load` kullanılarak etiket kütüphanesini genişletebilir, örneğin
+
+## Think-template Genişletme
+think-template, `view.options.taglib_pre_load` kullanarak etiket kütüphanesini genişletebilir, örneğin
 ```php
 <?php
 use support\view\ThinkPHP;
@@ -409,4 +413,4 @@ return [
 ];
 ```
 
-Ayrıntılar için [think-template etiket genişletme](https://www.kancloud.cn/manual/think-template/1286424) 'ne bakabilirsiniz.
+Detaylar için [think-template Tag Genişletme](https://www.kancloud.cn/manual/think-template/1286424) sayfasına bakabilirsiniz.

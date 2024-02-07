@@ -1,8 +1,8 @@
-# Cache
+# कैश
 
-वेबमैन में [Symfony/Cache](https://github.com/symfony/cache) को कैश कंपोनेंट के रूप में डिफ़ॉल्ट रूप से उपयोग किया जाता है।
+webman में डिफ़ॉल्ट रूप से [symfony/cache](https://github.com/symfony/cache) को कैश के कंपोनेंट के रूप में इस्तेमाल किया जाता है।
 
-> `Symfony/Cache` का उपयोग करने से पहले, `php-cli` को redis एक्सटेंशन को स्थापित करना आवश्यक है।
+> `symfony/cache` का उपयोग करने से पहले `php-cli` को रेडिस एक्सटेंशन इंस्टॉल करना आवश्यक है।
 
 ## स्थापना
 **php 7.x**
@@ -14,10 +14,10 @@ composer require -W illuminate/redis ^8.2.0 symfony/cache ^5.2
 composer require -W illuminate/redis symfony/cache
 ```
 
-स्थापना के बाद restart पुनः आरंभ करें (रीलोड कार्यरत नहीं होगा)
+स्थापना के बाद रिस्टार्ट (रीलोड काम नहीं करेगा)
 
 ## रेडिस कॉन्फ़िगरेशन
-रेडिस कॉन्फ़िगरेशन फ़ाइल `config/redis.php` में होती है।
+रेडिस कॉन्फ़िगरेशन फ़ाइल `config/redis.php` में होती है
 ```php
 return [
     'default' => [
@@ -48,8 +48,8 @@ class UserController
 }
 ```
 
-> **ध्यान दें**
-> कुंजी को संभावना से बचाने के लिए एक प्रीफ़िक्स जोड़ें, अन्य रेडिस का उपयोग करने वाले व्यावसायिक काम के साथ टकराव से बचें।
+> **नोट:**
+> की और चुरा लिखें, रेडिस का उपयोग करने वाले अन्य व्यापार से टकराव से बचें
 
-## अन्य कैश कंपोनेंट का उपयोग
-[ThinkCache](https://github.com/top-think/think-cache) कंपोनेंट का उपयोग करने के लिए देखें: [अन्य डेटाबेस](others.md#ThinkCache)
+## दूसरे कैश कंपोनेंट का उपयोग
+[ThinkCache](https://github.com/top-think/think-cache) कंपोनेंट का उपयोग देखने के लिए [दूसरे डेटाबेस](others.md#ThinkCache) का संदर्भ लें

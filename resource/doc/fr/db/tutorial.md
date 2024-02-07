@@ -1,16 +1,16 @@
 # Démarrage rapide
 
-La base de données webman utilise par défaut [Illuminate/Database](https://github.com/illuminate/database), c'est-à-dire la [base de données de Laravel](https://learnku.com/docs/laravel/8.x/database/9400), qui est utilisée de la même manière que dans Laravel.
+La base de données de webman utilise par défaut [illuminate/database](https://github.com/illuminate/database), c'est-à-dire la [base de données de Laravel](https://learnku.com/docs/laravel/8.x/database/9400), et son utilisation est similaire à celle de Laravel.
 
-Bien sûr, vous pouvez consulter la section [Utiliser d'autres composants de base de données](others.md) pour utiliser ThinkPHP ou d'autres bases de données.
+Bien sûr, vous pouvez consulter la section [Utilisation d'autres composants de base de données](others.md) pour utiliser ThinkPHP ou d'autres bases de données.
 
 ## Installation
 
-`composer require -W illuminate/database illuminate/pagination illuminate/events symfony/var-dumper`
+Exécutez la commande `composer require -W illuminate/database illuminate/pagination illuminate/events symfony/var-dumper` pour installer.
 
-Après l'installation, redémarrez (reload est invalide)
+Après l'installation, il est nécessaire de redémarrer (reload est inopérant).
 
-> **Conseil**
+> **Remarque**
 > Si vous n'avez pas besoin de pagination, d'événements de base de données ou de l'affichage des requêtes SQL, exécutez simplement
 > `composer require -W illuminate/database`
 
@@ -22,7 +22,7 @@ return [
     // Base de données par défaut
     'default' => 'mysql',
 
-    // Configurations de diverses bases de données
+    // Configurations des différentes bases de données
     'connections' => [
         'mysql' => [
             'driver'      => 'mysql',
@@ -44,7 +44,6 @@ return [
     ],
 ];
 ```
-
 
 ## Utilisation
 ```php

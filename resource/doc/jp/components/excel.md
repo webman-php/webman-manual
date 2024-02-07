@@ -2,7 +2,7 @@
 
 ## phpoffice/phpspreadsheet
 
-### プロジェクトアドレス
+### プロジェクトのアドレス
 
 https://github.com/PHPOffice/PhpSpreadsheet
   
@@ -12,7 +12,7 @@ https://github.com/PHPOffice/PhpSpreadsheet
   composer require phpoffice/phpspreadsheet
   ```
   
-### 使用方法
+### 使用法
 
 ```php
 <?php
@@ -31,7 +31,7 @@ class ExcelController
 
         $writer = new Xlsx($spreadsheet);
         $file_path = public_path().'/hello_world.xlsx';
-        // ファイルをpublicに保存
+        // ファイルをpublicディレクトリに保存
         $writer->save($file_path);
         // ファイルをダウンロード
         return response()->download($file_path, 'ファイル名.xlsx');
@@ -40,7 +40,7 @@ class ExcelController
 }
 ```
   
-### さらに詳細な情報
+  
+### その他の情報
 
-https://phpspreadsheet.readthedocs.io/en/latest/
-
+https://phpspreadsheet.readthedocs.io/en/latest/ をご覧ください。

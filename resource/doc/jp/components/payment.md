@@ -1,7 +1,7 @@
 # 支払いSDK（V3）
 
-## プロジェクトアドレス
 
+## プロジェクトアドレス
 https://github.com/yansongda/pay
 
 ## インストール
@@ -12,9 +12,9 @@ composer require yansongda/pay ^3.0.0
 
 ## 使用法
 
-> 注：以下は、ドキュメントの作成時にアリペイサンドボックス環境を想定しています。何か問題があれば、すぐにフィードバックしてください！
+> 注：以下はアリペイのサンドボックス環境を使用したドキュメント作成です。問題がある場合は、お知らせください。
 
-### 設定ファイル
+## 設定ファイル
 
 次のような設定ファイル `config/payment.php` があると仮定します。
 
@@ -28,80 +28,80 @@ composer require yansongda/pay ^3.0.0
 return [
     'alipay' => [
         'default' => [
-            // 必填-アリペイ割り当ての app_id
+            // 必須-アリペイが割り当てた app_id
             'app_id' => '20160909004708941',
-            // 必須-アプリケーション秘密鍵文字列またはパス
+            // 必須-アプリケーションプライベートキー　文字列またはパス
             'app_secret_cert' => 'MIIEpAIBAAKCxxxxxxxxxxxxxxP4r3m4OUmD/+XDgCg==',
-            // 必須-アプリケーション公開鍵証明書パス
+            // 必須-アプリケーション公開証明書のパス
             'app_public_cert_path' => base_path().'/payment/appCertPublicKey_2016090900470841.crt',
-            // 必須-アリペイ公開鍵証明書パス
+            // 必須-アリペイの公開証明書のパス
             'alipay_public_cert_path' => base_path().'/payment/alipayCertPublicKey_RSA2.crt',
-            // 必須-アリペイルート証明書パス
+            // 必須-アリペイのルート証明書のパス
             'alipay_root_cert_path' => base_path().'/payment/alipayRootCert.crt',
-            // 任意-同期コールバックアドレス
+            // オプション-同期コールバックアドレス
             'return_url' => 'https://webman.tinywan.cn/payment/alipay-return',
-            // 任意-非同期コールバックアドレス
+            // オプション-非同期コールバックアドレス
             'notify_url' => 'https://webman.tinywan.cn/payment/alipay-notify',
-            // 任意-サービスプロバイダモードのサービスプロバイダID、mode が Pay::MODE_SERVICE の場合にこのパラメタを使用します。
+            // オプション-サービスプロバイダモードのサービスプロバイダid、モードが Pay::MODE_SERVICE の場合に使用される
             'service_provider_id' => '',
-            // 任意-デフォルトは通常モードです。MODE_NORMAL、MODE_SANDBOX、MODE_SERVICE のいずれかに選択できます。
+            // オプション-デフォルトは通常モード。MODE_NORMAL, MODE_SANDBOX, MODE_SERVICE から選択可能
             'mode' => \Yansongda\Pay\Pay::MODE_SANDBOX,
         ]
     ],
     'wechat' => [
         'default' => [
-            // 必須-商人番号、サービスプロバイダモードではサービスプロバイダ商人番号です。
+            // 必須-商戸番号、サービスプロバイダモードであればサービスプロバイダの商戸番号
             'mch_id' => '',
-            // 必須-商人秘密鍵
+            // 必須-商戸秘密鍵
             'mch_secret_key' => '',
-            // 必須-商人秘密証明書文字列またはパス
+            // 必須-商戸プライベートキー 文字列またはパス
             'mch_secret_cert' => '',
-            // 必須-商人公開証明書パス
+            // 必須-商戸公開証明書のパス
             'mch_public_cert_path' => '',
             // 必須
             'notify_url' => 'https://yansongda.cn/wechat/notify',
-            // 任意-公衆の app_id
+            // オプション-公衆号の app_id
             'mp_app_id' => '2016082000291234',
-            // 任意-小プログラムの app_id
+            // オプション-ミニプログラムの app_id
             'mini_app_id' => '',
-            // 任意-app の app_id
+            // オプション-app の app_id
             'app_id' => '',
-            // 任意-合計 app_id
+            // オプション-合併 app_id
             'combine_app_id' => '',
-            // 任意-合計商人番号
+            // オプション-合併商戸番号
             'combine_mch_id' => '',
-            // 任意-サービスプロバイダモードでは、サブ公衆の app_id
+            // オプション-サービスプロバイダモードで、サブ公衆号の app_id
             'sub_mp_app_id' => '',
-            // 任意-サービスプロバイダモードでは、サブ app の app_id
+            // オプション-サービスプロバイダモードで、サブ app の app_id
             'sub_app_id' => '',
-            // 任意-サービスプロバイダモードでは、サブ小プログラムの app_id
+            // オプション-サービスプロバイダモードで、サブミニプログラムの app_id
             'sub_mini_app_id' => '',
-            // 任意-サービスプロバイダモードでは、サブ商人ID
+            // オプション-サービスプロバイダモードで、サブ商戸id
             'sub_mch_id' => '',
-            // 任意-ウィーチャット公開証明書パス、オプションですが、PHP-FPMモードで設定することを強くお勧めします。
+            // オプション-微信公開証明書のパス, optional, php-fpm モードでこのパラメータを設定することを強くお勧めします
             'wechat_public_cert_path' => [
                 '45F59D4DABF31918AFCEC556D5D2C6E376675D57' => __DIR__.'/Cert/wechatPublicKey.crt',
             ],
-            // 任意-デフォルトは通常モードです。MODE_NORMAL、MODE_SERVICE のいずれかに選択できます。
+            // オプション-デフォルトは通常モード。MODE_NORMAL, MODE_SERVICE から選択可能
             'mode' => \Yansongda\Pay\Pay::MODE_SANDBOX,
         ]
     ],
     'logger' => [
         'enable' => false,
         'file' => runtime_path().'/logs/alipay.log',
-        'level' => 'debug', // 建议生产环境等级调整为 info，开发环境为 debug
-        'type' => 'single', // optional, 可选 daily.
-        'max_file' => 30, // optional, 当 type 为 daily 时有效，默认 30 天
+        'level' => 'debug', // 本番環境では、info 推奨, 開発環境では debug 推奨
+        'type' => 'single', // optional, daily 可選
+        'max_file' => 30, // optional, daily の場合のデフォルト 30 日
     ],
     'http' => [ // optional
         'timeout' => 5.0,
         'connect_timeout' => 5.0,
-        // より多くの構成項目については [Guzzle](https://guzzle-cn.readthedocs.io/zh_CN/latest/request-options.html) を参照してください。
+        // 追加の構成項目は [Guzzle](https://guzzle-cn.readthedocs.io/zh_CN/latest/request-options.html) を参照
     ],
     '_force' => true,
 ];
 ```
-> 注意：証明書のディレクトリは規定されていません。上記の例では、フレームワークの `payment` ディレクトリに配置されています。
+> 注意：証明書ディレクトリは規定されていません。上記の例はフレームワークの `payment` ディレクトリに配置されているものです。
 
 ```php
 ├── payment
@@ -110,17 +110,17 @@ return [
 │   └── appCertPublicKey_2016090900470841.crt
 ```
 
-### 初期化
+## 初期化
 
 直接 `config` メソッドを呼び出して初期化します。
 ```php
-// 設定ファイル config/payment.php を取得する
+// 設定ファイル config/payment.php を取得
 $config = Config::get('payment');
 Pay::config($config);
 ```
-> 注意：アリペイサンドボックスモードの場合、必ず設定ファイルに `'mode' => \Yansongda\Pay\Pay::MODE_SANDBOX,` を有効にする必要があります。この選択肢はデフォルトで通常モードになっています。
+> 注意：アリペイのサンドボックスモードの場合、設定ファイルで `'mode' => \Yansongda\Pay\Pay::MODE_SANDBOX,` を有効にする必要があります。このオプションはデフォルトで通常モードになっています。
 
-### 支払い（ウェブ）
+## 支払い（ウェブ）
 
 ```php
 use support\Request;
@@ -133,7 +133,7 @@ use Yansongda\Pay\Pay;
  */
 public function payment(Request $request)
 {
-    // 1. 設定ファイル config/payment.php を取得する
+    // 1. 設定ファイル config/payment.php を取得
     $config = Config::get('payment');
 
     // 2. 設定の初期化
@@ -144,15 +144,13 @@ public function payment(Request $request)
         'out_trade_no' => time(),
         'total_amount' => '8888.88',
         'subject' => 'webman payment',
-        '_method' => 'get' // 方法を取得する
+        '_method' => 'get' // get 方法を使用してリダイレクト
     ];
     return Pay::alipay()->web($order)->getBody()->getContents();
 }
 ```
 
-### コールバック
-
-#### 非同期コールバック
+## 非同期コールバック
 
 ```php
 use support\Request;
@@ -160,37 +158,36 @@ use Webman\Config;
 use Yansongda\Pay\Pay;
 
 /**
- * @desc:『アリペイ』非同期通知
+ * @desc: 『アリペイ』非同期通知
  * @param Request $request
  * @return Response
  */
 public function alipayNotify(Request $request): Response
 {
-    // 1. 設定ファイル config/payment.php を取得する
+    // 1. 設定ファイル config/payment.php を取得
     $config = Config::get('payment');
 
     // 2. 設定の初期化
     Pay::config($config);
 
-    // 3. アリペイコールバック処理
+    // 3. アリペイのコールバック処理
     $result = Pay::alipay()->callback($request->post());
 
     // ===================================================================================================
-    // trade_status の判断とその他のロジックを自分で行う必要があります。取引通知の状態が TRADE_SUCCESS または TRADE_FINISHED の場合にのみ、アリペイが購入者の支払いを成功と見なします。以下のロジックを実行する必要があります。
-    // 1、売り手は通知データ内のout_trade_noが売り手システムで作成された注文番号かどうかを検証する必要があります。
-    // 2、total_amountが注文の実際の金額（売り手注文作成時の金額）と等しいかどうかを判断します。
-    // 3、通知のseller_id（またはseller_email）がout_trade_noのデータの対応する操作者であるかどうかを確認します。
-    // 4、app_idが売り手自身のものであるかどうかを確認します。
-    // 5、その他のビジネスロジック
+    // trade_status を判断し、その他のロジックを実行してください。トランザクション通知の状態が TRADE_SUCCESS または TRADE_FINISHED のみ、アリペイは購入者が支払い成功と見なします。
+    // 1. 商戸は通知データの out_trade_no が商戸システムで作成された注文番号かどうかを確認する必要があります；
+    // 2. total_amount が注文の実際の金額（商戸の注文作成時の金額）かを確認する必要があります；
+    // 3. 通知中の seller_id（または seller_email） が out_trade_no の対応操作側であることを確認する必要があります；
+    // 4. app_id が商戸自身であるかを確認する必要があります；
+    // 5. その他のビジネスロジック
     // ===================================================================================================
 
-    // 5. アリペイコールバック処理
+    // 5. アリペイのコールバック処理
     return new Response(200, [], 'success');
 }
 ```
-> 注意：プラグインの `return Pay::alipay()->success();` を使用してアリペイコールバックに応答することはできません。ミドルウェアを使用している場合、問題が発生する可能性があります。そのため、アリペイへの応答にはwebmanのレスポンスクラス `support\Response` を使用する必要があります。
-
-#### 同期コールバック
+> 注意：プラグインの `return Pay::alipay()->success();` でアリペイのコールバックに応答することはできません。ミドルウェアを使用すると問題が発生する可能性があります。アリペイに対する応答には webman の応答クラス `support\Response;` を使用する必要があります。
+## 同期コールバック
 
 ```php
 use support\Request;
@@ -207,11 +204,10 @@ public function alipayReturn(Request $request)
     return 'success';
 }
 ```
-
-## 完全な例のコード
+## 完全なコード例
 
 https://github.com/Tinywan/webman-admin/blob/main/app/controller/Test.php
 
-## その他の内容
+## その他の情報
 
-公式ドキュメントを参照してください https://pay.yansongda.cn/docs/v3/
+公式ドキュメントにアクセスしてください。https://pay.yansongda.cn/docs/v3/

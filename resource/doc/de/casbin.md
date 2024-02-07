@@ -1,8 +1,8 @@
-# Casbin 访问控制库 webman-permission
+# Casbin-Zugriffskontrollbibliothek webman-permission
 
-## Beschreibung
+## Erklärung
 
-Es basiert auf [PHP-Casbin](https://github.com/php-casbin/php-casbin), einem leistungsstarken Open-Source-Zugriffskontrollframework, das Zugriffssteuerungsmodelle wie `ACL`, `RBAC`, `ABAC` unterstützt.
+Es basiert auf [PHP-Casbin](https://github.com/php-casbin/php-casbin), einem leistungsstarken, effizienten Open-Source-Zugriffskontroll-Framework, das Modelle für den Zugriff auf `ACL`, `RBAC`, `ABAC` und andere Zugriffssteuerungsmodelle unterstützt.
 
 ## Projektadresse
 
@@ -13,20 +13,21 @@ https://github.com/Tinywan/webman-permission
 ```php
 composer require tinywan/webman-permission
 ```
-> Diese Erweiterung erfordert PHP 7.1+ und [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998). Offizielles Handbuch: https://www.workerman.net/doc/webman#/db/others
+> Dieses erforderte Erweitung PHP 7.1+ und [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998), Offizielle Handbuch: https://www.workerman.net/doc/webman#/db/others
 
 ## Konfiguration
 
-### Service registrieren
-Erstellen Sie die Konfigurationsdatei `config/bootstrap.php` mit dem folgenden Inhalt:
+### Dienst registrieren
+Erstellen Sie eine Konfigurationsdatei `config/bootstrap.php` mit ähnlichem Inhalt:
 
 ```php
-    // ...
-    webman\permission\Permission::class,
+// ...
+webman\permission\Permission::class,
 ```
 
-### Model Konfigurationsdatei
-Erstellen Sie die Konfigurationsdatei `config/casbin-basic-model.conf` mit dem folgenden Inhalt:
+### Modellkonfigurationsdatei
+
+Erstellen Sie eine Konfigurationsdatei `config/casbin-basic-model.conf` mit ähnlichem Inhalt:
 
 ```conf
 [request_definition]
@@ -45,15 +46,16 @@ e = some(where (p.eft == allow))
 m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
 ```
 
-### Policy Konfigurationsdatei
-Erstellen Sie die Konfigurationsdatei `config/permission.php` mit dem folgenden Inhalt:
+### Richtlinienkonfigurationsdatei
+
+Erstellen Sie eine Konfigurationsdatei `config/permission.php` mit ähnlichem Inhalt:
 
 ```php
 <?php
 
 return [
     /*
-     * Standardberechtigung
+     *Standardberechtigung
      */
     'default' => 'basic',
 
@@ -65,7 +67,7 @@ return [
     'enforcers' => [
         'basic' => [
             /*
-            * Model Einstellungen
+            * Modellkonfiguration
             */
             'model' => [
                 'config_type' => 'file',
@@ -77,14 +79,14 @@ return [
             'adapter' => webman\permission\adapter\DatabaseAdapter::class,
 
             /*
-            * Datenbankeinstellungen.
+            * Datenbankeinstellungen
             */
             'database' => [
-                // Datenbankverbindungsnamen, wenn nicht vorhanden, wird die Standardkonfiguration verwendet.
+                // Datenbankverbindungsname, wenn leer, wird die Standardeinstellung verwendet.
                 'connection' => '',
                 // Richtlinientabellenname (ohne Tabellenpräfix)
                 'rules_name' => 'rule',
-                // Vollständiger Tabellenname der Richtlinie.
+                // Vollständiger Name der Richtlinientabelle.
                 'rules_table' => 'train_rule',
             ],
         ],
@@ -99,33 +101,33 @@ use webman\permission\Permission;
 
 // Berechtigungen für einen Benutzer hinzufügen
 Permission::addPermissionForUser('eve', 'articles', 'read');
-// Eine Rolle für einen Benutzer hinzufügen.
+// Eine Rolle für einen Benutzer hinzufügen
 Permission::addRoleForUser('eve', 'writer');
 // Berechtigungen für eine Regel hinzufügen
-Permission::addPolicy('writer', 'articles','edit');
+Permission::addPolicy('writer', 'articles', 'edit');
 ```
 
 Sie können überprüfen, ob ein Benutzer solche Berechtigungen hat.
 
 ```php
 if (Permission::enforce("eve", "articles", "edit")) {
-    // Erlaube eve das Bearbeiten von Artikeln
+    // Erlauben Sie eve, Artikel zu bearbeiten
 } else {
     // Die Anfrage verweigern, einen Fehler anzeigen
 }
 ````
 
-## Autorisierungsmiddleware
+## Berechtigungsmittleres
 
-Erstellen Sie die Datei `app/middleware/AuthorizationMiddleware.php` (falls das Verzeichnis nicht vorhanden ist, erstellen Sie es bitte selbst) wie unten gezeigt:
+Erstellen Sie die Datei `app/middleware/AuthorizationMiddleware.php` (falls das Verzeichnis nicht existiert, erstellen Sie es bitte selbst) wie folgt:
 
 ```php
 <?php
 
 /**
- * Autorisierungsmiddleware
+ * Autorisierungsmittel
  * von ShaoBo Wan (Tinywan)
- * 07.09.2021 14:15 Uhr
+ * Datum und Uhrzeit 2021/09/07 14:15
  */
 
 declare(strict_types=1);
@@ -140,30 +142,30 @@ use webman\permission\Permission;
 
 class AuthorizationMiddleware implements MiddlewareInterface
 {
-	public function process(Request $request, callable $next): Response
-	{
-		$uri = $request->path();
-		try {
-			$userId = 10086;
-			$action = $request->method();
-			if (!Permission::enforce((string) $userId, $uri, strtoupper($action))) {
-				throw new \Exception('Entschuldigung, Sie haben keine Zugriffsberechtigung für diese Schnittstelle');
-			}
-		} catch (CasbinException $exception) {
-			throw new \Exception('Autorisierungsausnahme' . $exception->getMessage());
-		}
-		return $next($request);
-	}
+    public function process(Request $request, callable $next): Response
+    {
+        $uri = $request->path();
+        try {
+            $userId = 10086;
+            $action = $request->method();
+            if (!Permission::enforce((string) $userId, $uri, strtoupper($action))) {
+                throw new \Exception('Entschuldigung, Sie haben keine Berechtigung für den Zugriff auf diese Schnittstelle');
+            }
+        } catch (CasbinException $exception) {
+            throw new \Exception('Autorisierungsausnahme' . $exception->getMessage());
+        }
+        return $next($request);
+    }
 }
 ```
 
-Fügen Sie in `config/middleware.php` globale Middleware wie folgt hinzu:
+Fügen Sie in `config/middleware.php` globale Mittelware wie folgt hinzu:
 
 ```php
 return [
-    // Globale Middleware
+    // Globale mittlere Waren
     '' => [
-        // ... Hier fehlen andere Mittelwares
+        // ... Andere Mittel waren hier ausgelassen
         app\middleware\AuthorizationMiddleware::class,
     ]
 ];
@@ -171,8 +173,8 @@ return [
 
 ## Dank
 
-[Casbin](https://github.com/php-casbin/php-casbin). Sie können die komplette Dokumentation auf ihrer [Website](https://casbin.org/) einsehen.
+[Casbin](https://github.com/php-casbin/php-casbin), Sie können die vollständige Dokumentation auf ihrer [offiziellen Website](https://casbin.org/) einsehen.
 
 ## Lizenz
 
-Dieses Projekt ist unter der [Apache-2.0-Lizenz](LICENSE) lizenziert.
+Dieses Projekt steht unter der [Apache 2.0 Lizenz](LICENSE).

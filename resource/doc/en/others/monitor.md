@@ -1,10 +1,13 @@
 # Process Monitoring
-webman comes with a built-in monitoring process that supports two functions:
-1. Monitor file updates and automatically reload new business code (usually used during development).
-2. Monitor the memory usage of all processes, and automatically restart a process if its memory usage is about to exceed the `memory_limit` limit in the `php.ini` (without affecting the business).
+
+webman comes with a monitor process to support two functions:
+
+1. Detects file updates and automatically reloads new business code (usually used during development).
+2. Monitors memory consumption of all processes. If the memory consumption of a process is about to exceed the `memory_limit` limit set in `php.ini`, it will automatically safely restart the process without affecting the business.
 
 ### Monitoring Configuration
-The monitoring configuration is located in the file `config/process.php` under the `monitor` configuration.
+
+The configuration can be found in the file `config/process.php` under the `monitor` setting:
 ```php
 global $argv;
 
@@ -35,10 +38,11 @@ return [
     ]
 ];
 ```
-The `monitorDir` is used to configure which directories to monitor for updates (the number of files being monitored in each directory should not be too large).
-The `monitorExtensions` is used to configure which file suffixes within the `monitorDir` directory should be monitored.
-When `options.enable_file_monitor` is set to `true`, file update monitoring is enabled (by default, it is enabled on Linux systems running in debug mode).
-When `options.enable_memory_monitor` is set to `true`, memory usage monitoring is enabled (memory usage monitoring is not supported on Windows systems).
+
+The `monitorDir` is used to configure which directories to monitor for updates (it is not advisable to monitor too many files in the monitored directories).  
+The `monitorExtensions` is used to configure which file suffixes in the `monitorDir` directories should be monitored.  
+The value of `options.enable_file_monitor` as `true` enables file update monitoring (by default, in Linux systems, file monitoring is enabled when running in debug mode without specifying the `-d` flag).  
+The value of `options.enable_memory_monitor` as `true` enables memory usage monitoring (memory usage monitoring is not supported in Windows systems).
 
 > **Note**
-> On Windows systems, file update monitoring is only enabled when running `windows.bat` or `php windows.php`.
+> In Windows systems, file update monitoring is only enabled when running `windows.bat` or `php windows.php`.

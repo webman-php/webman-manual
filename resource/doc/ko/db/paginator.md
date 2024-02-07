@@ -1,7 +1,7 @@
 # 페이징
 
-# 1. 라라벨 ORM 기반의 페이징 방법
-라라벨의 `illuminate/database`는 편리한 페이지 구성 기능을 제공합니다.
+# 1. 라라벨의 ORM을 기반으로 한 페이징 방법
+라라벨의 `illuminate/database`는 편리한 페이징 기능을 제공합니다.
 
 ## 설치
 `composer require illuminate/pagination`
@@ -16,37 +16,36 @@ public function index(Request $request)
 }
 ```
 
-## 페이징 객체 메소드
-|  메소드  | 설명  |
+## 페이징 객체 메서드
+|  메서드   | 설명  |
 |  ----  |-----|
-|$paginator->count()|현재 페이지의 데이터 총 수 가져오기|
-|$paginator->currentPage()|현재 페이지 번호 가져오기|
-|$paginator->firstItem()|결과 집합에서 첫 번째 데이터의 번호 가져오기|
-|$paginator->getOptions()|페이징 옵션 가져오기|
-|$paginator->getUrlRange($start, $end)|지정된 페이지 범위의 URL 생성|
-|$paginator->hasPages()|여러 페이지를 생성할 충분한 데이터가 있는지 확인하기|
-|$paginator->hasMorePages()|더 많은 페이지를 표시할 수 있는지 확인하기|
-|$paginator->items()|현재 페이지의 데이터 항목 가져오기|
-|$paginator->lastItem()|결과 집합에서 마지막 데이터의 번호 가져오기|
-|$paginator->lastPage()|마지막 페이지 번호 가져오기( simplePaginate에서는 사용 불가)|
-|$paginator->nextPageUrl()|다음 페이지의 URL 가져오기|
-|$paginator->onFirstPage()|현재 페이지가 첫 번째 페이지인지 확인하기|
-|$paginator->perPage()|각 페이지에 보여지는 총 수 가져오기|
-|$paginator->previousPageUrl()|이전 페이지의 URL 가져오기|
-|$paginator->total()|결과 집합의 데이터 총 수 가져오기( simplePaginate에서는 사용 불가)|
-|$paginator->url($page)|지정된 페이지의 URL 가져오기|
-|$paginator->getPageName()|페이지 번호를 저장하는 데 사용되는 쿼리 매개변수 이름 가져오기|
-|$paginator->setPageName($name)|페이지 번호를 저장하는 데 사용되는 쿼리 매개변수 이름 설정하기|
+|$paginator->count()|현재 페이지의 데이터 총 수를 가져옵니다.|
+|$paginator->currentPage()|현재 페이지 번호를 가져옵니다.|
+|$paginator->firstItem()|결과 세트에서 첫 번째 데이터의 번호를 가져옵니다.|
+|$paginator->getOptions()|페이징 옵션을 가져옵니다.|
+|$paginator->getUrlRange($start, $end)|지정된 페이지 범위의 URL을 생성합니다.|
+|$paginator->hasPages()|여러 페이지를 만들기에 충분한 데이터가 있는지 여부를 확인합니다.|
+|$paginator->hasMorePages()|표시할 수 있는 더 많은 페이지가 있는지 여부를 확인합니다.|
+|$paginator->items()|현재 페이지의 데이터 항목을 가져옵니다.|
+|$paginator->lastItem()|결과 세트에서 마지막 데이터의 번호를 가져옵니다.|
+|$paginator->lastPage()|마지막 페이지 번호를 가져옵니다. (simplePaginate에서는 사용 불가)|
+|$paginator->nextPageUrl()|다음 페이지의 URL을 가져옵니다.|
+|$paginator->onFirstPage()|현재 페이지가 첫 페이지인지 여부를 확인합니다.|
+|$paginator->perPage()|페이지당 표시되는 총 수를 가져옵니다.|
+|$paginator->previousPageUrl()|이전 페이지의 URL을 가져옵니다.|
+|$paginator->total()|결과 세트의 데이터 총 수를 가져옵니다. (simplePaginate에서는 사용 불가)|
+|$paginator->url($page)|지정된 페이지의 URL을 가져옵니다.|
+|$paginator->getPageName()|페이지 번호를 저장하는 쿼리 매개변수 이름을 가져옵니다.|
+|$paginator->setPageName($name)|페이지 번호를 저장하는 쿼리 매개변수 이름을 설정합니다.|
 
-> **주의**
-> `$paginator->links()` 메소드는 지원되지 않습니다.
+> **참고**
+> `$paginator->links()` 메서드는 지원되지 않습니다.
 
 ## 페이징 컴포넌트
-webman에서는 `$paginator->links()` 메소드를 사용하여 페이지 버튼을 렌더링할 수 없지만, 대신 `jasongrimes/php-paginator`와 같은 다른 컴포넌트를 사용하여 렌더링할 수 있습니다.
+webman에서는 `$paginator->links()` 메서드를 사용하여 페이징 버튼을 렌더링할 수 없지만, 대신 `jasongrimes/php-paginator`와 같은 다른 컴포넌트를 사용할 수 있습니다.
 
 **설치**
 `composer require "jasongrimes/paginator:~1.0"`
-
 
 **백엔드**
 ```php
@@ -70,12 +69,12 @@ class UserController
 }
 ```
 
-**템플릿(php 원시)**
-app/view/user/get.html에 새로운 템플릿 추가
+**템플릿(php 원시 코드)**
+app/view/user/get.html에 새 템플릿 생성
 ```html
 <html>
 <head>
-  <!-- 내장된 Bootstrap 페이지 스타일 지원 -->
+  <!-- 내장된 부트스트랩 페이징 스타일 지원 -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -87,11 +86,11 @@ app/view/user/get.html에 새로운 템플릿 추가
 ```
 
 **템플릿(twig)**
-app/view/user/get.html에 새로운 템플릿 추가
+app/view/user/get.html에 새 템플릿 생성
 ```html
 <html>
 <head>
-  <!-- 내장된 Bootstrap 페이지 스타일 지원 -->
+  <!-- 내장된 부트스트랩 페이징 스타일 지원 -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -105,11 +104,11 @@ app/view/user/get.html에 새로운 템플릿 추가
 ```
 
 **템플릿(blade)**
-app/view/user/get.blade.php에 새로운 템플릿 추가
+app/view/user/get.blade.php에 새 템플릿 생성
 ```html
 <html>
 <head>
-  <!-- 내장된 Bootstrap 페이지 스타일 지원 -->
+  <!-- 내장된 부트스트랩 페이징 스타일 지원 -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -121,11 +120,11 @@ app/view/user/get.blade.php에 새로운 템플릿 추가
 ```
 
 **템플릿(thinkphp)**
-app/view/user/get.html에 새로운 템플릿 추가
+app/view/user/get.html에 새 템플릿 생성
 ```html
 <html>
 <head>
-    <!-- 내장된 Bootstrap 페이지 스타일 지원 -->
+    <!-- 내장된 부트스트랩 페이징 스타일 지원 -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -136,11 +135,11 @@ app/view/user/get.html에 새로운 템플릿 추가
 </html>
 ```
 
-결과는 다음과 같습니다:
+아래는 효과입니다:
 ![](../../assets/img/paginator.png)
 
-# 2. ThinkPHP ORM 기반의 페이징 방법
-추가적인 라이브러리 설치가 필요하지 않으며, think-orm을 설치한 상태에서 사용할 수 있습니다.
+# 2. Thinkphp의 ORM을 기반으로 한 페이징 방법
+추가적인 라이브러리 설치가 필요하지 않으며, think-orm을 설치한 경우에만 사용할 수 있습니다.
 ## 사용
 ```php
 public function index(Request $request)
@@ -155,7 +154,7 @@ public function index(Request $request)
 ```html
 <html>
 <head>
-    <!-- 내장된 Bootstrap 페이지 스타일 지원 -->
+    <!-- 내장된 부트스트랩 페이징 스타일 지원 -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>

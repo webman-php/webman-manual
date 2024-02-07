@@ -1,11 +1,11 @@
-# Utilisation d'autres bases de données
-En plus de [illuminate/database](https://github.com/illuminate/database), dans webman, vous pouvez utiliser d'autres composants de base de données.
+# Utiliser d'autres bases de données
+En plus de [illuminate/database](https://github.com/illuminate/database), vous pouvez utiliser d'autres composants de base de données dans webman.
 
 ## ThinkORM
-Voir [thinkorm](thinkorm.md)
+Veuillez consulter [thinkorm](thinkorm.md)
 
 ## ThinkCache
-Voir [think-cache](thinkcache.md)
+Veuillez consulter [think-cache](thinkcache.md)
 
 ## Plugin de base de données Medoo
-Voir [le plugin Medoo](https://www.workerman.net/plugin/29)
+Veuillez consulter [le plugin Medoo](../db/medoo.md)

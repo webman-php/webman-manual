@@ -1,4 +1,4 @@
 ## Visualizações
 
-Os arquivos de configuração de visualização do plugin do aplicativo estão localizados em `plugin/{identificação do plugin}/config/view.php`,
-Os aplicativos de plugin usam visualizações da mesma forma que os projetos normais do webman, consulte [Visualizações](../view.md) para obter uma experiência de desenvolvimento semelhante.
+O arquivo de configuração de visualizações do plugin de aplicativo está localizado em `plugin/{identificador_do_plugin}/config/view.php`,
+O uso de visualizações por aplicativos de plugins é semelhante à experiência de desenvolvimento de projetos comuns do webman. Consulte [Visualizações](../view.md) para obter mais informações.

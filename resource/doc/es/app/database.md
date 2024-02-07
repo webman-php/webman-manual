@@ -29,7 +29,7 @@ return  [
 ];
 ```
 
-La forma de referencia es `Db::connection('plugin.{plugin}.{nombre_de_conexión}');`, por ejemplo
+La forma de usar es `Db::connection('plugin.{plugin}.{nombre_de_conexión}');`, por ejemplo:
 
 ```php
 use support\Db;
@@ -37,18 +37,17 @@ Db::connection('plugin.foo.mysql')->table('user')->first();
 Db::connection('plugin.foo.admin')->table('admin')->first();
 ```
 
-Si desea usar la base de datos del proyecto principal, simplemente utilícela, por ejemplo
+Si desea usar la base de datos del proyecto principal, simplemente úsela directamente, por ejemplo:
 
 ```php
 use support\Db;
 Db::table('user')->first();
-// Suponiendo que el proyecto principal también tiene una conexión admin
+// Suponiendo que el proyecto principal también tiene una conexión admin configurada
 Db::connection('admin')->table('admin')->first();
 ```
 
 ## Configurar la base de datos para el Modelo
-
-Podemos crear una clase base para el modelo, la clase base utiliza `$connection` para especificar la conexión de base de datos del complemento, por ejemplo:
+Podemos crear una clase Base para el Modelo, donde la clase Base utiliza `$connection` para especificar la conexión a la base de datos del complemento, por ejemplo:
 
 ```php
 <?php
@@ -68,10 +67,10 @@ class Base extends Model
 }
 ```
 
-De esta manera, todos los modelos en el complemento heredarán de Base y automáticamente utilizarán la base de datos del complemento.
+De esta manera, todos los Modelos dentro del complemento heredan de la clase Base y automáticamente usan la base de datos del complemento.
 
 ## Reutilizar la configuración de la base de datos
-Por supuesto, podemos reutilizar la configuración de la base de datos del proyecto principal. Si ha integrado [webman-admin](https://www.workerman.net/plugin/82), también puede reutilizar la configuración de la base de datos de [webman-admin](https://www.workerman.net/plugin/82), por ejemplo:
+Por supuesto, podemos reutilizar la configuración de la base de datos del proyecto principal. Si se ha incorporado [webman-admin](https://www.workerman.net/plugin/82), también podemos reutilizar la configuración de la base de datos de [webman-admin](https://www.workerman.net/plugin/82), por ejemplo:
 
 ```php
 <?php

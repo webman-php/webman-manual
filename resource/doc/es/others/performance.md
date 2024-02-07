@@ -1,28 +1,29 @@
 # Rendimiento de webman
 
-### Proceso de manejo de solicitudes en el marco tradicional
+### Flujo de procesamiento de solicitudes en marcos de trabajo tradicionales
 
 1. Nginx/Apache recibe la solicitud.
-2. Nginx/Apache pasa la solicitud a php-fpm.
-3. PHP-FPM inicializa el entorno, como la creación de una lista de variables.
-4. PHP-FPM llama a RINIT de varias extensiones/módulos.
-5. PHP-FPM lee el archivo PHP del disco (se puede evitar usando opcache).
-6. PHP-FPM realiza el análisis léxico, análisis sintáctico y compila en opcode (se puede evitar usando opcache).
-7. PHP-FPM ejecuta opcode, incluyendo 8, 9, 10 y 11.
-8. El marco se inicializa, como instanciar varias clases, incluyendo el contenedor, controladores, enrutadores, middleware, etc.
-9. El marco se conecta a la base de datos y realiza verificación de permisos, conexión con Redis.
-10. El marco ejecuta la lógica del negocio.
-11. El marco cierra la conexión a la base de datos y a Redis.
-12. PHP-FPM libera recursos, destruye todas las definiciones de clases, instancias, y destruye la tabla de símbolos, etc.
-13. PHP-FPM llama secuencialmente el método RSHUTDOWN de varias extensiones/módulos.
-14. PHP-FPM reenvía el resultado a Nginx/Apache.
+2. Nginx/Apache transmite la solicitud a php-fpm.
+3. Php-fpm inicializa el entorno, como la creación de una lista de variables.
+4. Php-fpm llama a RINIT de varias extensiones/módulos.
+5. Php-fpm lee el archivo PHP desde el disco (se puede evitar usando opcache).
+6. Php-fpm realiza el análisis léxico, análisis sintáctico y compila en opcodes (se puede evitar usando opcache).
+7. Php-fpm ejecuta opcodes, incluyendo 8, 9, 10, 11.
+8. El marco de trabajo se inicializa, como instanciar diversas clases, incluyendo contenedores, controladores, rutas, middleware, etc.
+9. El marco de trabajo se conecta a la base de datos y realiza la autenticación de permisos, conectándose a Redis.
+10. El marco de trabajo ejecuta la lógica empresarial.
+11. El marco de trabajo cierra la conexión a la base de datos y a Redis.
+12. Php-fpm libera recursos, destruye todas las definiciones de clases, instancias y tablas de símbolos.
+13. Php-fpm llama secuencialmente a los métodos de RSHUTDOWN de varias extensiones/módulos.
+14. Php-fpm reenvía el resultado a Nginx/Apache.
 15. Nginx/Apache devuelve el resultado al cliente.
 
-### Proceso de manejo de solicitudes en webman
-1. El marco recibe la solicitud.
-2. El marco ejecuta la lógica del negocio.
-3. El marco devuelve el resultado al cliente.
+### Flujo de procesamiento de solicitudes en webman
 
-Eso es correcto, en el caso de que no haya un servidor Nginx de reenvío, el marco solo consta de estos 3 pasos. Se puede decir que esto ya es el pináculo de un marco de PHP, lo que hace que el rendimiento de webman sea varias veces o incluso decenas de veces mayor que el de un marco tradicional.
+1. El marco de trabajo recibe la solicitud.
+2. El marco de trabajo ejecuta la lógica empresarial.
+3. El marco de trabajo devuelve el resultado al cliente.
 
-Para más información, consulte [Pruebas de rendimiento](benchmarks.md).
+Sí, sin un proxy inverso de Nginx, el marco de trabajo solo consta de estos 3 pasos. Se puede decir que esto ya es lo último en términos de marcos de trabajo PHP, lo que hace que el rendimiento de webman sea varias veces mayor que el de los marcos de trabajo tradicionales, e incluso varias veces más.  
+
+Para más información, consulte [Pruebas de estrés](benchmarks.md).

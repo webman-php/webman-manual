@@ -7,7 +7,7 @@
 https://github.com/Intervention/image
   
 ### Instalación
- 
+  
 ```php
 composer require intervention/image
 ```
@@ -48,4 +48,4 @@ class UserController
   
 ### Más información
 
-Visite http://image.intervention.io/getting_started/introduction
+Visita http://image.intervention.io/getting_started/introduction

@@ -1,9 +1,9 @@
 # ตัวอย่างง่าย
 
-## การส่งคืนข้อความ
-**สร้างคอนโทรลเลอร์**
+## การส่งค่าเป็นข้อความ
+**สร้างคอนโทรลเลอร์ใหม่**
 
-สร้างไฟล์ `app/controller/UserController.php` ดังตัวอย่างนี้
+สร้างไฟล์ `app/controller/UserController.php` ดังนี้
 
 ```php
 <?php
@@ -16,9 +16,9 @@ class UserController
     public function hello(Request $request)
     {
         $default_name = 'webman';
-        // รับพารามิเตอร์ name จากคำขอแบบ GET หากไม่มีการส่งพารามิเตอร์ name ไปจะคืนค่า $default_name
+        // รับพารามิเตอร์ name จากคำขอแบบ GET ถ้าไม่ได้รับพารามิเตอร์ name ก็คืนค่าเป็น $default_name
         $name = $request->get('name', $default_name);
-        // ส่งคืนข้อความไปยังเบราว์เซอร์
+        // ส่งข้อความกลับไปยังเบราว์เซอร์
         return response('hello ' . $name);
     }
 }
@@ -28,10 +28,10 @@ class UserController
 
 เข้าถึงผ่านเบราว์เซอร์ที่ `http://127.0.0.1:8787/user/hello?name=tom`
 
-เบราว์เซอร์จะคืนค่า `hello tom`
+เบราว์เซอร์จะคืนค่าเป็น `hello tom`
 
-## การส่งคืน JSON
-แก้ไขไฟล์ `app/controller/UserController.php` ดังตัวอย่างนี้
+## การส่งค่าเป็น json
+แก้ไขไฟล์ `app/controller/UserController.php` ดังนี้
 
 ```php
 <?php
@@ -58,20 +58,20 @@ class UserController
 
 เข้าถึงผ่านเบราว์เซอร์ที่ `http://127.0.0.1:8787/user/hello?name=tom`
 
-เบราว์เซอร์จะคืนค่า `{"code":0,"msg":"ok","data":"tom""}`
+เบราว์เซอร์จะคืนค่าเป็น `{"code":0,"msg":"ok","data":"tom"}`
 
-การใช้ฟังก์ชันช่วยสร้าง JSON ส่งค่าโดยอัตโนมัติจะเพิ่มหัวข้อ `Content-Type: application/json`
+การใช้ฟังก์ชันช่วยในการส่งค่า json จะถูกเพิ่มเฮดเดอร์ `Content-Type: application/json` โดยอัตโนมัติ
 
-## การส่งคืน XML
-เช่นกัน การใช้ฟังก์ชันช่วย `xml($xml)` จะส่งค่าในรูปแบบ XML พร้อมเสริมหัวข้อ `Content-Type: text/xml`
+## การส่งค่าเป็น xml
+เช่นเดียวกัน การใช้ฟังก์ชันช่วย `xml($xml)` จะคืนค่าเป็นการตอบกลับ `xml` พร้อมเฮดเดอร์ `Content-Type: text/xml`
 
-ที่พารามิเตอร์ `$xml` สามารถเป็นสตริง XML หรืออ็อบเจ็กต์ `SimpleXMLElement`
+ที่พารามิเตอร์ `$xml` สามารถเป็นสตริง `xml` หรืออ็อบเจกต์ `SimpleXMLElement` ก็ได้
 
-## การส่งคืน JSONP
-เช่นกัน การใช้ฟังก์ชันช่วย `jsonp($data, $callback_name = 'callback')` จะส่งค่าในรูปแบบ JSONP
+## การส่งค่าเป็น jsonp
+เช่นเดียวกัน การใช้ฟังก์ชันช่วย `jsonp($data, $callback_name = 'callback')` จะคืนค่าเป็นการตอบกลับ `jsonp`
 
-## การส่งคืนมุมมอง
-แก้ไขไฟล์ `app/controller/UserController.php` ดังตัวอย่างนี้
+## การส่งค่าเป็นหน้าแสดงผล
+แก้ไขไฟล์ `app/controller/UserController.php` ดังนี้
 
 ```php
 <?php
@@ -90,7 +90,7 @@ class UserController
 }
 ```
 
-สร้างไฟล์ `app/view/user/hello.html` ดังตัวอย่างนี้
+สร้างไฟล์ `app/view/user/hello.html` ดังนี้
 
 ```html
 <!doctype html>
@@ -106,6 +106,6 @@ hello <?=htmlspecialchars($name)?>
 ```
 
 เข้าถึงผ่านเบราว์เซอร์ที่ `http://127.0.0.1:8787/user/hello?name=tom`
-จะคืนค่าหน้า HTML ที่มีเนื้อหาเป็น `hello tom`
+จะคืนค่าเป็นหน้า html ที่มีเนื้อหาเป็น `hello tom`
 
-โปรดทราบ: webman ใช้ไวยากรณ์ต้นฉบับของ PHP เป็นรูปแบบมาตรฐานของมอดูล หากต้องการใช้มุมมองอื่นๆ โปรดดูที่[มุมมอง](view.md)
+หมายเหตุ：webman ใช้ไวยากรต้นฉบับของ php เป็นภาษาต้นฉบับสำหรับมุมมอง. หากต้องการใช้มุมมองอื่นๆ ดูที่ [มุมมอง](view.md)

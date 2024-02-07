@@ -1,10 +1,10 @@
-# Introdução rápida
+# Começando rapidamente
 
-O modelo webman baseia-se no [Eloquent ORM](https://laravel.com/docs/7.x/eloquent). Cada tabela de banco de dados possui um "modelo" correspondente para interagir com essa tabela. Você pode usar o modelo para consultar os dados da tabela e inserir novos registros na tabela.
+O modelo webman é baseado no [Eloquent ORM](https://laravel.com/docs/7.x/eloquent). Cada tabela do banco de dados tem um "modelo" correspondente para interagir com essa tabela. Você pode usar o modelo para consultar os dados da tabela e inserir novos registros na tabela.
 
-Antes de começar, certifique-se de ter configurado a conexão com o banco de dados no arquivo `config/database.php`.
+Antes de começar, verifique se a conexão com o banco de dados está configurada em `config/database.php`.
 
-> Nota: Para suportar observadores de modelo, o Eloquent ORM requer a importação adicional `composer require "illuminate/events"` [Exemplo](#observadores-de-modelo)
+> Nota: Para que o Eloquent ORM suporte observadores de modelos, é necessário importar adicionalmente `composer require "illuminate/events"` [Exemplo](#模型观察者)
 
 ## Exemplo
 ```php
@@ -30,7 +30,7 @@ class User extends Model
     protected $primaryKey = 'uid';
 
     /**
-     * Indica se os carimbos de data e hora são mantidos automaticamente
+     * Indica se mantém automaticamente os carimbos de data/hora
      *
      * @var bool
      */
@@ -39,7 +39,7 @@ class User extends Model
 ```
 
 ## Nome da tabela
-Você pode especificar uma tabela personalizada definindo a propriedade `table` no modelo:
+Você pode especificar uma tabela de dados personalizada definindo o atributo `table` no modelo:
 ```php
 class User extends Model
 {
@@ -53,7 +53,7 @@ class User extends Model
 ```
 
 ## Chave primária
-O Eloquent assume que cada tabela de dados possui uma coluna de chave primária chamada id. Você pode definir uma propriedade protegida `$primaryKey` para redefinir essa convenção.
+O Eloquent presume que cada tabela de dados tem uma coluna de chave primária chamada id. Você pode definir um atributo protegido `$primaryKey` para reescrever esse padrão.
 ```php
 class User extends Model
 {
@@ -66,7 +66,7 @@ class User extends Model
 }
 ```
 
-O Eloquent assume que a chave primária é um valor inteiro incremental, o que significa que por padrão a chave primária será automaticamente convertida para o tipo int. Se você deseja usar uma chave primária não incremental ou não numérica, deve definir a propriedade pública `$incrementing` como false.
+O Eloquent presume que a chave primária é um valor inteiro autoincrementável, o que significa que, por padrão, a chave primária é automaticamente convertida para o tipo int. Se deseja usar uma chave primária não incremental ou não numérica, é necessário definir o atributo público `$incrementing` como false.
 ```php
 class User extends Model
 {
@@ -79,12 +79,12 @@ class User extends Model
 }
 ```
 
-Se sua chave primária não for um número inteiro, você precisará definir a propriedade protegida `$keyType` do modelo como string:
+Se a sua chave primária não for um número inteiro, você precisa definir o atributo protegido `$keyType` no modelo como string:
 ```php
 class User extends Model
 {
     /**
-     * "Tipo" de ID auto incrementado.
+     * "Tipo" do ID autoincrementável
      *
      * @var string
      */
@@ -92,25 +92,26 @@ class User extends Model
 }
 ```
 
-## Carimbos de data e hora
-Por padrão, o Eloquent espera que sua tabela de dados contenha as colunas created_at e updated_at. Se você não quer que o Eloquent gerencie automaticamente essas duas colunas, defina a propriedade `$timestamps` do modelo como false:
+## Carimbos de data/hora
+Por padrão, o Eloquent espera que a sua tabela de dados tenha as colunas created_at e updated_at. Se não quiser que o Eloquent gerencie automaticamente essas duas colunas, defina o atributo $timestamps do modelo como false:
 ```php
 class User extends Model
 {
     /**
-     * Indica se os carimbos de data e hora são mantidos automaticamente
+     * Indica se mantém automaticamente os carimbos de data/hora
      *
      * @var bool
      */
     public $timestamps = false;
 }
 ```
-Se precisar personalizar o formato do carimbo de data e hora, defina a propriedade `$dateFormat` no seu modelo. Esta propriedade determina como as propriedades de data são armazenadas no banco de dados, bem como o formato de serialização do modelo para array ou JSON:
+
+Se precisar personalizar o formato de carimbos de data/hora, defina o atributo $dateFormat no seu modelo. Este atributo determina como as propriedades de data são armazenadas no banco de dados e como o modelo é serializado para um array ou formato JSON:
 ```php
 class User extends Model
 {
     /**
-     * Formato de armazenamento do carimbo de data e hora
+     * Formato de armazenamento de carimbos de data/hora
      *
      * @var string
      */
@@ -118,7 +119,7 @@ class User extends Model
 }
 ```
 
-Se você precisar personalizar os nomes das colunas de carimbos de data e hora, pode definir os valores das constantes CREATED_AT e UPDATED_AT no seu modelo:
+Se precisar personalizar os nomes dos campos de armazenamento de carimbos de data/hora, pode definir os valores das constantes CREATED_AT e UPDATED_AT no modelo:
 ```php
 class User extends Model
 {
@@ -128,7 +129,7 @@ class User extends Model
 ```
 
 ## Conexão com o banco de dados
-Por padrão, os modelos Eloquent usarão a conexão padrão configurada para sua aplicação. Se desejar especificar uma conexão diferente para o modelo, defina a propriedade `$connection` no modelo:
+Por padrão, os modelos Eloquent usarão a conexão com o banco de dados padrão configurada em sua aplicação. Se quiser especificar uma conexão diferente para o modelo, defina o atributo $connection:
 ```php
 class User extends Model
 {
@@ -142,12 +143,12 @@ class User extends Model
 ```
 
 ## Valores padrão
-Se desejar definir valores padrão para algumas propriedades do modelo, pode definir a propriedade `$attributes` no modelo:
+Se desejar definir valores padrão para algumas propriedades do modelo, pode definir o atributo $attributes no modelo:
 ```php
 class User extends Model
 {
     /**
-     * Valores padrão do modelo.
+     * Valores padrão das propriedades do modelo
      *
      * @var array
      */
@@ -158,7 +159,7 @@ class User extends Model
 ```
 
 ## Recuperação do modelo
-Após criar o modelo associado a uma tabela, você pode consultar os dados do banco de dados. Imagine cada modelo Eloquent como um poderoso construtor de consulta que permite consultar rapidamente os dados associados a ele. Por exemplo:
+Após criar o modelo e a tabela de banco de dados associada, pode consultar os dados do banco de dados. Pode imaginar cada modelo Eloquent como um construtor de consultas poderoso, e usá-lo para consultar a tabela associada de forma mais rápida. Por exemplo:
 ```php
 $users = app\model\User::all();
 
@@ -166,10 +167,11 @@ foreach ($users as $user) {
     echo $user->name;
 }
 ```
-> Dica: Como os modelos Eloquent também são construtores de consulta, você também deve ler todos os métodos disponíveis em [Construtores de consulta](queries.md) e utilizá-los em consultas Eloquent.
+
+> Dica: Como os modelos Eloquent também são construtores de consultas, é recomendado ler todos os métodos disponíveis em [Construtor de consultas](queries.md). Pode usar esses métodos em consultas Eloquent.
 
 ## Restrições adicionais
-O método all do Eloquent retorna todos os resultados do modelo. Como cada modelo Eloquent funciona como um construtor de consulta, você também pode adicionar restrições de consulta e, em seguida, obter os resultados da consulta usando o método get:
+O método all do Eloquent retornará todos os resultados do modelo. Como cada modelo Eloquent atua como um construtor de consultas, também pode adicionar condições de consulta e, em seguida, usar o método get para obter os resultados da consulta:
 ```php
 $users = app\model\User::where('name', 'like', '%tom')
                ->orderBy('uid', 'desc')
@@ -178,14 +180,14 @@ $users = app\model\User::where('name', 'like', '%tom')
 ```
 
 ## Recarregar o modelo
-Você pode usar os métodos fresh e refresh para recarregar o modelo. O método fresh recarregará o modelo do banco de dados, sem afetar a instância existente:
+Pode usar os métodos fresh e refresh para recarregar o modelo. O método fresh irá recuperar o modelo do banco de dados. A instância existente do modelo não será afetada:
 ```php
 $user = app\model\User::where('name', 'tom')->first();
 
 $fresh_user = $user->fresh();
 ```
 
-O método refresh reatribuirá os novos dados do banco de dados ao modelo existente. Além disso, os relacionamentos carregados também serão recarregados:
+O método refresh usa os novos dados do banco de dados para recarregar a instância existente do modelo. Além disso, os relacionamentos carregados serão recarregados:
 ```php
 $user = app\model\User::where('name', 'tom')->first();
 
@@ -196,23 +198,22 @@ $user = $user->fresh();
 $user->name; // "tom"
 ```
 
-## Coleção
-Os métodos all e get do Eloquent podem recuperar vários resultados, retornando uma instância de `Illuminate\Database\Eloquent\Collection`. A classe `Collection` fornece muitos métodos auxiliares para manipular os resultados do Eloquent:
+## Coleções
+Os métodos all e get do Eloquent podem recuperar vários resultados e retornar uma instância de `Illuminate\Database\Eloquent\Collection`. A classe `Collection` fornece uma variedade de métodos auxiliares para lidar com os resultados Eloquent:
 ```php
 $users = $users->reject(function ($user) {
     return $user->disabled;
 });
 ```
-
-## Utilizando cursores
-O método cursor permite iterar sobre o banco de dados usando cursores, executando a consulta apenas uma vez. Ao lidar com grandes quantidades de dados, o método cursor pode reduzir significativamente o uso de memória:
+## Uso de cursor
+O método cursor permite usar um cursor para percorrer o banco de dados, executando a consulta apenas uma vez. Ao lidar com grandes volumes de dados, o método cursor pode reduzir significativamente o uso de memória:
 ```php
-foreach (app\model\User::where('sex', 1)->cursor() as $user) {
+foreach (app\model\User::where('sex', 1')->cursor() as $user) {
     //
 }
 ```
 
-O cursor retorna uma instância de `Illuminate\Support\LazyCollection`. [Coleções preguiçosas](https://laravel.com/docs/7.x/collections#lazy-collections) permitem usar a maioria dos métodos de coleções do Laravel, carregando apenas um único modelo na memória de cada vez:
+O método cursor retorna uma instância `Illuminate\Support\LazyCollection`. As [coleções Lazy](https://laravel.com/docs/7.x/collections#lazy-collections) permitem usar a maioria dos métodos de coleção do Laravel e carregar apenas um único modelo na memória de cada vez:
 ```php
 $users = app\model\User::cursor()->filter(function ($user) {
     return $user->id > 500;
@@ -222,11 +223,10 @@ foreach ($users as $user) {
     echo $user->id;
 }
 ```
-
 ## Subconsultas Select
-O Eloquent oferece suporte a subconsultas avançadas, permitindo extrair informações de tabelas relacionadas em uma única consulta. Por exemplo, digamos que tenhamos uma tabela de destinos (destinations) e uma tabela de voos para esses destinos (flights). A tabela flights contém um campo arrival_at que indica quando o voo chegou ao destino.
+O Eloquent fornece suporte avançado para subconsultas, permitindo extrair informações das tabelas relacionadas em uma única consulta. Por exemplo, suponha que tenhamos uma tabela de destinos chamada destinations e uma tabela de voos para esses destinos chamada flights. A tabela flights contém um campo arrival_at, que indica quando o voo chegou ao destino.
 
-Usando a função de subconsulta proporcionada pelos métodos select e addSelect, podemos consultar todos os destinos e o nome do último voo a chegar a cada destino em uma única consulta:
+Usando os métodos select e addSelect fornecidos pela funcionalidade de subconsulta, podemos buscar todos os destinos destinations em uma única consulta, juntamente com o nome do último voo que chegou a cada destino:
 ```php
 use app\model\Destination;
 use app\model\Flight;
@@ -237,8 +237,8 @@ return Destination::addSelect(['last_flight' => Flight::select('name')
     ->limit(1)
 ])->get();
 ```
-## Ordenação por subconsulta
-Além disso, o método orderBy do construtor de consulta também suporta subconsultas. Podemos usar esse recurso para classificar todos os destinos com base no tempo de chegada do último voo a cada destino. Novamente, isso pode ser feito com apenas uma consulta ao banco de dados:
+## Ordenação com base em Subconsultas
+Além disso, o método orderBy do construtor de consulta também suporta subconsultas. Podemos usar essa funcionalidade para ordenar todos os destinos com base no horário de chegada do último voo ao destino. Novamente, isso pode ser feito em uma única consulta ao banco de dados:
 ```php
 return Destination::orderByDesc(
     Flight::select('arrived_at')
@@ -248,54 +248,52 @@ return Destination::orderByDesc(
 )->get();
 ```
 
-## Recuperação de um único modelo/colecção
+## Recuperando um Único Modelo / Coleção
 Além de recuperar todos os registros de uma tabela especificada, você pode usar os métodos find, first ou firstWhere para recuperar um único registro. Esses métodos retornam uma única instância de modelo, em vez de uma coleção de modelos:
 ```php
-// Localize um modelo por chave primária...
+// Buscar um modelo por chave primária...
 $flight = app\model\Flight::find(1);
 
-// Localize o primeiro modelo correspondente à condição de consulta...
+// Buscar o primeiro modelo que atende à condição da consulta...
 $flight = app\model\Flight::where('active', 1)->first();
 
-// Localize o primeiro modelo correspondente à condição de consulta usando um atalho...
+// Buscar o primeiro modelo que atende à condição da consulta de forma rápida...
 $flight = app\model\Flight::firstWhere('active', 1);
 ```
-
-Também é possível chamar o método find com uma matriz de chaves primárias como argumento, que retornará uma coleção correspondente de registros:
+Você também pode usar um array de chaves primárias como argumento para o método find, que retornará uma coleção dos registros correspondentes:
 ```php
 $flights = app\model\Flight::find([1, 2, 3]);
 ```
-
-Às vezes, você pode querer executar ações diferentes se não encontrar um modelo ao procurar o primeiro resultado. O método firstOr retornará o primeiro resultado se encontrado, caso contrário, executará o retorno de chamada fornecido. O valor de retorno do retorno de chamada será o valor retornado pelo método firstOr:
+Às vezes, você pode querer executar outras ações caso não encontre o primeiro resultado. O método firstOr retornará o primeiro resultado encontrado e, se não houver nenhum resultado, executará a função de retorno de chamada fornecida. O valor retornado pela função de retorno de chamada será o valor de retorno do método firstOr:
 ```php
 $model = app\model\Flight::where('legs', '>', 100)->firstOr(function () {
         // ...
 });
 ```
-O método firstOr também aceita uma matriz de colunas como argumento para a consulta:
+O método firstOr também aceita um array de campos para consulta:
 ```php
-$model = app\modle\Flight::where('legs', '>', 100)
+$model = app\model\Flight::where('legs', '>', 100)
             ->firstOr(['id', 'legs'], function () {
                 // ...
             });
 ```
-
-## Exceção "Modelo não encontrado"
-Às vezes, você pode querer lançar uma exceção quando não encontrar um modelo. Isso é útil em controladores e rotas. Os métodos findOrFail e firstOrFail irão buscar o primeiro resultado da consulta e, se não encontrado, lançar uma exceção Illuminate\Database\Eloquent\ModelNotFoundException:
+## Exceção "Modelo Não Encontrado"
+Às vezes, você deseja lançar uma exceção quando um modelo não é encontrado. Isso é útil em controladores e rotas. Os métodos findOrFail e firstOrFail buscarão o primeiro resultado da consulta e, se não encontrarem, lançarão uma exceção ModelNotFoundException do Illuminate\Database\Eloquent\ModelNotFoundException:
 ```php
-$model = app\modle\Flight::findOrFail(1);
-$model = app\modle\Flight::where('legs', '>', 100)->firstOrFail();
+$model = app\model\Flight::findOrFail(1);
+$model = app\model\Flight::where('legs', '>', 100)->firstOrFail();
 ```
-## Coleção de Pesquisa
-Você também pode utilizar os métodos count, sum e max, oferecidos pelo construtor de consultas, e outras funções de coleção para operar sobre coleções. Esses métodos retornarão apenas valores escalares apropriados em vez de uma instância do modelo:
-```php
-$count = app\modle\Flight::where('active', 1)->count();
 
-$max = app\modle\Flight::where('active', 1)->max('price');
+## Recuperando Coleções
+Você também pode usar os métodos count, sum e max fornecidos pelo construtor de consultas e outras funções de coleção para manipular coleções. Esses métodos retornarão apenas valores escalares apropriados, em vez de uma instância de modelo:
+```php
+$count = app\model\Flight::where('active', 1)->count();
+
+$max = app\model\Flight::where('active', 1)->max('price');
 ```
 
 ## Inserção
-Para inserir um novo registro no banco de dados, primeiro crie uma nova instância do modelo, defina os atributos da instância e, em seguida, chame o método save:
+Para inserir um novo registro no banco de dados, crie primeiro uma nova instância de modelo, defina os atributos e, em seguida, chame o método save:
 ```php
 <?php
 
@@ -308,14 +306,14 @@ use support\Response;
 class FooController
 {
     /**
-     * Adicionar um novo registro à tabela de usuários
+     * Adiciona um novo registro à tabela de usuários
      *
      * @param  Request  $request
      * @return Response
      */
     public function store(Request $request)
     {
-        // Validar a solicitação
+        // Validar a requisição
 
         $user = new User;
 
@@ -325,25 +323,24 @@ class FooController
     }
 }
 ```
-
-Os carimbos de data created_at e updated_at serão automaticamente definidos (quando a propriedade $timestamps no modelo for verdadeira), portanto, não é necessário definir manualmente.
+Os carimbos de data created_at e updated_at serão automaticamente definidos (quando a propriedade $timestamps do modelo estiver definida como verdadeira), sem necessidade de atribuição manual.
 
 ## Atualização
-O método save também pode ser usado para atualizar um modelo existente no banco de dados. Para atualizar um modelo, você precisa primeiro recuperá-lo, definir os atributos a serem atualizados e, em seguida, chamar o método save. Da mesma forma, o carimbo de data updated_at será automaticamente atualizado, portanto, não é necessário definir manualmente:
+O método save também pode ser usado para atualizar um modelo existente no banco de dados. Para atualizar um modelo, primeiro recupere-o, defina os atributos a serem atualizados e, em seguida, chame o método save. Da mesma forma, o carimbo de data updated_at será automaticamente atualizado, sem necessidade de atribuição manual:
 ```php
 $user = app\model\User::find(1);
 $user->name = 'jerry';
 $user->save();
 ```
 
-## Atualização em lote
+## Atualização em Lote
 ```php
 app\model\User::where('uid', '>', 10)
           ->update(['name' => 'tom']);
 ```
 
-## Verificação de Mudanças nos Atributos
-O Eloquent fornece os métodos isDirty, isClean e wasChanged para verificar o estado interno do modelo e determinar como seus atributos mudaram desde a carga inicial. O método isDirty determina se algum atributo foi alterado desde o carregamento do modelo. Você pode passar um nome de atributo específico para determinar se algum atributo específico está sujo. O método isClean é o oposto de isDirty e também aceita um parâmetro de atributo opcional:
+## Verificação de Mudanças de Atributos
+O Eloquent fornece os métodos isDirty, isClean e wasChanged para verificar o estado interno do modelo e determinar como seus atributos mudaram desde a carga inicial. O método isDirty determina se algum atributo foi alterado desde a carga do modelo. Você pode passar um nome de atributo específico para determinar se um atributo específico foi modificado. O método isClean é o oposto de isDirty e também aceita um parâmetro opcional de atributo:
 ```php
 $user = User::create([
     'first_name' => 'Taylor',
@@ -366,7 +363,7 @@ $user->save();
 $user->isDirty(); // false
 $user->isClean(); // true
 ```
-O método wasChanged determina se algum atributo foi alterado desde a última vez que o modelo foi salvo durante o ciclo de solicitação atual. Você também pode passar o nome do atributo para ver se um atributo específico foi alterado:
+O método wasChanged determina se houve mudanças nos atributos desde a última vez que o modelo foi salvo durante o ciclo de solicitação atual. Você também pode passar o nome do atributo para ver se um atributo específico foi alterado:
 ```php
 $user = User::create([
     'first_name' => 'Taylor',
@@ -381,13 +378,12 @@ $user->wasChanged(); // true
 $user->wasChanged('title'); // true
 $user->wasChanged('first_name'); // false
 ```
-## Atribuição em Massa
-Você também pode usar o método create para salvar um novo modelo. Este método retornará a instância do modelo. No entanto, antes de usar, você precisa especificar os atributos fillable ou guarded no modelo, pois por padrão, todos os modelos Eloquent não aceitam atribuições em massa.
+## Atribuição em massa
+Também é possível usar o método create para salvar um novo modelo. Este método retornará uma instância do modelo. No entanto, antes de usar, é necessário especificar as propriedades fillable ou guarded no modelo, pois por padrão, todos os modelos Eloquent não permitem atribuições em massa.
 
-Quando os usuários enviam parâmetros HTTP inesperados e esses parâmetros modificam os campos do banco de dados que não devem ser alterados, uma vulnerabilidade de atribuição em massa ocorrerá. Por exemplo, um usuário mal-intencionado pode enviar o parâmetro is_admin por meio de uma solicitação HTTP e depois passá-lo para o método create, permitindo que o usuário se promova a administrador.
+Uma vulnerabilidade de atribuição em massa ocorre quando um usuário envia parâmetros HTTP inesperados e esses parâmetros alteram campos no banco de dados que não deveriam ser alterados. Por exemplo, um usuário mal-intencionado pode enviar o parâmetro is_admin através de uma solicitação HTTP e, em seguida, passá-lo para o método create, o que permitiria ao usuário se promover a administrador.
 
-Portanto, antes de começar, você deve definir quais atributos do modelo podem ser atribuídos em massa. Você pode realizar isso usando a propriedade $fillable do modelo. Por exemplo, para permitir a atribuição em massa do atributo name do modelo Flight:
-
+Portanto, antes de começar, é importante definir quais propriedades do modelo podem ser atribuídas em massa. Isso pode ser feito através da propriedade $fillable do modelo. Por exemplo, para permitir que a propriedade name do modelo Flight seja atribuída em massa:
 ```php
 <?php
 
@@ -398,24 +394,23 @@ use support\Model;
 class Flight extends Model
 {
     /**
-     * Atributos que podem ser atribuídos em massa.
+     * Propriedades que podem ser atribuídas em massa.
      *
      * @var array
      */
     protected $fillable = ['name'];
 }
-
 ```
-Depois de definirmos os atributos que podem ser atribuídos em massa, podemos usar o método create para inserir novos dados no banco de dados. O método create retornará a instância do modelo salvo:
-
+Uma vez que tenhamos definido as propriedades que podem ser atribuídas em massa, podemos inserir novos dados no banco de dados usando o método create. Este método retornará a instância do modelo salvo:
 ```php
-$flight = app\modle\Flight::create(['name' => 'Flight 10']);
+$flight = app\modle\Flight::create(['name' => 'Voo 10']);
 ```
-Se você já tiver uma instância do modelo, poderá passar uma matriz para o método fill para atribuir valores:
+Se você já tiver uma instância do modelo, pode passar um array para o método fill para atribuir valores:
 ```php
-$flight->fill(['name' => 'Flight 22']);
+$flight->fill(['name' => 'Voo 22']);
 ```
-$fillable pode ser considerado como uma "lista branca" de atribuições em massa e você também pode usar a propriedade $guarded para implementar uma "lista negra" de atribuições em massa. A propriedade $guarded contém um array de atributos que não são permitidos em atribuições em massa. Em outras palavras, $guarded funcionará mais como uma "lista negra". Importante: você só pode usar $fillable ou $guarded, não ambos simultaneamente. No exemplo a seguir, todos os atributos, exceto price, podem ser atribuídos em massa:
+
+A propriedade $fillable pode ser considerada como uma "lista branca" para atribuições em massa, mas também é possível utilizar a propriedade $guarded. A propriedade $guarded contém um array de atributos que não podem ser atribuídos em massa. Em outras palavras, $guarded funciona mais como uma "lista negra". Importante ressaltar: é possível utilizar apenas $fillable ou $guarded, não ambos simultaneamente. No exemplo a seguir, todos os atributos, exceto price, podem ser atribuídos em massa:
 ```php
 <?php
 
@@ -426,68 +421,66 @@ use support\Model;
 class Flight extends Model
 {
     /**
-     * Atributos que não são permitidos em atribuições em massa.
+     * Atributos que não podem ser atribuídos em massa.
      *
      * @var array
      */
     protected $guarded = ['price'];
 }
 ```
-Se você deseja permitir que todos os atributos sejam atribuídos em massa, pode definir $guarded como um array vazio:
+Se desejar permitir que todos os atributos sejam atribuídos em massa, basta definir $guarded como um array vazio:
 ```php
 /**
- * Atributos que não são permitidos em atribuições em massa.
+ * Atributos que não podem ser atribuídos em massa.
  *
  * @var array
  */
 protected $guarded = [];
 ```
-## Outros Métodos de Criação
-firstOrCreate/ firstOrNew
 
-Aqui estão dois métodos que você pode usar para atribuições em massa: firstOrCreate e firstOrNew. O método firstOrCreate tentará corresponder os dados do banco de dados com um par chave/valor fornecido. Se o modelo não for encontrado no banco de dados, será inserido um registro contendo os atributos do primeiro parâmetro e, opcionalmente, os atributos do segundo parâmetro.
+## Outros métodos de criação
+firstOrCreate/firstOrNew
+Aqui estão dois métodos que podem ser úteis para atribuições em massa: firstOrCreate e firstOrNew. O método firstOrCreate tentará corresponder aos dados no banco de dados usando pares chave/valor fornecidos. Se o modelo não for encontrado no banco de dados, ele será inserido, com as propriedades do primeiro parâmetro e, opcionalmente, as propriedades do segundo parâmetro.
 
-O método firstOrNew funcionará da mesma forma que o método firstOrCreate ao tentar encontrar um registro correspondente com os atributos fornecidos. No entanto, se o método firstOrNew não encontrar um modelo correspondente, ele retornará uma nova instância do modelo. Observe que a instância retornada por firstOrNew ainda não foi salva no banco de dados e você precisará chamar manualmente o método save:
+O método firstOrNew funciona de forma semelhante ao firstOrCreate, tentando encontrar um registro no banco de dados com as propriedades fornecidas. No entanto, se o método firstOrNew não encontrar um modelo correspondente, ele retornará uma nova instância do modelo. É importante observar que a instância retornada por firstOrNew ainda não foi salva no banco de dados e você precisará chamar o método save manualmente:
 ```php
-// Procurar voo pelo nome, se não encontrar, criar...
-$flight = app\modle\Flight::firstOrCreate(['name' => 'Flight 10']);
+// Busca o voo pelo nome, se não existir, cria...
+$flight = app\modle\Flight::firstOrCreate(['name' => 'Voo 10']);
 
-// Procurar voo pelo nome ou criar um novo com nome, atrasado e hora de chegada...
+// Busca o voo pelo nome e, se não existir, cria com as propriedades 'atrasado' e 'hora_chegada'...
 $flight = app\modle\Flight::firstOrCreate(
-    ['name' => 'Flight 10'],
-    ['delayed' => 1, 'arrival_time' => '11:30']
+    ['name' => 'Voo 10'],
+    ['atrasado' => 1, 'hora_chegada' => '11:30']
 );
 
-// Procurar voo pelo nome, se não encontrar, criar uma instância nova...
-$flight = app\modle\Flight::firstOrNew(['name' => 'Flight 10']);
+// Busca o voo pelo nome, se não existir, cria uma nova instância...
+$flight = app\modle\Flight::firstOrNew(['name' => 'Voo 10']);
 
-// Procurar voo pelo nome ou criar uma nova instância com nome, atrasado e hora de chegada...
+// Busca o voo pelo nome e, se não existir, cria uma nova instância com as propriedades 'atrasado' e 'hora_chegada'...
 $flight = app\modle\Flight::firstOrNew(
-    ['name' => 'Flight 10'],
-    ['delayed' => 1, 'arrival_time' => '11:30']
+    ['name' => 'Voo 10'],
+    ['atrasado' => 1, 'hora_chegada' => '11:30']
 );
 ```
 
-Você pode encontrar situações em que deseja atualizar um modelo existente ou criar um novo modelo se ele não existir. O método updateOrCreate realiza essas duas etapas em um único passo. Semelhante ao método firstOrCreate, updateOrCreate persiste o modelo, portanto, não é necessário chamar save():
-
+Também é possível encontrar casos em que seja desejável atualizar um modelo existente ou criar um novo modelo se ele não existir. Isso pode ser feito de uma vez com o método updateOrCreate. Similar ao método firstOrCreate, o updateOrCreate persiste o modelo, então não é necessário chamar save():
 ```php
-// Se houver um voo de Oakland para San Diego, defina o preço como $99.
-// Se não houver um modelo correspondente, ele será criado.
+// Se existir um voo de Oakland para San Diego, o preço será de 99 dólares.
+// Se não houver um modelo correspondente, um novo será criado.
 $flight = app\modle\Flight::updateOrCreate(
-    ['departure' => 'Oakland', 'destination' => 'San Diego'],
-    ['price' => 99, 'discounted' => 1]
+    ['partida' => 'Oakland', 'destino' => 'San Diego'],
+    ['preço' => 99, 'desconto' => 1]
 );
 ```
 
-## Excluir Modelo
-
-Você pode chamar o método delete em uma instância do modelo para excluí-la:
+## Excluir modelo
+É possível chamar o método delete em uma instância do modelo para excluí-la:
 ```php
 $flight = app\modle\Flight::find(1);
 $flight->delete();
 ```
 
-## Excluir Modelo por Chave Primária
+## Excluir modelo pelo ID
 ```php
 app\modle\Flight::destroy(1);
 
@@ -496,45 +489,42 @@ app\modle\Flight::destroy(1, 2, 3);
 app\modle\Flight::destroy([1, 2, 3]);
 
 app\modle\Flight::destroy(collect([1, 2, 3]));
-
 ```
 
-## Excluir Modelo por Consulta
+## Excluir modelo por consulta
 ```php
-$deletedRows = app\modle\Flight::where('active', 0)->delete();
+$linhasExcluidas = app\modle\Flight::where('ativo', 0)->delete();
 ```
-
-## Clonar Modelo
-Você pode usar o método replicate para criar uma nova instância ainda não salva no banco de dados. Este método é muito útil quando as instâncias do modelo compartilham muitos atributos:
+## Replicar Modelo
+Você pode usar o método replicate para criar uma nova instância do modelo que ainda não foi salva no banco de dados. Este método é útil quando várias instâncias de modelo compartilham muitas propriedades em comum.
 ```php
-$shipping = App\Address::create([
-    'type' => 'shipping',
-    'line_1' => '123 Example Street',
-    'city' => 'Victorville',
-    'state' => 'CA',
-    'postcode' => '90001',
+$endereco = App\Endereço::create([
+    'tipo' => 'remessa',
+    'linha_1' => '123 Rua Exemplo',
+    'cidade' => 'Victorville',
+    'estado' => 'CA',
+    'código_postal' => '90001',
 ]);
 
-$billing = $shipping->replicate()->fill([
-    'type' => 'billing'
+$cobranca= $endereco->replicate()->fill([
+    'tipo' => 'cobrança '
 ]);
 
-$billing->save();
+$cobranca->save();
 ```
 
 ## Comparação de Modelos
-Às vezes, pode ser necessário determinar se dois modelos são "iguais". O método is pode ser usado para verificar rapidamente se dois modelos têm a mesma chave primária, tabela e conexão com o banco de dados:
+Às vezes, pode ser necessário verificar se dois modelos são "iguais". O método is pode ser usado para verificar rapidamente se dois modelos têm a mesma chave primária, tabela e conexão de banco de dados:
 ```php
-if ($post->is($anotherPost)) {
+if ($post->is($outraPostagem)) {
     //
 }
 ```
 
-
 ## Observadores de Modelos
-Consulte o [Evento de Modelo e Observador no Laravel](https://learnku.com/articles/6657/model-events-and-observer-in-laravel)
+Para aprender mais sobre eventos e observadores de modelos em Laravel, consulte [Eventos do Modelo e Observador no Laravel](https://learnku.com/articles/6657/model-events-and-observer-in-laravel).
 
-Observação: Para que o Eloquent ORM suporte observadores de modelos, é necessário importar adicionalmente o pacote composer require "illuminate/events".
+Importante: para o Eloquent ORM suportar observadores de modelos, é necessário importar adicionamente o Illuminate/events via composer require "illuminate/events".
 ```php
 <?php
 namespace app\model;

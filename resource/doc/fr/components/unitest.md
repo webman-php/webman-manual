@@ -27,7 +27,6 @@ class TestConfig extends TestCase
 ```
 
 ## Exécution
-
 Exécutez dans le répertoire racine du projet `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php`
 
 Le résultat ressemblera à ceci :

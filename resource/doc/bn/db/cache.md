@@ -1,10 +1,10 @@
 # ক্যাশ
 
-webman ডিফল্টভাবে [symfony/cache](https://github.com/symfony/cache) ক্যাশ কম্পোনেন্ট ব্যবহার করে।
+webman ডিফল্টভাবে [symfony/cache](https://github.com/symfony/cache)কে ক্যাশ কম্পোনেন্ট হিসেবে ব্যবহার করে।
 
-> `symfony/cache` ব্যবহার করার আগে, `php-cli` কে রেডিস এক্সটেনশন ইন্সটল করা আবশ্যক।
+> `symfony/cache` ব্যবহার করতে আগে প্রোগ্রামের জন্য `php-cli` এর redis এক্সটেনশন ইন্সটল করতে হবে।
 
-## ইনস্টলেশন
+## ইন্সটলেশন
 **php 7.x**
 ```php
 composer require -W illuminate/redis ^8.2.0 symfony/cache ^5.2
@@ -14,11 +14,11 @@ composer require -W illuminate/redis ^8.2.0 symfony/cache ^5.2
 composer require -W illuminate/redis symfony/cache
 ```
 
-ইনস্টলেশন সম্পূর্ণ হওয়ার পরে রিস্টার্ট বা রিলোড করা প্রয়োজন নেই।
+ইন্সটলেশন শেষে restart করতে হবে (reload অফ করা যায় না)
 
 
-## রেডিস কনফিগারেশন
-রেডিস কনফিগারেশন ফাইল পাওয়া যায় `config/redis.php`
+## Redis কনফিগারেশন
+Redis কনফিগারেশন ফাইলটি `config/redis.php`তে রয়েছে
 ```php
 return [
     'default' => [
@@ -49,8 +49,8 @@ class UserController
 }
 ```
 
-> **নোট**
-> যত সম্ভব কীটি একটি প্রিফিক্স যোগ করুন, যাতে অন্যান্য রেডিস ব্যবহার করা কোন উপযোগীতা এসে না যায়।
+> **লক্ষ্য করুন**
+> ব্যবহার করার সময় key-এ একটি প্রিফিক্স যুক্ত করতে যাবে, যাতে অন্য রেডিস ব্যবহার করা পদক্ষেপে ঝগড়া না হয়।
 
-## অন্য ক্যাশ কম্পোনেন্ট ব্যবহার
-[ThinkCache](https://github.com/top-think/think-cache) কম্পোনেন্ট ব্যবহারের জন্য দেখুন [অন্যান্য ডেটাবেস](others.md#ThinkCache)
+## অন্যান্য ক্যাশ কম্পোনেন্ট ব্যবহার
+[ThinkCache](https://github.com/top-think/think-cache) কম্পোনেন্ট ব্যবহারের জন্য দেখুন [অন্যান্য ডাটাবেস](others.md#ThinkCache)

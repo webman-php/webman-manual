@@ -1,49 +1,43 @@
-# การบีบอัดด้วย phar
+# การแพ็ค phar
 
-phar เป็นไฟล์บีบอัดใน PHP ที่คล้ายกับ JAR คุณสามารถใช้ phar เพื่อบีบอัดโปรเจ็กต์ webman ของคุณเป็นไฟล์ phar เดียวเพื่อความสะดวกในการติดตั้ง
+phar เป็นไฟล์บีบอัดใน PHP ที่คล้ายกับ JAR คุณสามารถใช้ phar เพื่อแพ็คเว็บมันโปรเจคของคุณเป็นไฟล์ phar เดียวเพื่อง่ายต่อการใช้งาน
 
-**ขอขอบคุณ [fuzqing](https://github.com/fuzqing) สำหรับการ PR ครับ.**
+**ขอขอบคุณ [fuzqing](https://github.com/fuzqing) สำหรับการ PR นี้**
 
 > **โปรดทราบ**
-> คุณต้องปิดการตั้งค่า phar ใน `php.ini` โดยตั้งค่า `phar.readonly = 0`
+> ต้องปิดการตั้งค่า phar ใน `php.ini` โดยตั้งค่า `phar.readonly = 0`
 
 ## การติดตั้งเครื่องมือคำสั่ง
 `composer require webman/console`
 
 ## การตั้งค่า
-เปิดไฟล์ `config/plugin/webman/console/app.php` และตั้งค่า `'exclude_pattern'   => '#^(?!.*(composer.json|/.github/|/.idea/|/.git/|/.setting/|/runtime/|/vendor-bin/|/build/|vendor/webman/admin))(.*)$#'` เพื่อยกเว้นไดเร็กทอรีและไฟล์ที่ไม่จำเป็นออกจากการบีบอัด เพื่อลดขนาดของไฟล์ที่บีบอัด
+เปิดไฟล์ `config/plugin/webman/console/app.php` และตั้งค่า `'exclude_pattern'   => '#^(?!.*(composer.json|/.github/|/.idea/|/.git/|/.setting/|/runtime/|/vendor-bin/|/build/|vendor/webman/admin))(.*)$#'` เพื่อไม่รวมไดเรคทอรี่และไฟล์ที่ไม่จำเป็นเข้าในการแพ็ค เพื่อป้องกันไฟล์ phar ที่ใหญ่เกินไป
 
-## การบีบอัด
-ในไดเร็กทอรีหลักของโปรเจ็กต์ webman ให้รันคำสั่ง `php webman phar:pack`
-จะสร้างไฟล์ `webman.phar` ที่ไดเร็กทอรี build
+## การแพ็ค
+ในโฟลเดอร์หลักของเว็บมัน ให้รันคำสั่ง `php webman phar:pack` จะสร้างไฟล์ `webman.phar` ในโฟลเดอร์ build
 
-> การตั้งค่าที่เกี่ยวข้องกับการบีบอัดอยู่ในไฟล์ `config/plugin/webman/console/app.php`
+> การตั้งค่าการแพ็คอยู่ใน `config/plugin/webman/console/app.php`
 
-## คำสั่งเริ่มต้นและหยุด
-**เริ่มต้น**
+## คำสั่งเริ่มระงับ
+**เริ่ม**
 `php webman.phar start` หรือ `php webman.phar start -d`
 
 **หยุด**
 `php webman.phar stop`
 
-**ตรวจสอบสถานะ**
+**ดูสถานะ**
 `php webman.phar status`
 
-**ตรวจสอบสถานะการเชื่อมต่อ**
+**ดูสถานะการเชื่อมต่อ**
 `php webman.phar connections`
 
 **รีสตาร์ท**
 `php webman.phar restart` หรือ `php webman.phar restart -d`
 
 ## คำอธิบาย
-* เมื่อเรียกใช้ webman.phar จะสร้างไดเร็กทอรี runtime ในตำแหน่งที่ webman.phar อยู่ เพื่อเก็บไฟล์ล็อกและไฟล์ชั่วคราว
-
-* หากโปรเจ็กต์ของคุณใช้ไฟล์ .env คุณต้องตั้ง .env ไว้ในตำแหน่งที่ webman.phar อยู่
-
-* หากงานของคุณต้องการอัปโหลดไฟล์ไปยังไดเร็กทอรี public คุณต้องตั้งค่า public path ให้แยกไว้ในตำแหน่งที่ webman.phar อยู่ ในที่นี้คุณต้องตั้งค่า `config/app.php` ดังนี้
-```
-'public_path' => base_path(false) . DIRECTORY_SEPARATOR . 'public',
-```
-งานสามารถใช้ฟังก์ชันช่วยเหลือ `public_path()` เพื่อหาตำแหน่งที่ตั้งของไดเร็กทอรี public จริง
-
-* webman.phar ไม่สนับสนุนการเรียกใช้กระบวนการที่กำหนดเองใน Windows
+* เมื่อเรียกใช้ webman.phar จะสร้างโฟลเดอร์ runtime ในโฟลเดอร์ที่มี webman.phar เพื่อทำเก็บไฟล์ล็อกและไฟล์ชั่วคราวอื่น ๆ
+* หากโปรเจคของคุณมีไฟล์ .env คุณต้องวางไฟล์ .env ไว้ในโฟลเดอร์ที่มี webman.phar
+* หากธุรกิจของคุณต้องการที่จะอัพโหลดไฟล์ไปยังไดเร็คทอรี่ public คุณต้องทำการแยกไดเรคทอรี่ public และวางไปในโฟลเดอร์ที่มี webman.phar โดยนี้จะต้องตั้งค่า `config/app.php`
+```'public_path' => base_path(false) . DIRECTORY_SEPARATOR . 'public',```
+เพื่อให้ธุรกิจสามารถใช้ฟังก์ชันช่วยเหลือ `public_path()` เพื่อหาตำแหน่งจริงของไดเรคทอรี่ public
+* webman.phar ไม่รองรับการเปิดเซิร์ฟเวอร์ขณะที่ใช้ประสิทธิภาพที่กำหนดเองใน Windows

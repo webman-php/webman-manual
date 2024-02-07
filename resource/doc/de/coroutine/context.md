@@ -1,13 +1,15 @@
-Die Klasse `support\Context` dient zur Speicherung von Anfragedaten, die automatisch gelöscht werden, wenn die Anfrage abgeschlossen ist. Das bedeutet, die Lebensdauer der Kontextdaten entspricht der Lebensdauer der Anfrage. `support\Context` unterstützt die Fiber-, Swoole- und Swow-Kooperationsumgebung.
+# Kontext
 
-Weitere Informationen finden Sie unter [webman协程](./fiber.md).
+Die Klasse `support\Context` wird verwendet, um die Daten des Anfragekontexts zu speichern. Wenn die Anfrage abgeschlossen ist, werden die entsprechenden Kontextdaten automatisch gelöscht. Das bedeutet, dass die Lebensdauer der Kontextdaten der Lebensdauer der Anfrage folgt. `support\Context` unterstützt die Fiber-, Swoole- und Swow-Koexistenzumgebung.
 
-# Schnittstelle
-Der Kontext bietet folgende Schnittstellen
+Weitere Informationen finden Sie unter [webman-Fiber](./fiber.md).
 
-## Festlegung von Kontextdaten
+# Schnittstellen
+Der Kontext bietet die folgenden Schnittstellen.
+
+## Setzen von Kontextdaten
 ```php
-Context::set(string $name, $mixed $value);
+Context::set(string $name, mixed $value);
 ```
 
 ## Abrufen von Kontextdaten
@@ -21,7 +23,7 @@ Context::delete(string $name);
 ```
 
 > **Hinweis**
-> Das Framework ruft automatisch die Schnittstelle Context::destroy() auf, um die Kontextdaten nach Abschluss der Anfrage zu zerstören. Der Geschäftsbetrieb darf Context::destroy() nicht manuell aufrufen.
+> Das Framework ruft automatisch die Schnittstelle Context::destroy() auf, um die Kontextdaten nach Abschluss der Anfrage zu zerstören. Die Anwendung sollte nicht manuell Context::destroy() aufrufen.
 
 # Beispiel
 ```php
@@ -42,5 +44,5 @@ class TestController
 }
 ```
 
-# Hinweis
-**Bei Verwendung von Kooperation** sollten **anfragebezogene Statusdaten** nicht in globalen oder statischen Variablen gespeichert werden, da dies zu einer Verunreinigung globaler Daten führen kann. Die richtige Verwendung besteht darin, sie mit Context zu speichern und abzurufen.
+# Achtung
+Beim **Verwenden von Koexistenz** dürfen keine **anfragebezogenen Statusdaten** in globalen oder statischen Variablen gespeichert werden, da dies zu einer Verunreinigung globaler Daten führen kann. Die korrekte Verwendung ist, sie mit dem Kontext zu speichern und abzurufen.

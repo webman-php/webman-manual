@@ -1,17 +1,15 @@
-# Captcha İlgili Bileşenler
+# CAPTCHA İlgili Bileşenler
 
 
 ## webman/captcha
-Proje bağlantısı: https://github.com/webman-php/captcha
+Proje bağlantısı https://github.com/webman-php/captcha
 
 ### Kurulum
-```
-composer require webman/captcha
-```
+```composer require webman/captcha```
 
 ### Kullanım
 
-**`app/controller/LoginController.php` dosyası oluşturun.**
+**Dosya oluştur ```app/controller/LoginController.php```**
 
 ```php
 <?php
@@ -31,47 +29,46 @@ class LoginController
     }
     
     /**
-     * Captcha görüntüsünü çıkar
+     * CAPTCHA görüntüsü çıkart
      */
     public function captcha(Request $request)
     {
-        // CaptchaBuilder sınıfını başlat
+        // CAPTCHA oluşturucuyu başlat
         $builder = new CaptchaBuilder;
-        // Captcha oluştur
+        // CAPTCHA oluştur
         $builder->build();
-        // Captcha değerini oturuma depolayın
+        // CAPTCHA değerini oturuma kaydet
         $request->session()->set('captcha', strtolower($builder->getPhrase()));
-        // Captcha görüntüsünün ikili verilerini al
+        // CAPTCHA görüntüsünün ikili verilerini al
         $img_content = $builder->get();
-        // Captcha ikili verilerini çıkar
+        // CAPTCHA ikili verilerini çıkart
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
     }
 
     /**
-     * Captcha kontrolü
+     * CAPTCHA'yı kontrol et
      */
     public function check(Request $request)
     {
-        // post isteğinden captcha alanını al
+        // POST isteğindeki captcha alanını al
         $captcha = $request->post('captcha');
-        // Oturumdaki captcha değeri ile karşılaştır
+        // Oturumdaki captcha değeriyle karşılaştır
         if (strtolower($captcha) !== $request->session()->get('captcha')) {
-            return json(['code' => 400, 'msg' => 'Girilen captcha doğru değil']);
+            return json(['code' => 400, 'msg' => 'Girilen CAPTCHA doğru değil']);
         }
-        return json(['code' => 0, 'msg' => 'ok']);
+        return json(['code' => 0, 'msg' => 'tamam']);
     }
-
 }
 ```
 
-**`app/view/login/index.html` dosyası oluşturun.**
+**Şablon dosyası oluştur `app/view/login/index.html`**
 
 ```html
 <!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Captcha Test</title>  
+    <title>CAPTCHA Test</title>  
 </head>
 <body>
     <form method="post" action="/login/check">
@@ -83,33 +80,33 @@ class LoginController
 </html>
 ```
 
-`http://127.0.0.1:8787/login` adresine gidildiğinde, sayfa aşağıdaki gibi görünecektir:
+`http://127.0.0.1:8787/login` adresine girildiğinde, sayfa aşağıdaki gibi görünecektir:
   ![](../../assets/img/captcha.png)
 
-### Yaygın Parametre Ayarları
+### Sık Kullanılan Parametre Ayarları
 ```php
     /**
-     * Captcha görüntüsünü çıkar
+     * CAPTCHA görüntüsü çıkart
      */
     public function captcha(Request $request)
     {
-        // CaptchaBuilder sınıfını başlat
+        // CAPTCHA oluşturucuyu başlat
         $builder = new CaptchaBuilder;
-        // Captcha uzunluğu
+        // CAPTCHA uzunluğu
         $length = 4;
         // Hangi karakterleri içersin
         $chars = '0123456789abcefghijklmnopqrstuvwxyz';
         $builder = new PhraseBuilder($length, $chars);
         $captcha = new CaptchaBuilder(null, $builder);
-        // Captcha oluştur
+        // CAPTCHA oluştur
         $builder->build();
-        // Captcha değerini oturuma depolayın
+        // CAPTCHA değerini oturuma kaydet
         $request->session()->set('captcha', strtolower($builder->getPhrase()));
-        // Captcha görüntüsünün ikili verilerini al
+        // CAPTCHA görüntüsünün ikili verilerini al
         $img_content = $builder->get();
-        // Captcha ikili verilerini çıkar
+        // CAPTCHA ikili verilerini çıkart
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
     }
 ```
 
-Daha fazla API ve parametre için https://github.com/webman-php/captcha adresine bakın.
+Daha fazla API ve parametre için https://github.com/webman-php/captcha adresine bakabilirsiniz.

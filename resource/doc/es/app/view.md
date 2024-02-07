@@ -1,4 +1,4 @@
 ## Vistas
 
-El archivo de configuración de la vista del complemento de la aplicación se encuentra en `plugin/{identificación del complemento}/config/view.php`,
-El uso de vistas en la aplicación del complemento es similar a la experiencia de desarrollo de proyectos webman normales. Consulte [Vistas](../view.md) para obtener más información.
+El archivo de configuración de vistas del complemento de la aplicación se encuentra en `plugin/{identificador_del_complemento}/config/view.php`. 
+El uso de vistas en los complementos de la aplicación es similar a la experiencia de desarrollo de proyectos webman normales. Consulta [Vistas](../view.md) para más información.

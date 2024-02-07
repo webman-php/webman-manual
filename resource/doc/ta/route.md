@@ -1,18 +1,17 @@
-# ரூட்டிங்கு
+## வழிமாற்றுப்பு
+## இயல்புநிலை வழிமாற்று கோப்பைக்கு
+வழிமாற்றின் இயல்புநிலை விதிகள் webman-ஐ அமைக்கும்: `http://127.0.0.1:8787/{நிருபவகம்}/{செயல்பாடு}`.
 
-## இயல்பான ரூட் விதி
+இயல்புநிலையான நிருபகம் `app\controller\IndexController` ஆகும், இயல்புநிலையான செயல்பாடு `இந்தக் கூட்டுநிர்வாகம்` ஆகும்.
 
-webman-ன் இயல்பான ரூட் விதி `http://127.0.0.1:8787/{கட்டுப்பாட்டியல்}/{செயல்}` ஆகும்.
+உதாரணமாக, பார்க்க:
 
-இயல்பான கட்டுப்பாட்டியல் `app\controller\IndexController` ஆகும், முன்புற செயல் `index` ஆகும்.
+- `http://127.0.0.1:8787` இனைப் பார்க்க`app\controller\IndexController` வகையின் `index` செயல்முறை.
+- `http://127.0.0.1:8787/foo` கொண்டு பார்க்க`app\controller\FooController` வகையின் `index` செயல்முறை.
+- `http://127.0.0.1:8787/foo/test` கொண்டு பார்க்க`app\controller\FooController` வகையின் `test` செயல்முறை.
+- `http://127.0.0.1:8787/admin/foo/test` கொண்டு பார்க்க`app\admin\controller\FooController` வகையின் `test` செயல்முறை (பல பயன்பாட்டன்மைகளுக்கு முன் காண்பி).
 
-உதாரணமாக:
-- `http://127.0.0.1:8787` உடன் இயல்பான முன்புற செயல் `app\controller\IndexController` வகையின் `index` செயலை இயல்பானமாக அணுப்புகிறது
-- `http://127.0.0.1:8787/foo` உடன் இயல்பான முன்புற செயல் `app\controller\FooController` வகையின் `index` செயலை இயல்பானமாக அணுப்புகிறது
-- `http://127.0.0.1:8787/foo/test` உடன் இயல்பான முன்புற செயல் `app\controller\FooController` வகையின் `test` செயலை இயல்பானமாக அணுப்புகிறது
-- `http://127.0.0.1:8787/admin/foo/test` உடன் இயல்பான முன்புற செயல் `app\admin\controller\FooController` வகையின் `test` செயலை இயல்பானமாக அணுப்புகிறது (காண்பிக்க [பல விண்டோ](multiapp.md))
-
-1.4 மூலம் வெளிஆகும் இனித இயல்பான ரூட் விதி ஆனது, உதாரணமாக
+நிகழ்ச்சியின் மேல் webman 1.4 இல் இன்னும் பெருகுநினைவத்தை ஆதரிக்கின்றது, உதாரணமாக
 ```php
 app
 ├── admin
@@ -29,122 +28,115 @@ app
             └── IndexController.php
 ```
 
-பெறுவீர்கள் உங்கள் விண்டோ வழிவகுக்க வின்முகமாக கொள்ளலாம், `config/route.php` கோப்பை மாற்ற வேண்டும்.
+ஒரு கோரிக்கை மாற்றப்பட விரும்பினால், கட்டமைப்புக்கான கோப்பு `config/route.php` ஐ மாற்றுக. 
 
-இயல்புநிலை ரூட்-ஐ மும்படி மூலம் நிந்தநர் பதிவாக்க விரும்பாதீர்கள் `config/route.php` கோப்பிற்கு கீழேயுள்ள உள்ளி மூலமையாக இணையவும்:
+இயல்புநிலை வழிமாற்றை மூட, `config/route.php` கோப்பின் கடைசி வரியில் கீழ்க்கண்டவாறு அமைக்கவும்:
 ```php
 Route::disableDefaultRoute();
 ```
 
-## நிரப்தவதை ரூட்
-`config/route.php` கோப்பில் கீழேயுள்ள ரூட் குறிக்கோள் சேர்க்கவும்
+## கூட்டுமிக்க வழிமாற்று
+`config/route.php` கோப்பில் கீழ்க்கண்ட வழிமாற்று குறிக்கை சேர்க்கவும்:
 ```php
-Route::any('/test', function ($request) {
-    return response('test');
+Route::any('/test', function ($கோரியுள்ளவை) {
+    return response('சோதனை');
 });
 
-```
-> **குறிக்கோள்**
-> கூடவே எந்த ஒரு கட்டுப்பாட்டியும்-க்குள் உள்நோக், ஆனால் `$request->app` `$request->controller` `$request->action` முழுமையாக கலப்பட எதுவுமில்லை.
+``` 
+> **குறிப்பு**
+> வையிடப்படும் பெருமானம், ஒரு நிருவினருக்குத் தொடர்புடைய எந்த நிர்வாகாசிரியமும் அல்லது செய்யும் செயல்பாட்டினின்றும் பிரிவுகள் அல்லாததுமாகும் `$கோரியுள்ளவை->app` `$கோரியுள்ளவை->controller` `$கோரியுள்ளவை->action` அனைத்தையும் கொண்டிருக்காது.
 
-`http://127.0.0.1:8787/test` பின்னர், `test` கொஞ்சம் பின்னரில் திருப்பும்.
+`http://127.0.0.1:8787/test` அன்று, `சோதனை` சரமாக பின்கிறப்பிரதி செய்யப்படும்.
 
-> **குறிக்கோள்**
-> ரூட் பாதை உள்ளி உடன்பாடு, `/` உள்ளி ஆரம்பிப்பது வேலைவந்தது
+> **குறிப்பு**
+> வழிமாற்ற பாதைக்குத் தவிர மூச்சுவடங்கள் `/` மூலத்துக்கு தொடங்க வேண்டும், உதாரணமாக
+
 ```php
-// தவறான பயன்பாடு
-Route::any('test', function ($request) {
-    return response('test');
+// தவிர்க்கப்பட்ட முறை
+Route::any('test', function ($கோரியுள்ளவை) {
+    return response('சோதனை');
 });
 
-// சரியான பயன்பாடு
-Route::any('/test', function ($request) {
-    return response('test');
+// சரியான முறை
+Route::any('/test', function ($கோரியுள்ளவை) {
+    return response('சோதனை');
 });
 ```
-
-
-## வரைபு வாழ்ந்து
-`config/route.php` கோப்பில் கீழேயுள்ள ரூட் குறிக்கோளை சேர்க்கவும்
+## கிளாஸ் வழி
+`config/route.php`இல் கீழே குறுகிய வழியைச் சேர்க்கவும்
 ```php
 Route::any('/testclass', [app\controller\IndexController::class, 'test']);
 ```
-`http://127.0.0.1:8787/testclass` பின்னர், `app\controller\IndexController` வகையின் `test` செயல் பின்னரில் மட்டெல் வெளித்தலங்கள் திருப்பும்.
+`http://127.0.0.1:8787/testclass` ஐப் பார்க்கும்போது, `app\controller\IndexController` வர்க்கப்பட்ட கிளாஸின் `test` முறையைத் திருப்பும்.
 
 
-## ரூட் பகுதிகள்
-கூடும், ரூட் இலக்குகள் உள்ளியல், `{வினை}` மூலம் பொருயும், பொருய முடிவுகள் கூடுதல் முடியாக,  உதாரணமாக:
+## வழிபாட்டு அளவுகள்
+வழியில் மாற்றங்கள் உள்ளால், `{விருப்பம்}` உபயோகிக்கப்படும், பொருந்தும் முடிவுகள் அவ்வப்பெட்டியில் பகுப்பாய்வுக்கு அனுப்பப்படும் (இரண்டாவது ஆர்க்கமுகம் முதல் மூன்றாவது ஆர்க்கமுகம் தொடங்கி ஒன்றும் பரிமாற்றப்படும்)அத்துடன், உதாரணமாக:
 ```php
-// பொருய்யும் /user/123 /user/abc
+// /user/123 /user/abc ஐ பொருந்தும்
 Route::any('/user/{id}', [app\controller\UserController::class, 'get']);
 ```
 ```php
-பெயர்வு app\controller;
+இக்குறிப்பில்;
 class UserController
 {
     public function get($request, $id)
     {
-        return response('பரிமள் பெறும் தொகை'.$id);
+        return response('அளவு' . $id . ' ஐ பெற்றுள்ளது');
     }
 }
 ```
 
-கூடும் என்று உதாரணங்கள்:
+மேலும் உதாரணங்கள்:
 ```php
-// பொருயில் இதை கூடும் /user/123, பொருய்யல் இதை கூடும் /user/abc
+// 123 /user/123 ஐ பொருத்தும், /user/abc ஐ பொருத்தாமல் இருக்காது
 Route::any('/user/{id:\d+}', function ($request, $id) {
     return response($id);
 });
 
-// கூடும் /user/foobar, பொருய்யும் /user/foo/bar
+// foobar /user/foobar ஐ பொருத்தும், /user/foo/bar ஐ பொருத்தாமல் இருக்காது
 Route::any('/user/{name}', function ($request, $name) {
    return response($name);
 });
 
-// கூடும் /user /user/123 இமாம் /user/abc
+// /user /user/123 மற்றும் /user/abc ஐ பொருத்தும்
 Route::any('/user[/{name}]', function ($request, $name = null) {
-   return response($name ?? 'tom');
+   return response($name ?? 'தம்');
 });
 
-// அனைத்து விரிவுகளுக்கு மூலம் முதலாக அனைவருக்கு பொருயும்
+// அனைத்து options கேட்டங்களுமும் பொருத்தப்படும்
 Route::options('[{path:.+}]', function () {
     return response('');
 });
 ```
-
-## ரூட் குடுமா
-
-பரிபாலநகூடுதலைக் கொள்கிறீர்கள் ரூட் குடுமாக மற்றும் உதாரணங்களுக்கு:
+வேலைநாட்கள் பலப்பட்டுள்ள அல்லதுப் பொதுவான முனைவுகளை ஒப்படைக்கும்போது, நாங்கள் முறைவாக முறைவேற்கப்படுத்த முடியும் என்பது பெற வேண்டும். உதாரணத்தால்:
 
 ```php
 Route::group('/blog', function () {
-   Route::any('/create', function ($request) {return response('உருவம்');});
-   Route::any('/edit', function ($request) {return response('செய்ய');});
-   Route::any('/view/{id}', function ($request, $id) {return response("$ காண்பி");});
+   Route::any('/create', function ($request) {return response('create');});
+   Route::any('/edit', function ($request) {return response('edit');});
+   Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
 });
 ```
-ஒரேபக்க ஆனது
+மாற்றுப்பட்டது
 ```php
-Route::any('/blog/create', function ($request) {return response('உருவம்');});
-Route::any('/blog/edit', function ($request) {return response('செய்ய');});
-Route::any('/blog/view/{id}', function ($request, $id) {return response("$ காண்பி");});
+Route::any('/blog/create', function ($request) {return response('create');});
+Route::any('/blog/edit', function ($request) {return response('edit');});
+Route::any('/blog/view/{id}', function ($request, $id) {return response("view $id");});
 ```
 
-group அடைவு பயன்படுத்தி
+குரூப் சேர்த்தல்
+
 ```php
 Route::group('/blog', function () {
    Route::group('/v1', function () {
-      Route::any('/create', function ($request) {return response('உருவம்');});
-      Route::any('/edit', function ($request) {return response('செய்ய');});
-      Route::any('/view/{id}', function ($request, $id) {return response("$ காண்பி");});
+      Route::any('/create', function ($request) {return response('create');});
+      Route::any('/edit', function ($request) {return response('edit');});
+      Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
    });  
 });
 ```
-
-## ரூட் மத்தியாற்றி
-
-நீங்கள் ஒரு அல்லது ஒரு குடுமாக ரூட் மத்தியாற்றி அமைக்க விரும்பும்.
-உதாரணமாக:
+மேடையர் ஒன்றையோ மேடையர் குழுவையோ ஏற்றுக்கொள்ள முடியும். உதாரணமாகவே:
 ```php
 Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->middleware([
     app\middleware\MiddlewareA::class,
@@ -152,25 +144,26 @@ Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->mi
 ]);
 
 Route::group('/blog', function () {
-   Route::any('/create', function () {return response('உருவம்');});
-   Route::any('/edit', function () {return response('செய்ய');});
-   Route::any('/view/{id}', function ($request, $id) {response("$ காண்பி");});
+   Route::any('/create', function () {return response('create');});
+   Route::any('/edit', function () {return response('edit');});
+   Route::any('/view/{id}', function ($request, $id) {response("view $id");});
 })->middleware([
     app\middleware\MiddlewareA::class,
     app\middleware\MiddlewareB::class,
 ]);
 ```
 
-> **குறிக்கோள்**
-> 1.5.6 இன் போது `->middleware()` ரூட் ஆமாக ரூட் group பிரிவுக்கு பிறகு, தற்போது ரூட் மூலம் கொள்கப்படும் நிலையிலும், 
+> குறிக்கோள்:
+> webman-framework <= 1.5.6 இல் `->middleware()` குறித்து இணையம் மேடைகள் groupக்கு அநுப்பபபட்டுள்ளது என்பது என்றாலும், 
+> தற்போது webman-framework >= 1.5.7 இல் இந்த பயன்பாடு செல்லுபடியாகும்.
 
 ```php
-# தவறானபயன்பாடு (1.5.7 இன் பின் இந்த அவர்த்தம் நேர்கார்விலும் உள்ளியல் கிடைக்கும்)
+# பிழை மாதிரி உபயோகம் (webman-framework >= 1.5.7 இல் இந்த பயன்பாடு செல்லும்)
 Route::group('/blog', function () {
    Route::group('/v1', function () {
-      Route::any('/create', function ($request) {return response('உருவம்');});
-      Route::any('/edit', function ($request) {return response('செய்ய');});
-      Route::any('/view/{id}', function ($request, $id) {return response("$ காண்பி");});
+      Route::any('/create', function ($request) {return response('create');});
+      Route::any('/edit', function ($request) {return response('edit');});
+      Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
    });  
 })->middleware([
     app\middleware\MiddlewareA::class,
@@ -179,69 +172,107 @@ Route::group('/blog', function () {
 ```
 
 ```php
-# சரியானபயன்பாடு
+# வழங்கும் உரையாடல்
 Route::group('/blog', function () {
    Route::group('/v1', function () {
-      Route::any('/create', function ($request) {return response('உருவம்');});
-      Route::any('/edit', function ($request) {return response('செய்ய');});
-      Route::any('/view/{id}', function ($request, $id) {return response("$ காண்பி");});
+      Route::any('/create', function ($request) {return response('create');});
+      Route::any('/edit', function ($request) {return response('edit');});
+      Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
    })->middleware([
         app\middleware\MiddlewareA::class,
         app\middleware\MiddlewareB::class,
     ]);  
 });
 ```
+மூலப் பாதையான வழிமுறை
 
-## வளங்குணம் வசுஷிடு ரூட்
 ```php
 Route::resource('/test', app\controller\IndexController::class);
 
-//குறிக்கப்பட்ட வளங்குணம் ரூட்
+//மேலதிக வழிமுறை ஒட்டு
 Route::resource('/test', app\controller\IndexController::class, ['index','create']);
 
-//குறியாந்த வளங்குணம் ரூட்
-// எப்படி பெற<Vector/notify> ஒன்றும் any வழியில் /test/notifyஅல்லது /test/notify/{id} ரூ
-# வழிச்சோதனை இணைப்புகள்
+//வருகாமை வழிமுறை
+// என்னும் வழிமுறைக்கான "/test/notify" என்பது "any" வழிமுறை /test/notify அல்லது /test/notify/{id} அதிகாரப் பெயர் test.notify
+Route::resource('/test', app\controller\IndexController::class, ['index','create','notify']);
+```
+| வருகை | URI | செயல்முறை | வழிப்பெயர் |
+|-----|---------------------|----------|------------------|
+| GET | /test | index | test.index |
+| GET | /test/create | create | test.create |
+| POST | /test | store | test.store |
+| GET | /test/{id} | show | test.show |
+| GET | /test/{id}/edit | edit | test.edit |
+| PUT | /test/{id} | update | test.update |
+| DELETE | /test/{id} | destroy | test.destroy |
+| PUT | /test/{id}/recovery | recovery | test.recovery |
+
+
+## தள URL உருவாக்கம்
+> **குறிப்பு**
+> தற்பாலும் சுவரிப்பக்க உருவாக்கத்திற்கு ஏதாவது உடனடியாக route உருவாக்க கொண்டேன் ஐவர் அளிக்கலாம் அதை உணரமுடியும்
+
+உதாரணமாக ரூட்டு:
+```php
+Route::any('/blog/{id}', [app\controller\BlogController::class, 'view'])->name('blog.view');
+```
+நாம் மேலும் உரையாட தொடர்புடைய மற்றும் செல்ல முடியும் முறைகளுடன் இந்த மூலப் பாதையின் URL ஐ உருவாக்குவதற்கு பயன்படுத்தலாம்.
+```php
+route('blog.view', ['id' => 100]); //முடிவு /blog/100 ஆகும்
+```
+
+விளைத்திரவில் இந்த முறை பயன்பாடு செய்யும் போது, வழிமுறையின் விதிகள் எவ்வாறு மாறும் அவ்வாறு, URL தானாக உருவாக்கப்படும் என முடிவு பெற சிலுவையில் உள்ள பாத்திரங்களைக் கட்டுப்படுத்துகின்றன.
+## ரூட் தகவலைப் பெறுக
+> **குறிப்பு**
+> webman-framework >= 1.3.2 பேரப்புவைக்கப்படுகிறது
+
+மூலம்`$request->route` மாறியைப் பயன்படுத்தி நடவடிக்கை ரூட்டின் தகவல்களைப் பெற முடியும். உதாரணமாக,
 
 ```php
-// $uri க்கான எந்த மெதாடு கோரிக்கைகளையும் அமைப்பது
+$route = $request->route; // ஒரு ஒருங்கினை $route = request()->route;
+if ($route) {
+    var_export($route->getPath());
+    var_export($route->getMethods());
+    var_export($route->getName());
+    var_export($route->getMiddleware());
+    var_export($route->getCallback());
+    var_export($route->param()); // இந்த செயல்பாட்டு webman-framework >= 1.3.16 தேவை
+}
+```
+
+> **குறிப்பு**
+> தற்போது ரூட் config/route.php படிப்பில் அமைக்கப்பட்ட யாவும் ஒரு ஒரு வழி கிடையாது என்பதும் உள்ளது, ஒரு உருவாக்கப்பட்ட வழி முனை `$request->route`என்பதற்கு null என்று குறிக்கப்படும்
+
+
+## 404 காணப்படாதைகளை செயலாக்குக
+ரூட் காணப்படாதைகளைப் பெற்றபோது, இயல்புநிலையாக 404 நிலைகொண்டிருக்கிறது மற்றும் `public/404.html` கோப்பின் உள்ளடக்கத்தை வெளியிடுகிறது.
+
+தட்டச்சு ரூடு`Route::fallback($callback)` வழியாக அழுத்தப்படலாம். உதாரணமாக, ரூட் காணப்படாதையிலும் மீள்பாட்டிற்கு முன் முடிவேற்றப்படுகின்றதுஅதிக பொருள்.
+```php
+Route::fallback(function(){
+    return redirect('/');
+});
+```
+மேலும், ரூட்டு எதுவும் இல்லையானால் ஒரு json தரவைப் பின்பற்றுவது மிகவும் பயனுள்ளது.
+```php
+Route::fallback(function(){
+    return json(['code' => 404, 'msg' => '404 not found']);
+});
+```
+
+தொடர்பான இணைப்புகள் [தனிப்பட்ட 404 500 பக்கங்கள்](others/custom-error-page.md)
+## வழிமுறை இடைவேள்
+```php
+// எடுத்துக்குள் இருப்பு புதுப்பிப்பு கொண்டு வழிமுறை அமைக்குக
 Route::any($uri, $callback);
-// $uri க்கான get கோரிக்கையை அமைக்குக
+// எடுத்துக்குள் GET கோரிக்கையாக வழிமுறை அமைக்குக
 Route::get($uri, $callback);
-// $uri க்கான முன்னேற்றை அமைக்குக
+// எடுத்துக்குள் தகவல் அனுப்பு உரைப்படுத்தல் கோரிக்கையாக வழிமுறை அமைக்குக
 Route::post($uri, $callback);
-// $uri க்கான put கோரிக்கையை அமைக்குக
+// எடுத்துக்குள் தகவல் மாற்று கோரிக்கையாக வழிமுறை அமைக்குக
 Route::put($uri, $callback);
-// $uri க்கான patch கோரிக்கையை அமைக்குக
+// எடுத்துக்குள் தகவல் மாற்ற் மாற்று கோரிக்கையாக வழிமுறை அமைக்குக
 Route::patch($uri, $callback);
-// $uri க்கான delete கோரிக்கையை அமைக்குக
+// எடுத்துக்குள் தகவல் நீக்கு கோரிக்கையாக வழிமுறை அமைக்குக
 Route::delete($uri, $callback);
-// $uri க்கான head கோரிக்கையை அமைக்குக
-Route::head($uri, $callback);
-// பல கோரிக்கை வகைகளுடன் சேர்த்து ஒரு இணைப்பை அமைக்க
-Route::add(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'], $uri, $callback);
-// படி வழிச்சோதனை
-Route::group($path, $callback);
-// வளங்கள் வழிச்சோதனை
-Route::resource($path, $callback, [$options]);
-// வழிச்சோதனை முடுக்கு
-Route::disableDefaultRoute($plugin = '');
-// பின்பற்று வழிச்சோதனை, இயல்புநிலை வழியை அமைக்க
-Route::fallback($callback, $plugin = '');
-```
-
-குறிப்பிட்ட uri க்கு (இயல்புநிலை வழிச்சோதனை உள்ளிட்டு, 404 பிழை புரட்சி செய்யும்).
-
-## பல போது வழிச்சோதனை உள்ளிட்ட கோப்புகள்
-ஒரு பல வழிச்சோதனை உள்ளிடும் போது, உதாரணம் [பல பயன்பாடு](multiapp.md) குழுக்களில் ஒவ்வொரு பயன்பாட்டிற்கும் தன்னுடைய வழிச்சோதனை உள்ளிட்டு, இவ்வாறு வெள外 வழிச்சோதனை கோப்புகளை `பொருத்து` வழக்கம் மூலம் ஏற்றுத் தொடங்கவும்.
-உ஦ாகமாக, `config/route.php` பயன்பாடில் இருந்து
-```php
-<?php
-
-// admin பயன்பாடு க்கான வழிச்சோதனை உள்ளிட்டு வைக்கின்றது
-require_once app_path('admin/config/route.php');
-// api பயன்பாடு க்கான வழிச்சோதனை உள்ளிட்டு வைக்கின்றது
-
-require_once app_path('api/config/route.php');
-
-```
+// எடு

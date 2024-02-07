@@ -1,14 +1,14 @@
-# Componente di programmazione delle attività cron
+# Componente di attività pianificata crontab
 
 ## workerman/crontab
 
 ### Descrizione
 
-`workerman/crontab` è simile a crontab di Linux, con la differenza che `workerman/crontab` supporta la pianificazione fino al secondo.
+`workerman/crontab` è simile a crontab di Linux, con la differenza che `workerman/crontab` supporta la pianificazione al secondo.
 
 Spiegazione del tempo:
 
-```
+```plaintext
 0   1   2   3   4   5
 |   |   |   |   |   |
 |   |   |   |   |   +------ giorno della settimana (0 - 6) (Domenica=0)
@@ -16,7 +16,7 @@ Spiegazione del tempo:
 |   |   |   +-------- giorno del mese (1 - 31)
 |   |   +---------- ora (0 - 23)
 |   +------------ minuto (0 - 59)
-+-------------- secondo (0-59)[Opzionale, se manca 0, il minimo granularità di tempo è il minuto]
++-------------- secondi (0-59) [opzionale, se manca il 0, la minima unità di tempo è il minuto]
 ```
 
 ### Indirizzo del progetto
@@ -31,7 +31,7 @@ composer require workerman/crontab
 
 ### Utilizzo
 
-**Passaggio 1: Creare il file del processo `process/Task.php`**
+**Passo 1: Creare un file di processo `process/Task.php`**
 
 ```php
 <?php
@@ -44,32 +44,32 @@ class Task
     public function onWorkerStart()
     {
     
-        // Eseguire ogni secondo
+        // Esegui ogni secondo
         new Crontab('*/1 * * * * *', function(){
             echo date('Y-m-d H:i:s')."\n";
         });
         
-        // Eseguire ogni 5 secondi
+        // Esegui ogni 5 secondi
         new Crontab('*/5 * * * * *', function(){
             echo date('Y-m-d H:i:s')."\n";
         });
         
-        // Eseguire ogni minuto
+        // Esegui ogni minuto
         new Crontab('0 */1 * * * *', function(){
             echo date('Y-m-d H:i:s')."\n";
         });
         
-        // Eseguire ogni 5 minuti
+        // Esegui ogni 5 minuti
         new Crontab('0 */5 * * * *', function(){
             echo date('Y-m-d H:i:s')."\n";
         });
         
-        // Eseguire al primo secondo di ogni minuto
+        // Esegui al primo secondo di ogni minuto
         new Crontab('1 * * * * *', function(){
             echo date('Y-m-d H:i:s')."\n";
         });
       
-        // Eseguire alle 7:50 di ogni giorno, nota che qui l'indicatore dei secondi è omesso
+        // Esegui alle 7:50 ogni giorno, si noti che qui è stato omesso il campo dei secondi
         new Crontab('50 7 * * *', function(){
             echo date('Y-m-d H:i:s')."\n";
         });
@@ -78,32 +78,33 @@ class Task
 }
 ```
 
-**Passaggio 2: Configurare il file del processo per avviarsi con webman**
+**Passo 2: Configurare il file di processo per avviarsi con webman**
 
 Apri il file di configurazione `config/process.php` e aggiungi la seguente configurazione
 
 ```php
 return [
-    ....altre configurazioni, omesse per brevità....
-  
+    ....altri configurazioni, qui omesse....
+
     'task'  => [
         'handler'  => process\Task::class
     ],
 ];
 ```
 
-**Passaggio 3: Riavviare webman**
+**Passo 3: Riavvia webman**
 
-> Nota: le attività pianificate non verranno eseguite immediatamente, inizieranno a essere eseguite solo nel minuto successivo.
+> Nota: le attività pianificate non verranno eseguite immediatamente, ma partiranno al minuto successivo.
 
-### Nota
-crontab non è asincrono, ad esempio se un processo di attività imposta due timer A e B, entrambi eseguono un'attività ogni secondo, ma se l'attività A richiede 10 secondi, allora B dovrà aspettare che A finisca prima di poter essere eseguita, causando un ritardo nell'esecuzione di B.
-Se il business è sensibile agli intervalli di tempo, è necessario eseguire le attività pianificate sensibili al tempo in un processo separato per evitare il loro impatto su altre attività pianificate. Ad esempio, nel file `config/process.php` effettuare la seguente configurazione
+### Spiegazione
+
+crontab non è asincrono, ad esempio se un processo di attività imposta due timer A e B, entrambi eseguiti ogni secondo, ma il compito A richiede 10 secondi, allora B dovrà aspettare che A venga completato prima di poter essere eseguito, causando un ritardo nell'esecuzione di B.
+Se il business è molto sensibile all'intervallo di tempo, è necessario eseguire le attività cronologicamente sensibili in un processo separato per evitare di essere influenzati da altre attività programmate. Ad esempio, nel file `config/process.php` fare la seguente configurazione
 
 ```php
 return [
-    ....altre configurazioni, omesse per brevità....
-  
+    ....altri configurazioni, qui omesse....
+
     'task1'  => [
         'handler'  => process\Task1::class
     ],
@@ -112,7 +113,8 @@ return [
     ],
 ];
 ```
+
 Mettere le attività pianificate sensibili al tempo in `process/Task1.php` e le altre attività pianificate in `process/Task2.php`
 
-### Altro
-Per ulteriori istruzioni sulla configurazione di `config/process.php`, fare riferimento a [Processi personalizzati](../process.md)
+### Ulteriori informazioni
+Per ulteriori informazioni sulla configurazione di `config/process.php`, consultare [Processi personalizzati](../process.md)

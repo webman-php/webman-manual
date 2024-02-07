@@ -1,31 +1,30 @@
-```php
-# ফাংশন নিষেধ চেক
+# ফাংশন নিষেধ চেক করুন
 
-এই স্ক্রিপ্টটি ব্যবহার করে চেক করুন যে কোনও নিষিদ্ধ ফাংশন আছে কি না। কমান্ড লাইনে রান করুন```curl -Ss https://www.workerman.net/webman/check | php```
+দিয়ে স্ক্রিপ্ট ব্যবহার করে নিষিদ্ধ ফাংশনের জন্য পরীক্ষা করুন। ```curl -Ss https://www.workerman.net/webman/check | php``` কমান্ড লাইন দিয়ে চালান।
 
-যদি কোনও ম্যাসেজ প্রদর্শিত হয়```Functions ফাংশনের_নাম has be disabled. Please check disable_functions in php.ini```, তাহলে বোঝায় যে webman অপরিবর্তিতভাবে ব্যবহার করতে নিষিদ্ধ ফাংশন নিয়ন্ত্রিত করতে হয়, php.ini ফাইলে নিষিদ্ধকরণ_ফাংশন বন্ধ করতে হবে।
-নিষিদ্ধকরণ বিপরীত করার জন্য নিম্নলিখিত পদক্ষেপ গ্রহণ করুন।
+যদি আপনি ফাংশন নাম "অন" বন্ধ করা হয়েছে বলে তাহলে এর মাধ্যমে বুঝা যাবে। পরিষেবাসমূহ ফাঙ্শনের নিষিদ্ধ করা হয়েছে, তাই webman প্রচুর ব্যবহার করতে সমস্যা হয়। এটি ঠিক করার জন্য php.ini থেকে নিষিদ্ধকরণ সরাতে হয়। নিষিদ্ধকরণ সরাতে নিম্নলিখিত পদ্ধতির মধ্যে যে কোনটি একটি নির্বাচন করুন।
 
-## পদক্ষেপ প্রথম
-'webman/console' ইনস্টল করুন
+## বিধান এক
+
+`webman/console` ইনস্টল করুন
 ```
 composer require webman/console ^v1.2.35
 ```
 
-কমান্ড এটি সাক্ষাৎ করুন
+কমান্ড ব্যবহার করুন
 ```
 php webman fix-disable-functions
 ```
 
-## পদক্ষেপ দ্বিতীয়
+## বিধান দুই
 
-স্ক্রিপ্ট চালান ```curl -Ss https://www.workerman.net/webman/fix-disable-functions | php``` যাতে নিষিদ্ধ বিপরীত হতে পারে।
+স্ক্রিপ্ট ব্যবহার করুন `curl -Ss https://www.workerman.net/webman/fix-disable-functions | php` নিষিদ্ধকরণ সরাতে।
 
-## পদক্ষেপ তৃতীয়
+## বিধান তিন
 
-চালান ```php --ini```, php cli এর php.ini ফাইল এর অবস্থান খুঁজুন
+`php --ini` চালান, php cli ফাইলের স্থান খুঁজুন
 
-php.ini খোলুন, 'disable_functions' খুঁজুন, নিম্নলিখিত ফাংশনগুলির কল বন্ধ করুন
+php.ini খুলুন, 'disable_functions' খুঁজুন, নিম্নলিখিত ফাংশনগুলি আপনি বাতিল করে দিন
 ```
 stream_socket_server
 stream_socket_client
@@ -49,5 +48,4 @@ proc_open
 proc_get_status
 proc_close
 shell_exec
-```
 ```

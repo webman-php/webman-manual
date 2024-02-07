@@ -2,7 +2,7 @@
 
 webman uses [symfony/cache](https://github.com/symfony/cache) as the default cache component.
 
-> Before using `symfony/cache`, make sure to install the redis extension for `php-cli`.
+> Before using `symfony/cache`, you must install the redis extension for `php-cli`.
 
 ## Installation
 **php 7.x**
@@ -14,10 +14,10 @@ composer require -W illuminate/redis ^8.2.0 symfony/cache ^5.2
 composer require -W illuminate/redis symfony/cache
 ```
 
-After installation, restart is required (reload is not effective).
+After installation, you need to restart (reload is invalid).
 
 ## Redis Configuration
-The redis configuration file is located at `config/redis.php`
+The redis configuration file is located at `config/redis.php`.
 ```php
 return [
     'default' => [
@@ -29,7 +29,7 @@ return [
 ];
 ```
 
-## Example
+## Examples
 ```php
 <?php
 namespace app\controller;
@@ -48,9 +48,9 @@ class UserController
 }
 ```
 
-> **Note**
-> It is recommended to add a prefix to the key to avoid conflicts with other businesses using redis.
+> **Note:**
+> It is recommended to add a prefix to the key to avoid conflicts with other businesses that use redis.
 
 ## Using Other Cache Components
 
-For the use of the [ThinkCache](https://github.com/top-think/think-cache) component, refer to [other databases](others.md#ThinkCache).
+For the use of the [ThinkCache](https://github.com/top-think/think-cache) component, please refer to [Other Databases](others.md#ThinkCache).

@@ -1,3 +1,3 @@
 # Eklenti Mağazası
 
-[Uygulama mağazasına girmek için buraya tıklayın](/apps)
+[Mağaza için buraya tıklayın](/apps)

@@ -1,18 +1,18 @@
 # 設定檔
 
-插件的設定和一般的 webman 專案一樣，不過插件的設定通常僅對當前插件有效，對主專案通常沒有影響。
-例如 `plugin.foo.app.controller_suffix` 的值僅影響插件的控制器後綴，對主專案沒有影響。
-例如 `plugin.foo.app.controller_reuse` 的值僅影響插件是否複用控制器，對主專案沒有影響。
-例如 `plugin.foo.middleware` 的值僅影響插件的中介軟體，對主專案沒有影響。
-例如 `plugin.foo.view` 的值僅影響插件所使用的視圖，對主專案沒有影響。
-例如 `plugin.foo.container` 的值僅影響插件所使用的容器，對主專案沒有影響。
-例如 `plugin.foo.exception` 的值僅影響插件的異常處理類，對主專案沒有影響。
+插件的設定和普通的webman專案一樣，但通常插件的設定只對當前插件有效，對主專案通常無影響。
+例如 `plugin.foo.app.controller_suffix` 的值只影響插件的控制器後綴，對主專案沒有影響。
+例如 `plugin.foo.app.controller_reuse` 的值只影響插件是否重用控制器，對主專案沒有影響。
+例如 `plugin.foo.middleware` 的值只影響插件的中間件，對主專案沒有影響。
+例如 `plugin.foo.view` 的值只影響插件使用的視圖，對主專案沒有影響。
+例如 `plugin.foo.container` 的值只影響插件使用的容器，對主專案沒有影響。
+例如 `plugin.foo.exception` 的值只影響插件的異常處理類，對主專案沒有影響。
 
-不過由於路由是全域的，因此插件配置的路由也會全域影響。
+但是因為路由是全域的，所以插件設定的路由也是影響全域的。
 
 ## 獲取設定
-獲取某個插件設定的方法是 `config('plugin.{插件}.{具體的設定}');`，比如獲取 `plugin/foo/config/app.php` 的所有設定的方法是 `config('plugin.foo.app')`
-同樣的，主專案或其他插件也可以用 `config('plugin.foo.xxx')` 來獲取 foo 插件的設定。
+取得某個插件設定的方式是 `config('plugin.{插件}.{具體的設定}');`，例如取得 `plugin/foo/config/app.php` 的所有設定方法為 `config('plugin.foo.app')`
+同樣地，主專案或其他插件都可以使用 `config('plugin.foo.xxx')` 來取得 foo 插件的設定。
 
 ## 不支援的設定
-應用插件不支援 server.php、session.php 設定，也不支援 `app.request_class`、`app.public_path`、`app.runtime_path` 設定。
+應用插件不支援 server.php、session.php的設定，也不支援 `app.request_class`、`app.public_path`、`app.runtime_path` 的設定。

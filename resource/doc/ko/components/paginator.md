@@ -1,4 +1,4 @@
-# 페이지네이션 컴포넌트
+# 페이징 구성 요소
 
 ## jasongrimes/php-paginator
 
@@ -14,7 +14,7 @@ composer require "jasongrimes/paginator:^1.0.3"
   
 ### 사용
 
-새로운 `app/controller/UserController.php` 파일 생성
+`app/controller/UserController.php` 파일을 만듭니다.
 ```php
 <?php
 namespace app\controller;
@@ -39,8 +39,8 @@ class UserController
     
 }
 ```
-**템플릿(php 원시)**
-새로운 템플릿 app/view/user/get.html 파일 생성
+**템플릿 (php 기본)**
+`app/view/user/get.html` 파일을 만듭니다.
 ```html
 <html>
 <head>
@@ -55,8 +55,9 @@ class UserController
 </html>
 ```
 
-**템플릿(twig)**
-새로운 템플릿 app/view/user/get.html 파일 생성
+
+**템플릿 (twig)**
+`app/view/user/get.html` 파일을 만듭니다.
 ```html
 <html>
 <head>
@@ -73,8 +74,9 @@ class UserController
 </html>
 ```
 
-**템플릿(blade)**
-새로운 템플릿 app/view/user/get.blade.php 파일 생성
+
+**템플릿 (blade)**
+`app/view/user/get.blade.php` 파일을 만듭니다.
 ```html
 <html>
 <head>
@@ -89,8 +91,8 @@ class UserController
 </html>
 ```
 
-**템플릿(thinkphp)**
-새로운 템플릿 app/view/user/get.blade.php 파일 생성
+**템플릿 (thinkphp)**
+`app/view/user/get.blade.php` 파일을 만듭니다.
 ```html
 <html>
 <head>
@@ -105,9 +107,10 @@ class UserController
 </html>
 ```
 
-예상 결과:
+아래는 결과입니다:
+
 ![](../../assets/img/paginator.png)
   
-### 추가 정보
+### 더 많은 내용
 
-https://github.com/jasongrimes/php-paginator 방문
+https://github.com/jasongrimes/php-paginator를 방문하세요.

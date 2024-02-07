@@ -1,10 +1,10 @@
 # MongoDB
 
-webman utilise par défaut [jenssegers/mongodb](https://github.com/jenssegers/laravel-mongodb) en tant que composant MongoDB, qui a été extrait du projet Laravel et utilisé de la même manière.
+webman utilise par défaut [jenssegers/mongodb](https://github.com/jenssegers/laravel-mongodb) comme composant MongoDB, qui a été extrait du projet Laravel et s'utilise de la même manière.
 
-Avant d'utiliser `jenssegers/mongodb`, vous devez d'abord installer l'extension MongoDB pour `php-cli`.
+Avant d'utiliser `jenssegers/mongodb`, vous devez d'abord installer l'extension mongodb pour `php-cli`.
 
-> Utilisez la commande `php -m | grep mongodb` pour vérifier si l'extension MongoDB est installée pour `php-cli`. Remarque : même si vous avez installé l'extension MongoDB pour `php-fpm`, cela ne signifie pas que vous pouvez l'utiliser pour `php-cli`, car `php-cli` et `php-fpm` sont des applications distinctes et peuvent utiliser des fichiers de configuration `php.ini` différents. Utilisez la commande `php --ini` pour vérifier quel fichier de configuration `php.ini` est utilisé par votre `php-cli`.
+> Utilisez la commande `php -m | grep mongodb` pour vérifier si l'extension mongodb est installée pour `php-cli`. Notez que même si vous avez installé l'extension mongodb pour `php-fpm`, cela ne signifie pas que vous pouvez l'utiliser pour `php-cli` car `php-cli` et `php-fpm` sont des applications différentes et peuvent utiliser des fichiers de configuration `php.ini` différents. Utilisez la commande `php --ini` pour voir quel fichier de configuration `php.ini` est utilisé par votre `php-cli`.
 
 ## Installation
 
@@ -20,7 +20,7 @@ composer require -W illuminate/database jenssegers/mongodb ^3.7.0
 Après l'installation, redémarrez (reload ne fonctionne pas).
 
 ## Configuration
-Ajoutez une connexion `mongodb` dans le fichier `config/database.php`, de la manière suivante :
+Ajoutez une connexion `mongodb` dans le fichier `config/database.php`, similaire à ce qui suit :
 ```php
 return [
 
@@ -28,7 +28,7 @@ return [
 
     'connections' => [
 
-         ...autres configurations ici...
+         ... autres configurations ici ...
 
         'mongodb' => [
             'driver'   => 'mongodb',
@@ -38,8 +38,8 @@ return [
             'username' => null,
             'password' => null,
             'options' => [
-                // ici vous pouvez passer plus de paramètres au gestionnaire du pilote Mongo
-                // consultez https://www.php.net/manual/en/mongodb-driver-manager.construct.php sous "Options de l'URI" pour une liste des paramètres complets que vous pouvez utiliser
+                // ici vous pouvez passer plus de paramètres au gestionnaire de pilote MongoDB
+                // voir https://www.php.net/manual/en/mongodb-driver-manager.construct.php sous "Uri Options" pour une liste complète des paramètres que vous pouvez utiliser
 
                 'appname' => 'homestead'
             ],

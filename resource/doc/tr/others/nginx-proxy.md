@@ -1,14 +1,14 @@
 # nginx proxy
-Webman doğrudan dış ağ erişimine ihtiyaç duyduğunda, webman'ın önüne bir nginx proxy eklemenizi öneririz, böylece aşağıdaki faydaları olur.
+webman dış ağ erişimini sağlamanız gerektiğinde, webman önüne bir nginx proxy eklemenizi öneririz, bunun birkaç avantajı vardır.
 
-- Statik kaynaklar nginx tarafından işlenir, webman iş mantığı işlemlerine odaklanır
-- Birden çok webman'ın 80 ve 443 portlarını paylaşmasına izin verir, farklı siteleri alan adıyla ayırarak tek sunucuda çoklu site dağıtımını gerçekleştirir
-- php-fpm ve webman mimarisinin birlikte çalışmasını sağlar
-- Nginx proxy’nin ssl'yi https olarak gerçekleştirmesi daha basit ve verimlidir
-- Dış ağda bazı geçersiz istekleri sıkı bir şekilde filtreleyebilir
+- Statik kaynakları nginx'e bırakarak, webman'ın iş mantığına odaklanmasını sağlamak
+- Birden çok webman'ın 80, 443 portunu paylaşmasına izin vermek, alan adı ile farklı siteleri tek sunucuda dağıtmak
+- php-fpm ve webman mimarisinin birlikte var olmasını sağlamak
+- nginx proxy ile ssl sertifikası alarak https'i basit ve verimli hale getirmek
+- Dış ağdaki bazı geçersiz istekleri sıkı bir şekilde filtreleyebilmek
 
-## Nginx Proxy Örneği
-```
+## nginx proxy örneği
+```nginx
 upstream webman {
     server 127.0.0.1:8787;
     keepalive 10240;
@@ -33,4 +33,4 @@ server {
 }
 ```
 
-Genellikle, geliştiricilerin yukarıdaki yapılandırmada sadece server_name ve root değerlerini gerçek değerlere ayarlamaları gerekir, diğer alanların ayarlanmasına gerek yoktur.
+Genellikle, geliştiriciler yukarıdaki yapılandırmada yalnızca server_name ve root'u gerçek değerlere ayarlamaları gerekir, diğer alanlar yapılandırılmayabilir.

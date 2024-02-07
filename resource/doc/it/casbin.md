@@ -1,8 +1,8 @@
-# Libreria di controllo degli accessi Casbin webman-permission
+# Casbin libreria di controllo degli accessi webman-permission
 
 ## Descrizione
 
-Si basa su [PHP-Casbin](https://github.com/php-casbin/php-casbin), un potente e efficiente framework open source di controllo degli accessi che supporta modelli di controllo degli accessi basati su `ACL`, `RBAC`, `ABAC` e altro ancora.
+Si basa su [PHP-Casbin](https://github.com/php-casbin/php-casbin), un framework di controllo degli accessi open source potente ed efficiente, che supporta modelli di controllo degli accessi basati su `ACL`, `RBAC`, `ABAC` e altri.
 
 ## Indirizzo del progetto
 
@@ -13,20 +13,22 @@ https://github.com/Tinywan/webman-permission
 ```php
 composer require tinywan/webman-permission
 ```
-> Quest'estensione richiede PHP 7.1+ e [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998). Manuale ufficiale: https://www.workerman.net/doc/webman#/db/others
+
+> Questa estensione richiede PHP 7.1+ e [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998), documentazione ufficiale: https://www.workerman.net/doc/webman#/db/others
 
 ## Configurazione
 
-### Registra il servizio
-Crea il file di configurazione `config/bootstrap.php` con un contenuto simile a questo:
+### Registrazione del servizio
+Creare il file di configurazione `config/bootstrap.php` con un contenuto simile a questo:
 
 ```php
     // ...
     webman\permission\Permission::class,
 ```
-### File di configurazione del modello
 
-Crea il file di configurazione `config/casbin-basic-model.conf` con un contenuto simile a questo:
+### File di configurazione del Model
+
+Creare il file di configurazione `config/casbin-basic-model.conf` con un contenuto simile a questo:
 
 ```conf
 [request_definition]
@@ -44,16 +46,17 @@ e = some(where (p.eft == allow))
 [matchers]
 m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
 ```
-### File di configurazione delle policy
 
-Crea il file di configurazione `config/permission.php` con un contenuto simile a questo:
+### File di configurazione delle Policy
+
+Creare il file di configurazione `config/permission.php` con un contenuto simile a questo:
 
 ```php
 <?php
 
 return [
     /*
-     *Permission predefinito
+     * Permesso predefinito
      */
     'default' => 'basic',
 
@@ -65,7 +68,7 @@ return [
     'enforcers' => [
         'basic' => [
             /*
-            * Impostazioni del modello
+            * Impostazioni Model
             */
             'model' => [
                 'config_type' => 'file',
@@ -73,41 +76,42 @@ return [
                 'config_text' => '',
             ],
 
-            // Adattatore 
+            // Adattatore .
             'adapter' => webman\permission\adapter\DatabaseAdapter::class,
 
             /*
-            * Impostazioni database
+            * Impostazioni del database.
             */
             'database' => [
-                // Nome della connessione al database, se non specificato verrà utilizzata la configurazione predefinita
+                // Nome della connessione al database, se non specificato, verrà utilizzata la configurazione predefinita.
                 'connection' => '',
                 // Nome della tabella delle regole (senza prefisso tabella)
                 'rules_name' => 'rule',
-                // Nome completo della tabella delle regole
+                // Nome completo della tabella delle regole.
                 'rules_table' => 'train_rule',
             ],
         ],
     ],
 ];
 ```
-## Inizio veloce
+
+## Inizio rapido
 
 ```php
 use webman\permission\Permission;
 
-// Aggiunge i permessi a un utente
-Permission::addPermissionForUser('eve', 'articles', 'read');
-// Aggiunge un ruolo per un utente
-Permission::addRoleForUser('eve', 'writer');
-// Aggiunge i permessi a una regola
-Permission::addPolicy('writer', 'articles','edit');
+// aggiunge i permessi a un utente
+Permission::addPermissionForUser('eve', 'articoli', 'lettura');
+// aggiunge un ruolo per un utente.
+Permission::addRoleForUser('eve', 'scrittore');
+// aggiunge permessi a una regola
+Permission::addPolicy('scrittore', 'articoli', 'modifica');
 ```
 
-Puoi verificare se un utente ha tali autorizzazioni
+È possibile verificare se un utente ha tali permessi
 
 ```php
-if (Permission::enforce("eve", "articles", "edit")) {
+if (Permission::enforce("eve", "articoli", "modifica")) {
     // permette a eve di modificare gli articoli
 } else {
     // nega la richiesta, mostra un errore
@@ -116,15 +120,15 @@ if (Permission::enforce("eve", "articles", "edit")) {
 
 ## Middleware di autorizzazione
 
-Crea il file `app/middleware/AuthorizationMiddleware.php` (se la cartella non esiste, creala) come segue:
+Creare il file `app/middleware/AuthorizationMiddleware.php` (se la directory non esiste, creare manualmente) come segue:
 
 ```php
 <?php
 
 /**
  * Middleware di autorizzazione
- * Autore: ShaoBo Wan (Tinywan)
- * Data: 2021/09/07 14:15
+ * Autore ShaoBo Wan (Tinywan)
+ * Data e ora 2021/09/07 14:15
  */
 
 declare(strict_types=1);
@@ -146,7 +150,7 @@ class AuthorizationMiddleware implements MiddlewareInterface
             $userId = 10086;
             $action = $request->method();
             if (!Permission::enforce((string) $userId, $uri, strtoupper($action))) {
-                throw new \Exception('Spiacente, non hai l\'autorizzazione per accedere a questa API');
+                throw new \Exception('Spiacenti, non hai autorizzazione per accedere a questa interfaccia');
             }
         } catch (CasbinException $exception) {
             throw new \Exception('Eccezione di autorizzazione' . $exception->getMessage());
@@ -156,13 +160,13 @@ class AuthorizationMiddleware implements MiddlewareInterface
 }
 ```
 
-Aggiungi il middleware globale in `config/middleware.php` come segue:
+Aggiungere il middleware globale in `config/middleware.php` come segue:
 
 ```php
 return [
     // Middleware globali
     '' => [
-        // ... Altri middleware sono omessi qui
+        // ... Altri middleware omit
         app\middleware\AuthorizationMiddleware::class,
     ]
 ];

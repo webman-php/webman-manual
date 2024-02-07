@@ -15,125 +15,125 @@ class UserController
     public function hello(Request $request)
     {
         $default_name = 'webman';
-        // Obtenir le paramètre name de la requête get, s'il n'est pas passé, retourner $default_name
+        // Obtenez le paramètre name de la requête GET, s'il n'est pas passé, retournez $default_name
         $name = $request->get('name', $default_name);
-        // Retourner une chaîne à afficher dans le navigateur
+        // Retournez la chaîne au navigateur
         return response('hello ' . $name);
     }
 }
 ```
 
-Avec l'objet `$request`, nous pouvons obtenir n'importe quelle donnée liée à la requête.
+À travers l'objet `$request`, nous pouvons obtenir n'importe quelle donnée liée à la requête.
 
-**Parfois, nous souhaitons obtenir l'objet `$request` dans d'autres classes, dans ce cas, il suffit d'utiliser la fonction d'aide `request()`**.
+**Parfois, nous voulons obtenir l'objet `$request` de la requête actuelle dans une autre classe, dans ce cas, nous utilisons simplement la fonction d'aide `request()`**;
 
-## Obtenir les paramètres de la requête GET
+## Obtenir les paramètres de la requête get
 
-**Obtenir l'ensemble du tableau GET**
+**Obtenir tout le tableau get**
 ```php
 $request->get();
 ```
-Si la requête ne contient pas de paramètres GET, cela renvoie un tableau vide.
+Si la requête ne contient pas de paramètres get, il renvoie un tableau vide.
 
-**Obtenir une valeur spécifique du tableau GET**
+**Obtenir une valeur spécifique du tableau get**
 ```php
 $request->get('name');
 ```
-Si la valeur spécifiée n'est pas présente dans le tableau GET, cela renvoie null.
+S'il n'y a pas de valeur correspondante dans le tableau get, il renvoie null.
 
-Vous pouvez également fournir une valeur par défaut au deuxième paramètre de la méthode get. Si aucune valeur correspondante n'est trouvée dans le tableau GET, la valeur par défaut est renvoyée. Par exemple :
+Vous pouvez également fournir une valeur par défaut en deuxième paramètre de la méthode get, qui sera renvoyée si aucune valeur correspondante n'est trouvée dans le tableau get. Par exemple :
 ```php
 $request->get('name', 'tom');
 ```
 
-## Obtenir les paramètres de la requête POST
-**Obtenir l'ensemble du tableau POST**
+## Obtenir les paramètres de la requête post
+**Obtenir tout le tableau post**
 ```php
 $request->post();
 ```
-Si la requête ne contient pas de paramètres POST, cela renvoie un tableau vide.
+Si la requête ne contient pas de paramètres post, il renvoie un tableau vide.
 
-**Obtenir une valeur spécifique du tableau POST**
+**Obtenir une valeur spécifique du tableau post**
 ```php
 $request->post('name');
 ```
-Si la valeur spécifiée n'est pas présente dans le tableau POST, cela renvoie null.
+S'il n'y a pas de valeur correspondante dans le tableau post, il renvoie null.
 
-Comme pour la méthode get, vous pouvez fournir une valeur par défaut au deuxième paramètre de la méthode post. Si aucune valeur correspondante n'est trouvée dans le tableau POST, la valeur par défaut est renvoyée. Par exemple :
+Comme pour la méthode get, vous pouvez également fournir une valeur par défaut en deuxième paramètre de la méthode post, qui sera renvoyée si aucune valeur correspondante n'est trouvée dans le tableau post. Par exemple :
 ```php
 $request->post('name', 'tom');
 ```
 
-## Obtenir le corps brut de la requête POST
+## Obtenir le corps brut de la requête post
 ```php
 $post = $request->rawBody();
 ```
-Cette fonction est similaire à l'opération `file_get_contents("php://input");` dans `php-fpm`, elle est utilisée pour obtenir le corps brut de la requête HTTP. Cela est très utile pour obtenir des données de requêtes POST au format non `application/x-www-form-urlencoded`. 
+Cette fonction est similaire à l'opération `file_get_contents("php://input")` dans `php-fpm`. Elle est utilisée pour obtenir le corps brut de la requête http. Cela est utile pour obtenir des données de requête post au format non `application/x-www-form-urlencoded`.
 
 ## Obtenir l'en-tête
-**Obtenir l'ensemble des en-têtes**
+**Obtenir tout le tableau d'en-têtes**
 ```php
 $request->header();
 ```
-Si la requête ne contient pas d'en-tête, cela renvoie un tableau vide. Veuillez noter que toutes les clés sont en minuscules.
+Si la requête ne contient pas d'en-têtes, il renvoie un tableau vide. Notez que toutes les clés sont en minuscules.
 
-**Obtenir une valeur spécifique de l'en-tête**
+**Obtenir une valeur spécifique du tableau d'en-têtes**
 ```php
 $request->header('host');
 ```
-Si la clé spécifiée n'est pas présente dans les en-têtes, cela renvoie null. Veuillez noter que toutes les clés sont en minuscules.
+Si la valeur correspondante n'est pas présente dans le tableau d'en-têtes, il renvoie null. Notez que toutes les clés sont en minuscules.
 
-Comme pour la méthode get, vous pouvez également fournir une valeur par défaut au deuxième paramètre de la méthode header. Si aucune valeur correspondante n'est trouvée dans les en-têtes, la valeur par défaut est renvoyée. Par exemple :
+Tout comme la méthode get, vous pouvez également fournir une valeur par défaut en deuxième paramètre de la méthode header, qui sera renvoyée si aucune valeur correspondante n'est trouvée dans le tableau d'en-têtes. Par exemple :
 ```php
 $request->header('host', 'localhost');
 ```
 
 ## Obtenir les cookies
-**Obtenir l'ensemble des cookies**
+**Obtenir tout le tableau de cookies**
 ```php
 $request->cookie();
 ```
-Si la requête ne contient pas de cookie, cela renvoie un tableau vide.
+Si la requête ne contient pas de cookies, il renvoie un tableau vide.
 
-**Obtenir une valeur spécifique dans les cookies**
+**Obtenir une valeur spécifique du tableau de cookies**
 ```php
 $request->cookie('name');
 ```
-Si la valeur spécifiée n'est pas présente dans les cookies, cela renvoie null.
+Si la valeur correspondante n'est pas présente dans le tableau de cookies, il renvoie null.
 
-Comme pour la méthode get, vous pouvez également fournir une valeur par défaut au deuxième paramètre de la méthode cookie. Si aucune valeur correspondante n'est trouvée dans les cookies, la valeur par défaut est renvoyée. Par exemple :
+Tout comme la méthode get, vous pouvez également fournir une valeur par défaut en deuxième paramètre de la méthode cookie, qui sera renvoyée si aucune valeur correspondante n'est trouvée dans le tableau de cookies. Par exemple :
 ```php
 $request->cookie('name', 'tom');
 ```
 
 ## Obtenir toutes les entrées
-Cela inclut la collection `post` et `get`.
+Comprend la collection `post` `get`.
 ```php
 $request->all();
 ```
 
-## Obtenir une valeur spécifique d'entrée
-Obtenir une valeur spécifique de la collection `post` et `get`.
+## Obtenir une valeur d'entrée spécifique
+Obtenir une valeur spécifique de la collection `post` `get`.
 ```php
 $request->input('name', $valeur_par_défaut);
 ```
 
-## Obtenir des données d'entrée partielle
-Obtenir des données d'entrée partielle à partir des collections `post` et `get`.
+## Obtenir des données d'entrée partielles
+Obtenir des parties des données de la collection `post` `get`.
 ```php
-// Obtenir un tableau composé de username et password, en ignorant les clés manquantes
+// Obtenir un tableau composé de username et password, en ignorant les clés qui ne correspondent pas
 $only = $request->only(['username', 'password']);
 // Obtenir toutes les entrées sauf avatar et age
 $except = $request->except(['avatar', 'age']);
 ```
 
-## Obtenir les fichiers téléchargés
-**Obtenir l'ensemble des fichiers téléchargés**
+## Obtenir des fichiers téléchargés
+**Obtenir tous les fichiers téléchargés**
 ```php
 $request->file();
 ```
 
-Dans un formulaire similaire à :
+Exemple de formulaire:
 ```html
 <form method="post" action="http://127.0.0.1:8787/upload/files" enctype="multipart/form-data" />
 <input name="file1" multiple="multiple" type="file">
@@ -142,14 +142,14 @@ Dans un formulaire similaire à :
 </form>
 ```
 
-La sortie de `$request->file()` est similaire à :
+La sortie de `$request->file()` ressemble à ceci:
 ```php
 array (
     'file1' => object(webman\Http\UploadFile),
     'file2' => object(webman\Http\UploadFile)
 )
 ```
-Ceci est un tableau d'instances de `webman\Http\UploadFile`. La classe `webman\Http\UploadFile` étend la classe intégrée [`SplFileInfo`](https://www.php.net/manual/zh/class.splfileinfo.php) en PHP, et fournit quelques méthodes pratiques.
+Il s'agit d'une série d'instances de `webman\Http\UploadFile`. La classe `webman\Http\UploadFile` hérite de la classe PHP intégrée [`SplFileInfo`](https://www.php.net/manual/zh/class.splfileinfo.php) et fournit quelques méthodes utiles.
 
 ```php
 <?php
@@ -162,33 +162,33 @@ class UploadController
     public function files(Request $request)
     {
         foreach ($request->file() as $key => $spl_file) {
-            var_export($spl_file->isValid()); // Vérifie si le fichier est valide, vrai ou faux par exemple
-            var_export($spl_file->getUploadExtension()); // Retourne l'extension de téléchargement du fichier, par exemple 'jpg'
-            var_export($spl_file->getUploadMimeType()); // Retourne le type MIME de téléchargement du fichier, par exemple 'image/jpeg'
-            var_export($spl_file->getUploadErrorCode()); // Obtient le code d'erreur de téléchargement, par exemple UPLOAD_ERR_NO_TMP_DIR, UPLOAD_ERR_NO_FILE UPLOAD_ERR_CANT_WRITE
-            var_export($spl_file->getUploadName()); // Retourne le nom du fichier téléchargé, par exemple 'my-test.jpg'
-            var_export($spl_file->getSize()); // Obtient la taille du fichier, par exemple 13364 octets
-            var_export($spl_file->getPath()); // Obtient le répertoire de téléchargement, par exemple '/tmp'
-            var_export($spl_file->getRealPath()); // Obtient le chemin du fichier temporaire, par exemple `/tmp/workerman.upload.SRliMu`
+            var_export($spl_file->isValid()); // Est-ce que le fichier est valide, par exemple true|false
+            var_export($spl_file->getUploadExtension()); // Extension du fichier téléchargé, par exemple 'jpg'
+            var_export($spl_file->getUploadMimeType()); // Type mime du fichier téléchargé, par exemple 'image/jpeg'
+            var_export($spl_file->getUploadErrorCode()); // Obtenez le code d'erreur du téléchargement, par exemple UPLOAD_ERR_NO_TMP_DIR UPLOAD_ERR_NO_FILE UPLOAD_ERR_CANT_WRITE
+            var_export($spl_file->getUploadName()); // Nom du fichier téléchargé, par exemple 'my-test.jpg'
+            var_export($spl_file->getSize()); // Obtenir la taille du fichier, par exemple 13364, en octets
+            var_export($spl_file->getPath()); // Obtenir le répertoire de téléchargement, par exemple '/tmp'
+            var_export($spl_file->getRealPath()); // Obtenir le chemin du fichier temporaire, par exemple `/tmp/workerman.upload.SRliMu`
         }
         return response('ok');
     }
 }
 ```
 
-**Note :**
+**Remarque :**
 
-- Les fichiers téléchargés sont nommés avec un nom de fichier temporaire, par exemple `/tmp/workerman.upload.SRliMu`
-- La taille des fichiers téléchargés est limitée par [defaultMaxPackageSize](http://doc.workerman.net/tcp-connection/default-max-package-size.html), par défaut 10M, vous pouvez modifier la valeur par défaut en modifiant `max_package_size` dans le fichier `config/server.php`.
-- Une fois la requête terminée, les fichiers temporaires sont automatiquement supprimés
-- Si aucun fichier n'est téléchargé dans la requête, `$request->file()` retourne un tableau vide
-- La méthode `move_uploaded_file()` n'est pas prise en charge pour les fichiers téléchargés, veuillez utiliser la méthode `$file->move()` comme indiqué dans l'exemple ci-dessous
+- Une fois téléchargé, le fichier est nommé temporairement, par exemple `/tmp/workerman.upload.SRliMu`
+- La taille du fichier téléchargé est limitée par la [defaultMaxPackageSize](http://doc.workerman.net/tcp-connection/default-max-package-size.html), par défaut 10M, et peut être modifiée dans le fichier `config/server.php` en changeant `max_package_size` pour changer la valeur par défaut.
+- Une fois la requête terminée, le fichier temporaire sera automatiquement effacé
+- Si la requête ne contient pas de fichier téléchargé, `$request->file()` renvoie un tableau vide
+- Les fichiers téléchargés ne prennent pas en charge la méthode `move_uploaded_file()`. Veuillez utiliser la méthode `$file->move()` comme substitution, voir l'exemple ci-dessous
 
 ### Obtenir un fichier téléchargé spécifique
 ```php
 $request->file('avatar');
 ```
-Si le fichier existe, cela retourne une instance de `webman\Http\UploadFile` correspondant au fichier. Sinon, cela retourne null.
+S'il existe, il renvoie l'instance correspondante de `webman\Http\UploadFile`, sinon il renvoie null.
 
 **Exemple**
 ```php
@@ -212,11 +212,11 @@ class UploadController
 ```
 
 ## Obtenir l'hôte
-Obtenir les informations d'hôte de la requête.
+Obtient les informations d'hôte de la requête.
 ```php
 $request->host();
 ```
-Si l'adresse de la requête est sur un port non standard 80 ou 443, les informations d'hôte peuvent inclure le port, par exemple `example.com:8080`. Si le port n'est pas nécessaire, le premier paramètre peut être passé en tant que `true`.
+Si l'adresse de la requête est sur un port non standard 80 ou 443, les informations d'hôte peuvent contenir le port, par exemple `example.com:8080`. Si vous ne voulez pas du port, vous pouvez passer `true` en premier paramètre.
 
 ```php
 $request->host(true);
@@ -224,156 +224,143 @@ $request->host(true);
 
 ## Obtenir la méthode de la requête
 ```php
- $request->method();
+$request->method();
 ```
 La valeur renvoyée peut être `GET`, `POST`, `PUT`, `DELETE`, `OPTIONS`, ou `HEAD`.
 
-## Obtenir l'URI de la requête
+## Obtenir l'uri de la requête
 ```php
 $request->uri();
 ```
-Renvoie l'URI de la requête, y compris la partie path et queryString.
+Renvoie l'uri de la requête, y compris la partie path et queryString.
 
 ## Obtenir le chemin de la requête
-
 ```php
 $request->path();
 ```
 Renvoie la partie path de la requête.
 
 ## Obtenir la queryString de la requête
-
 ```php
 $request->queryString();
 ```
-Renvoie la queryString de la requête.
-
+Renvoie la partie queryString de la requête.
 ## Obtenir l'URL de la requête
-La méthode `url()` renvoie l'URL sans les paramètres de la `Query`.
+La méthode `url()` renvoie l'URL sans les paramètres de requête.
 ```php
 $request->url();
 ```
 Renvoie quelque chose comme `//www.workerman.net/workerman-chat`
 
-La méthode `fullUrl()` renvoie l'URL avec les paramètres de la `Query`.
+La méthode `fullUrl()` renvoie l'URL avec les paramètres de requête.
 ```php
 $request->fullUrl();
 ```
 Renvoie quelque chose comme `//www.workerman.net/workerman-chat?type=download`
 
 > **Remarque**
-> `url()` et `fullUrl()` n'incluent pas la partie protocole (http ou https). Cela est dû au fait que l'utilisation de `//example.com` dans le navigateur reconnaît automatiquement le protocole du site, en lançant automatiquement la requête en http ou https.
+> Les méthodes `url()` et `fullUrl()` ne renvoient pas la partie du protocole (elles ne renvoient pas http ou https).
+> Car dans un navigateur, l'utilisation d'une adresse qui commence par `//` reconnaîtra automatiquement le protocole du site actuel et enverra automatiquement une requête en http ou en https.
 
-Si vous utilisez un proxy nginx, veuillez ajouter `proxy_set_header X-Forwarded-Proto $scheme;` à la configuration de nginx, [référence au proxy nginx](others/nginx-proxy.md),
-ainsi vous pouvez utiliser `$request->header('x-forwarded-proto');` pour déterminer s'il s'agit du protocole http ou https, par exemple :
+Si vous utilisez une proxy nginx, veuillez ajouter `proxy_set_header X-Forwarded-Proto $scheme;` dans la configuration nginx, [voir proxy nginx](others/nginx-proxy.md), de cette façon vous pouvez utiliser `$request->header('x-forwarded-proto');` pour vérifier si c'est du http ou du https, par exemple :
 ```php
 echo $request->header('x-forwarded-proto'); // Renvoie http ou https
 ```
 
-## Obtenir la version HTTP de la requête
-
+## Obtenir la version du protocole de la requête
 ```php
 $request->protocolVersion();
 ```
-Renvoie une chaîne de caractères `1.1` ou`1.0`.
+Renvoie la chaîne `1.1` ou `1.0`.
 
-## Obtenir l'ID de session de la requête
-
+## Obtenir l'identifiant de session de la requête
 ```php
 $request->sessionId();
 ```
-Renvoie une chaîne composée de lettres et de chiffres
+Renvoie une chaîne composée de lettres et de chiffres.
 
 ## Obtenir l'adresse IP du client de la requête
 ```php
 $request->getRemoteIp();
 ```
 
-## Obtenir le port client de la requête
+## Obtenir le port du client de la requête
 ```php
 $request->getRemotePort();
 ```
-## Obtenir l'adresse IP réelle du client
 
+## Obtenir la véritable adresse IP du client de la requête
 ```php
 $request->getRealIp($safe_mode=true);
 ```
 
-Lorsque le projet utilise un proxy (comme nginx), l'utilisation de `$request->getRemoteIp()` renvoie souvent l'adresse IP du serveur proxy (tel que `127.0.0.1` `192.168.x.x`) au lieu de l'adresse IP réelle du client. Dans ce cas, vous pouvez essayer d'utiliser `$request->getRealIp()` pour obtenir l'adresse IP réelle du client.
+Lorsque le projet utilise un proxy (comme nginx), l'utilisation de `$request->getRemoteIp()` renvoie souvent l'adresse IP du serveur proxy (comme `127.0.0.1` `192.168.x.x`) plutôt que l'adresse IP réelle du client. Dans ce cas, vous pouvez essayer d'utiliser `$request->getRealIp()` pour obtenir la véritable adresse IP du client.
 
-`$request->getRealIp()` essaie d'obtenir l'adresse IP réelle à partir des en-têtes HTTP `x-real-ip`, `x-forwarded-for`, `client-ip`, `x-client-ip`, `via`.
+`$request->getRealIp()` tentera d'obtenir la véritable adresse IP à partir des en-têtes HTTP `x-real-ip`, `x-forwarded-for`, `client-ip`, `x-client-ip`, `via`.
 
-> Étant donné que les en-têtes HTTP peuvent être facilement falsifiés, l'adresse IP du client obtenue par cette méthode n'est pas fiable à 100%, surtout lorsque `$safe_mode` est défini sur false. Une méthode plus fiable pour obtenir l'adresse IP réelle du client via un proxy est de connaître l'adresse IP sécurisée du serveur proxy et de savoir exactement quel en-tête HTTP contient l'adresse IP réelle. Si l'adresse IP renvoyée par `$request->getRemoteIp()` est confirmée comme étant celle du serveur proxy sécurisé connu, alors vous pouvez utiliser `$request->header('nom_de_l_en_tête_contenant_l_adresse_IP_réelle')` pour obtenir l'adresse IP réelle.
-
+> Étant donné que les en-têtes HTTP peuvent être facilement falsifiés, la méthode n'obtient pas l'adresse IP du client à 100 % de manière fiable, en particulier lorsque `$safe_mode` est désactivé. Une méthode plus fiable pour obtenir l'adresse IP réelle du client à travers un proxy est de connaître l'adresse IP sûre du serveur proxy et de savoir clairement quel en-tête HTTP contient l'adresse IP réelle. Si l'IP renvoyée par `$request->getRemoteIp()` est confirmée comme étant celle d'un serveur proxy sûr connu, alors utilisez `$request->header('en-tête HTTP contenant l'IP réelle')` pour obtenir l'adresse IP réelle.
 
 ## Obtenir l'adresse IP du serveur
-
 ```php
 $request->getLocalIp();
 ```
 
 ## Obtenir le port du serveur
-
 ```php
 $request->getLocalPort();
 ```
 
-## Vérifier s'il s'agit d'une requête Ajax
-
+## Vérifier s'il s'agit d'une requête ajax
 ```php
 $request->isAjax();
 ```
 
-## Vérifier s'il s'agit d'une requête Pjax
-
+## Vérifier s'il s'agit d'une requête pjax
 ```php
 $request->isPjax();
 ```
 
-## Vérifier s'il s'agit d'une demande de retour JSON
-
+## Vérifier si une réponse JSON est attendue
 ```php
 $request->expectsJson();
 ```
 
-## Vérifier si le client accepte le retour JSON
-
+## Vérifier si le client accepte une réponse JSON
 ```php
 $request->acceptJson();
 ```
 
 ## Obtenir le nom du plugin de la requête
-Pour une requête qui ne provient pas d'un plugin, retourne une chaîne vide `''`.
+Renvoie une chaîne vide `''` pour une requête non liée à un plugin.
 ```php
 $request->plugin;
 ```
-> Cette fonctionnalité nécessite webman>=1.4.0
+> Cette fonctionnalité requiert webman>=1.4.0
 
 ## Obtenir le nom de l'application de la requête
-Pour une seule application, cela retourne toujours une chaîne vide `''`, et pour [plusieurs applications](multiapp.md), cela retourne le nom de l'application.
+Pour une seule application, cela renvoie toujours une chaîne vide `''`, pour [plusieurs applications](multiapp.md), cela renvoie le nom de l'application.
 ```php
 $request->app;
 ```
-
-> Étant donné que les fonctions de fermeture ne sont pas associées à une application, la requête provenant d'une route de fermeture retourne toujours une chaîne vide `''`.
-> Voir la route de fermeture dans [Route](route.md)
+> Comme les fonctions de fermeture ne sont pas liées à une application, la requête de routes de fermeture `$request->app` renverra toujours une chaîne vide `''`
+> Voir les routes de fermeture [Routes](route.md)
 
 ## Obtenir le nom de la classe du contrôleur de la requête
-Obtient le nom de la classe correspondant au contrôleur
+Obtenez le nom de la classe correspondant au contrôleur
 ```php
 $request->controller;
 ```
 Renvoie quelque chose comme `app\controller\IndexController`
 
-> Étant donné que les fonctions de fermeture ne sont pas associées à un contrôleur, la requête provenant d'une route de fermeture retourne toujours une chaîne vide `''`.
-> Voir la route de fermeture dans [Route](route.md)
+> Comme les fonctions de fermeture ne sont pas liées à un contrôleur, la requête de routes de fermeture `$request->controller` renverra toujours une chaîne vide `''`
+> Voir les routes de fermeture [Routes](route.md)
 
 ## Obtenir le nom de la méthode de la requête
-Obtient le nom de la méthode du contrôleur correspondant à la requête
+Obtenez le nom de la méthode du contrôleur correspondant à la requête
 ```php
 $request->action;
 ```
 Renvoie quelque chose comme `index`
 
-> Étant donné que les fonctions de fermeture ne sont pas associées à une méthode de contrôleur, la requête provenant d'une route de fermeture retourne toujours une chaîne vide `''`.
-> Voir la route de fermeture dans [Route](route.md)
+> Comme les fonctions de fermeture ne sont pas liées à une méthode de contrôleur, la requête de routes de fermeture `$request->action` renverra toujours une chaîne vide `''`
+> Voir les routes de fermeture [Routes](route.md)

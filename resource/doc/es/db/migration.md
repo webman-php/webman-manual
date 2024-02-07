@@ -1,10 +1,10 @@
-# Herramienta de migración de bases de datos Phinx
+# Herramienta de migración de base de datos Phinx
 
 ## Descripción
 
-Phinx permite a los desarrolladores modificar y mantener bases de datos de manera concisa. Evita la escritura manual de instrucciones SQL mediante el uso de una potente API de PHP para gestionar las migraciones de la base de datos. Los desarrolladores pueden utilizar el control de versiones para gestionar sus migraciones de base de datos. Phinx facilita la migración de datos entre diferentes bases de datos. También permite hacer un seguimiento de qué scripts de migración se han ejecutado, lo que permite a los desarrolladores centrarse en cómo escribir un sistema mejor en lugar de preocuparse por el estado de la base de datos.
+Phinx permite a los desarrolladores modificar y mantener la base de datos de forma concisa. Evita la escritura manual de declaraciones SQL, utilizando una potente API de PHP para gestionar la migración de la base de datos. Los desarrolladores pueden utilizar el control de versiones para gestionar sus migraciones de base de datos. Phinx facilita la migración de datos entre bases de datos diferentes. También puede rastrear qué scripts de migración se han ejecutado, permitiendo a los desarrolladores centrarse en cómo escribir sistemas de mejor calidad en lugar de preocuparse por el estado de la base de datos.
 
-## Repositorio del proyecto
+## Dirección del Proyecto
 
 https://github.com/cakephp/phinx
 
@@ -14,22 +14,22 @@ https://github.com/cakephp/phinx
 composer require robmorgan/phinx
 ```
 
-## Documentación oficial en chino
+## Documentación Oficial en Chino
 
-Para obtener información detallada, consulte la documentación oficial en chino. Aquí solo se explicará cómo configurar y utilizar Phinx en webman.
+Para obtener información detallada, consulte la documentación oficial en chino. Aquí solo se explica cómo configurar y usar en webman.
 
 https://tsy12321.gitbooks.io/phinx-doc/content/
 
-## Estructura de directorios de archivos de migración
+## Estructura de Directorios de Archivos de Migración
 
-```
+``` 
 .
 ├── app                           Directorio de la aplicación
 │   ├── controller                Directorio de controladores
 │   │   └── Index.php             Controlador
 │   ├── model                     Directorio de modelos
 ......
-├── database                      Archivos de base de datos
+├── database                      Archivos de la base de datos
 │   ├── migrations                Archivos de migración
 │   │   └── 20180426073606_create_user_table.php
 │   ├── seeds                     Datos de prueba
@@ -37,9 +37,9 @@ https://tsy12321.gitbooks.io/phinx-doc/content/
 ......
 ```
 
-## Configuración de phinx.php
+## Configuración phinx.php
 
-Crear el archivo phinx.php en el directorio raíz del proyecto
+Cree un archivo phinx.php en el directorio raíz del proyecto.
 
 ```php
 <?php
@@ -65,22 +65,22 @@ return [
 ];
 ```
 
-## Recomendaciones de uso
+## Sugerencias de Uso
 
-Una vez que se fusiona el código de los archivos de migración, no se permite modificarlo nuevamente. Si aparece un problema, es necesario crear un nuevo archivo de modificación o eliminación para solucionarlo.
+Una vez fusionado el código de los archivos de migración, no se permite modificarlos nuevamente. Si surge algún problema, se debe crear un nuevo archivo de operación o eliminarlo.
 
-#### Reglas de nombramiento para archivos de creación de tablas
+#### Reglas de Nomenclatura de Archivos de Operaciones para Crear Tablas
 
-`{hora(creación automática)}_create_{nombre de la tabla en minúsculas en inglés}`
+`{tiempo(creado automáticamente)}_create_{nombre de tabla en minúsculas en inglés}`
 
-#### Reglas de nombramiento para archivos de modificación de tablas
+#### Reglas de Nomenclatura de Archivos de Operaciones para Modificar Tablas
 
-`{hora(creación automática)}_modify_{nombre de la tabla en minúsculas en inglés + nombre específico de la modificación en minúsculas en inglés}`
+`{tiempo(creado automáticamente)}_modify_{nombre de tabla en minúsculas en inglés + elemento específico a modificar en minúsculas en inglés}`
 
-#### Reglas de nombramiento para archivos de eliminación de tablas
+### Reglas de Nomenclatura de Archivos de Operaciones para Eliminar Tablas
 
-`{hora(creación automática)}_delete_{nombre de la tabla en minúsculas en inglés + nombre específico de la modificación en minúsculas en inglés}`
+`{tiempo(creado automáticamente)}_delete_{nombre de tabla en minúsculas en inglés + elemento específico a modificar en minúsculas en inglés}`
 
-#### Reglas de nombramiento para archivos de relleno de datos
+### Reglas de Nomenclatura de Archivos de Rellenar Datos
 
-`{hora(creación automática)}_fill_{nombre de la tabla en minúsculas en inglés + nombre específico de la modificación en minúsculas en inglés}`
+`{tiempo(creado automáticamente)}_fill_{nombre de tabla en minúsculas en inglés + elemento específico a modificar en minúsculas en inglés}`

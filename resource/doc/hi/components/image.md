@@ -1,6 +1,6 @@
-# छवि प्रसंस्करण पूर्वक
+# छवि प्रसंस्करण संबंधी घटक
 
-## intervention / image
+## intervention/image
 
 ### परियोजना पता
 
@@ -9,17 +9,17 @@ https://github.com/Intervention/image
 ### स्थापना
 
 ```php
-कॉम्पोजर आवश्यक intervention / image को आवश्यक करते हैं
+composer require intervention/image
 ```
 
 ### उपयोग
 
-**अपलोड पृष्ठ से टुकड़ा**
+**अपलोड पृष्ठांश**
 
 ```html
   <form method="post" action="/user/img" enctype="multipart/form-data">
       <input type="file" name="file">
-      <input type="submit" value="प्रस्तुत">
+      <input type="submit" value="सबमिट">
   </form>
 ```
 
@@ -38,7 +38,7 @@ class UserController
         $file = $request->file('file');
         if ($file && $file->isValid()) {
             $image = Image::make($file)->resize(100, 100);
-            return response($image->encode('छवि/png'), 200, ['Content-Type' => 'छवि/png']);
+            return response($image->encode('png'), 200, ['Content-Type' => 'image/png']);
         }
         return response('फ़ाइल नहीं मिली');
     }
@@ -48,4 +48,4 @@ class UserController
 
 ### अधिक सामग्री
 
-http://image.intervention.io/getting_started/introduction पर जाएं
+http://image.intervention.io/getting_started/introduction पर जाएं।

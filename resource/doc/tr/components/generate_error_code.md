@@ -1,16 +1,16 @@
-# Error Code Oluşturma Bileşeni
+# Hata Kodu Oluşturma Bileşeni
 
 ## Açıklama
 
-Belirli kurallara göre otomatik olarak hata kodlarını oluşturmayı sağlar.
+Verilen kurallara göre otomatik olarak hata kodlarını oluşturmayı sağlar.
 
-> Dönen veri içindeki code parametresi için, tüm özel kodlar, pozitif sayılar hizmetin normal olduğunu, negatif sayılar ise hizmette anormallik olduğunu temsil eder.
+> Dönüş verilerindeki code parametresi için, tüm özel code'lar, pozitif sayılar hizmetin normal olduğunu, negatif sayılar ise hizmette istisna oluştuğunu temsil eder.
 
 ## Proje Adresi
 
 https://github.com/teamones-open/response-code-msg
 
-## Yükleme
+## Kurulum
 
 ```php
 composer require teamones/response-code-msg
@@ -20,12 +20,12 @@ composer require teamones/response-code-msg
 
 ### Boş ErrorCode Sınıf Dosyası
 
-- Dosya yolu: ./support/ErrorCode.php
+- Dosya Yolu: ./support/ErrorCode.php
 
 ```php
 <?php
 /**
- * Otomatik oluşturulan dosya, lütfen manuel olarak düzeltmeyin.
+ * Otomatik oluşturulan dosya, lütfen manuel olarak değiştirmeyin.
  * @Author:$Id$
  */
 namespace support;
@@ -37,9 +37,9 @@ class ErrorCode
 
 ### Yapılandırma Dosyası
 
-Hata kodları otomatik olarak aşağıda yapılandırılan parametrelere göre artan bir şekilde oluşturulur. Örneğin, şu anda system_number = 201, start_min_number = 10000 ise, ilk hata kodu -20110001 olacaktır.
+Hata kodları, aşağıdaki yapılandırma parametrelerine göre otomatik olarak artırılacaktır. Örneğin, system_number = 201, start_min_number = 10000 olarak yapılandırıldığında, oluşturulan ilk hata kodu -20110001 olacaktır.
 
-- Dosya yolu: ./config/error_code.php
+- Dosya Yolu: ./config/error_code.php
 
 ```php
 <?php
@@ -47,17 +47,17 @@ Hata kodları otomatik olarak aşağıda yapılandırılan parametrelere göre a
 return [
     "class" => new \support\ErrorCode(), // ErrorCode sınıf dosyası
     "root_path" => app_path(), // Mevcut kod kök dizini
-    "system_number" => 201, // Sistem kimliği
+    "system_number" => 201, // Sistem tanımlayıcısı
     "start_min_number" => 10000 // Hata kodu oluşturma aralığı, örneğin 10000-99999
 ];
 ```
 
-### start.php Dosyasına Hata Kodları Otomatik Oluşturmak İçin Başlatma Kodu Ekleyin
+### start.php'de Otomatik Hata Kodu Oluşturma Başlatma
 
-- Dosya yolu: ./start.php
+- Dosya Yolu: ./start.php
 
 ```php
-// Config::load(config_path(), ['route', 'container']); satırından sonra
+// Config::load(config_path(), ['route', 'container']); satırından sonra yerleştirin.
 
 // Hata kodlarını oluştur, sadece APP_DEBUG modunda oluştur
 if (config("app.debug")) {
@@ -66,16 +66,16 @@ if (config("app.debug")) {
 }
 ```
 
-### Kod İçinde Kullanım
+### Kod İçerisinde Kullanım
 
-Aşağıdaki kodda **ErrorCode::ModelAddOptionsError** hata kodudur, burada **ModelAddOptionsError** kullanıcının mevcut gereksinimlere göre anlamlı bir şekilde baş harfi büyük olarak yazması gereken bir kod yazıdır.
+Aşağıdaki kod içinde **ErrorCode::ModelAddOptionsError**, hata kodunu temsil etmektedir, burada **ModelAddOptionsError**, kullanıcıların mevcut gereksinimleri doğrultusunda ilk harfi büyük yapılandırmak zorundadır.
 
-> Kodu yazarsınız ancak hemen kullanamazsınız, bir sonraki yeniden başlatmadan sonra ilgili hata kodu otomatik olarak oluşturulacaktır. Bazı durumlarda iki kez yeniden başlatmanız gerekebilir.
+> Kodlamayı tamamladıktan sonra kullandığınızda çalışmayacak, bir sonraki yeniden başlatmadan sonra ilgili hata kodu otomatik olarak oluşturulacaktır. Bazı durumlarda iki kez yeniden başlatma gerekebilir.
 
 ```php
 <?php
 /**
- * Navigasyon ile ilgili işlemler servis sınıfı
+ * Navigasyonla ilgili işlemci sınıfı
  */
 
 namespace app\service;
@@ -105,7 +105,7 @@ class Demo
 
             return $demo->getData();
         } catch (\Throwable $e) {
-            // Hata mesajını yazdır
+            // Hata mesajını çıkar
             throw_http_exception($e->getMessage(), ErrorCode::ModelAddOptionsError);
         }
         return [];
@@ -113,12 +113,12 @@ class Demo
 }
 ```
 
-### Oluşturulduktan Sonra ./support/ErrorCode.php Dosyası
+### Oluşturulan ./support/ErrorCode.php Dosyası
 
 ```php
 <?php
 /**
- * Otomatik oluşturulan dosya, lütfen manuel olarak düzeltmeyin.
+ * Otomatik oluşturulan dosya, lütfen manuel olarak değiştirmeyin.
  * @Author:$Id$
  */
 namespace support;

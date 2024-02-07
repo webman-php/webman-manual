@@ -1,7 +1,7 @@
 # Yapılandırma Dosyası
 
 ## Konum
-webman'in yapılandırma dosyaları `config/` klasöründe bulunur, projede ilgili yapılandırmayı almak için `config()` fonksiyonu kullanılabilir.
+webman'ın yapılandırma dosyaları `config/` dizininde bulunur ve projede ilgili yapılandırmayı almak için `config()` işlevini kullanabilirsiniz.
 
 ## Yapılandırmayı Almak
 
@@ -10,17 +10,17 @@ Tüm yapılandırmayı almak için
 config();
 ```
 
-`config/app.php` içindeki tüm yapılandırmayı almak için
+Tüm `config/app.php` dosyasındaki yapılandırmayı almak için
 ```php
 config('app');
 ```
 
-`config/app.php` içindeki `debug` yapılandırmasını almak için
+`config/app.php` dosyasındaki `debug` yapılandırmasını almak için
 ```php
 config('app.debug');
 ```
 
-Eğer yapılandırma bir dizi ise, nokta kullanarak içindeki öğelerin değerlerini alabilirsiniz, örneğin
+Eğer yapılandırma bir dizi ise, `.` kullanarak dizi içindeki öğelerin değerlerini alabilirsiniz, örneğin
 ```php
 config('file.key1.key2');
 ```
@@ -29,10 +29,11 @@ config('file.key1.key2');
 ```php
 config($key, $default);
 ```
-config, ikinci argüman olarak varsayılan değeri ileterek yapılandırmayı alır, yapılandırma mevcut değilse varsayılan değeri döndürür. Yapılandırma yoksa ve varsayılan değer belirtilmemişse null döner.
+config ikinci parametre aracılığıyla varsayılan değeri iletebilir, yapılandırma mevcut değilse varsayılan değeri döndürür.
+Yapılandırma mevcut değilse ve varsayılan değer belirtilmemişse null döndürür.
 
 ## Özel Yapılandırma
-Geliştiriciler, kendi yapılandırma dosyalarını `config/` klasörüne ekleyebilir, örneğin
+Geliştiriciler `config/` dizini altına kendi yapılandırma dosyalarını ekleyebilirler, örneğin
 
 **config/payment.php**
 
@@ -44,15 +45,15 @@ return [
 ];
 ```
 
-**Alırken kullanımı**
+**Yapılandırmayı Alırken Kullanılabilir**
 ```php
 config('payment');
 config('payment.key');
-config('payment.secret');
+config('payment.key');
 ```
 
-## Yapılandırmayı Değiştirmek
-webman, yapılandırmayı dinamik olarak değiştirmeyi desteklemez, tüm yapılandırmaların ilgili yapılandırma dosyalarını el ile değiştirmek ve yeniden yüklemek veya yeniden başlatmak gereklidir.
+## Yapılandırmayı Değiştirme
+webman dinamik yapılandırmayı desteklemez, tüm yapılandırmalar ilgili yapılandırma dosyasını el ile değiştirmeniz gerekmektedir ve ardından yeniden yüklemek veya yeniden başlatmak gerekmektedir.
 
-> **Not**
-> Sunucu yapılandırması `config/server.php` ve işlem yapılandırması `config/process.php` yeniden yükleme işlemini desteklemez, etkili hale getirmek için yeniden başlatma gereklidir.
+> **Dikkat**
+> Sunucu yapılandırması `config/server.php` ve işlem yapılandırması `config/process.php` yeniden yükleme işlemini desteklemez, etkin olması için yeniden başlatılması gerekir

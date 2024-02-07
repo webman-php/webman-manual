@@ -1,40 +1,39 @@
-# Casbin
+# காஸ்பின்
 
-## 说明
+## விளக்கம்
 
-Casbin是一个强大的、高效的开源访问控制框架，其权限管理机制支持多种访问控制模型。
+காஸ்பின் ஒரு மிகப் பயனுள்ள, மிகுந்ததானத்தில் பொது அணுகுமுறை முகாமையை ஆதரிக்கும் விடுப்பு கட்டமைத்த முயற்சியாகக் கூடிய பூரணப்பாட்டைக் கொண்ட மூல உருவாக்கி வரும் சின்னத் திட்டமாகும்.
   
-## 项目地址
+## திட்டத்தின் முகவரி
 
 https://github.com/teamones-open/casbin
 
-## 安装
- 
+## நிறுவு
+
   ```php
   composer require teamones/casbin
   ```
 
-## Casbin官网
+## காஸ்பின் அலுவலகம்
 
-详细使用可以去看官方中文文档，这里只讲怎么在webman中配置使用
+விவரியாக பயன்படுத்தும்போது அலுவலகப் பதிவை பார்க்கலாம், இங்கு உள்ளது எப்படி வகைப்படுத்தி வரவேற்பு செய்ய வேண்டும் என்பதை மடிப்பது
 
 https://casbin.org/docs/zh-CN/overview
 
-## 目录结构
+## கோப்பு அமைப்பு
 
+``` 
+. 
+├── config கட்டமைப்பு அடைவு
+│   ├── casbin-restful-model.conf பயன்படுத்தும் அணுகுமுறை மாதிரி அமைப்பு கோப்பு
+│   ├── casbin.php காஸ்பின் அமைப்பு
+...... 
+├── database தரவுத்தள கோப்பு
+│   ├── migrations நகர்த்தல் கோப்புகள்
+│   │   └── 20210218074218_create_rule_table.php
+...... 
 ```
-.
-├── config                        配置目录
-│   ├── casbin-restful-model.conf 使用的权限模型配置文件
-│   ├── casbin.php                casbin配置
-......
-├── database                      数据库文件
-│   ├── migrations                迁移文件
-│   │   └── 20210218074218_create_rule_table.php
-......
-```
-
-## 数据库迁移文件
+## தரவுத்தள மாறுபாடு கோப்புகள்
 
 ```php
 <?php
@@ -44,15 +43,14 @@ use Phinx\Migration\AbstractMigration;
 class CreateRuleTable extends AbstractMigration
 {
     /**
-     * Change Method.
+     * மாற்று முறை.
      *
-     * Write your reversible migrations using this method.
+     * இந்த முறையை பயின்று மாறுக்கக்கப்படும் மறுமுகப் பயிற்சிகளை உருவாக்கலாம்.
      *
-     * More information on writing migrations is available here:
+     * மேலும் மாறுக்கப்படும் விவரங்களுக்கு இங்கே செல்லவும்:
      * http://docs.phinx.org/en/latest/migrations.html#the-abstractmigration-class
      *
-     * The following commands can be used in this method and Phinx will
-     * automatically reverse them when rolling back:
+     * பின்வரும் கட்டங்களை இந்த முறையினிடம் பயன்படுத்தலாம், மறுமுகத்தில் சுழற்சி செய்யும்பொருட்டு:
      *
      *    createTable
      *    renameTable
@@ -62,19 +60,18 @@ class CreateRuleTable extends AbstractMigration
      *    addIndex
      *    addForeignKey
      *
-     * Any other destructive changes will result in an error when trying to
-     * rollback the migration.
+     * மற்ற புழுதிவுகள்வேறு தீங்குள்ள மாறுகள் மாறுக்கவில்லை என்பதன் விளக்கம் மிகுந்தமாகும் போது பிழையாக செல்வது.
      *
-     * Remember to call "create()" or "update()" and NOT "save()" when working
-     * with the Table class.
+     * அடிப்படையாக "create()" அல்லது "update()" ஐ அழுத்தவும் "சேமி()" ஐ அழுத்தவாம்
+     * கட்டமைப்பு வகையுடன் வேலை செய்யும் போது அடிப்படையாக அழுத்தப்படும்.
      */
     public function change()
     {
-        $table = $this->table('rule', ['id' => false, 'primary_key' => ['id'], 'engine' => 'InnoDB', 'collation' => 'utf8mb4_general_ci', 'comment' => '规则表']);
+        $table = $this->table('rule', ['id' => false, 'primary_key' => ['id'], 'engine' => 'InnoDB', 'collation' => 'utf8mb4_general_ci', 'comment' => 'விதி அட்டவணை']);
 
-        //添加数据字段
-        $table->addColumn('id', 'integer', ['identity' => true, 'signed' => false, 'limit' => 11, 'comment' => '主键ID'])
-            ->addColumn('ptype', 'char', ['default' => '', 'limit' => 8, 'comment' => '规则类型'])
+        //தரவு புலங்களைச் சேர்க்கவும்
+        $table->addColumn('id', 'integer', ['identity' => true, 'signed' => false, 'limit' => 11, 'comment' => 'முதன்மை பொருள் ஐடி'])
+            ->addColumn('ptype', 'char', ['default' => '', 'limit' => 8, 'comment' => 'விதி வகை'])
             ->addColumn('v0', 'string', ['default' => '', 'limit' => 128])
             ->addColumn('v1', 'string', ['default' => '', 'limit' => 128])
             ->addColumn('v2', 'string', ['default' => '', 'limit' => 128])
@@ -82,16 +79,13 @@ class CreateRuleTable extends AbstractMigration
             ->addColumn('v4', 'string', ['default' => '', 'limit' => 128])
             ->addColumn('v5', 'string', ['default' => '', 'limit' => 128]);
 
-        //执行创建
+        //உருவாக்கம் செய்யும்
         $table->create();
     }
 }
 
 ```
-
-## casbin 配置
-
-权限规则模型配置语法请看：https://casbin.org/docs/zh-CN/syntax-for-models
+casbin உள்ளிட்ட கட்டுப்பாடு மாதிரி கட்டமைப்பு மொழி குறித்த விவரங்களைப் பார்க்கவும்: https://casbin.org/docs/zh-CN/syntax-for-models
 
 ```php
 
@@ -101,138 +95,135 @@ return [
     'default' => [
         'model' => [
             'config_type' => 'file',
-            'config_file_path' => config_path() . '/casbin-restful-model.conf', // 权限规则模型配置文件
+            'config_file_path' => config_path() . '/casbin-restful-model.conf', // அனுமதி விதிகள் மாதிரி கட்டமைப்பு கோப்பு
             'config_text' => '',
         ],
         'adapter' => [
-            'type' => 'model', // model or adapter
+            'type' => 'model', // model அல்லது adapter
             'class' => \app\model\Rule::class,
         ],
     ],
-    // 可以配置多个权限model
+    // பல உரிமங்கள் மாதிரிக்கு கட்டமைக்க முடியும்
     'rbac' => [
         'model' => [
             'config_type' => 'file',
-            'config_file_path' => config_path() . '/casbin-rbac-model.conf', // 权限规则模型配置文件
+            'config_file_path' => config_path() . '/casbin-rbac-model.conf', // அனுமதி விதிகள் மாதிரி கட்டமைப்பு கோப்பு
             'config_text' => '',
         ],
         'adapter' => [
-            'type' => 'model', // model or adapter
+            'type' => 'model', // model அல்லது adapter
             'class' => \app\model\RBACRule::class,
         ],
     ],
 ];
 ```
 
-### 适配器
+### ஒருங்கிணைந்தன
 
-当前composer封装中适配的是 think-orm 的model方法，其他 orm 请参考 vendor/teamones/src/adapters/DatabaseAdapter.php
+தற்போதைய தொலைப்புcomposer பொறுப்பில் தௌக்கு-orm ஆனது model முறையை உள்ளடக்கியிருக்கும், பின்னர் டேப்புபகிர்ந்து ஒரு மாற்றம் செய்யலாம் vendor/teamones/src/adapters/DatabaseAdapter.php
 
-然后修改配置
+அப்படியும் உருமங்களை மாற்ற உள்ளடக்கியது
 
 ```php
 return [
     'default' => [
         'model' => [
             'config_type' => 'file',
-            'config_file_path' => config_path() . '/casbin-restful-model.conf', // 权限规则模型配置文件
+            'config_file_path' => config_path() . '/casbin-restful-model.conf', // அனுமதி விதிகள் மாதிரி கட்டமைப்பு கோப்பு
             'config_text' => '',
         ],
         'adapter' => [
-            'type' => 'adapter', // 这里类型配置成适配器模式
+            'type' => 'adapter', // இங்கே வகை கட்டமைக்கவும் என்பது
             'class' => \app\adapter\DatabaseAdapter::class,
         ],
     ],
 ];
 ```
+## பயன்பாட்டைப் பற்றிய விளக்கம்
 
-## 使用说明
-
-### 引入
+### உள்ளீடு
 
 ```php
-# 引入
+# உள்ளீடு
 use teamones\casbin\Enforcer;
 ```
 
-### 两种用法
+### இரண்டு பயன்பாடுகள்
 
 ```php
-# 1. 默认使用 default 配置
+# 1. இயல்புநிலை உபயோகத்திற்கு இயல்புநிலையாக பயன்படுத்துக
 Enforcer::addPermissionForUser('user1', '/user', 'read');
 
-# 1. 使用自定义的 rbac 配置
+# 2. தனிப்பட்ட rbac அமைப்பைப் பயன்படுத்துக
 Enforcer::instance('rbac')->addPermissionForUser('user1', '/user', 'read');
 ```
 
-### 常用API介绍
+### பொதுவான பயன்பாட்டின் அறிமுகம்
 
-更多API用法请去官方查看
+மேலும் அதிக API பயன்பாட்டுகளைப் பார்வையிட அனைவரும் தணிக்கையால் சென்றுக்கொள்ளவும்.
 
-- 管理API： https://casbin.org/docs/zh-CN/management-api
-- RBAC API： https://casbin.org/docs/zh-CN/rbac-api
+- மேல்வழிமுறைப் பயன்பாடுகள்: https://casbin.org/docs/zh-CN/management-api
+- RBAC API: https://casbin.org/docs/zh-CN/rbac-api
 
 ```php
-# 为用户添加权限
+# பயனாளருக்கு அனுமதியைச் சேர்க்கவும்
 
 Enforcer::addPermissionForUser('user1', '/user', 'read');
 
-# 删除一个用户的权限
+# ஒரு பயனாளரின் அனுமதியை நீக்குக
 
 Enforcer::deletePermissionForUser('user1', '/user', 'read');
 
-# 获取用户所有权限
+# பயனாளருக்கு அனைத்து அனுமதிகளையும் பெறுதல்
 
 Enforcer::getPermissionsForUser('user1'); 
 
-# 为用户添加角色
+# பயனாளருக்கு பங்குகொடுப்பைச் சேர்க்கவும்
 
 Enforcer::addRoleForUser('user1', 'role1');
 
-# 为角色添加权限
+# பங்குகொடுப்புக்கு அனுமதியைச் சேர்க்கவும்
 
 Enforcer::addPermissionForUser('role1', '/user', 'edit');
 
-# 获取所有角色
+# அனைத்து பங்குகளையும் பெறுக
 
 Enforcer::getAllRoles();
 
-# 获取用户所有角色
+# பயனாளரின் அனைத்து பங்குகளையும் பெறுக
 
 Enforcer::getRolesForUser('user1');
 
-# 根据角色获取用户
+# பங்குகளுக்கு அட்டவணை போல பயனானவர்களைப் பெறுக
 
 Enforcer::getUsersForRole('role1');
 
-# 判断用户是否属于一个角色
+# பயனாளர் ஒரு பங்குக்கு உள்ளதாக உள்ளாரா என்பதைச் சொல்லுக
 
 Enforcer::hasRoleForUser('use1', 'role1');
 
-# 删除用户角色
+# பயனாளரின் பங்கை நீக்குக
 
 Enforcer::deleteRoleForUser('use1', 'role1');
 
-# 删除用户所有角色
+# பயனாளரின் அனைத்து பங்குகளையும் நீக்குக
 
 Enforcer::deleteRolesForUser('use1');
 
-# 删除角色
+# பங்கை நீக்குக
 
 Enforcer::deleteRole('role1');
 
-# 删除权限
+# அனுமதியை நீக்குக
 
 Enforcer::deletePermission('/user', 'read');
 
-# 删除用户或者角色的所有权限
+# பயனாய்வாளர் அல்லது பங்குக்கு உள்ளீட்டக்கான அனைத்து அனுமதிகளையும் நீக்குக
 
 Enforcer::deletePermissionsForUser('user1');
 Enforcer::deletePermissionsForUser('role1');
 
-# 检查权限，返回 true or false
+# அனுமதி சரிபார்க்கவும், true அல்லது false பின்பற்றுக
 
 Enforcer::enforce("user1", "/user", "edit");
 ```
-
-

@@ -7,7 +7,7 @@ composer require --dev phpunit/phpunit
 ```
 
 ## Verwendung
-Erstellen Sie eine neue Datei `tests/TestConfig.php`, um die Datenbankkonfiguration zu testen.
+Erstellen Sie die Datei `tests/TestConfig.php`, um die Konfiguration der Datenbank zu testen.
 
 ```php
 <?php
@@ -27,14 +27,14 @@ class TestConfig extends TestCase
 }
 ```
 
-## Ausführen
+## Ausführung
 
 Führen Sie im Stammverzeichnis des Projekts `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php` aus.
 
-Das Ergebnis sieht ähnlich aus wie folgt:
+Das Ergebnis ähnelt dem folgenden:
 
 ```
-PHPUnit 9.5.10 von Sebastian Bergmann und Mitwirkenden.
+PHPUnit 9.5.10 by Sebastian Bergmann and contributors.
 
 .                                                                   1 / 1 (100%)
 

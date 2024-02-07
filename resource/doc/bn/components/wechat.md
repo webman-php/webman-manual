@@ -1,17 +1,17 @@
-# ওয়েব এম্যান
+# ওয়েবম্যান
 
 ## overtrue/wechat
 
 ### প্রকল্প ঠিকানা
 
 https://github.com/overtrue/wechat
-  
-### ইনস্টলেশন
- 
+
+### ইনস্টল করুন
+
 ```php
 composer require overtrue/wechat ^5.0
 ```
-  
+
 ### ব্যবহার
 
 ```php
@@ -37,8 +37,7 @@ class WechatController
 
 }
 ```
-  
-  
-### আরো সামগ্রী
+
+### অধিক তথ্য
 
 https://www.easywechat.com/5.x/

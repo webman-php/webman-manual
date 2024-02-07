@@ -6,9 +6,9 @@
 [![webman-event](https://img.shields.io/github/last-commit/tinywan/webman-event/main)]()
 [![webman-event](https://img.shields.io/github/v/tag/tinywan/webman-event?color=ff69b4)]()
 
-イベントはミドルウェアと比較して、より精密な位置決め（つまり、細かい粒度）を持ち、一部のビジネスシーンの拡張に適しているという利点があります。例えば、通常、ユーザーが登録した後に一連の処理を行う必要があるケースがありますが、イベントシステムを使用すると、既存のコードを侵さずにログイン処理を拡張することができ、システムの結合度を低くし、同時にバグの可能性も低くします。
+イベントはミドルウェアよりも精密なロケーション（つまり、より細かい粒度）であり、特定のビジネスシーンの拡張により適しています。たとえば、通常、ユーザーの登録やログイン後に一連の操作を行う必要がありますが、イベントシステムを使用すると、既存のコードに侵入することなくログイン操作の拡張が可能になり、システムの結合度が低くなり、バグの可能性も低くなります。
 
-## プロジェクトアドレス
+## プロジェクトのリンク
 
 [https://github.com/Tinywan/webman-permission](https://github.com/Tinywan/webman-permission)
 
@@ -23,28 +23,28 @@ composer require tinywan/webman-event
 ```
 ## 設定 
 
-イベント設定ファイル `config/event.php` の内容は以下の通りです。
+イベントの設定ファイル `config/event.php` の内容は次のとおりです。
 
 ```php
 return [
-   // イベントリスナー
-   'listener'    => [],
+    // イベントリスナー
+    'listener'    => [],
 
-   // イベントサブスクライバー
-   'subscriber' => [],
+    // イベントサブスクライバー
+    'subscriber' => [],
 ];
 ```
-### プロセス起動設定
+### プロセス起動の設定
 
-`config/bootstrap.php` を開いて、以下の設定を追加します。
+ `config/bootstrap.php` を開き、次の設定を追加します。
 
 ```php
 return [
-   // ここでは他の設定を省略しています ...
-   webman\event\EventManager::class,
+    // 他の設定は省略されています...
+    webman\event\EventManager::class,
 ];
 ```
-## はじめ方
+## クイックスタート
 
 ### イベントの定義
 
@@ -59,30 +59,30 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class LogErrorWriteEvent extends Event
 {
-   const NAME = 'log.error.write';  // イベント名、イベントの一意な識別子
+    const NAME = 'log.error.write';  // イベント名、イベントのユニークな識別子
 
-   /** @var array */
-   public array $log;
+    /** @var array */
+    public array $log;
 
-   public function __construct(array $log)
-   {
-       $this->log = $log;
-   }
+    public function __construct(array $log)
+    {
+        $this->log = $log;
+    }
 
-   public function handle()
-   {
-       return $this->log;
-   }
+    public function handle()
+    {
+        return $this->log;
+    }
 }
 ```
 
 ### イベントのリスニング
 ```php
 return [
-   // イベントリスナー
-   'listener'    => [
-       \extend\event\LogErrorWriteEvent::NAME  => \extend\event\LogErrorWriteEvent::class,
-   ],
+    // イベントリスナー
+    'listener'    => [
+        \extend\event\LogErrorWriteEvent::NAME  => \extend\event\LogErrorWriteEvent::class,
+    ],
 ];
 ```
 
@@ -98,36 +98,36 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class LoggerSubscriber implements EventSubscriberInterface
 {
-   /**
-    * @desc: メソッドの説明
-    * @return array|string[]
-    */
-   public static function getSubscribedEvents()
-   {
-       return [
-           LogErrorWriteEvent::NAME => 'onLogErrorWrite',
-       ];
-   }
+    /**
+     * @desc: メソッドの説明
+     * @return array|string[]
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            LogErrorWriteEvent::NAME => 'onLogErrorWrite',
+        ];
+    }
 
-   /**
-    * @desc: イベントの発生
-    * @param LogErrorWriteEvent $event
-    */
-   public function onLogErrorWrite(LogErrorWriteEvent $event)
-   {
-       // 具体的なビジネスロジック
-       var_dump($event->handle());
-   }
+    /**
+     * @desc: イベントのトリガー
+     * @param LogErrorWriteEvent $event
+     */
+    public function onLogErrorWrite(LogErrorWriteEvent $event)
+    {
+        // いくつかの具体的なビジネスロジック
+        var_dump($event->handle());
+    }
 }
 ```
 
 イベントのサブスクライブ
 ```php
 return [
-   // イベントサブスクライバー
-   'subscriber' => [
-       \extend\event\subscriber\LoggerSubscriber::class,
-   ],
+    // イベントのサブスクライブ
+    'subscriber' => [
+        \extend\event\subscriber\LoggerSubscriber::class,
+    ],
 ];
 ```
 
@@ -137,16 +137,16 @@ return [
 
 ```php
 $error = [
-   'errorMessage' => 'エラーメッセージ',
-   'errorCode' => 500
+    'errorMessage' => 'エラーメッセージ',
+    'errorCode' => 500
 ];
 EventManager::trigger(new LogErrorWriteEvent($error),LogErrorWriteEvent::NAME);
 ```
 
 実行結果
 
-![結果を表示](./trigger.png)
+![イベントトリガー結果](./trigger.png)
 
 ## ライセンス
 
-このプロジェクトは[Apache 2.0 ライセンス](LICENSE)のもとでライセンスされています。
+このプロジェクトは [Apache 2.0 ライセンス](LICENSE)のもとでライセンスされています。

@@ -1,18 +1,18 @@
-# webman ไลบรารีเหตุการณ์ webman-event
+# ไลบรารีเหตุการณ์ webman webman-event
 
-[![license](https://img.shields.io/github/license/Tinywan/webman-event)]()
+[![สัญญาอนุญาต](https://img.shields.io/github/license/Tinywan/webman-event)]()
 [![webman-event](https://img.shields.io/github/v/release/tinywan/webman-event?include_prereleases)]()
 [![webman-event](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
 [![webman-event](https://img.shields.io/github/last-commit/tinywan/webman-event/main)]()
 [![webman-event](https://img.shields.io/github/v/tag/tinywan/webman-event?color=ff69b4)]()
 
-ข้อดีของเหตุการณ์เมื่อเปรียบเทียบกับไลบรารีกลางทางคือเหตุการณ์มีความแม่นยำมากกว่าการใช้ไลบรารีกลางทาง (หรืออาจจะเพิ่มเท่าไหร่ก็ได้) และเหมาะกับการขยายธุรกิจในบางสถานการณ์ เช่น เรามักจะพบว่าหลังจากที่ผุ้ใช้ทำการลงทะเบียนหรือเข้าสู่ระบบ ต้องการทำงานต่อสติบแรกบางอย่าง ผ่านระบบเหตุการณ์สามารถทำได้โดยไม่ต้องแทรกระหว่างรหัสปัจจุบัน ทำงานของการเข้าสู่ระบบที่เตรียมไว้, ลดความเชื่อมโยงของระบบ พร้อมทั้งลดความเป็นไปได้ของข้อผิดพลาดได้
+ความเหมาะสมของเหตุการณ์เมื่อเทียบกับ middleware คือเหตุการณ์จะทำให้การระบุตำแหน่งที่แน่นอนมากกว่า middleware (หรือบอกได้ว่าจะมีความละเอียดสูงขึ้น) และเหมาะสำหรับการขยายธุรกิจบางประการเช่น เช่น เมื่อมีการลงทะเบียนหรือล็อกอินผู้ใช้ต้องทำการดำเนินการหลายอย่าง ผ่านระบบเหตุการณ์สามารถทำได้โดยไม่ทำลายโค้ดเดิม เพิ่มประสิทธิภาพของระบบพร้อมกันลดความเกี่ยวข้องของระบบให้น้อยลงและลดความเป็นไปได้ของบั๊กอย่างเช่น
 
-## ที่อยู่ของโปรเจค
+## ที่อยู่โครงการ
 
 [https://github.com/Tinywan/webman-permission](https://github.com/Tinywan/webman-permission)
 
-## ความพึงพอใจในการใช้งาน
+## ความขึ้นอยู่
 
 - [symfony/event-dispatcher](https://github.com/symfony/event-dispatcher)
 
@@ -21,32 +21,32 @@
 ```shell script
 composer require tinywan/webman-event
 ```
-## การกำหนดค่า 
+## การตั้งค่า
 
-ไฟล์กำหนดค่าเหตุการณ์ `config/event.php` เนื้อหาดังต่อไปนี้
+ไฟล์ตั้งค่าเหตุการณ์ `config/event.php` มีเนื้อหาดังต่อไปนี้
 
 ```php
 return [
-    // การติดตามเหตุการณ์
+    // ตัวฟังก์ชันการติดต่อกับเหตุการณ์
     'listener'    => [],
 
-    // ผู้รับการติดตามเหตุการณ์
+    // ตัวเติมเหตุการณ์
     'subscriber' => [],
 ];
 ```
-### การกำหนดค่าการเริ่มต้นของกระบวนการ
+### การตั้งค่าการเริ่มต้นของกระบวนการ
 
-เปิด `config/bootstrap.php` และใส่การกำหนดค่าตามนี้:
+เปิด `config/bootstrap.php`, เพิ่มการตั้งค่าดังต่อไปนี้:
 
 ```php
 return [
-    // ที่นี่ข้ามการกำหนดค่าอื่น ๆ ...
+    // ปรับปรุงการตั้งค่า ...
     webman\event\EventManager::class,
 ];
 ```
-## เริ่มต้นอย่างรวดเร็ว
+## เริ่มต้นรวดเร็ว
 
-### การกำหนดเหตุการณ์
+### กำหนดเหตุการณ์
 
 คลาสเหตุการณ์ `LogErrorWriteEvent.php`
 
@@ -59,7 +59,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class LogErrorWriteEvent extends Event
 {
-    const NAME = 'log.error.write';  // ชื่อเหตุการณ์หรือตัวระบุเหตุการณ์เฉพาะเจาะจง
+    const NAME = 'log.error.write';  // ชื่อเหตุการณ์, ตัวแทนเหตุการณ์เป็นค่าไม่ซ้ำเอาโดยสิ้นเชิง
 
     /** @var array */
     public array $log;
@@ -76,19 +76,20 @@ class LogErrorWriteEvent extends Event
 }
 ```
 
-### การติดตามเหตุการณ์
+### ฟังก์ชันการติดต่อกับเหตุการณ์
+
 ```php
 return [
-    // การติดตามเหตุการณ์
+    // ตัวฟังก์ชันการติดต่อกับเหตุการณ์
     'listener'    => [
         \extend\event\LogErrorWriteEvent::NAME  => \extend\event\LogErrorWriteEvent::class,
     ],
 ];
 ```
 
-### ผู้รับการติดตามเหตุการณ์
+### ตัวเติมเหตุการณ์
 
-คลาสสินสับสําหรับการติดตามเหตุการณ์ `LoggerSubscriber.php`
+คลาสตัวเติม `LoggerSubscriber.php`
 
 ```php
 namespace extend\event\subscriber;
@@ -99,7 +100,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class LoggerSubscriber implements EventSubscriberInterface
 {
     /**
-     * @desc: การบรรยายเมดท็อด
+     * @desc: ประโยชน์ของเมธอด
      * @return array|string[]
      */
     public static function getSubscribedEvents()
@@ -110,43 +111,43 @@ class LoggerSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @desc: การบุัดกรองเหตุการณ์
+     * @desc: เริ่มต้นเหตุการณ์
      * @param LogErrorWriteEvent $event
      */
     public function onLogErrorWrite(LogErrorWriteEvent $event)
     {
-        // บางลักษณะของลอจิกซ์ทางธุรกิจ
+        // ตรวจสอบตามจุดเป้าหมายที่ระบุ
         var_dump($event->handle());
     }
 }
 ```
 
-การติดตตามเหตุการณ์ 
+การตั้งค่าเหตุการณ์
 ```php
 return [
-    // การติดตามเหตุการณ์
+    // ตัวเติมการติดต่อกับเหตุการณ์
     'subscriber' => [
         \extend\event\subscriber\LoggerSubscriber::class,
     ],
 ];
 ```
 
-### การเรียกใช้ตัวกระตรวงเหตุการณ์
+### กำหนดไม้กระตุ้นเหตุการณ์
 
-เรียกใช้เหตุการณ์ `LogErrorWriteEvent` ขึ้นชื่อ.
+ไม้กระตุ้นเหตุการณ์ `LogErrorWriteEvent` การเริ่มต้นเหตุการณ์
 
 ```php
 $error = [
-    'errorMessage' => 'ข้อความผิด',
+    'errorMessage' => 'ข้อความผิดพลาด',
     'errorCode' => 500
 ];
 EventManager::trigger(new LogErrorWriteEvent($error),LogErrorWriteEvent::NAME);
 ```
 
-ผลลัพธ์การทำงาน
+ผลลัพธ์การดำเนินการ
 
-![ผลลัพธ์การทำงาน](./trigger.png)
+![ผลัพธ์การดำเนินการ](./trigger.png)
 
-## ใบอนุญาต
+## สิทธิในการใช้งาน
 
-โปรเจคนี้ได้รับอนุญาตภายใต้ [ใบอนุญาต Apache 2.0](LICENSE).
+โครงการนี้มีสิทธิ์ในการใช้งานภายใต้การอนุญาต [Apache 2.0 license](LICENSE).

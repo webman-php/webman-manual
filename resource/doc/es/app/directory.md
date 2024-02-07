@@ -1,6 +1,6 @@
 # Estructura de directorios
 
-```
+```plaintext
 plugin/
 └── foo
     ├── app
@@ -33,11 +33,10 @@ plugin/
     └── api
 ```
 
-Observamos que un complemento de la aplicación tiene la misma estructura de directorios y archivos de configuración que webman. De hecho, la experiencia de desarrollo es prácticamente igual a la de desarrollar una aplicación común en webman.
-Los nombres de directorios y complementos siguen la especificación PSR4. Dado que los complementos se colocan en el directorio plugin, los espacios de nombres comienzan con plugin, por ejemplo `plugin\foo\app\controller\UserController`.
+Observamos una estructura de directorios y archivos de configuración similar a la de webman dentro de un complemento de la aplicación. De hecho, la experiencia de desarrollo es casi idéntica a la de desarrollar una aplicación webman normal.
+Los nombres de los directorios y los complementos siguen la especificación PSR4. Debido a que los complementos se almacenan en el directorio `plugin`, todos los espacios de nombres comienzan con `plugin`, por ejemplo, `plugin\foo\app\controller\UserController`.
 
 ## Acerca del directorio api
-Cada complemento tiene un directorio api. Si tu aplicación proporciona algunas interfaces internas para que otras aplicaciones las utilicen, es necesario colocar esas interfaces en el directorio api.
-Es importante mencionar que estas interfaces se refieren a interfaces de llamada de funciones, no a interfaces de llamada de red.
-Por ejemplo, el plugin `Email` proporciona una interfaz `Email::send()` en el archivo `plugin/email/api/Email.php`, que se utiliza para enviar correos electrónicos desde otras aplicaciones.
-Además, `plugin/email/api/Install.php` es generado automáticamente y se utiliza para permitir que el mercado de complementos webman-admin realice operaciones de instalación o desinstalación.
+Cada complemento tiene un directorio llamado `api`. Si su aplicación proporciona algunas interfaces internas para que otras aplicaciones las utilicen, es necesario colocar esas interfaces en el directorio `api`.
+Es importante destacar que estas interfaces hacen referencia a llamadas de funciones, no a llamadas de red. Por ejemplo, el complemento de `correo electrónico` proporciona una interfaz `Email::send()` en `plugin/email/api/Email.php` para que otras aplicaciones envíen correos electrónicos.
+Además, `plugin/email/api/Install.php` se genera automáticamente para permitir que webman-admin llame a la tienda de complementos para realizar operaciones de instalación o desinstalación.

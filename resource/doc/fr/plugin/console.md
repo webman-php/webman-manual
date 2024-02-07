@@ -1,48 +1,48 @@
-# Plugin de ligne de commande webman/console
+# Le plugin de ligne de commande webman/console
 
 `webman/console` est basé sur `symfony/console`
 
-> Le plugin nécessite webman>=1.2.2 webman-framework>=1.2.1
+> Le plugin nécessite webman>=1.2.2 et webman-framework>=1.2.1
 
 ## Installation
- 
+
 ```sh
 composer require webman/console
 ```
 
-## Commandes supportées
+## Commandes Supportées
 **Utilisation**  
-`php webman <commande>` ou `php webman <commande>`.
+`php webman commande` ou `php webman commande`
 Par exemple `php webman version` ou `php webman version`
 
-## Commandes supportées
+## Commandes Supportées
 ### version
 **Affiche le numéro de version de webman**
 
 ### route:list
-**Affiche la configuration de route actuelle**
+**Affiche la configuration actuelle des routes**
 
 ### make:controller
 **Crée un fichier de contrôleur** 
-Par exemple, `php webman make:controller admin` va créer un fichier `app/controller/AdminController.php`
-Par exemple, `php webman make:controller api/user` va créer un fichier `app/api/controller/UserController.php`
+Par exemple, `php webman make:controller admin` créera un fichier `app/controller/AdminController.php`
+Par exemple, `php webman make:controller api/user` créera un fichier `app/api/controller/UserController.php`
 
 ### make:model
 **Crée un fichier de modèle**
-Par exemple, `php webman make:model admin` va créer un fichier `app/model/Admin.php`
-Par exemple, `php webman make:model api/user` va créer un fichier `app/api/model/User.php`
+Par exemple, `php webman make:model admin` créera un fichier `app/model/Admin.php`
+Par exemple, `php webman make:model api/user` créera un fichier `app/api/model/User.php`
 
 ### make:middleware
 **Crée un fichier middleware**
-Par exemple, `php webman make:middleware Auth` va créer un fichier `app/middleware/Auth.php`
+Par exemple, `php webman make:middleware Auth` créera un fichier `app/middleware/Auth.php`
 
 ### make:command
 **Crée un fichier de commande personnalisée**
-Par exemple, `php webman make:command db:config` va créer un fichier `app\command\DbConfigCommand.php`
+Par exemple, `php webman make:command db:config` créera un fichier `app\command\DbConfigCommand.php`
 
 ### plugin:create
 **Crée un plugin de base**
-Par exemple, `php webman plugin:create --name=foo/admin` va créer les répertoires `config/plugin/foo/admin` et `vendor/foo/admin`
+Par exemple, `php webman plugin:create --name=foo/admin` créera deux répertoires, `config/plugin/foo/admin` et `vendor/foo/admin`
 Voir [Créer un plugin de base](/doc/webman/plugin/create.html)
 
 ### plugin:export
@@ -56,12 +56,12 @@ Par exemple, `php webman plugin:export shop`
 Voir [Plugin d'application](/doc/webman/plugin/app.html)
 
 ### phar:pack
-**Emballer le projet webman dans un fichier phar**
-Voir [Emballer en phar](/doc/webman/others/phar.html)
-> Cette fonctionnalité nécessite webman>=1.2.4 webman-framework>=1.2.4 webman\console>=1.0.5
+**Packager le projet webman en fichier phar**
+Voir [Emballage phar](/doc/webman/others/phar.html)
+> Cette fonctionnalité nécessite webman>=1.2.4, webman-framework>=1.2.4 et webman/console>=1.0.5
 
 ## Commandes personnalisées
-Les utilisateurs peuvent définir leurs propres commandes, par exemple voici une commande pour afficher la configuration de la base de données
+Les utilisateurs peuvent définir leurs propres commandes, par exemple le suivant est une commande pour afficher la configuration de la base de données.
 
 * Exécuter `php webman make:command config:mysql`
 * Ouvrir `app/command/ConfigMySQLCommand.php` et le modifier comme suit
@@ -79,13 +79,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ConfigMySQLCommand extends Command
 {
     protected static $defaultName = 'config:mysql';
-    protected static $defaultDescription = 'Afficher la configuration actuelle du serveur MySQL';
+    protected static $defaultDescription = 'Affiche la configuration actuelle du serveur MySQL';
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Informations de configuration MySQL :');
+        $output->writeln('Informations de configuration de MySQL :');
         $config = config('database');
-        $headers = ['nom', 'par défaut', 'pilote', 'hôte', 'port', 'base de données', 'nom d\'utilisateur', 'mot de passe', 'socket UNIX', 'jeu de caractères', 'collation', 'préfixe', 'strict', 'moteur', 'schéma', 'mode SSL'];
+        $headers = ['name', 'default', 'driver', 'host', 'port', 'database', 'username', 'password', 'unix_socket', 'charset', 'collation', 'prefix', 'strict', 'engine', 'schema', 'sslmode'];
         $rows = [];
         foreach ($config['connections'] as $name => $db_config) {
             $row = [];
@@ -115,19 +115,20 @@ class ConfigMySQLCommand extends Command
     }
 }
 ```
-  
+
 ## Test
 
-Exécutez la commande suivante dans le terminal : `php webman config:mysql`
+Exécutez `php webman config:mysql` en ligne de commande
 
-Le résultat est similaire à ceci :
-```
+Le résultat sera similaire à :
+
+```shell
 +-------+---------+--------+-----------+------+----------+----------+----------+-------------+---------+-----------------+--------+--------+--------+--------+---------+
-| nom   | par défaut | pilote | hôte      | port | base de données | nom d'utilisateur | mot de passe | socket UNIX | jeu de caractères | collation | préfixe | strict | moteur | schéma | mode SSL |
+| name  | default | driver | host      | port | database | username | password | unix_socket | charset | collation       | prefix | strict | engine | schema | sslmode |
 +-------+---------+--------+-----------+------+----------+----------+----------+-------------+---------+-----------------+--------+--------+--------+--------+---------+
 | mysql | true    | mysql  | 127.0.0.1 | 3306 | mysql    | root     | ******   |             | utf8    | utf8_unicode_ci |        | 1      |        |        |         |
 +-------+---------+--------+-----------+------+----------+----------+----------+-------------+---------+-----------------+--------+--------+--------+--------+---------+
 ```
 
-## Plus d'informations
+## Pour plus d'informations
 http://www.symfonychina.com/doc/current/components/console.html

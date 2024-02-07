@@ -1,5 +1,5 @@
-# Abfrage-Generator
-## Alle Zeilen abrufen
+# Abfrage-Builder
+## Abrufen aller Zeilen
 ```php
 <?php
 namespace app\controller;
@@ -12,26 +12,26 @@ class UserController
     public function all(Request $request)
     {
         $users = Db::table('users')->get();
-        return view('user/all', ['users' => $users]);
+        return view('user/all', ['benutzer' => $users]);
     }
 }
 ```
 
-## Spezifische Spalten abrufen
+## Abrufen von bestimmten Spalten
 ```php
 $users = Db::table('user')->select('name', 'email as user_email')->get();
 ```
 
-## Eine Zeile abrufen
+## Abrufen einer Zeile
 ```php
 $user = Db::table('users')->where('name', 'John')->first();
 ```
 
-Einzelne Spalte abrufen
+## Abrufen einer Spalte
 ```php
 $titles = Db::table('roles')->pluck('title');
 ```
-Werte des angegebenen ID-Feldes als Index festlegen
+Wert der spezifizierten ID-Spalte als Index
 ```php
 $roles = Db::table('roles')->pluck('title', 'id');
 
@@ -40,17 +40,19 @@ foreach ($roles as $id => $title) {
 }
 ```
 
-## Einen einzelnen Wert (Feld) abrufen
+## Abrufen eines einzelnen Werts (Feldes)
 ```php
 $email = Db::table('users')->where('name', 'John')->value('email');
 ```
+
 ## Duplikate entfernen
 ```php
 $email = Db::table('user')->select('nickname')->distinct()->get();
 ```
 
-## Ergebnisse in Blöcken abrufen
-Wenn Sie Tausende von Datenbankeinträgen verarbeiten müssen, kann das Abrufen dieser Daten auf einmal zeitaufwändig und zu einem Speicherüberlauf führen. In diesem Fall können Sie die `chunkById`-Methode in Betracht ziehen. Mit dieser Methode können Sie das Ergebnis in kleine Blöcke aufteilen und es an die Closure-Funktion übergeben, um es zu verarbeiten. Zum Beispiel können wir alle Daten der `users`-Tabelle in kleine Blöcke von 100 Datensätzen aufteilen und verarbeiten:
+## Ergebnisse in Blöcke aufteilen
+Wenn Sie Tausende von Datensätzen aus einer Datenbank abrufen müssen, kann das vollständige Abrufen dieser Daten sehr zeitaufwändig sein und zu einem Speicherüberlauf führen. In solchen Fällen können Sie die `chunkById`-Methode in Betracht ziehen. Diese Methode ruft das Ergebnis in kleinen Blöcken ab und übergibt es einer Closure-Funktion zur Verarbeitung. Sie könnten beispielsweise alle Datensätze der Tabelle "users" in Blöcke von 100 Datensätzen aufteilen:
+
 ```php
 Db::table('users')->orderBy('id')->chunkById(100, function ($users) {
     foreach ($users as $user) {
@@ -58,46 +60,47 @@ Db::table('users')->orderBy('id')->chunkById(100, function ($users) {
     }
 });
 ```
-Sie können die Weitergabe der Ergebnisblöcke durch Rückgabe von `false` in der Closure beenden.
+Sie können die Iteration durch die Blöcke beenden, indem Sie in der Closure `false` zurückgeben.
 ```php
 Db::table('users')->orderBy('id')->chunkById(100, function ($users) {
-    // Bearbeiten der Datensätze...
+    // Verarbeitung der Datensätze...
 
     return false;
 });
 ```
 
-> Hinweis: Löschen Sie keine Daten in der Rückruffunktion, da dies dazu führen kann, dass einige Datensätze nicht im Ergebnis enthalten sind.
+> Hinweis: Löschen Sie keine Daten in der Closure, da dies dazu führen kann, dass einige Datensätze nicht im Ergebnis enthalten sind.
 
-## Aggregationen
-Der Abfrage-Generator bietet auch verschiedene Aggregationsmethoden wie count, max, min, avg, sum usw.
+## Aggregation
+Der Abfrage-Builder bietet auch verschiedene Aggregationsmethoden wie z.B. count, max, min, avg, sum usw.
 ```php
 $users = Db::table('users')->count();
 $price = Db::table('orders')->max('price');
 $price = Db::table('orders')->where('finalized', 1)->avg('price');
 ```
 
-## Überprüfen, ob ein Eintrag existiert
+## Überprüfen, ob ein Datensatz existiert
 ```php
 return Db::table('orders')->where('finalized', 1)->exists();
 return Db::table('orders')->where('finalized', 1)->doesntExist();
 ```
 
-## Rohausdrücke
+## Raw-Abfrageausdrücke
 Prototyp
 ```php
 selectRaw($expression, $bindings = [])
 ```
-Manchmal müssen Sie in der Abfrage Rohausdrücke verwenden. Sie können `selectRaw()` verwenden, um einen Rohausdruck zu erstellen:
+Manchmal müssen Sie in einer Abfrage einen Raw-Query-Ausdruck verwenden. Sie können `selectRaw()` verwenden, um einen Raw-Query-Ausdruck zu erstellen:
 ```php
 $orders = Db::table('orders')
                 ->selectRaw('price * ? as price_with_tax', [1.0825])
                 ->get();
 
 ```
-Ebenso stehen die Methoden `whereRaw()`, `orWhereRaw()`, `havingRaw()`, `orHavingRaw()`, `orderByRaw()`, `groupByRaw()` für Rohausdrücke zur Verfügung.
 
-`Db::raw($value)` wird ebenfalls zum Erstellen eines Rohausdrucks verwendet, hat jedoch keine Bindungsparameter, weshalb bei der Verwendung Vorsicht vor SQL-Injections geboten ist.
+Ebenso stehen `whereRaw()`, `orWhereRaw()`, `havingRaw()`, `orHavingRaw()`, `orderByRaw()` und `groupByRaw()`-Methoden für Raw-Query-Ausdrücke zur Verfügung.
+
+`Db::raw($value)` wird ebenfalls verwendet, um einen Raw-Query-Ausdruck zu erstellen, hat jedoch keine Bindungsparameter-Funktion und sollte daher vorsichtig bei der Verwendung aufgrund von möglichen SQL-Injection-Problemen sein.
 ```php
 $orders = Db::table('orders')
                 ->select('department', Db::raw('SUM(price) as total_sales'))
@@ -106,32 +109,33 @@ $orders = Db::table('orders')
                 ->get();
 
 ```
-## Join-Anweisungen
+
+## Join-Klauseln
 ```php
-// Join
+// join
 $users = Db::table('users')
             ->join('contacts', 'users.id', '=', 'contacts.user_id')
             ->join('orders', 'users.id', '=', 'orders.user_id')
             ->select('users.*', 'contacts.phone', 'orders.price')
             ->get();
 
-// Left Join
+// leftJoin            
 $users = Db::table('users')
             ->leftJoin('posts', 'users.id', '=', 'posts.user_id')
             ->get();
 
-// Right Join
+// rightJoin
 $users = Db::table('users')
             ->rightJoin('posts', 'users.id', '=', 'posts.user_id')
             ->get();
 
-// Cross Join
+// crossJoin    
 $users = Db::table('sizes')
             ->crossJoin('colors')
             ->get();
 ```
 
-## Union-Anweisungen
+## Union-Klauseln
 ```php
 $first = Db::table('users')
             ->whereNull('first_name');
@@ -141,17 +145,16 @@ $users = Db::table('users')
             ->union($first)
             ->get();
 ```
-
-## Where-Anweisungen
+## WHERE-Anweisung
 Prototyp
 ```php
 where($column, $operator = null, $value = null)
 ```
-Das erste Argument ist der Spaltenname, das zweite Argument kann ein beliebiger Operator sein, den das Datenbanksystem unterstützt, und das dritte ist der Wert, mit dem die Spalte verglichen werden soll.
+Der erste Parameter ist der Spaltenname, der zweite Parameter ist ein beliebiger Operator, den das Datenbanksystem unterstützt, und der dritte ist der Wert, mit dem die Spalte verglichen werden soll.
 ```php
 $users = Db::table('users')->where('votes', '=', 100)->get();
 
-// Wenn der Operator ein Gleichheitszeichen ist, können Sie ihn weglassen, sodass dieser Ausdruck denselben Effekt hat wie der obige
+// Wenn der Operator das Gleichheitszeichen ist, kann es weggelassen werden, daher ist dieser Ausdruck mit dem vorherigen äquivalent
 $users = Db::table('users')->where('votes', 100)->get();
 
 $users = Db::table('users')
@@ -167,16 +170,15 @@ $users = Db::table('users')
                 ->get();
 ```
 
-Sie können auch ein Bedingungsarray an die `where`-Funktion übergeben:
+Sie können auch ein Bedingungsarray an die where-Funktion übergeben:
 ```php
 $users = Db::table('users')->where([
     ['status', '=', '1'],
     ['subscribed', '<>', '1'],
 ])->get();
-
 ```
 
-Die `orWhere`-Methode akzeptiert die gleichen Parameter wie die `where`-Methode:
+Die orWhere-Methode akzeptiert die gleichen Parameter wie die where-Methode:
 ```php
 $users = Db::table('users')
                     ->where('votes', '>', 100)
@@ -184,7 +186,7 @@ $users = Db::table('users')
                     ->get();
 ```
 
-Sie können der `orWhere`-Methode als ersten Parameter auch eine Closure übergeben:
+Sie können der orWhere-Methode auch eine Closure als ersten Parameter übergeben:
 ```php
 // SQL: select * from users where votes > 100 or (name = 'Abigail' and votes > 50)
 $users = Db::table('users')
@@ -194,69 +196,65 @@ $users = Db::table('users')
                       ->where('votes', '>', 50);
             })
             ->get();
-
 ```
 
-`whereBetween` / `orWhereBetween` dient zur Überprüfung, ob der Spaltenwert zwischen zwei gegebenen Werten liegt:
+Die whereBetween / orWhereBetween Methode überprüft, ob der Wert des Felds zwischen den beiden angegebenen Werten liegt:
 ```php
 $users = Db::table('users')
            ->whereBetween('votes', [1, 100])
            ->get();
 ```
 
-`whereNotBetween` / `orWhereNotBetween` dient zur Überprüfung, ob der Spaltenwert nicht zwischen zwei gegebenen Werten liegt:
+Die whereNotBetween / orWhereNotBetween Methode überprüft, ob der Wert des Felds nicht zwischen den beiden angegebenen Werten liegt:
 ```php
 $users = Db::table('users')
                     ->whereNotBetween('votes', [1, 100])
                     ->get();
 ```
 
-`whereIn` / `whereNotIn` / `orWhereIn` / `orWhereNotIn` dient zur Überprüfung, ob der Wert der Spalte in einem angegebenen Array vorhanden sein muss:
+Die Methoden whereIn / whereNotIn / orWhereIn / orWhereNotIn überprüfen, ob der Wert des Felds in einem angegebenen Array vorhanden sein muss:
 ```php
 $users = Db::table('users')
                     ->whereIn('id', [1, 2, 3])
                     ->get();
 ```
 
-`whereNull` / `whereNotNull` / `orWhereNull` / `orWhereNotNull` dient zur Überprüfung, ob das angegebene Feld NULL sein muss:
+Die Methoden whereNull / whereNotNull / orWhereNull / orWhereNotNull überprüfen, ob das angegebene Feld NULL sein muss bzw. nicht NULL sein darf:
 ```php
 $users = Db::table('users')
                     ->whereNull('updated_at')
                     ->get();
 ```
-
-`whereNotNull` dient zur Überprüfung, ob das angegebene Feld nicht NULL sein muss:
 ```php
 $users = Db::table('users')
                     ->whereNotNull('updated_at')
                     ->get();
 ```
 
-`whereDate` / `whereMonth` / `whereDay` / `whereYear` / `whereTime` dient zum Vergleichen des Spaltenwerts mit einem angegebenen Datum:
+Die Methoden whereDate / whereMonth / whereDay / whereYear / whereTime werden verwendet, um den Wert des Felds mit dem angegebenen Datum zu vergleichen:
 ```php
 $users = Db::table('users')
                 ->whereDate('created_at', '2016-12-31')
                 ->get();
 ```
 
-`whereColumn` / `orWhereColumn` dient zum Vergleichen der Werte zweier Spalten:
+Die whereColumn / orWhereColumn Methoden werden verwendet, um zu überprüfen, ob die Werte zweier Spalten gleich sind:
 ```php
 $users = Db::table('users')
                 ->whereColumn('first_name', 'last_name')
                 ->get();
-
+                
 // Sie können auch einen Vergleichsoperator übergeben
 $users = Db::table('users')
                 ->whereColumn('updated_at', '>', 'created_at')
                 ->get();
-
-// Die Methode 'whereColumn' akzeptiert auch ein Array
+                
+// Die whereColumn-Methode akzeptiert auch Arrays
 $users = Db::table('users')
                 ->whereColumn([
                     ['first_name', '=', 'last_name'],
                     ['updated_at', '>', 'created_at'],
                 ])->get();
-
 ```
 
 Parametergruppierung
@@ -271,7 +269,7 @@ $users = Db::table('users')
            ->get();
 ```
 
-`whereExists`
+whereExists
 ```php
 // select * from users where exists ( select 1 from orders where orders.user_id = users.id )
 $users = Db::table('users')
@@ -283,49 +281,50 @@ $users = Db::table('users')
            ->get();
 ```
 
-## Sortieren nach
+## orderBy
 ```php
 $users = Db::table('users')
                 ->orderBy('name', 'desc')
                 ->get();
 ```
 
-## Zufällige Sortierung
+## Zufällige Reihenfolge
 ```php
 $randomUser = Db::table('users')
                 ->inRandomOrder()
                 ->first();
 ```
-> Random Order kann die Serverleistung stark beeinträchtigen, daher wird davon abgeraten, sie zu verwenden
+> Die zufällige Reihenfolge kann die Serverleistung erheblich beeinträchtigen und wird daher nicht empfohlen.
 
-## GroupBy / Having
+## groupBy / having
 ```php
 $users = Db::table('users')
                 ->groupBy('account_id')
                 ->having('account_id', '>', 100)
                 ->get();
-// Sie können der 'groupBy'-Methode auch mehrere Parameter übergeben
+// Sie können der groupBy-Methode auch mehrere Parameter übergeben
 $users = Db::table('users')
                 ->groupBy('first_name', 'status')
                 ->having('account_id', '>', 100)
                 ->get();
 ```
 
-## Offset / Limit
+## offset / limit
 ```php
 $users = Db::table('users')
                 ->offset(10)
                 ->limit(5)
                 ->get();
 ```
+
 ## Einfügen
-Einfügen eines einzelnen Datensatzes
+Einfügen von einzelnen Datensätzen
 ```php
 Db::table('users')->insert(
     ['email' => 'john@example.com', 'votes' => 0]
 );
 ```
-Einfügen mehrerer Datensätze
+Einfügen von mehreren Datensätzen
 ```php
 Db::table('users')->insert([
     ['email' => 'taylor@example.com', 'votes' => 0],
@@ -333,24 +332,23 @@ Db::table('users')->insert([
 ]);
 ```
 
-## Autoinkrement-ID
+## Automatische ID-Zuweisung
 ```php
 $id = Db::table('users')->insertGetId(
     ['email' => 'john@example.com', 'votes' => 0]
 );
 ```
+> Hinweis: Bei der Verwendung von PostgreSQL weist die insertGetId-Methode standardmäßig "id" als den automatisch inkrementierten Feldnamen zu. Wenn Sie die ID aus einer anderen "Sequenz" erhalten möchten, können Sie den Feldnamen als zweiten Parameter an die insertGetId-Methode übergeben.
 
-> Hinweis: Bei Verwendung von PostgreSQL wird die Methode insertGetId standardmäßig das Feld id als den Namen des automatisch inkrementierten Feldes verwenden. Wenn Sie die ID aus einer anderen "Sequenz" abrufen möchten, können Sie den Feldnamen als zweiten Parameter an die Methode insertGetId übergeben.
-
-## Aktualisieren
+## Aktualisierung
 ```php
 $affected = Db::table('users')
               ->where('id', 1)
               ->update(['votes' => 1]);
 ```
 
-## Aktualisieren oder einfügen
-Manchmal möchten Sie vorhandene Datensätze in der Datenbank aktualisieren oder sie erstellen, wenn kein übereinstimmender Datensatz vorhanden ist:
+## Aktualisieren oder Einfügen
+Manchmal möchten Sie vorhandene Datensätze in der Datenbank aktualisieren oder, falls keine übereinstimmenden Datensätze gefunden werden, diese erstellen:
 ```php
 Db::table('users')
     ->updateOrInsert(
@@ -358,10 +356,10 @@ Db::table('users')
         ['votes' => '2']
     );
 ```
-Die updateOrInsert Methode wird zuerst versuchen, anhand des Schlüssels und Werts im ersten Parameter übereinstimmende Datensätze in der Datenbank zu finden. Wenn ein Datensatz gefunden wird, wird er mit den Werten im zweiten Parameter aktualisiert. Wenn kein Datensatz gefunden wird, wird ein neuer Datensatz mit den Daten aus beiden Arrays eingefügt.
+Die updateOrInsert-Methode versucht zunächst, anhand des Schlüssels und des Werts im ersten Parameter übereinstimmende Datensätze in der Datenbank zu finden. Wenn ein Datensatz vorhanden ist, werden die Datensätze mit den Werten im zweiten Parameter aktualisiert. Wenn kein Datensatz gefunden wird, wird ein neuer Datensatz mit den kombinierten Daten beider Arrays eingefügt.
 
-## Inkrement & Dekrement
-Diese Methoden akzeptieren mindestens eine Spalte, die geändert werden soll. Der zweite Parameter ist optional und steuert die Höhe der Inkrementierung oder Dekrementierung:
+## Inkrementieren & Dekrementieren
+Beide Methoden akzeptieren mindestens eine Spalte als Parameter. Der zweite Parameter ist optional und dient zur Steuerung des Inkrements oder Dekrements der Spalte:
 ```php
 Db::table('users')->increment('votes');
 
@@ -371,7 +369,7 @@ Db::table('users')->decrement('votes');
 
 Db::table('users')->decrement('votes', 5);
 ```
-Sie können auch das Feld angeben, das während des Vorgangs aktualisiert werden soll:
+Sie können auch das zu aktualisierende Feld während des Vorgangs angeben:
 ```php
 Db::table('users')->increment('votes', 1, ['name' => 'John']);
 ```
@@ -382,27 +380,26 @@ Db::table('users')->delete();
 
 Db::table('users')->where('votes', '>', 100)->delete();
 ```
-Wenn Sie die Tabelle leeren möchten, können Sie die truncate Methode verwenden, die alle Zeilen löscht und den Autoinkrement-ID auf Null zurücksetzt:
+Wenn Sie alle Datensätze in einer Tabelle löschen möchten, können Sie die truncate-Methode verwenden, die alle Zeilen löscht und die automatische ID auf null zurücksetzt:
 ```php
 Db::table('users')->truncate();
 ```
 
 ## Pessimistisches Sperren
-Der Abfrage-Builder enthält auch einige Funktionen, mit denen Sie auf der Abfrageebene eine "pessimistische Sperre" implementieren können. Wenn Sie ein "Shared Lock" in der Abfrage implementieren möchten, können Sie die Methode sharedLock verwenden. Ein Shared Lock kann verhindern, dass ausgewählte Datenspalten geändert werden, bis die Transaktion abgeschlossen ist:
+Der Query Builder enthält auch einige Funktionen, die Ihnen bei der Umsetzung von "pessimistischem Locking" in SELECT-Statements helfen können. Wenn Sie in Ihrer Abfrage ein "shared lock" implementieren möchten, können Sie die sharedLock-Methode verwenden. Der shared lock verhindert, dass die ausgewählten Datensätze geändert werden, bis die Transaktion abgeschlossen ist:
 ```php
 Db::table('users')->where('votes', '>', 100)->sharedLock()->get();
 ```
-Alternativ können Sie auch die Methode lockForUpdate verwenden. Durch Verwendung eines "Update Locks" können Zeilen davor geschützt werden, von anderen Shared Locks geändert oder ausgewählt zu werden:
+Alternativ können Sie die lockForUpdate-Methode verwenden. Die Verwendung des "update"-Locks verhindert, dass vom Locking anderer Datensätze geändert oder ausgewählt wird:
 ```php
 Db::table('users')->where('votes', '>', 100)->lockForUpdate()->get();
 ```
-
-## Debuggen
-Sie können die dd oder dump Methode verwenden, um Abfrageergebnisse oder SQL-Anweisungen anzuzeigen. Mit der dd Methode können Sie Debug-Informationen anzeigen und die Ausführung der Anfrage anhalten. Die dump Methode zeigt ebenfalls Debug-Informationen an, hält jedoch nicht die Ausführung der Anfrage an:
+## Debugging
+Sie können die Ergebnisse von Abfragen oder SQL-Anweisungen mit der `dd`- oder `dump`-Methode ausgeben. Die Verwendung der `dd`-Methode zeigt Debug-Informationen an und stoppt dann die Ausführung der Anfrage. Die `dump`-Methode zeigt ebenfalls Debug-Informationen an, stoppt jedoch nicht die Ausführung der Anfrage:
 ```php
 Db::table('users')->where('votes', '>', 100)->dd();
 Db::table('users')->where('votes', '>', 100)->dump();
 ```
 
 > **Hinweis**
-> Zur Verwendung des Debuggens muss `symfony/var-dumper` installiert sein. Das entsprechende Kommando lautet: `composer require symfony/var-dumper`
+> Zur Debugging ist die Installation von `symfony/var-dumper` erforderlich. Verwenden Sie den Befehl `composer require symfony/var-dumper` zur Installation.

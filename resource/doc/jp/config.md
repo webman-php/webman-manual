@@ -10,17 +10,17 @@ webmanの設定ファイルは`config/`ディレクトリにあり、プロジ�
 config();
 ```
 
-`config/app.php`にあるすべての設定を取得する
+`config/app.php`のすべての設定を取得する
 ```php
 config('app');
 ```
 
-`config/app.php`にある`debug`の設定を取得する
+`config/app.php`の`debug`設定を取得する
 ```php
 config('app.debug');
 ```
 
-設定が配列の場合、`.`を使用して配列内の要素の値を取得できます。例えば
+設定が配列の場合、`.`を使って配列内の要素の値を取得することができます。例えば
 ```php
 config('file.key1.key2');
 ```
@@ -29,11 +29,11 @@ config('file.key1.key2');
 ```php
 config($key, $default);
 ```
-`config`は第2引数を使用してデフォルト値を渡し、設定が存在しない場合はデフォルト値を返します。
+2番目のパラメータを使用してデフォルト値を渡し、設定が存在しない場合はデフォルト値を返します。
 設定が存在せず、デフォルト値が設定されていない場合はnullを返します。
 
 ## カスタム設定
-開発者は`config/`ディレクトリに独自の設定ファイルを追加できます。例えば
+開発者は`config/`ディレクトリに独自の設定ファイルを追加することができます。例えば
 
 **config/payment.php**
 
@@ -45,7 +45,7 @@ return [
 ];
 ```
 
-**設定を取得する際の使用例**
+**設定を取得するときに使用**
 ```php
 config('payment');
 config('payment.key');
@@ -53,7 +53,7 @@ config('payment.key');
 ```
 
 ## 設定の変更
-webmanは動的な設定変更をサポートしておらず、すべての設定は対応する設定ファイルを手動で変更し、reloadまたはrestartを行う必要があります。
+webmanは設定の動的な変更をサポートしていません。すべての設定は対応する設定ファイルを手動で変更し、reloadまたはrestartを行う必要があります。
 
 > **注意**
-> サーバー設定(`config/server.php`)およびプロセス設定(`config/process.php`)はreloadをサポートしておらず、restartが必要です。
+>`config/server.php`でのサーバーの設定と`config/process.php`でのプロセスの設定はreloadをサポートしていません。restartを行う必要があります。

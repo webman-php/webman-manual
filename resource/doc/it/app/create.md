@@ -1,17 +1,18 @@
-# Creare un plugin dell'applicazione
+# Creare un'applicazione di plugin
 
-## Identificativo unico
+## Identificatore unico
 
-Ogni plugin ha un identificativo unico dell'applicazione. Prima di sviluppare un plugin, il programmatore deve pensare a un'identificazione e verificare che non sia già in uso. Verifica l'identificativo all'indirizzo [Verifica dell'identificativo dell'applicazione](https://www.workerman.net/app/check)
+Ogni plugin ha un'identificazione unica dell'applicazione, pertanto gli sviluppatori devono pensare a un'identificazione prima di sviluppare e verificare che l'identificazione non sia già occupata.
+Indirizzo di verifica dell'identificazione dell'applicazione [Check dell'identificazione dell'applicazione](https://www.workerman.net/app/check)
 
 ## Creazione
 
-Esegui `composer require webman/console` per installare la riga di comando di webman.
+Eseguire `composer require webman/console` per installare la console webman
 
-Usa il comando `php webman app-plugin:create {identificativo del plugin}` per creare un plugin dell'applicazione in locale.
+Utilizzare il comando `php webman app-plugin:create {identificatore del plugin}` per creare un'applicazione di plugin locale
 
-Ad esempio: `php webman app-plugin:create foo`
+Ad esempio `php webman app-plugin:create foo`
 
-Riavvia webman.
+Riavviare webman
 
-Visita `http://127.0.0.1:8787/app/foo`. Se viene restituito un contenuto, significa che la creazione è avvenuta con successo.
+Visitare `http://127.0.0.1:8787/app/foo` se viene restituito un contenuto, significa che la creazione è riuscita.

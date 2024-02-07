@@ -1,33 +1,33 @@
-# Über Memory Leaks
-Webman ist ein Framework, das im Speicher verbleibt, daher müssen wir uns ein wenig um mögliche Memory Leaks kümmern. Entwickler müssen sich jedoch keine übermäßigen Sorgen machen, da Memory Leaks unter extremen Bedingungen auftreten und leicht vermieden werden können. Die Entwicklung mit Webman ist im Wesentlichen gleich wie bei herkömmlichen Frameworks und erfordert keine zusätzlichen Operationen für das Memory Management.
+# Über Speicherverluste
+Webman ist ein residentes Speicherframework, daher müssen wir ein wenig auf mögliche Speicherverluste achten. Entwickler müssen sich jedoch keine allzu großen Sorgen machen, da Speicherverluste unter extremen Bedingungen auftreten und leicht vermieden werden können. Die Entwicklung mit Webman ist im Wesentlichen genauso wie bei herkömmlichen Frameworks, es sind keine zusätzlichen Maßnahmen für das Speichermanagement erforderlich.
 
 > **Hinweis**
-> Der mit Webman gelieferte Monitor-Prozess überwacht den Speicherverbrauch aller Prozesse. Wenn der Speicherverbrauch eines Prozesses kurz davor steht, den im php.ini festgelegten Wert von `memory_limit` zu erreichen, wird der entsprechende Prozess automatisch sicher neu gestartet, um Speicher freizugeben. Dies hat keinen Einfluss auf das laufende System.
+> Der mitgelieferte Monitorprozess von Webman überwacht den Speicherverbrauch aller Prozesse. Wenn der Speicherverbrauch eines Prozesses den im `php.ini` definierten `memory_limit` erreicht, wird der entsprechende Prozess automatisch sicher neu gestartet, um Speicher freizugeben. In dieser Zeit hat dies keinen Einfluss auf das Geschäft.
 
-## Definition eines Memory Leaks
-Mit zunehmender Anzahl von Anfragen nimmt der Speicherbedarf von Webman **unbegrenzt zu** (beachten Sie, dass es **unbegrenzt zunimmt**), oft auf mehrere hundert Megabyte oder sogar mehr, was als Memory Leaks bezeichnet wird. Wenn der Speicherbedarf zunimmt, aber dann nicht weiter ansteigt, handelt es sich nicht um einen Memory Leaks.
+## Definition von Speicherverlusten
+Mit zunehmenden Anfragen steigt der Speicherverbrauch von Webman **unbegrenzt** (beachten Sie, dass er **unbegrenzt** steigt) und erreicht einige hundert Megabyte oder mehr. Dies wird als Speicherverlust bezeichnet. Wenn der Speicherverbrauch zunimmt, aber später nicht weiter ansteigt, handelt es sich nicht um einen Speicherverlust.
 
-Ein Prozess, der einige zehn Megabyte Speicher belegt, ist eine normale Situation. Wenn ein Prozess jedoch sehr große Anfragen verarbeitet oder eine große Anzahl von Verbindungen verwaltet, kann der Speicherverbrauch eines einzelnen Prozesses möglicherweise auf mehrere hundert Megabyte ansteigen. Ein Teil dieses Speichers wird möglicherweise von PHP nach der Verwendung nicht vollständig an das Betriebssystem zurückgegeben, sondern für die Wiederverwendung zurückgehalten. Dadurch kann es nach der Verarbeitung einer großen Anfrage zu einer Speichererhöhung kommen, ohne dass der Speicher freigegeben wird. Dies ist ein normaler Vorgang. (Durch den Aufruf der Methode `gc_mem_caches()` kann etwas ungenutzter Speicher freigegeben werden.)
+Es ist normal, dass ein Prozess mehrere zehn Megabyte Speicherplatz einnimmt. Wenn ein Prozess jedoch eine extrem große Anfrage verarbeitet oder eine große Anzahl von Verbindungen verwaltet, kann der Speicherverbrauch eines einzelnen Prozesses möglicherweise auf über hundert Megabyte steigen. Nach der Verwendung gibt PHP möglicherweise nicht den gesamten Speicherplatz an das Betriebssystem zurück, sondern behält diesen zur Wiederverwendung bei. Daher kann es zu einer Situation kommen, in der der Speicherverbrauch nach der Verarbeitung einer großen Anfrage steigt und der Speicher nicht freigegeben wird. Dies ist ein normaler Vorgang. (Das Aufrufen der Methode `gc_mem_caches()` kann einen Teil des ungenutzten Speichers freigeben.)
 
-## Wie entstehen Memory Leaks?
-**Memory Leaks treten auf, wenn folgende zwei Bedingungen erfüllt sind:**
-1. Es gibt ein **Array mit langer Lebensdauer** (beachten Sie, dass es sich um ein Array mit langer Lebensdauer handelt, normale Arrays sind unproblematisch).
-2. Dieses **Array mit langer Lebensdauer** wächst unbegrenzt (es werden kontinuierlich Daten in das Array eingefügt, ohne dass diese bereinigt werden).
+## Wie entstehen Speicherverluste?
+**Speicherverluste treten nur unter folgenden beiden Bedingungen auf:**
+1. Es gibt ein **langfristiges** Array (Achten Sie auf das Wort "langfristig", normale Arrays sind unbedenklich).
+2. Und dieses **langfristige** Array dehnt sich unbegrenzt aus (Geschäft fügt unbegrenzt Daten hinzu, ohne sie zu bereinigen).
 
-Wenn beide Bedingungen von Punkt 1 und 2 **gleichzeitig** erfüllt sind, tritt ein Memory Leaks auf. Andernfalls, wenn eine oder gar keine der oben genannten Bedingungen erfüllt ist, liegt kein Memory Leaks vor.
+Wenn beide Bedingungen 1 und 2 **gleichzeitig erfüllt** sind, tritt ein Speicherverlust auf. Wenn eine der Bedingungen nicht erfüllt ist oder nur eine Bedingung erfüllt ist, liegt kein Speicherverlust vor.
 
-## Arrays mit langer Lebensdauer
-In Webman umfassen Arrays mit langer Lebensdauer:
+## Langfristige Arrays
+In Webman umfassen langfristige Arrays:
 1. Arrays mit dem Schlüsselwort `static`
-2. Array-Eigenschaften von Singleton-Instanzen
+2. Arrays mit Eigenschaften von Singletons
 3. Arrays mit dem Schlüsselwort `global`
 
-> **Hinweis**
-> In Webman ist es möglich, Daten mit langer Lebensdauer zu verwenden, jedoch muss sichergestellt werden, dass die Elemente in diesen Daten begrenzt sind und die Anzahl der Elemente nicht unbegrenzt wächst.
+> **Beachten**
+> In Webman ist es erlaubt, langfristige Daten zu verwenden, es muss jedoch sichergestellt werden, dass die Daten im Array begrenzt sind und die Anzahl der Elemente nicht unbegrenzt ansteigt.
 
-Im Folgenden werden Beispiele zu den einzelnen Punkten erläutert.
+Im Folgenden werden jeweils Beispiele erläutert.
 
-#### Unbegrenzt wachsendes statisches Array
+#### Unbegrenztes Wachstum des statischen Arrays
 ```php
 class Foo
 {
@@ -35,14 +35,13 @@ class Foo
     public function index(Request $request)
     {
         self::$data[] = time();
-        return response('hello');
+        return response('hallo');
     }
 }
 ```
+Das mit dem Schlüsselwort `static` definierte `$data` Array ist ein langfristiges Array, und in diesem Beispiel wird das `$data` Array mit jeder Anfrage unbegrenzt erweitert, was zu Speicherverlusten führt.
 
-Das mit dem Schlüsselwort `static` definierte Array `$data` ist ein Array mit langer Lebensdauer und wächst in dem Beispiel kontinuierlich mit jeder Anfrage, was zu einem Memory Leaks führt.
-
-#### Unbegrenzt wachsende Array-Eigenschaften eines Singleton
+#### Unbegrenztes Wachstum von Singleton-Array-Eigenschaften
 ```php
 class Cache
 {
@@ -63,25 +62,23 @@ class Cache
     }
 }
 ```
-
-Aufruf des Codes
+Aufrufcode
 ```php
 class Foo
 {
     public function index(Request $request)
     {
         Cache::instance()->set(time(), time());
-        return response('hello');
+        return response('hallo');
     }
 }
 ```
+`Cache::instance()` gibt eine Cache-Singleton-Instanz zurück, die eine langfristige Klasseninstanz ist. Obwohl ihr `$data` Attribut kein Schlüsselwort `static` verwendet, ist es aufgrund der langen Lebensdauer der Klasse selbst ein langfristiges Array. Mit jeder Hinzufügung eines neuen Schlüssels zum `$data` Array verbraucht das Programm immer mehr Speicher, was zu Speicherverlusten führt.
 
-`Cache::instance()` gibt eine Singleton-Instanz von `Cache` zurück, die eine lange Lebensdauer hat. Obwohl das `$data`-Attribut kein Schlüsselwort `static` verwendet, ist es aufgrund der langen Lebensdauer der Klasse selbst ebenfalls ein Array mit langer Lebensdauer. Durch kontinuierliches Hinzufügen unterschiedlicher Schlüssel zur `$data`-Eigenschaft nimmt auch der Speicherverbrauch des Programms zu und führt so zu einem Memory Leaks.
+> **Beachten**
+> Wenn der Schlüssel, den `Cache::instance()->set(key, value)` hinzufügt, in begrenzter Anzahl vorhanden ist, wird keine Speicherverschwendung auftreten, da das `$data` Array nicht unbegrenzt ansteigt.
 
-> **Hinweis**
-> Wenn die von `Cache::instance()->set(key, value)` hinzugefügten Schlüssel eine begrenzte Anzahl haben, tritt kein Memory Leaks auf, da das `$data`-Array nicht unbegrenzt wächst.
-
-#### Unbegrenzt wachsendes globales Array
+#### Unbegrenztes Wachstum von globalen Arrays
 ```php
 class Index
 {
@@ -93,8 +90,7 @@ class Index
     }
 }
 ```
-
-Arrays, die mit dem Schlüsselwort `global` definiert sind, werden nach dem Abschluss der Funktion oder der Methode nicht freigegeben, wodurch sie zu Arrays mit langer Lebensdauer werden. Der obige Code verursacht einen Memory Leaks, da der Speicherverbrauch mit jeder Anfrage kontinuierlich zunimmt. Ebenso sind Arrays, die in Funktionen oder Methoden mit dem Schlüsselwort `static` definiert sind, Arrays mit langer Lebensdauer. Wenn solch ein Array unbegrenzt wächst, kann auch ein Memory Leaks auftreten, etwa wie folgt:
+Arrays, die mit dem Schlüsselwort `global` definiert sind, werden nach dem Abschluss einer Funktion oder einer Methoden nicht freigegeben, daher sind sie langfristige Arrays. Der oben genannten Code führt zu Speicherverlusten, da der Speicherverbrauch mit jedem Anstieg der Anfragen steigt. Ebenso sind in Funktionen oder Methoden mit dem Schlüsselwort `static` definierte Arrays langfristige Arrays, und wenn das Array unbegrenzt wächst, tritt ebenfalls ein Speicherverlust auf, z.B:
 ```php
 class Index
 {
@@ -108,8 +104,8 @@ class Index
 ```
 
 ## Empfehlungen
-Entwickler sollten Memory Leaks nicht übermäßig beachten, da sie äußerst selten auftreten. Sollten sie unglücklicherweise auftreten, können wir durch Belastungstests feststellen, welche Teile des Codes den Memory Leaks verursachen und so das Problem lokalisieren. Selbst wenn Entwickler den Leckagepunkt nicht finden, wird der von Webman bereitgestellte Monitor-Dienst gestartet, um Prozesse mit Memory Leaks rechtzeitig sicher neu zu starten und den Speicher freizugeben.
+Entwickler sollten sich in der Regel keine große Sorgen um Speicherverluste machen, da sie selten auftreten. Wenn sie dennoch auftreten, können wir durch Stresstesting den Codeabschnitt finden, der den Speicherverlust verursacht, und das Problem lokalisieren. Selbst wenn Entwickler den Leckagepunkt nicht finden, wird der mitgelieferte Überwachungsdienst von Webman den Prozess rechtzeitig sicher neu starten, um den Speicher freizugeben.
 
-Wenn Sie Memory Leaks jedoch so weit wie möglich vermeiden möchten, können Sie die folgenden Empfehlungen beachten.
-1. Vermeiden Sie die Verwendung von Arrays mit dem Schlüsselwort `global` und `static`, und wenn Sie diese dennoch verwenden, stellen Sie sicher, dass sie nicht unbegrenzt wachsen.
-2. Vermeiden Sie die Verwendung von Singleton für Klassen, die Sie nicht kennen, und verwenden Sie stattdessen das `new`-Stichwort zur Initialisierung. Sollten Sie dennoch ein Singleton benötigen, überprüfen Sie, ob es Eigenschaften mit unbegrenztem Wachstum von Arrays gibt.
+Wenn Sie dennoch versuchen möchten, Speicherverluste zu vermeiden, können Sie die folgenden Empfehlungen beachten:
+1. Vermeiden Sie global oder statische Arrays und stellen Sie sicher, dass sie nicht unbegrenzt wachsen.
+2. Verwenden Sie für unbekannte Klassen möglichst keine Singleton-Instanzen. Wenn ein Singleton erforderlich ist, überprüfen Sie, ob es Eigenschaften mit unbegrenztem Wachstum gibt. Verwenden Sie die `new`-Anweisung zur Initialisierung, wenn ein Singleton nicht erforderlich ist.

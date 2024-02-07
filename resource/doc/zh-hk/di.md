@@ -2,9 +2,7 @@
 在webman裡依賴自動注入是可選功能，此功能默認關閉。如果你需要依賴自動注入，推薦使用[php-di](https://php-di.org/doc/getting-started.html)，以下是webman結合`php-di`的用法。
 
 ## 安裝
-```
-composer require psr/container ^1.1.1 php-di/php-di ^6 doctrine/annotations ^1.14
-```
+```composer require psr/container ^1.1.1 php-di/php-di ^6 doctrine/annotations ^1.14```
 
 修改配置`config/container.php`，其最終內容如下：
 ```php
@@ -15,7 +13,7 @@ $builder->useAnnotations(true);
 return $builder->build();
 ```
 
-> `config/container.php`裡最終返回一個符合`PSR-11`規範的容器實例。如果你不想使用 `php-di` ，可以在這裡創建並返回一個其他符合`PSR-11`規範的容器實例。
+>`config/container.php`裡最終返回一個符合`PSR-11`規範的容器實例。如果你不想使用`php-di`，可以在這裡創建並返回一個其它符合`PSR-11`規範的容器實例。
 
 ## 構造函數注入
 新建`app/service/Mailer.php`(如目錄不存在請自行創建)內容如下：
@@ -62,7 +60,7 @@ class UserController
 $mailer = new Mailer;
 $user = new UserController($mailer);
 ```
-當使用`php-di`後，開發者無需手動實例化控制器中的`Mailer`，webman會自動幫你完成。如果在實例化`Mailer`過程中有其他類的依賴，webman也會自動實例化並注入。開發者不需要任何的初始化工作。
+當使用`php-di`後，開發者無需手動實例化控制器中的`Mailer`，webman會自動幫你完成。如果在實例化`Mailer`過程中有其它類的依賴，webman也會自動實例化並注入。開發者不需要任何的初始化工作。
 
 > **注意**
 > 必須是由框架或者`php-di`創建的實例才能完成依賴自動注入，手動`new`的實例無法完成依賴自動注入，如需注入，需要使用`support\Container`介面替換`new`語句，例如：
@@ -83,7 +81,7 @@ $user_service = Container::get(UserService::class);
 $log_service = Container::make(LogService::class, [$path, $name]);
 ```
 
-## 注解注入
+## 註解注入
 除了構造函數依賴自動注入，我們還可以使用註解注入。繼續上面的例子，`app\controller\UserController`更改成如下：
 ```php
 <?php
@@ -132,8 +130,7 @@ class UserController
 ```
 
 ## 自定義構造函數注入
-
-有時候構造函數傳入的參數可能不是類的實例，而是字符串、數字、數組等數據。例如Mailer構造函數需要傳遞smtp伺服器ip和端口：
+有時候構造函數傳入的參數可能不是類的實例，而是字符串、數字、數組等數據。例如Mailer構造函數需要傳遞smtp伺服器IP和端口：
 ```php
 <?php
 namespace app\service;
@@ -156,10 +153,9 @@ class Mailer
     }
 }
 ```
+這種情況無法直接使用前面介紹的構造函數自動注入，因為`php-di`無法確定`$smtp_host`、`$smtp_port`的值是什麼。這時候可以嘗試自定義注入。
 
-這種情況無法直接使用前面介紹的構造函數自動注入，因為`php-di`無法確定`$smtp_host` `$smtp_port`的值是什麼。這時候可以嘗試自定義注入。
-
-在`config/dependence.php`(文件不存在請自行創建)中加入如下代碼：
+在`config/dependence.php`(檔案不存在請自行創建)中加入如下代碼：
 ```php
 return [
     // ... 這裡忽略了其他配置
@@ -170,11 +166,10 @@ return [
 這樣當依賴注入需要獲取`app\service\Mailer`實例時將自動使用這個配置中創建的`app\service\Mailer`實例。
 
 我們注意到，`config/dependence.php` 中使用了`new`來實例化`Mailer`類，這個在本示例沒有任何問題，但是想象下如果`Mailer`類依賴了其他類的話或者`Mailer`類內部使用了註解注入，使用`new`初始化將不會依賴自動注入。解決辦法是利用自定義接口注入，通過`Container::get(類名)` 或者 `Container::make(類名, [構造函數參數])`方法來初始化類。
+## 自訂介面注入
+在實際項目中，我們更希望以介面編程，而不是具體的類別。例如，`app\controller\UserController` 應引入 `app\service\MailerInterface` 而不是 `app\service\Mailer`。
 
-## 自定義接口注入
-在現實項目中，我們更希望面向接口編程，而不是具體的類。比如`app\controller\UserController`裡應該引入`app\service\MailerInterface`而不是`app\service\Mailer`。
-
-定義`MailerInterface`接口。
+定義 `MailerInterface` 介面。
 ```php
 <?php
 namespace app\service;
@@ -185,7 +180,7 @@ interface MailerInterface
 }
 ```
 
-定義`MailerInterface`接口的實現。
+定義 `MailerInterface` 介面的實現。
 ```php
 <?php
 namespace app\service;
@@ -204,12 +199,12 @@ class Mailer implements MailerInterface
 
     public function mail($email, $content)
     {
-        // 發送郵件代碼省略
+        // 發送郵件程式碼省略
     }
 }
 ```
 
-引入`MailerInterface`接口而非具體實現。
+引入 `MailerInterface` 介面而非具體實現。
 ```php
 <?php
 namespace app\controller;
@@ -234,7 +229,7 @@ class UserController
 }
 ```
 
-`config/dependence.php` 將 `MailerInterface` 接口定義如下實現。
+在 `config/dependence.php` 中將 `MailerInterface` 介面定義如下實現。
 ```php
 use Psr\Container\ContainerInterface;
 return [
@@ -244,14 +239,14 @@ return [
 ];
 ```
 
-這樣當業務需要使用`MailerInterface`接口時，將自動使用`Mailer`實現。
+這樣當業務需要使用 `MailerInterface` 介面時，將自動使用 `Mailer` 實現。
 
-> 面向接口編程的好處是，當我們需要更換某個組件時，不需要更改業務代碼，只需要更改`config/dependence.php`中的具體實現即可。這在做單元測試也非常有用。
+> 面向介面編程的好處是，當我們需要更換某個組件時，不需要更改業務程式碼，只需要更改 `config/dependence.php` 中的具體實現即可。這在做單元測試也非常有用。
 
-## 其他自定義注入
-`config/dependence.php`除了能定義類的依賴，也能定義其他值，例如字符串、數字、數組等。
+## 其它自訂注入
+`config/dependence.php` 除了能定義類的依賴，也能定義其他值，例如字串、數字、陣列等。
 
-例如`config/dependence.php`定義如下：
+例如 `config/dependence.php` 定義如下：
 ```php
 return [
     'smtp_host' => '192.168.1.11',
@@ -259,7 +254,7 @@ return [
 ];
 ```
 
-這時候我們可以通過`@Inject`將`smtp_host` `smtp_port` 注入到類的屬性中。
+這時候我們可以通過 `@Inject` 將 `smtp_host` `smtp_port` 注入到類的屬性中。
 ```php
 <?php
 namespace app\service;
@@ -280,7 +275,7 @@ class Mailer
 
     public function mail($email, $content)
     {
-        // 發送郵件代碼省略
+        // 發送郵件程式碼省略
         echo "{$this->smtpHost}:{$this->smtpPort}\n"; // 將輸出 192.168.1.11:25
     }
 }
@@ -288,6 +283,5 @@ class Mailer
 
 > 注意：`@Inject("key")` 裡面是雙引號
 
-
 ## 更多內容
-請參考[php-di手冊](https://php-di.org/doc/getting-started.html)
+請參考 [php-di手冊](https://php-di.org/doc/getting-started.html)

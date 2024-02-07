@@ -1,25 +1,94 @@
-# கட்சியம்
-illuminate/database ஆவணம் மற்றும் புதியது ஆதாரவாரிகளை கொண்டு, கீழே உள்ளது:
- - மைஎஸ்கியூஎல் 5.6+ 
- - போஸ்ட்க்விஸ்க்யூஎல 9.4+ 
- - ஸ்க்வாலைட் 3.8.8+
- - எஸ்கியெல் சர்வேர் 2017+
- 
- தரவுத்தள அமைப்பு கோப்பு இருக்கின்றது `config/database.php`.
+# கட்சியகம்
+illuminate/database தரவுத்தளம் மற்றும் பதிப்பு ஆதரவு எப்படி இருக்கின்றது என்று கீழே குறியீடு சொல்லப்பட்டுள்ளது:
+ - MySQL 5.6+ 
+ - PostgreSQL 9.4+ 
+ - SQLite 3.8.8+
+ - SQL Server 2017+
 
- ```php
- return [
-     // இயல்பு தரவுத்தளம்
-     'default' => 'mysql',
-     // வெளியீடுகளாக தரவுத்தளங்கள்
-     'connections' => [
- 
-         'mysql' => [
+தரவுத்தள அமைப்பு கோப்பு இடம் `config/database.php` ஆகும்.
+
+```php
+return [
+    // இயல்பு தரவுத்தளம்
+    'default' => 'mysql',
+    // வேறுபட தரவுத்தள அமைப்பு
+    'connections' => [
+        'mysql' => [
+            'driver'      => 'mysql',
+            'host'        => '127.0.0.1',
+            'port'        => 3306,
+            'database'    => 'webman',
+            'username'    => 'webman',
+            'password'    => '',
+            'unix_socket' => '',
+            'charset'     => 'utf8',
+            'collation'   => 'utf8_unicode_ci',
+            'prefix'      => '',
+            'strict'      => true,
+            'engine'      => null,
+        ],
+        'sqlite' => [
+            'driver'   => 'sqlite',
+            'database' => '',
+            'prefix'   => '',
+        ],
+        'pgsql' => [
+            'driver'   => 'pgsql',
+            'host'     => '127.0.0.1',
+            'port'     => 5432,
+            'database' => 'webman',
+            'username' => 'webman',
+            'password' => '',
+            'charset'  => 'utf8',
+            'prefix'   => '',
+            'schema'   => 'public',
+            'sslmode'  => 'prefer',
+        ],
+        'sqlsrv' => [
+            'driver'   => 'sqlsrv',
+            'host'     => 'localhost',
+            'port'     => 1433,
+            'database' => 'webman',
+            'username' => 'webman',
+            'password' => '',
+            'charset'  => 'utf8',
+            'prefix'   => '',
+        ],
+    ],
+];
+```
+
+## பல தரவுத்தளங்களை பயன்படுத்துவது
+`Db::connection('அமைப்புப் பெயர்')` பயன்படுத்தி எப்படி தரவுத்தளத்தை பயன்படுத்த வேண்டும் என்பதை தெரிவிக்கின்றது, அதன் பெயர் `config/database.php` கோப்பில் உள்ள அதிகூடினால்  'key' ஆகும்.
+
+உ஦ாகாக, பின்னணித் தரவுத்தள அமைப்பு:
+
+```php
+return [
+    // இயல்பு தரவுத்தளம்
+    'default' => 'mysql',
+    // வேறுபட தரவுத்தள அமைப்பு
+    'connections' => [
+        'mysql' => [
+            'driver'      => 'mysql',
+            'host'        =>   '127.0.0.1',
+            'port'        => 3306,
+            'database'    => 'webman',
+            'username'    => 'webman',
+            'password'    => '',
+            'unix_socket' =>  '',
+            'charset'     => 'utf8',
+            'collation'   => 'utf8_unicode_ci',
+            'prefix'      => '',
+            'strict'      => true,
+            'engine'      => null,
+        ],
+        'mysql2' => [
              'driver'      => 'mysql',
              'host'        => '127.0.0.1',
              'port'        => 3306,
-             'database'    => 'webman',
-             'username'    => 'webman',
+             'database'    => 'webman2',
+             'username'    => 'webman2',
              'password'    => '',
              'unix_socket' => '',
              'charset'     => 'utf8',
@@ -27,103 +96,29 @@ illuminate/database ஆவணம் மற்றும் புதியது 
              'prefix'      => '',
              'strict'      => true,
              'engine'      => null,
-         ],
-         
-         'sqlite' => [
-             'driver'   => 'sqlite',
-             'database' => '',
-             'prefix'   => '',
-         ],
- 
-         'pgsql' => [
+        ],
+        'pgsql' => [
              'driver'   => 'pgsql',
              'host'     => '127.0.0.1',
-             'port'     => 5432,
+             'port'     =>  5432,
              'database' => 'webman',
-             'username' => 'webman',
+             'username' =>  'webman',
              'password' => '',
              'charset'  => 'utf8',
              'prefix'   => '',
              'schema'   => 'public',
              'sslmode'  => 'prefer',
          ],
- 
-         'sqlsrv' => [
-             'driver'   => 'sqlsrv',
-             'host'     => 'localhost',
-             'port'     => 1433,
-             'database' => 'webman',
-             'username' => 'webman',
-             'password' => '',
-             'charset'  => 'utf8',
-             'prefix'   => '',
-         ],
-     ],
- ];
- ```
- 
- ## பல உள்ளடக்க தரவுத்தளங்களை பயன்படுத்துவதன் மூலம்
-`Db::connection('அமைப்புப் பெயர்')` உபயோகப்படுத்தி யாதோர் ஒன்றைத் தரவுத்தளத்தை பயன்படுத்த வேண்டும், `கட்சிப் பெயர்` அவ்விசேஷம் `மூலம் அமைக்கப்பட்ட அமைப்புப்` கோப்பில் இருந்து `தரவுத்தளங்கள்` மற்றும் `கீ` ஐ பயன்படுத்திக்கொள்ளும். 
-
-உதாரணமாக பின்வரும் தரவுத்தள உரையாடல் உள்ளது:
-
-```php
- return [
-     // இயல்பு தரவுத்தளங்கள்
-     'default' => 'mysql',
-     // வெளியீடுகள் வேறு தரவுத்தள உரையாடங்கள்
-     'connections' => [
- 
-         'mysql' => [
-             'driver'      => 'mysql',
-             'host'        =>   '127.0.0.1',
-             'port'        => 3306,
-             'database'    => 'webman',
-             'username'    => 'webman',
-             'password'    => '',
-             'unix_socket' =>  '',
-             'charset'     => 'utf8',
-             'collation'   => 'utf8_unicode_ci',
-             'prefix'      => '',
-             'strict'      => true,
-             'engine'      => null,
-         ],
-         
-         'mysql2' => [
-              'driver'      => 'mysql',
-              'host'        => '127.0.0.1',
-              'port'        => 3306,
-              'database'    => 'webman2',
-              'username'    => 'webman2',
-              'password'    => '',
-              'unix_socket' => '',
-              'charset'     => 'utf8',
-              'collation'   => 'utf8_unicode_ci',
-              'prefix'      => '',
-              'strict'      => true,
-              'engine'      => null,
-         ],
-         'pgsql' => [
-              'driver'   => 'pgsql',
-              'host'     => '127.0.0.1',
-              'port'     =>  5432,
-              'database' => 'webman',
-              'username' =>  'webman',
-              'password' => '',
-              'charset'  => 'utf8',
-              'prefix'   => '',
-              'schema'   => 'public',
-              'sslmode'  => 'prefer',
-          ],
- ];
+    ],
+];
 ```
 
-போதுமாக பல தரவுத்தளங்கள் பயன்படுத்தி வெளியீடு அமைக்கலாம்.
+வகைப்படுத்த தரவுத்தளங்கள் பயன்படுத்த வேண்டும்.
 ```php
-// இயல்பு தரவுத்தளம் பயன்படுத்தி, Db::connection('mysql')->table('users')->where('name', 'John')->first(); உடன் சமம்
-$users = Db::table('பயனர்கள்')->where('பெயர்', 'ஜான்')->first(); 
-// மைஎஸ்கியூ2 பயன்படுத்த
-$users = Db::connection('mysql2')->table('பயனர்கள்')->where('பெயர்', 'ஜான்')->first();
-// போஸ்க்யூஎல் பயன்படுத்த
-$users = Db::connection('pgsql')->table('பயனர்கள்')->where('பெயர்', 'ஜான்')->first();
+// இயல்பு தரவுத்தளத்தை பயன்படுத்தும், Db::connection('mysql')->table('users')->where('name', 'John')->first(); என்று கொள்கிறது;
+$users = Db::table('users')->where('name', 'John')->first();; 
+// mysql2 ஐ பயன்படுத்தும்
+$users = Db::connection('mysql2')->table('users')->where('name', 'John')->first();
+// pgsql ஐ பயன்படுத்தும்
+$users = Db::connection('pgsql')->table('users')->where('name', 'John')->first();
 ```

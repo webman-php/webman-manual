@@ -1,16 +1,16 @@
 # AOP
 
-> Gracias a los autores de Hyperf por su contribución
+> Agradecimientos a los colaboradores de Hyperf
 
 ### Instalación
 
-- Instalar aop-integration
+- Instalar la integración aop
 
 ```shell
 composer require "hyperf/aop-integration: ^1.1"
 ```
 
-### Agregar configuraciones relacionadas con AOP
+### Agregar configuración relacionada con AOP
 
 Necesitamos agregar la configuración `config.php` en el directorio `config`
 
@@ -36,31 +36,31 @@ return [
         ],
     ],
     'aspects' => [
-        // Escribir el Aspecto correspondiente aquí
+        // Escribir aquí el Aspect correspondiente
         app\aspect\DebugAspect::class,
     ]
 ];
 
 ```
 
-### Archivo de entrada de configuración start.php
+### Configurar el archivo de inicio start.php
 
-> Colocaremos el método de inicialización debajo de la zona horaria, omitiendo el resto del código a continuación
+> Vamos a colocar el método de inicialización debajo de la zona de la zona horaria, a continuación omitiremos el resto del código
 
-```
+```php
 use Hyperf\AopIntegration\ClassLoader;
 
 if ($timezone = config('app.default_timezone')) {
     date_default_timezone_set($timezone);
 }
 
-// Inicialización
+// Inicializar
 ClassLoader::init();
 ```
 
 ### Prueba
 
-Primero, escribamos la clase de corte esperada
+Primero vamos a escribir la clase a la que se le aplicará el corte
 
 ```php
 <?php
@@ -75,7 +75,7 @@ class UserService
 }
 ```
 
-Luego agreguemos el `DebugAspect` correspondiente
+Luego añadimos el `DebugAspect` correspondiente
 
 ```php
 <?php
@@ -99,7 +99,7 @@ class DebugAspect extends AbstractAspect
 }
 ```
 
-A continuación, editemos el controlador `app/controller/IndexController.php`
+A continuación, editamos el controlador `app/controller/IndexController.php`
 
 ```php
 <?php
@@ -117,7 +117,7 @@ class IndexController
 }
 ```
 
-Luego configuremos la ruta
+Luego configuramos las rutas
 
 ```php
 <?php
@@ -126,7 +126,7 @@ use Webman\Route;
 Route::any('/json', [app\controller\IndexController::class, 'json']);
 ```
 
-Finalmente, iniciemos el servicio y hagamos la prueba.
+Finalmente, iniciamos el servicio y realizamos la prueba.
 
 ```shell
 php start.php start

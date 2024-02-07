@@ -2,23 +2,22 @@
 
 phar是PHP裡類似於JAR的一種打包文件，你可以利用phar將你的webman項目打包成單個phar文件，方便部署。
 
-**這裡非常感謝 [fuzqing](https://github.com/fuzqing) 的PR.**
+**這裡非常感謝[fuzqing](https://github.com/fuzqing)的PR。**
 
 > **注意**
-> 需要關閉`php.ini`的phar配置選項，即設置 `phar.readonly = 0`
+> 需要關閉`php.ini`的phar配置選項，即設置`phar.readonly = 0`
 
 ## 安裝命令行工具
 `composer require webman/console`
 
 ## 配置設置
-打開 `config/plugin/webman/console/app.php` 文件，設置 `'exclude_pattern'   => '#^(?!.*(composer.json|/.github/|/.idea/|/.git/|/.setting/|/runtime/|/vendor-bin/|/build/|vendor/webman/admin))(.*)$#'`，用戶打包時排除一些無用的目錄及文件，避免打包體積過大
+打開`config/plugin/webman/console/app.php`文件，設置`'exclude_pattern'   => '#^(?!.*(composer.json|/.github/|/.idea/|/.git/|/.setting/|/runtime/|/vendor-bin/|/build/|vendor/webman/admin))(.*)$#'`，用戶打包時排除一些無用的目錄及文件，避免打包體積過大
 
 ## 打包
 在webman項目根目錄執行命令 `php webman phar:pack`
-會在build目錄生成一個`webman.phar`文件。
+會在bulid目錄生成一個`webman.phar`文件。
 
 > 打包相關配置在 `config/plugin/webman/console/app.php` 中
-
 
 ## 啟動停止相關命令
 **啟動**

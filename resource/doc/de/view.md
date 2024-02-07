@@ -1,17 +1,15 @@
-## Sicht
-Standardmäßig verwendet webman die native PHP-Syntax als Vorlage, die nach dem Öffnen von `opcache` die beste Leistung bietet. Neben der nativen PHP-Vorlage bietet webman auch die [Twig](https://twig.symfony.com/doc/3.x/), [Blade](https://learnku.com/docs/laravel/8.x/blade/9377) und [think-template](https://www.kancloud.cn/manual/think-template/content) Template-Engines.
+## Ansichten
+Webman verwendet standardmäßig die native PHP-Syntax als Vorlage und erreicht nach dem Öffnen von `opcache` die beste Leistung. Neben der nativen PHP-Vorlage bietet Webman auch Vorlagen-Engines wie [Twig](https://twig.symfony.com/doc/3.x/), [Blade](https://learnku.com/docs/laravel/8.x/blade/9377) und [think-template](https://www.kancloud.cn/manual/think-template/content).
 
 ## Opcache aktivieren
-Bei der Verwendung von Ansichten wird dringend empfohlen, die Optionen `opcache.enable` und `opcache.enable_cli` in der `php.ini` zu aktivieren, um die Leistung der Template-Engine zu optimieren.
+Beim Verwenden von Ansichten wird dringend empfohlen, die Optionen `opcache.enable` und `opcache.enable_cli` in der `php.ini` zu aktivieren, um die optimale Leistung der Vorlagen-Engine zu erreichen.
 
 ## Twig installieren
-1. Composer-Installation
+1. Composer installieren
 
- ```php
-composer require twig/twig
- ```
+   `composer require twig/twig`
 
-2. Ändern Sie die Konfiguration `config/view.php` wie folgt
+2. Konfigurationsänderung in `config/view.php`:
 
 ```php
 <?php
@@ -21,8 +19,9 @@ return [
     'handler' => Twig::class
 ];
 ```
+
 > **Hinweis**
-> Andere Konfigurationsoptionen werden über die Optionen übergeben, z. B.
+> Andere Konfigurationsoptionen werden über `options` übergeben, zum Beispiel:
 
 ```php
 return [
@@ -34,15 +33,12 @@ return [
 ];
 ```
 
-
 ## Blade installieren
-1. Composer-Installation
+1. Composer installieren
 
-```
-composer require psr/container ^1.1.1 webman/blade
-```
+   `composer require psr/container ^1.1.1 webman/blade`
 
-2. Ändern Sie die Konfiguration `config/view.php` wie folgt
+2. Konfigurationsänderung in `config/view.php`:
 
 ```php
 <?php
@@ -53,12 +49,12 @@ return [
 ];
 ```
 
-## think-template installieren
-1. Composer-Installation
+## Think-Template installieren
+1. Composer installieren
 
-`composer require topthink/think-template`
+   `composer require topthink/think-template`
 
-2. Ändern Sie die Konfiguration `config/view.php` wie folgt
+2. Konfigurationsänderung in `config/view.php`:
 
 ```php
 <?php
@@ -68,8 +64,9 @@ return [
     'handler' => ThinkPHP::class,
 ];
 ```
+
 > **Hinweis**
-> Andere Konfigurationsoptionen werden über die Optionen übergeben, z. B.
+> Andere Konfigurationsoptionen werden über `options` übergeben, zum Beispiel:
 
 ```php
 return [
@@ -83,7 +80,7 @@ return [
 ```
 
 ## Beispiel für native PHP-Vorlagen-Engine
-Erstellen Sie die Datei `app/controller/UserController.php` wie folgt
+Erstellen Sie die Datei `app/controller/UserController.php` wie folgt:
 
 ```php
 <?php
@@ -100,7 +97,7 @@ class UserController
 }
 ```
 
-Erstellen Sie die Datei `app/view/user/hello.html` wie folgt
+Erstellen Sie die Datei `app/view/user/hello.html` wie folgt:
 
 ```html
 <!doctype html>
@@ -115,8 +112,8 @@ hello <?=htmlspecialchars($name)?>
 </html>
 ```
 
-## Beispiel für die Twig-Template-Engine
-Ändern Sie die Konfiguration `config/view.php` wie folgt
+## Beispiel für Twig-Vorlagen-Engine
+Ändern Sie die Konfiguration in `config/view.php` wie folgt:
 
 ```php
 <?php
@@ -127,7 +124,7 @@ return [
 ];
 ```
 
-`app/controller/UserController.php` wie folgt
+`app/controller/UserController.php` sieht folgendermaßen aus:
 
 ```php
 <?php
@@ -144,7 +141,7 @@ class UserController
 }
 ```
 
-Die Datei `app/view/user/hello.html` sieht wie folgt aus
+Die Datei `app/view/user/hello.html` sieht folgendermaßen aus:
 
 ```html
 <!doctype html>
@@ -159,10 +156,10 @@ hello {{name}}
 </html>
 ```
 
-Weitere Dokumentationen finden Sie unter [Twig](https://twig.symfony.com/doc/3.x/)
+Weitere Informationen finden Sie in der [Twig-Dokumentation](https://twig.symfony.com/doc/3.x/).
 
-## Beispiel für die Blade-Template-Engine
-Ändern Sie die Konfiguration `config/view.php` wie folgt
+## Beispiel für Blade-Vorlagen-Engine
+Ändern Sie die Konfiguration in `config/view.php` wie folgt:
 
 ```php
 <?php
@@ -173,7 +170,7 @@ return [
 ];
 ```
 
-`app/controller/UserController.php` wie folgt
+`app/controller/UserController.php` sieht folgendermaßen aus:
 
 ```php
 <?php
@@ -190,9 +187,9 @@ class UserController
 }
 ```
 
-Die Datei `app/view/user/hello.blade.php` sieht wie folgt aus
+Die Datei `app/view/user/hello.blade.php` sieht folgendermaßen aus:
 
-> Bitte beachten Sie, dass die Dateierweiterung für Blade-Vorlagen `.blade.php` lautet
+> Beachten Sie, dass die Blade-Dateierweiterung `.blade.php` ist.
 
 ```html
 <!doctype html>
@@ -207,10 +204,10 @@ hello {{$name}}
 </html>
 ```
 
-Weitere Dokumentationen finden Sie unter [Blade](https://learnku.com/docs/laravel/8.x/blade/9377)
+Weitere Informationen finden Sie in der [Blade-Dokumentation](https://learnku.com/docs/laravel/8.x/blade/9377).
 
-## Beispiel für die ThinkPHP-Template-Engine
-Ändern Sie die Konfiguration `config/view.php` wie folgt
+## Beispiel für ThinkPHP-Vorlagen-Engine
+Ändern Sie die Konfiguration in `config/view.php` wie folgt:
 
 ```php
 <?php
@@ -221,7 +218,7 @@ return [
 ];
 ```
 
-`app/controller/UserController.php` wie folgt
+`app/controller/UserController.php` sieht folgendermaßen aus:
 
 ```php
 <?php
@@ -238,7 +235,7 @@ class UserController
 }
 ```
 
-Die Datei `app/view/user/hello.html` sieht wie folgt aus
+Die Datei `app/view/user/hello.html` sieht folgendermaßen aus:
 
 ```html
 <!doctype html>
@@ -253,10 +250,10 @@ hello {$name}
 </html>
 ```
 
-Weitere Dokumentationen finden Sie unter [think-template](https://www.kancloud.cn/manual/think-template/content)
+Weitere Informationen finden Sie in der [ThinkPHP-Dokumentation](https://www.kancloud.cn/manual/think-template/content).
 
-## Template-Zuweisung
-Neben der Verwendung von `view(template, variableArray)` zur Zuweisung von Templates können wir überall auch die Methode `View::assign()` aufrufen, um Templates zuzuweisen. Zum Beispiel:
+## Vorlagenzuweisung
+Neben der Verwendung von `view(template, variable_array)` zur Zuweisung von Vorlagen können wir auch jederzeit mithilfe von `View::assign()` Vorlagen zuweisen. Zum Beispiel:
 
 ```php
 <?php
@@ -271,7 +268,7 @@ class UserController
     {
         View::assign([
             'name1' => 'value1',
-            'name2' => 'value2',
+            'name2'=> 'value2',
         ]);
         View::assign('name3', 'value3');
         return view('user/test', ['name' => 'webman']);
@@ -279,36 +276,39 @@ class UserController
 }
 ```
 
-`View::assign()` ist in einigen Szenarien sehr nützlich, zum Beispiel muss in einem System auf jeder Seite die aktuelle Anmelderinformation angezeigt werden. Es ist sehr umständlich, diese Informationen auf jeder Seite mit `view('template', ['user_info' => 'user_info'])` zuzuweisen. Die Lösung besteht darin, die Benutzerinformationen im Middleware zu erhalten und dann mit `View::assign()` an das Template zuzuweisen.
+`View::assign()` ist in einigen Szenarien sehr nützlich, zum Beispiel wenn auf jeder Seite eines Systems Informationen zum angemeldeten Benutzer angezeigt werden müssen. Es wäre umständlich, diese Informationen auf jeder Seite mit `view('template', ['user_info' => 'user info'])` zuzuweisen. Die Lösung besteht darin, die Benutzerinformationen im Middleware zu erhalten und sie mit `View::assign()` der Vorlage zuzuweisen.
 
-## Über die Ansichtsdateipfade
+## Über die Pfade der Vorlagendateien
 
 #### Controller
-Wenn der Controller `view('template_name', [])` aufruft, sucht die Ansichtsdatei nach folgendem Muster:
+Wenn ein Controller `view('template_name', [])` aufruft, werden die Vorlagendateien gemäß den folgenden Regeln gesucht:
 
-1. Wenn es sich nicht um eine Multi-App handelt, wird die Ansichtsdatei in `app/view/` gesucht.
-2. Bei [Multi-Apps](multiapp.md) wird die Ansichtsdatei in `app/app_name/view/` gesucht.
+1. Wenn es sich nicht um eine Mehrfachanwendung handelt, werden die entsprechenden Vorlagendateien unter `app/view/` verwendet.
+2. Im Falle einer [Mehrfachanwendung](multiapp.md) werden die entsprechenden Vorlagendateien unter `app/application_name/view/` verwendet.
 
-Zusammengefasst: Wenn `$request->app` leer ist, wird die Ansichtsdatei in `app/view/` gesucht, andernfalls wird die Ansichtsdatei in `app/{$request->app}/view/` gesucht.
+Zusammenfassend lässt sich sagen, dass, wenn `$request->app` leer ist, die Vorlagendateien unter `app/view/` verwendet werden. Andernfalls werden die Vorlagendateien unter `app/{$request->app}/view/` verwendet.
 
-#### Anonyme Funktionen
-Anonyme Funktionen mit `$request->app` leer gehören zu keiner App und verwenden daher die Ansichtsdatei in `app/view/`, z. B. in der in `config/route.php` definierten Route:
+#### Closure-Funktion
+Die Closure-Funktion mit `$request->app` leer gehört keiner Anwendung an. Daher verwendet sie die Vorlagendateien unter `app/view/`, z.B. wenn Routen in der Datei `config/route.php` definiert sind:
+
 ```php
 Route::any('/admin/user/get', function (Request $request) {
     return view('user', []);
 });
 ```
-Hier wird die Datei `app/view/user.html` als Vorlagendatei verwendet (wenn Blade-Vorlagen verwendet werden, lautet die Vorlagendatei `app/view/user.blade.php`).
 
-#### App spezifizieren
-Um Vorlagen im Multi-App-Modus wiederzuverwenden, bietet `view($template, $data, $app = null)` den dritten Parameter `$app`, um anzugeben, welche Anwendungsverzeichnisvorlagen verwendet werden sollen. Beispielsweise wird `view('user', [], 'admin');` gezwungen, die Ansichtsdatei in `app/admin/view/` zu verwenden.
+Es werden die Vorlagendateien unter `app/view/user.html` (bei Verwendung von Blade ist die Vorlagendatei `app/view/user.blade.php`) verwendet.
 
-## Erweiterung von Twig
+#### Anwendung spezifizieren
+Um Vorlagen in einer Mehrfachanwendung wiederverwenden zu können, bietet `view($template, $data, $app = null)` einen dritten Parameter `$app`, um anzugeben, welche Anwendungsverzeichnisse für Vorlagen verwendet werden sollen. Zum Beispiel wird `view('user', [], 'admin')` dazu führen, dass die Vorlagendateien unter `app/admin/view/` verwendet werden.
+
+## Twig erweitern
 
 > **Hinweis**
 > Diese Funktion erfordert webman-framework>=1.4.8
 
-Wir können durch das Zurückgeben von `view.extension` im Konfigurationsrückruf Twig-View-Instanzen erweitern, beispielsweise `config/view.php` wie folgt:
+Wir können die Twig-Ansichtsinstanz erweitern, indem wir der Konfiguration `view.extension` eine Rückruffunktion hinzufügen. Zum Beispiel `config/view.php`:
+
 ```php
 <?php
 use support\view\Twig;
@@ -322,11 +322,10 @@ return [
 ];
 ```
 
-
-## Blade-Erweiterung
+## Blade erweitern
 > **Hinweis**
 > Diese Funktion erfordert webman-framework>=1.4.8
-Ebenso können wir durch das Zurückgeben von `view.extension` im Konfigurationsrückruf Blade-View-Instanzen erweitern, beispielsweise `config/view.php` wie folgt:
+Ebenso können wir die Blade-Ansichtsinstanz erweitern, indem wir der Konfiguration `view.extension` eine Rückruffunktion hinzufügen. Zum Beispiel `config/view.php`:
 
 ```php
 <?php
@@ -334,22 +333,21 @@ use support\view\Blade;
 return [
     'handler' => Blade::class,
     'extension' => function (Jenssegers\Blade\Blade $blade) {
-        // Anweisung für Blade hinzufügen
+        // Anweisungen zu Blade hinzufügen
         $blade->directive('mydate', function ($timestamp) {
             return "<?php echo date('Y-m-d H:i:s', $timestamp); ?>";
         });
     }
 ];
 ```
-
 ## Verwendung von Blade-Komponenten
 
 > **Hinweis
 > Erfordert webman/blade>=1.5.2**
 
-Angenommen, es muss ein Alert-Komponenten hinzugefügt werden
+Angenommen, wir müssen ein `Alert`-Komponente hinzufügen
 
-**Neue `app/view/components/Alert.php` erstellen**
+**Neue Datei `app/view/components/Alert.php`**
 ```php
 <?php
 
@@ -372,14 +370,14 @@ class Alert extends Component
 }
 ```
 
-**Neue `app/view/components/alert.blade.php` erstellen**
-```
+**Neue Datei `app/view/components/alert.blade.php`**
+```php
 <div>
     <b style="color: red">Hallo Blade-Komponente</b>
 </div>
 ```
 
-**`/config/view.php` ähnelt dem folgenden Code**
+**`/config/view.php` ähnlich wie der folgende Code**
 
 ```php
 <?php
@@ -392,7 +390,7 @@ return [
 ];
 ```
 
-Damit ist das Blade-Komponenten-Alert abgeschlossen. Im Template wird es wie folgt verwendet:
+Damit ist die Blade-Komponente "Alert" eingerichtet, und die Verwendung im Template sieht ähnlich wie folgt aus
 ```html
 <!doctype html>
 <html>
@@ -408,9 +406,8 @@ Damit ist das Blade-Komponenten-Alert abgeschlossen. Im Template wird es wie fol
 </html>
 ```
 
-
-## Erweiterung der PHP-Vorlage von Think
-Die Think-Vorlage verwendet `view.options.taglib_pre_load`, um Tag-Bibliotheken zu erweitern, zum Beispiel
+## Erweiterung von think-template
+think-template verwendet `view.options.taglib_pre_load`, um Tag-Bibliotheken zu erweitern, zum Beispiel
 ```php
 <?php
 use support\view\ThinkPHP;
@@ -422,5 +419,4 @@ return [
 ];
 ```
 
-Weitere Informationen finden Sie unter [think-template](https://www.kancloud.cn/manual/think-template/1286424)
-
+Weitere Details finden Sie unter [think-template标签扩展](https://www.kancloud.cn/manual/think-template/1286424)

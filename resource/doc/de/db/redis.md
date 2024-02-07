@@ -1,11 +1,11 @@
 # Redis
 
-Die webman-Redis-Komponente verwendet standardmäßig [illuminate/redis](https://github.com/illuminate/redis), was die Redis-Bibliothek von Laravel ist. Die Verwendung ist ähnlich wie bei Laravel.
+Die Redis-Komponente von webman verwendet standardmäßig [illuminate/redis](https://github.com/illuminate/redis), was die Redis-Bibliothek von Laravel ist, und wird genauso verwendet wie in Laravel.
 
-Bevor Sie `illuminate/redis` verwenden, müssen Sie die Redis-Erweiterung für `php-cli` installieren.
+Bevor Sie `illuminate/redis` verwenden können, muss die Redis-Erweiterung für `php-cli` installiert sein.
 
-> **Achtung**
-> Verwenden Sie den Befehl `php -m | grep redis`, um zu prüfen, ob die Redis-Erweiterung für `php-cli` installiert ist. Beachten Sie, dass auch wenn Sie die Redis-Erweiterung für `php-fpm` installiert haben, dies nicht bedeutet, dass Sie sie für `php-cli` verwenden können, da `php-cli` und `php-fpm` unterschiedliche Anwendungen sind und möglicherweise unterschiedliche `php.ini`-Konfigurationen verwenden. Verwenden Sie den Befehl `php --ini`, um herauszufinden, welche `php.ini`-Konfigurationsdatei von Ihrem `php-cli` verwendet wird.
+> **Hinweis**
+> Verwenden Sie den Befehl `php -m | grep redis`, um zu überprüfen, ob die Redis-Erweiterung für `php-cli` installiert ist. Beachten Sie: Selbst wenn Sie die Redis-Erweiterung für `php-fpm` installiert haben, bedeutet dies nicht, dass Sie sie für `php-cli` verwenden können, da `php-cli` und `php-fpm` unterschiedliche Anwendungen sind und möglicherweise unterschiedliche `php.ini`-Konfigurationen verwenden. Verwenden Sie den Befehl `php --ini`, um zu überprüfen, welche `php.ini`-Konfigurationsdatei von Ihrem `php-cli` verwendet wird.
 
 ## Installation
 
@@ -13,10 +13,10 @@ Bevor Sie `illuminate/redis` verwenden, müssen Sie die Redis-Erweiterung für `
 composer require -W illuminate/redis illuminate/events
 ```
 
-Nach der Installation muss neu gestartet werden (reload ist unwirksam).
+Nach der Installation ist ein Restart erforderlich (ein Reload funktioniert nicht).
 
 ## Konfiguration
-Die Redis-Konfigurationsdatei befindet sich in `config/redis.php`.
+Die Redis-Konfigurationsdatei befindet sich unter `config/redis.php`.
 ```php
 return [
     'default' => [
@@ -47,7 +47,7 @@ class UserController
 }
 ```
 
-## Redis API
+## Redis-API
 ```php
 Redis::append($key, $value)
 Redis::bitCount($key)
@@ -77,7 +77,7 @@ Redis::expire($key, $ttl)
 Redis::expireAt($key, $timestamp)
 Redis::select($dbIndex)
 ```
-Entspricht
+Entsprechend:
 ```php
 $redis = Redis::connection('default');
 $redis->append($key, $value)
@@ -89,11 +89,11 @@ $redis->getBit($key, $offset)
 ...
 ```
 
-> **Achtung**
-> Verwenden Sie die `Redis::select($db)`-Schnittstelle mit Vorsicht, da webman ein im Speicher verbleibendes Framework ist. Wenn eine Anfrage `Redis::select($db)` verwendet, um die Datenbank zu wechseln, wird dies sich auf nachfolgende Anfragen auswirken. Für den Einsatz von mehreren Datenbanken wird empfohlen, verschiedene `$db`-Einstellungen in unterschiedlichen Redis-Verbindungskonfigurationen zu verwenden.
+> **Hinweis**
+> Verwenden Sie die `Redis::select($db)`-Schnittstelle vorsichtig, da webman ein permanentes Framework im Speicher ist. Wenn eine Anfrage `Redis::select($db)` zur Umstellung der Datenbank verwendet, wird dies sich auf nachfolgende Anfragen auswirken. Für den Gebrauch von mehreren Datenbanken wird empfohlen, unterschiedliche `$db`-Konfigurationen für verschiedene Redis-Verbindungen vorzunehmen.
 
 ## Verwendung mehrerer Redis-Verbindungen
-Zum Beispiel in der Konfigurationsdatei `config/redis.php`
+Beispielsweise in der Konfigurationsdatei `config/redis.php`:
 ```php
 return [
     'default' => [
@@ -109,17 +109,16 @@ return [
         'port'     => 6379,
         'database' => 1,
     ],
-
-]
+];
 ```
-Standardmäßig wird die Verbindung verwendet, die in `default` konfiguriert ist. Sie können die Methode `Redis::connection()` verwenden, um festzulegen, welche Redis-Verbindung verwendet werden soll.
+Standardmäßig wird die in `default` konfigurierte Verbindung verwendet. Sie können die Methode `Redis::connection()` verwenden, um zu wählen, welche Redis-Verbindung verwendet werden soll.
 ```php
 $redis = Redis::connection('cache');
 $redis->get('test_key');
 ```
 
 ## Cluster-Konfiguration
-Wenn Ihre Anwendung einen Redis-Server-Cluster verwendet, sollten Sie in der Redis-Konfigurationsdatei mit dem Schlüssel `clusters` diese Cluster definieren:
+Wenn Ihre Anwendung einen Redis-Server-Cluster verwendet, sollten Sie in der Redis-Konfigurationsdatei mithilfe des `clusters`-Keys diese Cluster definieren:
 ```php
 return [
     'clusters' => [
@@ -136,8 +135,7 @@ return [
 ];
 ```
 
-Standardmäßig kann der Cluster das Client-Sharding auf den Knoten implementieren, um einen Pool von Knoten zu erstellen und eine große Menge an verfügbarem Speicher zu ermöglichen. Beachten Sie, dass das Client-Sharing nicht mit Fehlern umgehen wird; daher wird diese Funktion hauptsächlich für das Abrufen von Cachedaten aus einer anderen Hauptdatenbank verwendet. Wenn Sie den nativen Redis-Cluster verwenden möchten, müssen Sie im Schlüssel `options` in der Konfigurationsdatei Folgendes angeben:
-
+Standardmäßig kann der Cluster auf dem Knoten das Client-Sharding ermöglichen, um einen Pool von Knoten zu implementieren und eine große Menge verfügbarer Speicher zu schaffen. Es ist zu beachten, dass das Client-Sharing nicht mit fehlgeschlagenen Vorgängen umgeht und hauptsächlich für das Abrufen von Cache-Daten aus einer anderen primären Datenbank verwendet wird. Wenn Sie den nativen Redis-Cluster verwenden möchten, müssen Sie dies im `options`-Key der Konfigurationsdatei wie folgt angeben:
 ```php
 return[
     'options' => [
@@ -151,7 +149,7 @@ return[
 ```
 
 ## Pipeline-Befehl
-Wenn Sie viele Befehle an den Server senden müssen, wird empfohlen, den Pipeline-Befehl zu verwenden. Die Methode `pipeline` akzeptiert eine Closure eines Redis-Instanz. Sie können alle Befehle an die Redis-Instanz senden, und sie werden alle in einer Aktion ausgeführt:
+Wenn Sie viele Befehle an den Server senden müssen, wird empfohlen, den Pipeline-Befehl zu verwenden. Die Methode `pipeline` akzeptiert eine Closure für eine Redis-Instanz. Sie können alle Befehle an die Redis-Instanz senden, und sie werden alle in einem Vorgang ausgeführt:
 ```php
 Redis::pipeline(function ($pipe) {
     for ($i = 0; $i < 1000; $i++) {

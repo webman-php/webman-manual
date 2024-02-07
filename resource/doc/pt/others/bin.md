@@ -1,12 +1,12 @@
-# Empacotamento binário
+# Empacotamento Binário
 
-O webman suporta empacotar o projeto em um arquivo binário, o que permite que o webman seja executado em sistemas Linux sem a necessidade de um ambiente PHP.
+O webman suporta a compactação do projeto em um arquivo binário, permitindo que o webman seja executado em sistemas Linux sem a necessidade de um ambiente PHP.
 
-> **Observação**
-> O arquivo empacotado atualmente só suporta a execução em sistemas Linux com arquitetura x86_64, não suporta o sistema Mac.
-> É necessário desativar a opção de configuração phar do `php.ini`, ou seja, configurar `phar.readonly = 0`.
+> **Atenção**  
+> O arquivo compactado atualmente só é compatível com sistemas Linux com arquitetura x86_64 e não é compatível com sistemas Mac.  
+> É necessário desativar a opção de configuração `phar` no arquivo `php.ini`, ou seja, defina `phar.readonly = 0`.
 
-## Instalação da ferramenta de linha de comando
+## Instalação da Ferramenta de Linha de Comando
 `composer require webman/console ^1.2.24`
 
 ## Configurações
@@ -14,45 +14,45 @@ Abra o arquivo `config/plugin/webman/console/app.php` e defina
 ```php
 'exclude_pattern'   => '#^(?!.*(composer.json|/.github/|/.idea/|/.git/|/.setting/|/runtime/|/vendor-bin/|/build/|vendor/webman/admin))(.*)$#'
 ```
-para excluir alguns diretórios e arquivos inúteis durante o empacotamento, evitando assim um volume de empacotamento muito grande.
+Para excluir alguns diretórios e arquivos inúteis ao compactar o projeto, evitando que o arquivo compactado tenha um tamanho excessivo.
 
-## Empacotamento
+## Compactação
 Execute o comando
-```
+```sh
 php webman build:bin
 ```
-Também é possível especificar a versão do PHP para o empacotamento, por exemplo
-```
+Também é possível especificar a versão do PHP para a compactação, por exemplo
+```sh
 php webman build:bin 8.1
 ```
 
-Após o empacotamento, um arquivo `webman.bin` será gerado no diretório build.
+Após a compactação, o arquivo `webman.bin` será gerado no diretório `build`.
 
 ## Inicialização
-Faça o upload do webman.bin para o servidor Linux, execute `./webman.bin start` ou `./webman.bin start -d` para iniciar.
+Faça o upload do arquivo webman.bin para o servidor Linux e execute `./webman.bin start` ou `./webman.bin start -d` para iniciar.
 
 ## Princípio
-* Primeiramente, empacote o projeto webman local em um arquivo phar
-* Em seguida, baixe o php8.x.micro.sfx remotamente para o local
-* Combine o php8.x.micro.sfx e o arquivo phar em um arquivo binário
+* Primeiro, o projeto webman local é compactado em um arquivo phar.
+* Em seguida, o arquivo php8.x.micro.sfx é baixado remotamente.
+* O arquivo php8.x.micro.sfx e o arquivo phar são concatenados em um arquivo binário.
 
 ## Observações
-* O PHP local com versão >= 7.2 pode executar o comando de empacotamento
-* No entanto, somente é possível empacotar em um arquivo binário do PHP8
-* É altamente recomendável que a versão do PHP local seja compatível com a versão de empacotamento, ou seja, se o PHP local for 8.0, o empacotamento também deve ser feito com o PHP 8.0, para evitar problemas de compatibilidade
-* O empacotamento fará o download do código-fonte do PHP8, mas não o instalará localmente, não afetando o ambiente PHP local
-* O webman.bin atualmente só é compatível com a execução em sistemas Linux com arquitetura x86_64, não sendo compatível com sistemas Mac
-* Por padrão, o arquivo env não é empacotado (`config/plugin/webman/console/app.php` controla os arquivos excluídos), portanto, o arquivo env deve ser colocado no mesmo diretório que o webman.bin ao iniciar
-* Durante a execução, um diretório runtime será gerado no diretório onde está o webman.bin, para armazenar os arquivos de log
-* Atualmente, o webman.bin não lerá um arquivo php.ini externo. Se for necessário personalizar o php.ini, defina-o no arquivo `/config/plugin/webman/console/app.php` em custom_ini
+* Qualquer versão do PHP local a partir de 7.2 pode executar o comando de compactação.
+* No entanto, somente é possível compactar o arquivo binário para o PHP 8.
+* É altamente recomendável que a versão local do PHP e a versão de compactação sejam compatíveis. Ou seja, se o PHP local for 8.0, a compactação também deve ser feita com o PHP 8.0, para evitar problemas de compatibilidade.
+* A compactação fará o download do código-fonte do PHP 8, mas não instalará localmente, não afetando o ambiente PHP local.
+* Atualmente, o webman.bin só é compatível com sistemas Linux com arquitetura x86_64 e não é compatível com sistemas Mac.
+* Por padrão, o arquivo env não é compactado (definido por exclude_files em `config/plugin/webman/console/app.php`), portanto, ao iniciar, o arquivo env deve ser colocado no mesmo diretório que o webman.bin.
+* Durante a execução, será criado um diretório runtime no mesmo diretório do webman.bin para armazenar arquivos de log.
+* Atualmente, o webman.bin não lerá um arquivo php.ini externo; se for necessário personalizar o php.ini, defina-o em `/config/plugin/webman/console/app.php` no campo custom_ini.
 
-## Download do PHP estático separadamente
-Às vezes, você só precisa do executável do PHP e não quer implantar um ambiente PHP completo. Para isso, clique [aqui para baixar o PHP estático](https://www.workerman.net/download)
+## Download Separado do PHP Estático
+Às vezes, você só precisa do arquivo executável do PHP sem implementar o ambiente PHP, para isso, clique [aqui para baixar o PHP estático](https://www.workerman.net/download).
 
-> **Dica**
-> Se precisar especificar um arquivo php.ini para o PHP estático, use o seguinte comando `php -c /seu/caminho/php.ini start.php start -d`
+> **Dica**  
+> Se você precisar especificar o arquivo php.ini para o PHP estático, use o seguinte comando `php -c /seu/caminho/php.ini start.php start -d`.
 
-## Extensões suportadas
+## Extensões Suportadas
 bcmath
 calendar
 Core
@@ -99,7 +99,6 @@ xmlwriter
 zip
 zlib
 
-## Origem do projeto
-
+## Fonte do Projeto
 https://github.com/crazywhalecc/static-php-cli
 https://github.com/walkor/static-php-cli

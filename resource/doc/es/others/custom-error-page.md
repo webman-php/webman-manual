@@ -1,9 +1,9 @@
-## Personalizar la página de error 404
-Cuando webman se enfrenta a un error 404, automáticamente devuelve el contenido dentro de `public/404.html`, por lo que los desarrolladores pueden modificar directamente el archivo `public/404.html`.
+## Personalizar el error 404
+Cuando ocurre un error 404 en webman, automáticamente se devuelve el contenido de `public/404.html`, por lo que los desarrolladores pueden cambiar directamente el archivo `public/404.html`.
 
-Si deseas controlar dinámicamente el contenido del error 404, por ejemplo, devolver datos JSON como `{"code:"404", "msg":"404 not found"}` en las solicitudes ajax, y devolver la plantilla `app/view/404.html` en las solicitudes de página, sigue el siguiente ejemplo.
+Si desea controlar dinámicamente el contenido del error 404, por ejemplo, devolver datos json `{"code:"404", "msg":"404 not found"}` en una solicitud ajax y devolver la plantilla `app/view/404.html` en una solicitud de página, consulte el siguiente ejemplo.
 
-> A continuación, se muestra un ejemplo utilizando una plantilla nativa de PHP, pero el principio es similar para otras plantillas como `twig`, `blade` y `think-tmplate`.
+> A continuación se muestra un ejemplo utilizando una plantilla nativa de PHP, el principio es similar para otras plantillas como `twig`, `blade`, `think-template`.
 
 **Crear el archivo `app/view/404.html`**
 ```html
@@ -19,24 +19,23 @@ Si deseas controlar dinámicamente el contenido del error 404, por ejemplo, devo
 </html>
 ```
 
-**Agregar el siguiente código en `config/route.php`**
+**Agregue el siguiente código a `config/route.php`:**
 ```php
 use support\Request;
 use Webman\Route;
 
 Route::fallback(function(Request $request){
-    // Devolver JSON en solicitudes ajax
+    // Devolver json en solicitudes ajax
     if ($request->expectsJson()) {
         return json(['code' => 404, 'msg' => '404 not found']);
     }
-    // Devolver la plantilla 404.html en las solicitudes de página
+    // Devolver la plantilla 404.html en solicitudes de página
     return view('404', ['error' => 'some error'])->withStatus(404);
 });
 ```
 
-## Personalizar la página de error 500
+## Personalizar el error 500
 **Crear `app/view/500.html`**
-
 ```html
 <!doctype html>
 <html>
@@ -51,7 +50,7 @@ Plantilla de error personalizada:
 </html>
 ```
 
-**Crear** `app/exception/Handler.php` **(si el directorio no existe, créalo tú mismo)**
+**Crear `app/exception/Handler.php` (si el directorio no existe, créelo usted mismo)**
 ```php
 <?php
 
@@ -72,11 +71,11 @@ class Handler extends \support\exception\Handler
     public function render(Request $request, Throwable $exception) : Response
     {
         $code = $exception->getCode();
-        // Devolver datos JSON en solicitudes ajax
+        // Devolver datos json en solicitudes ajax
         if ($request->expectsJson()) {
             return json(['code' => $code ? $code : 500, 'msg' => $exception->getMessage()]);
         }
-        // Devolver la plantilla 500.html en las solicitudes de página
+        // Devolver la plantilla 500.html en solicitudes de página
         return view('500', ['exception' => $exception], '')->withStatus(500);
     }
 }
@@ -88,4 +87,3 @@ return [
     '' => \app\exception\Handler::class,
 ];
 ```
-

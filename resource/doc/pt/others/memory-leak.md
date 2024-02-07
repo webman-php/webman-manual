@@ -1,34 +1,36 @@
-# Sobre Vazamentos de Memória
-
-O webman é um framework de memória persistente, então precisamos prestar um pouco de atenção aos vazamentos de memória. No entanto, os desenvolvedores não precisam se preocupar muito, porque os vazamentos de memória ocorrem em condições extremas e são fáceis de evitar. Desenvolver com o webman é praticamente igual ao desenvolvimento com frameworks tradicionais, sem a necessidade de realizar operações extras para gerenciar a memória.
+# Sobre Vazamento de Memória
+webman é um framework de memória residente, por isso precisamos prestar um pouco de atenção aos vazamentos de memória. No entanto, os desenvolvedores não precisam se preocupar muito, pois os vazamentos de memória ocorrem em condições extremas e são facilmente evitáveis. O processo de desenvolvimento com webman é basicamente o mesmo que o desenvolvimento com frameworks tradicionais, não sendo necessário realizar operações extras de gerenciamento de memória.
 
 > **Dica**
-> O processo de monitoramento embutido do webman irá monitorar o uso de memória de todos os processos. Se um processo estiver prestes a atingir o valor definido em `memory_limit` no arquivo php.ini, ele será reiniciado automaticamente de forma segura, liberando memória. Isso não afeta a aplicação durante esse período.
+> O processo monitor embutido do webman irá monitorar o uso de memória de todos os processos. Se um processo estiver prestes a atingir o valor definido em `memory_limit` no arquivo php.ini, ele será reiniciado com segurança para liberar memória. Isso não afetará os negócios durante o processo.
 
 ## Definição de Vazamento de Memória
-Com o aumento contínuo das solicitações, a memória utilizada pelo webman também **aumenta infinitamente** (observe que é um aumento **infinito**), alcançando várias centenas de megabytes ou até mais, isso é considerado um vazamento de memória. Se a memória aumenta e depois para de aumentar, não é considerado um vazamento de memória.
+À medida que o número de solicitações aumenta, a quantidade de memória usada pelo webman também aumenta indefinidamente (observe que isso significa **aumento indefinido**), atingindo centenas de MB ou até mais, caracterizando um vazamento de memória. Se a memória aumentar e parar de aumentar depois disso, isso não é considerado um vazamento de memória.
 
-Geralmente, um processo que utiliza algumas dezenas de megabytes de memória é considerado uma situação normal. Quando um processo lida com uma solicitação muito grande ou mantém um grande número de conexões, é comum que o uso de memória de um único processo possa atingir várias centenas de megabytes. Depois de utilizar essa parte da memória, o PHP pode não retorná-la completamente ao sistema operacional, deixando-a reservada para reutilização. Sendo assim, pode acontecer de haver um aumento no uso de memória após processar uma grande solicitação e não liberar a memória, o que é considerado um comportamento normal. (Chamar o método gc_mem_caches() pode liberar parte da memória ociosa)
+É bastante normal para um processo usar algumas dezenas de MB de memória. No entanto, ao lidar com solicitações muito grandes ou manter grandes quantidades de conexões, é comum que o uso de memória por processo atinja centenas de MB. Após o uso desse tipo de memória, o PHP pode não devolvê-la completamente ao sistema operacional. Em vez disso, ele a mantém para reutilização, o que pode resultar em um aumento do uso de memória após o processamento de uma solicitação grande e não a liberação da memória. Isso é considerado um comportamento normal. (Chamar o método gc_mem_caches() pode liberar parte da memória ociosa)
 
-## Como os Vazamentos de Memória Ocorrem
-**Os vazamentos de memória ocorrem apenas quando ambos os seguintes critérios são atendidos:**
-1. Existe um array de **longa duração** (observe que é um array de **longa duração**, arrays comuns não são um problema)
-2. E esse array de **longa duração** é expandindo indefinidamente (ou seja, o negócio insere dados ilimitadamente e nunca limpa os dados)
 
-Se ambos os critérios 1 e 2 forem **satisfeitos simultaneamente** (observe que é simultaneamente), um vazamento de memória ocorrerá. Caso contrário, não será considerado um vazamento de memória se não atender a ambos os critérios ou atender apenas a um deles.
+## Como ocorre o Vazamento de Memória
+**Um vazamento de memória ocorre quando as seguintes duas condições são atendidas:**
+1. Existe um array de **longa vida útil** (observe que é um array de **longa vida útil**, e não um array comum)
+2. E esse array de **longa vida útil** se expande indefinidamente (o negócio continua inserindo dados nele sem limpá-los)
 
-## Arrays de Longa Duração
-Os arrays de longa duração no webman incluem:
-1. Arrays com a palavra-chave `static`
+Se 1 e 2 forem **atendidos simultaneamente** (observe que é simultaneamente), ocorrerá um vazamento de memória. Caso contrário, se uma das condições não for atendida ou se apenas uma for atendida, não será considerado um vazamento de memória.
+
+
+## Arrays de Longa Vida Útil
+Os arrays de longa vida útil no webman incluem:
+1. Arrays com a palavra-chave static
 2. Propriedades de arrays singleton
-3. Arrays com a palavra-chave `global`
+3. Arrays com a palavra-chave global
 
-> **Observação:**
-> O webman permite o uso de dados de longa duração, desde que limite os elementos do array para que não se expandam indefinidamente.
+> **Observação**
+> O webman permite o uso de dados de longa vida útil, mas é necessário garantir que os dados dentro deles sejam finitos e que o número de elementos não se expanda indefinidamente.
 
-A seguir, serão fornecidos exemplos explicativos.
 
-#### Array estático que se expande indefinidamente
+A seguir estão exemplos ilustrativos
+
+#### Array static expandindo indefinidamente
 ```php
 class Foo
 {
@@ -41,9 +43,9 @@ class Foo
 }
 ```
 
-O array `$data` definido com a palavra-chave `static` é um array de longa duração. No exemplo, o array `$data` aumenta indefinidamente com as solicitações, resultando em um vazamento de memória.
+O array `$data` definido com a palavra-chave `static` é um array de longa vida útil. No exemplo acima, o array `$data` se expande indefinidamente à medida que as solicitações continuam, levando a um vazamento de memória.
 
-#### Propriedade de array singleton que se expande indefinidamente
+#### Propriedade de Array Singleton expandindo indefinidamente
 ```php
 class Cache
 {
@@ -65,7 +67,7 @@ class Cache
 }
 ```
 
-Código de chamada:
+Código de chamada
 ```php
 class Foo
 {
@@ -77,12 +79,13 @@ class Foo
 }
 ```
 
-`Cache::instance()` retorna um singleton de Cache, que é uma instância de longa duração. Embora a propriedade `$data` não tenha a palavra-chave `static`, devido à própria classe ser de longa duração, `$data` também se torna um array de longa duração. Com o aumento contínuo de diferentes chaves no array `$data`, a aplicação utiliza cada vez mais memória, resultando em um vazamento de memória.
+`Cache::instance()` retorna um singleton Cache, que é uma instância de longa vida útil. Embora sua propriedade `$data` não tenha a palavra-chave `static`, ela é considerada de longa vida útil devido à própria classe ser de longa vida útil. À medida que dados com chaves diferentes são continuamente adicionados ao `$data`, a memória usada pelo programa aumenta, resultando em um vazamento de memória.
 
-> **Observação:**
-> Se as chaves adicionadas por `Cache::instance()->set(key, value)` forem de quantidade finita, não ocorrerá vazamento de memória, pois o array `$data` não aumentará indefinidamente.
+> **Observação**
+> Se as chaves adicionadas através de Cache::instance()->set(chave, valor) forem de um número finito, então não ocorrerá um vazamento de memória, pois o array `$data` não se expandirá indefinidamente.
 
-#### Array global que se expande indefinidamente
+
+#### Array global expandindo indefinidamente
 ```php
 class Index
 {
@@ -94,7 +97,7 @@ class Index
     }
 }
 ```
-O array definido com a palavra-chave global não é liberado após a execução de uma função ou método, tornando-o um array de longa duração. O código acima resultará em um vazamento de memória conforme as solicitações aumentam. Da mesma forma, um array definido com a palavra-chave static dentro de uma função ou método também é um array de longa duração. Se o array se expandir indefinidamente, ocorrerá um vazamento de memória, por exemplo:
+O array definido com a palavra-chave global não será liberado após a conclusão da função ou do método da classe, tornando-o um array de longa vida útil. O código acima, à medida que as solicitações continuamente aumentam, resultará em um vazamento de memória. Da mesma forma, um array definido com a palavra-chave static dentro de uma função ou método também é um array de longa vida útil e, se esse array se expandir indefinidamente, também resultará em um vazamento de memória, como por exemplo:
 ```php
 class Index
 {
@@ -104,14 +107,11 @@ class Index
         $data[] = time();
         return response($foo->sayHello());
     }
-}
 ```
 
-## Sugestões
-Recomenda-se que os desenvolvedores não se concentrem muito nos vazamentos de memória, pois eles raramente ocorrem. Se ocorrerem, é possível identificar a origem por meio de testes de carga e corrigi-la. Mesmo que os desenvolvedores não consigam encontrar o ponto de vazamento, o serviço de monitoramento embutido no webman reiniciará o processo com vazamento de memória apropriadamente, liberando a memória.
+## Recomendações
+Recomenda-se que os desenvolvedores não se preocupem excessivamente com vazamentos de memória, pois eles raramente acontecem. Caso ocorram, podemos encontrar o trecho de código que está causando o vazamento por meio de testes de estresse, a fim de localizar o problema. Mesmo que os desenvolvedores não identifiquem o ponto de vazamento, o serviço de monitoramento embutido no webman fará com que os processos com vazamento de memória sejam reiniciados de forma segura e oportuna para liberar memória.
 
-No entanto, se desejar evitar ao máximo os vazamentos de memória, siga as sugestões a seguir.
-1. Evite usar arrays com as palavras-chave `global` e `static`, e se precisar usar, garanta que não expandam indefinidamente.
-2. Evite usar singletons para classes não familiares, e caso precise, verifique se elas possuem propriedades de arrays que expandem indefinidamente.
-
-
+Se você desejar evitar vazamentos de memória o máximo possível, pode seguir as seguintes recomendações:
+1. Evite usar arrays com as palavras-chave `global` e `static`, mas se usar, certifique-se de que eles não se expandirão indefinidamente.
+2. Evite utilizar singletons em classes que não sejam familiares, e opte por inicializá-las com a palavra-chave `new`. Se um singleton for necessário, verifique se ele possui propriedades de array que não aumentarão indefinidamente.

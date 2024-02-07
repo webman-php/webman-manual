@@ -1,4 +1,4 @@
-## Ansicht
+## Ansichten
 
-Die Konfigurationsdatei für die Ansicht des Anwendungs-Plugin befindet sich in `plugin/{Pluginkennung}/config/view.php`.
-Die Verwendung der Ansicht in der Anwendungs-Plugin ist ähnlich wie bei der Entwicklung eines herkömmlichen Webman-Projekts. Siehe [Ansicht](../view.md) für weitere Informationen.
+Die Konfigurationsdatei für die Ansicht der Anwendungs-Plugin befindet sich in `plugin/{Pluginkennung}/config/view.php`.
+Die Verwendung von Ansichten in der Anwendungs-Plugin entspricht der Entwicklungserfahrung für normale Webman-Projekte. Siehe [Ansichten](../view.md) für weitere Informationen.

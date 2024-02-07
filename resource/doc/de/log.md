@@ -1,5 +1,5 @@
 # Protokoll
-Webman verwendet [monolog/monolog](https://github.com/Seldaek/monolog) für die Protokollierung von Ereignissen.
+Webman verwendet [monolog/monolog](https://github.com/Seldaek/monolog) zur Protokollierung.
 
 ## Verwendung
 ```php
@@ -50,21 +50,21 @@ $log->emergency($message, array $context = [])
 return [
     // Standard-Protokollkanal
     'default' => [
-        // Behandler für den Standardkanal können mehrfach definiert werden
+        // Handler für den Standardkanal, können mehrere eingestellt werden
         'handlers' => [
             [   
-                // Klassenname des Behandlers
+                // Klassenname des Handlers
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // Konstruktorparameter der Klasse des Behandlers
+                // Konstruktorparameter des Handlers
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // Formatbezogene Einstellungen
+                // Formatbezogen
                 'formatter' => [
-                    // Klassenname des Formatierungsbehandlers
+                    // Klassenname des Formatierungshandlers
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // Konstruktorparameter der Klasse des Formatierungsbehandlers
+                    // Konstruktorparameter des Formatierungshandlers
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -74,26 +74,26 @@ return [
 ```
 
 ## Mehrere Kanäle
-Monolog unterstützt mehrere Kanäle, wobei standardmäßig der Kanal `default` genutzt wird. Wenn Sie einen zusätzlichen Kanal `log2` hinzufügen möchten, sieht die Konfiguration wie folgt aus:
+Monolog unterstützt mehrere Kanäle und verwendet standardmäßig den `default`-Kanal. Wenn Sie einen zusätzlichen Kanal `log2` hinzufügen möchten, erfolgt die Konfiguration wie folgt:
 ```php
 return [
     // Standard-Protokollkanal
     'default' => [
-        // Behandler für den Standardkanal können mehrfach definiert werden
+        // Handler für den Standardkanal, können mehrere eingestellt werden
         'handlers' => [
             [   
-                // Klassenname des Behandlers
+                // Klassenname des Handlers
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // Konstruktorparameter der Klasse des Behandlers
+                // Konstruktorparameter des Handlers
                 'constructor' => [
                     runtime_path() . '/logs/webman.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // Formatbezogene Einstellungen
+                // Formatbezogen
                 'formatter' => [
-                    // Klassenname des Formatierungsbehandlers
+                    // Klassenname des Formatierungshandlers
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // Konstruktorparameter der Klasse des Formatierungsbehandlers
+                    // Konstruktorparameter des Formatierungshandlers
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -101,21 +101,21 @@ return [
     ],
     // Kanal log2
     'log2' => [
-        // Behandler für den Kanal log2 können mehrfach definiert werden
+        // Handler für den Kanal log2, können mehrere eingestellt werden
         'handlers' => [
             [   
-                // Klassenname des Behandlers
+                // Klassenname des Handlers
                 'class' => Monolog\Handler\RotatingFileHandler::class,
-                // Konstruktorparameter der Klasse des Behandlers
+                // Konstruktorparameter des Handlers
                 'constructor' => [
                     runtime_path() . '/logs/log2.log',
                     Monolog\Logger::DEBUG,
                 ],
-                // Formatbezogene Einstellungen
+                // Formatbezogen
                 'formatter' => [
-                    // Klassenname des Formatierungsbehandlers
+                    // Klassenname des Formatierungshandlers
                     'class' => Monolog\Formatter\LineFormatter::class,
-                    // Konstruktorparameter der Klasse des Formatierungsbehandlers
+                    // Konstruktorparameter des Formatierungshandlers
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
                 ],
             ]
@@ -124,7 +124,7 @@ return [
 ];
 ```
 
-Die Verwendung des Kanals `log2` erfolgt wie folgt:
+Verwendung des Kanals `log2`:
 ```php
 <?php
 namespace app\controller;
@@ -137,7 +137,7 @@ class FooController
     public function index(Request $request)
     {
         $log = Log::channel('log2');
-        $log->info('log2 Test');
+        $log->info('Log2-Test');
         return response('Hallo Index');
     }
 }

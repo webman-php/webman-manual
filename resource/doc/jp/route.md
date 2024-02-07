@@ -1,16 +1,16 @@
 ## ルーティング
 ## デフォルトのルーティングルール
-webmanのデフォルトのルーティングルールは `http://127.0.0.1:8787/{コントローラ}/{アクション}` です。
+webmanのデフォルトのルーティングルールは `http://127.0.0.1:8787/{controller}/{action}`です。
 
-デフォルトのコントローラは `app\controller\IndexController` であり、デフォルトのアクションは `index` です。
+デフォルトのコントローラは `app\controller\IndexController` で、デフォルトのアクションは `index` です。
 
-例えば、以下のようにアクセスできます：
-- `http://127.0.0.1:8787` は`app\controller\IndexController`クラスの`index`メソッドにデフォルトでアクセスします。
-- `http://127.0.0.1:8787/foo` は`app\controller\FooController`クラスの`index`メソッドにデフォルトでアクセスします。
-- `http://127.0.0.1:8787/foo/test` は`app\controller\FooController`クラスの`test`メソッドにデフォルトでアクセスします。
-- `http://127.0.0.1:8787/admin/foo/test` は`app\admin\controller\FooController`クラスの`test`メソッドにデフォルトでアクセスします（[複数アプリケーション](multiapp.md)を参照）。
+例えば：
+- `http://127.0.0.1:8787` は `app\controller\IndexController` クラスの `index` メソッドにデフォルトでアクセスします。
+- `http://127.0.0.1:8787/foo` は `app\controller\FooController` クラスの `index` メソッドにデフォルトでアクセスします。
+- `http://127.0.0.1:8787/foo/test` は `app\controller\FooController` クラスの `test` メソッドにデフォルトでアクセスします。
+- `http://127.0.0.1:8787/admin/foo/test` は `app\admin\controller\FooController` クラスの `test` メソッドにデフォルトでアクセスします（[multiple](multiapp.md)を参照）。
 
-また、webmanは1.4以降、複雑なデフォルトのルーティングをサポートしています
+また、webmanは1.4からより複雑なデフォルトのルーティングをサポートしています。例えば
 ```php
 app
 ├── admin
@@ -27,51 +27,52 @@ app
             └── IndexController.php
 ```
 
-リクエストルーティングを変更したい場合は、`config/route.php`の構成ファイルを変更してください。
+特定のリクエストのルーティングを変更したい場合は、`config/route.php` の設定ファイルを変更してください。
 
-デフォルトのルーティングを無効にしたい場合は、`config/route.php`ファイルの最終行に次の構成を追加してください：
+デフォルトのルーティングを無効にしたい場合は、`config/route.php` ファイルの最後の行に以下の設定を追加してください：
 ```php
 Route::disableDefaultRoute();
 ```
 
-## クロージャ・ルーティング
-`config/route.php`に次のようなルートコードを追加します。
+## クロージャルーティング
+`config/route.php` に以下のようなルーティングコードを追加してください。
 ```php
 Route::any('/test', function ($request) {
     return response('test');
 });
 ```
-> **注意**
-> クロージャ関数はどのコントローラにも属していないため、`$request->app` `$request->controller` `$request->action` はすべて空の文字列です。
-
-アドレスが `http://127.0.0.1:8787/test`の場合、`test`の文字列が返されます。
 
 > **注意**
-> ルートのパスは`/`で始まる必要があります。例：
+> クロージャ関数はどのコントローラにも属さないため、`$request->app` `$request->controller` `$request->action` はすべて空の文字列です。
 
+`http://127.0.0.1:8787/test` にアクセスすると、`test` の文字列が返されます。
+
+> **注意**
+> ルーティングパスは `/` で始まる必要があります。例：
 ```php
-// 間違った使い方
+// 間違った使用法
 Route::any('test', function ($request) {
     return response('test');
 });
 
-// 正しい使い方
+// 正しい使用法
 Route::any('/test', function ($request) {
     return response('test');
 });
 ```
 
-## クラス・ルーティング
-`config/route.php`に次のようなルートコードを追加します。
+## クラスルーティング
+`config/route.php` に以下のようなルーティングコードを追加してください。
 ```php
 Route::any('/testclass', [app\controller\IndexController::class, 'test']);
 ```
-`http://127.0.0.1:8787/testclass`にアクセスすると、`app\controller\IndexController`クラスの`test`メソッドの戻り値が返されます。
 
-## ルートパラメータ
-ルートにパラメータが含まれている場合、`{key}`を使用して一致させ、一致結果は対応するコントローラメソッドのパラメータに渡されます（2番目のパラメータ以降に順番に渡されます）、例：
+`http://127.0.0.1:8787/testclass` にアクセスすると、`app\controller\IndexController` クラスの `test` メソッドの返り値が返されます。
+
+## ルーティングパラメータ
+ルーティングにパラメータが含まれている場合、 `{key}` を使用してマッチングし、マッチング結果は対応するコントローラーメソッドパラメータに渡されます（2番目のパラメータから順に渡されます）。例：
 ```php
-// /user/123 または /user/abc に一致
+// /user/123 および /user/abc にマッチ
 Route::any('/user/{id}', [app\controller\UserController::class, 'get']);
 ```
 ```php
@@ -80,37 +81,36 @@ class UserController
 {
     public function get($request, $id)
     {
-        return response('パラメータを受け取りました：'.$id);
+        return response('パラメータを受け取りました'.$id);
     }
 }
 ```
 
-その他の例：
+さらに例：
 ```php
-// /user/123 に一致、/user/abc には一致しない
+// /user/123 にマッチ、/user/abc にはマッチしない
 Route::any('/user/{id:\d+}', function ($request, $id) {
     return response($id);
 });
 
-// /user/foobar に一致、/user/foo/bar には一致しない
+// /user/foobar にマッチ、/user/foo/bar にはマッチしない
 Route::any('/user/{name}', function ($request, $name) {
    return response($name);
 });
 
-// /user、/user/123、/user/abcに一致
+// /user、/user/123 、および /user/abc にマッチ
 Route::any('/user[/{name}]', function ($request, $name = null) {
    return response($name ?? 'tom');
 });
 
-// すべてのoptionsリクエストに一致
+// すべてのオプションリクエストにマッチ
 Route::options('[{path:.+}]', function () {
     return response('');
 });
 ```
 
-## ルートグループ
-時には、多くの共通の接頭辞が含まれる場合、ルートグループを使用して定義を簡素化できます。例：
-
+## ルーティンググループ
+時にはルーティングには多くの共通の接頭辞が含まれていることがあります。このような場合は、ルーティンググループを使用して定義を簡素化できます。例：
 ```php
 Route::group('/blog', function () {
    Route::any('/create', function ($request) {return response('create');});
@@ -118,15 +118,14 @@ Route::group('/blog', function () {
    Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
 });
 ```
-これは以下と同等です：
+次のように同じものになります：
 ```php
 Route::any('/blog/create', function ($request) {return response('create');});
 Route::any('/blog/edit', function ($request) {return response('edit');});
 Route::any('/blog/view/{id}', function ($request, $id) {return response("view $id");});
 ```
 
-グループをネストして使用する例：
-
+グループのネスト使用例：
 ```php
 Route::group('/blog', function () {
    Route::group('/v1', function () {
@@ -137,9 +136,9 @@ Route::group('/blog', function () {
 });
 ```
 
-## ルートミドルウェア
-1つまたは複数のルートまたはルートグループにミドルウェアを設定できます。例：
-
+## ルーティングミドルウェア
+特定の1つまたはグループのルーティングにミドルウェアを設定することができます。
+例えば：
 ```php
 Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->middleware([
     app\middleware\MiddlewareA::class,
@@ -157,10 +156,10 @@ Route::group('/blog', function () {
 ```
 
 > **注意**：
-> webman-framework <= 1.5.6 の場合、 `->middleware()` のルートミドルウェアはグループグループの後にルートが配置されている必要があります。
+> webman-framework <= 1.5.6 では `->middleware()` ルーティングのミドルウェアは、グループの後にルートがある場合にのみ有効です。
 
 ```php
-# 間違った使用例（webman-framework >= 1.5.7 ではこの使用が有効）
+# 間違った使用例 (webman-framework >= 1.5.7 からこの方法が有効になりました)
 Route::group('/blog', function () {
    Route::group('/v1', function () {
       Route::any('/create', function ($request) {return response('create');});
@@ -186,19 +185,19 @@ Route::group('/blog', function () {
     ]);  
 });
 ```
+## リソースルート
 
-## リソース型ルート
 ```php
 Route::resource('/test', app\controller\IndexController::class);
 
-//リソースルートを指定
+// リソースルートの指定
 Route::resource('/test', app\controller\IndexController::class, ['index','create']);
 
-//非定義型リソースルート
-// たとえば notify アクセスアドレスはどちらでも型がないルート /test/notifyまたは/test/notify/{id} routeNameは test.notify
+// 未定義のリソースルート
+// たとえば、notifyにアクセスすると、any型のルート /test/notifyまたは/test/notify/{id} のいずれかを使用できます。routeNameはtest.notifyです。
 Route::resource('/test', app\controller\IndexController::class, ['index','create','notify']);
 ```
-| 動詞   | URI                 | アクション   | ルート名称    |
+| 動詞   | URI                 | アクション   | ルート名    |
 |--------|---------------------|----------|---------------|
 | GET    | /test               | index    | test.index    |
 | GET    | /test/create        | create   | test.create   |
@@ -211,50 +210,49 @@ Route::resource('/test', app\controller\IndexController::class, ['index','create
 
 ## URL生成
 > **注意** 
-> 現時点ではグループの中でネストしたルートのURL生成はサポートされていません。
+> 現時点では、グループにネストされたルートのURL生成はサポートされていません。  
 
-例えば、次のようなルートがある場合：
+たとえば、次のようなルートがあるとします。
 ```php
 Route::any('/blog/{id}', [app\controller\BlogController::class, 'view'])->name('blog.view');
 ```
-次の方法でこのルートのURLを生成できます。
+このルートのURLを生成するには、次のようにします。
 ```php
-route('blog.view', ['id' => 100]); // 結果：/blog/100
+route('blog.view', ['id' => 100]); // 結果は /blog/100 となります
 ```
-
-ビューでルートのURLを使用するには、このメソッドを使用すると、どのようにルートの規則が変更されてもURLが自動的に生成されるため、大量のビューファイルを変更する必要がなくなります。
+ビューでルートのURLを使用する場合、この方法を使用すると、ルート規則が変わってもURLが自動的に生成されるため、多くのビューファイルを変更する必要がありません。
 
 ## ルート情報の取得
 > **注意**
-> webman-framework >= 1.3.2が必要です
+> webman-framework >= 1.3.2が必要です。
 
-`$request->route`オブジェクトを使用すると、現在のリクエストのルート情報を取得できます。例えば
+`$request->route`オブジェクトを使用すると、現在のリクエストのルート情報を取得できます。たとえば、
+
 ```php
-$route = $request->route; // 等価：$route = request()->route;
+$route = $request->route; // $route = request()->route;と同等です。
 if ($route) {
     var_export($route->getPath());
     var_export($route->getMethods());
     var_export($route->getName());
     var_export($route->getMiddleware());
     var_export($route->getCallback());
-    var_export($route->param()); // この機能は webman-framework >= 1.3.16 が必要です
+    var_export($route->param()); // この機能には、webman-framework >= 1.3.16が必要です。
 }
 ```
-
 > **注意**
-> もし現在のリクエストがconfig/route.phpに一致するルートがない場合、`$request->route`はnullになります。つまり、デフォルトのルートがある場合、`$request->route`はnullです
+> 現在のリクエストがconfig/route.phpに設定されたどのルートにも一致しない場合、`$request->route`はnullになります。つまり、デフォルトのルートをたどる場合には、`$request->route`はnullになります。
 
 
 ## 404エラーの処理
-ルートが見つからない場合、デフォルトで404ステータスコードが返され、`public/404.html`の内容が出力されます。
+ルートが見つからない場合、デフォルトでは404のステータスコードが返され、`public/404.html`ファイルの内容が出力されます。
 
-開発者がルートが見つからない場合のビジネスプロセスに介入したい場合は、webmanが提供するフォールバックルート`Route::fallback($callback)`メソッドを使用できます。次のコードロジックは、ルートが見つからない場合にホームページにリダイレクトします。
+開発者がルートが見つからない場合のビジネスプロセスに介入したい場合は、webmanが提供するフォールバックルート`Route::fallback($callback)`メソッドを使用できます。たとえば、以下のコードのロジックは、ルートが見つからない場合にホームページにリダイレクトします。
 ```php
 Route::fallback(function(){
     return redirect('/');
 });
 ```
-また、ルートが存在しない場合にJSONデータを返すこともできます。これはwebmanがAPIエンドポイントとして使用される場合に非常に便利です。
+また、ルートが存在しない場合にJSONデータを返すこともできます。これは、webmanがAPIエンドポイントとして使用される場合に非常に便利です。
 ```php
 Route::fallback(function(){
     return json(['code' => 404, 'msg' => '404 not found']);
@@ -262,43 +260,45 @@ Route::fallback(function(){
 ```
 
 関連リンク [カスタム404 500ページ](others/custom-error-page.md)
-## ルーティングインターフェイス
+
+## ルートインターフェイス
 ```php
-// 任意のメソッドで$uriのルートを設定
+// $uriの任意のメソッドリクエストのルートを設定します。
 Route::any($uri, $callback);
-// GETリクエストの$uriのルートを設定
+// $uriのgetリクエストのルートを設定します。
 Route::get($uri, $callback);
-// POSTリクエストの$uriのルートを設定
+// $uriのリクエストのルートを設定します。
 Route::post($uri, $callback);
-// PUTリクエストの$uriのルートを設定
+// $uriのputリクエストのルートを設定します。
 Route::put($uri, $callback);
-// PATCHリクエストの$uriのルートを設定
+// $uriのpatchリクエストのルートを設定します。
 Route::patch($uri, $callback);
-// DELETEリクエストの$uriのルートを設定
+// $uriのdeleteリクエストのルートを設定します。
 Route::delete($uri, $callback);
-// HEADリクエストの$uriのルートを設定
+// $uriのheadリクエストのルートを設定します。
 Route::head($uri, $callback);
-// 複数のリクエストタイプのルートを同時に設定
+// 複数のリクエスト種別のルートを同時に設定します。
 Route::add(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'], $uri, $callback);
-// グループ化されたルート
+// グループルート
 Route::group($path, $callback);
 // リソースルート
 Route::resource($path, $callback, [$options]);
-// デフォルトのルートを無効化
+// デフォルトルートを無効にする
 Route::disableDefaultRoute($plugin = '');
 // フォールバックルート、デフォルトのルートを設定
 Route::fallback($callback, $plugin = '');
 ```
-$uriに対応するルート（デフォルトのルートを含む）が存在しない場合、フォールバックルートが設定されていない場合は、404が返されます。
+もしuriに対応するルート（デフォルトのルートを含む）がなく、フォールバックルートも設定されていない場合、404が返されます。
 
-## 複数のルート設定ファイル
-複数のルート設定ファイルを使用してルートを管理したい場合、たとえば[マルチアプリケーション](multiapp.md)で、それぞれのアプリケーションに独自のルート設定がある場合は、`require`を使用して外部のルート設定ファイルを読み込むことができます。
-例えば`config/route.php`内で
+## 複数のルート構成ファイル
+ルートを複数の構成ファイルで管理したい場合は、たとえば[複数のアプリ](multiapp.md)の場合は、各アプリで独自のルート構成ファイルを持つようにしたいかもしれません。この場合は、外部のルート構成ファイルを`require`することで読み込むことができます。
+たとえば、`config/route.php`では、次のようになります。
 ```php
 <?php
 
-// adminアプリケーションのルート設定をロードする
+// adminアプリのルート構成を読み込む
 require_once app_path('admin/config/route.php');
-// apiアプリケーションのルート設定をロードする
+// apiアプリのルート構成を読み込む
 require_once app_path('api/config/route.php');
+
 ```

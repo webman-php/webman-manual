@@ -34,12 +34,11 @@ class ExcelController
         // Save file to public directory
         $writer->save($file_path);
         // Download file
-        return response()->download($file_path, 'file_name.xlsx');
+        return response()->download($file_path, 'filename.xlsx');
     }
-
 }
 ```
 
-### More Information
+### Read More
 
 Visit https://phpspreadsheet.readthedocs.io/en/latest/

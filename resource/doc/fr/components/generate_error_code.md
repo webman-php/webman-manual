@@ -2,9 +2,9 @@
 
 ## Description
 
-Permet de générer automatiquement des codes d'erreur en fonction des règles spécifiées.
+Peut générer automatiquement des codes d'erreur en fonction des règles spécifiées.
 
-> Il est convenu que le paramètre code des données renvoyées, tous les codes personnalisés, les nombres positifs représentent un service normal et les nombres négatifs représentent une exception de service.
+> Dans les données renvoyées, le paramètre code est convenu ; tous les codes personnalisés, les valeurs positives représentent un service normal, les valeurs négatives représentent une anomalie de service.
 
 ## Adresse du projet
 
@@ -25,8 +25,8 @@ composer require teamones/response-code-msg
 ```php
 <?php
 /**
- * Fichier généré automatiquement, veuillez ne pas le modifier manuellement.
- * @Auteur : $Id$
+ * Fichier généré, veuillez ne pas modifier manuellement.
+ * @Author:$Id$
  */
 namespace support;
 
@@ -37,7 +37,7 @@ class ErrorCode
 
 ### Fichier de configuration
 
-Les codes d'erreur seront automatiquement générés de manière incrémentielle selon les paramètres de configuration ci-dessous. Par exemple, si system_number = 201 et start_min_number = 10000, le premier code d'erreur généré sera -20110001.
+Les codes d'erreur seront automatiquement générés en fonction des paramètres configurés ci-dessous. Par exemple, si system_number = 201 et start_min_number = 10000, le premier code d'erreur généré sera -20110001.
 
 - Chemin du fichier : ./config/error_code.php
 
@@ -46,20 +46,20 @@ Les codes d'erreur seront automatiquement générés de manière incrémentielle
 
 return [
     "class" => new \support\ErrorCode(), // Fichier de classe ErrorCode
-    "root_path" => app_path(), // Répertoire racine du code actuel
+    "root_path" => app_path(), // Répertoire racine de code actuel
     "system_number" => 201, // Identifiant du système
     "start_min_number" => 10000 // Plage de génération des codes d'erreur, par exemple 10000-99999
 ];
 ```
 
-### Ajout du code de génération automatique des erreurs dans start.php
+### Ajout du démarrage automatique de la génération de codes d'erreur dans start.php
 
 - Chemin du fichier : ./start.php
 
 ```php
 // Placé après Config::load(config_path(), ['route', 'container']);
 
-// Générer des codes d'erreur, uniquement en mode APP_DEBUG
+// Générer les codes d'erreur, uniquement en mode APP_DEBUG
 if (config("app.debug")) {
     $errorCodeConfig = config('error_code');
     (new \teamones\responseCodeMsg\Generate($errorCodeConfig))->run();
@@ -68,14 +68,14 @@ if (config("app.debug")) {
 
 ### Utilisation dans le code
 
-Dans le code ci-dessous, **ErrorCode::ModelAddOptionsError** représente un code d'erreur, où **ModelAddOptionsError** doit être écrit par l'utilisateur en utilisant la première lettre en majuscule en fonction de la sémantique actuelle.
+Dans le code ci-dessous, **ErrorCode::ModelAddOptionsError** est un code d'erreur, où **ModelAddOptionsError** doit être écrit en majuscules en fonction de la signification requise.
 
-> Une fois écrit, vous constaterez que vous ne pourrez pas l'utiliser. Il sera généré automatiquement lors du prochain redémarrage. Notez qu'il peut parfois être nécessaire de redémarrer deux fois.
+> Vous constaterez qu'il est impossible de l'utiliser une fois écrit, il sera généré après le redémarrage suivant. Notez que parfois il est nécessaire de redémarrer deux fois.
 
 ```php
 <?php
 /**
- * Classe de service pour les opérations relatives à la navigation
+ * Classe de service pour les opérations liées à la navigation
  */
 
 namespace app\service;
@@ -118,8 +118,8 @@ class Demo
 ```php
 <?php
 /**
- * Fichier généré automatiquement, veuillez ne pas le modifier manuellement.
- * @Auteur : $Id$
+ * Fichier généré, veuillez ne pas modifier manuellement.
+ * @Author:$Id$
  */
 namespace support;
 

@@ -1,16 +1,15 @@
 # Database
-Il plugin può configurare il proprio database, ad esempio il contenuto di `plugin/foo/config/database.php` sarebbe:
-
+Il plugin può configurare il proprio database, ad esempio `plugin/foo/config/database.php` contiene il seguente contenuto:
 ```php
-return  [
+return [
     'default' => 'mysql',
     'connections' => [
         'mysql' => [ // mysql è il nome della connessione
             'driver'      => 'mysql',
             'host'        => '127.0.0.1',
             'port'        => 3306,
-            'database'    => 'database',
-            'username'    => 'username',
+            'database'    => 'nome del database',
+            'username'    => 'nome utente',
             'password'    => 'password',
             'charset'     => 'utf8mb4',
             'collation'   => 'utf8mb4_general_ci',
@@ -19,8 +18,8 @@ return  [
             'driver'      => 'mysql',
             'host'        => '127.0.0.1',
             'port'        => 3306,
-            'database'    => 'database',
-            'username'    => 'username',
+            'database'    => 'nome del database',
+            'username'    => 'nome utente',
             'password'    => 'password',
             'charset'     => 'utf8mb4',
             'collation'   => 'utf8mb4_general_ci',
@@ -29,8 +28,7 @@ return  [
 ];
 ```
 
-Il modo per richiamare questa configurazione è `Db::connection('plugin.{plugin}.{nome_connessione}');`, per esempio
-
+Usa `Db::connection('plugin.{plugin}.{nome connessione}');`, per esempio
 ```php
 use support\Db;
 Db::connection('plugin.foo.mysql')->table('user')->first();
@@ -38,7 +36,6 @@ Db::connection('plugin.foo.admin')->table('admin')->first();
 ```
 
 Se si desidera utilizzare il database del progetto principale, è sufficiente utilizzarlo direttamente, per esempio
-
 ```php
 use support\Db;
 Db::table('user')->first();
@@ -46,10 +43,8 @@ Db::table('user')->first();
 Db::connection('admin')->table('admin')->first();
 ```
 
-## Configurare il database per il Model
-
-È possibile creare una classe Base per il Model, con la proprietà `$connection` che specifica la connessione al database del plugin, per esempio
-
+## Configurare il database per il Modello
+Possiamo creare una classe Base per il Modello, dove la classe Base usa `$connection` per specificare la connessione al database del plugin, ad esempio
 ```php
 <?php
 
@@ -68,11 +63,10 @@ class Base extends Model
 }
 ```
 
-In questo modo, tutti i Model nel plugin che ereditano da Base utilizzeranno automaticamente il database del plugin.
+In questo modo, tutti i Modelli all'interno del plugin ereditano da Base e utilizzano automaticamente il proprio database del plugin.
 
-## Riutilizzare la configurazione del database
-Naturalmente è possibile riutilizzare la configurazione del database del progetto principale. Se si sta utilizzando [webman-admin](https://www.workerman.net/plugin/82), è anche possibile riutilizzare la configurazione del database di [webman-admin](https://www.workerman.net/plugin/82), per esempio
-
+## Riuso della configurazione del database
+Naturalmente possiamo riutilizzare la configurazione del database del progetto principale, ad esempio, se si sta utilizzando [webman-admin](https://www.workerman.net/plugin/82), è possibile riutilizzare la configurazione del database di [webman-admin](https://www.workerman.net/plugin/82), ad esempio
 ```php
 <?php
 

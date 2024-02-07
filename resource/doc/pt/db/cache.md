@@ -1,8 +1,8 @@
 # Cache
 
-O webman usa por padrão [symfony/cache](https://github.com/symfony/cache) como componente de cache.
+No webman, o [symfony/cache](https://github.com/symfony/cache) é usado como componente de cache por padrão.
 
-> É necessário instalar a extensão redis para `php-cli` antes de usar o `symfony/cache`.
+> Antes de usar o `symfony/cache`, o módulo de extensão do Redis deve ser instalado para o `php-cli`.
 
 ## Instalação
 **php 7.x**
@@ -14,7 +14,7 @@ composer require -W illuminate/redis ^8.2.0 symfony/cache ^5.2
 composer require -W illuminate/redis symfony/cache
 ```
 
-Depois de instalar, é necessário reiniciar (reload não é válido)
+Após a instalação, é necessário reiniciar (reload não é eficaz).
 
 ## Configuração do Redis
 O arquivo de configuração do Redis está em `config/redis.php`
@@ -48,9 +48,9 @@ class UserController
 }
 ```
 
-> **Observação**
+> **Nota**
 > É recomendável adicionar um prefixo à chave para evitar conflitos com outros usos do Redis.
 
-## Usando Outro Componente de Cache
+## Uso de Outros Componentes de Cache
 
-O uso do componente [ThinkCache](https://github.com/top-think/think-cache) será referenciado em [Outras bases de dados](others.md#ThinkCache).
+O componente [ThinkCache](https://github.com/top-think/think-cache) pode ser referenciado para uso em [outros bancos de dados](others.md#ThinkCache).

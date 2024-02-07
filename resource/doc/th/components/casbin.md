@@ -2,39 +2,39 @@
 
 ## คำอธิบาย
 
-Casbin เป็นกรอบควบคุมการเข้าถึงที่เปิดตัวที่มีประสิทธิภาพและมีความแข็งแกร่ง และมีกลไกการจัดการสิทธิการเข้าถึงที่รองรับรูปแบบควบคุมการเข้าถึงที่หลากหลาย
+Casbin เป็นกรอบการควบคุมการเข้าถึงอย่างมีประสิทธิภาพและมีพลัง ซึ่งระบบการจัดการสิทธิ์ของมันสนับสนุนรูปแบบการควบคุมการเข้าถึงหลายแบบ
 
 ## ที่อยู่โปรเจค
 
 https://github.com/teamones-open/casbin
 
 ## การติดตั้ง
-
+ 
   ```php
   composer require teamones/casbin
   ```
 
 ## เว็บไซต์ Casbin
 
-สามารถดูข้อมูลการใช้งานเพิ่มเติมได้ที่เว็บไซต์อย่างเป็นทางการ ที่นี่จะกล่าวถึงวิธีการกำหนดใช้งานใน webman เท่านั้น
+สำหรับการใช้งานอธิบายอย่างละเอียดสามารถดูได้ที่เว็บไซต์ทางการภาษาจีน ที่นี่จะอธิบายว่าจะกำหนดค่าและใช้งานใน webman อย่างไร
 
 https://casbin.org/docs/zh-CN/overview
 
-## โครงสร้างไดเร็กทอรี
+## โครงสร้างโฟลเดอร์
 
-```
+``` 
 .
-├── config                        ไดเร็กทอรีการกำหนดค่า
-│   ├── casbin-restful-model.conf ไฟล์กำหนดค่าของโมเดลสิทธิการเข้าถึงที่ใช้
+├── config                        โฟลเดอร์การกำหนดค่า
+│   ├── casbin-restful-model.conf ไฟล์กำหนดค่าโมเดลสิทธิ์ที่ใช้
 │   ├── casbin.php                การกำหนดค่า casbin
 ......
 ├── database                      ไฟล์ฐานข้อมูล
-│   ├── migrations                ไฟล์โครงการย้าย
+│   ├── migrations                ไฟล์เคลื่อนย้าย
 │   │   └── 20210218074218_create_rule_table.php
 ......
 ```
 
-## ไฟล์การย้ายฐานข้อมูล
+## ไฟล์เคลื่อนย้ายของฐานข้อมูล
 
 ```php
 <?php
@@ -43,36 +43,11 @@ use Phinx\Migration\AbstractMigration;
 
 class CreateRuleTable extends AbstractMigration
 {
-    /**
-     * Change Method.
-     *
-     * Write your reversible migrations using this method.
-     *
-     * More information on writing migrations is available here:
-     * http://docs.phinx.org/en/latest/migrations.html#the-abstractmigration-class
-     *
-     * The following commands can be used in this method and Phinx will
-     * automatically reverse them when rolling back:
-     *
-     *    createTable
-     *    renameTable
-     *    addColumn
-     *    addCustomColumn
-     *    renameColumn
-     *    addIndex
-     *    addForeignKey
-     *
-     * Any other destructive changes will result in an error when trying to
-     * rollback the migration.
-     *
-     * Remember to call "create()" or "update()" and NOT "save()" when working
-     * with the Table class.
-     */
     public function change()
     {
         $table = $this->table('rule', ['id' => false, 'primary_key' => ['id'], 'engine' => 'InnoDB', 'collation' => 'utf8mb4_general_ci', 'comment' => 'ตารางกฎ']);
 
-        // เพิ่มฟิลด์ข้อมูล
+        //เพิ่มฟิลด์ข้อมูล
         $table->addColumn('id', 'integer', ['identity' => true, 'signed' => false, 'limit' => 11, 'comment' => 'ไอดีหลัก'])
             ->addColumn('ptype', 'char', ['default' => '', 'limit' => 8, 'comment' => 'ประเภทกฎ'])
             ->addColumn('v0', 'string', ['default' => '', 'limit' => 128])
@@ -82,7 +57,7 @@ class CreateRuleTable extends AbstractMigration
             ->addColumn('v4', 'string', ['default' => '', 'limit' => 128])
             ->addColumn('v5', 'string', ['default' => '', 'limit' => 128]);
 
-        // ทำการสร้าง
+        //ทำการสร้าง
         $table->create();
     }
 }
@@ -91,7 +66,7 @@ class CreateRuleTable extends AbstractMigration
 
 ## การกำหนดค่า casbin
 
-สัญญาณการกำหนดค่าโมเดลสิทธิการเข้าถึง โปรดดูที่นี่：https://casbin.org/docs/zh-CN/syntax-for-models
+สัญลักษณ์กฎสิทธิ์ ตัวอย่างของการกำหนดค่าดูได้ที่ : https://casbin.org/docs/zh-CN/syntax-for-models
 
 ```php
 
@@ -101,7 +76,7 @@ return [
     'default' => [
         'model' => [
             'config_type' => 'file',
-            'config_file_path' => config_path() . '/casbin-restful-model.conf', // ไฟล์กำหนดค่าโมเดลสิทธิการเข้าถึง
+            'config_file_path' => config_path() . '/casbin-restful-model.conf', // ไฟล์กำหนดค่าโมเดลสิทธิ์
             'config_text' => '',
         ],
         'adapter' => [
@@ -109,11 +84,11 @@ return [
             'class' => \app\model\Rule::class,
         ],
     ],
-    // สามารถกำหนดค่าโมเดลสิทธิหลาย ๆ รูปแบบ
+    // สามารถกำหนดค่า model สิทธิ์ได้หลายตัว
     'rbac' => [
         'model' => [
             'config_type' => 'file',
-            'config_file_path' => config_path() . '/casbin-rbac-model.conf', // ไฟล์กำหนดค่าโมเดลสิทธิการเข้าถึง
+            'config_file_path' => config_path() . '/casbin-rbac-model.conf', // ไฟล์กำหนดค่าโมเดลสิทธิ์
             'config_text' => '',
         ],
         'adapter' => [
@@ -124,64 +99,62 @@ return [
 ];
 ```
 
-### อะแดปเตอร์
+### Adapter
 
-สำหรับขณะนี้ที่พากย์หน้าคอมโพเซอร์มีการฝังวิธีการของ think-orm หากต้องการใช้ orm อื่น ๆ โปรดดูที่ vendor/teamones/src/adapters/DatabaseAdapter.php
+ในการจัดการผ่าน Composer นี้ มันสามารถทำงานกับวิธีการของ think-orm ซึ่งอื่น ๆ โมร์ โปรดดูที่ vendor/teamones/src/adapters/DatabaseAdapter.php
 
-แล้วแก้ไขการกำหนดค่าดังนี้
+และเปลี่ยนแปลงการกำหนดค่า
 
 ```php
 return [
     'default' => [
         'model' => [
             'config_type' => 'file',
-            'config_file_path' => config_path() . '/casbin-restful-model.conf', // ไฟล์กำหนดค่าโมเดลสิทธิการเข้าถึง
+            'config_file_path' => config_path() . '/casbin-restful-model.conf', // ไฟล์กำหนดค่าโมเดลสิทธิ์
             'config_text' => '',
         ],
         'adapter' => [
-            'type' => 'adapter', // ที่นี่กำหนดเป็นโหมดอะแดปเตอร์
+            'type' => 'adapter', // จะกำหนดประเภทเป็นโหมดที่เข้ากันได้
             'class' => \app\adapter\DatabaseAdapter::class,
         ],
     ],
 ];
 ```
 
-## การใช้งาน
+## วิธีใช้
 
-### การนำเข้า
+### นำเข้า
 
 ```php
 # การนำเข้า
 use teamones\casbin\Enforcer;
 ```
 
-### วิธีการใช้งาน 2 แบบ
+### การใช้งาน 2 แบบ
 
 ```php
-# 1. ใช้ค่าเริ่มต้น default
+# 1. ใช้ค่าปรับแต่ง default 
 Enforcer::addPermissionForUser('user1', '/user', 'read');
 
-# 1. ใช้การกำหนดรูปแบบ rbac ที่กำหนดเอง
+# 2. ใช้ค่าปรับแต่ง rbac เอง
 Enforcer::instance('rbac')->addPermissionForUser('user1', '/user', 'read');
 ```
 
-### แนวทางการใช้งาน API
+### API ที่ใช้บ่อย
 
-สำหรับข้อมูลการใช้งาน API โปรดดูที่เว็บไซต์อย่างเป็นทางการ
-
-- การจัดการ API: https://casbin.org/docs/zh-CN/management-api
-- RBAC API: https://casbin.org/docs/zh-CN/rbac-api
+ตาราง API สำหรับความจัดการ: https://casbin.org/docs/zh-CN/management-api
+ตาราง RBAC API: https://casbin.org/docs/zh-CN/rbac-api
 
 ```php
-# เพิ่มสิทธิให้กับผู้ใช้
+# เพิ่มสิทธิ์ที่แต่งตั้งให้กับผู้ใช้
 
 Enforcer::addPermissionForUser('user1', '/user', 'read');
 
-# ลบสิทธิของผู้ใช้หนึ่งคน
+# ลบสิทธิ์ของผู้ใช้
 
 Enforcer::deletePermissionForUser('user1', '/user', 'read');
 
-# รับสิทธิทั้งหมดของผู้ใช้
+# รับข้อมูลสิทธิ์ทั้งหมดของผู้ใช้
 
 Enforcer::getPermissionsForUser('user1'); 
 
@@ -189,23 +162,23 @@ Enforcer::getPermissionsForUser('user1');
 
 Enforcer::addRoleForUser('user1', 'role1');
 
-# เพิ่มสิทธิให้แก่บทบาท
+# เพิ่มสิทธิ์ให้กับบทบาท
 
 Enforcer::addPermissionForUser('role1', '/user', 'edit');
 
-# รับข้อมูลบทบาททั้งหมด
+# รับข้อมูลของบทบาททั้งหมด
 
 Enforcer::getAllRoles();
 
-# รับข้อมูลบทบาททั้งหมดของผู้ใช้
+# รับข้อมูลของบทบาททั้งหมดของผู้ใช้
 
 Enforcer::getRolesForUser('user1');
 
-# รับข้อมูลผู้ใช้โดยใช้บทบาท
+# รับข้อมูลของผู้ใช้ทั้งหมดของบทบาทที่กำหนด
 
 Enforcer::getUsersForRole('role1');
 
-# ตรวจสอบว่าผู้ใช้ตรงกับบทบาทหรือไม่
+# ตรวจสอบว่าผู้ใช้มีบทบาทหรือเปล่า
 
 Enforcer::hasRoleForUser('use1', 'role1');
 
@@ -213,7 +186,7 @@ Enforcer::hasRoleForUser('use1', 'role1');
 
 Enforcer::deleteRoleForUser('use1', 'role1');
 
-# ลบบทบาททั้งหมดของผู้ใช้
+# ลบบทบาตทั้งหมดของผู้ใช้
 
 Enforcer::deleteRolesForUser('use1');
 
@@ -221,16 +194,16 @@ Enforcer::deleteRolesForUser('use1');
 
 Enforcer::deleteRole('role1');
 
-# ลบสิทธิ
+# ลบสิทธ์
 
 Enforcer::deletePermission('/user', 'read');
 
-# ลบสิทธิทั้งหมดของผู้ใช้หรือบทบาท
+# ลบสิทธ์ทั้งหมดของผู้ใช้หรือบทบาท
 
 Enforcer::deletePermissionsForUser('user1');
 Enforcer::deletePermissionsForUser('role1');
 
-# ตรวจสอบสิทธิ และคืนค่าเป็น true หรือ false
+# ตรวจสอบสิทธิ์ และคืนค่าเป็น true หรือ false
 
 Enforcer::enforce("user1", "/user", "edit");
 ```

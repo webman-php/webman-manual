@@ -1,8 +1,7 @@
 # Paginación
 
-# 1. Forma de paginación basada en ORM de Laravel
-
-La biblioteca `illuminate/database` de Laravel proporciona una práctica función de paginación.
+# 1. Método de paginación basado en el ORM de Laravel
+`illuminate/database` de Laravel proporciona una manera conveniente de paginar.
 
 ## Instalación
 `composer require illuminate/pagination`
@@ -20,34 +19,33 @@ public function index(Request $request)
 ## Métodos de instancia del paginador
 |  Método   | Descripción  |
 |  ----  |-----|
-|$paginator->count()|Obtener el número total de datos en la página actual|
+|$paginator->count()|Obtener el total de datos en la página actual|
 |$paginator->currentPage()|Obtener el número de página actual|
-|$paginator->firstItem()|Obtener el número de la primera entidad en el conjunto de resultados|
+|$paginator->firstItem()|Obtener el número del primer elemento en el conjunto de resultados|
 |$paginator->getOptions()|Obtener las opciones del paginador|
-|$paginator->getUrlRange($start, $end)|Crear un rango de URL para páginas específicas|
-|$paginator->hasPages()|Indicar si hay suficientes datos para crear múltiples páginas|
-|$paginator->hasMorePages()|Indicar si hay más páginas disponibles para mostrar|
+|$paginator->getUrlRange($start, $end)|Crear una URL para un rango de páginas especificado|
+|$paginator->hasPages()|Determinar si hay suficientes datos para crear múltiples páginas|
+|$paginator->hasMorePages()|Determinar si hay más páginas para mostrar|
 |$paginator->items()|Obtener los elementos de datos de la página actual|
-|$paginator->lastItem()|Obtener el número de la última entidad en el conjunto de resultados|
+|$paginator->lastItem()|Obtener el número del último elemento en el conjunto de resultados|
 |$paginator->lastPage()|Obtener el número de la última página (no disponible en simplePaginate)|
-|$paginator->nextPageUrl()|Obtener la URL de la página siguiente|
-|$paginator->onFirstPage()|Indicar si la página actual es la primera página|
-|$paginator->perPage()|Obtener el número total de elementos mostrados por página|
+|$paginator->nextPageUrl()|Obtener la URL de la siguiente página|
+|$paginator->onFirstPage()|Determinar si la página actual es la primera página|
+|$paginator->perPage()|Obtener el número total de elementos para mostrar por página|
 |$paginator->previousPageUrl()|Obtener la URL de la página anterior|
-|$paginator->total()|Obtener el número total de datos en el conjunto de resultados (no disponible en simplePaginate)|
+|$paginator->total()|Obtener el total de elementos en el conjunto de resultados (no disponible en simplePaginate)|
 |$paginator->url($page)|Obtener la URL de una página específica|
 |$paginator->getPageName()|Obtener el nombre del parámetro de consulta utilizado para almacenar el número de página|
 |$paginator->setPageName($name)|Establecer el nombre del parámetro de consulta utilizado para almacenar el número de página|
 
 > **Nota**
-> No se admite el método `$paginator->links()`.
+> No se admite el método `$paginator->links()`
 
 ## Componente de paginación
-En webman, no se puede utilizar el método `$paginator->links()` para renderizar los botones de paginación, sin embargo, se puede utilizar otro componente para hacerlo, como `jasongrimes/php-paginator`.
+En webman no se puede utilizar el método `$paginator->links()` para renderizar los botones de paginación, sin embargo, se pueden usar otros componentes para renderizarlos, como `jasongrimes/php-paginator`.
 
 **Instalación**
 `composer require "jasongrimes/paginator:~1.0"`
-
 
 **Lado del servidor**
 ```php
@@ -72,11 +70,11 @@ class UserController
 ```
 
 **Plantilla (PHP nativo)**
-Crear la plantilla app/view/user/get.html
+Crear una plantilla llamada app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- Soporte integrado para estilos de paginación de Bootstrap -->
+  <!-- Se admite el estilo de paginación de Bootstrap de forma nativa -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -88,11 +86,11 @@ Crear la plantilla app/view/user/get.html
 ```
 
 **Plantilla (twig)**
-Crear la plantilla app/view/user/get.html
+Crear una plantilla llamada app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- Soporte integrado para estilos de paginación de Bootstrap -->
+  <!-- Se admite el estilo de paginación de Bootstrap de forma nativa -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -106,11 +104,11 @@ Crear la plantilla app/view/user/get.html
 ```
 
 **Plantilla (blade)**
-Crear la plantilla app/view/user/get.blade.php
+Crear una plantilla llamada app/view/user/get.blade.php
 ```html
 <html>
 <head>
-  <!-- Soporte integrado para estilos de paginación de Bootstrap -->
+  <!-- Se admite el estilo de paginación de Bootstrap de forma nativa -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -122,11 +120,11 @@ Crear la plantilla app/view/user/get.blade.php
 ```
 
 **Plantilla (thinkphp)**
-Crear la plantilla app/view/user/get.html
+Crear una plantilla llamada app/view/user/get.html
 ```html
 <html>
 <head>
-    <!-- Soporte integrado para estilos de paginación de Bootstrap -->
+    <!-- Se admite el estilo de paginación de Bootstrap de forma nativa -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -137,12 +135,11 @@ Crear la plantilla app/view/user/get.html
 </html>
 ```
 
-Resultado:
+El resultado es el siguiente:
 ![](../../assets/img/paginator.png)
 
-# 2. Forma de paginación basada en ORM de Thinkphp
-
-No se necesita instalar bibliotecas adicionales, solo se necesita haber instalado think-orm.
+# 2. Método de paginación basado en el ORM de Thinkphp
+No es necesario instalar bibliotecas adicionales, solo es necesario haber instalado think-orm.
 
 ## Uso
 ```php
@@ -158,7 +155,7 @@ public function index(Request $request)
 ```html
 <html>
 <head>
-    <!-- Soporte integrado para estilos de paginación de Bootstrap -->
+    <!-- Se admite el estilo de paginación de Bootstrap de forma nativa -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>

@@ -1,13 +1,13 @@
 # Requisiti di sistema
 
-## Sistema operativo Linux
-Il sistema operativo Linux richiede le estensioni `posix` e `pcntl`, le quali sono integrate in PHP e di solito non richiedono un'installazione separata.
+## Sistema Linux
+Il sistema Linux richiede le estensioni `posix` e `pcntl`, le quali sono incorporate in PHP e di solito non richiedono un'installazione separata.
 
-Per gli utenti di Baota, è sufficiente disattivare o rimuovere le funzioni che iniziano con `pnctl_` nella piattaforma Baota.
+Se sei un utente di Baota, è sufficiente disabilitare o rimuovere le funzioni che iniziano con `pnctl_` in Baota.
 
 L'estensione `event` non è obbligatoria, ma è consigliabile installarla per migliorare le prestazioni.
 
-## Sistema operativo Windows
-Webman può essere eseguito su sistema Windows, ma poiché non è possibile configurare processi multipli, demoni, e altri aspetti, si consiglia di utilizzare Windows solamente come ambiente di sviluppo. Per l'ambiente di produzione, si prega di utilizzare il sistema operativo Linux.
+## Sistema Windows
+Webman può funzionare su sistemi Windows, ma a causa delle limitazioni nell'impostazione di processi multipli e processi in background, si consiglia di usare Windows solo come ambiente di sviluppo e di usare i sistemi Linux per l'ambiente di produzione.
 
-Nota: Su sistema Windows non vi è alcuna dipendenza dall'estensione `posix` e `pcntl`.
+Nota: Il sistema Windows non dipende dalle estensioni `posix` e `pcntl`.

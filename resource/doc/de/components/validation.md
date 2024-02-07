@@ -1,15 +1,14 @@
 # Validierer
-
-Es gibt viele Validierer, die direkt verwendet werden können, z.B.:
+Es gibt viele Validierer, die direkt in Composer verwendet werden können, zum Beispiel:
 
 #### <a href="#think-validate"> top-think/think-validate</a>
 #### <a href="#respect-validation"> respect/validation</a>
 
 <a name="think-validate"></a>
-## Validierer top-think/think-validate
+## Validator top-think/think-validate
 
 ### Beschreibung
-Offizieller Validierer von ThinkPHP
+Offizieller Validator von ThinkPHP
 
 ### Projektadresse
 https://github.com/top-think/think-validate
@@ -19,7 +18,7 @@ https://github.com/top-think/think-validate
 
 ### Schnellstart
 
-**Erstellen von `app/index/validate/User.php`**
+**Erstellen Sie `app/index/validate/User.php`**
 
 ```php
 <?php
@@ -44,8 +43,8 @@ class User extends Validate
     ];
 
 }
-```
-  
+```  
+
 **Verwendung**
 ```php
 $data = [
@@ -59,21 +58,17 @@ if (!$validate->check($data)) {
     var_dump($validate->getError());
 }
 ```
-
 <a name="respect-validation"></a>
-# Validierer  workerman/validation
+
+# Validator workerman/validation
 
 ### Beschreibung
-
-Projekt ist die chinesische Version von https://github.com/Respect/Validation
+Projekt ist die chinesischsprachige Version von https://github.com/Respect/Validation
 
 ### Projektadresse
-
 https://github.com/walkor/validation
-  
-  
+
 ### Installation
- 
 ```php
 composer require workerman/validation
 ```
@@ -102,27 +97,24 @@ class IndexController
     }
 }  
 ```
-  
-**Durch jquery Zugriff**
-  
-  ```js
-  $.ajax({
-      url : 'http://127.0.0.1:8787',
-      type : "post",
-      dataType:'json',
-      data : {nickname:'Tom', username:'Tomkat', password: '123456'}
-  });
-  ```
-  
-Ergebnis:
+**Über jquery zugreifen**
+```js
+$.ajax({
+    url : 'http://127.0.0.1:8787',
+    type : "post",
+    dataType:'json',
+    data : {nickname:'Tom', username:'tom cat', password: '123456'}
+});
+```
+Ergebnis erhalten:
 
 `{"code":500,"msg":"Benutzername darf nur Buchstaben (a-z) und Zahlen (0-9) enthalten"}`
 
 Erklärung:
 
-`v::input(array $input, array $rules)` wird verwendet, um Daten zu validieren und zu sammeln. Bei ungültigen Daten wird eine `Respect\Validation\Exceptions\ValidationException`-Ausnahme ausgelöst, andernfalls wird das validierte Daten (Array) zurückgegeben.
+`v::input(array $input, array $rules)` wird verwendet, um Daten zu validieren und zu sammeln. Wenn die Datenvalidierung fehlschlägt, wird eine Ausnahme `Respect\Validation\Exceptions\ValidationException` geworfen. Bei erfolgreicher Validierung werden die validierten Daten (Array) zurückgegeben.
 
-Wenn die Validierungsausnahme nicht im Geschäftscode abgefangen wird, fängt das Webman-Framework automatisch die Validierungs-Ausnahme ein und gibt JSON-Daten zurück (ähnlich wie `{"code":500, "msg":"xxx"}`) oder eine normale Ausnahme-Seite, je nachdem was im HTTP-Request-Header angegeben ist. Wenn das Rückgabeformat nicht den Geschäftsanforderungen entspricht, kann der Entwickler die `ValidationException`-Ausnahme selbst abfangen und die erforderlichen Daten zurückgeben, ähnlich wie im folgenden Beispiel:
+Wenn der Geschäftscode die Validierungsausnahme nicht abfängt, fängt das Webman-Framework automatisch die Ausnahme ab und gibt basierend auf dem HTTP-Anforderungsheader JSON-Daten zurück (ähnlich wie `{"code":500, "msg":"xxx"}`) oder eine normale Fehlerseite. Wenn das Rückgabeformat nicht den Geschäftsanforderungen entspricht, kann der Entwickler die Ausnahme `ValidationException` selbst abfangen und die benötigten Daten zurückgeben, ähnlich wie im folgenden Beispiel:
 
 ```php
 <?php
@@ -148,9 +140,7 @@ class IndexController
     }
 }
 ```
-
-### Validator Funktionenübersicht
-
+### Validator Funktionsleitfaden
 ```php
 use Respect\Validation\Validator as v;
 
@@ -158,52 +148,52 @@ use Respect\Validation\Validator as v;
 $number = 123;
 v::numericVal()->validate($number); // true
 
-// Mehrere Regeln verketten
+// Mehrere regelkettenvalidierung
 $usernameValidator = v::alnum()->noWhitespace()->length(1, 15);
 $usernameValidator->validate('alganet'); // true
 
-// Den ersten Validierungsfehler erhalten
+// Erhalten des ersten fehlgeschlagenen Validierungsgrundes
 try {
     $usernameValidator->setName('Benutzername')->check('alg  anet');
 } catch (ValidationException $exception) {
     echo $exception->getMessage(); // Benutzername darf nur Buchstaben (a-z) und Zahlen (0-9) enthalten
 }
 
-// Alle Validierungsfehler erhalten
+// Erhalten aller fehlgeschlagenen Validierungsgründe
 try {
     $usernameValidator->setName('Benutzername')->assert('alg  anet');
 } catch (ValidationException $exception) {
     echo $exception->getFullMessage();
-    // Wird ausgeben
-    // -  Benutzername muss folgende Regeln erfüllen
+    // Hier werden
+    // - Benutzername muss folgenden Regeln entsprechen
     //     - Benutzername darf nur Buchstaben (a-z) und Zahlen (0-9) enthalten
     //     - Benutzername darf keine Leerzeichen enthalten
   
     var_export($exception->getMessages());
-    // Wird ausgeben
+    // Ausgabe
     // array (
     //   'alnum' => 'Benutzername darf nur Buchstaben (a-z) und Zahlen (0-9) enthalten',
     //   'noWhitespace' => 'Benutzername darf keine Leerzeichen enthalten',
     // )
 }
 
-// Benutzerdefinierte Fehlermeldung
+// Anpassung von Fehlermeldungen
 try {
     $usernameValidator->setName('Benutzername')->assert('alg  anet');
 } catch (ValidationException $exception) {
     var_export($exception->getMessages([
         'alnum' => 'Benutzername darf nur Buchstaben und Zahlen enthalten',
         'noWhitespace' => 'Benutzername darf keine Leerzeichen enthalten',
-        'length' => 'Länge entspricht der Regel, daher wird diese Meldung nicht angezeigt'
+        'length' => 'Länge entspricht den Regeln, daher wird diese Meldung nicht angezeigt'
     ]);
-    // Wird ausgeben 
+    // Ausgabe
     // array(
     //    'alnum' => 'Benutzername darf nur Buchstaben und Zahlen enthalten',
     //    'noWhitespace' => 'Benutzername darf keine Leerzeichen enthalten'
     // )
 }
 
-// Objekt validieren
+// Objektvalidierung
 $user = new stdClass;
 $user->name = 'Alexandre';
 $user->birthdate = '1987-07-01';
@@ -225,44 +215,43 @@ v::key(
         ->key('field2', v::stringType())
         ->key('field3', v::boolType())
     )
-    ->assert($data); // Kann auch mit check() oder validate() verwendet werden
- 
+    ->assert($data); // auch mit check() oder validate()
+  
 // Optionale Validierung
 v::alpha()->validate(''); // false 
 v::alpha()->validate(null); // false 
 v::optional(v::alpha())->validate(''); // true
 v::optional(v::alpha())->validate(null); // true
 
-// Negierte Regel
+// Negativregel
 v::not(v::intVal())->validate(10); // false
 ```
-  
-### Validator Methode `validate()` `check()` `assert()` Unterschiede
 
-`validate()` gibt einen Boolean zurück und wirft keine Ausnahme
+### Validator Unterschied zwischen den drei Methoden `validate()` `check()` `assert()`
 
-`check()` wirft bei ungültiger Validierung eine Ausnahme und gibt die erste fehlgeschlagene Validierung mit `$exception->getMessage()` aus
+`validate()` gibt einen booleschen Wert zurück und wirft keine Ausnahme
 
-`assert()` wirft bei ungültiger Validierung eine Ausnahme und mit `$exception->getFullMessage()` können alle fehlgeschlagenen Validierungen abgerufen werden
-  
-  
-### Liste gängiger Validierungsregeln
+`check()` wirft eine Ausnahme, wenn die Validierung fehlschlägt, gibt die erste Validierungsfehlergrund zurück
+
+`assert()` wirft eine Ausnahme, wenn die Validierung fehlschlägt, gibt alle Validierungsfehlergründe zurück
+
+### Liste der häufig verwendeten Validierungsregeln
 
 `Alnum()` enthält nur Buchstaben und Zahlen
 
 `Alpha()` enthält nur Buchstaben
 
-`ArrayType()` Array Typ
+`ArrayType()` Array-Typ
 
-`Between(mixed $minimum, mixed $maximum)` überprüft, ob der Eingabe zwischen zwei Werten liegt.
+`Between(mixed $minimum, mixed $maximum)` überprüft, ob die Eingabe zwischen zwei Werten liegt
 
-`BoolType()` überprüft, ob es sich um einen Bool-Typ handelt
+`BoolType()` überprüft, ob es sich um einen Booleschen Wert handelt
 
 `Contains(mixed $expectedValue)` überprüft, ob die Eingabe bestimmte Werte enthält
 
-`ContainsAny(array $needles)` überprüft, ob die Eingabe mindestens einen definierten Wert enthält
+`ContainsAny(array $needles)` überprüft, ob die Eingabe mindestens einen bestimmten Wert enthält
 
-`Digit()` überprüft, ob die Eingabe nur Ziffern enthält
+`Digit()` überprüft, ob die Eingabe nur Zahlen enthält
 
 `Domain()` überprüft, ob es sich um eine gültige Domain handelt
 
@@ -270,36 +259,36 @@ v::not(v::intVal())->validate(10); // false
 
 `Extension(string $extension)` überprüft die Dateierweiterung
 
-`FloatType()` überprüft, ob es sich um einen Fließkommazahl-Typ handelt
+`FloatType()` überprüft, ob es sich um eine Gleitkommazahl handelt
 
-`IntType()` überprüft, ob es sich um einen Integer-Typ handelt
+`IntType()` überprüft, ob es sich um eine ganze Zahl handelt
 
 `Ip()` überprüft, ob es sich um eine IP-Adresse handelt
 
 `Json()` überprüft, ob es sich um JSON-Daten handelt
 
-`Length(int $min, int $max)` überprüft die Länge im angegebenen Bereich
+`Length(int $min, int $max)` überprüft, ob die Länge innerhalb des angegebenen Bereichs liegt
 
-`LessThan(mixed $compareTo)` überprüft, ob die Länge kleiner als ein bestimmter Wert ist
+`LessThan(mixed $compareTo)` überprüft, ob die Länge kleiner als der angegebene Wert ist
 
 `Lowercase()` überprüft, ob es sich um Kleinbuchstaben handelt
 
 `MacAddress()` überprüft, ob es sich um eine MAC-Adresse handelt
 
-`NotEmpty()` überprüft, ob nicht leer ist
+`NotEmpty()` überprüft, ob es nicht leer ist
 
-`NullType()` überprüft, ob es sich um Null handelt
+`NullType()` überprüft, ob es sich um `null` handelt
 
 `Number()` überprüft, ob es sich um eine Nummer handelt
 
-`ObjectType()` überprüft, ob es sich um einen Objekt-Typ handelt
+`ObjectType()` überprüft, ob es sich um ein Objekt handelt
 
-`StringType()` überprüft, ob es sich um einen String-Typ handelt
+`StringType()` überprüft, ob es sich um einen Zeichenfolgentyp handelt
 
 `Url()` überprüft, ob es sich um eine URL handelt
   
 Weitere Validierungsregeln finden Sie unter https://respect-validation.readthedocs.io/en/2.0/list-of-rules/
-  
+
 ### Weitere Informationen
 
 Besuchen Sie https://respect-validation.readthedocs.io/en/2.0/

@@ -1,13 +1,13 @@
-# 验证码相关组件
+# 驗證碼相關組件
 
 
 ## webman/captcha
-项目地址 https://github.com/webman-php/captcha
+專案地址 https://github.com/webman-php/captcha
 
-### 安装
-```
+### 安裝
+``` 
 composer require webman/captcha
-```
+``` 
 
 ### 使用
 
@@ -23,7 +23,7 @@ use Webman\Captcha\CaptchaBuilder;
 class LoginController
 {
     /**
-     * 测试页面
+     * 測試頁面
      */
     public function index(Request $request)
     {
@@ -31,32 +31,32 @@ class LoginController
     }
     
     /**
-     * 输出验证码图像
+     * 輸出驗證碼圖像
      */
     public function captcha(Request $request)
     {
-        // 初始化验证码类
+        // 初始化驗證碼類
         $builder = new CaptchaBuilder;
-        // 生成验证码
+        // 生成驗證碼
         $builder->build();
-        // 将验证码的值存储到session中
+        // 將驗證碼的值存儲到session中
         $request->session()->set('captcha', strtolower($builder->getPhrase()));
-        // 获得验证码图片二进制数据
+        // 獲得驗證碼圖片二進制數據
         $img_content = $builder->get();
-        // 输出验证码二进制数据
+        // 輸出驗證碼二進制數據
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
     }
 
     /**
-     * 检查验证码
+     * 檢查驗證碼
      */
     public function check(Request $request)
     {
-        // 获取post请求中的captcha字段
+        // 獲取post請求中的captcha字段
         $captcha = $request->post('captcha');
-        // 对比session中的captcha值
+        // 對比session中的captcha值
         if (strtolower($captcha) !== $request->session()->get('captcha')) {
-            return json(['code' => 400, 'msg' => '输入的验证码不正确']);
+            return json(['code' => 400, 'msg' => '輸入的驗證碼不正確']);
         }
         return json(['code' => 0, 'msg' => 'ok']);
     }
@@ -64,14 +64,14 @@ class LoginController
 }
 ```
 
-**建立模版文件`app/view/login/index.html`**
+**建立模板文件 `app/view/login/index.html`**
 
 ```html
 <!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>验证码测试</title>  
+    <title>驗證碼測試</title>  
 </head>
 <body>
     <form method="post" action="/login/check">
@@ -83,33 +83,33 @@ class LoginController
 </html>
 ```
 
-进入页面`http://127.0.0.1:8787/login` 界面类似如下：
+進入頁面 `http://127.0.0.1:8787/login` 界面類似如下：
   ![](../../assets/img/captcha.png)
 
-### 常见参数设置
+### 常見參數設置
 ```php
     /**
-     * 输出验证码图像
+     * 輸出驗證碼圖像
      */
     public function captcha(Request $request)
     {
-        // 初始化验证码类
+        // 初始化驗證碼類
         $builder = new CaptchaBuilder;
-        // 验证码长度
+        // 驗證碼長度
         $length = 4;
         // 包含哪些字符
         $chars = '0123456789abcefghijklmnopqrstuvwxyz';
         $builder = new PhraseBuilder($length, $chars);
         $captcha = new CaptchaBuilder(null, $builder);
-        // 生成验证码
+        // 生成驗證碼
         $builder->build();
-        // 将验证码的值存储到session中
+        // 將驗證碼的值存儲到session中
         $request->session()->set('captcha', strtolower($builder->getPhrase()));
-        // 获得验证码图片二进制数据
+        // 獲得驗證碼圖片二進制數據
         $img_content = $builder->get();
-        // 输出验证码二进制数据
+        // 輸出驗證碼二進制數據
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
     }
 ```
 
-更多接口及参数参考 https://github.com/webman-php/captcha
+更多介面及參數參考 https://github.com/webman-php/captcha

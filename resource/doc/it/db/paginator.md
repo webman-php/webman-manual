@@ -1,7 +1,7 @@
 # Paginazione
 
-# 1. Paginazione basata su ORM di Laravel
-L'illuminazione/database di Laravel fornisce un comodo supporto per la paginazione.
+# 1. Paginazione basata su ORM Laravel
+Illuminate/database di Laravel fornisce una comoda funzionalità di paginazione.
 
 ## Installazione
 `composer require illuminate/pagination`
@@ -19,36 +19,35 @@ public function index(Request $request)
 ## Metodi di istanza del paginatore
 | Metodo | Descrizione |
 | ---- |-----|
-|$paginator->count()| Ottiene il numero totale di dati nella pagina corrente|
-|$paginator->currentPage()| Ottiene il numero di pagina attuale|
-|$paginator->firstItem()| Ottiene il numero del primo elemento nel set di risultati|
-|$paginator->getOptions()| Ottiene le opzioni del paginatore|
-|$paginator->getUrlRange($start, $end)| Crea l'URL per un intervallo specifico di pagine|
-|$paginator->hasPages()| Indica se ci sono abbastanza dati per creare più pagine|
-|$paginator->hasMorePages()| Indica se ci sono altre pagine disponibili per la visualizzazione|
-|$paginator->items()| Ottiene gli elementi della pagina corrente|
-|$paginator->lastItem()| Ottiene il numero dell'ultimo elemento nel set di risultati|
-|$paginator->lastPage()| Ottiene il numero dell'ultima pagina (non disponibile in simplePaginate)|
-|$paginator->nextPageUrl()| Ottiene l'URL della pagina successiva|
-|$paginator->onFirstPage()| Indica se la pagina attuale è la prima pagina|
-|$paginator->perPage()| Ottiene il numero totale di elementi da mostrare per pagina|
-|$paginator->previousPageUrl()| Ottiene l'URL della pagina precedente|
-|$paginator->total()| Ottiene il numero totale di elementi nel set di risultati (non disponibile in simplePaginate)|
-|$paginator->url($page)| Ottiene l'URL di una pagina specifica|
-|$paginator->getPageName()| Ottiene il nome del parametro di query per memorizzare il numero di pagina|
-|$paginator->setPageName($name)| Imposta il nome del parametro di query per memorizzare il numero di pagina|
+|$paginator->count()|Ottenere il totale dei dati nella pagina corrente|
+|$paginator->currentPage()|Ottenere il numero di pagina corrente|
+|$paginator->firstItem()|Ottenere il numero di serie del primo dato nel risultato|
+|$paginator->getOptions()|Ottenere le opzioni del paginatore|
+|$paginator->getUrlRange($start, $end)|Creare URL per un intervallo di pagine specifico|
+|$paginator->hasPages()|Se ci sono abbastanza dati per creare più pagine|
+|$paginator->hasMorePages()|Se ci sono altre pagine da mostrare|
+|$paginator->items()|Ottenere gli elementi di dati nella pagina corrente|
+|$paginator->lastItem()|Ottenere il numero di serie dell'ultimo dato nel risultato|
+|$paginator->lastPage()|Ottenere il numero dell'ultima pagina (non disponibile in simplePaginate)|
+|$paginator->nextPageUrl()|Ottenere l'URL della pagina successiva|
+|$paginator->onFirstPage()|Se la pagina corrente è la prima pagina|
+|$paginator->perPage()|Ottenere il numero totale di elementi da mostrare per pagina|
+|$paginator->previousPageUrl()|Ottenere l'URL della pagina precedente|
+|$paginator->total()|Ottenere il totale dei dati nel risultato (non disponibile in simplePaginate)|
+|$paginator->url($page)|Ottenere l'URL di una pagina specifica|
+|$paginator->getPageName()|Ottenere il nome del parametro di query per memorizzare il numero di pagina|
+|$paginator->setPageName($name)|Impostare il nome del parametro di query per memorizzare il numero di pagina|
 
 > **Nota**
-> Il metodo `$paginator->links()` non è supportato
+> Non supporta il metodo `$paginator->links()`
 
 ## Componente di paginazione
-In webman non è possibile utilizzare il metodo `$paginator->links()` per renderizzare i pulsanti di paginazione, tuttavia è possibile utilizzare un'altra libreria per farlo, ad esempio `jasongrimes/php-paginator`.
+In webman non è possibile utilizzare il metodo `$paginator->links()` per creare i pulsanti della paginazione, tuttavia è possibile utilizzare altri componenti per renderli, ad esempio `jasongrimes/php-paginator`.
 
 **Installazione**
 `composer require "jasongrimes/paginator:~1.0"`
 
-
-**Backend**
+**Lato server**
 ```php
 <?php
 namespace app\controller;
@@ -71,11 +70,11 @@ class UserController
 ```
 
 **Template (PHP nativo)**
-Crea il template app/view/user/get.html
+Creare il template app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- Supporto integrato per lo stile di paginazione di Bootstrap -->
+  <!-- Supporto integrato per lo stile di paginazione Bootstrap -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -87,11 +86,11 @@ Crea il template app/view/user/get.html
 ```
 
 **Template (twig)**
-Crea il template app/view/user/get.html
+Creare il template app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- Supporto integrato per lo stile di paginazione di Bootstrap -->
+  <!-- Supporto integrato per lo stile di paginazione Bootstrap -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -105,11 +104,11 @@ Crea il template app/view/user/get.html
 ```
 
 **Template (blade)**
-Crea il template app/view/user/get.blade.php
+Creare il template app/view/user/get.blade.php
 ```html
 <html>
 <head>
-  <!-- Supporto integrato per lo stile di paginazione di Bootstrap -->
+  <!-- Supporto integrato per lo stile di paginazione Bootstrap -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -121,11 +120,11 @@ Crea il template app/view/user/get.blade.php
 ```
 
 **Template (thinkphp)**
-Crea il template app/view/user/get.html
+Creare il template app/view/user/get.html
 ```html
 <html>
 <head>
-    <!-- Supporto integrato per lo stile di paginazione di Bootstrap -->
+    <!-- Supporto integrato per lo stile di paginazione Bootstrap -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -136,10 +135,10 @@ Crea il template app/view/user/get.html
 </html>
 ```
 
-Ecco un esempio dell'aspetto:
+Esempio:
 ![](../../assets/img/paginator.png)
 
-# 2. Paginazione basata su ORM di Thinkphp
+# 2. Paginazione basata su ORM Thinkphp
 Non è necessario installare alcuna libreria aggiuntiva, è sufficiente aver installato think-orm.
 
 ## Utilizzo
@@ -156,7 +155,7 @@ public function index(Request $request)
 ```html
 <html>
 <head>
-    <!-- Supporto integrato per lo stile di paginazione di Bootstrap -->
+    <!-- Supporto integrato per lo stile di paginazione Bootstrap -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>

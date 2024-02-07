@@ -17,7 +17,7 @@ class UserController
 }
 ```
 
-## Obtener columnas específicas
+## Obtener columnas especificas
 ```php
 $users = Db::table('user')->select('name', 'email as user_email')->get();
 ```
@@ -31,7 +31,7 @@ $user = Db::table('users')->where('name', 'John')->first();
 ```php
 $titles = Db::table('roles')->pluck('title');
 ```
-Especificar el valor del campo de id como índice
+Especificar el valor del campo id como índice
 ```php
 $roles = Db::table('roles')->pluck('title', 'id');
 
@@ -40,7 +40,7 @@ foreach ($roles as $id => $title) {
 }
 ```
 
-## Obtener un solo valor (campo)
+## Obtener un único valor (campo)
 ```php
 $email = Db::table('users')->where('name', 'John')->value('email');
 ```
@@ -51,7 +51,7 @@ $email = Db::table('user')->select('nickname')->distinct()->get();
 ```
 
 ## Resultados en bloques
-Si necesitas procesar miles de registros de la base de datos, leer todos estos datos de una sola vez llevará mucho tiempo y puede causar que se exceda la memoria. En estos casos, puedes considerar usar el método `chunkById`. Este método obtiene un trozo pequeño del conjunto de resultados a la vez y lo pasa a una función de cierre para su procesamiento. Por ejemplo, podemos dividir todos los datos de la tabla de `users` en trozos de 100 registros para su procesamiento:
+Si necesitas manejar miles de registros de la base de datos, cargarlos todos a la vez puede consumir mucho tiempo y llevar al límite de memoria. En este caso, considera usar el método `chunkById`. Este método obtiene un pequeño bloque del conjunto de resultados y lo envía a una función de cierre para su procesamiento. Por ejemplo, podemos dividir todos los datos de la tabla `users` en bloques de 100 registros para procesarlos de a trozos:
 ```php
 Db::table('users')->orderBy('id')->chunkById(100, function ($users) {
     foreach ($users as $user) {
@@ -59,7 +59,7 @@ Db::table('users')->orderBy('id')->chunkById(100, function ($users) {
     }
 });
 ```
-Puedes terminar la obtención de los resultados en bloques devolviendo false en el cierre.
+Puedes detener la obtención de resultados por bloques devolviendo `false` en el cierre.
 ```php
 Db::table('users')->orderBy('id')->chunkById(100, function ($users) {
     // Procesar los registros...
@@ -67,50 +67,47 @@ Db::table('users')->orderBy('id')->chunkById(100, function ($users) {
     return false;
 });
 ```
+> Ten en cuenta: No elimines datos dentro del cierre, ya que algunos registros podrían no estar incluidos en el conjunto de resultados.
 
-> Nota: No elimines datos en el cierre, ya que podrías terminar con algunos registros que no están incluidos en el conjunto de resultados
-
-## Agregar
-El constructor de consultas también proporciona varios métodos de agregación, como count, max, min, avg, sum, etc.
+## Agregación
+El constructor de consultas también proporciona varios métodos de agregación, como count, max, min, avg, sum, entre otros.
 ```php
 $users = Db::table('users')->count();
 $price = Db::table('orders')->max('price');
 $price = Db::table('orders')->where('finalized', 1)->avg('price');
 ```
 
-## Comprobar si existe un registro
+## Verificar si un registro existe
 ```php
 return Db::table('orders')->where('finalized', 1)->exists();
 return Db::table('orders')->where('finalized', 1)->doesntExist();
 ```
 
-## Expresión nativa
+## Expresiones SQL nativas
 Prototipo
 ```php
 selectRaw($expression, $bindings = [])
 ```
-A veces es posible que necesites usar expresiones nativas en la consulta. Puedes usar `selectRaw()` para crear una expresión nativa:
+En ocasiones, es posible que necesites usar expresiones SQL nativas en una consulta. Puedes utilizar `selectRaw()` para crear una expresión SQL nativa:
 ```php
 $orders = Db::table('orders')
                 ->selectRaw('price * ? as price_with_tax', [1.0825])
                 ->get();
-
 ```
+Del mismo modo, también se proporcionan los métodos de expresiones SQL nativas `whereRaw()`, `orWhereRaw()`, `havingRaw()`, `orHavingRaw()`, `orderByRaw()`, y `groupByRaw()`.
 
-Del mismo modo, hay métodos de expresiones nativas como `whereRaw()`, `orWhereRaw()`, `havingRaw()`, `orHavingRaw()`, `orderByRaw()`, `groupByRaw()`.
-
-`Db::raw($value)` también se utiliza para crear una expresión nativa, pero no tiene la funcionalidad de enlazar parámetros, por lo que debes tener cuidado con los problemas de inyección de SQL al usarlo.
+`Db::raw($value)` también se utiliza para crear una expresión SQL nativa, pero no tiene la capacidad de vincular parámetros, así que ten cuidado con los problemas de inyección SQL al usarlo.
 ```php
 $orders = Db::table('orders')
                 ->select('department', Db::raw('SUM(price) as total_sales'))
                 ->groupBy('department')
                 ->havingRaw('SUM(price) > ?', [2500])
                 ->get();
-
 ```
+
 ## Declaración Join
 ```php
-// unir
+// join
 $users = Db::table('users')
             ->join('contacts', 'users.id', '=', 'contacts.user_id')
             ->join('orders', 'users.id', '=', 'orders.user_id')
@@ -143,9 +140,8 @@ $users = Db::table('users')
             ->union($first)
             ->get();
 ```
-
-## Declaración Where
-Prototipo
+## Sentencia Where
+Firma
 ```php
 where($column, $operator = null, $value = null)
 ```
@@ -153,7 +149,7 @@ El primer parámetro es el nombre de la columna, el segundo parámetro es un ope
 ```php
 $users = Db::table('users')->where('votes', '=', 100)->get();
 
-// Cuando el operador es igual, se puede omitir, por lo que esta expresión realiza la misma acción que la anterior
+// Cuando el operador es igual, puede omitirse, por lo que esta expresión es equivalente a la anterior
 $users = Db::table('users')->where('votes', 100)->get();
 
 $users = Db::table('users')
@@ -169,13 +165,12 @@ $users = Db::table('users')
                 ->get();
 ```
 
-También puedes pasar un arreglo de condiciones a la función where:
+También puedes pasar una matriz de condiciones a la función where:
 ```php
 $users = Db::table('users')->where([
     ['status', '=', '1'],
     ['subscribed', '<>', '1'],
 ])->get();
-
 ```
 
 El método orWhere recibe los mismos parámetros que el método where:
@@ -186,7 +181,7 @@ $users = Db::table('users')
                     ->get();
 ```
 
-Puedes pasar un cierre al método orWhere como primer parámetro:
+Puedes pasar un cierre (closure) al método orWhere como primer parámetro:
 ```php
 // SQL: select * from users where votes > 100 or (name = 'Abigail' and votes > 50)
 $users = Db::table('users')
@@ -196,72 +191,70 @@ $users = Db::table('users')
                       ->where('votes', '>', 50);
             })
             ->get();
-
 ```
 
-Los métodos whereBetween / orWhereBetween verifican si el valor del campo está entre los dos valores dados:
+Los métodos whereBetween / orWhereBetween validan si el valor del campo está entre los dos valores dados:
 ```php
 $users = Db::table('users')
            ->whereBetween('votes', [1, 100])
            ->get();
 ```
 
-Los métodos whereNotBetween / orWhereNotBetween verifican si el valor del campo no está entre los dos valores dados:
+Los métodos whereNotBetween / orWhereNotBetween validan si el valor del campo está fuera de los dos valores dados:
 ```php
 $users = Db::table('users')
                     ->whereNotBetween('votes', [1, 100])
                     ->get();
 ```
 
-Los métodos whereIn / whereNotIn / orWhereIn / orWhereNotIn verifican si el valor del campo debe estar presente en el array especificado:
+Los métodos whereIn / whereNotIn / orWhereIn / orWhereNotIn validan si el valor del campo debe estar en el arreglo especificado:
 ```php
 $users = Db::table('users')
                     ->whereIn('id', [1, 2, 3])
                     ->get();
 ```
 
-Los métodos whereNull / whereNotNull / orWhereNull / orWhereNotNull verifican si el campo especificado debe ser NULL:
+Los métodos whereNull / whereNotNull / orWhereNull / orWhereNotNull validan si el campo especificado debe ser NULL:
 ```php
 $users = Db::table('users')
                     ->whereNull('updated_at')
                     ->get();
 ```
 
-El método whereNotNull verifica si el campo especificado no es NULL:
+El método whereNotNull valida si el campo especificado no es NULL:
 ```php
 $users = Db::table('users')
                     ->whereNotNull('updated_at')
                     ->get();
 ```
 
-Los métodos whereDate / whereMonth / whereDay / whereYear / whereTime se utilizan para comparar el valor del campo con la fecha especificada:
+Los métodos whereDate / whereMonth / whereDay / whereYear / whereTime se utilizan para comparar el valor del campo con la fecha dada:
 ```php
 $users = Db::table('users')
                 ->whereDate('created_at', '2016-12-31')
                 ->get();
 ```
 
-Los métodos whereColumn / orWhereColumn se utilizan para comparar si los valores de dos campos son iguales:
+El método whereColumn / orWhereColumn se utiliza para comparar si los valores de dos campos son iguales:
 ```php
 $users = Db::table('users')
                 ->whereColumn('first_name', 'last_name')
                 ->get();
                 
-// También puedes pasar un operador de comparación
+// También se puede pasar un operador de comparación
 $users = Db::table('users')
                 ->whereColumn('updated_at', '>', 'created_at')
                 ->get();
                 
-// El método whereColumn también acepta un arreglo
+// El método whereColumn también puede recibir una matriz
 $users = Db::table('users')
                 ->whereColumn([
                     ['first_name', '=', 'last_name'],
                     ['updated_at', '>', 'created_at'],
                 ])->get();
-
 ```
 
-Agrupar parámetros
+Agrupación de parámetros
 ```php
 // select * from users where name = 'John' and (votes > 100 or title = 'Admin')
 $users = Db::table('users')
@@ -285,20 +278,20 @@ $users = Db::table('users')
            ->get();
 ```
 
-## orderBy
+## OrderBy
 ```php
 $users = Db::table('users')
                 ->orderBy('name', 'desc')
                 ->get();
 ```
 
-## Orden aleatorio
+## Orden Aleatorio
 ```php
 $randomUser = Db::table('users')
                 ->inRandomOrder()
                 ->first();
 ```
-> El orden aleatorio tiene un gran impacto en el rendimiento del servidor, se recomienda no usarlo
+> La orden aleatoria afecta mucho el rendimiento del servidor, no se recomienda su uso
 
 ## groupBy / having
 ```php
@@ -306,7 +299,7 @@ $users = Db::table('users')
                 ->groupBy('account_id')
                 ->having('account_id', '>', 100)
                 ->get();
-// Puedes pasar varios parámetros al método groupBy
+// Puedes pasar múltiples parámetros al método groupBy
 $users = Db::table('users')
                 ->groupBy('first_name', 'status')
                 ->having('account_id', '>', 100)
@@ -322,13 +315,13 @@ $users = Db::table('users')
 ```
 
 ## Inserción
-Inserción de un solo registro
+Insertar un registro
 ```php
 Db::table('users')->insert(
     ['email' => 'john@example.com', 'votes' => 0]
 );
 ```
-Inserción de varios registros
+Insertar múltiples registros
 ```php
 Db::table('users')->insert([
     ['email' => 'taylor@example.com', 'votes' => 0],
@@ -336,24 +329,23 @@ Db::table('users')->insert([
 ]);
 ```
 
-## ID Incremental
+## ID Autoincremental
 ```php
 $id = Db::table('users')->insertGetId(
     ['email' => 'john@example.com', 'votes' => 0]
 );
 ```
-
-> Nota: Cuando se utiliza PostgreSQL, el método insertGetId por defecto utilizará 'id' como el nombre del campo de incremento automático. Si deseas obtener el ID de otra "secuencia", puedes pasar el nombre del campo como segundo parámetro al método insertGetId.
+> Nota: Cuando se utiliza PostgreSQL, el método insertGetId asumirá que 'id' es el nombre del campo de incremento automático. Si deseas obtener el ID de otra "secuencia", puedes pasar el nombre del campo como segundo parámetro al método insertGetId.
 
 ## Actualización
 ```php
 $affected = Db::table('users')
-    ->where('id', 1)
-    ->update(['votes' => 1]);
+              ->where('id', 1)
+              ->update(['votes' => 1]);
 ```
 
 ## Actualizar o Insertar
-A veces es posible que desees actualizar un registro existente en la base de datos, o crearlo si no existe un registro correspondiente:
+A veces es posible que desees actualizar un registro existente en la base de datos, o crearlo si no existe:
 ```php
 Db::table('users')
     ->updateOrInsert(
@@ -361,10 +353,10 @@ Db::table('users')
         ['votes' => '2']
     );
 ```
-El método updateOrInsert primero intentará buscar un registro en la base de datos utilizando la clave y el valor del primer parámetro. Si el registro existe, se actualizará con los valores del segundo parámetro. Si no se encuentra un registro, se insertará uno nuevo con los datos de ambas matrices.
+El método updateOrInsert intentará primero usar la clave y el valor del primer parámetro para encontrar un registro coincidente en la base de datos. Si existe el registro, lo actualiza con los valores del segundo parámetro. Si no se encuentra el registro, se inserta un nuevo registro con la combinación de datos de ambas matrices.
 
-## Incremento y Decremento
-Ambos métodos aceptan al menos un parámetro: la columna que se va a modificar. El segundo parámetro es opcional y se utiliza para controlar la cantidad de incremento o decremento de la columna:
+## Incrementar & Decrementar
+Ambos métodos aceptan al menos un parámetro: la columna a modificar. El segundo parámetro es opcional, y es utilizado para controlar la cantidad de incremento o decremento en la columna:
 ```php
 Db::table('users')->increment('votes');
 
@@ -374,7 +366,7 @@ Db::table('users')->decrement('votes');
 
 Db::table('users')->decrement('votes', 5);
 ```
-También puedes especificar los campos que deseas actualizar durante la operación:
+También puedes especificar el campo que se actualizará durante la operación:
 ```php
 Db::table('users')->increment('votes', 1, ['name' => 'John']);
 ```
@@ -385,27 +377,26 @@ Db::table('users')->delete();
 
 Db::table('users')->where('votes', '>', 100)->delete();
 ```
-Si necesitas vaciar una tabla, puedes utilizar el método truncate, que eliminará todas las filas y restablecerá el ID incremental a cero:
+Si necesitas vaciar una tabla, puedes usar el método truncate, que eliminará todas las filas y reiniciará el ID autoincremental a cero:
 ```php
 Db::table('users')->truncate();
 ```
 
-## Bloqueo Pessimista
-El constructor de consultas también incluye algunas funciones que pueden ayudarte a implementar un "bloqueo pesimista" en la sintaxis select. Si deseas implementar un "bloqueo compartido" en la consulta, puedes utilizar el método sharedLock. El bloqueo compartido evita que las columnas de datos seleccionadas sean modificadas hasta que la transacción se complete:
+## Bloqueo Pesimista
+El constructor de consultas también incluye funciones que te permiten implementar "bloqueos pesimistas" en la sintaxis select. Si deseas implementar un "bloqueo compartido" en la consulta, puedes usar el método sharedLock. El bloqueo compartido evita que las columnas de datos seleccionadas sean modificadas hasta que la transacción se confirme:
 ```php
 Db::table('users')->where('votes', '>', 100)->sharedLock()->get();
 ```
-O bien, puedes usar el método lockForUpdate. El bloqueo "para actualización" evita que las filas sean modificadas o seleccionadas por otros bloqueos compartidos:
+O, puedes usar el método lockForUpdate. El bloqueo de "para actualización" evita que las filas sean modificadas o seleccionadas por otros bloqueos compartidos:
 ```php
 Db::table('users')->where('votes', '>', 100)->lockForUpdate()->get();
 ```
-
 ## Depuración
-Puedes utilizar los métodos dd o dump para mostrar los resultados de la consulta o la declaración SQL. El método dd muestra la información de depuración y luego detiene la ejecución de la solicitud. El método dump también muestra la información de depuración, pero no detiene la ejecución de la solicitud:
+Puedes utilizar los métodos `dd` o `dump` para imprimir los resultados de las consultas o las sentencias SQL. El método `dd` muestra la información de depuración y detiene la ejecución de la solicitud, mientras que el método `dump` también muestra la información de depuración, pero no detiene la ejecución de la solicitud:
 ```php
 Db::table('users')->where('votes', '>', 100)->dd();
 Db::table('users')->where('votes', '>', 100)->dump();
 ```
 
 > **Nota**
-> La depuración requiere la instalación de `symfony/var-dumper`, el comando es `composer require symfony/var-dumper`.
+> La depuración requiere la instalación de `symfony/var-dumper` mediante el comando `composer require symfony/var-dumper`.

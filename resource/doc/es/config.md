@@ -3,35 +3,36 @@
 ## Ubicación
 El archivo de configuración de webman se encuentra en el directorio `config/`, en el proyecto se puede obtener la configuración correspondiente mediante la función `config()`.
 
-## Obtener configuraciones
+## Obtener configuración
 
-Obtener todas las configuraciones
+Obtener toda la configuración
 ```php
 config();
 ```
 
-Obtener todas las configuraciones en `config/app.php`
+Obtener toda la configuración en `config/app.php`
 ```php
 config('app');
 ```
 
-Obtener la configuración `debug` en `config/app.php`
+Obtener la configuración de `debug` en `config/app.php`
 ```php
 config('app.debug');
 ```
 
-Si la configuración es un arreglo, se puede obtener el valor de los elementos internos del arreglo usando `.`, por ejemplo
+Si la configuración es un array, se puede obtener el valor de los elementos internos del array usando `.`, por ejemplo
 ```php
-config('file.key1.key2');
+config('archivo.clave1.clave2');
 ```
 
-## Valor predeterminado
+## Valor por defecto
 ```php
 config($key, $default);
 ```
-Se puede pasar el valor predeterminado como segundo parámetro en el método `config()`, si la configuración no existe, se devolverá el valor predeterminado. Si no se ha establecido un valor predeterminado y la configuración no existe, se devolverá `null`.
+config utiliza el segundo parámetro para pasar un valor por defecto, si la configuración no existe, devolverá el valor por defecto.
+Si la configuración no existe y no se ha establecido un valor por defecto, devolverá null.
 
-## Configuraciones personalizadas
+## Configuración personalizada
 Los desarrolladores pueden agregar sus propios archivos de configuración en el directorio `config/`, por ejemplo
 
 **config/payment.php**
@@ -48,11 +49,11 @@ return [
 ```php
 config('payment');
 config('payment.key');
-config('payment.key');
+config('payment.secret');
 ```
 
-## Cambiar configuraciones
-webman no admite la modificación dinámica de configuraciones, todas las configuraciones deben ser modificadas manualmente en los archivos de configuración correspondientes, y luego recargar o reiniciar el servidor.
+## Modificar la configuración
+webman no soporta la modificación dinámica de la configuración, toda la configuración debe modificarse manualmente en el archivo de configuración correspondiente, y debe realizarse un reinicio reload o restart.
 
 > **Nota**
-> Las configuraciones del servidor en `config/server.php` y las configuraciones de procesos en `config/process.php` no admiten recarga, es necesario reiniciar el servidor para que surtan efecto.
+> La configuración del servidor `config/server.php` y la configuración de los procesos `config/process.php` no admiten reload, y se requiere un restart para surtir efecto.

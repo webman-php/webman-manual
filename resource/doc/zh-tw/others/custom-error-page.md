@@ -1,11 +1,11 @@
-## 自定義404
-webman在404時會自動返回`public/404.html`裡面的內容，所以開發者可以直接更改`public/404.html`文件。
+## 自訂404錯誤頁面
+當webman發生404錯誤時，會自動返回`public/404.html`檔案中的內容，因此開發者可以直接修改`public/404.html`文件。
 
-如果你想動態控制404的內容時，例如在ajax請求時返回json數據 `{"code:"404", "msg":"404 not found"}`，頁面請求時返回`app/view/404.html`模版，請參考如下示例
+如果您想要動態控制404錯誤頁面的內容，例如在ajax請求時返回json數據 `{"code:"404", "msg":"404 not found"}`，在頁面請求時返回`app/view/404.html`模板，請參考以下示例
 
-> 以下以php原生模版為例，其它模版`twig` `blade` `think-tmplate` 原理類似
+> 以下以php原生模板為例，其他模板`twig` `blade` `think-tmplate`原理類似
 
-**創建文件`app/view/404.html`**
+**建立文件`app/view/404.html`**
 ```html
 <!doctype html>
 <html>
@@ -19,7 +19,7 @@ webman在404時會自動返回`public/404.html`裡面的內容，所以開發者
 </html>
 ```
 
-**在`config/route.php`中加入如下代碼：**
+**在`config/route.php`中加入以下代碼：**
 ```php
 use support\Request;
 use Webman\Route;
@@ -29,12 +29,12 @@ Route::fallback(function(Request $request){
     if ($request->expectsJson()) {
         return json(['code' => 404, 'msg' => '404 not found']);
     }
-    // 頁面請求返回404.html模版
+    // 頁面請求返回404.html模板
     return view('404', ['error' => 'some error'])->withStatus(404);
 });
 ```
 
-## 自定義500
+## 自訂500錯誤頁面
 **新建`app/view/500.html`**
 
 ```html
@@ -45,13 +45,13 @@ Route::fallback(function(Request $request){
     <title>500 Internal Server Error</title>
 </head>
 <body>
-自定義錯誤模版：
+自訂錯誤模板：
 <?=htmlspecialchars($exception)?>
 </body>
 </html>
 ```
 
-**新建**app/exception/Handler.php**(如目錄不存在請自行創建)**
+**新建`app/exception/Handler.php`(如路徑不存在請自行創建)**
 ```php
 <?php
 
@@ -64,7 +64,7 @@ use Webman\Http\Response;
 class Handler extends \support\exception\Handler
 {
     /**
-     * 渲染返回
+     * Render 返回
      * @param Request $request
      * @param Throwable $exception
      * @return Response
@@ -76,7 +76,7 @@ class Handler extends \support\exception\Handler
         if ($request->expectsJson()) {
             return json(['code' => $code ? $code : 500, 'msg' => $exception->getMessage()]);
         }
-        // 頁面請求返回500.html模版
+        // 頁面請求返回500.html模板
         return view('500', ['exception' => $exception], '')->withStatus(500);
     }
 }

@@ -1,25 +1,25 @@
-- Einsteigerleitfaden
+- Einführung
 
   - [Was ist webman](README.md)
-  - [Programmierhinweise](attention.md)
-  - [FAQ-Community](help.md)
-
+  - [Hinweise zur Programmierung](attention.md)
+  - [Fragen und Antworten in der Community](help.md)
+  
 - Schnellstart
 
   - [Installation](install.md)
   - [Verzeichnisstruktur](directory.md)
   - [Einfaches Beispiel](tutorial.md)
 
-- Grundlegende Funktionen
+- Grundfunktionen
 
   - [Anfrage](request.md)
   - [Antwort](response.md)
   - [Controller](controller.md)
-  - [Routing](route.md)
+  - [Route](route.md)
   - [Middleware](middleware.md)
   - [Ansicht](view.md)
   - [Statische Dateien](static.md)
-  - [Sitzungsverwaltung](session.md)
+  - [Session-Verwaltung](session.md)
   - [Fehlerbehandlung](exception.md)
   - [Protokoll](log.md)
   - [Konfigurationsdatei](config.md)
@@ -31,8 +31,8 @@
   - [Datenbankkonfiguration](db/config.md)
   - [Abfrage-Builder](db/queries.md)
   - [Modell](db/model.md)
-  - [Modell-Beziehungen](db/relationships.md)
-  - [Paging](db/paginator.md)
+  - [Modell-Verknüpfungen](db/relationships.md)
+  - [Seitennummerierung](db/paginator.md)
   - [Datenbankmigration](db/migration.md)
   - [Redis](db/redis.md)
   - [Cache](db/cache.md)
@@ -40,44 +40,40 @@
   - [ThinkORM](db/thinkorm.md)
   - [ThinkCache](db/thinkcache.md)
   - [Medoo](db/medoo.md)
-
-- Warteschlangen
-
+  
+- Nachrichtenwarteschlange
   - [Redis-Warteschlange](queue/redis.md)
   - [Stomp](queue/stomp.md)
-
-- Gängige Komponenten
-
-  - [Validierung](components/validation.md)
-  - [Paging-Komponente](components/paginator.md)
+ 
+- Übliche Komponenten
+  - [Validierer](components/validation.md)
+  - [Pagination-Komponente](components/paginator.md)
   - [Mehrsprachigkeit](components/translation.md)
   - [Bildverarbeitung](components/image.md)
-  - [Captcha](components/captcha.md)
-  - [Event Events](components/event.md)
-  - [Env-Umgebungsvariable-Komponente](components/env.md)
-  - [Crontab-Zeitplanungsaufgabe](components/crontab.md)
+  - [captcha](components/captcha.md)
+  - [Event-Ereignis](components/event.md)
+  - [Env-Komponente für Umgebungsvariablen](components/env.md)
+  - [Crontab-geplanter Task](components/crontab.md)
   - [Excel-Tabelle](components/excel.md)
   - [WeChat-SDK](components/wechat.md)
   - [Zahlungs-SDK](components/payment.md)
-  - [Casbin SDK](components/casbin.md)
-  - [Unit-Test](components/unitest.md)
-  - [Fehlercode-Generierung](components/generate_error_code.md)
+  - [Casbin-SDK](components/casbin.md)
+  - [Einheitstests](components/unitest.md)
+  - [Fehlercodegenerator](components/generate_error_code.md)
 
 - Grundlegende Plugins
-
-  - [Grundplugin](plugin/base.md)
+  - [Grundlegende Plugins](plugin/base.md)
   - [Befehlszeile](plugin/console.md)
-  - [Push-Benachrichtigung](plugin/push.md)
-  - [Grundplugin-Marktplatz](plugin/market.md)
-  - [Grundplugin-Erstellung](plugin/create.md)
+  - [Push-Benachrichtigungen](plugin/push.md)
+  - [Grundlegender Plugin-Marktplatz](plugin/market.md)
+  - [Grundlegendes Plugin erstellen](plugin/create.md)
 
 - Anwendungs-Plugins
-
   - [Einführung](app/app.md)
-  - [Spezifikation](app/standard.md)
+  - [Spezifikationen](app/standard.md)
   - [Anwendung erstellen](app/create.md)
   - [Verzeichnisstruktur](app/directory.md)
-  - [Routing](app/route.md)
+  - [Route](app/route.md)
   - [Konfigurationsdatei](app/config.md)
   - [Controller](app/controller.md)
   - [Ansicht](app/view.md)
@@ -85,39 +81,36 @@
   - [Datenbank](app/database.md)
   - [Redis](app/redis.md)
   - [Protokoll](app/log.md)
-  - [Integration von webman-admin](app/admin.md)
-  - [Plugin verpacken](app/pack.md)
+  - [Anbindung von webman-admin](app/admin.md)
+  - [Plugin bündeln](app/pack.md)
   - [Plugin veröffentlichen](app/publish.md)
-  - [Installation deinstallieren](app/install.md)
+  - [Installation und Deinstallation](app/install.md)
   - [Anwendungsmarkt](app/market.md)
 
-- Fortgeschrittene
-
-  - [Benutzerdefinierter Prozess](process.md)
+- Fortgeschrittene Themen
+  - [Benutzerdefinierte Prozesse](process.md)
   - [Abhängigkeitsinjektion](di.md)
   - [AOP](aop.md)
-
+  
 - Sonstiges
-
   - [Sicherheit](others/security.md)
-  - [Deaktivierung von Funktionen überprüfen](others/disable-function-check.md)
+  - [Überprüfung nicht erlaubter Funktionen](others/disable-function-check.md)
   - [Benutzerdefiniertes Skript](others/scripts.md)
-  - [Benutzerdefinierte 404 500](others/custom-error-page.md)
-  - [Aktualisierungsmethoden](others/upgrade.md)
-  - [Nginx-Proxy](others/nginx-proxy.md)
-  - [Phar-Packung](others/phar.md)
-  - [Binärverpackung](others/bin.md)
-  - [Startsequenz](others/process.md)
+  - [Benutzerdefinierte 404- und 500-Fehlerseiten](others/custom-error-page.md)
+  - [Upgrade-Methode](others/upgrade.md)
+  - [nginx-Proxy](others/nginx-proxy.md)
+  - [phar-Paketierung](others/phar.md)
+  - [Binäre Paketierung](others/bin.md)
+  - [Startprozess](others/process.md)
   - [Lebenszyklus](others/lifecycle.md)
-  - [Speicherleck](others/memory-leak.md)
+  - [Speicherleckage](others/memory-leak.md)
   - [Geschäftsinitialisierung](others/bootstrap.md)
-  - [Automatisches Laden](others/autoload.md)
-  - [Sperrige Geschäftsabwicklung](others/task.md)
+  - [Automatische Ladung](others/autoload.md)
+  - [Verarbeitung von langsamen Geschäften](others/task.md)
   - [Leistung](others/performance.md)
-  - [Belastungstests](others/benchmarks.md)
+  - [Benchmark-Tests](others/benchmarks.md)
   - [Dateiüberwachung](others/monitor.md)
 
 - Upgrade
-
   - [1.4](upgrade/1-4.md)
   - [Danksagung](thanks.md)

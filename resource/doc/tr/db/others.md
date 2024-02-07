@@ -1,11 +1,11 @@
 # Diğer Veritabanı Kullanımı
-[illuminate/database](https://github.com/illuminate/database) dışında, webman'de diğer veritabanı bileşenlerini de kullanabilirsiniz.
+[illuminate/database](https://github.com/illuminate/database) dışında, Webman'de diğer veritabanı bileşenlerini de kullanabilirsiniz.
 
 ## ThinkORM
-[thinkorm](thinkorm.md) bağlantısına bakınız.
+Daha fazla bilgi için [thinkorm belgesi](thinkorm.md)
 
 ## ThinkCache
-[think-cache](thinkcache.md) bağlantısına bakınız.
+Daha fazla bilgi için [think-cache belgesi](thinkcache.md)
 
 ## Medoo Veritabanı Eklentisi
-[medoo eklentisi](https://www.workerman.net/plugin/29) bağlantısına bakınız.
+Daha fazla bilgi için [medoo eklenti belgesi](../db/medoo.md)

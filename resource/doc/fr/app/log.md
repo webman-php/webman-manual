@@ -1,15 +1,17 @@
 # Journal
 
-La classe journal a une utilisation similaire à celle de la base de données.
+L'utilisation de la classe de journal est similaire à celle de la base de données.
+
 ```php
 use support\Log;
-Journal::channel('plugin.admin.default')->info('test');
+Log::channel('plugin.admin.default')->info('test');
 ```
 
-Si vous souhaitez réutiliser la configuration du journal du projet principal, utilisez simplement
+Si vous souhaitez réutiliser la configuration du journal du projet principal, vous pouvez simplement utiliser :
+
 ```php
 use support\Log;
-Journal::info('Contenu du journal');
-// Supposons que le projet principal a une configuration de journal test
-Journal::channel('test')->info('Contenu du journal');
+Log::info('Contenu du journal');
+// Supposons que le projet principal ait une configuration de journal nommée test
+Log::channel('test')->info('Contenu du journal');
 ```

@@ -6,7 +6,7 @@
 
 > 約定返回數據中 code 參數，所有自定義的 code ，正數代表服務正常，負數代表服務異常。
 
-## 專案位址
+## 專案地址
 
 https://github.com/teamones-open/response-code-msg
 
@@ -25,7 +25,7 @@ composer require teamones/response-code-msg
 ```php
 <?php
 /**
- * 自动生成的文件 ,请不要手动修改.
+ * 自動生成的文件，請不要手動修改。
  * @Author:$Id$
  */
 namespace support;
@@ -35,7 +35,7 @@ class ErrorCode
 }
 ```
 
-### 設定檔
+### 設置文件
 
 錯誤碼會自動按照下面配置的參數自增生成，例如當前 system_number = 201，start_min_number = 10000，那麼生成的第一個錯誤碼就是 -20110001。
 
@@ -52,12 +52,12 @@ return [
 ];
 ```
 
-### 在start.php中增加啟動自动生成錯誤碼的程式碼
+### 在start.php中增加啟動自动生成錯誤碼程式碼
 
 - 文件路徑 ./start.php
 
 ```php
-// 放在 Config::load(config_path(), ['route', 'container']); 后面
+// 放在 Config::load(config_path(), ['route', 'container']); 後面
 
 // 生成錯誤碼，僅APP_DEBUG模式下生成
 if (config("app.debug")) {
@@ -68,9 +68,9 @@ if (config("app.debug")) {
 
 ### 在程式碼中使用
 
-下面程式碼中 **ErrorCode::ModelAddOptionsError** 為錯誤碼, 其中 **ModelAddOptionsError** 需要用戶自己根據當前需求語義化首字母大寫去書寫。
+下面程式碼中 ErrorCode::ModelAddOptionsError 為錯誤碼，其中 ModelAddOptionsError 需要使用者自己根據當前需求語義化首字母大寫去書寫。
 
-> 書寫完你會發現是無法使用的，再下次重啟後會自动生成對應錯誤碼。注意有時候需要重啟兩次。
+> 書寫完後你會發現是無法使用的，再下次重啟後會自動生成對應錯誤碼。注意有時候需要重啟兩次。
 
 ```php
 <?php
@@ -105,7 +105,7 @@ class Demo
 
             return $demo->getData();
         } catch (\Throwable $e) {
-            // 輸出錯誤訊息
+            // 輸出錯誤信息
             throw_http_exception($e->getMessage(), ErrorCode::ModelAddOptionsError);
         }
         return [];
@@ -118,7 +118,7 @@ class Demo
 ```php
 <?php
 /**
- * 自动生成的文件 ,请不要手动修改.
+ * 自動生成的文件，請不要手動修改。
  * @Author:$Id$
  */
 namespace support;

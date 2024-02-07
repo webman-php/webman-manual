@@ -1,4 +1,4 @@
-# webman Event Library webman-event
+# webman Event Library
 
 [![license](https://img.shields.io/github/license/Tinywan/webman-event)]()
 [![webman-event](https://img.shields.io/github/v/release/tinywan/webman-event?include_prereleases)]()
@@ -6,9 +6,9 @@
 [![webman-event](https://img.shields.io/github/last-commit/tinywan/webman-event/main)]()
 [![webman-event](https://img.shields.io/github/v/tag/tinywan/webman-event?color=ff69b4)]()
 
-Compared with middleware, events have the advantage of more precise positioning (or finer granularity) and are more suitable for some business scenarios to expand. For example, we often encounter situations where a series of operations need to be performed after a user registers or logs in. The event system can achieve the extension of the login operation without invading the original code, reducing the coupling of the system and the possibility of bugs.
+The advantage of events over middleware is that events are more precise in positioning (or finer-grained) than middleware, and they are more suitable for extending certain business scenarios. For example, we often encounter a series of operations that need to be performed after a user registers or logs in. With the event system, we can complete the login operation extension without modifying the original code, reducing the coupling of the system and reducing the possibility of bugs.
 
-## Project Address
+## Project URL
 
 [https://github.com/Tinywan/webman-permission](https://github.com/Tinywan/webman-permission)
 
@@ -24,19 +24,19 @@ composer require tinywan/webman-event
 
 ## Configuration
 
-Contents of the event configuration file `config/event.php` are as follows:
+Event configuration file `config/event.php` is as follows:
 
 ```php
 return [
-    // Event Listeners
+    // Event listeners
     'listener'    => [],
 
-    // Event Subscribers
+    // Event subscribers
     'subscriber' => [],
 ];
 ```
 
-### Process Start Configuration
+### Process startup configuration
 
 Open `config/bootstrap.php` and add the following configuration:
 
@@ -49,9 +49,9 @@ return [
 
 ## Quick Start
 
-### Define Event
+### Define an Event
 
-Event class `LogErrorWriteEvent.php`
+Event class `LogErrorWriteEvent.php`:
 
 ```php
 declare(strict_types=1);
@@ -62,7 +62,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class LogErrorWriteEvent extends Event
 {
-    const NAME = 'log.error.write';  // Event Name, unique identifier for the event
+    const NAME = 'log.error.write';  // Event name, the unique identifier of the event
 
     /** @var array */
     public array $log;
@@ -79,20 +79,20 @@ class LogErrorWriteEvent extends Event
 }
 ```
 
-### Listen to Event
+### Listen for Events
 
 ```php
 return [
-    // Event Listeners
+    // Event listeners
     'listener'    => [
         \extend\event\LogErrorWriteEvent::NAME  => \extend\event\LogErrorWriteEvent::class,
     ],
 ];
 ```
 
-### Subscribe to Event
+### Subscribe to Events
 
-Subscription class `LoggerSubscriber.php`
+Subscription class `LoggerSubscriber.php`:
 
 ```php
 namespace extend\event\subscriber;
@@ -103,7 +103,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class LoggerSubscriber implements EventSubscriberInterface
 {
     /**
-     * @desc: Method Description
+     * @desc: Method description
      * @return array|string[]
      */
     public static function getSubscribedEvents()
@@ -114,7 +114,7 @@ class LoggerSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @desc: Trigger Event
+     * @desc: Trigger event
      * @param LogErrorWriteEvent $event
      */
     public function onLogErrorWrite(LogErrorWriteEvent $event)
@@ -125,11 +125,11 @@ class LoggerSubscriber implements EventSubscriberInterface
 }
 ```
 
-Event Subscription
+Event subscription:
 
 ```php
 return [
-    // Event Subscribers
+    // Event subscribers
     'subscriber' => [
         \extend\event\subscriber\LoggerSubscriber::class,
     ],
@@ -148,7 +148,7 @@ $error = [
 EventManager::trigger(new LogErrorWriteEvent($error),LogErrorWriteEvent::NAME);
 ```
 
-Execution result
+Execution result:
 
 ![Print result](./trigger.png)
 

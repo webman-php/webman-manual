@@ -1,14 +1,14 @@
-# Proceso personalizado
+# Procesos personalizados
 
-En webman, al igual que en workerman, puedes personalizar tus procesos de escucha o tus propios procesos.
+En webman, al igual que en workerman, puedes personalizar la escucha o los procesos.
 
 > **Nota**
-> Los usuarios de Windows deben usar `php windows.php` para iniciar webman y poder ejecutar un proceso personalizado.
+> Los usuarios de Windows necesitan usar `php windows.php` para iniciar webman y poder ejecutar procesos personalizados.
 
-## Servicio http personalizado
-A veces, es posible que tengas requisitos especiales que requieran cambiar el núcleo del servicio http de webman. En este caso, puedes usar un proceso personalizado para lograrlo.
+## Personalizar el servicio http
+A veces puedes tener una necesidad especial que requiere modificar el código principal del servicio http de webman. En este caso, puedes usar procesos personalizados para lograrlo.
 
-Por ejemplo, crea `app\Server.php`:
+Por ejemplo, crea app\Server.php
 
 ```php
 <?php
@@ -19,11 +19,11 @@ use Webman\App;
 
 class Server extends App
 {
-    // Aquí puedes sobrescribir los métodos de Webman\App
+    // Aquí se sobrescriben los métodos de Webman\App
 }
 ```
 
-Agrega la siguiente configuración en `config/process.php`:
+Agrega la siguiente configuración en `config/process.php`
 
 ```php
 use Workerman\Worker;
@@ -39,7 +39,7 @@ return [
         'group' => '',
         'reusePort' => true,
         'constructor' => [
-            'request_class' => \support\Request::class, // Configuración de la clase request
+            'request_class' => \support\Request::class, // Configuración de la clase de solicitud
             'logger' => \support\Log::channel('default'), // Instancia de registro
             'app_path' => app_path(), // Ubicación del directorio app
             'public_path' => public_path() // Ubicación del directorio public
@@ -49,11 +49,11 @@ return [
 ```
 
 > **Consejo**
-> Si deseas cerrar el proceso http integrado de webman, simplemente establece `listen=>''` en `config/server.php`.
+> Si deseas desactivar el proceso http incluido en webman, solo necesitas configurar `listen=>''` en config/server.php
 
-## Ejemplo de escucha personalizada de websocket
-Crea `app/Pusher.php`:
+## Ejemplo de personalización de escucha de websocket
 
+Crea `app/Pusher.php`
 ```php
 <?php
 namespace app;
@@ -83,17 +83,16 @@ class Pusher
     }
 }
 ```
-> Nota: Todas las propiedades onXXX son públicas.
+> Nota: Todas las propiedades onXXX son públicas
 
-Agrega la siguiente configuración en `config/process.php`:
-
+Agrega la siguiente configuración en `config/process.php`
 ```php
 return [
-    // ... Otras configuraciones de procesos omitidas...
+    // ... Otras configuraciones de proceso omitidas...
     
     // websocket_test es el nombre del proceso
     'websocket_test' => [
-        // Aquí se especifica la clase del proceso, es decir, la clase Pusher definida anteriormente
+        // Aquí se especifica la clase del proceso, que es la clase Pusher definida anteriormente
         'handler' => app\Pusher::class,
         'listen'  => 'websocket://0.0.0.0:8888',
         'count'   => 1,
@@ -101,9 +100,8 @@ return [
 ];
 ```
 
-## Ejemplo de proceso sin escucha personalizada
-Crea `app/TaskTest.php`:
-
+## Ejemplo de proceso personalizado sin escucha
+Crea `app/TaskTest.php`
 ```php
 <?php
 namespace app;
@@ -116,7 +114,7 @@ class TaskTest
   
     public function onWorkerStart()
     {
-        // Verificar si hay nuevos usuarios registrados en la base de datos cada 10 segundos
+        // Verifica la base de datos cada 10 segundos para ver si hay nuevos usuarios registrados
         Timer::add(10, function(){
             Db::table('users')->where('regist_timestamp', '>', time()-10)->get();
         });
@@ -124,53 +122,51 @@ class TaskTest
     
 }
 ```
-Agrega la siguiente configuracion en `config/process.php`:
-
+Agrega la siguiente configuración en `config/process.php`
 ```php
 return [
-    // ... Otras configuraciones de procesos omitidas...
-    
+    // ... Otras configuraciones de proceso omitidas...
+
     'task' => [
         'handler'  => app\TaskTest::class
     ],
 ];
 ```
 
-> Nota: Si se omite la escucha, el proceso no escuchará ningún puerto; si se omite el número de procesos, el valor predeterminado es 1.
+> Nota: Si la escucha se omita, el proceso no escuchará ningún puerto. Si el número de procesos se omite, el valor predeterminado es 1.
 
-## Explicación de la configuración
+## Descripción de los archivos de configuración
 
-Una configuración completa de un proceso se muestra a continuación:
-
+La configuración completa de un proceso se define de la siguiente manera:
 ```php
 return [
-    // ...
-    
+    // ... 
+
     // websocket_test es el nombre del proceso
     'websocket_test' => [
         // Aquí se especifica la clase del proceso
         'handler' => app\Pusher::class,
-        // Protocolo, IP y puerto a escuchar (opcional)
+        // Protocolo, IP y puerto escuchado (opcional)
         'listen'  => 'websocket://0.0.0.0:8888',
-        // Número de procesos (opcional, 1 por defecto)
+        // Número de procesos (opcional, por defecto 1)
         'count'   => 2,
-        // Usuario que ejecutará el proceso (opcional, usuario actual por defecto)
+        // Usuario que ejecuta el proceso (opcional, usuario actual por defecto)
         'user'    => '',
-        // Grupo de usuario que ejecutará el proceso (opcional, grupo de usuario actual por defecto)
+        // Grupo de usuario que ejecuta el proceso (opcional, grupo de usuario actual por defecto)
         'group'   => '',
-        // Compatibilidad con recarga del proceso (opcional, verdadero por defecto)
+        // Si el proceso admite recarga (opcional, true por defecto)
         'reloadable' => true,
-        // Habilitar reusePort (opcional, requerido que php>=7.0, verdadero por defecto)
+        // Si se habilita reusePort (opcional, esta opción requiere php>=7.0, por defecto true)
         'reusePort'  => true,
-        // Transporte (opcional, configurar como ssl si se necesita habilitar SSL, predeterminado es tcp)
+        // Transporte (opcional, establecer a ssl si es necesario activar ssl, por defecto tcp)
         'transport'  => 'tcp',
-        // Contexto (opcional, cuando se habilita SSL, se requiere la ruta al certificado)
-        'context'    => [],
-        // Parámetros del constructor de la clase del proceso, en este caso para process\Pusher::class (opcional)
+        // contexto (opcional, cuando es ssl, se necesitan pasar las rutas de certificados)
+        'context'    => [], 
+        // Parámetros del constructor de la clase del proceso; en este caso, para process\Pusher::class (opcional)
         'constructor' => [],
     ],
 ];
 ```
 
 ## Conclusión
-El proceso personalizado en webman es simplemente un envoltorio simple para workerman. Separación de la configuración y la lógica del negocio, así como la implementación de los callbacks `onXXX` de workerman a través de los métodos de las clases, son idénticos a los métodos normales de workerman.
+Los procesos personalizados en webman son básicamente un simple envoltorio de workerman, separando la configuración del negocio y proporcionando formas de implementar los callbacks `onXXX` de workerman a través de métodos de clase. Todos los demás usos son completamente iguales a los de workerman.

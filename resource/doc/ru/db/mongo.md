@@ -1,27 +1,27 @@
 # MongoDB
 
-webman использует [jenssegers/mongodb](https://github.com/jenssegers/laravel-mongodb) в качестве компонента mongodb по умолчанию. Он был извлечен из проекта laravel и имеет такое же использование.
+webman по умолчанию использует [jenssegers/mongodb](https://github.com/jenssegers/laravel-mongodb) в качестве компонента mongodb, он был извлечен из проекта laravel и используется так же, как и в laravel.
 
-Прежде чем использовать `jenssegers/mongodb`, необходимо установить расширение mongodb для `php-cli`.
+Перед использованием `jenssegers/mongodb` необходимо установить расширение mongodb для `php-cli`.
 
-> Используйте команду `php -m | grep mongodb` для проверки наличия расширения mongodb для `php-cli`. Обратите внимание: даже если вы установили расширение mongodb для `php-fpm`, это не означает, что вы можете использовать его в `php-cli`, поскольку `php-cli` и `php-fpm` - это разные программы, которые могут использовать разные файлы настройки `php.ini`. Используйте команду `php --ini`, чтобы узнать, какой файл настройки `php.ini` используется для вашего `php-cli`.
+> Используйте команду `php -m | grep mongodb` для проверки установлено ли расширение mongodb для `php-cli`. Обратите внимание: даже если вы установили расширение mongodb для `php-fpm`, это не означает, что вы можете использовать его для `php-cli`, поскольку `php-cli` и `php-fpm` - разные приложения, которые могут использовать разные конфигурационные файлы `php.ini`. Чтобы узнать, какой файл конфигурации `php.ini` используется для вашего `php-cli`, используйте команду `php --ini`.
 
 ## Установка
 
-Для PHP>7.2
+PHP>7.2
 ```php
 composer require -W illuminate/database jenssegers/mongodb ^3.8.0
 ```
-Для PHP=7.2
+PHP=7.2
 ```php
 composer require -W illuminate/database jenssegers/mongodb ^3.7.0
 ```
 
-После установки необходимо перезапустить (restart) (reload не действует).
+После установки необходимо выполнить restart (перезагрузку), reload не сработает.
 
 ## Настройка
+Добавьте соединение с `mongodb` в файле `config/database.php`, примерно так:
 
-Добавьте подключение `mongodb` в файле `config/database.php`, подобно следующему:
 ```php
 return [
 
@@ -29,7 +29,7 @@ return [
 
     'connections' => [
 
-         ...другие конфигурации здесь...
+         ...здесь опущены другие настройки...
 
         'mongodb' => [
             'driver'   => 'mongodb',
@@ -39,8 +39,8 @@ return [
             'username' => null,
             'password' => null,
             'options' => [
-                // здесь можно передать больше настроек для менеджера драйвера Mongo
-                // см. https://www.php.net/manual/en/mongodb-driver-manager.construct.php раздел "Uri Options" для списка полных параметров, которые вы можете использовать
+                // здесь вы можете передать дополнительные настройки в Mongo Driver Manager
+                // см. https://www.php.net/manual/en/mongodb-driver-manager.construct.php раздел "Uri Options" для списка всех параметров, которые вы можете использовать
 
                 'appname' => 'homestead'
             ],
@@ -50,7 +50,6 @@ return [
 ```
 
 ## Пример
-
 ```php
 <?php
 namespace app\controller;
@@ -68,6 +67,7 @@ class UserController
 }
 ```
 
-## Дополнительную информацию можно найти на
+## Дополнительная информация
+Для получения дополнительной информации посетите:
 
 https://github.com/jenssegers/laravel-mongodb

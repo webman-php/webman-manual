@@ -40,13 +40,12 @@ class UserController
             $image = Image::make($file)->resize(100, 100);
             return response($image->encode('png'), 200, ['Content-Type' => 'image/png']);
         }
-        return response('file not found');
+        return response('檔案未找到');
     }
     
 }
 ```
   
-  
 ### 更多內容
 
-請訪問 http://image.intervention.io/getting_started/introduction
+訪問 http://image.intervention.io/getting_started/introduction

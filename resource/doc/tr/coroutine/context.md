@@ -1,18 +1,18 @@
-# Context Sınıfı
+# Bağlam
 
-`support\Context` sınıfı, istek bağlam verilerini depolamak için kullanılır, istek tamamlandığında ilgili bağlam verileri otomatik olarak silinir. Yani bağlam verilerinin yaşam döngüsü talep yaşam döngüsünü takip eder. `support\Context`, Fiber, Swoole, Swow koşullu ortamlarını destekler.
+`support\Context` sınıfı, istek bağlam verilerini depolamak için kullanılır; istek tamamlandığında ilgili bağlam verileri otomatik olarak silinir. Yani bağlam verilerinin ömrü istek ömrünü takip eder. `support\Context`, Fiber, Swoole ve Swow koşullu ortamlarını destekler.
 
-Daha fazla bilgi için [webman fiber](./fiber.md)'a bakın.
+Daha fazla bilgi için [webman Fiber](./fiber.md)'a bakın.
 
-# Arayüz
-Bağlam aşağıdaki arayüzleri sağlar.
+# Arabirim
+Bağlam, aşağıdaki arabirimleri sağlar.
 
 ## Bağlam verisi ayarlama
 ```php
-Context::set(string $name, mixed $value);
+Context::set(string $name, $mixed $value);
 ```
 
-## Bağlam verisi alıma
+## Bağlam verisi alma
 ```php
 Context::get(string $name = null);
 ```
@@ -23,7 +23,7 @@ Context::delete(string $name);
 ```
 
 > **Not**
-> Çerçeve, istek sona erdikten sonra bağlam verilerini otomatik olarak yok etmek için Context::destroy() arayüzünü otomatik olarak çağırır, iş mantığı kullanıcı tarafından Context::destroy() arayüzünü manuel olarak çağıramaz.
+> Çerçeve, istek sonlandıktan sonra bağlam verilerini otomatik olarak yok etmek için Context::destroy() arabirimini otomatik olarak çağırır; iş mantığı manuel olarak Context::destroy() arabirimini çağıramaz.
 
 # Örnek
 ```php
@@ -45,4 +45,4 @@ class TestController
 ```
 
 # Dikkat
-**Koşullu olarak kullanılırken**, **istekle ilgili durum verilerini** global değişkenlere veya statik değişkenlere depolamamalısınız, bu durum genel veri kirliliğine yol açabilir, doğru kullanımı bunları saklamak ve almak için Context'tir.
+**Koşululu kullanılırken**, **istekle ilgili durum verilerini** global değişkenlere veya statik değişkenlere depolamamalısınız, bu global veri kirliliğine neden olabilir; doğru kullanım, bunları depolamak ve almak için Context'i kullanmaktır.

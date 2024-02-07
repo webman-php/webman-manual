@@ -1,7 +1,8 @@
-# Systemanforderungen
+# Umgebungsvoraussetzungen
 
 * PHP >= 7.2
 * [Composer](https://getcomposer.org/) >= 2.0
+
 
 ### 1. Projekt erstellen
 
@@ -9,32 +10,32 @@
 composer create-project workerman/webman
 ```
 
-### 2. Ausführung
+### 2. Ausführen
 
-Gehe in das Webman-Verzeichnis
+Navigieren Sie zum Webman-Verzeichnis
 
-#### Benutzer von Windows
-Doppelklick auf `windows.bat` oder Ausführung von `php windows.php` zum Starten
+#### Windows-Benutzer
+Doppelklicken Sie auf `windows.bat` oder führen Sie `php windows.php` aus, um zu starten
 
 > **Hinweis**
-> Falls Fehler auftreten, besteht wahrscheinlich eine Einschränkung von Funktionen. Siehe [Funktions-Einschränkungsprüfung](others/disable-function-check.md) zur Aufhebung der Einschränkungen.
+> Wenn Fehler auftreten, liegt dies wahrscheinlich daran, dass bestimmte Funktionen deaktiviert sind. Siehe [Deaktivierungsprüfung von Funktionen](others/disable-function-check.md), um die Deaktivierung aufzuheben.
 
-#### Benutzer von Linux
-Im `debug`-Modus ausführen (für Entwicklung und Debugging)
+#### Linux-Benutzer
+Im `Debug`-Modus ausführen (für Entwicklungsdebugging)
 
 ```php
 php start.php start
 ```
 
-Im `daemon`-Modus ausführen (für den produktiven Einsatz)
+Im `Daemon`-Modus ausführen (für den Produktionsumgebung)
 
 ```php
 php start.php start -d
 ```
 
 > **Hinweis**
-> Falls Fehler auftreten, besteht wahrscheinlich eine Einschränkung von Funktionen. Siehe [Funktions-Einschränkungsprüfung](others/disable-function-check.md) zur Aufhebung der Einschränkungen.
+> Wenn Fehler auftreten, liegt dies wahrscheinlich daran, dass bestimmte Funktionen deaktiviert sind. Siehe [Deaktivierungsprüfung von Funktionen](others/disable-function-check.md), um die Deaktivierung aufzuheben.
 
 ### 3. Zugriff
 
-Öffne den Webbrowser und gehe zu `http://ip-adresse:8787`
+Öffnen Sie den Browser und rufen Sie `http://IP-Adresse:8787` auf

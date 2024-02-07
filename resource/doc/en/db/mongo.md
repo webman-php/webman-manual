@@ -4,7 +4,7 @@ webman uses [jenssegers/mongodb](https://github.com/jenssegers/laravel-mongodb) 
 
 Before using `jenssegers/mongodb`, you must first install the MongoDB extension for `php-cli`.
 
-> Use the command `php -m | grep mongodb` to check if the MongoDB extension is installed for `php-cli`. Note: even if you have installed the MongoDB extension for `php-fpm`, it does not mean that you can use it for `php-cli`, because `php-cli` and `php-fpm` are different applications and may use different `php.ini` configurations. Use the command `php --ini` to check which `php.ini` configuration file your `php-cli` is using.
+> Use the command `php -m | grep mongodb` to check if the MongoDB extension is installed for `php-cli`. Note: Even if you have installed the MongoDB extension for `php-fpm`, it does not mean that you can use it in `php-cli`, because `php-cli` and `php-fpm` are different applications and may use different `php.ini` configurations. Use the command `php --ini` to see which `php.ini` configuration file your `php-cli` is using.
 
 ## Installation
 
@@ -17,11 +17,10 @@ For PHP=7.2
 composer require -W illuminate/database jenssegers/mongodb ^3.7.0
 ```
 
-After installation, restart the server (reload won't work).
+After installation, you need to restart (reload is invalid).
 
 ## Configuration
-
-Add the `mongodb` connection in the `config/database.php`, similar to the following:
+Add the `mongodb` connection in `config/database.php`, similar to the following:
 ```php
 return [
 
@@ -29,7 +28,7 @@ return [
 
     'connections' => [
 
-         ...other configurations omitted...
+         ...Other configurations are omitted here...
 
         'mongodb' => [
             'driver'   => 'mongodb',
@@ -68,4 +67,5 @@ class UserController
 ```
 
 ## For more information, please visit
+
 https://github.com/jenssegers/laravel-mongodb

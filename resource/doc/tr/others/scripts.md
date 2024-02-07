@@ -1,6 +1,6 @@
-# Özel Betikler
+# Özel Betik
 
-Bazı durumlarda geçici betikler yazmamız gerekebilir. Bu betiklerde webman gibi herhangi bir sınıfı veya arayüzü çağırarak veri aktarma, veri güncelleme ve istatistiksel işlemler gibi işlemleri gerçekleştirebiliriz. Webman'de bunun yapıması çok kolaydır, örneğin:
+Bazı durumlarda geçici betikler yazmamız gerekebilir, bu betikler webman gibi herhangi bir sınıfı veya arayüzü çağırarak veri içe aktarma, veri güncelleme ve istatistik hesaplama gibi işlemleri gerçekleştirebilir. Bu webman'de çok kolay bir işlemdir, örneğin:
 
 **Yeni bir `scripts/update.php` oluşturun** (dizin yoksa kendiniz oluşturun)
 ```php
@@ -15,4 +15,4 @@ $user = Db::table('user')->find(1);
 var_dump($user);
 ```
 
-Tabii ki, aynı işlemi gerçekleştirmek için `webman/console` özel komutlarını kullanabiliriz. Daha fazla bilgi için [Komut Satırı](../plugin/console.md) bölümüne bakınız.
+Tabii ki, bu tür işlemleri gerçekleştirmek için `webman/console` özelleştirilmiş komutları da kullanabiliriz, bkz. [Command Line](../plugin/console.md)

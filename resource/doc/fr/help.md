@@ -1,6 +1,6 @@
-# Communauté d'aide
+# Aide communautaire
 
-## Forum de questions-réponses
+## Communauté de questions-réponses
 
 https://www.workerman.net/questions
 

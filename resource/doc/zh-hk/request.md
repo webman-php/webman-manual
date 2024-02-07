@@ -1,10 +1,9 @@
 # 說明
 
-## 獲得請求對象
-Webman將自動將請求對象注入到action方法的第一個參數中，例如
+## 獲取請求物件
+webman會自動將請求物件注入到action方法的第一個參數中，例如
 
-
-**例子**
+**範例**
 ```php
 <?php
 namespace app\controller;
@@ -16,7 +15,7 @@ class UserController
     public function hello(Request $request)
     {
         $default_name = 'webman';
-        // 從get請求中獲得name參數，如果沒有傳遞name參數則返回$default_name
+        // 從get請求中獲取name參數，如果沒有傳遞name參數則返回$default_name
         $name = $request->get('name', $default_name);
         // 向瀏覽器返回字串
         return response('hello ' . $name);
@@ -24,91 +23,90 @@ class UserController
 }
 ```
 
-通過`$request`對象我們能獲取到請求相關的任何數據。
+透過`$request`物件我們能獲取請求相關的任何資料。
 
-**有時候我們想在其它類中獲取當前請求的`$request`對象，這時候我們只要使用助手函數`request()`即可**;
+**有時候我們想在其他類別中獲取當前請求的`$request`物件，這時候我們只要使用助手函數`request()`即可**;
 
-## 獲得請求參數get
+## 獲取請求參數get
 
-**獲取整個get數組**
+**獲取整個get陣列**
 ```php
 $request->get();
 ```
-如果請求沒有get參數則返回一個空的數組。
+如果請求沒有get參數則返回一個空的陣列。
 
-**獲取get數組的某一個值**
+**獲取get陣列的某一個值**
 ```php
 $request->get('name');
 ```
-如果get數組中不包含這個值則返回null。
+如果get陣列中不包含這個值則返回null。
 
-你也可以給get方法第二個參數傳遞一個默認值，如果get數組中沒找到對應值則返回默認值。例如：
+你也可以給get方法第二個參數傳遞一個預設值，如果get陣列中沒找到對應值則返回預設值。例如：
 ```php
 $request->get('name', 'tom');
 ```
 
-## 獲得請求參數post
-**獲取整個post數組**
+## 獲取請求參數post
+**獲取整個post陣列**
 ```php
 $request->post();
 ```
-如果請求沒有post參數則返回一個空的數組。
+如果請求沒有post參數則返回一個空的陣列。
 
-**獲取post數組的某一個值**
+**獲取post陣列的某一個值**
 ```php
 $request->post('name');
 ```
-如果post數組中不包含這個值則返回null。
+如果post陣列中不包含這個值則返回null。
 
-與get方法一樣，你也可以給post方法第二個參數傳遞一個默認值，如果post數組中沒找到對應值則返回默認值。例如：
+與get方法一樣，你也可以給post方法第二個參數傳遞一個預設值，如果post陣列中沒找到對應值則返回預設值。例如：
 ```php
 $request->post('name', 'tom');
 ```
 
-## 獲得原始請求post包體
+## 獲取原始請求post包體
 ```php
 $post = $request->rawBody();
 ```
-這個功能類似與 `php-fpm`裡的 `file_get_contents("php://input");`操作。用於獲得http原始請求包體。這在獲取非`application/x-www-form-urlencoded`格式的post請求數據時很有用。 
-
+這個功能類似與 `php-fpm`裡的 `file_get_contents("php://input");`操作。用於獲得http原始請求包體。這在獲取非`application/x-www-form-urlencoded`格式的post請求資料時很有用。 
 
 ## 獲取header
-**獲取整個header數組**
+**獲取整個header陣列**
 ```php
 $request->header();
 ```
-如果請求沒有header參數則返回一個空的數組。注意所有key均為小寫。
+如果請求沒有header參數則返回一個空的陣列。注意所有key均為小寫。
 
-**獲取header數組的某一個值**
+**獲取header陣列的某一個值**
 ```php
 $request->header('host');
 ```
-如果header數組中不包含這個值則返回null。注意所有key均為小寫。
+如果header陣列中不包含這個值則返回null。注意所有key均為小寫。
 
-與get方法一樣，你也可以給header方法第二個參數傳遞一個默認值，如果header數組中沒找到對應值則返回默認值。例如：
+與get方法一樣，你也可以給header方法第二個參數傳遞一個預設值，如果header陣列中沒找到對應值則返回預設值。例如：
 ```php
 $request->header('host', 'localhost');
 ```
 
 ## 獲取cookie
-**獲取整個cookie數組**
+**獲取整個cookie陣列**
 ```php
 $request->cookie();
 ```
-如果請求沒有cookie參數則返回一個空的數組。
+如果請求沒有cookie參數則返回一個空的陣列。
 
-**獲取cookie數組的某一個值**
+**獲取cookie陣列的某一個值**
 ```php
 $request->cookie('name');
 ```
-如果cookie數組中不包含這個值則返回null。
+如果cookie陣列中不包含這個值則返回null。
 
-與get方法一樣，你也可以給cookie方法第二個參數傳遞一個默認值，如果cookie數組中沒找到對應值則返回默認值。例如：
+與get方法一樣，你也可以給cookie方法第二個參數傳遞一個預設值，如果cookie陣列中沒找到對應值則返回預設值。例如：
 ```php
 $request->cookie('name', 'tom');
 ```
 
-## 獲得所有輸入
+## 獲取所有輸入
 包含了`post` `get` 的集合。
 ```php
 $request->all();
@@ -120,22 +118,21 @@ $request->all();
 $request->input('name', $default_value);
 ```
 
-## 獲取部分輸入數據
-從`post` `get`的集合中獲取部分數據。
+## 獲取部分輸入資料
+從`post` `get`的集合中獲取部分資料。
 ```php
-// 獲取 username 和 password 組成的數組，如果對應的key沒有則忽略
+// 獲取 username 和 password 組成的陣列，如果對應的key沒有則忽略
 $only = $request->only(['username', 'password']);
 // 獲得除了avatar 和 age 以外的所有輸入
 $except = $request->except(['avatar', 'age']);
 ```
-
 ## 獲取上傳文件
-**獲取整個上傳文件數組**
+**獲取整個上傳文件陣列**
 ```php
 $request->file();
 ```
 
-表單類似:
+類似的表單:
 ```html
 <form method="post" action="http://127.0.0.1:8787/upload/files" enctype="multipart/form-data" />
 <input name="file1" multiple="multiple" type="file">
@@ -144,14 +141,14 @@ $request->file();
 </form>
 ```
 
-`$request->file()`返回的格式類似:
+`$request->file()` 返回的格式類似:
 ```php
 array (
     'file1' => object(webman\Http\UploadFile),
     'file2' => object(webman\Http\UploadFile)
 )
 ```
-他是一個`webman\Http\UploadFile`實例的數組。`webman\Http\UploadFile`類繼承了 PHP 內置的 [`SplFileInfo`](https://www.php.net/manual/zh/class.splfileinfo.php) 類，並且提供了一些實用的方法。
+這是一個`webman\Http\UploadFile`實例的陣列。`webman\Http\UploadFile`類繼承了 PHP 內建的[`SplFileInfo`](https://www.php.net/manual/zh/class.splfileinfo.php) 類，並且提供了一些實用的方法。
 
 ```php
 <?php
@@ -164,14 +161,14 @@ class UploadController
     public function files(Request $request)
     {
         foreach ($request->file() as $key => $spl_file) {
-            var_export($spl_file->isValid()); // 檔案是否有效，例如ture|false
-            var_export($spl_file->getUploadExtension()); // 上傳檔案後副檔名，例如'jpg'
-            var_export($spl_file->getUploadMimeType()); // 上傳檔案mine類型，例如 'image/jpeg'
+            var_export($spl_file->isValid()); // 文件是否有效，例如ture|false
+            var_export($spl_file->getUploadExtension()); // 上傳文件後綴名，例如'jpg'
+            var_export($spl_file->getUploadMimeType()); // 上傳文件mine類型，例如 'image/jpeg'
             var_export($spl_file->getUploadErrorCode()); // 獲取上傳錯誤碼，例如 UPLOAD_ERR_NO_TMP_DIR UPLOAD_ERR_NO_FILE UPLOAD_ERR_CANT_WRITE
-            var_export($spl_file->getUploadName()); // 上傳檔案名，例如 'my-test.jpg'
-            var_export($spl_file->getSize()); // 獲得檔案大小，例如 13364，單位字節
+            var_export($spl_file->getUploadName()); // 上傳文件名，例如 'my-test.jpg'
+            var_export($spl_file->getSize()); // 獲得文件大小，例如 13364，單位字節
             var_export($spl_file->getPath()); // 獲得上傳的目錄，例如 '/tmp'
-            var_export($spl_file->getRealPath()); // 獲得臨時檔案路徑，例如 `/tmp/workerman.upload.SRliMu`
+            var_export($spl_file->getRealPath()); // 獲得臨時文件路徑，例如 `/tmp/workerman.upload.SRliMu`
         }
         return response('ok');
     }
@@ -180,17 +177,17 @@ class UploadController
 
 **注意：**
 
-- 文件被上傳後會被命名為一個臨時檔案，類似 `/tmp/workerman.upload.SRliMu`
-- 上傳檔案大小受到[defaultMaxPackageSize](http://doc.workerman.net/tcp-connection/default-max-package-size.html)限制，默認10M，可在`config/server.php`檔案中修改`max_package_size`更改默認值。
-- 請求結束後臨時檔案將被自動清除
-- 如果請求沒有上傳檔案則`$request->file()`返回一個空的數組
-- 上傳的檔案不支持 `move_uploaded_file()` 方法，請使用 `$file->move()`方法代替，參見下面的例子
+- 文件被上傳後會被命名為一個臨時文件，類似 `/tmp/workerman.upload.SRliMu`
+- 上傳文件大小受到[defaultMaxPackageSize](http://doc.workerman.net/tcp-connection/default-max-package-size.html) 限制，默認10M，可在`config/server.php`文件中修改`max_package_size`更改默認值。
+- 請求結束後臨時文件將被自動清除
+- 如果請求沒有上傳文件則`$request->file()`返回一個空的陣列
+- 上傳的文件不支持 `move_uploaded_file()` 方法，請使用 `$file->move()` 方法代替，參見下面的例子
 
 ### 獲取特定上傳文件
 ```php
 $request->file('avatar');
 ```
-如果檔案存在的話則返回對應檔案的`webman\Http\UploadFile`實例，否則返回null。
+如果文件存在的話則返回對應文件的`webman\Http\UploadFile`實例，否則返回null。
 
 **例子**
 ```php
@@ -237,15 +234,12 @@ $request->uri();
 返回請求的uri，包括path和queryString部分。
 
 ## 獲取請求路徑
-
 ```php
 $request->path();
 ```
 返回請求的path部分。
 
-
 ## 獲取請求queryString
-
 ```php
 $request->queryString();
 ```
@@ -275,20 +269,16 @@ echo $request->header('x-forwarded-proto'); // 輸出 http 或 https
 ```
 
 ## 獲取請求HTTP版本
-
 ```php
 $request->protocolVersion();
 ```
 返回字符串 `1.1` 或者`1.0`。
 
-
 ## 獲取請求sessionId
-
 ```php
 $request->sessionId();
 ```
 返回字符串，由字母和數字組成
-
 
 ## 獲取請求客戶端IP
 ```php
@@ -299,7 +289,6 @@ $request->getRemoteIp();
 ```php
 $request->getRemotePort();
 ```
-
 ## 獲取請求客戶端真實IP
 ```php
 $request->getRealIp($safe_mode=true);
@@ -309,15 +298,15 @@ $request->getRealIp($safe_mode=true);
 
 `$request->getRealIp()`會嘗試從HTTP頭的`x-real-ip`、`x-forwarded-for`、`client-ip`、`x-client-ip`、`via`字段中獲取真實IP。
 
-> 由於HTTP頭很容偽造，所以此方法獲得的客戶端IP並非100%可信，尤其是`$safe_mode`為false時。透過代理獲得客戶端真實IP的比較可靠的方法是，已知安全的代理伺服器IP，並且明確知道攜帶真實IP是哪個HTTP頭，如果`$request->getRemoteIp()`返回的IP確認為已知的安全的代理伺服器，然後通過`$request->header('攜帶真實IP的HTTP頭')`獲取真實IP。
+> 由於HTTP頭很容易伪造，所以此方法獲得的客戶端IP並非100%可信，尤其是`$safe_mode`為false時。透過代理獲得客戶端真實IP的比較可靠的方法是，已知安全的代理伺服器IP，並且明確知道攜帶真實IP是哪個HTTP頭，如果`$request->getRemoteIp()`返回的IP確認為已知的安全的代理伺服器，然後通過`$request->header('攜帶真實IP的HTTP頭')`獲取真實IP。
 
 
-## 獲取伺服端IP
+## 獲取服務器IP
 ```php
 $request->getLocalIp();
 ```
 
-## 獲取伺服端端口
+## 獲取服務器端口
 ```php
 $request->getLocalPort();
 ```
@@ -354,7 +343,6 @@ $request->plugin;
 ```php
 $request->app;
 ```
-
 > 因為閉包函數不屬於任何應用，所以來自閉包路由的請求`$request->app`始終返回空字符串`''`
 > 閉包路由參見 [路由](route.md)
 

@@ -6,7 +6,7 @@
 [![webman-event](https://img.shields.io/github/last-commit/tinywan/webman-event/main)]()
 [![webman-event](https://img.shields.io/github/v/tag/tinywan/webman-event?color=ff69b4)]()
 
-중간웨어에 비해 이벤트의 장점은 이벤트가 중간웨어보다 더 정확하게 위치를 잡거나(또는 더 세분화된 레벨로) 여러 비즈니스 시나리오에 더 적합하다는 것입니다. 예를 들어, 사용자가 등록 또는 로그인 한 후에 일련의 작업을 수행해야 하는 경우, 이벤트 시스템을 사용하여 기존 코드를 침범하지 않고 로그인 작업을 확장할 수 있으며 시스템의 결합도를 줄이고 버그 가능성을 줄일 수 있습니다.
+이벤트는 미들웨어보다 정확한 위치 지정(또는 보다 세분화된)과 일부 비즈니스 시나리오의 확장에 더 적합하다는 장점이 있습니다. 예를 들어, 일련의 작업을 수행해야 하는 사용자가 등록하거나 로그인하는 경우, 이벤트 시스템을 사용하여 기존 코드에 침범하지 않고 로그인 작업을 확장하여 시스템의 결합도를 낮추고 버그 가능성을 줄일 수 있습니다.
 
 ## 프로젝트 주소
 
@@ -27,7 +27,7 @@ composer require tinywan/webman-event
 
 ```php
 return [
-    // 이벤트 리스너
+    // 이벤트 리스닝
     'listener'    => [],
 
     // 이벤트 구독자
@@ -36,11 +36,11 @@ return [
 ```
 ### 프로세스 시작 구성
 
-`config/bootstrap.php`를 열고 다음 구성을 추가합니다.
+`config/bootstrap.php`을 열고 다음 구성을 추가합니다.
 
 ```php
 return [
-    // 여기에 다른 구성이 생략되었습니다 ...
+    // 여기에 다른 설정이 생략되었습니다 ...
     webman\event\EventManager::class,
 ];
 ```
@@ -76,11 +76,10 @@ class LogErrorWriteEvent extends Event
 }
 ```
 
-### 이벤트 청취
-
+### 이벤트 리스닝
 ```php
 return [
-    // 이벤트 리스너
+    // 이벤트 리스닝
     'listener'    => [
         \extend\event\LogErrorWriteEvent::NAME  => \extend\event\LogErrorWriteEvent::class,
     ],
@@ -89,7 +88,7 @@ return [
 
 ### 이벤트 구독
 
-구독자 클래스 `LoggerSubscriber.php`
+구독 클래스 `LoggerSubscriber.php`
 
 ```php
 namespace extend\event\subscriber;
@@ -122,7 +121,7 @@ class LoggerSubscriber implements EventSubscriberInterface
 }
 ```
 
-이벤트 구독
+이벤트를 구독합니다.
 ```php
 return [
     // 이벤트 구독
@@ -134,7 +133,7 @@ return [
 
 ### 이벤트 트리거
 
-`LogErrorWriteEvent` 이벤트 트리거.
+`LogErrorWriteEvent` 이벤트를 트리거합니다.
 
 ```php
 $error = [
@@ -146,7 +145,7 @@ EventManager::trigger(new LogErrorWriteEvent($error),LogErrorWriteEvent::NAME);
 
 실행 결과
 
-![trigger.png](./trigger.png)
+![Print result](./trigger.png)
 
 ## 라이센스
 

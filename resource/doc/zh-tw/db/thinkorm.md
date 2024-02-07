@@ -1,12 +1,10 @@
 ## ThinkORM
 
-### 安装ThinkORM
+### 安裝ThinkORM
 
-```sh
-composer require -W webman/think-orm
-```
+`composer require -W webman/think-orm`
 
-安裝後需要重啟 (reload無效)
+安裝後需要restart重啟(reload無效)
 
 > **提示**
 > 如果安裝失敗，可能是因為你使用了composer代理，嘗試運行 `composer config -g --unset repos.packagist` 取消composer代理試下
@@ -38,7 +36,7 @@ class FooController
 ### 創建模型
 
 ThinkOrm模型繼承`think\Model`，類似如下
-```
+```php
 <?php
 namespace app\model;
 
@@ -64,8 +62,8 @@ class User extends Model
 }
 ```
 
-你也使用以下命令创建基于thinkorm的模型
-```
+你也使用以下命令創建基於thinkorm的模型
+```shell
 php webman make:model 表名
 ```
 

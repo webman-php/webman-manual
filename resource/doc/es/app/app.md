@@ -1,15 +1,15 @@
-# Plugins de aplicación
+# Plugins for Applications
 
-> Los plugins de aplicación requieren webman>=1.4.0
+> The application plugins require webman >= 1.4.0
 
-## Concepto
-Construir rápidamente su propia aplicación como si estuviera armando un rompecabezas.
+## Concept
+Build your own application quickly, like assembling building blocks.
 
-## Introducción
-Los plugins de aplicación son en realidad una aplicación completa que se puede instalar como un complemento en un proyecto principal, lo que permite al proyecto principal obtener rápidamente la funcionalidad de cierto módulo. Por ejemplo, si el proyecto principal necesita un sistema de preguntas y respuestas, puede instalar un plugin de aplicación de preguntas y respuestas, o si necesita un sistema de comercio, puede instalar un plugin de aplicación de comercio. Todos los plugins son independientes y listos para usar, y se pueden eliminar con un solo clic cuando no son necesarios.
+## Introduction
+In fact, application plugins are complete applications that can be installed as plugins into the main project, enabling the main project to quickly obtain certain module functionalities. For example, if the main project needs a Q&A system, it can install a Q&A application plugin, or if it needs a shopping mall system, it can install a shopping mall application plugin. All plugins are independent and can be used immediately, and can be easily deleted when not needed.
 
-## Impacto
-Los plugins de aplicación han mejorado en gran medida la reutilización del proyecto webman, permitiendo a cualquier desarrollador transformar su proyecto en un plugin y ofrecerlo para su instalación en otros proyectos, beneficiando a esos proyectos y generando ingresos para sí mismos.
+## Impact
+Application plugins greatly enhance the reusability of webman projects. Any developer can transform their own projects into plugins and offer them for installation in other projects, benefiting those projects and earning revenue for themselves.
 
-## Obtención de ingresos
-webman ofrece un [mercado de aplicaciones](https://www.workerman.net/apps) oficial donde los desarrolladores pueden enviar las aplicaciones que han desarrollado y obtener ingresos a partir de ellas.
+## Earning Revenue
+webman provides an official [application market](https://www.workerman.net/apps), where developers can submit the applications they have developed and earn revenue from them.

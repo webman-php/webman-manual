@@ -31,7 +31,7 @@ Log::critical($message, array $context = [])
 Log::alert($message, array $context = [])
 Log::emergency($message, array $context = [])
 ```
-동일한 기능으로써 다음과 동일합니다.
+동등한 것은 다음과 같습니다.
 ```php
 $log = Log::channel('default');
 $log->log($level, $message, array $context = [])
@@ -45,12 +45,12 @@ $log->alert($message, array $context = [])
 $log->emergency($message, array $context = [])
 ```
 
-## 구성
+## 설정
 ```php
 return [
     // 기본 로그 채널
     'default' => [
-        // 기본 채널을 처리하는 핸들러, 복수 설정 가능
+        // 기본 채널을 처리하는 핸들러, 여러 개 설정할 수 있음
         'handlers' => [
             [   
                 // 핸들러 클래스 이름
@@ -62,7 +62,7 @@ return [
                 ],
                 // 형식 관련
                 'formatter' => [
-                    // 형식 처리 클래스 이름
+                    // 형식 처리 클래스의 이름
                     'class' => Monolog\Formatter\LineFormatter::class,
                     // 형식 처리 클래스의 생성자 매개변수
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
@@ -74,12 +74,12 @@ return [
 ```
 
 ## 다중 채널
-monolog은 다중 채널을 지원하며, 기본적으로 `default` 채널을 사용합니다. `log2` 채널을 추가하려면 다음과 같이 구성합니다.
+monolog은 다중 채널을 지원하며, 기본적으로 `default` 채널을 사용합니다. `log2` 채널을 추가하려면 다음과 유사한 구성을 사용하십시오.
 ```php
 return [
     // 기본 로그 채널
     'default' => [
-        // 기본 채널을 처리하는 핸들러, 복수 설정 가능
+        // 기본 채널을 처리하는 핸들러, 여러 개 설정할 수 있음
         'handlers' => [
             [   
                 // 핸들러 클래스 이름
@@ -91,7 +91,7 @@ return [
                 ],
                 // 형식 관련
                 'formatter' => [
-                    // 형식 처리 클래스 이름
+                    // 형식 처리 클래스의 이름
                     'class' => Monolog\Formatter\LineFormatter::class,
                     // 형식 처리 클래스의 생성자 매개변수
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
@@ -101,7 +101,7 @@ return [
     ],
     // log2 채널
     'log2' => [
-        // 기본 채널을 처리하는 핸들러, 복수 설정 가능
+        // 기본 채널을 처리하는 핸들러, 여러 개 설정할 수 있음
         'handlers' => [
             [   
                 // 핸들러 클래스 이름
@@ -113,7 +113,7 @@ return [
                 ],
                 // 형식 관련
                 'formatter' => [
-                    // 형식 처리 클래스 이름
+                    // 형식 처리 클래스의 이름
                     'class' => Monolog\Formatter\LineFormatter::class,
                     // 형식 처리 클래스의 생성자 매개변수
                     'constructor' => [ null, 'Y-m-d H:i:s', true],
