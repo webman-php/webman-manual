@@ -37,7 +37,7 @@ Parfois, nous ne voulons pas qu'une demande atteigne le niveau du contrôleur. P
             │     │          │    ┌──────────────────┐      │      │     │
             │     │          │    │                  │      │      │     │
    ── Requête ─────────┐     │    │    Contrôleur    │      │      │     │
-            │     │ Réponse │    │                  │      │      │     │
+            │     │ Réponse  │    │                  │      │      │     │
    <───────────────────┘     │    └──────────────────┘      │      │     │
             │     │          │                              │      │     │
             │     │          └──────────────────────────────┘      │     │

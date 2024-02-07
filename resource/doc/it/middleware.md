@@ -38,7 +38,7 @@ A volte non vogliamo che una determinata richiesta raggiunga il livello del cont
             │     │          │        middleware3           │      │     │       
             │     │          │    ┌──────────────────┐      │      │     │
             │     │          │    │                  │      │      │     │
-   ── Richiesta ─────────┐     │    │    Controllore    │      │      │     │
+   ── Richiesta ───────┐     │    │    Controllore   │      │      │     │
             │     │ Risposta │    │                  │      │      │     │
    <───────────────────┘     │    └──────────────────┘      │      │     │
             │     │          │                              │      │     │

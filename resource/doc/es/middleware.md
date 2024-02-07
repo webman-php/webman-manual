@@ -37,8 +37,8 @@ A veces queremos evitar que una solicitud llegue a la capa del controlador, por 
             │     │          │        middleware3           │      │     │       
             │     │          │    ┌──────────────────┐      │      │     │
             │     │          │    │                  │      │      │     │
-   ── Solicitud ─────────┐     │    │    Controlador    │      │      │     │
-            │     │ Respuesta │    │                  │      │      │     │
+   ── Solicitud ─────────┐   │    │    Controlador   │      │      │     │
+            │     │ Respuesta│    │                  │      │      │     │
    <───────────────────┘     │    └──────────────────┘      │      │     │
             │     │          │                              │      │     │
             │     │          └──────────────────────────────┘      │     │
