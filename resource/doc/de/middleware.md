@@ -38,7 +38,7 @@ Sometimes we do not want a certain request to reach the controller layer. For ex
             │     │          │        middleware3           │      │     │       
             │     │          │    ┌──────────────────┐      │      │     │
             │     │          │    │                  │      │      │     │
-   ── Request ─────────┐     │    │      Controller    │      │      │     │
+   ── Request ─────────┐     │    │     Controller   │      │      │     │
             │     │ Response │    │                  │      │      │     │
    <───────────────────┘     │    └──────────────────┘      │      │     │
             │     │          │                              │      │     │

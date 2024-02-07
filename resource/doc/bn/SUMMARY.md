@@ -16,7 +16,7 @@
   - [প্রতিক্রিয়া](response.md)
   - [নিয়ন্ত্রক](controller.md)
   - [রাউট](route.md)
-  - [মধ্যবর্তী](middleware.md)
+  - [মিডলওয়্যার](middleware.md)
   - [ভিউ](view.md)
   - [স্থাৎয়িক ফাইল](static.md)
   - [সেশন ব্যবস্থাপনা](session.md)

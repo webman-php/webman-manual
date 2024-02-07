@@ -1,16 +1,16 @@
-## Hướng dẫn bắt đầu
+- Hướng dẫn bắt đầu
 
   - [webman là gì](README.md)
   - [Lưu ý lập trình](attention.md)
   - [Cộng đồng hỏi đáp](help.md)
 
-## Bắt đầu nhanh chóng
+- Bắt đầu nhanh chóng
 
   - [Cài đặt](install.md)
   - [Cấu trúc thư mục](directory.md)
   - [Ví dụ đơn giản](tutorial.md)
 
-## Các chức năng cơ bản
+- Các chức năng cơ bản
 
   - [Yêu cầu](request.md)
   - [Phản hồi](response.md)
@@ -25,7 +25,7 @@
   - [Tập tin cấu hình](config.md)
   - [Nhiều ứng dụng](multiapp.md)
 
-## Cơ sở dữ liệu
+- Cơ sở dữ liệu
 
   - [Bắt đầu nhanh chóng](db/tutorial.md)
   - [Cấu hình cơ sở dữ liệu](db/config.md)
@@ -41,12 +41,12 @@
   - [ThinkCache](db/thinkcache.md)
   - [Medoo](db/medoo.md)
 
-## Hàng đợi tin nhắn
+- Hàng đợi tin nhắn
 
   - [Hàng đợi Redis](queue/redis.md)
   - [Stomp](queue/stomp.md)
 
-## Các thành phần phổ biến
+- Các thành phần phổ biến
 
   - [Trình xác thực](components/validation.md)
   - [Trình phân trang](components/paginator.md)
@@ -63,7 +63,7 @@
   - [Kiểm thử đơn vị](components/unitest.md)
   - [Tạo mã lỗi](components/generate_error_code.md)
 
-## Tiện ích cơ bản
+- Tiện ích cơ bản
 
   - [Tiện ích cơ bản](plugin/base.md)
   - [Dòng lệnh](plugin/console.md)
@@ -71,7 +71,7 @@
   - [Thị trường tiện ích cơ bản](plugin/market.md)
   - [Đệ trình tiện ích cơ bản](plugin/create.md)
 
-## Tiện ích ứng dụng
+- Tiện ích ứng dụng
 
   - [Giới thiệu](app/app.md)
   - [Quy định](app/standard.md)
@@ -91,13 +91,13 @@
   - [Cài đặt và gỡ bỏ](app/install.md)
   - [Thị trường ứng dụng](app/market.md)
 
-## Tiên tiến và tiện ích cao cấp
+- Tiên tiến và tiện ích cao cấp
 
   - [Tiến trình tùy chỉnh](process.md)
   - [Tiêm phụ thuộc](di.md)
   - [AOP](aop.md)
 
-## Khác
+- Khác
 
   - [Bảo mật](others/security.md)
   - [Kiểm tra cấm chức năng](others/disable-function-check.md)
@@ -117,7 +117,7 @@
   - [Kiểm tra áp lực](others/benchmarks.md)
   - [Giám sát tập tin](others/monitor.md)
 
-## Nâng cấp
+- Nâng cấp
 
   - [1.4](upgrade/1-4.md)
   - [Cảm ơn](thanks.md)
