@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../../server/vendor/autoload.php';
 require __DIR__ . '/filters.php';
 
 ini_set('display_errors', 'on');

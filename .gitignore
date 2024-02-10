@@ -1,5 +1,6 @@
 /.idea
 /.vscode
 webman
-runtime
 *Thumbs.db*
+server/composer.lock
+server/vendor

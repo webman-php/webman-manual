@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <?php if(!empty($html_desc)) {?><meta name="description" content="<?=$html_desc?>"/><?php }?>
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link href="/css/bootstrap.min.css?v=20211126" rel="stylesheet">
+    <link href="/css/main.css?v=20211223" rel="stylesheet">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js?v=20211126"></script>
+    <script src="/js/functions.js?v=20211129"></script>
+    <title><?=$html_title?></title>
+
+</head>
+<body class="bg-light ready sticky">
+    <nav class="navbar navbar-expand-lg navbar-light shadow-sm bg-white mybt2 sticky-top">
+        <div class="container-fluid" style="max-width:1332px;">
+            <a class="navbar-brand" href="/"><b class="">webman</b></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item <?=isset($nav)&&$nav=='index'?'active':''?>">
+                        <a class="nav-link" href="/">home</a>
+                    </li>
+                    <li class="nav-item <?=isset($nav)&&$nav=='question'?'active':''?> position-relative">
+                        <a class="nav-link" href="/questions">Documentation</a>
+                        <small class="badge-dot"></small>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav mr-3 my-2 my-lg-0 ">
+                    <li class="nav-item dropdown">
+
+                        <a class="dropdown-toggle btn btn-primary" style="color:#fff;" href="#" id="publishDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="d-inline-block d-md-none d-lg-none d-xl-inline-block"><?=$current_lang?></span>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="publishDropdown">
+                            <?php foreach($langs as $l) {?>
+                            <a class="dropdown-item" href="/doc/<?=$l?>"><?=$langs[$l]?></a>
+                            <?php }?>
+                        </div>
+                    </li>
+                </ul>
+
+
+            </div>
+        </div>
+    </nav>
+
+
