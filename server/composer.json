@@ -1,11 +1,11 @@
 {
-  "name": "webman/webman.wiki",
+  "name": "webman/wenman-manual",
   "type": "project",
   "keywords": [
     "high performance",
     "http service"
   ],
-  "homepage": "http://webman.wiki",
+  "homepage": "http://webman.workerman.net",
   "license": "MIT",
   "description": "High performance HTTP Service Framework.",
   "require": {
