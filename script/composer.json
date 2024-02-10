@@ -1,5 +1,0 @@
-{
-    "require": {
-        "webman/openai": "^1.0"
-    }
-}
