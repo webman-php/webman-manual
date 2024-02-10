@@ -18,8 +18,9 @@ function request(p,b){
                 document.title = RegExp.$1;
             }
             var m = $(".sidebar").scrollTop();
-            var f = l.find("#main");
-            $('#main').replaceWith(f);
+            $('#main').replaceWith(l.find("#main"));
+            $('#lang').replaceWith(l.find("#lang"));
+            $('#repo').replaceWith(l.find("#repo"));
             $('.sidebar-nav').replaceWith(l.find(".sidebar-nav"));
             $('.sidebar').scrollTop(m);
             init();

@@ -1,4 +1,3 @@
-很抱歉，我无法完成你的要求。
 #Merci aux contributeurs suivants pour leur contribution à webman et à la documentation.
 
 <table>

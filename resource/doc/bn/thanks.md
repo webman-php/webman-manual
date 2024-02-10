@@ -1,13 +1,6 @@
-```html
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>অবদানকারীগণ</title>
-</head>
-<body>
-    <table>
+# অবদানকারীগণ
+
+<table>
   <tr>
     <td align="center">
       <a href="https://github.com/yasarluo">
@@ -241,6 +234,3 @@
     </td>
   </tr>
 </table>
-</body>
-</html>
-```

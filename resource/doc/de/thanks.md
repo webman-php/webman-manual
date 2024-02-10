@@ -1,4 +1,3 @@
-Sure, please go ahead and provide the document for translation.
 # Dank an die folgenden Beitragenden für ihren Beitrag zu Webman und der Dokumentation
 <table>
   <tr>

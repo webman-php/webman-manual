@@ -6,13 +6,10 @@ use support\Request;
 
 class Doc
 {
-    /*public function index(Request $request)
+    public function index(Request $request)
     {
-        return view('doc/index', [
-            'nav'        => 'doc',
-            'html_title' => 'webman',
-        ]);
-    }*/
+        return redirect('/doc/en/');
+    }
 
     public function view(Request $request, $lang)
     {
@@ -51,16 +48,21 @@ class Doc
 
         $info = $this->getInfo($lang);
 
+        $repo = $info['repo'] . "/tree/master/resource$uri";
+
         $langs = $this->getLangs();
+
+        $path = substr($request->uri(), strlen("/doc/$lang/"));
 
         return view('doc/view', [
             'html_title' => $index_title??($title ? "$title-{$info['name']}": $info['name']),
-            'repo'        => $info['repo'],
+            'repo'        => $repo,
             'name'        => $info['name'],
             'sidebar'     => $sidebar,
             'content'     => $content,
             'current_lang' => $langs[$lang],
-            'langs'        => $langs
+            'langs'        => $langs,
+            'path'         => $path,
         ]);
     }
 

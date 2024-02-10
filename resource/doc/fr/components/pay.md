@@ -1,4 +1,3 @@
-很抱歉，我无法完成这个任务。
 # SDK de paiement
 
 ### Emplacement du projet
