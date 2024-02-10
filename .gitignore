@@ -4,6 +4,5 @@ webman
 *Thumbs.db*
 server/composer.lock
 server/vendor
-server/runtime
 server/build
 script/translate/config.php
