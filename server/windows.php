@@ -4,93 +4,115 @@
  */
 require_once __DIR__ . '/vendor/autoload.php';
 
+use Dotenv\Dotenv;
 use process\Monitor;
+use support\App;
 use Workerman\Worker;
-use Webman\Config;
 
 ini_set('display_errors', 'on');
 error_reporting(E_ALL);
 
-Config::load(config_path(), ['route', 'container']);
-
-$runtime_process_path = runtime_path() . DIRECTORY_SEPARATOR . '/windows';
-if (!is_dir($runtime_process_path)) {
-    mkdir($runtime_process_path);
+if (class_exists('Dotenv\Dotenv') && file_exists(base_path() . '/.env')) {
+    if (method_exists('Dotenv\Dotenv', 'createUnsafeImmutable')) {
+        Dotenv::createUnsafeImmutable(base_path())->load();
+    } else {
+        Dotenv::createMutable(base_path())->load();
+    }
 }
-$process_files = [
+
+App::loadAllConfig(['route']);
+
+$errorReporting = config('app.error_reporting');
+if (isset($errorReporting)) {
+    error_reporting($errorReporting);
+}
+
+$runtimeProcessPath = runtime_path() . DIRECTORY_SEPARATOR . '/windows';
+if (!is_dir($runtimeProcessPath)) {
+    mkdir($runtimeProcessPath);
+}
+$processFiles = [
     __DIR__ . DIRECTORY_SEPARATOR . 'start.php'
 ];
-foreach (config('process', []) as $process_name => $config) {
-    $file_content = <<<EOF
-<?php
-require_once __DIR__ . '/../../vendor/autoload.php';
-
-use Workerman\Worker;
-use Webman\Config;
-
-ini_set('display_errors', 'on');
-error_reporting(E_ALL);
-
-Config::load(config_path(), ['route', 'container']);
-
-worker_start('$process_name', config('process')['$process_name']);
-Worker::runAll();
-
-EOF;
-
-    $process_file = $runtime_process_path . DIRECTORY_SEPARATOR . "start_$process_name.php";
-    $process_files[] = $process_file;
-    file_put_contents($process_file, $file_content);
+foreach (config('process', []) as $processName => $config) {
+    $processFiles[] = write_process_file($runtimeProcessPath, $processName, '');
 }
 
 foreach (config('plugin', []) as $firm => $projects) {
     foreach ($projects as $name => $project) {
-        foreach ($project['process'] ?? [] as $process_name => $config) {
-            $file_content = <<<EOF
+        if (!is_array($project)) {
+            continue;
+        }
+        foreach ($project['process'] ?? [] as $processName => $config) {
+            $processFiles[] = write_process_file($runtimeProcessPath, $processName, "$firm.$name");
+        }
+    }
+    foreach ($projects['process'] ?? [] as $processName => $config) {
+        $processFiles[] = write_process_file($runtimeProcessPath, $processName, $firm);
+    }
+}
+
+function write_process_file($runtimeProcessPath, $processName, $firm): string
+{
+    $processParam = $firm ? "plugin.$firm.$processName" : $processName;
+    $configParam = $firm ? "config('plugin.$firm.process')['$processName']" : "config('process')['$processName']";
+    $fileContent = <<<EOF
 <?php
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Workerman\Worker;
+use Workerman\Connection\TcpConnection;
 use Webman\Config;
+use support\App;
 
 ini_set('display_errors', 'on');
 error_reporting(E_ALL);
 
-Config::load(config_path(), ['route', 'container']);
+if (is_callable('opcache_reset')) {
+    opcache_reset();
+}
 
-worker_start("plugin.$firm.$name.$process_name", config("plugin.$firm.$name.process")['$process_name']);
+App::loadAllConfig(['route']);
+
+worker_start('$processParam', $configParam);
+
+if (DIRECTORY_SEPARATOR != "/") {
+    Worker::\$logFile = config('server')['log_file'] ?? Worker::\$logFile;
+    TcpConnection::\$defaultMaxPackageSize = config('server')['max_package_size'] ?? 10*1024*1024;
+}
+
 Worker::runAll();
 
 EOF;
-            $process_file = $runtime_process_path . DIRECTORY_SEPARATOR . "start_$process_name.php";
-            $process_files[] = $process_file;
-            file_put_contents($process_file, $file_content);
-        }
-    }
+    $processFile = $runtimeProcessPath . DIRECTORY_SEPARATOR . "start_$processParam.php";
+    file_put_contents($processFile, $fileContent);
+    return $processFile;
 }
 
-$monitor = new Monitor(...array_values(config('process.monitor.constructor')));
+if ($monitorConfig = config('process.monitor.constructor')) {
+    $monitor = new Monitor(...array_values($monitorConfig));
+}
 
-function popen_processes($process_files)
+function popen_processes($processFiles)
 {
-    $cmd = "php " . implode(' ', $process_files);
+    $cmd = '"' . PHP_BINARY . '" ' . implode(' ', $processFiles);
     $descriptorspec = [STDIN, STDOUT, STDOUT];
-    $resource = proc_open($cmd, $descriptorspec, $pipes);
+    $resource = proc_open($cmd, $descriptorspec, $pipes, null, null, ['bypass_shell' => true]);
     if (!$resource) {
         exit("Can not execute $cmd\r\n");
     }
     return $resource;
 }
 
-$resource = popen_processes($process_files);
+$resource = popen_processes($processFiles);
 echo "\r\n";
 while (1) {
     sleep(1);
-    if ($monitor->checkAllFilesChange()) {
+    if (!empty($monitor) && $monitor->checkAllFilesChange()) {
         $status = proc_get_status($resource);
         $pid = $status['pid'];
         shell_exec("taskkill /F /T /PID $pid");
         proc_close($resource);
-        $resource = popen_processes($process_files);
+        $resource = popen_processes($processFiles);
     }
 }

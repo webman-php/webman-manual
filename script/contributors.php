@@ -55,7 +55,7 @@ foreach ($contributors_chunk as $contributors) {
         $table .='
     <td align="center">
       <a href="https://github.com/'.$contributor['name'].'">
-        <img src="'.$contributor['avatar'].'" width="100px;"/><h5>'.$contributor['name'].'</h3>
+        <img src="'.$contributor['avatar'].'" width="100px;"/><h5>'.$contributor['name'].'</h5>
       </a>
     </td>';
     }
@@ -68,5 +68,12 @@ $table .= '
 $zh_cn_thanks = '#感谢以下贡献者对webman及文档的贡献';
 $en_thanks = '#Thank the following contributors for their contributions to webman and the document';
 
-file_put_contents(__DIR__ . '/../resource/doc/zh-cn/thanks.md', "$zh_cn_thanks\n$table\n");
-file_put_contents(__DIR__ . '/../resource/doc/en/thanks.md', "$en_thanks\n$table\n");
+$dir = __DIR__ . '/../resource/doc';
+
+// 遍历dir下所有的thanks.md文件
+foreach (glob("$dir/*/thanks.md") as $path) {
+    $content = file_get_contents($path);
+    // 将文件内容的table部分替换
+    $content = preg_replace('/<table>[\s\S]*?<\/table>/s', $table, $content);
+    file_put_contents($path, $content);
+}

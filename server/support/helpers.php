@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of webman.
  *
@@ -12,102 +13,141 @@
  * @license   http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
+use support\Container;
 use support\Request;
 use support\Response;
 use support\Translation;
-use support\Container;
-use support\view\Raw;
 use support\view\Blade;
+use support\view\Raw;
 use support\view\ThinkPHP;
 use support\view\Twig;
-use Workerman\Worker;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use Webman\App;
 use Webman\Config;
 use Webman\Route;
+use Workerman\Protocols\Http\Session;
+use Workerman\Worker;
 
-// Phar support.
-if (is_phar()) {
-    define('BASE_PATH', dirname(__DIR__));
-} else {
-    define('BASE_PATH', realpath(__DIR__ . '/../'));
-}
-define('WEBMAN_VERSION', '1.2.4');
-
+// Project base path
+define('BASE_PATH', dirname(__DIR__));
 
 /**
+ * return the program execute directory
+ * @param string $path
  * @return string
  */
-function base_path()
+function run_path(string $path = ''): string
 {
-    return BASE_PATH;
-}
-
-/**
- * @return string
- */
-function app_path()
-{
-    return BASE_PATH . DIRECTORY_SEPARATOR . 'app';
-}
-
-/**
- * @return string
- */
-function public_path()
-{
-    return BASE_PATH . DIRECTORY_SEPARATOR . 'public';
-}
-
-/**
- * @return string
- */
-function config_path()
-{
-    return BASE_PATH . DIRECTORY_SEPARATOR . 'config';
-}
-
-/**
- * Phar support.
- * Compatible with the 'realpath' function in the phar file.
- *
- * @return string
- */
-function runtime_path()
-{
-    static $runtime_path;
-    if (!$runtime_path) {
-        $runtime_path = is_phar() ? dirname(Phar::running(false)) . DIRECTORY_SEPARATOR . 'runtime'
-            : $runtime_path = BASE_PATH . DIRECTORY_SEPARATOR . 'runtime';
+    static $runPath = '';
+    if (!$runPath) {
+        $runPath = is_phar() ? dirname(Phar::running(false)) : BASE_PATH;
     }
-    return $runtime_path;
+    return path_combine($runPath, $path);
 }
 
 /**
+ * if the param $path equal false,will return this program current execute directory
+ * @param string|false $path
+ * @return string
+ */
+function base_path($path = ''): string
+{
+    if (false === $path) {
+        return run_path();
+    }
+    return path_combine(BASE_PATH, $path);
+}
+
+/**
+ * App path
+ * @param string $path
+ * @return string
+ */
+function app_path(string $path = ''): string
+{
+    return path_combine(BASE_PATH . DIRECTORY_SEPARATOR . 'app', $path);
+}
+
+/**
+ * Public path
+ * @param string $path
+ * @return string
+ */
+function public_path(string $path = ''): string
+{
+    static $publicPath = '';
+    if (!$publicPath) {
+        $publicPath = \config('app.public_path') ?: run_path('public');
+    }
+    return path_combine($publicPath, $path);
+}
+
+/**
+ * Config path
+ * @param string $path
+ * @return string
+ */
+function config_path(string $path = ''): string
+{
+    return path_combine(BASE_PATH . DIRECTORY_SEPARATOR . 'config', $path);
+}
+
+/**
+ * Runtime path
+ * @param string $path
+ * @return string
+ */
+function runtime_path(string $path = ''): string
+{
+    static $runtimePath = '';
+    if (!$runtimePath) {
+        $runtimePath = \config('app.runtime_path') ?: run_path('runtime');
+    }
+    return path_combine($runtimePath, $path);
+}
+
+/**
+ * Generate paths based on given information
+ * @param string $front
+ * @param string $back
+ * @return string
+ */
+function path_combine(string $front, string $back): string
+{
+    return $front . ($back ? (DIRECTORY_SEPARATOR . ltrim($back, DIRECTORY_SEPARATOR)) : $back);
+}
+
+/**
+ * Response
  * @param int $status
  * @param array $headers
  * @param string $body
  * @return Response
  */
-function response($body = '', $status = 200, $headers = array())
+function response(string $body = '', int $status = 200, array $headers = []): Response
 {
     return new Response($status, $headers, $body);
 }
 
 /**
+ * Json response
  * @param $data
  * @param int $options
  * @return Response
  */
-function json($data, $options = JSON_UNESCAPED_UNICODE)
+function json($data, int $options = JSON_UNESCAPED_UNICODE): Response
 {
     return new Response(200, ['Content-Type' => 'application/json'], json_encode($data, $options));
 }
 
 /**
+ * Xml response
  * @param $xml
  * @return Response
  */
-function xml($xml)
+function xml($xml): Response
 {
     if ($xml instanceof SimpleXMLElement) {
         $xml = $xml->asXML();
@@ -116,25 +156,27 @@ function xml($xml)
 }
 
 /**
+ * Jsonp response
  * @param $data
- * @param string $callback_name
+ * @param string $callbackName
  * @return Response
  */
-function jsonp($data, $callback_name = 'callback')
+function jsonp($data, string $callbackName = 'callback'): Response
 {
     if (!is_scalar($data) && null !== $data) {
         $data = json_encode($data);
     }
-    return new Response(200, [], "$callback_name($data)");
+    return new Response(200, [], "$callbackName($data)");
 }
 
 /**
- * @param $location
+ * Redirect response
+ * @param string $location
  * @param int $status
  * @param array $headers
  * @return Response
  */
-function redirect($location, $status = 302, $headers = [])
+function redirect(string $location, int $status = 302, array $headers = []): Response
 {
     $response = new Response($status, ['Location' => $location]);
     if (!empty($headers)) {
@@ -144,66 +186,76 @@ function redirect($location, $status = 302, $headers = [])
 }
 
 /**
- * @param $template
+ * View response
+ * @param string $template
  * @param array $vars
- * @param null $app
+ * @param string|null $app
+ * @param string|null $plugin
  * @return Response
  */
-function view($template, $vars = [], $app = null)
+function view(string $template, array $vars = [], string $app = null, string $plugin = null): Response
 {
-    static $handler;
-    if (null === $handler) {
-        $handler = config('view.handler');
-    }
-    return new Response(200, [], $handler::render($template, $vars, $app));
+    $request = \request();
+    $plugin = $plugin === null ? ($request->plugin ?? '') : $plugin;
+    $handler = \config($plugin ? "plugin.$plugin.view.handler" : 'view.handler');
+    return new Response(200, [], $handler::render($template, $vars, $app, $plugin));
 }
 
 /**
- * @param $template
+ * Raw view response
+ * @param string $template
  * @param array $vars
- * @param null $app
+ * @param string|null $app
  * @return Response
+ * @throws Throwable
  */
-function raw_view($template, $vars = [], $app = null)
+function raw_view(string $template, array $vars = [], string $app = null): Response
 {
     return new Response(200, [], Raw::render($template, $vars, $app));
 }
 
 /**
- * @param $template
+ * Blade view response
+ * @param string $template
  * @param array $vars
- * @param null $app
+ * @param string|null $app
  * @return Response
  */
-function blade_view($template, $vars = [], $app = null)
+function blade_view(string $template, array $vars = [], string $app = null): Response
 {
     return new Response(200, [], Blade::render($template, $vars, $app));
 }
 
 /**
- * @param $template
+ * Think view response
+ * @param string $template
  * @param array $vars
- * @param null $app
+ * @param string|null $app
  * @return Response
  */
-function think_view($template, $vars = [], $app = null)
+function think_view(string $template, array $vars = [], string $app = null): Response
 {
     return new Response(200, [], ThinkPHP::render($template, $vars, $app));
 }
 
 /**
- * @param $template
+ * Twig view response
+ * @param string $template
  * @param array $vars
- * @param null $app
+ * @param string|null $app
  * @return Response
+ * @throws LoaderError
+ * @throws RuntimeError
+ * @throws SyntaxError
  */
-function twig_view($template, $vars = [], $app = null)
+function twig_view(string $template, array $vars = [], string $app = null): Response
 {
     return new Response(200, [], Twig::render($template, $vars, $app));
 }
 
 /**
- * @return Request
+ * Get request
+ * @return \Webman\Http\Request|Request|null
  */
 function request()
 {
@@ -211,79 +263,115 @@ function request()
 }
 
 /**
- * @param $key
- * @param null $default
- * @return mixed
+ * Get config
+ * @param string|null $key
+ * @param $default
+ * @return array|mixed|null
  */
-function config($key = null, $default = null)
+function config(string $key = null, $default = null)
 {
     return Config::get($key, $default);
 }
 
 /**
- * @param $name
- * @param array $parameters
+ * Create url
+ * @param string $name
+ * @param ...$parameters
  * @return string
  */
-function route($name, $parameters = [])
+function route(string $name, ...$parameters): string
 {
     $route = Route::getByName($name);
     if (!$route) {
         return '';
     }
+
+    if (!$parameters) {
+        return $route->url();
+    }
+
+    if (is_array(current($parameters))) {
+        $parameters = current($parameters);
+    }
+
     return $route->url($parameters);
 }
 
 /**
- * @param null $key
- * @param null $default
- * @return mixed
+ * Session
+ * @param mixed $key
+ * @param mixed $default
+ * @return mixed|bool|Session
  */
 function session($key = null, $default = null)
 {
-    $session = request()->session();
+    $session = \request()->session();
     if (null === $key) {
         return $session;
     }
-    if (\is_array($key)) {
+    if (is_array($key)) {
         $session->put($key);
         return null;
+    }
+    if (strpos($key, '.')) {
+        $keyArray = explode('.', $key);
+        $value = $session->all();
+        foreach ($keyArray as $index) {
+            if (!isset($value[$index])) {
+                return $default;
+            }
+            $value = $value[$index];
+        }
+        return $value;
     }
     return $session->get($key, $default);
 }
 
 /**
- * @param null|string $id
+ * Translation
+ * @param string $id
  * @param array $parameters
  * @param string|null $domain
  * @param string|null $locale
  * @return string
  */
-function trans(string $id, array $parameters = [], string $domain = null, string $locale = null)
+function trans(string $id, array $parameters = [], string $domain = null, string $locale = null): string
 {
     $res = Translation::trans($id, $parameters, $domain, $locale);
     return $res === '' ? $id : $res;
 }
 
 /**
- * @param null|string $locale
+ * Locale
+ * @param string|null $locale
  * @return string
  */
-function locale(string $locale = null)
+function locale(string $locale = null): string
 {
     if (!$locale) {
         return Translation::getLocale();
     }
     Translation::setLocale($locale);
+    return $locale;
 }
 
 /**
- * Copy dir.
- * @param $source
- * @param $dest
+ * 404 not found
+ * @return Response
+ */
+function not_found(): Response
+{
+    return new Response(404, [], file_get_contents(public_path() . '/404.html'));
+}
+
+/**
+ * Copy dir
+ * @param string $source
+ * @param string $dest
+ * @param bool $overwrite
  * @return void
  */
-function copy_dir($source, $dest)
+function copy_dir(string $source, string $dest, bool $overwrite = false)
 {
     if (is_dir($source)) {
         if (!is_dir($dest)) {
@@ -292,21 +380,25 @@ function copy_dir($source, $dest)
         $files = scandir($source);
         foreach ($files as $file) {
             if ($file !== "." && $file !== "..") {
-                copy_dir("$source/$file", "$dest/$file");
+                copy_dir("$source/$file", "$dest/$file", $overwrite);
             }
         }
-    } else if (file_exists($source)) {
+    } else if (file_exists($source) && ($overwrite || !file_exists($dest))) {
         copy($source, $dest);
     }
 }
 
 /**
- * Remove dir.
- * @param $dir
+ * Remove dir
+ * @param string $dir
  * @return bool
  */
-function remove_dir($dir) {
-    $files = array_diff(scandir($dir), array('.','..'));
+function remove_dir(string $dir): bool
+{
+    if (is_link($dir) || is_file($dir)) {
+        return unlink($dir);
+    }
+    $files = array_diff(scandir($dir), array('.', '..'));
     foreach ($files as $file) {
         (is_dir("$dir/$file") && !is_link($dir)) ? remove_dir("$dir/$file") : unlink("$dir/$file");
     }
@@ -314,11 +406,13 @@ function remove_dir($dir) {
 }
 
 /**
+ * Bind worker
  * @param $worker
  * @param $class
  */
-function worker_bind($worker, $class) {
-    $callback_map = [
+function worker_bind($worker, $class)
+{
+    $callbackMap = [
         'onConnect',
         'onMessage',
         'onClose',
@@ -326,9 +420,10 @@ function worker_bind($worker, $class) {
         'onBufferFull',
         'onBufferDrain',
         'onWorkerStop',
-        'onWebSocketConnect'
+        'onWebSocketConnect',
+        'onWorkerReload'
     ];
-    foreach ($callback_map as $name) {
+    foreach ($callbackMap as $name) {
         if (method_exists($class, $name)) {
             $worker->$name = [$class, $name];
         }
@@ -339,13 +434,15 @@ function worker_bind($worker, $class) {
 }
 
 /**
- * @param $process_name
+ * Start worker
+ * @param $processName
  * @param $config
  * @return void
  */
-function worker_start($process_name, $config) {
+function worker_start($processName, $config)
+{
     $worker = new Worker($config['listen'] ?? null, $config['context'] ?? []);
-    $property_map = [
+    $propertyMap = [
         'count',
         'user',
         'group',
@@ -354,30 +451,15 @@ function worker_start($process_name, $config) {
         'transport',
         'protocol',
     ];
-    $worker->name = $process_name;
-    foreach ($property_map as $property) {
+    $worker->name = $processName;
+    foreach ($propertyMap as $property) {
         if (isset($config[$property])) {
             $worker->$property = $config[$property];
         }
     }
 
     $worker->onWorkerStart = function ($worker) use ($config) {
-        require_once base_path() . '/support/bootstrap.php';
-
-        foreach ($config['services'] ?? [] as $server) {
-            if (!class_exists($server['handler'])) {
-                echo "process error: class {$server['handler']} not exists\r\n";
-                continue;
-            }
-            $listen = new Worker($server['listen'] ?? null, $server['context'] ?? []);
-            if (isset($server['listen'])) {
-                echo "listen: {$server['listen']}\n";
-            }
-            $instance = Container::make($server['handler'], $server['constructor'] ?? []);
-            worker_bind($listen, $instance);
-            $listen->listen();
-        }
-
+        require_once base_path('/support/bootstrap.php');
         if (isset($config['handler'])) {
             if (!class_exists($config['handler'])) {
                 echo "process error: class {$config['handler']} not exists\r\n";
@@ -387,47 +469,60 @@ function worker_start($process_name, $config) {
             $instance = Container::make($config['handler'], $config['constructor'] ?? []);
             worker_bind($worker, $instance);
         }
-
     };
 }
 
 /**
- * Phar support.
- * Compatible with the 'realpath' function in the phar file.
- *
- * @param string $file_path
+ * Get realpath
+ * @param string $filePath
  * @return string
  */
-function get_realpath(string $file_path): string
+function get_realpath(string $filePath): string
 {
-    if (is_phar()) {
-        return $file_path;
+    if (strpos($filePath, 'phar://') === 0) {
+        return $filePath;
     } else {
-        return realpath($file_path);
+        return realpath($filePath);
     }
 }
 
 /**
+ * Is phar
  * @return bool
  */
-function is_phar()
+function is_phar(): bool
 {
-    return class_exists(\Phar::class, false) && Phar::running();
+    return class_exists(Phar::class, false) && Phar::running();
 }
 
 /**
+ * Get cpu count
  * @return int
  */
-function cpu_count() {
+function cpu_count(): int
+{
     // Windows does not support the number of processes setting.
-    if (\DIRECTORY_SEPARATOR === '\\') {
+    if (DIRECTORY_SEPARATOR === '\\') {
         return 1;
     }
-    if (strtolower(PHP_OS) === 'darwin') {
-        $count = shell_exec('sysctl -n machdep.cpu.core_count');
-    } else {
-        $count = shell_exec('nproc');
+    $count = 4;
+    if (is_callable('shell_exec')) {
+        if (strtolower(PHP_OS) === 'darwin') {
+            $count = (int)shell_exec('sysctl -n machdep.cpu.core_count');
+        } else {
+            $count = (int)shell_exec('nproc');
+        }
     }
-    $count = (int)$count > 0 ? (int)$count : 4;
-    return $count;
+    return $count > 0 ? $count : 4;
+}
+
+/**
+ * Get request parameters, if no parameter name is passed, an array of all values is returned, default values is supported
+ * @param string|null $param param's name
+ * @param mixed|null $default default value
+ * @return mixed|null
+ */
+function input(string $param = null, $default = null)
+{
+    return is_null($param) ? request()->all() : request()->input($param, $default);
 }
