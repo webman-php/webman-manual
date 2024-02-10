@@ -163,12 +163,22 @@
       </a>
     </td>
     <td align="center">
-      <a href="https://github.com/oladoyinbov">
-        <img src="https://avatars.githubusercontent.com/u/73993087?v=4" width="100px;"/><h5>oladoyinbov</h3>
+      <a href="https://github.com/hiders-cn">
+        <img src="https://avatars.githubusercontent.com/u/37099678?v=4" width="100px;"/><h5>hiders-cn</h3>
       </a>
     </td>
   </tr>
   <tr>
+    <td align="center">
+      <a href="https://github.com/nidiac">
+        <img src="https://avatars.githubusercontent.com/u/9798319?v=4" width="100px;"/><h5>nidiac</h3>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/oladoyinbov">
+        <img src="https://avatars.githubusercontent.com/u/73993087?v=4" width="100px;"/><h5>oladoyinbov</h3>
+      </a>
+    </td>
     <td align="center">
       <a href="https://github.com/ooing">
         <img src="https://avatars.githubusercontent.com/u/5188151?v=4" width="100px;"/><h5>ooing</h3>
@@ -199,6 +209,8 @@
         <img src="https://avatars.githubusercontent.com/u/13976521?v=4" width="100px;"/><h5>tingfeng-key</h3>
       </a>
     </td>
+  </tr>
+  <tr>
     <td align="center">
       <a href="https://github.com/wansxlysys">
         <img src="https://avatars.githubusercontent.com/u/38864787?v=4" width="100px;"/><h5>wansxlysys</h3>
@@ -209,8 +221,6 @@
         <img src="https://avatars.githubusercontent.com/u/12838756?v=4" width="100px;"/><h5>weijer</h3>
       </a>
     </td>
-  </tr>
-  <tr>
     <td align="center">
       <a href="https://github.com/woodongwong">
         <img src="https://avatars.githubusercontent.com/u/9292647?v=4" width="100px;"/><h5>woodongwong</h3>
