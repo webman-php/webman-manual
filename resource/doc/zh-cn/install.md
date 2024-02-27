@@ -24,13 +24,13 @@ composer create-project workerman/webman
 `debug`方式运行（用于开发调试）
  
 ```php
-php start.php start
+php start.php start -d
 ```
 
 `daemon`方式运行（用于正式环境）
 
 ```php
-php start.php start -d
+php start.php start
 ```
 
 > **提示**
