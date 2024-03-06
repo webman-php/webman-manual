@@ -15,7 +15,7 @@ try {
 }
 ```
 
-这里特别需要注意的是**必须使用**`\Throwable`而**不能使用**`\Exception`，因为业务处理过程中可能触发`Error`，它并不属于`Exception`，catch捕捉不到导致bug。
+这里特别需要注意的是**必须使用**`\Throwable`而**不能使用**`\Exception`，因为业务处理过程中可能触发`Error`，它并不属于`Exception`
 
 ## 数据库连接
 
@@ -62,4 +62,5 @@ try {
 
 `composer require webman/log`
 
-主要需要restart重启，reload重启不生效
+> **注意**
+> 安装后需要restart重启，reload不生效
