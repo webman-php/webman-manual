@@ -157,6 +157,26 @@ class MyMailSend implements Consumer
         // 无需反序列化
         var_export($data); // 输出 ['to' => 'tom@gmail.com', 'content' => 'hello']
     }
+    // 消费失败回调
+    /* 
+    $package = [
+        'id' => 1357277951, // 消息ID
+        'time' => 1709170510, // 消息时间
+        'delay' => 0, // 延迟时间
+        'attempts' => 2, // 消费次数
+        'queue' => 'send-mail', // 队列名
+        'data' => ['to' => 'tom@gmail.com', 'content' => 'hello'], // 消息内容
+        'max_attempts' => 5, // 最大重试次数
+        'error' => '错误信息' // 错误信息
+    ]
+    */
+    public function onConsumeFailure(\Throwable $e, $package)
+    {
+        echo "consume failure\n";
+        echo $e->getMessage() . "\n";
+        // 无需反序列化
+        var_export($package); 
+    }
 }
 ```
 
@@ -172,6 +192,9 @@ class MyMailSend implements Consumer
 
 > **提示**
 > windows用户需要执行php windows.php 启动webman，否则不会启动消费进程
+
+> **提示**
+> onConsumeFailure回调会在每次消费失败时触发，你可以在这里处理失败后的逻辑。
 
 ## 为不同的队列设置不同的消费进程
 默认情况下，所有的消费者共用相同的消费进程。但有时我们需要将一些队列的消费独立出来，例如消费慢的业务放到一组进程中消费，消费快的业务放到另外一组进程消费。为此我们可以将消费者分为两个目录，例如 `app_path() . '/queue/redis/fast'` 和 `app_path() . '/queue/redis/slow'` （注意消费类的命名空间需要做相应的更改），则配置如下：
