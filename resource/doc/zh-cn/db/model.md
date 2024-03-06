@@ -560,3 +560,6 @@ class User extends Model
     }
 }
 ```
+
+## 事务
+参见[数据库事务](../others/transaction.md)

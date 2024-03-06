@@ -393,6 +393,9 @@ Db::table('users')->where('votes', '>', 100)->delete();
 Db::table('users')->truncate();
 ```
 
+## 事务
+参见[数据库事务](../others/transaction.md)
+
 ## 悲观锁
 查询构造器也包含一些可以帮助你在 select 语法上实现「悲观锁定」的函数。若想在查询中实现一个「共享锁」， 你可以使用 sharedLock 方法。 共享锁可防止选中的数据列被篡改，直到事务被提交为止:
 ```php
