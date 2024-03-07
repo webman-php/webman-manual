@@ -44,7 +44,7 @@ class User
 ```
 
 ## 发布事件
-使用`Event::emit($event_name, $data);`发布事件，例如
+使用`Event::emit($event_name, $data);` 或 `Event::dispatch($event_name, $data);` 发布事件，例如
 ```php
 <?php
 namespace app\controller;
@@ -63,8 +63,13 @@ class User
 }
 ```
 
+发布事件有两个函数，`Event::emit($event_name, $data);` 和 `Event::dispatch($event_name, $data);` 二者参数一样。
+区别是emit内部会自动捕获异常，也就是说如果一个事件有多个处理函数，某个处理函数发生异常不会影响其它处理函数的执行。
+而dispatch则内部不会自动捕获异常，当前事件的任何一个处理函数发生异常，则停止执行下一个处理函数并直接向上抛出异常。
+
 > **提示**
-> `Event::emit($event_name, $data);`参数$data可以是任意的数据，例如数组、类实例、字符串等
+> 参数$data可以是任意的数据，例如数组、类实例、字符串等
+
 
 ## 通配符事件监听
 通配符注册监听允许您在同一个监听器上处理多个事件，例如`config/event.php`里配置
