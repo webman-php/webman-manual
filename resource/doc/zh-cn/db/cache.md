@@ -50,7 +50,8 @@ class UserController
 ```
 
 > **注意**
-> key尽量加一个前缀，避免与其它使用redis的业务冲突
+> key尽量加一个前缀，避免与其它使用redis的业务冲突。
+> symfony/cache 的key不允许包含字符"{}()/\@:"
 
 ## 使用其它Cache组件
 
