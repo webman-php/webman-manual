@@ -58,6 +58,9 @@ if (!$validate->check($data)) {
 }
 ```
 
+> **注意**
+> webman里不支持think-validate的`Validate::rule()`方法
+
 <a name="respect-validation"></a>
 # 验证器 workerman/validation
 
