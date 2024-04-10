@@ -1,8 +1,8 @@
 # 数据库
 
-由于大部分插件都会安装[webman-admin](https://www.workerman.net/plugin/82)，所以建议直接复用[webman-admin](https://www.workerman.net/plugin/82)的数据库配置。
+由于大部分插件都会安装[webman-admin](https://www.workerman.net/plugin/82)，所以建议直接复用`webman-admin`的数据库配置。
 
-模型基类使用`plugin\admin\app\model\Base`则会自动使用[webman-admin](https://www.workerman.net/plugin/82)的数据库配置。
+模型基类使用`plugin\admin\app\model\Base`则会自动使用`webman-admin`的数据库配置。
 ```php
 <?php
 
@@ -29,7 +29,7 @@ class Orders extends Base
 }
 ```
 
-也可以通过`plugin.admin.mysql`操作[webman-admin](https://www.workerman.net/plugin/82)的数据库，例如
+也可以通过`plugin.admin.mysql`操作`webman-admin`的数据库，例如
 
 ```php
 Db::connection('plugin.admin.mysql')->table('user')->first();
