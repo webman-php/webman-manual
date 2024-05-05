@@ -41,5 +41,5 @@ class WechatController
   
 ### 更多内容
 
-访问 https://www.easywechat.com/5.x/
+访问 https://easywechat.com/5.x/
 
