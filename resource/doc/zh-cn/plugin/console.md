@@ -12,8 +12,11 @@ composer require webman/console
 
 ## 支持的命令
 **使用方法**  
-`php webman 命令` 或者 `php webman 命令`。
-例如 `php webman version` 或者 `php webman version`
+`php webman 命令`
+例如 `php webman version`  
+
+> ** 提示 **
+> linux系统下可简化为 `./webman 命令`
 
 ## 支持的命令
 ### version
