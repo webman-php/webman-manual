@@ -3,7 +3,7 @@
 webman支持将项目打包成一个二进制文件，这使得webman无需php环境也能在linux系统运行起来。
 
 > **注意**
-> 打包后的文件目前只支持运行在x86_64架构的linux系统上，不支持mac系统
+> 打包后的文件目前只支持运行在x86_64架构的linux系统上，不支持windows和mac系统
 > 需要关闭`php.ini`的phar配置选项，既设置 `phar.readonly = 0`
 
 ## 安装命令行工具
