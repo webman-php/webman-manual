@@ -304,6 +304,35 @@ Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->mi
 ]);
 ```
 
+中间件里使用参数示例
+```
+<?php
+namespace app\middleware;
+
+use Webman\MiddlewareInterface;
+use Webman\Http\Response;
+use Webman\Http\Request;
+
+class MiddlewareA implements MiddlewareInterface
+{
+    protected $param1;
+
+    protected $param2;
+
+    public function __construct($param1, $param2)
+    {
+        $this->param1 = $param1;
+        $this->param2 = $param2;
+    }
+
+    public function process(Request $request, callable $handler) : Response
+    {
+        var_dump($this->param1, $this->param2);
+        return $handler($request);
+    }
+}
+```
+
 ## 中间件执行顺序
  - 中间件执行顺序为`全局中间件`->`应用中间件`->`路由中间件`。
  - 有多个全局中间件时，按照中间件实际配置顺序执行(应用中间件、路由中间件同理)。
