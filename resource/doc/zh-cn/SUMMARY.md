@@ -59,7 +59,6 @@
   - [支付SDK](components/payment.md)
   - [Casbin SDK](components/casbin.md)
   - [单元测试](components/unitest.md)
-  - [错误码生成](components/generate_error_code.md)
 
 - 基础插件
   - [基础插件](plugin/base.md)
