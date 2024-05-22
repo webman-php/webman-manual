@@ -299,6 +299,8 @@ Route::resource($path, $callback, [$options]);
 Route::disableDefaultRoute($plugin = '');
 // 回退路由，设置默认的路由兜底
 Route::fallback($callback, $plugin = '');
+// 获取所有路由信息
+Route::getRoutes();
 ```
 如果uri没有对应的路由(包括默认路由)，且回退路由也未设置，则会返回404。
 
