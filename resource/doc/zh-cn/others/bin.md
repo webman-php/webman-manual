@@ -38,6 +38,7 @@ php webman build:bin 8.1
 * 运行过程中会在webman.bin所在目录生成runtime目录，用于存放日志文件
 * 目前webman.bin不会读取外部php.ini文件，如需要自定义php.ini，请在 `/config/plugin/webman/console/app.php` 文件custom_ini中设置
 * 有些文件不需要打包，可以设置`config/plugin/webman/console/app.php`排除掉，避免打包后的文件过大
+* 切勿将用户上传的文件存储在包中，因为以`phar://`协议操作用户上传的文件是非常危险的(phar反序列化漏洞)。用户上传的文件必须单独存储在包之外的磁盘中(参考[phar打包](phar.md))。
 
 ## 单独下载静态PHP
 有时候你只是不想部署PHP环境，只需要一个PHP可执行文件，点击请点击这里下载[静态php下载](https://www.workerman.net/download)
