@@ -10,9 +10,6 @@ phar是PHP里类似于JAR的一种打包文件，你可以利用phar将你的web
 ## 安装命令行工具
 `composer require webman/console`
 
-## 配置设置
-打开 `config/plugin/webman/console/app.php` 文件，设置 `'exclude_pattern'   => '#^(?!.*(composer.json|/.github/|/.idea/|/.git/|/.setting/|/runtime/|/vendor-bin/|/build/|vendor/webman/admin))(.*)$#'`，用户打包时排除一些无用的目录及文件，避免打包体积过大
-
 ## 打包
 在webman项目根目录执行命令 `php webman phar:pack`
 会在bulid目录生成一个`webman.phar`文件。
@@ -37,15 +34,19 @@ phar是PHP里类似于JAR的一种打包文件，你可以利用phar将你的web
 `php webman.phar restart` 或 `php webman.phar restart -d`
 
 ## 说明
+* 为了避免打包文件尺寸过大占用过多内存，可以设置 `config/plugin/webman/console/app.php`里的`exclude_pattern` `exclude_files`选项将排除不必要的文件。
+
 * 运行webman.phar后会在webman.phar所在目录生成runtime目录，用于存放日志等临时文件。
 
 * 如果你的项目里使用了.env文件，需要将.env文件放在webman.phar所在目录。
 
-* 如果你的业务需要上传文件到public目录，也需要将public目录独立出来放在webman.phar所在目录，这时候需要配置`config/app.php`。
+* 切勿将用户上传的文件存储在phar包中，因为以`phar://`协议操作用户上传的文件是非常危险的(phar反序列化漏洞)。用户上传的文件必须单独存储在phar包之外的磁盘中，参见下面。
+
+* 如果你的业务需要上传文件到public目录，需要将public目录独立出来放在webman.phar所在目录，这时候需要配置`config/app.php`。
 ```
 'public_path' => base_path(false) . DIRECTORY_SEPARATOR . 'public',
 ```
-业务可以使用助手函数`public_path()`找到实际的public目录位置。
+业务可以使用助手函数`public_path($文件相对位置)`找到实际的public目录位置。
 
-* webman.phar不支持在windows下开启自定义进程
+* 注意webman.phar不支持在windows下开启自定义进程
 
