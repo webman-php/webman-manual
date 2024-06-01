@@ -48,6 +48,9 @@ proc_open
 proc_get_status
 proc_close
 shell_exec
+exec
+putenv
+getenv
 ```
 
 
