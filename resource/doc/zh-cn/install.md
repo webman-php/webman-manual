@@ -21,13 +21,13 @@ composer create-project workerman/webman
 > 如果有报错，很可能是有函数被禁用，参考[函数禁用检查](others/disable-function-check.md)解除禁用
 
 #### linux用户
-`debug`方式运行（用于开发调试）
+调试方式运行（用于开发调试，打印数据会显示在终端，终端关闭后webman服务关闭）
  
 ```php
 php start.php start
 ```
 
-`daemon`方式运行（用于正式环境）
+守护进程方式运行（用于正式环境，打印数据不会显示在终端，终端关闭后服务会继续运行）
 
 ```php
 php start.php start -d
