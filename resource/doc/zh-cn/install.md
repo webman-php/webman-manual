@@ -27,7 +27,7 @@ composer create-project workerman/webman
 php start.php start
 ```
 
-守护进程方式运行（用于正式环境，打印数据不会显示在终端，终端关闭后webman服务会持续运行，保证客户端能一直访问）
+守护进程方式运行（用于正式环境，打印数据不会显示在终端，终端关闭后webman服务会持续运行）
 
 ```php
 php start.php start -d
