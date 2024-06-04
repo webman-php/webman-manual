@@ -14,7 +14,7 @@
 ## XSS过滤
 考虑通用性，webman没有对请求进行XSS转义。
 webman强烈推荐在渲染时进行XSS转义，而不是在入库前进行转义。
-并且twig、blade、think-tmplate等模版会自动执行XSS转义，无需手动转义，非常方便。
+并且twig、blade、think-template等模版会自动执行XSS转义，无需手动转义，非常方便。
 
 > **提示**
 > 如果你在入库前进行XSS转义，很可能造成一些应用插件的不兼容问题
