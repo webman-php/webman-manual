@@ -308,10 +308,10 @@ Route::any('/admin/user/get', function (Reqeust $reqeust) {
 use support\view\Twig;
 return [
     'handler' => Twig::class,
-    'extension' => function (Twig\Environment $twig) {
+    'extension' => function (\Twig\Environment $twig) {
         $twig->addExtension(new your\namespace\YourExtension()); // 增加Extension
-        $twig->addFilter(new Twig\TwigFilter('rot13', 'str_rot13')); // 增加Filter
-        $twig->addFunction(new Twig\TwigFunction('function_name', function () {})); // 增加函数
+        $twig->addFilter(new \Twig\TwigFilter('rot13', 'str_rot13')); // 增加Filter
+        $twig->addFunction(new \Twig\TwigFunction('function_name', function () {})); // 增加函数
     }
 ];
 ```
