@@ -105,6 +105,11 @@ Route::any('/user[/{name}]', function ($request, $name = null) {
    return response($name ?? 'tom');
 });
 
+// 匹配 任意以/user/为前缀的请求
+Route::any('/user/[{path:.+}]', function (Request  $request) {
+    return $request->path();
+});
+
 // 匹配所有options请求
 Route::options('[{path:.+}]', function () {
     return response('');
