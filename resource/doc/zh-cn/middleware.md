@@ -532,7 +532,7 @@ return [
 ```php
 return [
     'plugin.ai' => [], // 给ai插件增加中间件
-    'plugin.ai.admin' => [], // 给ai插件的admin模块增加中间件
+    'plugin.ai.admin' => [], // 给ai插件的admin模块(plugin\ai\app\admin目录)增加中间件
 ];
 ```
 
