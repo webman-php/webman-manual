@@ -48,6 +48,9 @@ class UserController
 }
 ```
 
+> **注意**
+> 以上是v3版本用法
+
 ### 更多内容
 
 访问 https://image.intervention.io/v3
