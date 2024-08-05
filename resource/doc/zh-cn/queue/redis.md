@@ -202,7 +202,7 @@ class MyMailSend implements Consumer
 return [
     ...这里省略了其它配置...
     
-    'redis_consumer_fast'  => [
+    'redis_consumer_fast'  => [ // key是自定义的，没有格式限制，这里取名redis_consumer_fast
         'handler'     => Webman\RedisQueue\Process\Consumer::class,
         'count'       => 8,
         'constructor' => [
@@ -210,7 +210,7 @@ return [
             'consumer_dir' => app_path() . '/queue/redis/fast'
         ]
     ],
-    'redis_consumer_slow'  => [
+    'redis_consumer_slow'  => [  // key是自定义的，没有格式限制，这里取名redis_consumer_slow
         'handler'     => Webman\RedisQueue\Process\Consumer::class,
         'count'       => 8,
         'constructor' => [
