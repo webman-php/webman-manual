@@ -18,6 +18,7 @@ server {
   server_name 站点域名;
   listen 80;
   access_log off;
+  # 注意，这里一定是webman下的public目录，不能是webman根目录
   root /your/webman/public;
 
   location ^~ / {
@@ -30,7 +31,26 @@ server {
           proxy_pass http://webman;
       }
   }
+
+  # 拒绝访问所有以 .php 结尾的文件
+  location ~ \.php$ {
+      return 404;
+  }
+
+  # 允许访问 .well-known 目录
+  location ~ ^/\.well-known/ {
+    allow all;
+  }
+
+  # 拒绝访问所有以 . 开头的文件或目录
+  location ~ /\. {
+      return 404;
+  }
+
 }
 ```
 
 一般来说以上配置开发者只需要将server_name和root配置成实际值即可，其它字段不需要配置。
+
+> **注意**
+> 特别注意的是，root选项一定要配置成webman下的public目录，千万不要直接设置成webman目录，否则你的所有文件可能会被外网下载访问，包括数据库配置等敏感文件。
