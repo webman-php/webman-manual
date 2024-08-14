@@ -294,6 +294,8 @@ Route::patch($uri, $callback);
 Route::delete($uri, $callback);
 // 设置$uri的head请求的路由
 Route::head($uri, $callback);
+// 设置$uri的options请求的路由
+Route::options($uri, $callback);
 // 同时设置多种请求类型的路由
 Route::add(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'], $uri, $callback);
 // 分组路由
