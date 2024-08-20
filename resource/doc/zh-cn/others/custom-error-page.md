@@ -34,6 +34,21 @@ Route::fallback(function(Request $request){
 });
 ```
 
+## 自定义405
+从webman-framework 1.5.23开始，回调函数支持传递status参数，如果status是404则代表请求不存在，405代表不支持当前请求方法(例如Route::post()设置的路由通过GET方式访问)
+```php
+use support\Request;
+use Webman\Route;
+
+Route::fallback(function(Request $request, $status) {
+    $map = [
+        404 => '404 not found',
+        405 => '405 method not allowed',
+    ];
+    return response($map[$status], $status);
+});
+```
+
 ## 自定义500
 **新建`app/view/500.html`**
 
