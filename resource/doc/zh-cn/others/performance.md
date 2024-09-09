@@ -1,7 +1,7 @@
 # webman性能
 
 
-###传统框架请求处理流程
+### 传统框架请求处理流程
 
 1. nginx/apache接收请求
 2. nginx/apache将请求传递给php-fpm
@@ -20,7 +20,7 @@
 15. nginx/apache将结果返回给客户端
 
 
-###webman的请求处理流程
+### webman的请求处理流程
 1. 框架接收请求
 2. 框架执行业务逻辑(opcode字节码)
 3. 框架将结果返回给客户端
