@@ -6,7 +6,7 @@ webman数据库默认采用的是 [illuminate/database](https://github.com/illum
 
 ## 安装
 
-`composer require -W illuminate/database illuminate/pagination illuminate/events symfony/var-dumper`
+`composer require -W illuminate/database illuminate/pagination illuminate/events symfony/var-dumper laravel/serializable-closure`
 
 安装后需要restart重启(reload无效)
 
