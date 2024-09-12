@@ -12,7 +12,7 @@ webman数据库默认采用的是 [illuminate/database](https://github.com/illum
 
 > **提示**
 > 如果不需要分页、数据库事件、打印SQL，则只需要执行
-> `composer require -W illuminate/database`
+> `composer require -W illuminate/database laravel/serializable-closure`
 
 ## 数据库配置
 `config/database.php`
