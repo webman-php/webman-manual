@@ -31,12 +31,12 @@ GitHub: https://github.com/walkor/webman **不要吝啬你的小星星哦**
 # 第三方权威压测数据
 
 
-![](../assets/img/benchmark1.png)
+[![](../assets/img/benchmark1.png)](https://www.techempower.com/benchmarks/#section=data-r20&hw=ph&test=db&l=zik073-sf)
 
 带数据库查询业务，webman单机吞吐量达到39万QPS，比传统php-fpm架构的laravel框架高出近80倍。
 
 
-![](../assets/img/benchmarks-go.png)
+[![](../assets/img/benchmarks-go.png)](https://www.techempower.com/benchmarks/#section=data-r20&hw=ph&test=db&l=zik073-sf)
 
 带数据库查询业务，webman比同类型go语言的web框架性能高一倍左右。
 
