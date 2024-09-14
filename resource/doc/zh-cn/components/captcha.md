@@ -93,21 +93,11 @@ class LoginController
      */
     public function captcha(Request $request)
     {
-        // 初始化验证码类
-        $builder = new CaptchaBuilder;
-        // 验证码长度
-        $length = 4;
-        // 包含哪些字符
-        $chars = '0123456789abcefghijklmnopqrstuvwxyz';
-        $builder = new PhraseBuilder($length, $chars);
-        $captcha = new CaptchaBuilder(null, $builder);
-        // 生成验证码
-        $builder->build();
-        // 将验证码的值存储到session中
-        $request->session()->set('captcha', strtolower($builder->getPhrase()));
-        // 获得验证码图片二进制数据
-        $img_content = $builder->get();
-        // 输出验证码二进制数据
+        $builder = new PhraseBuilder(4, 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ');
+        $captcha = new Captcha(null, $builder);
+        $captcha->build();
+        $request->session()->set('join', strtolower($captcha->getPhrase()));
+        $img_content = $captcha->get();
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
     }
 ```
