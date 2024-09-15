@@ -34,7 +34,7 @@ class UserController
 ## 配置文件位置
 配置文件在 `config/cache.php`。如果你的webman没有这个文件，请手动创建，并在项目根目录执行 `composer require workerman/webman-framework ^1.5.24` 升级 `workerman/webman-framework`。
 
-## 配置文件
+## 配置文件内容
 ```php
 <?php
 return [
