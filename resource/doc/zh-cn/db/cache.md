@@ -60,20 +60,21 @@ return [
 此为默认驱动，可通过`default`字段更改。
 
 ### redis Redis驱动
-Redis存储，如需使用请先安装Redis组件
+Redis存储，如需使用请先安装Redis组件，命令如下
 
-**php 7.x**
+* php 7.x
 ```
 composer require -W illuminate/redis ^8.2.0
 ```
-**php 8.x**
+* php 8.x
 ```
 composer require -W illuminate/redis
 ```
 > **提示**
 > 要想使用`illuminate/redis`请确保`php-cli`安装了Redis扩展，执行`php -m` 查看`php-cli`支持的扩展。
 
-**stores.redis.connection** 对应的是`config/redis.php` 里对应的key。建议在`config/redis.php`创建一个独立的key，例如cache类似如下
+### stores.redis.connection
+stores.redis.connection 对应的是`config/redis.php` 里对应的key。建议在`config/redis.php`创建一个独立的key，例如cache类似如下
 
 ```php
 <?php
@@ -114,10 +115,6 @@ return [
     ]
 ];
 ```
-
-> **注意**
-> symfony/cache 的key不允许包含字符"{}()/\@:"
-
 ### array 内存驱动
 内存存储，性能最好，但是会占用内存，一般用于缓存数据量小的项目。
 
@@ -127,6 +124,10 @@ return [
 Cache::store('redis')->set('key', 'value');
 Cache::store('array')->set('key', 'value');
 ```
+
+> **注意**
+> symfony/cache 的key不允许包含字符"{}()/\@:"
+
 
 ## 使用其它Cache组件
 
