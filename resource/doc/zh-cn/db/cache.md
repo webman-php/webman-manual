@@ -54,7 +54,7 @@ return [
     ]
 ];
 ```
-Cache支持3种驱动，file、redis、array。
+`stores.driver`支持3种驱动，**file**、**redis**、**array**。
 
 ### file 文件驱动
 此为默认驱动，可通过`default`字段更改。
@@ -73,7 +73,7 @@ composer require -W illuminate/redis
 > **提示**
 > 要想使用`illuminate/redis`请确保`php-cli`安装了Redis扩展，执行`php -m` 查看`php-cli`支持的扩展。
 
-**connection** 对应的是`config/redis.php` 里对应的key。建议在`config/redis.php`创建一个独立的cache配置，例如
+**stores.redis.connection** 对应的是`config/redis.php` 里对应的key。建议在`config/redis.php`创建一个独立的key，例如cache类似如下
 
 ```php
 <?php
@@ -94,7 +94,7 @@ return [
 ];
 ```
 
-然后将`connection`设置为`cache`，`config/cache.php`最终配置类似如下
+然后将`stores.redis.connection`设置为`cache`，`config/cache.php`最终配置类似如下
 ```php
 <?php
 return [
@@ -121,8 +121,8 @@ return [
 ### array 内存驱动
 内存存储，性能最好，但是会占用内存，一般用于缓存数据量小的项目。
 
-## 切换驱动类型
-可以通过如下代码切换驱动类型
+## 切换存储
+可以通过如下代码手动切store，从而使用不同的存储驱动，例如
 ```php
 Cache::store('redis')->set('key', 'value');
 Cache::store('array')->set('key', 'value');
