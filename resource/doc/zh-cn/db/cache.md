@@ -125,9 +125,11 @@ Cache::store('redis')->set('key', 'value');
 Cache::store('array')->set('key', 'value');
 ```
 
-> **注意**
+> **提示**
 > symfony/cache 的key不允许包含字符"{}()/\@:"
 
+> **注意**
+> 此特性需要 workerman/webman-framework版本 >= 1.5.24
 
 ## 使用其它Cache组件
 
