@@ -59,7 +59,7 @@ return [
 ### file 文件驱动
 此为默认驱动，可通过`'default' => 'xxx'`字段更改。
 
-### redis Redis驱动
+### redis 驱动
 Redis存储，如需使用请先安装Redis组件，命令如下
 
 * php 7.x
