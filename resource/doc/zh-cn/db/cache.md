@@ -2,6 +2,10 @@
 
 在webman默认使用 [symfony/cache](https://github.com/symfony/cache)作为cache组件。
 
+> **注意**
+> Cache 组件在2024-09-15进行了升级，此文档需要 `workerman/webman-framework`版本 >= 1.5.24
+> 通过`composer info`命令查看`workerman/webman-framework`版本，通过命令 `composer require workerman/webman-framework ^1.5.24` 升级。
+
 ## 安装
 **php 7.x**
 ```php
@@ -32,7 +36,7 @@ class UserController
 ```
 
 ## 配置文件位置
-配置文件在 `config/cache.php`。如果你的webman没有这个文件，请手动创建，并在项目根目录执行 `composer require workerman/webman-framework ^1.5.24` 升级 `workerman/webman-framework`。
+配置文件在 `config/cache.php`。如果你的webman没有这个文件说明框架不是最新的，请手动创建`config/cache.php`，并在项目根目录执行 `composer require workerman/webman-framework ^1.5.24` 升级 `workerman/webman-framework`。
 
 ## 配置文件内容
 ```php
@@ -127,9 +131,6 @@ Cache::store('array')->set('key', 'value');
 
 > **提示**
 > symfony/cache 的key不允许包含字符"{}()/\@:"
-
-> **注意**
-> 此特性需要 workerman/webman-framework版本 >= 1.5.24
 
 ## 使用其它Cache组件
 
