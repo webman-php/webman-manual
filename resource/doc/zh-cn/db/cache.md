@@ -9,11 +9,11 @@
 ## 安装
 **php 7.x**
 ```php
-composer -W symfony/cache ^5.2
+composer -W symfony/cache psr/simple-cache ^5.2
 ```
 **php 8.x**
 ```php
-composer require -W symfony/cache
+composer require -W symfony/cache psr/simple-cache
 ```
 
 ## 示例
