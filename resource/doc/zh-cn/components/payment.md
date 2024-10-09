@@ -116,7 +116,7 @@ return [
 直接调用 `config` 方法初始化
 ```php
 // 获取配置文件 config/payment.php
-$config = Config::get('payment');
+$config = config('payment');
 Pay::config($config);
 ```
 > 注意：如果是支付宝沙箱模式，一定要记得开启配置文件 `'mode' => \Yansongda\Pay\Pay::MODE_SANDBOX,`，该选项默认为默认为正常模式。
@@ -125,7 +125,6 @@ Pay::config($config);
 
 ```php
 use support\Request;
-use Webman\Config;
 use Yansongda\Pay\Pay;
 
 /**
@@ -135,7 +134,7 @@ use Yansongda\Pay\Pay;
 public function payment(Request $request)
 {
     // 1. 获取配置文件 config/payment.php
-    $config = Config::get('payment');
+    $config = config('payment');
 
     // 2. 初始化配置
     Pay::config($config);
@@ -155,7 +154,6 @@ public function payment(Request $request)
 
 ```php
 use support\Request;
-use Webman\Config;
 use Yansongda\Pay\Pay;
 
 /**
@@ -166,7 +164,7 @@ use Yansongda\Pay\Pay;
 public function alipayNotify(Request $request): Response
 {
     // 1. 获取配置文件 config/payment.php
-    $config = Config::get('payment');
+    $config = config('payment');
 
     // 2. 初始化配置
     Pay::config($config);
@@ -206,9 +204,6 @@ public function alipayReturn(Request $request)
     return 'success';
 }
 ```
-## 案例完整代码
-
-https://github.com/Tinywan/webman-admin/blob/main/app/controller/Test.php
 
 ## 更多内容
  
