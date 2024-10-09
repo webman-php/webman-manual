@@ -37,7 +37,8 @@ Route::disableDefaultRoute();
 ## 闭包路由
 `config/route.php`里添加如下路由代码
 ```php
-Route::any('/test', function ($request) {
+use support\Request;
+Route::any('/test', function (Request $request) {
     return response('test');
 });
 
@@ -51,13 +52,14 @@ Route::any('/test', function ($request) {
 > 路由路径必须以`/`开头，例如
 
 ```php
+use support\Request;
 // 错误的用法
-Route::any('test', function ($request) {
+Route::any('test', function (Request $request) {
     return response('test');
 });
 
 // 正确的用法
-Route::any('/test', function ($request) {
+Route::any('/test', function (Request $request) {
     return response('test');
 });
 ```
@@ -79,9 +81,11 @@ Route::any('/user/{id}', [app\controller\UserController::class, 'get']);
 ```
 ```php
 namespace app\controller;
+use support\Request;
+
 class UserController
 {
-    public function get($request, $id)
+    public function get(Request $request, $id)
     {
         return response('接收到参数'.$id);
     }
@@ -90,23 +94,24 @@ class UserController
 
 更多例子：
 ```php
+use support\Request;
 // 匹配 /user/123, 不匹配 /user/abc
-Route::any('/user/{id:\d+}', function ($request, $id) {
+Route::any('/user/{id:\d+}', function (Request $request, $id) {
     return response($id);
 });
 
 // 匹配 /user/foobar, 不匹配 /user/foo/bar
-Route::any('/user/{name}', function ($request, $name) {
+Route::any('/user/{name}', function (Request $request, $name) {
    return response($name);
 });
 
 // 匹配 /user /user/123 和 /user/abc
-Route::any('/user[/{name}]', function ($request, $name = null) {
+Route::any('/user[/{name}]', function (Request $request, $name = null) {
    return response($name ?? 'tom');
 });
 
 // 匹配 任意以/user/为前缀的请求
-Route::any('/user/[{path:.+}]', function (Request  $request) {
+Route::any('/user/[{path:.+}]', function (Request $request) {
     return $request->path();
 });
 
@@ -122,16 +127,16 @@ Route::options('[{path:.+}]', function () {
 
 ```php
 Route::group('/blog', function () {
-   Route::any('/create', function ($request) {return response('create');});
-   Route::any('/edit', function ($request) {return response('edit');});
-   Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
+   Route::any('/create', function (Request $request) {return response('create');});
+   Route::any('/edit', function (Request $request) {return response('edit');});
+   Route::any('/view/{id}', function (Request $request, $id) {return response("view $id");});
 });
 ```
 等价与
 ```php
-Route::any('/blog/create', function ($request) {return response('create');});
-Route::any('/blog/edit', function ($request) {return response('edit');});
-Route::any('/blog/view/{id}', function ($request, $id) {return response("view $id");});
+Route::any('/blog/create', function (Request $request) {return response('create');});
+Route::any('/blog/edit', function (Request $request) {return response('edit');});
+Route::any('/blog/view/{id}', function (Request $request, $id) {return response("view $id");});
 ```
 
 group嵌套使用
@@ -139,9 +144,9 @@ group嵌套使用
 ```php
 Route::group('/blog', function () {
    Route::group('/v1', function () {
-      Route::any('/create', function ($request) {return response('create');});
-      Route::any('/edit', function ($request) {return response('edit');});
-      Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
+      Route::any('/create', function (Request $request) {return response('create');});
+      Route::any('/edit', function (Request $request) {return response('edit');});
+      Route::any('/view/{id}', function (Request $request, $id) {return response("view $id");});
    });  
 });
 ```
@@ -173,9 +178,9 @@ Route::group('/blog', function () {
 # 错误使用例子 (webman-framework >= 1.5.7 时此用法有效)
 Route::group('/blog', function () {
    Route::group('/v1', function () {
-      Route::any('/create', function ($request) {return response('create');});
-      Route::any('/edit', function ($request) {return response('edit');});
-      Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
+      Route::any('/create', function (Request $request) {return response('create');});
+      Route::any('/edit', function (Request $request) {return response('edit');});
+      Route::any('/view/{id}', function (Request $request, $id) {return response("view $id");});
    });  
 })->middleware([
     app\middleware\MiddlewareA::class,
@@ -187,9 +192,9 @@ Route::group('/blog', function () {
 # 正确使用例子
 Route::group('/blog', function () {
    Route::group('/v1', function () {
-      Route::any('/create', function ($request) {return response('create');});
-      Route::any('/edit', function ($request) {return response('edit');});
-      Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
+      Route::any('/create', function (Request $request) {return response('create');});
+      Route::any('/edit', function (Request $request) {return response('edit');});
+      Route::any('/view/{id}', function (Request $request, $id) {return response("view $id");});
    })->middleware([
         app\middleware\MiddlewareA::class,
         app\middleware\MiddlewareB::class,
