@@ -133,13 +133,10 @@ use Yansongda\Pay\Pay;
  */
 public function payment(Request $request)
 {
-    // 1. 获取配置文件 config/payment.php
-    $config = config('payment');
+    // 1. 初始化配置
+    Pay::config(config('payment'));
 
-    // 2. 初始化配置
-    Pay::config($config);
-
-    // 3. 网页支付
+    // 2. 网页支付
     $order = [
         'out_trade_no' => time(),
         'total_amount' => '8888.88',
@@ -163,13 +160,10 @@ use Yansongda\Pay\Pay;
  */
 public function alipayNotify(Request $request): Response
 {
-    // 1. 获取配置文件 config/payment.php
-    $config = config('payment');
+    // 1. 初始化配置
+    Pay::config(config('payment'));
 
-    // 2. 初始化配置
-    Pay::config($config);
-
-    // 3. 支付宝回调处理
+    // 2. 支付宝回调处理
     $result = Pay::alipay()->callback($request->post());
 
     // ===================================================================================================
