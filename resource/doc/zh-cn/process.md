@@ -39,10 +39,10 @@ return [
         'group' => '',
         'reusePort' => true,
         'constructor' => [
-            'request_class' => \support\Request::class, // request类设置
+            'requestClass' => \support\Request::class, // request类设置
             'logger' => \support\Log::channel('default'), // 日志实例
-            'app_path' => app_path(), // app目录位置
-            'public_path' => public_path() // public目录位置
+            'appPath' => app_path(), // app目录位置
+            'publicPath' => public_path() // public目录位置
         ]
     ]
 ];
