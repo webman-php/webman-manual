@@ -58,3 +58,21 @@ webman不支持动态修改配置，所有配置必须手动修改对应的配�
 
 > **注意**
 > 服务器配置`config/server.php`以及进程配置`config/process.php`不支持reload，需要restart重启才能生效
+
+## 特别提醒
+如果你是要在config下的子目录创建配置文件并读取，比如：`config/order/status.php`，那么`config/order`目录下需要有一个`app.php`文件，内容如下
+```php
+<?php
+return [
+    'enable' => true,
+];
+```
+`enable`为`true`代表让框架读取这个目录的配置。
+最终配置文件目录树类似下面这样
+```
+├── config
+│   ├── order
+│   │   ├── app.php
+│   │   └── status.php
+```
+这样你就可以通过`config.order.status`读取`status.php`中返回的数组或者特定的key数据了。
