@@ -105,7 +105,7 @@ Route::any('/user/{name}', function (Request $request, $name) {
    return response($name);
 });
 
-// 匹配 /user /user/123 和 /user/abc
+// 匹配 /user /user/123 和 /user/abc   []表示可选
 Route::any('/user[/{name}]', function (Request $request, $name = null) {
    return response($name ?? 'tom');
 });
@@ -115,11 +115,17 @@ Route::any('/user/[{path:.+}]', function (Request $request) {
     return $request->path();
 });
 
-// 匹配所有options请求
+// 匹配所有options请求   :后填写正则表达式，表示此命名参数的正则规则
 Route::options('[{path:.+}]', function () {
     return response('');
 });
 ```
+进阶用法总结
+
+> `[]` 语法在 Webman 路由中主要用于处理可选路径部分或匹配动态路由，它让你能够为路由定义更复杂的路径结构和匹配规则
+> 
+> `:用户指定正则表达式`
+
 
 ## 路由分组
 
