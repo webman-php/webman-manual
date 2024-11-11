@@ -177,6 +177,12 @@ return [
 有了身份验证中间件，我们就可以在控制器层专心的写业务代码，不用就用户是否登录而担心。
 
 ## 示例：跨域请求中间件
+修改`route.php`文件，加上
+```php
+// 匹配所有options请求,否则如果找不到路由定义不会进入中间件
+Route::options('[{path:.+}]', function () {});
+```
+
 创建文件`app/middleware/AccessControlTest.php` (如目录不存在请自行创建) 如下：
 ```php
 <?php
