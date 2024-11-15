@@ -130,6 +130,10 @@ $except = $request->except(['avatar', 'age']);
 ```
 
 ## 获取上传文件
+
+> **提示**
+> 上传文件需要使用 `multipart/form-data` 格式的表单
+
 **获取整个上传文件数组**
 ```php
 $request->file();
