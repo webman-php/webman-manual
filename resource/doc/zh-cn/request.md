@@ -129,6 +129,42 @@ $only = $request->only(['username', 'password']);
 $except = $request->except(['avatar', 'age']);
 ```
 
+## 通过控制器参数获得输入
+> **注意**
+> 此特性需要 webman-framework >= 1.6.0
+
+```php
+<?php
+namespace app\controller;
+use support\Response;
+
+class UserController
+{
+    public function create(string $name, int $age = 18): Response
+    {
+        return json(['name' => $name, 'age' => $age]);
+    }
+}
+```
+代码逻辑类似于
+```php
+<?php
+namespace app\controller;
+use support\Request;
+use support\Response;
+
+class UserController
+{
+    public function create(Request $request): Response
+    {
+        $name = $request->input('name');
+        $age = (int)$request->input('age', 18);
+        return json(['name' => $name, 'age' => $age]);
+    }
+}
+```
+更多信息请参考[控制器参数绑定](controller.md#控制器参数绑定)
+
 ## 获取上传文件
 
 > **提示**
@@ -382,5 +418,37 @@ $request->action;
 > 因为闭包函数不属于任何控制器，所以来自闭包路由的请求`$request->action`始终返回空字符串`''`
 > 闭包路由参见 [路由](route.md)
 
+## 重写参数
+有时候我们想重写请求的参数，例如将请求过滤，让后重新赋值给请求对象，这时候我们可以使用`setGet()` `setPost()` `setHeader()`方法。
+
+> **提示**
+> 此特性需要webman-framework>=1.6.0
+
+#### 重写GET参数
+```php
+$request->get(); // 假设得到 ['name' => 'tom', 'age' => 18]
+$request->setGet(['name' => 'tom']);
+$request->get(); // 最终得到 ['name' => 'tom']
+```
+
+> **注意**
+> 如例子所示，`setGet()`是重写所有GET参数，`setPost()` `setHeader()` 也是同样的行为。
+
+
+#### 重写POST参数
+```php
+$post = $request->post();
+foreach ($post as $key => $value) {
+    $post[$key] = htmlspecialchars($value);
+}
+$request->setPost($post);
+$request->post(); // 得到过滤后的post参数
+```
+
+#### 重写HEADER参数
+```php
+$request->setHeader(['host' => 'example.com']);
+$request->header('host'); // 输出 example.com
+```
 
 

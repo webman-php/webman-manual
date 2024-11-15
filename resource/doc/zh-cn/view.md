@@ -280,10 +280,28 @@ class UserController
 #### 控制器
 当控制器调用`view('模版名',[]);`时，视图文件按照如下规则查找：
 
-1. 非多应用时，使用 `app/view/` 下对应的视图文件
-2. [多应用](multiapp.md)时，使用 `app/应用名/view/` 下对应的视图文件
+1. `/`开头则直接使用该路径查找视图文件(`此特性需要webman-framework>=1.6.0`)
+2. 不是以`/`开头并且非多应用时，使用 `app/view/` 下对应的视图文件
+3. 不是以`/`开头并且是[多应用](multiapp.md)时，使用 `app/应用名/view/` 下对应的视图文件
+4. 如果不传模板参数，自动根据2 3规则查找模板文件(`此特性需要webman-framework>=1.6.0`)
 
-总结来说就是如果 `$request->app` 为空，则使用 `app/view/`下的视图文件，否则使用 `app/{$request->app}/view/` 下的视图文件。
+例子：
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+
+class UserController
+{
+    public function hello(Request $request)
+    {
+        // 等价于 return view('user/hello', ['name' => 'webman']);
+        // 等价于 return view('/app/view/user/hello', ['name' => 'webman']);
+        return view(['name' => 'webman']);
+    }
+}
+```
 
 #### 闭包函数
 闭包函数`$request->app` 为空，不属于任何应用，所以闭包函数使用`app/view/`下的视图文件，例如 `config/route.php` 里定义路由
@@ -296,6 +314,29 @@ Route::any('/admin/user/get', function (Reqeust $reqeust) {
 
 #### 指定应用
 为了多应用模式下模版可以复用，view($template, $data, $app = null) 提供了第三个参数 `$app`，可以用来指定使用哪个应用目录下的模版。例如 `view('user', [], 'admin');` 会强制使用 `app/admin/view/` 下的视图文件。
+
+#### 省略模板参数
+
+> **注意**
+> 此特性需要webman-framework>=1.6.0
+
+在类的控制器里可以省略模板参数，例如
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+
+class UserController
+{
+    public function hello(Request $request)
+    {
+        // 等价于 return view('user/hello', ['name' => 'webman']);
+        // 等价于 return view('/app/view/user/hello', ['name' => 'webman']);
+        return view(['name' => 'webman']);
+    }
+}
+```
 
 ## 扩展twig
 

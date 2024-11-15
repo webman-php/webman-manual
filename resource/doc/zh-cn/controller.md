@@ -64,6 +64,196 @@ class Foo
  - `support\Response` 对象可以通过`response()` `json()` `xml()` `jsonp()` `redirect()`等助手函数创建。
  
 
+## 控制器参数绑定
+> **注意**
+> 此特性需要 webman-framework >= 1.6.0
+
+#### 例子
+webman支持通过控制器方法参数自动绑定请求参数，例如
+```php
+<?php
+namespace app\controller;
+use support\Response;
+
+class UserController
+{
+    public function create(string $name, int $age): Response
+    {
+        return json(['name' => $name, 'age' => $age]);
+    }
+}
+```
+
+你可以通过`GET` `POST`方式传递`name`和`age`的值，也可以通过路由参数传递`name`和`age`参数，例如
+
+```php
+Route::any('/user/{name}/{age}', [app\controller\UserController::class, 'create']);
+```
+
+优先级为`路由参数` > `GET` > `POST`参数
+
+#### 默认值
+
+假设我们访问 `/user/create?name=tom`，我们将得到如下的错误
+
+```html
+Missing input parameter age
+```
+原因是我们没有传递`age`参数，可以通过给参数设置默认值来解决这个问题，例如
+
+```php
+<?php
+namespace app\controller;
+use support\Response;
+
+class UserController
+{
+    public function create(string $name, int $age = 18): Response
+    {
+        return json(['name' => $name, 'age' => $age]);
+    }
+}
+```
+
+#### 参数类型
+当我们访问 `/user/create?name=tom&age=not_int`，我们将得到如下的错误
+
+> **提示**
+> 这里为了方便测试，我们直接在浏览器地址栏输入参数，实际开发中应该通过`POST`方式传递参数
+
+```html
+Input age must be of type int, string given
+```
+
+这是因为接受的数据会按照类型进行转换，如果无法转换则会抛出`support\exception\InputTypeException`异常，
+因为传递的`age`参数无法转换为`int`类型，所以得到如上错误。
+
+#### 其它类型
+webman支持的参数类型有`int` `float` `string` `bool` `array` `object` `类实例`等，例如
+
+```php
+<?php
+namespace app\controller;
+use support\Response;
+
+class UserController
+{
+    public function create(string $name, int $age, float $balance, bool $vip, array $extension): Response
+    {
+        return json([
+            'name' => $name,
+            'age' => $age,
+            'balance' => $balance,
+            'vip' => $vip,
+            'extension' => $extension,
+        ]);
+    }
+}
+```
+
+当我们访问 `/user/create?name=tom&age=18&balance=100.5&vip=true&extension[foo]=bar`，我们将得到如下的结果
+
+```json
+{
+  "name": "tom",
+  "age": 18,
+  "balance": 100.5,
+  "vip": true,
+  "extension": {
+    "foo": "bar"
+  }
+}
+```
+
+#### 类实例
+webman支持通过参数类型提示传递类实例，例如
+
+**app\service\Blog.php**
+```php
+<?php
+namespace app\service;
+class Blog
+{
+    private $title;
+    private $content;
+    public function __construct(string $title, string $content)
+    {
+        $this->title = $title;
+        $this->content = $content;
+    }
+    public function get()
+    {
+        return [
+            'title' => $this->title,
+            'content' => $this->content,
+        ];
+    }
+}
+```
+
+**app\controller\BlogController.php**
+```php
+<?php
+namespace app\controller;
+use app\service\Blog;
+use support\Response;
+
+class BlogController
+{
+    public function create(Blog $blog): Response
+    {
+        return json($blog->get());
+    }
+}
+```
+
+当访问 `/blog/create?blog[title]=hello&blog[content]=world`，我们将得到如下的结果
+
+```json
+{
+  "title": "hello",
+  "content": "world"
+}
+```
+
+#### 模型实例
+
+**app\model\User.php**
+```php
+<?php
+namespace app\model;
+use support\Model;
+class User extends Model
+{
+    protected $connection = 'mysql';
+    protected $table = 'user';
+    protected $primaryKey = 'id';
+    public $timestamps = false;
+    // 这里需要添加可填充字段，防止前端传入不安全字段
+    protected $fillable = ['name', 'age'];
+}
+```
+
+**app\controller\UserController.php**
+```php
+<?php
+namespace app\controller;
+use app\model\User;
+class UserController
+{
+    public function create(User $user): int
+    {
+        $user->save();
+        return $user->id;
+    }
+}
+```
+
+当访问 `/user/create?user[name]=tom&user[age]=18`，我们将得到类似如下的结果
+
+```json
+1
+```
 
 ## 控制器生命周期
 

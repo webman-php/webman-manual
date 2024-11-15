@@ -228,7 +228,6 @@ return [
 ## 说明
   
  - 中间件分为全局中间件、应用中间件(应用中间件仅在多应用模式下有效，参见[多应用](multiapp.md))、路由中间件
- - 目前不支持单个控制器的中间件(但可以在中间件中通过判断`$request->controller`来实现类似控制器中间件功能)
  - 中间件配置文件位置在 `config/middleware.php`
  - 全局中间件配置在key `''` 下
  - 应用中间件配置在具体的应用名下，例如
@@ -245,6 +244,30 @@ return [
         app\middleware\ApiOnly::class,
     ]
 ];
+```
+
+## 控制器中间件
+
+> **注意**
+> 此特性需要webman-framework >= 1.6.0
+
+```php
+<?php
+namespace app\controller;
+use app\middleware\MiddlewareA;
+use app\middleware\MiddlewareB;
+use support\Request;
+class IndexController
+{
+    protected $middleware = [
+        MiddlewareA::class,
+        MiddlewareB::class,
+    ];
+    public function index(Request $request): string
+    {
+        return 'hello';
+    }
+}
 ```
 
 ## 路由中间件
