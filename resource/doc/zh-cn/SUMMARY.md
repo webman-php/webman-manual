@@ -113,6 +113,7 @@
 
 - 升级
   - [1.4](upgrade/1-4.md)
+  - [1.6](upgrade/1-6.md)
   - [致谢](thanks.md)
   
  
