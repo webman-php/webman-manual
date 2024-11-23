@@ -2,11 +2,12 @@
 
 基于Redis的消息队列，支持消息延迟处理。
 
+
 ## 安装
 `composer require webman/redis-queue`
 
 ## 配置文件
-redis配置文件自动生成在 `config/plugin/webman/redis-queue/redis.php`，内容类似如下：
+redis配置文件自动生成在 `{主项目}/config/plugin/webman/redis-queue/redis.php`，内容类似如下：
 ```php
 <?php
 return [
@@ -128,10 +129,10 @@ redis_queue_send($redis, $queue, $data);
 ````
 
 ## 消费
-消费进程配置文件在 `config/plugin/webman/redis-queue/process.php`。
-消费者目录在 `app/queue/redis/` 下。
+消费进程配置文件在 `{主项目}/config/plugin/webman/redis-queue/process.php`。
+消费者目录在 `{主项目}/app/queue/redis/` 下。
 
-执行命令`php webman redis-queue:consumer my-send-mail`则会生成文件`app/queue/redis/MyMailSend.php`
+执行命令`php webman redis-queue:consumer my-send-mail`则会生成文件`{主项目}/app/queue/redis/MyMailSend.php`
 
 > **提示**
 > 如果命令不存在也可以手动生成
