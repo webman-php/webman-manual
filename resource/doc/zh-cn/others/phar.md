@@ -34,6 +34,9 @@ phar是PHP里类似于JAR的一种打包文件，你可以利用phar将你的web
 `php webman.phar restart` 或 `php webman.phar restart -d`
 
 ## 说明
+
+* 打包后的项目不支持reload
+
 * 为了避免打包文件尺寸过大占用过多内存，可以设置 `config/plugin/webman/console/app.php`里的`exclude_pattern` `exclude_files`选项将排除不必要的文件。
 
 * 运行webman.phar后会在webman.phar所在目录生成runtime目录，用于存放日志等临时文件。
