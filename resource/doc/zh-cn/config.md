@@ -83,6 +83,14 @@ return [
 #### server.php
 ```php
 return [
+    'listen' => 'http://0.0.0.0:8787', // 监听端口(从1.6.0版本开始移除, 改在config/process.php中配置)
+    'transport' => 'tcp', // 传输层协议(从1.6.0版本开始移除, 改在config/process.php中配置)
+    'context' => [], // ssl等配置(从1.6.0版本开始移除, 改在config/process.php中配置)
+    'name' => 'webman', // 进程名(从1.6.0版本开始移除, 改在config/process.php中配置)
+    'count' => cpu_count() * 4, // 进程数量(从1.6.0版本开始移除, 改在config/process.php中配置)
+    'user' => '', // 用户(从1.6.0版本开始移除, 改在config/process.php中配置)
+    'group' => '', // 用户组(从1.6.0版本开始移除, 改在config/process.php中配置)
+    'reusePort' => false, // 是否开启端口复用(从1.6.0版本开始移除, 改在config/process.php中配置)
     'event_loop' => '',  // 事件循环类，默认自动选择
     'stop_timeout' => 2, // 收到stop/restart/reload信号时，等待处理完成的最大时间，超过这个时间进程未退出则强制退出
     'pid_file' => runtime_path() . '/webman.pid', // pid文件存储位置
