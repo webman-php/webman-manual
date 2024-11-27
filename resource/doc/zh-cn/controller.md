@@ -128,6 +128,21 @@ Input age must be of type int, string given
 这是因为接受的数据会按照类型进行转换，如果无法转换则会抛出`support\exception\InputTypeException`异常，
 因为传递的`age`参数无法转换为`int`类型，所以得到如上错误。
 
+#### 自定义错误
+我们可以利用多语言自定义`Missing input parameter age` 和 `Input age must be of type int, string given` 这样的错误，
+参考如下命令
+
+```
+composer require symfony/translation
+mkdir resource/translations/zh_CN/ -p
+echo "<?php
+return [
+    'Input :parameter must be of type :exceptType, :actualType given' => '输入参数 :parameter 必须是 :exceptType 类型，传递的类型是 :actualType',
+    'Missing input parameter :parameter' => '缺少输入参数 :parameter',
+];" > resource/translations/zh_CN/messages.php
+php start.php restart
+```
+
 #### 其它类型
 webman支持的参数类型有`int` `float` `string` `bool` `array` `object` `类实例`等，例如
 
