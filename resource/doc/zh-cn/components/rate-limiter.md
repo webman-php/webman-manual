@@ -2,6 +2,8 @@
 webman限流器，支持注解限流。
 支持apcu、redis、memory驱动。
 
+##源码地址
+https://github.com/webman-php/rate-limiter
 
 ##安装
 ```
