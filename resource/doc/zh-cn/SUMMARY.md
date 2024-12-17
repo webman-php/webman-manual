@@ -47,6 +47,7 @@
  
 - 常用组件
   - [验证器](components/validation.md)
+  - [限流器](components/rate-limiter.md)
   - [分页组件](components/paginator.md)
   - [多语言](components/translation.md)
   - [图像处理](components/image.md)
