@@ -250,7 +250,7 @@ return [
 
 #### database.php
 ```php
-eturn [
+return [
  // 默认数据库
  'default' => 'mysql',
  // 各种数据库配置
