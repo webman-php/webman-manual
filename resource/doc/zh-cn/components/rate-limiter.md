@@ -41,8 +41,8 @@ class UserController
         return '邮件发送成功';
     }
 
-    #[RateLimiter(limit: 100, ttl: 24 * 60 * 60, key: 'coupon', message: '今天的优惠券已经发完，请明天再来')]
-    #[RateLimiter(limit: 1, ttl: 24 * 60 * 60, key: RateLimiter::UID, message: '每个用户每天只能领取一次优惠券')]
+    #[RateLimiter(limit: 100, ttl: 24*60*60, key: 'coupon', message: '今天的优惠券已经发完，请明天再来')]
+    #[RateLimiter(limit: 1, ttl: 24*60*60, key: RateLimiter::UID, message: '每个用户每天只能领取一次优惠券')]
     public function coupon(): string
     {
         // key: 'coupon'， 这里coupon为自定义key，也就是全局以coupon为key进行限流，每天最多发100张优惠券
@@ -53,11 +53,11 @@ class UserController
     public function sendSms(string $mobile): string
     {
         // 当key为变量时，可以使用如下代码手动限流，这里mobile作为key
-        Limiter::check($mobile, 5, 24 * 60 * 60, '每个手机号一天最多5条短信');
+        Limiter::check($mobile, 5, 24*60*60, '每个手机号一天最多5条短信');
         return '短信发送成功';
     }
 
-    #[RateLimiter(limit: 5, ttl: 24 * 60 * 60, key: [UserController::class, 'getMobile'], message: '每个手机号一天最多5条短信')]
+    #[RateLimiter(limit: 5, ttl: 24*60*60, key: [UserController::class, 'getMobile'], message: '每个手机号一天最多5条短信')]
     public function sendSms2(): string
     {
         // 当key为变量时，可以使用[类, 静态方法]的方式获取key，例如[UserController::class, 'getMobile']会调用UserController的getMobile()方法的返回值为key
