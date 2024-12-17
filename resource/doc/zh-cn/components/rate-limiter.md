@@ -142,7 +142,7 @@ return [
 **apcu**
 
 * 安装扩展
-  当driver使用apcu时，需要安装apcu扩展，并且php.ini中设置
+  需要安装apcu扩展，并且php.ini中设置
 ```
 apc.enabled=1
 apc.enable_cli=1
