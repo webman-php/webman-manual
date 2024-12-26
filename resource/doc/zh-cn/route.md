@@ -322,6 +322,43 @@ Route::disableDefaultRoute('foo', 'admin');
 Route::disableDefaultRoute([\app\controller\IndexController::class, 'index']);
 ```
 
+## 注解禁用默认路由
+
+> **注意**
+> 需要 webman-framework >= 1.6.11
+
+我们可以通过注解禁用某个控制器的默认路由，例如：
+
+```php
+namespace app\controller;
+use support\annotation\DisableDefaultRoute;
+
+#[DisableDefaultRoute]
+class IndexController
+{
+    public function index()
+    {
+        return 'index';
+    }
+}
+```
+
+同样的，我们也可以通过注解禁用某个控制器的默认路由，例如：
+
+```php
+namespace app\controller;
+use support\annotation\DisableDefaultRoute;
+
+class IndexController
+{
+    #[DisableDefaultRoute]
+    public function index()
+    {
+        return 'index';
+    }
+}
+```
+
 ## 路由接口
 ```php
 // 设置$uri的任意方法请求的路由

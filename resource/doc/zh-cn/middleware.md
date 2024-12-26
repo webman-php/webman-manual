@@ -246,23 +246,27 @@ return [
 ];
 ```
 
-## 控制器中间件
+## 控制器中间件和方法中间件
+
+利用注解，我们可以给某个控制器或者控制器的某个方法设置中间件。
 
 > **注意**
-> 此特性需要webman-framework >= 1.6.0
+> 此特性需要webman-framework >= 1.6.11
 
 ```php
 <?php
 namespace app\controller;
-use app\middleware\MiddlewareA;
-use app\middleware\MiddlewareB;
+use app\middleware\Controller1Middleware;
+use app\middleware\Controller2Middleware;
+use app\middleware\Method1Middleware;
+use app\middleware\Method2Middleware;
+use support\annotation\Middleware;
 use support\Request;
+
+#[Middleware(Controller1Middleware::class, Controller2Middleware::class)]
 class IndexController
 {
-    protected $middleware = [
-        MiddlewareA::class,
-        MiddlewareB::class,
-    ];
+    #[Middleware(Method1Middleware::class, Method2Middleware::class)]
     public function index(Request $request): string
     {
         return 'hello';
@@ -357,9 +361,9 @@ class MiddlewareA implements MiddlewareInterface
 ```
 
 ## 中间件执行顺序
- - 中间件执行顺序为`全局中间件`->`应用中间件`->`路由中间件`。
- - 有多个全局中间件时，按照中间件实际配置顺序执行(应用中间件、路由中间件同理)。
- - 404请求不会触发任何中间件，包括全局中间件
+ - 中间件执行顺序为`全局中间件`->`应用中间件`->`控制器中间件`->`路由中间件`->`方法中间件`。
+ - 当同一个层次有多个中间件时，按照同层次中间件实际配置顺序执行。
+ - 404请求默认不会触发任何中间件(不过仍然可以通过`Route::fallback(function(){})->middleware()`添加中间件)。
 
 ## 路由向中间件传参(route->setParams)
 
