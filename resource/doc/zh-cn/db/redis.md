@@ -5,7 +5,8 @@ webman的redis组件默认使用的是[illuminate/redis](https://github.com/illu
 使用`illuminate/redis`之前必须先给`php-cli`安装redis扩展。
 
 > **注意**
-> 使用命令`php -m | grep redis`查看`php-cli`是否装了redis扩展。注意：即使你在`php-fpm`安装了redis扩展，不代表你在`php-cli`可以使用它，因为`php-cli`和`php-fpm`是不同的应用程序，可能使用的是不同的`php.ini`配置。使用命令`php --ini`来查看你的`php-cli`使用的是哪个`php.ini`配置文件。
+> 虽然
+> 使用命令`php -m | grep redis`查看`php-cli`是否装了redis扩展。
 
 ## 安装
 
