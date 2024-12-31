@@ -26,7 +26,8 @@ composer create-project workerman/webman
 ### 4. 设置运行目录
 ![](../assets/img/bt-install-4.png)
 
-**为了系统安全，必须设置为 `/public`**
+> **注意：**
+> 为了系统安全，运行目录必须设置为 `/public`，错误的设置可能会导致敏感文件被外网访问
 
 ### 5. 设置伪静态
 ![](../assets/img/bt-install-5.png)
