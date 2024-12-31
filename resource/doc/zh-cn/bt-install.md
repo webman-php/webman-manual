@@ -70,3 +70,13 @@ chmod -R 777 /www/wwwroot/webman/runtime
 ### 8. 访问站点
 
 访问站点 `http://example.com` 即可看到webman的欢迎页面
+
+
+## 故障排查
+
+* 站点无法访问提示 502 Bad Gateway
+    检查webman是否启动
+  
+* weman启动失败
+    如图所示，检查是否有错误日志
+    ![](../assets/img/bt-install-faq-1.png)
