@@ -17,7 +17,6 @@ namespace app\controller;
 
 use RuntimeException;
 use Webman\RateLimiter\Annotation\RateLimiter;
-use Webman\RateLimiter\Limiter;
 
 class UserController
 {
@@ -50,13 +49,6 @@ class UserController
         // key: 'coupon'， 这里coupon为自定义key，也就是全局以coupon为key进行限流，每天最多发100张优惠券
         // 同时以用户ID为维度进行限流，每个用户每天只能领取一次优惠券
         return '优惠券发送成功';
-    }
-
-    public function sendSms(string $mobile): string
-    {
-        // 当key为变量时，可以使用如下代码手动限流，这里mobile作为key
-        Limiter::check($mobile, 5, 24*60*60, '每个手机号一天最多5条短信');
-        return '短信发送成功';
     }
 
     #[RateLimiter(limit: 5, ttl: 24*60*60, key: [UserController::class, 'getMobile'], message: '每个手机号一天最多5条短信')]
@@ -102,6 +94,27 @@ return [
     'Too Many Requests' => '请求频率受限'
 ];" > resource/translations/zh_CN/messages.php
 php start.php restart
+```
+
+## 接口
+有时候开发者想直接在代码中调用限流器，参考如下代码
+
+```php
+<?php
+namespace app\controller;
+
+use RuntimeException;
+use Webman\RateLimiter\Limiter;
+
+class UserController {
+
+    public function sendSms(string $mobile): string
+    {
+        // 这里mobile作为key
+        Limiter::check($mobile, 5, 24*60*60, '每个手机号一天最多5条短信');
+        return '短信发送成功';
+    }
+}
 ```
 
 ##配置
