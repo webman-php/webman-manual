@@ -9,7 +9,7 @@
 curl -sO https://www.workerman.net/install-php-and-composer && sudo bash install-php-and-composer
 ```
 通过以上命令可以快速安装PHP+Composer环境，支持PHP8.0-8.3版本。
-如需要手动安装PHP可下载webman官方提供的[静态PHP文件](https://www.workerman.net/download)，解压即可使用。
+也可手动下载webman官方提供的[静态PHP文件](https://www.workerman.net/download)，解压即可使用。
 
 ### 1. 创建项目
 
