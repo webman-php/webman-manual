@@ -11,7 +11,6 @@
 ```php
 cd /www/wwwroot
 composer create-project workerman/webman
-chmod 777 webman/runtime -R
 ```
 
 ### 2. 设置网站
@@ -52,10 +51,18 @@ chmod 777 webman/runtime -R
   }
 ```
 
-### 6. 重启服务
+### 6. 给runtime可写权限
+
 ![](../assets/img/bt-install-6.png)
 
+```
+chmod -R 777 /www/wwwroot/webman/runtime
+```
 
-### 7. 访问站点
+### 7. 重启服务
+![](../assets/img/bt-install-7.png)
+
+
+### 8. 访问站点
 
 访问站点 `http://example.com` 即可看到webman的欢迎页面
