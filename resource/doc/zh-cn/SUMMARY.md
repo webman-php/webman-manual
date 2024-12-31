@@ -7,6 +7,7 @@
 - 快速开始
   
   - [安装](install.md)
+  - [宝塔安装](bt-install.md)
   - [目录结构](directory.md)
   - [简单示例](tutorial.md)
 
