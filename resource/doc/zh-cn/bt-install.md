@@ -17,7 +17,8 @@ composer create-project workerman/webman
 
 ![](../assets/img/bt-install-2.png)
 
-假设域名为 `example.com`
+> **注意：**
+> 启动命令为 `php start.php start`，不加 `-d` 参数，否则无法启动
 
 
 ### 3. 配置站点
