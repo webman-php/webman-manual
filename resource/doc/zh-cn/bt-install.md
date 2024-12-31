@@ -51,6 +51,16 @@ composer create-project workerman/webman
   location ~ \.php$ {
       return 404;
   }
+
+  # 允许访问 .well-known 目录
+  location ~ ^/\.well-known/ {
+    allow all;
+  }
+
+  # 拒绝访问所有以 . 开头的文件或目录
+  location ~ /\. {
+      return 404;
+  }
 ```
 
 ### 6. 给runtime可写权限
