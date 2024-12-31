@@ -60,6 +60,9 @@ composer create-project workerman/webman
 chmod -R 777 /www/wwwroot/webman/runtime
 ```
 
+> **备注**
+> 正常不需要此步骤，疑似宝塔bug，服务设置的`www`用户启动，但实际是daemon用户启动，导致无法写入runtime目录
+
 ### 7. 重启服务
 ![](../assets/img/bt-install-7.png)
 
