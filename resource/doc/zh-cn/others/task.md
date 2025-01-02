@@ -92,4 +92,32 @@ server {
 
 这样客户端访问`域名.com/tast/xxx`时将会走单独的8686端口处理，不影响8787端口的请求处理。
 
+## 方案三 利用http chunked 异步分段发送数据
 
+#### 优点
+可以直接将数据返回给客户端
+
+```php
+<?php
+namespace app\controller;
+
+use support\Request;
+use support\Response;
+use Workerman\Protocols\Http\Chunk;
+
+class IndexController
+{
+    public function index(Request $request)
+    {
+        $connection = $request->connection;
+        $http = new \Workerman\Http\Client();
+        $http->get('https://example.com/', function ($response) use ($connection) {
+            $connection->send(new Chunk($response->getBody()));
+            $connection->send(new Chunk('')); // 发送空的的chunk代表response结束
+        });
+        return response()->withHeaders([
+            "Transfer-Encoding" => "chunked",
+        ]);
+    }
+}
+```
