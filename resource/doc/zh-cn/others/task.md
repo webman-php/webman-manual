@@ -97,6 +97,13 @@ server {
 #### 优点
 可以直接将数据返回给客户端
 
+**安装 workerman/http-client**
+
+```
+composer require workerman/http-client
+```
+
+**app/controller/IndexController.php**
 ```php
 <?php
 namespace app\controller;
@@ -115,9 +122,13 @@ class IndexController
             $connection->send(new Chunk($response->getBody()));
             $connection->send(new Chunk('')); // 发送空的的chunk代表response结束
         });
+        // 先发送一个http头，后续数据通过异步发送
         return response()->withHeaders([
             "Transfer-Encoding" => "chunked",
         ]);
     }
 }
 ```
+
+> **提示**
+> 本例中使用了 `workerman/http-client` 客户端异步获取http结果并返回数据，也可以使用其它异步客户端例如 [AsyncTcpConnection](https://www.workerman.net/doc/workerman/async-tcp-connection/construct.html) 。
