@@ -65,7 +65,7 @@ Route::fallback(function(Request $request, $status) {
 </html>
 ```
 
-**新建**app/exception/Handler.php**(如目录不存在请自行创建)**
+**新建`app/exception/Handler.php`(如目录不存在请自行创建)**
 ```php
 <?php
 
