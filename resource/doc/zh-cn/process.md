@@ -164,7 +164,7 @@ return [
         'context'    => [], 
         // 进程类构造函数参数，这里为 process\Pusher::class 类的构造函数参数 （可选）
         'constructor' => [],
-        //当前进程是否启用(可选,默认true,此选项需webman-framework>=1.6.11)
+        //当前进程是否启用(可选,默认true,此选项需webman-framework>=1.6.0)
         'enable' => true
     ],
 ];
