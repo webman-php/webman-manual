@@ -1,19 +1,11 @@
 # Cache
 
-在webman默认使用 [symfony/cache](https://github.com/symfony/cache)作为cache组件。
-
-> **注意**
-> Cache 组件在2024-09-15进行了升级，此文档需要 `workerman/webman-framework`版本 >= 1.5.24
-> 通过`composer info`命令查看`workerman/webman-framework`版本，通过命令 `composer require workerman/webman-framework ^1.5.24` 升级。
+[webman/cache](https://github.com/webman-php/cache)基于[symfony/cache](https://github.com/symfony/cache)开发，兼容协程和非协程环境，自带连接池。
 
 ## 安装
-**php 7.x**
+
 ```php
-composer require -W symfony/cache ^5.2 psr/simple-cache
-```
-**php 8.x**
-```php
-composer require -W symfony/cache psr/simple-cache
+composer require -W webman/cache
 ```
 
 ## 示例
@@ -36,7 +28,7 @@ class UserController
 ```
 
 ## 配置文件位置
-配置文件在 `config/cache.php`。如果你的webman没有这个文件说明框架不是最新的，请手动创建`config/cache.php`，并在项目根目录执行 `composer require workerman/webman-framework ^1.5.24` 升级 `workerman/webman-framework`。
+配置文件在 `config/cache.php`，如果没有请手动创建。
 
 ## 配置文件内容
 ```php
@@ -66,19 +58,14 @@ return [
 ### redis 驱动
 Redis存储，如需使用请先安装Redis组件，命令如下
 
-* php 7.x
 ```
-composer require -W illuminate/redis ^8.2.0
-```
-* php 8.x
-```
-composer require -W illuminate/redis
+composer require -W webman/redis
 ```
 > **提示**
 > 要想使用`illuminate/redis`请确保`php-cli`安装了Redis扩展，执行`php -m` 查看`php-cli`支持的扩展。
 
 ### stores.redis.connection
-stores.redis.connection 对应的是`config/redis.php` 里对应的key。建议在`config/redis.php`创建一个独立的key，例如cache类似如下
+`stores.redis.connection` 对应的是`config/redis.php` 里对应的key。建议在`config/redis.php`创建一个独立的key，例如cache类似如下
 
 ```php
 <?php
@@ -134,4 +121,4 @@ Cache::store('array')->set('key', 'value');
 
 ## 使用其它Cache组件
 
-[ThinkCache](https://github.com/top-think/think-cache)组件使用参考 [其它数据库](others.md#ThinkCache)
+[ThinkCache](https://github.com/webman-php/think-cache)组件使用参考 [其它数据库](others.md#ThinkCache)

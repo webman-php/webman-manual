@@ -1,5 +1,5 @@
 # 使用其它数据库
-除了[illuminate/database](https://github.com/illuminate/database)，在webman中你可以使用其它数据库组件。
+除了[webman/database](https://github.com/webman-php/database)，在webman中你可以使用其它数据库组件。
 
 ## ThinkORM
 参考 [thinkorm](thinkorm.md)

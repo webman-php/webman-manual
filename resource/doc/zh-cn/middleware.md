@@ -250,8 +250,6 @@ return [
 
 利用注解，我们可以给某个控制器或者控制器的某个方法设置中间件。
 
-> **注意**
-> 此特性需要webman-framework >= 1.6.11
 
 ```php
 <?php
@@ -300,10 +298,8 @@ Route::group('/blog', function () {
 
 ## 中间件构造函数传参
 
-> **注意**
-> 此特性需要webman-framework >= 1.4.8
 
-1.4.8版本之后，配置文件支持直接实例化中间件或者匿名函数，这样可以方便的通过构造函数向中间件传参。
+配置文件支持直接实例化中间件或者匿名函数，这样可以方便的通过构造函数向中间件传参。
 例如`config/middleware.php`里也可以这样配置
 ```
 return [
@@ -440,8 +436,6 @@ class FooController
 ```
 
 ## 中间件获取当前请求路由信息
-> **注意**
-> 需要 webman-framework >= 1.3.2
 
 我们可以使用 `$request->route` 获取路由对象，通过调用对应的方法获取相应信息。
 
@@ -485,12 +479,8 @@ class Hello implements MiddlewareInterface
 ```
 
 > **注意**
-> `$route->param()`方法需要 webman-framework >= 1.3.16
-
 
 ## 中间件获取异常
-> **注意**
-> 需要 webman-framework >= 1.3.15
 
 业务处理过程中可能会产生异常，在中间件里使用 `$response->exception()` 获取异常。
 
@@ -530,9 +520,6 @@ class Hello implements MiddlewareInterface
 
 ## 超全局中间件
 
-> **注意**
-> 此特性要求 webman-framework >= 1.5.16
-
 主项目的全局中间件只影响主项目，不会对[应用插件](app/app.md)产生影响。有时候我们想要加一个影响全局包括所有插件的中间件，则可以使用超全局中间件。
 
 在`config/middleware.php`中配置如下：
@@ -549,9 +536,6 @@ return [
 > `@`超全局中间件不仅可以在主项目配置，也可以在某个插件里配置，例如`plugin/ai/config/middleware.php`里配置`@`超全局中间件，则也会影响主项目及所有插件。
 
 ## 给某个插件增加中间件
-
-> **注意**
-> 此特性要求 webman-framework >= 1.5.16
 
 有时候我们想给某个[应用插件](app/app.md)增加一个中间件，又不想改插件的代码(因为升级会被覆盖)，这时候我们可以在主项目中给它配置中间件。
 

@@ -177,9 +177,6 @@ Route::group('/blog', function () {
 ]);
 ```
 
-> **注意**: 
-> 在 webman-framework <= 1.5.6 时 `->middleware()` 路由中间件作用于 group 分组之后时候，当前路由必须在处于当前分组之下
-
 ```php
 # 错误使用例子 (webman-framework >= 1.5.7 时此用法有效)
 Route::group('/blog', function () {
@@ -250,8 +247,6 @@ route('blog.view', ['id' => 100]); // 结果为 /blog/100
 
 
 ## 获取路由信息
-> **注意**
-> 需要 webman-framework >= 1.3.2
 
 通过`$request->route`对象我们可以获取当前请求路由信息，例如
 
@@ -263,7 +258,7 @@ if ($route) {
     var_export($route->getName());
     var_export($route->getMiddleware());
     var_export($route->getCallback());
-    var_export($route->param()); // 此特性需要 webman-framework >= 1.3.16
+    var_export($route->param());
 }
 ```
 
@@ -289,9 +284,6 @@ Route::fallback(function(){
 
 ## 给404添加中间件
 
-> **注意**
-> 此特性需要 webman-framework >= 1.6.0
-
 默认404请求不会走任何中间件，如果需要给404请求添加中间件，请参考以下代码。
 ```php
 Route::fallback(function(){
@@ -305,9 +297,6 @@ Route::fallback(function(){
 相关链接 [自定义404 500页面](others/custom-error-page.md)
 
 ## 禁用默认路由
-
-> **注意**
-> 需要 webman-framework >= 1.6.0
 
 ```php
 // 禁用主项目默认路由，不影响应用插件
@@ -323,9 +312,6 @@ Route::disableDefaultRoute([\app\controller\IndexController::class, 'index']);
 ```
 
 ## 注解禁用默认路由
-
-> **注意**
-> 需要 webman-framework >= 1.6.11
 
 我们可以通过注解禁用某个控制器的默认路由，例如：
 

@@ -1,11 +1,11 @@
 # Redis
 
-webman的redis组件默认使用的是[illuminate/redis](https://github.com/illuminate/redis)，也就是laravel的redis库，用法与laravel相同。
+[webman/redis](https://github.com/webman-php/redis)是在[illuminate/redis](https://github.com/illuminate/redis)的基础上添加了连接池功能，用法与laravel相同。
 
 使用`illuminate/redis`之前必须先给`php-cli`安装redis扩展。
 
 > **注意**
-> 使用命令`php -m | grep redis`查看`php-cli`是否装了redis扩展。
+> 此组件需要安装redis扩展，使用命令`php -m | grep redis`查看`php-cli`是否装了redis扩展。
 
 ## 安装
 

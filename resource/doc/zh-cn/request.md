@@ -130,8 +130,6 @@ $except = $request->except(['avatar', 'age']);
 ```
 
 ## 通过控制器参数获得输入
-> **注意**
-> 此特性需要 webman-framework >= 1.6.0
 
 ```php
 <?php
@@ -387,7 +385,6 @@ $request->acceptJson();
 ```php
 $request->plugin;
 ```
-> 此特性需要webman>=1.4.0
 
 ## 获得请求的应用名
 单应用的时候始终返回空字符串`''`，[多应用](multiapp.md)的时候返回应用名
@@ -420,9 +417,6 @@ $request->action;
 
 ## 重写参数
 有时候我们想重写请求的参数，例如将请求过滤，让后重新赋值给请求对象，这时候我们可以使用`setGet()` `setPost()` `setHeader()`方法。
-
-> **提示**
-> 此特性需要webman-framework>=1.6.0
 
 #### 重写GET参数
 ```php

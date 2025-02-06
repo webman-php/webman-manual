@@ -2,8 +2,6 @@
 
 `webman/console` 基于 `symfony/console`
 
-> 插件需要webman>=1.2.2 webman-framework>=1.2.1
-
 ## 安装
  
 ```sh
@@ -61,7 +59,6 @@ composer require webman/console
 ### phar:pack
 **将webman项目打包成phar文件**
 参见[phar打包](/doc/webman/others/phar.html)
-> 此特性需要webman>=1.2.4 webman-framework>=1.2.4 webman\console>=1.0.5
 
 ## 自定义命令
 用户可以定义自己的命令，例如以下是打印数据库配置的命令

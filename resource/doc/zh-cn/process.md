@@ -156,7 +156,7 @@ return [
         'group'   => '',
         // 当前进程是否支持reload （可选，默认true）
         'reloadable' => true,
-        // 是否开启reusePort （可选，此选项需要php>=7.0，默认为true）
+        // 是否开启reusePort
         'reusePort'  => true,
         // transport (可选，当需要开启ssl时设置为ssl，默认为tcp)
         'transport'  => 'tcp',
@@ -164,7 +164,7 @@ return [
         'context'    => [], 
         // 进程类构造函数参数，这里为 process\Pusher::class 类的构造函数参数 （可选）
         'constructor' => [],
-        //当前进程是否启用(可选,默认true,此选项需webman-framework>=1.6.0)
+        //当前进程是否启用
         'enable' => true
     ],
 ];

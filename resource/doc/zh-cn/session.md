@@ -179,8 +179,6 @@ return [
     ],
 
     'session_name' => 'PHPSID', // 存储session_id的cookie名
-    
-    // === 以下配置需要 webman-framework>=1.3.14 workerman>=4.0.37 ===
     'auto_update_timestamp' => false,  // 是否自动刷新session，默认关闭
     'lifetime' => 7*24*60*60,          // session过期时间
     'cookie_lifetime' => 365*24*60*60, // 存储session_id的cookie过期时间

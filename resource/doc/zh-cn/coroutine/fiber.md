@@ -63,7 +63,6 @@ class TestController
 `support\Context`类用于存储请求上下文数据，当请求完成时，相应的context数据会自动删除。也就是说context数据生命周期是跟随请求生命周期的。`support\Context`支持Fiber、Swoole、Swow协程环境。
 
 
-
 ### Swoole协程
 安装swoole扩展(要求swoole>=5.0)后，通过配置config/server.php开启swoole协程
 ```php

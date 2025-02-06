@@ -1,6 +1,6 @@
 # 环境需求
 
-* PHP >= 7.2
+* PHP >= 8.1
 * [Composer](https://getcomposer.org/) >= 2.0
 
 

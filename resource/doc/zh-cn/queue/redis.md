@@ -28,8 +28,6 @@ return [
 `retry_seconds` 和 `max_attempts`共同控制。比如`max_attempts`为5，`retry_seconds`为10，第1次重试间隔为`1*10`秒，第2次重试时间间隔为 `2*10秒`，第3次重试时间间隔为`3*10秒`，以此类推直到重试5次。如果超过了`max_attempts`设置测重试次数，则消息放入key为`{redis-queue}-failed`的失败队列。
 
 ## 投递消息(同步)
-> **注意**
-> 需要webman/redis >= 1.2.0，依赖 redis扩展
 
 ```php
 <?php

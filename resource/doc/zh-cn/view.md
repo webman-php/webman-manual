@@ -280,10 +280,10 @@ class UserController
 #### 控制器
 当控制器调用`view('模版名',[]);`时，视图文件按照如下规则查找：
 
-1. `/`开头则直接使用该路径查找视图文件(`此特性需要webman-framework>=1.6.0`)
+1. `/`开头则直接使用该路径查找视图文件
 2. 不是以`/`开头并且非多应用时，使用 `app/view/` 下对应的视图文件
 3. 不是以`/`开头并且是[多应用](multiapp.md)时，使用 `app/应用名/view/` 下对应的视图文件
-4. 如果不传模板参数，自动根据2 3规则查找模板文件(`此特性需要webman-framework>=1.6.0`)
+4. 如果不传模板参数，自动根据2 3规则查找模板文件
 
 例子：
 ```php
@@ -317,8 +317,6 @@ Route::any('/admin/user/get', function (Reqeust $reqeust) {
 
 #### 省略模板参数
 
-> **注意**
-> 此特性需要webman-framework>=1.6.0
 
 在类的控制器里可以省略模板参数，例如
 ```php
@@ -340,9 +338,6 @@ class UserController
 
 ## 扩展twig
 
-> **注意**
-> 此特性需要webman-framework>=1.4.8
-
 我们可以通过给配置`view.extension`回调，来扩展twig视图实例，例如`config/view.php`如下
 ```php
 <?php
@@ -359,8 +354,7 @@ return [
 
 
 ## 扩展blade
-> **注意**
-> 此特性需要webman-framework>=1.4.8
+
 同样的我们可以通过给配置`view.extension`回调，来扩展blade视图实例，例如`config/view.php`如下
 
 ```php
@@ -378,9 +372,6 @@ return [
 ```
 
 ## blade使用component组件
-
-> **注意
-> 需要webman/blade>=1.5.2**
 
 假设需要添加一个Alert组件
 

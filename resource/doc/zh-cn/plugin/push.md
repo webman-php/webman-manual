@@ -5,8 +5,6 @@
 
 插件中自带一个网页js客户端push.js以及uniapp客户端`uniapp-push.js`，其它语言客户端在 https://pusher.com/docs/channels/channels_libraries/libraries/ 下载
 
-> 插件需要webman-framework>=1.2.0
-
 ## 安装
 
 ```sh
