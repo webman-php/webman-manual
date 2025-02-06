@@ -1,8 +1,10 @@
 # webman是什么
+Webman是一款基于Workerman构建的高性能服务框架，集成了HTTP、WebSocket、TCP、UDP等多种模块。通过常驻内存、协程、连接池等先进技术，Webman不仅突破了传统PHP的性能瓶颈，还极大地扩展了其应用场景。
 
-webman是一款基于[workerman](https://www.workerman.net)开发的高性能HTTP服务框架。webman用于替代传统的php-fpm架构，提供超高性能可扩展的HTTP服务。你可以用webman开发网站，也可以开发HTTP接口或者微服务。
+此外，Webman还提供了强大的插件机制，使开发者能够快速集成和复用其他开发者开发的功能模块。无论是构建网站、开发HTTP接口、实现即时通讯、搭建物联网系统，还是开发游戏、TCP/UDP服务、Unix Socket服务等，Webman都能轻松应对，展现出卓越的性能和灵活性。
 
-除此之外，webman还支持自定义进程，可以做workerman能做的任何事情，例如websocket服务、物联网、游戏、TCP服务、UDP服务、unix socket服务等等。
+> **注意**
+> 当前文档为`webman v2`版本，如果你使用的是v1版本，请查看[webman v1文档](/doc/webman-v1/)
 
 # webman理念
 **以最小内核提供最大的扩展性与最强的性能。**

@@ -1,6 +1,6 @@
 # Cache
 
-[webman/cache](https://github.com/webman-php/cache)基于[symfony/cache](https://github.com/symfony/cache)开发，兼容协程和非协程环境，自带连接池。
+[webman/cache](https://github.com/webman-php/cache)基于[symfony/cache](https://github.com/symfony/cache)开发的缓存组件，兼容协程和非协程环境，支持连接池。
 
 ## 安装
 
@@ -65,7 +65,9 @@ composer require -W webman/redis
 > 要想使用`illuminate/redis`请确保`php-cli`安装了Redis扩展，执行`php -m` 查看`php-cli`支持的扩展。
 
 ### stores.redis.connection
-`stores.redis.connection` 对应的是`config/redis.php` 里对应的key。建议在`config/redis.php`创建一个独立的key，例如cache类似如下
+`stores.redis.connection` 对应的是`config/redis.php` 里对应的key。当使用redis时，会复用`webman/redis`的配置包括连接池配置。
+
+建议在`config/redis.php`创建一个独立的key，例如cache类似如下
 
 ```php
 <?php

@@ -1,18 +1,18 @@
 # 快速开始
 
-webman数据库默认采用的是 [illuminate/database](https://github.com/illuminate/database)，也就是[laravel的数据库](https://learnku.com/docs/laravel/8.x/database/9400)，用法与laravel相同。
+[webman/database](https://github.com/webman-php/database)是基于[illuminate/database](https://github.com/illuminate/database)开发的，并加入了连接池功能，支持协程和非携程环境，接口用法与laravel相同。
 
-当然你可以参考[使用其它数据库组件](others.md)章节使用ThinkPHP或者其它数据库。
+开发者也可以参考[使用其它数据库组件](others.md)章节使用ThinkPHP或者其它数据库。
 
 ## 安装
 
-`composer require -W illuminate/database illuminate/pagination illuminate/events symfony/var-dumper laravel/serializable-closure`
+`composer require -W webman/database illuminate/pagination illuminate/events symfony/var-dumper`
 
 安装后需要restart重启(reload无效)
 
 > **提示**
 > 如果不需要分页、数据库事件、打印SQL，则只需要执行
-> `composer require -W illuminate/database laravel/serializable-closure`
+> `composer require -W illuminate/database`
 
 ## 数据库配置
 `config/database.php`
@@ -38,8 +38,15 @@ return [
             'strict'      => true,
             'engine'      => null,
             'options' => [
-                \PDO::ATTR_TIMEOUT => 3
-            ]
+                PDO::ATTR_EMULATE_PREPARES => false, // 当使用swoole或swow作为驱动时是必须的
+            ],
+            'pool' => [ // 连接池配置，仅支持swoole/swow驱动
+                'max_connections' => 5, // 最大连接数
+                'min_connections' => 1, // 最小连接数
+                'wait_timeout' => 3,    // 从连接池获取连接等待的最大时间，超时后会抛出异常
+                'idle_timeout' => 60,   // 连接池中连接最大空闲时间，超时后会关闭回收，直到连接数为min_connections
+                'heartbeat_interval' => 50, // 连接池心跳检测时间，单位秒，不要小于60
+            ],
         ],
     ],
 ];
