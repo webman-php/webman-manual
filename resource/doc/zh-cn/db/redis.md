@@ -1,6 +1,6 @@
 # Redis
 
-[webman/redis](https://github.com/webman-php/redis)是在[illuminate/redis](https://github.com/illuminate/redis)的基础上添加了连接池功能，用法与laravel相同。
+[webman/redis](https://github.com/webman-php/redis)是在[illuminate/redis](https://github.com/illuminate/redis)的基础上添加了连接池功能，支持协程和非协程环境，用法与laravel相同。
 
 使用`illuminate/redis`之前必须先给`php-cli`安装redis扩展。
 
@@ -10,7 +10,7 @@
 ## 安装
 
 ```php
-composer require -W illuminate/redis illuminate/events
+composer require -W webman/redis illuminate/events
 ```
 
 安装后需要restart重启(reload无效)
