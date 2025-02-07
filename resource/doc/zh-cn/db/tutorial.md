@@ -1,6 +1,6 @@
 # 快速开始
 
-[webman/database](https://github.com/webman-php/database)是基于[illuminate/database](https://github.com/illuminate/database)开发的，并加入了连接池功能，支持协程和非携程环境，接口用法与laravel相同。
+[webman/database](https://github.com/webman-php/database)是基于[illuminate/database](https://github.com/illuminate/database)开发的，并加入了连接池功能，支持协程和非协程环境，用法与laravel相同。
 
 开发者也可以参考[使用其它数据库组件](others.md)章节使用ThinkPHP或者其它数据库。
 
