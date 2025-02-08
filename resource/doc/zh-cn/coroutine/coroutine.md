@@ -46,6 +46,8 @@ return [
             'publicPath' => public_path()
         ]
     ]
+    
+    // ... 其它配置省略 ...
 ];
 ```
 
@@ -354,7 +356,9 @@ return [
             'appPath' => app_path(),
             'publicPath' => public_path()
         ]
-    ]
+    ],
+    
+    // ... 其它配置省略 ...
 ];
 ```
 
