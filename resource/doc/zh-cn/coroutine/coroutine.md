@@ -29,7 +29,7 @@ return [
             'publicPath' => public_path()
         ]
     ],
-    'webman-coroutine' => [
+    'my-coroutine' => [
         'handler' => Http::class,
         'listen' => 'http://0.0.0.0:8686',
         'count' => 1,
@@ -314,3 +314,88 @@ class IndexController
 ## 更多协程及相关组件介绍
 
 参考[workerman 协程文档](https://www.workerman.net/doc/workerman/coroutine/coroutine.html)
+
+## 协程与非协程混合部署
+webman支持协程和非协程混合部署，例如非协程处理普通业务，协程处理慢IO业务，通过nginx转发请求到不同的服务上。
+
+例如 `config/process.php`
+
+```php
+return [
+    'webman' => [
+        'handler' => Http::class,
+        'listen' => 'http://0.0.0.0:8787',
+        'count' => 1,
+        'user' => '',
+        'group' => '',
+        'reusePort' => false,
+        'eventLoop' => '', // 默认为空自动选择Select或者Event，不开启协程
+        'context' => [],
+        'constructor' => [
+            'requestClass' => Request::class,
+            'logger' => Log::channel('default'),
+            'appPath' => app_path(),
+            'publicPath' => public_path()
+        ]
+    ],
+    'my-coroutine' => [
+        'handler' => Http::class,
+        'listen' => 'http://0.0.0.0:8686',
+        'count' => 1,
+        'user' => '',
+        'group' => '',
+        'reusePort' => false,
+        // 开启协程需要设置为 Workerman\Events\Swoole::class 或者 Workerman\Events\Swow::class 或者 Workerman\Events\Fiber::class
+        'eventLoop' => Workerman\Events\Swoole::class,
+        'context' => [],
+        'constructor' => [
+            'requestClass' => Request::class,
+            'logger' => Log::channel('default'),
+            'appPath' => app_path(),
+            'publicPath' => public_path()
+        ]
+    ]
+];
+```
+
+然后通过nginx配置转发请求到不同的服务上
+
+```nginx
+upstream webman {
+    server 127.0.0.1:8787;
+    keepalive 10240;
+}
+
+# 新增一个8686 upstream
+upstream task {
+   server 127.0.0.1:8686;
+   keepalive 10240;
+}
+
+server {
+  server_name webman.com;
+  listen 80;
+  access_log off;
+  root /path/webman/public;
+
+  # 以/tast开头的请求走8686端口，请按实际情况将/tast更改为你需要的前缀
+  location /tast {
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header Host $host;
+      proxy_http_version 1.1;
+      proxy_set_header Connection "";
+      proxy_pass http://task;
+  }
+
+  # 其它请求走原8787端口
+  location / {
+      proxy_set_header X-Real-IP $remote_addr;
+      proxy_set_header Host $host;
+      proxy_http_version 1.1;
+      proxy_set_header Connection "";
+      if (!-f $request_filename){
+          proxy_pass http://webman;
+      }
+  }
+}
+```
