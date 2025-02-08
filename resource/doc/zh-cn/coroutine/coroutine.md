@@ -6,6 +6,7 @@ webman是基于workerman开发的，所以webman可以使用workerman的协程�
 - Workerman >= 5.1.0 (`composer require workerman/workerman ^v5.1`)
 - webman-framework >= 2.1 (`composer require workerman/webman-framework ^v2.1`)
 - 安装了swoole或者swow扩展，或者安装了`composer require revolt/event-loop` (Fiber)
+- 协程默认是关闭的，需要设置eventLoop开启协程支持
 
 ## 开启方法
 webman支持为不同的进程开启不同的驱动，所以你可以在`config/process.php`中通过`eventLoop`配置协程驱动：
@@ -19,7 +20,24 @@ return [
         'user' => '',
         'group' => '',
         'reusePort' => false,
-        'eventLoop' => Workerman\Events\Swoole::class, // 或者 Workerman\Events\Swow::class 或者 Workerman\Events\Fiber::class
+        'eventLoop' => '', // 默认为空自动选择Select或者Event，不开启协程
+        'context' => [],
+        'constructor' => [
+            'requestClass' => Request::class,
+            'logger' => Log::channel('default'),
+            'appPath' => app_path(),
+            'publicPath' => public_path()
+        ]
+    ],
+    'webman-coroutine' => [
+        'handler' => Http::class,
+        'listen' => 'http://0.0.0.0:8686',
+        'count' => 1,
+        'user' => '',
+        'group' => '',
+        'reusePort' => false,
+        // 开启协程需要设置为 Workerman\Events\Swoole::class 或者 Workerman\Events\Swow::class 或者 Workerman\Events\Fiber::class
+        'eventLoop' => Workerman\Events\Swoole::class,
         'context' => [],
         'constructor' => [
             'requestClass' => Request::class,
@@ -89,6 +107,10 @@ class TestController
 }
 ```
 
+> **注意**
+> 协程环境下并非禁止使用全局变量或静态变量，而是禁止使用全局变量或静态变量存储**请求相关的状态数据**。
+> 例如全局配置、数据库连接、一些类的单例等需要全局共享的对象数据是推荐用全局变量或静态变量存储的。
+
 将进程数设置为1，当我们连续发起两个请求时  
 http://127.0.0.1:8787/test?name=lilei  
 http://127.0.0.1:8787/test?name=hanmeimei  
@@ -116,6 +138,10 @@ class TestController
 }
 ```
 
+`support\Context`类用于存储协程上下文数据，当协程执行完毕后，相应的context数据会自动删除。
+协程环境里，因为每个请求都是单独的协程，所以当请求完成时context数据会自动销毁。
+非协程环境里，context会在请求结束时会自动销毁。
+
 **局部变量不会造成数据污染**
 ```php
 <?php
@@ -138,9 +164,6 @@ class TestController
 ```
 因为`$name`是局部变量，协程之间无法互相访问局部变量，所以使用局部变量是协程安全的。
 
-`support\Context`类用于存储协程上下文数据，当协程执行完毕后，相应的context数据会自动删除。
-协程环境里，因为每个请求都是单独的协程，所以当请求完成时context数据会自动销毁。
-为了兼容，`support\Context`同时支持非协程环境使用，非协程环境下context会在请求结束时会自动销毁。
 
 ## Locker 锁
 有时候一些组件或者业务没有考虑到协程环境，可能会出现资源竞争或原子性问题，这时候可以使用`Workerman\Locker`加锁来实现排队处理，防止并发问题。
