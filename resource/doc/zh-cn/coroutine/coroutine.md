@@ -49,6 +49,10 @@ return [
 ];
 ```
 
+> **提示**
+> webman可以为不同的进程设置不同的eventLoop，这意味着你可以选择性的为特定进程开启协程。
+> 例如上面配置中8787端口的服务没有开启协程，8686端口的服务开启了协程，配合nginx转发可以实现协程和非协程混合部署。
+
 ## 协程示例
 ```php
 <?php
@@ -186,7 +190,9 @@ class IndexController
             $redis = new Redis();
             $redis->connect('127.0.0.1', 6379);
         }
-        // 如果不加锁，会触发类似 "Socket#10 has already been bound to another coroutine#10" 错误
+        // 如果不加锁，Swoole下会触发类似 "Socket#10 has already been bound to another coroutine#10" 错误
+        // Swow下可能会触发coredump
+        // Fiber下因为Redis扩展是同步阻塞IO，所以不会有问题
         Locker::lock('redis');
         $time = $redis->time();
         Locker::unlock('redis');
@@ -197,7 +203,7 @@ class IndexController
 ```
 
 ## Parallel 并发执行
-当我们需要并发执行多个任务，可以使用`Workerman\Parallel`来实现。
+当我们需要并发执行多个任务并获取结果时，可以使用`Workerman\Parallel`来实现。
 
 ```php
 <?php
