@@ -363,7 +363,7 @@ class MiddlewareA implements MiddlewareInterface
 ## 中间件执行顺序
  - 中间件执行顺序为`全局中间件`->`应用中间件`->`控制器中间件`->`路由中间件`->`方法中间件`。
  - 当同一个层次有多个中间件时，按照同层次中间件实际配置顺序执行。
- - 404请求默认不会触发任何中间件(不过仍然可以通过`Route::fallback(function(){})->middleware()`添加中间件)。
+ - 404请求默认不会触发任何中间件(不过仍然可以通过`Route::fallback(function(){})->middleware()`添加中间件(需要webman-framework>=1.6.0))。
 
 ## 路由向中间件传参(route->setParams)
 
