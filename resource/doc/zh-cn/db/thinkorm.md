@@ -2,6 +2,10 @@
 
 [webman/think-orm](https://github.com/webman-php/think-orm) 是基于 [top-think/think-orm](https://github.com/top-think/think-orm) 开发的数据库组件，支持连接池，支持协程和非协程环境。
 
+> **注意**
+> 当前是webman-v2的手册，如果你使用的是webman-v1，请参考[webman-v1 think-orm](https://www.workerman.net/doc/webman-v1/db/thinkorm.html)
+
+
 ### 安装think-orm
 
 `composer require -W webman/think-orm`
