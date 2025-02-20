@@ -90,6 +90,9 @@ illuminate/database 数据库及版本支持情况如下：
      ],
  ];
  ```
+
+
+
  
  ## 使用多个数据库
 通过`Db::connection('配置名')`来选择使用哪个数据库，其中`配置名`为配置文件`config/database.php`中的对应配置的`key`。

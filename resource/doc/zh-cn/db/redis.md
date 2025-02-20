@@ -36,6 +36,14 @@ return [
 ];
 ```
 
+## 关于连接池
+* 每个进程有自己的连接池，进程间不共享连接池。
+* 不开启协程时，业务在进程内排队执行，不会产生并发，所以连接池最多只有1个连接。
+* 开启协程后，业务在进程内并发执行，连接池会根据需要动态调整连接数，最多不超过`max_connections`，最少不小于`min_connections`。
+* 因为连接池连接数最大为`max_connections`，当操作Redis的协程数大于`max_connections`时，会有协程排队等待，最多等待`wait_timeout`秒，超过则触发异常。
+* 在空闲的情况下(包括协程和非协程环境)，连接会在`idle_timeout`时间后被回收，直到连接数为`min_connections`(`min_connections`可为0)。
+
+
 ## 示例
 ```php
 <?php
