@@ -53,21 +53,19 @@ return [
 `stores.driver`支持3种驱动，**file**、**redis**、**array**。
 
 ### file 文件驱动
-此为默认驱动，可通过`'default' => 'xxx'`字段更改。
+此为默认驱动，不依赖其它组件，支持跨进程共享缓存数据，不支持多服务器共享缓存数据。
+
+### array 内存驱动
+内存存储，性能最好，但是会占用内存，不支持跨进程跨服务器共享数据，进程重启后失效，一般用于缓存数据量小的项目。
 
 ### redis 驱动
-Redis存储，如需使用请先安装Redis组件，命令如下
+依赖[webman/redis](./redis.md)组件，支持跨进程跨服务器共享缓存数据。
 
-```
-composer require -W webman/redis
-```
-> **提示**
-> 要想使用`illuminate/redis`请确保`php-cli`安装了Redis扩展，执行`php -m` 查看`php-cli`支持的扩展。
+**stores.redis.connection**
 
-### stores.redis.connection
 `stores.redis.connection` 对应的是`config/redis.php` 里对应的key。当使用redis时，会复用`webman/redis`的配置包括连接池配置。
 
-建议在`config/redis.php`创建一个独立的key，例如cache类似如下
+**建议在`config/redis.php`增加一个独立的配置，例如cache类似如下**
 
 ```php
 <?php
@@ -78,7 +76,7 @@ return [
         'port' => 6379,
         'database' => 0,
     ],
-    'cache' => [ // <===
+    'cache' => [ // <==== 新增
         'password' => 'abc123',
         'host' => '127.0.0.1',
         'port' => 6379,
@@ -92,7 +90,7 @@ return [
 ```php
 <?php
 return [
-    'default' => 'redis', // <=== 
+    'default' => 'redis', // <==== 
     'stores' => [
         'file' => [
             'driver' => 'file',
@@ -108,8 +106,6 @@ return [
     ]
 ];
 ```
-### array 内存驱动
-内存存储，性能最好，但是会占用内存，一般用于缓存数据量小的项目。
 
 ## 切换存储
 可以通过如下代码手动切store，从而使用不同的存储驱动，例如
