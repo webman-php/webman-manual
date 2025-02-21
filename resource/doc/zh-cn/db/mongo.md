@@ -9,7 +9,7 @@ webman默认使用 [jenssegers/mongodb](https://github.com/jenssegers/laravel-mo
 ## 安装
 
 ```php
-composer require -W webman/database jenssegers/mongodb ^3.8.0
+composer require -W webman/database jenssegers/mongodb ^4.8
 ```
 
 安装后需要restart重启(reload无效)
