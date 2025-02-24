@@ -1,6 +1,6 @@
 ## Medoo
 
-Medoo是一个轻量级的数据库操作插件，[Medoo官网](https://medoo.in/)。
+[webman/medoo](https://github.com/webman-php/medoo)在[Medoo](https://medoo.in/)的基础上增加了连接池功能，并支持协程和非协程环境，用法与Medoo相同。
 
 ## 安装
 `composer require webman/medoo`
@@ -14,7 +14,7 @@ Medoo是一个轻量级的数据库操作插件，[Medoo官网](https://medoo.in
 namespace app\controller;
 
 use support\Request;
-use Webman\Medoo\Medoo;
+use support\Medoo;
 
 class Index
 {
@@ -56,6 +56,13 @@ return [
         ],
         'command' => [
             'SET SQL_MODE=ANSI_QUOTES'
+        ],
+        'pool' => [ // 连接池配置
+            'max_connections' => 5, // 最大连接数
+            'min_connections' => 1, // 最小连接数
+            'wait_timeout' => 60,   // 从连接池获取连接等待的最大时间，超时后会抛出异常
+            'idle_timeout' => 3,    // 连接池中连接最大空闲时间，超时后会关闭回收，直到连接数为min_connections
+            'heartbeat_interval' => 50, // 连接池心跳检测时间，单位秒，建议小于60秒
         ]
     ],
     // 这里新增了一个other的配置
@@ -76,7 +83,14 @@ return [
         ],
         'command' => [
             'SET SQL_MODE=ANSI_QUOTES'
-        ]
+        ],
+        'pool' => [
+            'max_connections' => 5,
+            'min_connections' => 1,
+            'wait_timeout' => 60,
+            'idle_timeout' => 3,
+            'heartbeat_interval' => 50,
+        ],
     ],
 ];
 ```

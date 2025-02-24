@@ -1,6 +1,6 @@
 # MongoDB
 
-webman默认使用 [jenssegers/mongodb](https://github.com/jenssegers/laravel-mongodb) 作为mongodb组件，它是从laravel项目中抽离出来的，用法与laravel相同。
+webman默认使用 [mongodb/laravel-mongodb](https://github.com/mongodb/laravel-mongodb) 作为mongodb组件，它是从laravel项目中抽离出来的，用法与laravel相同。
 
 使用`jenssegers/mongodb`之前必须先给`php-cli`安装mongodb扩展。
 
@@ -9,7 +9,7 @@ webman默认使用 [jenssegers/mongodb](https://github.com/jenssegers/laravel-mo
 ## 安装
 
 ```php
-composer require -W webman/database jenssegers/mongodb ^4.8
+composer require -W webman/database mongodb/laravel-mongodb ^4.8
 ```
 
 安装后需要restart重启(reload无效)
@@ -55,8 +55,8 @@ class UserController
 {
     public function db(Request $request)
     {
-        Db::connection('mongodb')->collection('test')->insert([1,2,3]);
-        return json(Db::connection('mongodb')->collection('test')->get());
+        Db::connection('mongodb')->table('test')->insert([1,2,3]);
+        return json(Db::connection('mongodb')->table('test')->get());
     }
 }
 ```
