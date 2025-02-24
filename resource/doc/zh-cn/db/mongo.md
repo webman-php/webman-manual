@@ -91,5 +91,5 @@ class Test extends Model
 
 ## 更多内容请访问
 
-https://github.com/jenssegers/laravel-mongodb
+https://github.com/mongodb/laravel-mongodb
 
