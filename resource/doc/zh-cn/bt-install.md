@@ -18,7 +18,7 @@ composer create-project workerman/webman
 ![](../assets/img/bt-install-2.png)
 
 > **注意：**
-> 宝塔会自动守护进程，启动命令为 `php start.php start`，不加 `-d` 参数，否则无法启动
+> 宝塔会自动守护进程，启动命令为 `php /www/wwwroot/webman/start.php start`，不加 `-d` 参数，否则无法启动
 
 
 ### 3. 配置站点
