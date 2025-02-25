@@ -18,7 +18,7 @@ composer create-project workerman/webman:~2.0
 ```
 
 > **提示**
-> 如果报错用了有问题的composer镜像代理(例如阿里云)，请执行 `composer config -g --unset repos.packagist` 取消代理。
+> 如果报错用了有问题的composer镜像代理，请执行 `composer config -g --unset repos.packagist` 取消代理。
 > 或者使用腾讯云composer镜像 `composer config -g repos.packagist composer https://mirrors.cloud.tencent.com/composer/`
 
 ### 2. 运行
