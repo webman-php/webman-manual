@@ -4,6 +4,9 @@
 
 开发者也可以参考[使用其它数据库组件](others.md)章节使用ThinkPHP或者其它数据库。
 
+> **注意**
+> 当前手册为 webman-v2 版本，如果您使用的是webman-v1版本，请查看 [v1版本手册](/doc/webman-v1/db/tutorial.html)
+
 ## 安装
 
 `composer require -W webman/database illuminate/pagination illuminate/events symfony/var-dumper`
