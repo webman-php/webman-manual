@@ -5,6 +5,7 @@
 使用`illuminate/redis`之前必须先给`php-cli`安装redis扩展。
 
 > **注意**
+> 当前手册为 webman v2 版本，如果您使用的是webman v1版本，请查看 [v1版本手册](/doc/webman-v1/db/redis.html)
 > 此组件需要安装redis扩展，使用命令`php -m | grep redis`查看`php-cli`是否装了redis扩展。
 
 ## 安装

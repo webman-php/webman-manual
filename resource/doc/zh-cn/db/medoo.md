@@ -2,6 +2,10 @@
 
 [webman/medoo](https://github.com/webman-php/medoo)在[Medoo](https://medoo.in/)的基础上增加了连接池功能，并支持协程和非协程环境，用法与Medoo相同。
 
+
+> **注意**
+> 当前手册为 webman v2 版本，如果您使用的是webman v1版本，请查看 [v1版本手册](/doc/webman-v1/db/medoo.html)
+
 ## 安装
 `composer require webman/medoo`
 

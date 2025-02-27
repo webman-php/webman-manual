@@ -2,6 +2,10 @@
 
 [webman/cache](https://github.com/webman-php/cache)是基于[symfony/cache](https://github.com/symfony/cache)开发的缓存组件，兼容协程和非协程环境，支持连接池。
 
+
+> **注意**
+> 当前手册为 webman v2 版本，如果您使用的是webman v1版本，请查看 [v1版本手册](/doc/webman-v1/db/cache.html)
+
 ## 安装
 
 ```php

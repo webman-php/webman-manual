@@ -4,6 +4,8 @@ webman默认使用 [mongodb/laravel-mongodb](https://github.com/mongodb/laravel-
 
 使用`jenssegers/mongodb`之前必须先给`php-cli`安装mongodb扩展。
 
+> **注意**
+> 当前手册为 webman v2 版本，如果您使用的是webman v1版本，请查看 [v1版本手册](/doc/webman-v1/db/mongo.html)
 > 使用命令`php -m | grep mongodb`查看`php-cli`是否装了mongodb扩展。注意：即使你在`php-fpm`安装了mongodb扩展，不代表你在`php-cli`可以使用它，因为`php-cli`和`php-fpm`是不同的应用程序，可能使用的是不同的`php.ini`配置。使用命令`php --ini`来查看你的`php-cli`使用的是哪个`php.ini`配置文件。
 
 ## 安装

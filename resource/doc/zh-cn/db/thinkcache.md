@@ -3,7 +3,7 @@
 think-cache是从thinkphp框架抽离出的一个组件，并添加了连接池功能，自动支持协程和非协程环境。
 
 > **注意**
-> 当前是webman v2的手册，如果你使用的是webman v1，请参考[webman-v1 think-cache](https://www.workerman.net/doc/webman-v1/db/thinkcache.html)
+> 当前手册为 webman v2 版本，如果您使用的是webman v1版本，请查看 [v1版本手册](/doc/webman-v1/db/thinkcache.html)
 
 ## 安装
 `composer require -W webman/think-cache`
