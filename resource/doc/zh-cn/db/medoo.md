@@ -3,7 +3,7 @@
 Medoo是一个轻量级的数据库操作插件，[Medoo官网](https://medoo.in/)。
 
 ## 安装
-`composer require webman/medoo`
+`composer require webman/medoo:~1.0`
 
 ## 数据库配置
 配置文件位置在 `config/plugin/webman/medoo/database.php`

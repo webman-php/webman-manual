@@ -2,7 +2,7 @@
 
 ### 安装ThinkORM
 
-`composer require -W webman/think-orm`
+`composer require -W webman/think-orm:~1.1`
 
 安装后需要restart重启(reload无效)
 

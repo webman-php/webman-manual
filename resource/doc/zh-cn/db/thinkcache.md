@@ -2,7 +2,7 @@
 ## ThinkCache
 
 ### 安装ThinkCache  
-`composer require -W webman/think-cache`
+`composer require -W webman/think-cache:~1.0`
 
 安装后需要restart重启(reload无效)
 
