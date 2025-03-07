@@ -95,8 +95,6 @@ Swow底层会自动hook php的阻塞函数，但是因为这种hook影响了PHP�
 * 如果你的项目没有使用Swow时，请不要安装Swow扩展
 * 如果你的项目使用了Swow，请设置`eventLoop`为`Workerman\Events\Swow::class` 
 
-```ini
-
 ## 协程上下文
 
 协程环境禁止将**请求相关**的状态信息存储在全局变量或者静态变量中，因为这可能会导致全局变量污染，例如
