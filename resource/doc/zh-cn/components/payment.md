@@ -27,6 +27,7 @@ composer require yansongda/pay ^3.0.0
  * @date 2022/03/11 20:15
  */
 return [
+    '_force' => true, // 注意，这个必须是true
     'alipay' => [
         'default' => [
             // 必填-支付宝分配的 app_id
@@ -98,8 +99,7 @@ return [
         'timeout' => 5.0,
         'connect_timeout' => 5.0,
         // 更多配置项请参考 [Guzzle](https://guzzle-cn.readthedocs.io/zh_CN/latest/request-options.html)
-    ],
-    '_force' => true,
+    ]
 ];
 ```
 > 注意：证书目录没有规定，以上示例是放在的框架的 `payment`目录下
