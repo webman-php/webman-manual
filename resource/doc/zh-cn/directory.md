@@ -36,6 +36,5 @@
 └── support                       类库适配(包括第三方类库)
     ├── Request.php               请求类
     ├── Response.php              响应类
-    ├── helpers.php               助手函数(业务自定义函数请写到app/functions.php)
     └── bootstrap.php             进程启动后初始化脚本
 ```
