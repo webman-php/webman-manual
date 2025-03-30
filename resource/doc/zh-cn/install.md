@@ -1,4 +1,4 @@
-# 环境需求
+# 如何安装webman
 
 * PHP >= 8.1
 * [Composer](https://getcomposer.org/) >= 2.0
