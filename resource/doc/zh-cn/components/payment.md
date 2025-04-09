@@ -8,7 +8,7 @@
 ## 安装
 
 ```php
-composer require yansongda/pay ^3.0.0
+composer require yansongda/pay ~3.0
 ```
 
 ## 使用 
