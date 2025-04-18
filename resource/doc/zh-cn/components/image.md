@@ -1,18 +1,16 @@
 # 图像处理组件
 
-## intervention/image
-
-### 项目地址
+## 项目地址
 
 https://github.com/Intervention/image
   
-### 安装
+## 安装
  
 ```php
 composer require intervention/image
 ```
   
-### 使用
+## 使用
 
 **上传页面片段**
 
@@ -51,7 +49,7 @@ class UserController
 > **注意**
 > 以上是v3版本用法
 
-### 更多内容
+## 更多内容
 
 访问 https://image.intervention.io/v3
   

@@ -1,16 +1,16 @@
-#限流器
+# 限流器
 webman限流器，支持注解限流。
 支持apcu、redis、memory驱动。
 
-##源码地址
+## 源码地址
 https://github.com/webman-php/rate-limiter
 
-##安装
+## 安装
 ```
 composer require webman/rate-limiter
 ```
 
-##使用
+## 使用
 ```php
 <?php
 namespace app\controller;
@@ -117,7 +117,7 @@ class UserController {
 }
 ```
 
-##配置
+## 配置
 **config/plugin/webman/rate-limiter/app.php**
 ```
 <?php

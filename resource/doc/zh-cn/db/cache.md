@@ -1,4 +1,4 @@
-# Cache
+# Cache缓存
 
 [webman/cache](https://github.com/webman-php/cache)是基于[symfony/cache](https://github.com/symfony/cache)开发的缓存组件，兼容协程和非协程环境，支持连接池。
 
@@ -59,18 +59,18 @@ return [
 ```
 `stores.driver`支持4种驱动，**file**、**redis**、**array**、**apcu**。
 
-### file 文件驱动
+#### file 文件驱动
 此为默认驱动，不依赖其它组件，支持跨进程共享缓存数据，不支持多服务器共享缓存数据。
 
-### array 内存驱动
+#### array 内存驱动
 内存存储，性能最好，但是会占用内存，不支持跨进程跨服务器共享数据，进程重启后失效，一般用于缓存数据量小的项目。
 
-### apcu 内存驱动
+#### apcu 内存驱动
 内存存储，性能仅次于 array，支持跨进程共享缓存数据，不支持多服务器共享缓存数据，进程重启后失效，一般用于缓存数据量小的项目。
 
 > 需要安装并启用 [APCu 扩展](https://pecl.php.net/package/APCu)；不建议用于频繁进行缓存写入/删除的场景，会导致明显的性能下降。
 
-### redis 驱动
+#### redis 驱动
 依赖[webman/redis](./redis.md)组件，支持跨进程跨服务器共享缓存数据。
 
 **stores.redis.connection**

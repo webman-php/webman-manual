@@ -22,7 +22,7 @@
 
 `composer require webman/console`
 
-#### 创建插件
+### 创建插件
 
 假设创建的插件名字叫 `foo/admin` (名称也就是后面composer要发布的项目名，名称需要小写)
 运行命令
@@ -35,7 +35,7 @@
 使用时以 `plugin` 为前缀访问，例如 config('plugin.foo.admin.app');
 
 
-#### 导出插件
+### 导出插件
 
 当我们开发完插件后，执行以下命令导出插件
 `php webman plugin:export --name=foo/admin`
@@ -47,7 +47,7 @@
 > 移除时默认操作是将 当前项目config/plugin 下的配置文件删除
 > 你可以修改Install.php以便在安装和卸载插件时做一些自定义操作。
 
-#### 提交插件
+### 提交插件
 * 假设你已经有 [github](https://github.com) 和 [packagist](https://packagist.org) 账号
 * 在[github](https://github.com)上创建一个admin项目并将代码上传，项目地址假设是 `https://github.com/你的用户名/admin`
 * 进入地址`https://github.com/你的用户名/admin/releases/new`发布一个release如 `v1.0.0`
@@ -63,7 +63,7 @@
 
 假设`foo/admin`插件需要添加`foo-admin:add`命令，参考如下步骤。 
 
-#### 新建命令
+### 新建命令
 
 **新建命令文件 `vendor/foo/admin/src/FooAdminAddCommand.php`**
 
@@ -109,7 +109,7 @@ class FooAdminAddCommand extends Command
 > **注意**
 > 为了避免插件间命令冲突，命令行格式建议为 `厂商-插件名:具体命令`，例如 `foo/admin` 插件的所有命令都应该以 `foo-admin:` 为前缀，例如 `foo-admin:add`。
 
-#### 增加配置
+### 增加配置
 **新建配置 `config/plugin/foo/admin/command.php`**
 ```php
 <?php
@@ -125,5 +125,5 @@ return [
 > **提示**
 > `command.php` 用于给插件配置自定义命令，数组中每个元素对应一个命令行类文件，每个类文件对应一个命令。当用户运行命令行时`webman/console`会自动加载每个插件`command.php`里设置的自定义命令。 想了解更多命令行相关请参考[命令行](console.md)
 
-#### 执行导出
+### 执行导出
 执行命令 `php webman plugin:export --name=foo/admin` 导出插件，并提交到`packagist`。这样用户安装 `foo/admin` 插件后，就会增加一个 `foo-admin:add` 命令。执行 `php webman foo-admin:add jerry` 将打印 `Admin add jerry`

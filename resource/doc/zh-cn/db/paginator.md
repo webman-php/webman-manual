@@ -1,6 +1,6 @@
 # 分页
 
-# 1. 基于Laravel的ORM的分页方式
+# 基于Laravel的ORM的分页方式
 Laravel的`illuminate/database`提供了方便的分页功能。
 
 ## 安装
@@ -139,7 +139,7 @@ class UserController
 效果如下：
 ![](../../assets/img/paginator.png)
 
-# 2. 基于Thinkphp的ORM的分页方式
+# 基于Thinkphp的ORM的分页方式
 无须额外安装类库,只要安装过think-orm即可
 ## 使用
 ```php

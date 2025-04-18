@@ -1,18 +1,16 @@
 # 微信SDK
 
-## overtrue/wechat
-
-### 项目地址
+## 项目地址
 
 https://github.com/overtrue/wechat
   
-### 安装
+## 安装
  
 ```php
 composer require overtrue/wechat ~5.0
 ```
   
-### 使用
+## 使用
 
 ```php
 <?php
@@ -39,7 +37,7 @@ class WechatController
 ```
   
   
-### 更多内容
+## 更多内容
 
 访问 https://easywechat.com/5.x/
 

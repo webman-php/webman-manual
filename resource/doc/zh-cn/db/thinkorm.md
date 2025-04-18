@@ -1,23 +1,23 @@
-## think-orm
+# think-orm
 
 [webman/think-orm](https://github.com/webman-php/think-orm) 是基于 [top-think/think-orm](https://github.com/top-think/think-orm) 开发的数据库组件，支持连接池，支持协程和非协程环境。
 
 > **注意**
 > 当前手册为 webman v2 版本，如果您使用的是webman v1版本，请查看 [v1版本手册](/doc/webman-v1/db/thinkorm.html)
 
-### 安装think-orm
+## 安装think-orm
 
 `composer require -W webman/think-orm`
 
 安装后需要restart重启(reload无效)
 
-### 配置文件
+## 配置文件
 根据实际情况修改配置文件 `config/think-orm.php`
 
-### 文档地址
+## 文档地址
 https://www.kancloud.cn/manual/think-orm
 
-### 使用
+## 使用
 
 ```php
 <?php
@@ -36,7 +36,7 @@ class FooController
 }
 ```
 
-### 创建模型
+## 创建模型
 
 think-orm模型继承`support\think\Model`，类似如下
 ```

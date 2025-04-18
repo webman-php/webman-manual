@@ -1,4 +1,4 @@
-## 自定义404
+# 自定义404
 
 如果你想动态控制404的内容时，例如在ajax请求时返回json数据 `{"code:"404", "msg":"404 not found"}`，页面请求时返回`app/view/404.html`模版，请参考如下示例
 
@@ -33,7 +33,7 @@ Route::fallback(function(Request $request){
 });
 ```
 
-## 自定义405
+# 自定义405
 从webman-framework 1.5.23开始，回调函数支持传递status参数，如果status是404则代表请求不存在，405代表不支持当前请求方法(例如Route::post()设置的路由通过GET方式访问)
 ```php
 use support\Request;
@@ -48,7 +48,7 @@ Route::fallback(function(Request $request, $status) {
 });
 ```
 
-## 自定义500
+# 自定义500
 **新建`app/view/500.html`**
 
 ```html

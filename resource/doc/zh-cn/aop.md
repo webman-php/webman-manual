@@ -2,7 +2,7 @@
 
 > 感谢 Hyperf 作者的提交
 
-### 安装
+## 安装
 
 - 安装 aop-integration
 
@@ -10,7 +10,7 @@
 composer require "hyperf/aop-integration: ^1.1"
 ```
 
-### 增加 AOP 相关配置
+## 增加 AOP 相关配置
 
 我们需要在 `config` 目录下，增加 `config.php` 配置
 
@@ -43,7 +43,7 @@ return [
 
 ```
 
-### 配置入口文件 start.php
+## 配置入口文件 start.php
 
 > 我们将初始化方法，放到 timezone 下方，以下省略其他代码
 
@@ -58,7 +58,7 @@ if ($timezone = config('app.default_timezone')) {
 ClassLoader::init();
 ```
 
-### 测试
+## 测试
 
 首先让我们编写待切入类
 

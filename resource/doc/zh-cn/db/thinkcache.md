@@ -14,7 +14,7 @@ think-cache是从thinkphp框架抽离出的一个组件，并添加了连接池�
 
 配置文件为 `config/think-cache.php`
 
-### 使用
+## 使用
 
   ```php
   <?php

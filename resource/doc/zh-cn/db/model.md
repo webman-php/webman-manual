@@ -1,4 +1,4 @@
-# 快速开始
+# 数据库模型 Model用法(Laravel风格)
 
 webman模型 基于 [Eloquent ORM](https://laravel.com/docs/7.x/eloquent) 。每个数据库表都有一个对应的「模型」用来与该表交互。你可以通过模型查询数据表中的数据，以及在数据表中插入新记录。
 
@@ -6,7 +6,7 @@ webman模型 基于 [Eloquent ORM](https://laravel.com/docs/7.x/eloquent) 。每
 
 > 注意：Eloquent ORM 要支持模型观察者需要额外导入`composer require "illuminate/events"` [例子](#模型观察者)
 
-## 示例
+## 数据库模型示例
 ```php
 <?php
 namespace app\model;

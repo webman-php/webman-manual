@@ -1,4 +1,4 @@
-## Medoo
+# Medoo 数据库
 
 [webman/medoo](https://github.com/webman-php/medoo)在[Medoo](https://medoo.in/)的基础上增加了连接池功能，并支持协程和非协程环境，用法与Medoo相同。
 
@@ -9,10 +9,10 @@
 ## 安装
 `composer require webman/medoo`
 
-## 数据库配置
+## Medoo数据库配置
 配置文件位置在 `config/plugin/webman/medoo/database.php`
 
-## 使用
+## Medoo数据库使用
 ```php
 <?php
 namespace app\controller;
@@ -35,7 +35,7 @@ class Index
 > 等同于
 > `Medoo::instance('default')->get('user', '*', ['uid' => 1]);`
 
-## 多数据库配置
+## Medoo多数据库配置
 
 **配置**  
 `config/plugin/webman/medoo/database.php` 里新增一个配置，key任意，这里使用的是`other`。
@@ -99,11 +99,10 @@ return [
 ];
 ```
 
-**使用**
+## Medoo数据库使用
 ```php
 $user = Medoo::instance('other')->get('user', '*', ['uid' => 1]);
 ```
 
-## 详细文档
 参见 [Medoo官方文档](https://medoo.in/api/select)
 

@@ -1,10 +1,10 @@
 # 宝塔面板安装Webman项目
 
-### 0. 环境要求
+## 0. 环境要求
 
 * PHP >= 8.1
 
-### 1. 创建项目
+## 1. 创建项目
 
 ![](../assets/img/bt-install-1.png)
 
@@ -13,7 +13,7 @@ cd /www/wwwroot
 composer create-project workerman/webman
 ```
 
-### 2. 设置网站
+## 2. 设置网站
 
 ![](../assets/img/bt-install-2.png?v=20250224)
 
@@ -21,16 +21,16 @@ composer create-project workerman/webman
 > 宝塔会自动守护进程，启动命令为 `php /www/wwwroot/webman/start.php start`，不加 `-d` 参数，否则无法启动
 
 
-### 3. 配置站点
+## 3. 配置站点
 ![](../assets/img/bt-install-3.png)
 
-### 4. 设置运行目录
+## 4. 设置运行目录
 ![](../assets/img/bt-install-4.png?v=20250224)
 
 > **注意：**
 > 为了系统安全，运行目录必须设置为 `/public`，错误的设置可能会导致敏感文件被外网访问
 
-### 5. 设置伪静态
+## 5. 设置伪静态
 ![](../assets/img/bt-install-5.png)
 
 ```
@@ -63,7 +63,7 @@ composer create-project workerman/webman
   }
 ```
 
-### 6. 给runtime可写权限
+## 6. 给runtime可写权限
 
 ![](../assets/img/bt-install-6.png)
 
@@ -74,11 +74,11 @@ chmod -R 777 /www/wwwroot/webman/runtime
 > **备注**
 > 正常不需要此步骤，疑似宝塔bug，服务设置的`www`用户启动，但实际是daemon用户启动，导致无法写入runtime目录
 
-### 7. 重启服务
+## 7. 重启服务
 ![](../assets/img/bt-install-7.png?v=20250224)
 
 
-### 8. 访问站点
+## 8. 访问站点
 
 访问站点 `http://example.com` 即可看到webman的欢迎页面
 

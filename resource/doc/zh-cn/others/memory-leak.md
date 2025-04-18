@@ -33,7 +33,7 @@ webman里长生命周期的数组包括：
 
 以下分别举例说明
 
-#### 无限膨胀的static数组
+### 无限膨胀的static数组
 ```php
 class Foo
 {
@@ -48,7 +48,7 @@ class Foo
 
 以`static`关键字定义的`$data`数组是长生命周期的数组，并且示例中`$data`数组随着请求不断增加而不断膨胀，导致内存泄漏。
 
-#### 无限膨胀的单例数组属性
+### 无限膨胀的单例数组属性
 ```php
 class Cache
 {
@@ -87,7 +87,7 @@ class Foo
 > **注意**
 > 如果 Cache::instance()->set(key, value) 添加的key是有限数量的，则不会内存泄漏，因为`$data`数组并没有无限膨胀。
 
-#### 无限膨胀的global数组
+### 无限膨胀的global数组
 ```php
 class Index
 {

@@ -1,4 +1,4 @@
-# 快速开始
+# 数据库快速入门(基于Laravel数据库组件)
 
 [webman/database](https://github.com/webman-php/database)是基于[illuminate/database](https://github.com/illuminate/database)开发的，并加入了连接池功能，支持协程和非协程环境，用法与laravel相同。
 
@@ -7,13 +7,17 @@
 > **注意**
 > 当前手册为 webman-v2 版本，如果您使用的是webman-v1版本，请查看 [v1版本手册](/doc/webman-v1/db/tutorial.html)
 
-## 安装
+## 数据库安装
 
 `composer require -W webman/database illuminate/pagination illuminate/events symfony/var-dumper`
 
 安装后需要restart重启(reload无效)
 
 > **提示**
+> webman/database 依赖于laravel的`illuminate/database`，所以安装时会自动安装`illuminate/database`的依赖包。
+ 
+
+> **注意**
 > 如果不需要分页、数据库事件、记录SQL，则只需要执行
 > `composer require -W webman/database`
 
@@ -55,6 +59,8 @@ return [
 ];
 ```
 
+除了`pool`配置外，其它配置与laravel相同。
+
 ## 关于连接池
 * 每个进程有自己的连接池，进程间不共享连接池。
 * 不开启协程时，业务在进程内排队执行，不会产生并发，所以连接池最多只有1个连接。
@@ -63,7 +69,7 @@ return [
 * 在空闲的情况下(包括协程和非协程环境)，连接会在`idle_timeout`时间后被回收，直到连接数为`min_connections`(`min_connections`可为0)。
 
 
-## 使用
+## 数据库使用示例
 ```php
 <?php
 namespace app\controller;
@@ -82,3 +88,5 @@ class UserController
     }
 }
 ```
+
+我们看到，用法与laravel相同，使用`Db::table()`方法来操作数据库。

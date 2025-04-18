@@ -10,9 +10,9 @@ https://github.com/teamones-open/casbin
 
 ## 安装
  
-  ```php
-  composer require teamones/casbin
-  ```
+```php
+composer require teamones/casbin
+```
 
 ## Casbin官网
 

@@ -1,4 +1,4 @@
-# vlucas/phpdotenv
+# ENV组件 vlucas/phpdotenv
 
 ## 说明
 `vlucas/phpdotenv`是一个环境变量加载组件，用来区分不同环境(如开发环境、测试环境等)的配置。
@@ -15,7 +15,7 @@ composer require vlucas/phpdotenv
   
 ## 使用
 
-#### 项目根目录新建`.env`文件
+### 项目根目录新建`.env`文件
 **.env**
 ```
 DB_HOST = 127.0.0.1
@@ -25,7 +25,7 @@ DB_USER = foo
 DB_PASSWORD = 123456
 ```
 
-#### 修改配置文件
+### 修改配置文件
 **config/database.php**
 ```php
 return [
