@@ -3,7 +3,7 @@ namespace app\controller;
 
 use GuzzleHttp\Psr7\Response;
 use support\Request;
-
+use app\support\Pangu;
 class Doc
 {
     public function index(Request $request)
@@ -51,6 +51,10 @@ class Doc
         $repo = $info['repo'] . "/tree/master/resource$uri";
 
         $langs = $this->getLangs();
+
+        if($lang == 'zh-cn'){
+            $content = Pangu::format($content);
+        }
 
         $path = substr($request->uri(), strlen("/doc/$lang/"));
 
