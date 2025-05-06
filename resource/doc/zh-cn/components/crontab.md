@@ -29,11 +29,11 @@ composer require workerman/crontab
   
 ## 使用
 
-**步骤一：新建进程文件 `process/Task.php`**
+**步骤一：新建进程文件 `app/process/Task.php`**
 
 ```php
 <?php
-namespace process;
+namespace app\process;
 
 use Workerman\Crontab\Crontab;
 
@@ -85,7 +85,7 @@ return [
     ....其它配置，这里省略....
   
     'task'  => [
-        'handler'  => process\Task::class
+        'handler'  => app\process\Task::class
     ],
 ];
 ```
