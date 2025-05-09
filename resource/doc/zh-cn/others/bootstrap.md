@@ -31,7 +31,7 @@ class MemReport implements Bootstrap
         // 是否是命令行环境 ?
         $is_console = !$worker;
         if ($is_console) {
-            // 如果你不想命令行环境执行这个初始化，则在这里直接返回
+            // 如果你不想在非命令行环境执行这个初始化，则在这里直接返回
             return;
         }
         
@@ -77,7 +77,7 @@ class MemReport implements Bootstrap
         // 是否是命令行环境 ?
         $is_console = !$worker;
         if ($is_console) {
-            // 如果你不想命令行环境执行这个初始化，则在这里直接返回
+            // 如果你不想在非命令行环境执行这个初始化，则在这里直接返回
             return;
         }
         
