@@ -38,6 +38,7 @@ php webman build:bin 8.1
 * 运行过程中会在webman.bin所在目录生成runtime目录，用于存放日志文件
 * 目前webman.bin不会读取外部php.ini文件，如需要自定义php.ini，请在 `/config/plugin/webman/console/app.php` 文件custom_ini中设置
 * 有些文件不需要打包，可以设置`config/plugin/webman/console/app.php`排除掉，避免打包后的文件过大
+* 二进制打包不支持使用swoole协程
 * 切勿将用户上传的文件存储在二进制包中，因为以`phar://`协议操作用户上传的文件是非常危险的(phar反序列化漏洞)。用户上传的文件必须单独存储在包之外的磁盘中。
 * 如果你的业务需要上传文件到public目录，需要将public目录独立出来放在webman.bin所在目录，这时候需要配置`config/app.php`如下并重新打包。
 ```
