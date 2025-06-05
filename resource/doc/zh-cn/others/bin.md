@@ -7,7 +7,7 @@ webman支持将项目打包成一个二进制文件，这使得webman无需php�
 > 需要关闭`php.ini`的phar配置选项，既设置 `phar.readonly = 0`
 
 ## 安装命令行工具
-`composer require webman/console ^1.2.24`
+`composer require webman/console`
 
 ## 打包
 运行命令
