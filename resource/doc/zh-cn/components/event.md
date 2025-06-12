@@ -115,5 +115,10 @@ return [
 ##  查看事件及监听器
 使用命令 `php webman event:list` 查看项目配置的所有事件及监听器
 
+## 支持范围
+除了主项目[基础插件](../plugin/base.md)和[应用插件](../app/app.md)同样支持event.php配置。
+**基础插件配置文件** `config/plugin/插件厂商/插件名/event.php`
+**应用插件配置文件** `plugin/插件名/config/event.php`
+
 ## 注意事项
 event事件处理并不是异步的，event不适合处理慢业务，慢业务应该用消息队列处理，例如[webman/redis-queue](https://www.workerman.net/plugin/12)
