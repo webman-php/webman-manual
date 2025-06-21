@@ -193,7 +193,7 @@ class MyMailSend implements Consumer
 > windows用户需要执行php windows.php 启动webman，否则不会启动消费进程
 
 > **提示**
-> onConsumeFailure回调会在每次消费失败时触发，你可以在这里处理失败后的逻辑。
+> onConsumeFailure回调会在每次消费失败时触发，你可以在这里处理失败后的逻辑。（此特性需要`webman/redis-queue>=1.3.2` `workerman/redis-queue>=1.2.1`）
 
 ## 为不同的队列设置不同的消费进程
 默认情况下，所有的消费者共用相同的消费进程。但有时我们需要将一些队列的消费独立出来，例如消费慢的业务放到一组进程中消费，消费快的业务放到另外一组进程消费。为此我们可以将消费者分为两个目录，例如 `app_path() . '/queue/redis/fast'` 和 `app_path() . '/queue/redis/slow'` （注意消费类的命名空间需要做相应的更改），则配置如下：
