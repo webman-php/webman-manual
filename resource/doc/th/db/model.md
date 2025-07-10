@@ -274,7 +274,7 @@ $model = app\model\Flight::where('legs', '>', 100)->firstOr(function () {
 ```
 ฟังก์ชัน firstOr ยังรับที่อาร์เรย์ของคอลัมน์เป็นคำสั่งที่จะใช้ใน query ได้เช่นกัน:
 ```php
-$model = app\modle\Flight::where('legs', '>', 100)
+$model = app\model\Flight::where('legs', '>', 100)
             ->firstOr(['id', 'legs'], function () {
                 // ...
             });
@@ -283,16 +283,16 @@ $model = app\modle\Flight::where('legs', '>', 100)
 ## ข้อยกเว้น “ไม่พบ” 
 บางครั้งคุณอาจหวังที่จะทำการยกเว้นเมื่อไม่พบโมเดล เช่นในภายในคอนโทรลเลอร์และเส้นทาง  findOrFail และ firstOrFail จะดึงเรคคอร์ดแรกของค้นหาและหากไม่พบ จะเกิดข้อยกเว้น Illuminate\Database\Eloquent\ModelNotFoundException:
 ```php
-$model = app\modle\Flight::findOrFail(1);
-$model = app\modle\Flight::where('legs', '>', 100)->firstOrFail();
+$model = app\model\Flight::findOrFail(1);
+$model = app\model\Flight::where('legs', '>', 100)->firstOrFail();
 ```
 
 ## ดึงคอลเล็กชัน
 คุณยังสามารถใช้ คำสั่ง count, sum และ max จาก query builder และฟังก์ชันอื่น ๆ ที่เกี่ยวกับคอลเล็กชันเพื่อดำเนินการกับคอลเล็กชัน ฟังก์ชันเหล่านี้จะคืนค่าสกัล่าลต์ที่ถูกต้องแทนที่จะเป็น istance ของ model:
 ```php
-$count = app\modle\Flight::where('active', 1)->count();
+$count = app\model\Flight::where('active', 1)->count();
 
-$max = app\modle\Flight::where('active', 1)->max('price');
+$max = app\model\Flight::where('active', 1)->max('price');
 ```
 
 ## เพิ่มข้อมูล
@@ -412,7 +412,7 @@ class Flight extends Model
 เมื่อเรากำหนดค่าเป็นกลุ่มไว้แล้ว คุณสามารถใช้เมธอด create เพื่อแทรกข้อมูลใหม่ลงในฐานข้อมูลได้  เมธอด create จะคืนอินสแตนซ์ของโมเดลที่บันทึกไว้:
 
 ```php
-$flight = app\modle\Flight::create(['name' => 'Flight 10']);
+$flight = app\model\Flight::create(['name' => 'Flight 10']);
 ```
 
 หากคุณมีอินสแตนซ์ของโมเดลอยู่แล้ว คุณสามารถส่งอาร์เรย์โดยใช้เมธอด fill เพื่อกำหนดค่า:
@@ -462,19 +462,19 @@ firstOrCreate/ firstOrNew
 
 ```php
 // ค้นหาเที่ยวบินด้วยชื่อ ถ้าไม่พบก็สร้าง...
-$flight = app\modle\Flight::firstOrCreate(['name' => 'Flight 10']);
+$flight = app\model\Flight::firstOrCreate(['name' => 'Flight 10']);
 
 // ค้นหาเที่ยวบินด้วยชื่อ หรือสร้างพร้อมคุณลักษณะ delayed และ arrival_time
-$flight = app\modle\Flight::firstOrCreate(
+$flight = app\model\Flight::firstOrCreate(
     ['name' => 'Flight 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
 
 // ค้นหาเที่ยวบินด้วยชื่อ ถ้าไม่พบก็สร้างอินสแตนซ์หนึ่ง
-$flight = app\modle\Flight::firstOrNew(['name' => 'Flight 10']);
+$flight = app\model\Flight::firstOrNew(['name' => 'Flight 10']);
 
 // ค้นหาเที่ยวบินด้วยชื่อ หรือสร้างอินสแตนซ์ด้วยคุณลักษณะ name, delayed และ arrival_time
-$flight = app\modle\Flight::firstOrNew(
+$flight = app\model\Flight::firstOrNew(
     ['name' => 'Flight 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
@@ -485,7 +485,7 @@ $flight = app\modle\Flight::firstOrNew(
 ```php
 // หากมีเที่ยวบินจากโอคแลนด์ไปมาสันดีเอโก้ ให้ราคาเท่ากับ 99 ดอลลาร์
 // ถ้าไม่เจอโมเดลที่ตรงกับ จะสร้างอันใหม่
-$flight = app\modle\Flight::updateOrCreate(
+$flight = app\model\Flight::updateOrCreate(
     ['departure' => 'Oakland', 'destination' => 'San Diego'],
     ['price' => 99, 'discounted' => 1]
 );
@@ -495,25 +495,25 @@ $flight = app\modle\Flight::updateOrCreate(
 คุณสามารถเรียกใช้เมธอด delete เพื่อลบอินสแตนท์ของโมเดล:
 
 ```php
-$flight = app\modle\Flight::find(1);
+$flight = app\model\Flight::find(1);
 $flight->delete();
 ```
 
 ## ลบโมเดลโดยใช้คีย์หลัก
 ```php
-app\modle\Flight::destroy(1);
+app\model\Flight::destroy(1);
 
-app\modle\Flight::destroy(1, 2, 3);
+app\model\Flight::destroy(1, 2, 3);
 
-app\modle\Flight::destroy([1, 2, 3]);
+app\model\Flight::destroy([1, 2, 3]);
 
-app\modle\Flight::destroy(collect([1, 2, 3]));
+app\model\Flight::destroy(collect([1, 2, 3]));
 
 ```
 
 ## ลบโมเดลโดยใช้การสืบค้น
 ```php
-$deletedRows = app\modle\Flight::where('active', 0)->delete();
+$deletedRows = app\model\Flight::where('active', 0)->delete();
 ```
 
 ## คัดลอกโมเดล

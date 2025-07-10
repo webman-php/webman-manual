@@ -450,19 +450,19 @@ El método firstOrNew intenta encontrar un registro en la base de datos utilizan
 
 ```php
 // Buscar un vuelo por nombre, crear si no existe...
-$flight = app\modle\Flight::firstOrCreate(['name' => 'Vuelo 10']);
+$flight = app\model\Flight::firstOrCreate(['name' => 'Vuelo 10']);
 
 // Buscar un vuelo por nombre, o crear con atributos de retraso y hora de llegada
-$flight = app\modle\Flight::firstOrCreate(
+$flight = app\model\Flight::firstOrCreate(
     ['name' => 'Vuelo 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
 
 // Buscar un vuelo por nombre, crear una nueva instancia si no existe
-$flight = app\modle\Flight::firstOrNew(['name' => 'Vuelo 10']);
+$flight = app\model\Flight::firstOrNew(['name' => 'Vuelo 10']);
 
 // Buscar un vuelo por nombre, o crear una nueva instancia con atributos de retraso y hora de llegada
-$flight = app\modle\Flight::firstOrNew(
+$flight = app\model\Flight::firstOrNew(
     ['name' => 'Vuelo 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
@@ -474,7 +474,7 @@ También podrías encontrarte en situaciones donde quieras actualizar un modelo 
 ```php
 // Si existe un vuelo de Oakland a San Diego, el precio será de 99 dólares.
 // Si no hay un modelo coincidente, se creará uno.
-$flight = app\modle\Flight::updateOrCreate(
+$flight = app\model\Flight::updateOrCreate(
     ['departure' => 'Oakland', 'destination' => 'San Diego'],
     ['price' => 99, 'discounted' => 1]
 );
@@ -485,25 +485,25 @@ $flight = app\modle\Flight::updateOrCreate(
 Puedes llamar al método delete en una instancia de modelo para eliminarla:
 
 ```php
-$flight = app\modle\Flight::find(1);
+$flight = app\model\Flight::find(1);
 $flight->delete();
 ```
 
 ## Eliminar por clave primaria
 ```php
-app\modle\Flight::destroy(1);
+app\model\Flight::destroy(1);
 
-app\modle\Flight::destroy(1, 2, 3);
+app\model\Flight::destroy(1, 2, 3);
 
-app\modle\Flight::destroy([1, 2, 3]);
+app\model\Flight::destroy([1, 2, 3]);
 
-app\modle\Flight::destroy(collect([1, 2, 3]));
+app\model\Flight::destroy(collect([1, 2, 3]));
 
 ```
 
 ## Eliminar por consulta
 ```php
-$deletedRows = app\modle\Flight::where('active', 0)->delete();
+$deletedRows = app\model\Flight::where('active', 0)->delete();
 ```
 
 ## Duplicar modelos

@@ -275,7 +275,7 @@ $model = app\model\Flight::where('legs', '>', 100)->firstOr(function () {
 ```
 firstOr yöntemi aynı şekilde sütun dizisini sorgulamak için de kullanılabilir:
 ```php
-$model = app\modle\Flight::where('legs', '>', 100)
+$model = app\model\Flight::where('legs', '>', 100)
             ->firstOr(['id', 'legs'], function () {
                 // ...
             });
@@ -284,16 +284,16 @@ $model = app\modle\Flight::where('legs', '>', 100)
 ## "Bulunamadı" İstisnası
 Bazı durumlarda, model bulunamadığında istisna fırlatmanız gerekebilir. Bu, kontrollerde ve rotalarda oldukça kullanışlıdır. findOrFail ve firstOrFail yöntemleri, aranan ilk sonucu getirir ve bulunamazsa Illuminate\Database\Eloquent\ModelNotFoundException istisnası fırlatır:
 ```php
-$model = app\modle\Flight::findOrFail(1);
-$model = app\modle\Flight::where('legs', '>', 100)->firstOrFail();
+$model = app\model\Flight::findOrFail(1);
+$model = app\model\Flight::where('legs', '>', 100)->firstOrFail();
 ```
 
 ## Koleksiyon Getirme
 Ayrıca, sorgu oluşturucusunun count, sum ve max yöntemleri gibi diğer koleksiyon işlevlerini kullanarak koleksiyonları işleyebilirsiniz. Bu yöntemler, bir model örneği döndürmez; uygun bir skaler değer döndürür:
 ```php
-$count = app\modle\Flight::where('active', 1)->count();
+$count = app\model\Flight::where('active', 1)->count();
 
-$max = app\modle\Flight::where('active', 1)->max('price');
+$max = app\model\Flight::where('active', 1)->max('price');
 ```
 
 ## Ekleme
@@ -409,7 +409,7 @@ class Flight extends Model
 ```
 Toplu atamaya izin verilen özellikleri ayarladıktan sonra create yöntemini kullanarak yeni veriyi veritabanına ekleyebilirsiniz. Create yöntemi kaydedilen model örneğini döndürecektir:
 ```php
-$flight = app\modle\Flight::create(['name' => 'Flight 10']);
+$flight = app\model\Flight::create(['name' => 'Flight 10']);
 ```
 Eğer zaten bir model örneğiniz varsa, fill yöntemine bir dizi parametresi geçerek değer atayabilirsiniz:
 ```php
@@ -452,19 +452,19 @@ Burada, oluşturmak veya güncellemek için kullanabileceğiniz iki toplu atama 
 firstOrNew yöntemi, firstOrCreate yöntemi gibi belirtilen özelliklere göre veritabanında kayıt arayacaktır. Ancak, firstOrNew yöntemi eşleşen model bulunamazsa yeni bir model örneği döndürecektir. Unutmayın ki firstOrNew tarafından döndürülen model örneği henüz veritabanına kaydedilmemiştir, kaydetmek için save yöntemini elle çağırmanız gerekir:
 ```php
 // name'e göre uçuş ara, bulunamazsa oluştur...
-$flight = app\modle\Flight::firstOrCreate(['name' => 'Flight 10']);
+$flight = app\model\Flight::firstOrCreate(['name' => 'Flight 10']);
 
 // name ve delayed özellikleri ve arrival_time özelliği ile uçuş ara, bulunamazsa oluştur...
-$flight = app\modle\Flight::firstOrCreate(
+$flight = app\model\Flight::firstOrCreate(
     ['name' => 'Flight 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
 
 // name'e göre uçuş ara, bulunamazsa örnek oluştur...
-$flight = app\modle\Flight::firstOrNew(['name' => 'Flight 10']);
+$flight = app\model\Flight::firstOrNew(['name' => 'Flight 10']);
 
 // name ve delayed özellikleri ve arrival_time özelliği ile uçuş ara, bulunamazsa örnek oluştur...
-$flight = app\modle\Flight::firstOrNew(
+$flight = app\model\Flight::firstOrNew(
     ['name' => 'Flight 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
@@ -474,7 +474,7 @@ Ayrıca, mevcut bir modeli güncellemek veya oluşturmak isteyebilirsiniz. Bu du
 ```php
 // OakLand'dan San Diego'ya bir uçuş bulunursa, fiyatı 99 dolar olarak belirtin.
 // Eşleşen bir model bulunamazsa yeni bir tane oluşturun.
-$flight = app\modle\Flight::updateOrCreate(
+$flight = app\model\Flight::updateOrCreate(
     ['departure' => 'Oakland', 'destination' => 'San Diego'],
     ['price' => 99, 'discounted' => 1]
 );
@@ -483,23 +483,23 @@ $flight = app\modle\Flight::updateOrCreate(
 ## Modeli Silme
 Model örneği üzerinde delete yöntemini çağırarak bir örneği silebilirsiniz:
 ```php
-$flight = app\modle\Flight::find(1);
+$flight = app\model\Flight::find(1);
 $flight->delete();
 ```
 
 ## Anahtarına Göre Modeli Silme
 ```php
-app\modle\Flight::destroy(1);
+app\model\Flight::destroy(1);
 
-app\modle\Flight::destroy(1, 2, 3);
+app\model\Flight::destroy(1, 2, 3);
 
-app\modle\Flight::destroy([1, 2, 3]);
+app\model\Flight::destroy([1, 2, 3]);
 
-app\modle\Flight::destroy(collect([1, 2, 3]));
+app\model\Flight::destroy(collect([1, 2, 3]));
 ```
 ## Model Sorgusu İle Silme
 ```php
-$deletedRows = app\modle\Flight::where('active', 0)->delete();
+$deletedRows = app\model\Flight::where('active', 0)->delete();
 ```
 
 ## Model Kopyalama

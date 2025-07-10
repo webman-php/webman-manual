@@ -277,7 +277,7 @@ $model = app\model\Flight::where('legs', '>', 100)->firstOr(function () {
 The firstOr method also accepts an array of columns to query:
 
 ```php
-$model = app\modle\Flight::where('legs', '>', 100)
+$model = app\model\Flight::where('legs', '>', 100)
             ->firstOr(['id', 'legs'], function () {
                 // ...
             });
@@ -286,17 +286,17 @@ $model = app\modle\Flight::where('legs', '>', 100)
 Sometimes you may want to throw an exception when a model is not found. This is useful in controllers and routes. The findOrFail and firstOrFail methods will retrieve the first result of the query, and if not found, they will throw the Illuminate\Database\Eloquent\ModelNotFoundException exception:
 
 ```php
-$model = app\modle\Flight::findOrFail(1);
-$model = app\modle\Flight::where('legs', '>', 100)->firstOrFail();
+$model = app\model\Flight::findOrFail(1);
+$model = app\model\Flight::where('legs', '>', 100)->firstOrFail();
 ```
 
 ## Retrieving Collections
 You can also use the count, sum, and max methods provided by the query builder, as well as other collection functions, to operate on collections. These methods will only return the appropriate scalar value instead of a model instance:
 
 ```php
-$count = app\modle\Flight::where('active', 1)->count();
+$count = app\model\Flight::where('active', 1)->count();
 
-$max = app\modle\Flight::where('active', 1)->max('price');
+$max = app\model\Flight::where('active', 1)->max('price');
 ```
 
 ## Inserting
@@ -466,19 +466,19 @@ The firstOrNew method is like the firstOrCreate method; however, if it can't fin
  
 ```php
 // Retrieve the flight by the given attributes or create it if it doesn't exist...
-$flight = app\modle\Flight::firstOrCreate(['name' => 'Flight 10']);
+$flight = app\model\Flight::firstOrCreate(['name' => 'Flight 10']);
 
 // Retrieve the flight by the given attributes or create it with certain attributes...
-$flight = app\modle\Flight::firstOrCreate(
+$flight = app\model\Flight::firstOrCreate(
     ['name' => 'Flight 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
 
 // Retrieve the flight by the given attributes or instantiate it if it doesn't exist...
-$flight = app\modle\Flight::firstOrNew(['name' => 'Flight 10']);
+$flight = app\model\Flight::firstOrNew(['name' => 'Flight 10']);
 
 // Retrieve the flight by the given attributes or instantiate it with certain attributes...
-$flight = app\modle\Flight::firstOrNew(
+$flight = app\model\Flight::firstOrNew(
     ['name' => 'Flight 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
@@ -488,7 +488,7 @@ You may also come across scenarios where you want to update an existing model if
 ```php
 // If a flight from Oakland to San Diego exists, set the price to $99.
 // If the model does not exist, create it.
-$flight = app\modle\Flight::updateOrCreate(
+$flight = app\model\Flight::updateOrCreate(
     ['departure' => 'Oakland', 'destination' => 'San Diego'],
     ['price' => 99, 'discounted' => 1]
 );
@@ -498,25 +498,25 @@ $flight = app\modle\Flight::updateOrCreate(
 ## Deleting Models
 You may call the delete method on a model instance to delete the instance:
 ```php
-$flight = app\modle\Flight::find(1);
+$flight = app\model\Flight::find(1);
 $flight->delete();
 ```
 
 ## Deleting Models By Primary Key
 ```php
-app\modle\Flight::destroy(1);
+app\model\Flight::destroy(1);
 
-app\modle\Flight::destroy(1, 2, 3);
+app\model\Flight::destroy(1, 2, 3);
 
-app\modle\Flight::destroy([1, 2, 3]);
+app\model\Flight::destroy([1, 2, 3]);
 
-app\modle\Flight::destroy(collect([1, 2, 3]));
+app\model\Flight::destroy(collect([1, 2, 3]));
 
 ```
 
 ## Deleting Models By Query
 ```php
-$deletedRows = app\modle\Flight::where('active', 0)->delete();
+$deletedRows = app\model\Flight::where('active', 0)->delete();
 ```
 
 ## Copying Models

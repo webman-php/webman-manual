@@ -271,7 +271,7 @@ $model = app\model\Flight::where('legs', '>', 100)->firstOr(function () {
 ```
 firstOr মেথডটি আকারের সাথে কালাম অ্যারে গ্রহণ করে:
 ```php
-$model = app\modle\Flight::where('legs', '>', 100)
+$model = app\model\Flight::where('legs', '>', 100)
             ->firstOr(['id', 'legs'], function () {
                 // ...
             });
@@ -280,16 +280,16 @@ $model = app\modle\Flight::where('legs', '>', 100)
 ## "পাওয়া যায়নি" অসুবিধা
 সময়ে সময় আপনি প্রথম ফলাফল খুঁজে না পেলে একটি অসুবিধায় প্রকাশ করা চান। এটি নিয়ন্ত্রণাধীনগন্য ও পথে এটি খুঁজে পেলে প্রথম প্রতিষ্ঠান থেকে প্রকাশ করিবে Illuminate\Database\Eloquent\ModelNotFoundException অসুবিধা:
 ```php
-$model = app\modle\Flight::findOrFail(1);
-$model = app\modle\Flight::where('legs', '>', 100)->firstOrFail();
+$model = app\model\Flight::findOrFail(1);
+$model = app\model\Flight::where('legs', '>', 100)->firstOrFail();
 ```
 
 ## সংগ্রহ পাওয়া
 আপনি পরিশোধ বিতরণকারী দ্বারা প্রদত্ত count, sum এবং max মেথড, এবং অন্যান্য সংগ্রহ কার্য ব্যবহার করে সংগ্রহ পরিত্যাগ করতে পারেন। এই মেথডগুলি শুধুমাত্র ঠিকমতি স্কেলার মান ফেরত দেয় দ্বিতীয় মডেল ইনস্ট্যান্স:
 ```php
-$count = app\modle\Flight::where('active', 1)->count();
+$count = app\model\Flight::where('active', 1)->count();
 
-$max = app\modle\Flight::where('active', 1)->max('price');
+$max = app\model\Flight::where('active', 1)->max('price');
 ```
 
 ## প্রবেশ করান
@@ -406,7 +406,7 @@ class Flight extends Model
 যখন আমরা সেট করে দিয়েছি বাল্য অনুদান করা যাওয়ার বৈশিষ্ট্যগুলি, তাহলে আমরা create মেথডের মাধ্যমে নতুন ডেটা ডাটাবেসে ইনসার্ট করতে পারি। create মেথডটি সংরক্ষণকৃত মডেল ইনস্ট্যান্স ফিরিয়ে দেবে:
 
 ```php
-$flight = app\modle\Flight::create(['name' => 'Flight 10']);
+$flight = app\model\Flight::create(['name' => 'Flight 10']);
 ```
 
 যদি আপনার ইতিমধ্যে একটি মডেল ইনস্ট্যান্স থাকে, আপনি fill মেথডে একটি অ্যারে পাঠাতে পারেন যেখানে মান প্রদান করতে:
@@ -452,19 +452,19 @@ protected $guarded = [];
 firstOrNew মেথড firstOrCreate মেথডের মতই চেষ্টা করবে দেওয়া গুণের মডেল ডাটাবেসে খুঁজে পাওয়া যাবে না। তবে, যদি firstOrNew মেথডটি একটি সংবাদ মডেল অনুলিপি খুঁজে না পায়, তবে একটি নতুন মডেল ইনস্ট্যান্স ফিরিয়ে দেয়। দ্রষ্টব্য: firstOrNew মেথডের ইনস্ট্যান্সটি তথ্যসমূহ ডাটাবেসে সংরক্ষণ করা হয়নি, আপনাকে সংরক্ষণ করার জন্য সেভ মেথড সক্ষম করতে হবেঃ
 ```php
 // নাম দিয়ে ফাইলরটেরা অনুসন্ধান, না পাওয়া গেলে তৈরি করবে...
-$flight = app\modle\Flight::firstOrCreate(['name' => 'Flight 10']);
+$flight = app\model\Flight::firstOrCreate(['name' => 'Flight 10']);
 
 // নাম এবং এলাকার দিকটি পূরণ সহ ফাইলরটেরা অনুসন্ধান, না পাওয়া গেলে তৈরি করবে...
-$flight = app\modle\Flight::firstOrCreate(
+$flight = app\model\Flight::firstOrCreate(
     ['name' => 'Flight 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
 
 // নাম দিয়ে ফাইলরটেরা অনুসন্ধান, না পাওয়া গেলে একটি ইনস্ট্যান্স তৈরি করবে...
-$flight = app\modle\Flight::firstOrNew(['name' => 'Flight 10']);
+$flight = app\model\Flight::firstOrNew(['name' => 'Flight 10']);
 
 // নাম এবং ডিলেড সঙ্গে এবং আগমনের সময়ের সঙ্গে ফাইলরটেরা অনুসন্ধান, না পাওয়া গেলে একটি ইনস্ট্যান্স তৈরি করবে...
-$flight = app\modle\Flight::firstOrNew(
+$flight = app\model\Flight::firstOrNew(
     ['name' => 'Flight 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
@@ -473,7 +473,7 @@ $flight = app\modle\Flight::firstOrNew(
 ```php
 // যদি ওকল্যান্ড থেকে সান ডিগো ফ্লাইট থাকে, তাহলে মূল্যটি 99 ডলার হবে।
 // যদি মডেল ম্যাচ না পাওয়া যায়, তবে একটি তৈরি করা হবে।
-$flight = app\modle\Flight::updateOrCreate(
+$flight = app\model\Flight::updateOrCreate(
     ['departure' => 'Oakland', 'destination' => 'San Diego'],
     ['price' => 99, 'discounted' => 1]
 );
@@ -482,24 +482,24 @@ $flight = app\modle\Flight::updateOrCreate(
 ## মডেল মুছে ফেলুন
 মডেল ইনস্ট্যান্সের উপর ডিলিট মেথড কল করে ইনস্ট্যান্স মুছে ফেলা যাবে।
 ```php
-$flight = app\modle\Flight::find(1);
+$flight = app\model\Flight::find(1);
 $flight->delete();
 ```
 
 ## প্রাইমারী কি ব্যবহার করে মডেল মুছে ফেলুন
 ```php
-app\modle\Flight::destroy(1);
+app\model\Flight::destroy(1);
 
-app\modle\Flight::destroy(1, 2, 3);
+app\model\Flight::destroy(1, 2, 3);
 
-app\modle\Flight::destroy([1, 2, 3]);
+app\model\Flight::destroy([1, 2, 3]);
 
-app\modle\Flight::destroy(collect([1, 2, 3]));
+app\model\Flight::destroy(collect([1, 2, 3]));
 ```
 
 ## কুয়েরি ব্যবহার করে মডেল মুছে ফেলেন
 ```php
-$deletedRows = app\modle\Flight::where('active', 0)->delete();
+$deletedRows = app\model\Flight::where('active', 0)->delete();
 ```
 
 ## মডেল অনুলিপি করুন

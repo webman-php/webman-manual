@@ -274,7 +274,7 @@ $model = app\model\Flight::where('legs', '>', 100)->firstOr(function () {
 ```
 firstOr 메서드는 또한 필드 배열을 사용하여 쿼리할 수 있습니다.
 ```php
-$model = app\modle\Flight::where('legs', '>', 100)
+$model = app\model\Flight::where('legs', '>', 100)
             ->firstOr(['id', 'legs'], function () {
                 // ...
             });
@@ -283,16 +283,16 @@ $model = app\modle\Flight::where('legs', '>', 100)
 ## "찾을 수 없음" 예외
 모델을 찾을 수 없을 때 예외를 throw하고 싶을 때가 있습니다. 이는 컨트롤러 및 라우터에서 매우 유용합니다. findOrFail 및 firstOrFail 메서드는 질의의 첫 번째 결과를 검색하고, 결과를 찾지 못할 경우 Illuminate\Database\Eloquent\ModelNotFoundException 예외를 throw합니다.
 ```php
-$model = app\modle\Flight::findOrFail(1);
-$model = app\modle\Flight::where('legs', '>', 100)->firstOrFail();
+$model = app\model\Flight::findOrFail(1);
+$model = app\model\Flight::where('legs', '>', 100)->firstOrFail();
 ```
 
 ## 컬렉션 검색
 쿼리 빌더가 제공하는 count, sum 및 max 메서드와 같은 기능을 사용하여 컬렉션을 조작할 수도 있습니다. 이러한 메서드는 모델 인스턴스 대신 적절한 스칼라 값만 반환합니다.
 ```php
-$count = app\modle\Flight::where('active', 1)->count();
+$count = app\model\Flight::where('active', 1)->count();
 
-$max = app\modle\Flight::where('active', 1)->max('price');
+$max = app\model\Flight::where('active', 1)->max('price');
 ```
 
 ## 삽입
@@ -414,7 +414,7 @@ class Flight extends Model
 일괄 할당할 수 있는 속성을 설정한 후에는 create 메서드를 사용하여 새로운 데이터를 데이터베이스에 삽입할 수 있습니다. create 메서드는 저장된 모델 인스턴스를 반환합니다.
 
 ```php
-$flight = app\modle\Flight::create(['name' => 'Flight 10']);
+$flight = app\model\Flight::create(['name' => 'Flight 10']);
 ```
 
 이미 모델 인스턴스가 있는 경우에는 fill 메서드에 배열을 전달하여 값 할당이 가능합니다.
@@ -464,19 +464,19 @@ firstOrNew 메서드도 firstOrCreate 메서드와 마찬가지로 데이터베�
 
 ```php
 // name으로 항공편 검색, 존재하지 않으면 생성...
-$flight = app\modle\Flight::firstOrCreate(['name' => 'Flight 10']);
+$flight = app\model\Flight::firstOrCreate(['name' => 'Flight 10']);
 
 // name으로 항공편 검색하거나 name과 delayed 및 arrival_time 속성과 함께 생성...
-$flight = app\modle\Flight::firstOrCreate(
+$flight = app\model\Flight::firstOrCreate(
     ['name' => 'Flight 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
 
 // name으로 항공편 검색, 존재하지 않으면 인스턴스 생성...
-$flight = app\modle\Flight::firstOrNew(['name' => 'Flight 10']);
+$flight = app\model\Flight::firstOrNew(['name' => 'Flight 10']);
 
 // name으로 항공편 검색하거나 name과 delayed 및 arrival_time 속성과 함께 모델 인스턴스 생성...
-$flight = app\modle\Flight::firstOrNew(
+$flight = app\model\Flight::firstOrNew(
     ['name' => 'Flight 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
@@ -488,7 +488,7 @@ $flight = app\modle\Flight::firstOrNew(
 ```php
 // 오크랜드에서 산디에이고로 가는 항공편이 있는 경우 가격을 99달러로 설정합니다.
 // 일치하는 모델이 없는 경우에는 생성합니다.
-$flight = app\modle\Flight::updateOrCreate(
+$flight = app\model\Flight::updateOrCreate(
     ['departure' => 'Oakland', 'destination' => 'San Diego'],
     ['price' => 99, 'discounted' => 1]
 );
@@ -500,27 +500,27 @@ $flight = app\modle\Flight::updateOrCreate(
 모델 인스턴스에서 delete 메서드를 사용하여 모델을 삭제할 수 있습니다.
 
 ```php
-$flight = app\modle\Flight::find(1);
+$flight = app\model\Flight::find(1);
 $flight->delete();
 ```
 
 ## 기본 키를 사용하여 모델 삭제
 
 ```php
-app\modle\Flight::destroy(1);
+app\model\Flight::destroy(1);
 
-app\modle\Flight::destroy(1, 2, 3);
+app\model\Flight::destroy(1, 2, 3);
 
-app\modle\Flight::destroy([1, 2, 3]);
+app\model\Flight::destroy([1, 2, 3]);
 
-app\modle\Flight::destroy(collect([1, 2, 3]));
+app\model\Flight::destroy(collect([1, 2, 3]));
 
 ```
 
 ## 쿼리를 사용하여 모델 삭제
 
 ```php
-$deletedRows = app\modle\Flight::where('active', 0)->delete();
+$deletedRows = app\model\Flight::where('active', 0)->delete();
 ```
 
 ## 모델 복사

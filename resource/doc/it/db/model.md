@@ -272,7 +272,7 @@ $model = app\model\Flight::where('legs', '>', 100)->firstOr(function () {
 ```
 Il metodo firstOr accetta anche un array di colonne come query:
 ```php
-$model = app\modle\Flight::where('legs', '>', 100)
+$model = app\model\Flight::where('legs', '>', 100)
             ->firstOr(['id', 'legs'], function () {
                 // ...
             });
@@ -281,16 +281,16 @@ $model = app\modle\Flight::where('legs', '>', 100)
 ## Eccezione "non trovato"
 A volte potresti desiderare di generare un'eccezione quando un modello non viene trovato. Questo è particolarmente utile nei controller e nelle route. I metodi findOrFail e firstOrFail recupereranno il primo risultato della query e, se non trovato, solleveranno un'eccezione Illuminate\Database\Eloquent\ModelNotFoundException:
 ```php
-$model = app\modle\Flight::findOrFail(1);
-$model = app\modle\Flight::where('legs', '>', 100)->firstOrFail();
+$model = app\model\Flight::findOrFail(1);
+$model = app\model\Flight::where('legs', '>', 100)->firstOrFail();
 ```
 
 ## Recupero di una collezione
 È inoltre possibile utilizzare i metodi count, sum e max forniti dal query builder, insieme ad altre funzioni di aggregazione, per operare su una collezione. Questi metodi restituiranno solo valori scalari appropriati anziché un'istanza del modello:
 ```php
-$count = app\modle\Flight::where('active', 1)->count();
+$count = app\model\Flight::where('active', 1)->count();
 
-$max = app\modle\Flight::where('active', 1)->max('price');
+$max = app\model\Flight::where('active', 1)->max('price');
 ```
 
 ## Inserimento
@@ -405,7 +405,7 @@ class Flight extends Model
 
 Una volta definiti gli attributi che possono essere assegnati in massa, è possibile inserire nuovi dati nel database utilizzando il metodo `create`. Questo metodo restituirà l'istanza del modello salvato:
 ```php
-$flight = app\modle\Flight::create(['name' => 'Volo 10']);
+$flight = app\model\Flight::create(['name' => 'Volo 10']);
 ```
 
 Se si dispone già di un'istanza del modello, è possibile passare un array al metodo `fill` per assegnare i valori:
@@ -449,19 +449,19 @@ Ci sono due metodi che potresti utilizzare per l'assegnazione di massa: `firstOr
 Il metodo `firstOrNew` funziona in modo simile al `firstOrCreate`, ma se non trova un modello corrispondente, restituirà una nuova istanza del modello. È importante notare che l'istanza restituita da `firstOrNew` non è ancora salvata nel database e richiederà una chiamata al metodo `save` per essere salvata:
 ```php
 // Cerca un volo per nome, se non esiste, lo crea...
-$flight = app\modle\Flight::firstOrCreate(['name' => 'Volo 10']);
+$flight = app\model\Flight::firstOrCreate(['name' => 'Volo 10']);
 
 // Cerca un volo per nome, o crea un volo con l'attributo di ritardo e l'ora di arrivo specificati.
-$flight = app\modle\Flight::firstOrCreate(
+$flight = app\model\Flight::firstOrCreate(
     ['name' => 'Volo 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
 
 // Cerca un volo per nome, se non esiste, crea un'istanza...
-$flight = app\modle\Flight::firstOrNew(['name' => 'Volo 10']);
+$flight = app\model\Flight::firstOrNew(['name' => 'Volo 10']);
 
 // Cerca un volo per nome, o crea un'istanza con l'attributo di ritardo e l'ora di arrivo specificati...
-$flight = app\modle\Flight::firstOrNew(
+$flight = app\model\Flight::firstOrNew(
     ['name' => 'Volo 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
@@ -471,7 +471,7 @@ Potresti anche incontrare situazioni in cui desideri aggiornare un modello esist
 ```php
 // Se esiste un volo da Oakland a San Diego, imposta il prezzo a 99 dollari.
 // Se nessun modello corrisponde, ne crea uno.
-$flight = app\modle\Flight::updateOrCreate(
+$flight = app\model\Flight::updateOrCreate(
     ['departure' => 'Oakland', 'destination' => 'San Diego'],
     ['price' => 99, 'discounted' => 1]
 );
@@ -480,25 +480,25 @@ $flight = app\modle\Flight::updateOrCreate(
 ## Eliminazione del modello
 È possibile chiamare il metodo `delete` sull'istanza del modello per eliminarla:
 ```php
-$flight = app\modle\Flight::find(1);
+$flight = app\model\Flight::find(1);
 $flight->delete();
 ```
 
 ## Eliminazione del modello tramite chiave primaria
 ```php
-app\modle\Flight::destroy(1);
+app\model\Flight::destroy(1);
 
-app\modle\Flight::destroy(1, 2, 3);
+app\model\Flight::destroy(1, 2, 3);
 
-app\modle\Flight::destroy([1, 2, 3]);
+app\model\Flight::destroy([1, 2, 3]);
 
-app\modle\Flight::destroy(collect([1, 2, 3]));
+app\model\Flight::destroy(collect([1, 2, 3]));
 
 ```
 
 ## Eliminazione del modello tramite query
 ```php
-$deletedRows = app\modle\Flight::where('active', 0)->delete();
+$deletedRows = app\model\Flight::where('active', 0)->delete();
 ```
 
 ## Copia del modello

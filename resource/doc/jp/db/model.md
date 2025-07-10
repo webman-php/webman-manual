@@ -275,7 +275,7 @@ $model = app\model\Flight::where('legs', '>', 100)->firstOr(function () {
 ```
 firstOrメソッドはクエリフィールドの配列も受け入れることができます：
 ```php
-$model = app\modle\Flight::where('legs', '>', 100)
+$model = app\model\Flight::where('legs', '>', 100)
             ->firstOr(['id', 'legs'], function () {
                 // ...
             });
@@ -284,16 +284,16 @@ $model = app\modle\Flight::where('legs', '>', 100)
 ## "Not Found"例外
 モデルが見つからない場合に例外をスローしたい場合があります。これはコントローラーやルートで特に便利です。findOrFailメソッドとfirstOrFailメソッドは、クエリの最初の結果を取得し、見つからない場合にはIlluminate\Database\Eloquent\ModelNotFoundException例外をスローします：
 ```php
-$model = app\modle\Flight::findOrFail(1);
-$model = app\modle\Flight::where('legs', '>', 100)->firstOrFail();
+$model = app\model\Flight::findOrFail(1);
+$model = app\model\Flight::where('legs', '>', 100)->firstOrFail();
 ```
 
 ## コレクションの取得
 また、クエリビルダのcount、sum、maxメソッドやその他のコレクション関数を使用して、コレクションを操作することができます。これらのメソッドは、モデルインスタンスではなく、適切なスカラー値を返します：
 ```php
-$count = app\modle\Flight::where('active', 1)->count();
+$count = app\model\Flight::where('active', 1)->count();
 
-$max = app\modle\Flight::where('active', 1)->max('price');
+$max = app\model\Flight::where('active', 1)->max('price');
 ```
 
 ## 挿入
@@ -412,7 +412,7 @@ class Flight extends Model
 一括代入可能な属性を設定したら、createメソッドを使用して新しいデータをデータベースに挿入することができます。createメソッドは保存されたモデルのインスタンスを返します：
 
 ```php
-$flight = app\modle\Flight::create(['name' => 'Flight 10']);
+$flight = app\model\Flight::create(['name' => 'Flight 10']);
 ```
 
 モデルインスタンスがすでにある場合は、fillメソッドに配列を渡すことで値を代入できます：
@@ -460,19 +460,19 @@ firstOrNewメソッドは、firstOrCreateメソッドと同じように属性で
 
 ```php
 // nameでフライトを検索し、存在しない場合は作成する…
-$flight = app\modle\Flight::firstOrCreate(['name' => 'Flight 10']);
+$flight = app\model\Flight::firstOrCreate(['name' => 'Flight 10']);
 
 // nameでフライトを検索し、nameとdelayed属性およびarrival_time属性を使用して作成…
-$flight = app\modle\Flight::firstOrCreate(
+$flight = app\model\Flight::firstOrCreate(
     ['name' => 'Flight 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
 
 // nameでフライトを検索し、存在しない場合はインスタンスを作成…
-$flight = app\modle\Flight::firstOrNew(['name' => 'Flight 10']);
+$flight = app\model\Flight::firstOrNew(['name' => 'Flight 10']);
 
 // nameでフライトを検索し、nameとdelayed属性およびarrival_time属性を使用してモデルインスタンスを作成…
-$flight = app\modle\Flight::firstOrNew(
+$flight = app\model\Flight::firstOrNew(
     ['name' => 'Flight 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
@@ -483,7 +483,7 @@ $flight = app\modle\Flight::firstOrNew(
 ```php
 // オークランドからサンディエゴへのフライトが存在する場合、価格を99ドルに設定する。
 // 存在しないモデルが一致しない場合は作成する。
-$flight = app\modle\Flight::updateOrCreate(
+$flight = app\model\Flight::updateOrCreate(
     ['departure' => 'Oakland', 'destination' => 'San Diego'],
     ['price' => 99, 'discounted' => 1]
 );
@@ -494,24 +494,24 @@ $flight = app\modle\Flight::updateOrCreate(
 モデルインスタンスに対してdeleteメソッドを呼び出すことで、インスタンスを削除できます：
 
 ```php
-$flight = app\modle\Flight::find(1);
+$flight = app\model\Flight::find(1);
 $flight->delete();
 ```
 
 ## 主キーでモデルを削除
 ```php
-app\modle\Flight::destroy(1);
+app\model\Flight::destroy(1);
 
-app\modle\Flight::destroy(1, 2, 3);
+app\model\Flight::destroy(1, 2, 3);
 
-app\modle\Flight::destroy([1, 2, 3]);
+app\model\Flight::destroy([1, 2, 3]);
 
-app\modle\Flight::destroy(collect([1, 2, 3]));
+app\model\Flight::destroy(collect([1, 2, 3]));
 ```
 
 ## クエリによるモデルの削除
 ```php
-$deletedRows = app\modle\Flight::where('active', 0)->delete();
+$deletedRows = app\model\Flight::where('active', 0)->delete();
 ```
 
 ## モデルの複製

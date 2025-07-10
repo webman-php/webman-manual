@@ -408,7 +408,7 @@ protected $fillable = ['name'];
 ```
 Khi chúng ta đã xác định được những thuộc tính có thể được gán giá trị theo lô, bạn có thể sử dụng phương thức create để chèn dữ liệu mới vào cơ sở dữ liệu. Phương thức create sẽ trả về một thực thể mô hình đã lưu:
 ```php
-$flight = app\modle\Flight::create(['name' => 'Flight 10']);
+$flight = app\model\Flight::create(['name' => 'Flight 10']);
 ```
 Nếu bạn đã có một thực thể mô hình, bạn có thể chuyển một mảng cho phương thức fill để gán giá trị:
 ```php
@@ -447,19 +447,19 @@ firstOrCreate/ firstOrNew
 Phương thức firstOrNew tương tự như phương thức firstOrCreate khi cố gắng tìm kiếm bản ghi của cơ sở dữ liệu thông qua các thuộc tính đã cung cấp. Tuy nhiên, nếu phương thức firstOrNew không tìm thấy mô hình tương ứng, nó sẽ trả về một thực thể mô hình mới. Lưu ý rằng thực thể mô hình được trả về bởi firstOrNew chưa được lưu vào cơ sở dữ liệu, bạn cần gọi phương thức save thủ công để lưu:
 ```php
 // Tìm kiếm chuyến bay qua name, nếu không tồn tại thì tạo mới...
-$flight = app\modle\Flight::firstOrCreate(['name' => 'Flight 10']);
+$flight = app\model\Flight::firstOrCreate(['name' => 'Flight 10']);
 
 // Tìm kiếm chuyến bay thông qua name, hoặc tạo mới với name và thuộc tính delayed và arrival_time tùy chọn...
-$flight = app\modle\Flight::firstOrCreate(
+$flight = app\model\Flight::firstOrCreate(
 ['name' => 'Flight 10'],
 ['delayed' => 1, 'arrival_time' => '11:30']
 );
 
 // Tìm kiếm chuyến bay thông qua name, nếu không tồn tại thì tạo một thực thể mới...
-$flight = app\modle\Flight::firstOrNew(['name' => 'Flight 10']);
+$flight = app\model\Flight::firstOrNew(['name' => 'Flight 10']);
 
 // Tìm kiếm chuyến bay qua name, hoặc tạo một thực thể mới với name và thuộc tính delayed và arrival_time tùy chọn...
-$flight = app\modle\Flight::firstOrNew(
+$flight = app\model\Flight::firstOrNew(
 ['name' => 'Flight 10'],
 ['delayed' => 1, 'arrival_time' => '11:30']
 );
@@ -468,7 +468,7 @@ Bạn cũng có thể gặp trường hợp muốn cập nhật mô hình hiện
 ```php
 // Nếu có chuyến bay từ Oakland đến San Diego, giá định là 99 đô la.
 // Nếu không tìm thấy mô hình tồn tại, thì tạo một mô hình mới.
-$flight = app\modle\Flight::updateOrCreate(
+$flight = app\model\Flight::updateOrCreate(
 ['departure' => 'Oakland', 'destination' => 'San Diego'],
 ['price' => 99, 'discounted' => 1]
 );
@@ -476,22 +476,22 @@ $flight = app\modle\Flight::updateOrCreate(
 ## Xóa mô hình
 Bạn có thể gọi phương thức delete trên thực thể mô hình để xóa thực thể:
 ```php
-$flight = app\modle\Flight::find(1);
+$flight = app\model\Flight::find(1);
 $flight->delete();
 ```
 ## Xóa mô hình theo khóa chính
 ```php
-app\modle\Flight::destroy(1);
+app\model\Flight::destroy(1);
 
-app\modle\Flight::destroy(1, 2, 3);
+app\model\Flight::destroy(1, 2, 3);
 
-app\modle\Flight::destroy([1, 2, 3]);
+app\model\Flight::destroy([1, 2, 3]);
 
-app\modle\Flight::destroy(collect([1, 2, 3]));
+app\model\Flight::destroy(collect([1, 2, 3]));
 ```
 ## Xóa mô hình thông qua truy vấn
 ```php
-$deletedRows = app\modle\Flight::where('active', 0)->delete();
+$deletedRows = app\model\Flight::where('active', 0)->delete();
 ```
 
 ## Sao chép mô hình

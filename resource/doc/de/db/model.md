@@ -409,7 +409,7 @@ class Flight extends Model
 ```
 Sobald Sie die für Massenzuweisungen zugelassenen Eigenschaften festgelegt haben, können Sie die create Methode verwenden, um neue Daten in die Datenbank einzufügen. Die create Methode gibt die gespeicherte Modellinstanz zurück:
 ```php
-$flight = app\modle\Flight::create(['name' => 'Flug 10']);
+$flight = app\model\Flight::create(['name' => 'Flug 10']);
 ```
 Wenn Sie bereits eine Modellinstanz haben, können Sie ein Array an die fill Methode übergeben, um Werte zuzuweisen:
 ```php
@@ -451,19 +451,19 @@ Die Methode firstOrNew versucht, ähnlich wie die Methode firstOrCreate, anhand 
 
 ```php
 // Flug anhand des Namens abrufen oder erstellen, wenn nicht vorhanden...
-$flight = app\modle\Flight::firstOrCreate(['name' => 'Flug 10']);
+$flight = app\model\Flight::firstOrCreate(['name' => 'Flug 10']);
 
 // Flug anhand des Namens abrufen oder mit den Attributen name, delayed und arrival_time erstellen...
-$flight = app\modle\Flight::firstOrCreate(
+$flight = app\model\Flight::firstOrCreate(
     ['name' => 'Flug 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
 
 // Flug anhand des Namens abrufen oder eine Instanz erstellen, wenn nicht vorhanden...
-$flight = app\modle\Flight::firstOrNew(['name' => 'Flug 10']);
+$flight = app\model\Flight::firstOrNew(['name' => 'Flug 10']);
 
 // Flug anhand des Namens abrufen oder eine Modellinstanz mit den Attributen name, delayed und arrival_time erstellen...
-$flight = app\modle\Flight::firstOrNew(
+$flight = app\model\Flight::firstOrNew(
     ['name' => 'Flug 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
@@ -474,7 +474,7 @@ Es kann auch vorkommen, dass Sie bestehende Modelle aktualisieren oder bei Nicht
 ```php
 // Wenn ein Flug von Oakland nach San Diego existiert, wird der Preis auf 99 USD festgelegt.
 // Wenn kein passendes Modell gefunden wird, wird eins erstellt.
-$flight = app\modle\Flight::updateOrCreate(
+$flight = app\model\Flight::updateOrCreate(
     ['departure' => 'Oakland', 'destination' => 'San Diego'],
     ['price' => 99, 'discounted' => 1]
 );
@@ -484,24 +484,24 @@ $flight = app\modle\Flight::updateOrCreate(
 Sie können die Methode delete auf einer Modellinstanz aufrufen, um die Instanz zu löschen:
 
 ```php
-$flight = app\modle\Flight::find(1);
+$flight = app\model\Flight::find(1);
 $flight->delete();
 ```
 
 ## Modell anhand des Primärschlüssels löschen
 ```php
-app\modle\Flight::destroy(1);
+app\model\Flight::destroy(1);
 
-app\modle\Flight::destroy(1, 2, 3);
+app\model\Flight::destroy(1, 2, 3);
 
-app\modle\Flight::destroy([1, 2, 3]);
+app\model\Flight::destroy([1, 2, 3]);
 
-app\modle\Flight::destroy(collect([1, 2, 3]));
+app\model\Flight::destroy(collect([1, 2, 3]));
 ```
 
 ## Modell anhand einer Abfrage löschen
 ```php
-$deletedRows = app\modle\Flight::where('active', 0)->delete();
+$deletedRows = app\model\Flight::where('active', 0)->delete();
 ```
 
 ## Modell kopieren

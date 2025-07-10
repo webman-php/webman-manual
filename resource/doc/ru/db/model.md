@@ -274,7 +274,7 @@ $model = app\model\Flight::where('legs', '>', 100)->firstOr(function () {
 ```
 Метод firstOr также принимает массив столбцов для запроса:
 ```php
-$model = app\modle\Flight::where('legs', '>', 100)
+$model = app\model\Flight::where('legs', '>', 100)
             ->firstOr(['id', 'legs'], function () {
                 // ...
             });
@@ -283,16 +283,16 @@ $model = app\modle\Flight::where('legs', '>', 100)
 ## Исключение "не найдено"
 Иногда вы можете захотеть вызвать исключение, если модель не найдена. Это может быть очень удобно в контроллерах и маршрутах. Методы findOrFail и firstOrFail извлекут первый результат запроса и, если его нет, вызовут исключение Illuminate\Database\Eloquent\ModelNotFoundException:
 ```php
-$model = app\modle\Flight::findOrFail(1);
-$model = app\modle\Flight::where('legs', '>', 100)->firstOrFail();
+$model = app\model\Flight::findOrFail(1);
+$model = app\model\Flight::where('legs', '>', 100)->firstOrFail();
 ```
 
 ## Извлечение коллекции
 Также вы можете использовать методы count, sum и max, предоставляемые строителем запросов, а также другие функции коллекций для работы с коллекциями. Эти методы возвращают скалярное значение, а не экземпляр модели:
 ```php
-$count = app\modle\Flight::where('active', 1)->count();
+$count = app\model\Flight::where('active', 1)->count();
 
-$max = app\modle\Flight::where('active', 1)->max('price');
+$max = app\model\Flight::where('active', 1)->max('price');
 ```
 
 ## Вставка

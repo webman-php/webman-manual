@@ -403,7 +403,7 @@ class Flight extends Model
 ```
 Uma vez que tenhamos definido as propriedades que podem ser atribuídas em massa, podemos inserir novos dados no banco de dados usando o método create. Este método retornará a instância do modelo salvo:
 ```php
-$flight = app\modle\Flight::create(['name' => 'Voo 10']);
+$flight = app\model\Flight::create(['name' => 'Voo 10']);
 ```
 Se você já tiver uma instância do modelo, pode passar um array para o método fill para atribuir valores:
 ```php
@@ -445,19 +445,19 @@ Aqui estão dois métodos que podem ser úteis para atribuições em massa: firs
 O método firstOrNew funciona de forma semelhante ao firstOrCreate, tentando encontrar um registro no banco de dados com as propriedades fornecidas. No entanto, se o método firstOrNew não encontrar um modelo correspondente, ele retornará uma nova instância do modelo. É importante observar que a instância retornada por firstOrNew ainda não foi salva no banco de dados e você precisará chamar o método save manualmente:
 ```php
 // Busca o voo pelo nome, se não existir, cria...
-$flight = app\modle\Flight::firstOrCreate(['name' => 'Voo 10']);
+$flight = app\model\Flight::firstOrCreate(['name' => 'Voo 10']);
 
 // Busca o voo pelo nome e, se não existir, cria com as propriedades 'atrasado' e 'hora_chegada'...
-$flight = app\modle\Flight::firstOrCreate(
+$flight = app\model\Flight::firstOrCreate(
     ['name' => 'Voo 10'],
     ['atrasado' => 1, 'hora_chegada' => '11:30']
 );
 
 // Busca o voo pelo nome, se não existir, cria uma nova instância...
-$flight = app\modle\Flight::firstOrNew(['name' => 'Voo 10']);
+$flight = app\model\Flight::firstOrNew(['name' => 'Voo 10']);
 
 // Busca o voo pelo nome e, se não existir, cria uma nova instância com as propriedades 'atrasado' e 'hora_chegada'...
-$flight = app\modle\Flight::firstOrNew(
+$flight = app\model\Flight::firstOrNew(
     ['name' => 'Voo 10'],
     ['atrasado' => 1, 'hora_chegada' => '11:30']
 );
@@ -467,7 +467,7 @@ Também é possível encontrar casos em que seja desejável atualizar um modelo 
 ```php
 // Se existir um voo de Oakland para San Diego, o preço será de 99 dólares.
 // Se não houver um modelo correspondente, um novo será criado.
-$flight = app\modle\Flight::updateOrCreate(
+$flight = app\model\Flight::updateOrCreate(
     ['partida' => 'Oakland', 'destino' => 'San Diego'],
     ['preço' => 99, 'desconto' => 1]
 );
@@ -476,24 +476,24 @@ $flight = app\modle\Flight::updateOrCreate(
 ## Excluir modelo
 É possível chamar o método delete em uma instância do modelo para excluí-la:
 ```php
-$flight = app\modle\Flight::find(1);
+$flight = app\model\Flight::find(1);
 $flight->delete();
 ```
 
 ## Excluir modelo pelo ID
 ```php
-app\modle\Flight::destroy(1);
+app\model\Flight::destroy(1);
 
-app\modle\Flight::destroy(1, 2, 3);
+app\model\Flight::destroy(1, 2, 3);
 
-app\modle\Flight::destroy([1, 2, 3]);
+app\model\Flight::destroy([1, 2, 3]);
 
-app\modle\Flight::destroy(collect([1, 2, 3]));
+app\model\Flight::destroy(collect([1, 2, 3]));
 ```
 
 ## Excluir modelo por consulta
 ```php
-$linhasExcluidas = app\modle\Flight::where('ativo', 0)->delete();
+$linhasExcluidas = app\model\Flight::where('ativo', 0)->delete();
 ```
 ## Replicar Modelo
 Você pode usar o método replicate para criar uma nova instância do modelo que ainda não foi salva no banco de dados. Este método é útil quando várias instâncias de modelo compartilham muitas propriedades em comum.

@@ -412,7 +412,7 @@ class Flight extends Model
 ```
 एक बार जब आप निर्धारित कर दिया है कि कौन-कौन से गुण बैच देने की अनुमति है, तो create विधि का उपयोग नया डेटा डेटाबेस में डालने के लिए किया जा सकता है। create विधि सहेजी गई मॉडल उदाहरण लौटाएगी:
 ```php
-$flight = app\modle\Flight::create(['name' => 'फ्लाइट 10']);
+$flight = app\model\Flight::create(['name' => 'फ्लाइट 10']);
 ```
 अगर आपके पास पहले से मॉडल उदाहरण है, तो आप fill विधि को गुण को भरने के लिए एक सरणी पास कर सकते हैं:
 ```php
@@ -454,19 +454,19 @@ firstOrCreate/ firstOrNew
 
 ```php
 // नाम पर फ्लाइट खोजें, अगर नहीं मिलता है तो बनाएं...
-$flight = app\modle\Flight::firstOrCreate(['name' => 'Flight 10']);
+$flight = app\model\Flight::firstOrCreate(['name' => 'Flight 10']);
 
 // नाम पर फ्लाइट खोजें, या नाम और देरी गुण और पहुंच समय गुण का उपयोग करके बनाएं...
-$flight = app\modle\Flight::firstOrCreate(
+$flight = app\model\Flight::firstOrCreate(
     ['name' => 'Flight 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
 
 // नाम पर फ्लाइट खोजें, नहीं मिलता है तो एक उदाहरण बनाएं...
-$flight = app\modle\Flight::firstOrNew(['name' => 'Flight 10']);
+$flight = app\model\Flight::firstOrNew(['name' => 'Flight 10']);
 
 // नाम पर फ्लाइट खोजें, या नाम और देरी गुण और पहुंच समय गुण के साथ एक मॉडल उदाहरण बनाएं...
-$flight = app\modle\Flight::firstOrNew(
+$flight = app\model\Flight::firstOrNew(
     ['name' => 'Flight 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
@@ -478,7 +478,7 @@ $flight = app\modle\Flight::firstOrNew(
 ```php
 // यदि ऑकलैंड से सैंट डिएगो के लिए फ्लाइट है, तो मूल्य को 99 डॉलर किया जाता है।
 // अगर मॉडल मिला नहीं है तो एक बनाएं।
-$flight = app\modle\Flight::updateOrCreate(
+$flight = app\model\Flight::updateOrCreate(
     ['departure' => 'Oakland', 'destination' => 'San Diego'],
     ['price' => 99, 'discounted' => 1]
 );
@@ -488,25 +488,25 @@ $flight = app\modle\Flight::updateOrCreate(
 ## मॉडल हटाना
 मॉडल उदाहरण पर हटाने के लिए delete विधि को कॉल कर सकते हैं:
 ```php
-$flight = app\modle\Flight::find(1);
+$flight = app\model\Flight::find(1);
 $flight->delete();
 ```
 
 ## प्राथमिक कुंजी के माध्यम से मॉडल हटाने
 ```php
-app\modle\Flight::destroy(1);
+app\model\Flight::destroy(1);
 
-app\modle\Flight::destroy(1, 2, 3);
+app\model\Flight::destroy(1, 2, 3);
 
-app\modle\Flight::destroy([1, 2, 3]);
+app\model\Flight::destroy([1, 2, 3]);
 
-app\modle\Flight::destroy(collect([1, 2, 3]));
+app\model\Flight::destroy(collect([1, 2, 3]));
 
 ```
 
 ## क्वेरी के माध्यम से मॉडल हटाना
 ```php
-$deletedRows = app\modle\Flight::where('active', 0)->delete();
+$deletedRows = app\model\Flight::where('active', 0)->delete();
 ```
 
 ## मॉडल की प्रतिलिपि

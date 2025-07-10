@@ -272,9 +272,9 @@ $flights = app\model\Flight::find([1, 2, 3]);
 ## جمع البحث
 يمكنك استخدام أساليب العدد، المجموع، والأقصى المقدمة بواسطة بنّاء الاستعلامات للتحكم في الجمعيات. هذه الأساليب ستُرجع القيم الصحيحة بدلاً من حالة نموذجية واحدة:
 ```php
-$count = app\modle\Flight::where('active', 1)->count();
+$count = app\model\Flight::where('active', 1)->count();
 
-$max = app\modle\Flight::where('active', 1)->max('price');
+$max = app\model\Flight::where('active', 1)->max('price');
 ```
 
 ## الإدراج
@@ -393,7 +393,7 @@ class Flight extends Model
 
 بمجرد تحديد السمات التي يُمكن تحديثها بشكل دفعي، يُمكنك استخدام الطريقة create لإدخال بيانات جديدة إلى قاعدة البيانات. ستعيد هذه الطريقة نموذجًا مُحفوظًا:
 ```php
-$flight = app\modle\Flight::create(['name' => 'Flight 10']);
+$flight = app\model\Flight::create(['name' => 'Flight 10']);
 ```
 
 إذا كان لديك نموذج مُتاح، يُمكنك تمرير مصفوفة إلى الطريقة fill لتحديث السمات:
@@ -440,19 +440,19 @@ firstOrCreate/ firstOrNew
 
 ```php
 // البحث عن رحلة باسم معين، وإن لم تجدها فسيتم إنشاء...
-$flight = app\modle\Flight::firstOrCreate(['name' => 'Flight 10']);
+$flight = app\model\Flight::firstOrCreate(['name' => 'Flight 10']);
 
 // البحث عن رحلة بإسم معين، أو إنشاء نموذج بالإضافة إلى الخصائي المؤجل ووقت الوصول
-$flight = app\modle\Flight::firstOrCreate(
+$flight = app\model\Flight::firstOrCreate(
     ['name' => 'Flight 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
 
 // البحث عن رحلة بإسم معين، وإن لم تجدها فسيتم إعادة نموذج جديد...
-$flight = app\modle\Flight::firstOrNew(['name' => 'Flight 10']);
+$flight = app\model\Flight::firstOrNew(['name' => 'Flight 10']);
 
 // البحث عن رحلة بإسم معين، أو إنشاء نموذج جديد بالإضافة إلى الخصائي المؤجل ووقت الوصول
-$flight = app\modle\Flight::firstOrNew(
+$flight = app\model\Flight::firstOrNew(
     ['name' => 'Flight 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
@@ -462,7 +462,7 @@ $flight = app\modle\Flight::firstOrNew(
 ```php
 // إذا وجدت رحلة من أوكلاند إلى سان دييجو، سيتم تحديد السعر عند 99 دولار.
 // إذا لم يكن هناك نموذج مطابق، سيتم إنشاء واحد.
-$flight = app\modle\Flight::updateOrCreate(
+$flight = app\model\Flight::updateOrCreate(
     ['departure' => 'Oakland', 'destination' => 'San Diego'],
     ['price' => 99, 'discounted' => 1]
 );
@@ -471,24 +471,24 @@ $flight = app\modle\Flight::updateOrCreate(
 ## حذف النموذج
 يُمكن استدعاء طريقة «delete» على نموذج لحذف النموذج:
 ```php
-$flight = app\modle\Flight::find(1);
+$flight = app\model\Flight::find(1);
 $flight->delete();
 ```
 
 ## حذف النموذج باستخدام المفتاح الأساسي
 ```php
-app\modle\Flight::destroy(1);
+app\model\Flight::destroy(1);
 
-app\modle\Flight::destroy(1, 2, 3);
+app\model\Flight::destroy(1, 2, 3);
 
-app\modle\Flight::destroy([1, 2, 3]);
+app\model\Flight::destroy([1, 2, 3]);
 
-app\modle\Flight::destroy(collect([1, 2, 3]));
+app\model\Flight::destroy(collect([1, 2, 3]));
 ```
 
 ## حذف النموذج باستخدام الاستعلام
 ```php
-$deletedRows = app\modle\Flight::where('active', 0)->delete();
+$deletedRows = app\model\Flight::where('active', 0)->delete();
 ```
 
 ## استنساخ النموذج

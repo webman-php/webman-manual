@@ -409,7 +409,7 @@ class Flight extends Model
 ```
 Une fois que vous avez défini les attributs qui peuvent être modifiés en masse, vous pouvez insérer de nouvelles données dans la base de données en utilisant la méthode create. La méthode create renverra l'instance de modèle sauvegardée :
 ```php
-$flight = app\modle\Flight::create(['name' => 'Flight 10']);
+$flight = app\model\Flight::create(['name' => 'Flight 10']);
 ```
 Si vous avez déjà une instance de modèle, vous pouvez passer un tableau à la méthode fill pour définir les valeurs :
 ```php
@@ -452,19 +452,19 @@ La méthode firstOrNew tente de trouver un enregistrement dans la base de donné
 
 ```php
 // Recherche du vol par nom, création s'il n'existe pas...
-$flight = app\modle\Flight::firstOrCreate(['name' => 'Vol 10']);
+$flight = app\model\Flight::firstOrCreate(['name' => 'Vol 10']);
 
 // Recherche du vol par nom ou création avec les attributs name, delayed et arrival_time...
-$flight = app\modle\Flight::firstOrCreate(
+$flight = app\model\Flight::firstOrCreate(
     ['name' => 'Vol 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
 
 // Recherche du vol par nom, création d'une instance s'il n'existe pas...
-$flight = app\modle\Flight::firstOrNew(['name' => 'Vol 10']);
+$flight = app\model\Flight::firstOrNew(['name' => 'Vol 10']);
 
 // Recherche du vol par nom ou création d'une nouvelle instance avec les attributs name, delayed et arrival_time...
-$flight = app\modle\Flight::firstOrNew(
+$flight = app\model\Flight::firstOrNew(
     ['name' => 'Vol 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
@@ -475,7 +475,7 @@ Vous pourriez également rencontrer des cas où vous souhaitez mettre à jour un
 ```php
 // Si un vol d'Oakland à San Diego existe, le prix est fixé à 99 dollars.
 // S'il n'y a pas de correspondance pour le modèle existant, il en crée un nouveau.
-$flight = app\modle\Flight::updateOrCreate(
+$flight = app\model\Flight::updateOrCreate(
     ['departure' => 'Oakland', 'destination' => 'San Diego'],
     ['price' => 99, 'discounted' => 1]
 );
@@ -486,26 +486,26 @@ $flight = app\modle\Flight::updateOrCreate(
 Vous pouvez appeler la méthode delete sur une instance de modèle pour la supprimer :
 
 ```php
-$flight = app\modle\Flight::find(1);
+$flight = app\model\Flight::find(1);
 $flight->delete();
 ```
 
 ## Supprimer un modèle par clé primaire
 
 ```php
-app\modle\Flight::destroy(1);
+app\model\Flight::destroy(1);
 
-app\modle\Flight::destroy(1, 2, 3);
+app\model\Flight::destroy(1, 2, 3);
 
-app\modle\Flight::destroy([1, 2, 3]);
+app\model\Flight::destroy([1, 2, 3]);
 
-app\modle\Flight::destroy(collect([1, 2, 3]));
+app\model\Flight::destroy(collect([1, 2, 3]));
 ```
 
 ## Supprimer un modèle par requête
 
 ```php
-$deletedRows = app\modle\Flight::where('active', 0)->delete();
+$deletedRows = app\model\Flight::where('active', 0)->delete();
 ```
 
 ## Dupliquer un modèle

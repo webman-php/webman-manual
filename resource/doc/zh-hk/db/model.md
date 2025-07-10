@@ -272,7 +272,7 @@ $model = app\model\Flight::where('legs', '>', 100)->firstOr(function () {
 
 firstOr 方法同樣接受欄位數組來查詢：
 ```php
-$model = app\modle\Flight::where('legs', '>', 100)
+$model = app\model\Flight::where('legs', '>', 100)
             ->firstOr(['id', 'legs'], function () {
                 // ...
             });
@@ -281,16 +281,16 @@ $model = app\modle\Flight::where('legs', '>', 100)
 ## 「未找到」異常
 有時您希望在未找到模型時拋出異常。這在控制器和路由中非常有用。 findOrFail 和 firstOrFail 方法會檢索查詢的第一個結果，如果未找到，將拋出 Illuminate\Database\Eloquent\ModelNotFoundException 異常：
 ```php
-$model = app\modle\Flight::findOrFail(1);
-$model = app\modle\Flight::where('legs', '>', 100)->firstOrFail();
+$model = app\model\Flight::findOrFail(1);
+$model = app\model\Flight::where('legs', '>', 100)->firstOrFail();
 ```
 
 ## 檢索集合
 您還可以使用查詢構造器提供的 count、sum 和 max 方法，以及其他的集合函數來操作集合。這些方法只會返回適當的標量值而不是一個模型實例：
 ```php
-$count = app\modle\Flight::where('active', 1)->count();
+$count = app\model\Flight::where('active', 1)->count();
 
-$max = app\modle\Flight::where('active', 1)->max('price');
+$max = app\model\Flight::where('active', 1)->max('price');
 ```
 
 ## 插入
@@ -407,7 +407,7 @@ class Flight extends Model
 ```
 一旦我們設定好了可以批量賦值的屬性，就可以通過 create 方法插入新數據到數據庫中了。create 方法將返回保存的模型實例：
 ```php
-$flight = app\modle\Flight::create(['name' => 'Flight 10']);
+$flight = app\model\Flight::create(['name' => 'Flight 10']);
 ```
 如果你已經有一個模型實例，你可以傳遞一個數組給 fill 方法來賦值：
 ```php
@@ -450,19 +450,19 @@ firstOrCreate/ firstOrNew
 firstOrNew 方法像 firstOrCreate 方法一樣嘗試通過給定的屬性查找數據庫中的記錄。不過，如果 firstOrNew 方法找不到對應的模型，會返回一個新的模型實例。注意 firstOrNew 返回的模型實例尚未保存到數據庫中，你需要手動調用 save 方法來保存：
 ```php
 // 通過 name 檢索航班，不存在則創建...
-$flight = app\modle\Flight::firstOrCreate(['name' => 'Flight 10']);
+$flight = app\model\Flight::firstOrCreate(['name' => 'Flight 10']);
 
 // 通过 name 检索航班，并使用 name 和 delayed 属性和 arrival_time 属性创建...
-$flight = app\modle\Flight::firstOrCreate(
+$flight = app\model\Flight::firstOrCreate(
     ['name' => 'Flight 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
 
 // 通過 name 檢索航班，不存在則創建一个實例...
-$flight = app\modle\Flight::firstOrNew(['name' => 'Flight 10']);
+$flight = app\model\Flight::firstOrNew(['name' => 'Flight 10']);
 
 // 通过 name 检索航班，或使用 name 和 delayed 属性和 arrival_time 属性创建一个模型实例...
-$flight = app\modle\Flight::firstOrNew(
+$flight = app\model\Flight::firstOrNew(
     ['name' => 'Flight 10'],
     ['delayed' => 1, 'arrival_time' => '11:30']
 );
@@ -474,7 +474,7 @@ $flight = app\modle\Flight::firstOrNew(
 ```php
 // 如果有从奥克兰到圣地亚哥的航班，则价格定为99美元。
 // 如果没匹配到存在的模型，则创建一个。
-$flight = app\modle\Flight::updateOrCreate(
+$flight = app\model\Flight::updateOrCreate(
     ['departure' => 'Oakland', 'destination' => 'San Diego'],
     ['price' => 99, 'discounted' => 1]
 );
@@ -485,25 +485,25 @@ $flight = app\modle\Flight::updateOrCreate(
 
 可以在模型實例上調用 delete 方法來刪除實例：
 ```php
-$flight = app\modle\Flight::find(1);
+$flight = app\model\Flight::find(1);
 $flight->delete();
 ``` 
 
 ## 通过主键刪除模型
 
 ```php
-app\modle\Flight::destroy(1);
+app\model\Flight::destroy(1);
 
-app\modle\Flight::destroy(1, 2, 3);
+app\model\Flight::destroy(1, 2, 3);
 
-app\modle\Flight::destroy([1, 2, 3]);
+app\model\Flight::destroy([1, 2, 3]);
 
-app\modle\Flight::destroy(collect([1, 2, 3]));
+app\model\Flight::destroy(collect([1, 2, 3]));
 
 ```
 ## 通過查詢刪除模型
 ```php
-$deletedRows = app\modle\Flight::where('active', 0)->delete();
+$deletedRows = app\model\Flight::where('active', 0)->delete();
 ```
 
 ## 複製模型
