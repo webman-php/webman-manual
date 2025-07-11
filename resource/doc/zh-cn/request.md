@@ -65,6 +65,21 @@ $request->post('name');
 $request->post('name', 'tom');
 ```
 
+## 助手函数input()
+与$request->input()函数类似,可以获取到所有参数, input()助手函数一共有两个参数:
+1. name: 获取的参数名称 (如果为空,可以获取所有参数的数组)
+2. default: 默认值 (通过第一个参数获取失败后, 会使用该参数的值)
+
+**例如**
+```php
+//获取参数name
+$name = input('name');
+//获取参数name, 如果不存在则使用默认值
+$name = input('name','张三');
+//获取全部参数
+$all_params = input();
+```
+
 ## 获得原始请求post包体
 ```php
 $post = $request->rawBody();
