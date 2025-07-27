@@ -11,7 +11,7 @@ phar是PHP里类似于JAR的一种打包文件，你可以利用phar将你的web
 `composer require webman/console`
 
 ## 打包
-在webman项目根目录执行命令 `php webman phar:pack`
+在webman项目根目录执行命令 `php webman build:phar`
 会在bulid目录生成一个`webman.phar`文件。
 
 > 打包相关配置在 `config/plugin/webman/console/app.php` 中
