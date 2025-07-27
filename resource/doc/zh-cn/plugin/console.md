@@ -56,9 +56,13 @@ composer require webman/console
 例如 `php webman plugin:export shop`
 参见[应用插件](/doc/webman/plugin/app.html)
 
-### phar:pack
+### build:phar
 **将webman项目打包成phar文件**
 参见[phar打包](/doc/webman/others/phar.html)
+
+### build:bin
+**将webman项目打包成可直接执行的二进制文件**
+参见[phar打包](/doc/webman/others/bin.html)
 
 ## 自定义命令
 用户可以定义自己的命令，例如以下是打印数据库配置的命令
