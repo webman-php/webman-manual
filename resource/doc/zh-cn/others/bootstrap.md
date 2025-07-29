@@ -62,7 +62,7 @@ return [
 这样我们就完成了一个业务初始化流程。
 
 ## 补充说明
-[自定义进程](../process.md)启动后也会执行`config/bootstrap.php`配置的start方法，我们可以通过`$worker->name` 来判断当前进程是什么进程，然后决定是否在该进程执行你的业务初始化代码，例如我们不需要监控monitor进程，则`MemReport.php`内容类似如下：
+[自定义进程](../process.md)启动后也会执行`config/bootstrap.php`配置的start方法，我们可以通过`$worker->name` 来判断当前进程是什么进程，进一步可以通过`$worker->id`判断是几号进程，然后决定是否在该进程执行你的业务初始化代码，例如我们只需要在webman的0号进程执行，则`MemReport.php`内容类似如下：
 ```php
 <?php
 
@@ -80,9 +80,9 @@ class MemReport implements Bootstrap
             // 如果你不想命令行环境执行这个初始化，则在这里直接返回
             return;
         }
-        
-        // monitor进程不执行定时器
-        if ($worker->name == 'monitor') {
+
+        // 只在webman的0号进程执行
+        if ($worker->name != 'webman' && $worker->id != 0) {
             return;
         }
         
