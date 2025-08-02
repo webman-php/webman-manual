@@ -104,7 +104,7 @@ return [
 #### app.php
 ```php
 return [
-    'debug' => true,  // 是否开启debug模式，开启后页面报错会输出更多调试信息
+    'debug' => true,  // 是否开启debug模式，开启后页面报错会输出调用栈等调试信息，为了安全生产环境应该关闭debug
     'error_reporting' => E_ALL, // 错误报告级别
     'default_timezone' => 'Asia/Shanghai', // 默认时区
     'public_path' => base_path() . DIRECTORY_SEPARATOR . 'public', // public目录位置
