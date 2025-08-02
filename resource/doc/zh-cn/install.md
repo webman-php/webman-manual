@@ -18,8 +18,7 @@ composer create-project workerman/webman:~2.0
 ```
 
 > **提示**
-> 如果报错用了有问题的composer镜像代理，请执行 `composer config -g --unset repos.packagist` 取消代理。
-> 或者使用腾讯云composer镜像 `composer config -g repos.packagist composer https://mirrors.cloud.tencent.com/composer/`
+> 如果报错可能是用了有问题的composer镜像代理，请执行 `composer config -g --unset repos.packagist` 取消代理。
 
 ## 2. 运行
 
@@ -50,5 +49,6 @@ php start.php start -d
 ## 3.访问
 
 浏览器访问 `http://ip地址:8787`
+
 
 
