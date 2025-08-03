@@ -37,3 +37,6 @@ webman是常驻内存的框架，一般来说，php文件载入后便以opcode�
 
 ## 不要执行`pcntl_fork`函数
 `pcntl_fork`用户创建一个进程，这在webman中是不允许的。
+
+## composer安装组件
+`composer require xxx/xxx` 安装的组件需要restart重启才能生效
