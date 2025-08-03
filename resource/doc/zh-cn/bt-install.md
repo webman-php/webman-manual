@@ -10,7 +10,7 @@
 
 ```php
 cd /www/wwwroot
-composer create-project workerman/webman
+composer create-project workerman/webman:~2.0
 ```
 
 ## 2. 设置网站
