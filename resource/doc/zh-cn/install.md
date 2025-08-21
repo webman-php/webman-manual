@@ -9,7 +9,7 @@
 curl -sO https://www.workerman.net/install-php-and-composer && sudo bash install-php-and-composer
 ```
 > **注意**
-> 以上命令适用于Linux/Mac系统，Windows系统需要手动安装
+> 以上命令适用于Linux/Mac系统，Windows系统需要自行安装PHP环境
 
 也可手动下载webman官方提供的[静态PHP](https://www.workerman.net/download)，解压即可使用。
 
@@ -51,6 +51,7 @@ php start.php start -d
 ## 3.访问
 
 浏览器访问 `http://ip地址:8787`
+
 
 
 
