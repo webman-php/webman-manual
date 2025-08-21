@@ -4,11 +4,13 @@
 * [Composer](https://getcomposer.org/) >= 2.0
 
 
-## 安装PHP+Composer环境(已有环境则跳过)
+## Linux安装PHP+Composer环境(已有环境请跳过)
 ```
 curl -sO https://www.workerman.net/install-php-and-composer && sudo bash install-php-and-composer
 ```
-通过以上命令可以快速安装PHP+Composer环境，支持PHP8.1-8.4版本。
+> **注意**
+> 以上命令适用于Linux/Mac系统，Windows系统需要手动安装
+
 也可手动下载webman官方提供的[静态PHP](https://www.workerman.net/download)，解压即可使用。
 
 ## 1. 创建项目
@@ -49,6 +51,7 @@ php start.php start -d
 ## 3.访问
 
 浏览器访问 `http://ip地址:8787`
+
 
 
 
