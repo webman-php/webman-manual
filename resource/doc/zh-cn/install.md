@@ -45,12 +45,25 @@ php start.php start
 php start.php start -d
 ```
 
+#### docker 用户
+
+启动所有服务并附加到控制台
+```php
+docker-compose up
+```
+
+在后台模式运行服务
+```php
+docker-compose up -d
+```
+
 > **提示**
 > 如果有报错，很可能是有函数被禁用，参考[函数禁用检查](others/disable-function-check.md)解除禁用
 
 ## 3.访问
 
 浏览器访问 `http://ip地址:8787`
+
 
 
 
