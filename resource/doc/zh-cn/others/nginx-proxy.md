@@ -28,7 +28,7 @@ server {
       proxy_set_header X-Real-IP $remote_addr;
       proxy_http_version 1.1;
       proxy_set_header Connection "";
-      if (!-f $request_filename){
+      if (!-e $request_filename){
           proxy_pass http://webman;
       }
   }
