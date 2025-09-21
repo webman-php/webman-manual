@@ -1,5 +1,29 @@
 <?php
 
+/**
+ * 脚本功能：遍历 `resource/doc/zh-cn` 下的所有 Markdown 文件，将文内的相对链接与图片地址
+ * 转换为站点的绝对 URL。
+ *
+ * 工作原理：
+ * - 将形如 [文本](path/to/page.md#anchor) 的相对链接改写为 BASE_URL + 路径(.html) + 锚点；
+ * - 将形如 ![alt](path/to/img.png) 的相对图片地址改写为 BASE_IMG_URL + 路径；
+ * - 仅处理以 .md 结尾的链接与非 http/data 开头的图片地址；其余保持不变；
+ * - 就地覆盖写回原 Markdown 文件，并在控制台输出统计信息。
+ *
+ * 使用方法（Windows PowerShell）：
+ * 1) 在项目根目录执行：
+ *    php script\\transfer-link.php
+ *
+ * 可配置项：
+ * - BASE_URL：文档页面的域名与路径前缀（用于普通链接）。
+ * - BASE_IMG_URL：图片资源的域名与路径前缀（用于图片）。
+ * - ROOT_DIR：要处理的 Markdown 根目录，默认 `resource/doc/zh-cn`。
+ *
+ * 注意：
+ * - 脚本会直接改写文件，建议先做好版本管理或备份。
+ * - 如需处理其它语言目录，修改 ROOT_DIR 或调用 convertMarkdownLinks(自定义路径)。
+ */
+
 // 基础URL前缀
 const BASE_URL = 'https://www.workerman.net/doc/webman/';
 const BASE_IMG_URL = 'https://www.workerman.net/doc/';
