@@ -2,5 +2,6 @@
   "name": "webman",
   "lang":"繁體中文(臺)",
   "repo":"https://github.com/webman-php/webman-manual",
-  "zh-lang": "台湾繁体"
+  "zh-lang": "台湾繁体",
+  "order": 18
 }

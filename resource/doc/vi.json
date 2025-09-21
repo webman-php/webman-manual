@@ -2,5 +2,6 @@
   "name": "webman manual",
   "lang":"Tiếng Việt",
   "repo":"https://github.com/webman-php/webman-manual",
-  "zh-lang": "越南语"
+  "zh-lang": "越南语",
+  "order": 14
 }

@@ -2,5 +2,6 @@
   "name": "webman manual",
   "lang":"English",
   "repo":"https://github.com/webman-php/webman-manual",
-  "zh-lang": "英语"
+  "zh-lang": "英语",
+  "order": 1
 }

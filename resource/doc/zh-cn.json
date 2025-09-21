@@ -1,5 +1,6 @@
 {
   "name": "webman手册",
   "lang":"简体中文",
-  "repo":"https://github.com/webman-php/webman-manual"
+  "repo":"https://github.com/webman-php/webman-manual",
+  "order": 16
 }

@@ -2,5 +2,6 @@
   "name": "webman manual",
   "lang":"हिन्दी",
   "repo":"https://github.com/webman-php/webman-manual",
-  "zh-lang": "印地语"
+  "zh-lang": "印地语",
+  "order": 11
 }
