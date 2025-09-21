@@ -1,24 +1,23 @@
-يعتمد webman افتراضيًا على [jenssegers/mongodb](https://github.com/jenssegers/laravel-mongodb) كمكون mongodb ، وهو مشتق من مشروع laravel ، ويتم استخدامه بنفس الطريقة التي يتم فيها استخدام laravel.
+# MongoDB
 
-يجب تثبيت الامتداد mongodb لـ `php-cli` قبل استخدام `jenssegers/mongodb`.
+webman默认使用 [mongodb/laravel-mongodb](https://github.com/mongodb/laravel-mongodb) 作为mongodb组件，它是从laravel项目中抽离出来的，用法与laravel相同。
 
-> استخدم الأمر `php -m | grep mongodb` للتحقق مما إذا كانت الامتدادات mongodb مثبتة لـ `php-cli`. يرجى ملاحظة: حتى لو كنت قد قمت بتثبيت امتدادات mongodb في `php-fpm` ، فهذا لا يعني أنك يمكنك استخدامه في `php-cli` ، لأن `php-cli` و `php-fpm` هما تطبيقات مختلفة ، وقد يستخدمان تكوينات `php.ini` مختلفة. استخدم الأمر `php --ini` لمعرفة ملف تكوين `php.ini` الذي يستخدمه `php-cli` الخاص بك.
+使用`jenssegers/mongodb`之前必须先给`php-cli`安装mongodb扩展。
 
-## التثبيت
+> **注意**
+> 当前手册为 webman v2 版本，如果您使用的是webman v1版本，请查看 [v1版本手册](/doc/webman-v1/db/mongo.html)
+> 使用命令`php -m | grep mongodb`查看`php-cli`是否装了mongodb扩展。注意：即使你在`php-fpm`安装了mongodb扩展，不代表你在`php-cli`可以使用它，因为`php-cli`和`php-fpm`是不同的应用程序，可能使用的是不同的`php.ini`配置。使用命令`php --ini`来查看你的`php-cli`使用的是哪个`php.ini`配置文件。
 
-PHP>7.2 حينئذٍ
+## 安装
+
 ```php
-composer require -W illuminate/database jenssegers/mongodb ^3.8.0
-```
-PHP=7.2 حينئذٍ
-```php
-composer require -W illuminate/database jenssegers/mongodb ^3.7.0
+composer require -W webman/database mongodb/laravel-mongodb ^4.8
 ```
 
-بعد التثبيت ، يجب إعادة التشغيل (إعادة التحميل غير فعالة)
+安装后需要restart重启(reload无效)
 
-## التكوين
-في `config/database.php` ، قم بإضافة اتصال `mongodb` ، مثل ما يلي:
+## 配置
+在 `config/database.php` 里增加 `mongodb` connection， 类似如下：
 ```php
 return [
 
@@ -26,7 +25,7 @@ return [
 
     'connections' => [
 
-         ...التكوينات الأخرى تم حذفها هنا...
+         ...这里省略了其它配置...
 
         'mongodb' => [
             'driver'   => 'mongodb',
@@ -36,8 +35,8 @@ return [
             'username' => null,
             'password' => null,
             'options' => [
-                // يمكنك هنا تمرير المزيد من الإعدادات إلى Mongo Driver Manager
-                // انظر https://www.php.net/manual/en/mongodb-driver-manager.construct.php في "Uri Options" للحصول على قائمة من المعلمات الكاملة التي يمكنك استخدامها
+                // here you can pass more settings to the Mongo Driver Manager
+                // see https://www.php.net/manual/en/mongodb-driver-manager.construct.php under "Uri Options" for a list of complete parameters that you can use
 
                 'appname' => 'homestead'
             ],
@@ -46,7 +45,7 @@ return [
 ];
 ```
 
-## مثال
+## 示例
 ```php
 <?php
 namespace app\controller;
@@ -58,12 +57,41 @@ class UserController
 {
     public function db(Request $request)
     {
-        Db::connection('mongodb')->collection('test')->insert([1,2,3]);
-        return json(Db::connection('mongodb')->collection('test')->get());
+        Db::connection('mongodb')->table('test')->insert([1,2,3]);
+        return json(Db::connection('mongodb')->table('test')->get());
     }
 }
 ```
 
-## لمزيد من المعلومات يرجى زيارة
+## 模型示例
+```php
+<?php
+namespace app\model;
 
-https://github.com/jenssegers/laravel-mongodb
+use DateTimeInterface;
+use support\MongoModel as Model;
+
+class Test extends Model
+{
+    protected $connection = 'mongodb';
+
+    protected $table = 'test';
+
+    public $timestamps = true;
+
+    /**
+     * @param DateTimeInterface $date
+     * @return string
+     */
+    protected function serializeDate(DateTimeInterface $date): string
+    {
+        return $date->format('Y-m-d H:i:s');
+    }
+}
+
+```
+
+## 更多内容请访问
+
+https://github.com/mongodb/laravel-mongodb
+

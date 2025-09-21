@@ -1,18 +1,18 @@
 # AOP
 
-> نشكر مؤلف Hyperf لتقديمه
+> 感谢 Hyperf 作者的提交
 
-### التثبيت
+## 安装
 
-- تثبيت دمج aop
+- 安装 aop-integration
 
 ```shell
 composer require "hyperf/aop-integration: ^1.1"
 ```
 
-### إضافة تكوين AOP ذات الصلة
+## 增加 AOP 相关配置
 
-نحتاج إلى إضافة تكوين `config.php` في الدليل `config`
+我们需要在 `config` 目录下，增加 `config.php` 配置
 
 ```php
 <?php
@@ -36,16 +36,16 @@ return [
         ],
     ],
     'aspects' => [
-        // يتم كتابة الناحية المناسبة هنا
+        // 这里写入对应的 Aspect
         app\aspect\DebugAspect::class,
     ]
 ];
 
 ```
 
-### ملف الإدخال start.php
+## 配置入口文件 start.php
 
-> سنضع الطريقة المبدئية تحت timezone ، وسنحافظ على الشيفرة الأخرى
+> 我们将初始化方法，放到 timezone 下方，以下省略其他代码
 
 ```
 use Hyperf\AopIntegration\ClassLoader;
@@ -54,13 +54,13 @@ if ($timezone = config('app.default_timezone')) {
     date_default_timezone_set($timezone);
 }
 
-// تهيئة
+// 初始化
 ClassLoader::init();
 ```
 
-### اختبار
+## 测试
 
-أولاً دعونا نكتب الفئة المستهدفة
+首先让我们编写待切入类
 
 ```php
 <?php
@@ -75,7 +75,7 @@ class UserService
 }
 ```
 
-ثم أضف الناحية DebugAspect المقابلة
+其次新增对应的 `DebugAspect`
 
 ```php
 <?php
@@ -99,7 +99,7 @@ class DebugAspect extends AbstractAspect
 }
 ```
 
-ثم قم بتحرير تحكم المدخل `app/controller/IndexController.php`
+接下来编辑控制器 `app/controller/IndexController.php`
 
 ```php
 <?php
@@ -117,7 +117,7 @@ class IndexController
 }
 ```
 
-ثم قم بتكوين الطرق
+然后配置路由
 
 ```php
 <?php
@@ -126,9 +126,11 @@ use Webman\Route;
 Route::any('/json', [app\controller\IndexController::class, 'json']);
 ```
 
-أخيرًا، قم بتشغيل الخدمة واختبرها.
+最后启动服务，并测试。
 
 ```shell
 php start.php start
 curl  http://127.0.0.1:8787/json
 ```
+
+

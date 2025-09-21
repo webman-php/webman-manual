@@ -1,12 +1,10 @@
-webman هو إطار عمل PHP عالي الأداء مبني على Workerman. 以下是webman文档، يرجى التأكد من تفضيل جملة المفتاح إلى العربية:
+# 说明
 
-# الشرح
+##  获得请求对象
+webman会自动将请求对象注入到action方法第一个参数中，例如
 
-## الحصول على كائن الطلب
-يقوم webman تلقائياً بحقن كائن الطلب في الوسيطة الأولى لطريقة الإجراء، على سبيل المثال
 
-**مثال**
-
+**例子**
 ```php
 <?php
 namespace app\controller;
@@ -18,120 +16,179 @@ class UserController
     public function hello(Request $request)
     {
         $default_name = 'webman';
+        // 从get请求里获得name参数，如果没有传递name参数则返回$default_name
         $name = $request->get('name', $default_name);
+        // 向浏览器返回字符串
         return response('hello ' . $name);
     }
 }
 ```
 
-من خلال كائن `$request`، يمكننا الحصول على أي بيانات ذات صلة بالطلب.
+通过`$request`对象我们能获取到请求相关的任何数据。
 
-**في بعض الأحيان نريد الحصول على كائن الطلب `$request` في فئة أخرى، في هذه الحالة يُمكِننا استخدام دالة المساعدة `request()`**.
+**有时候我们想在其它类中获取当前请求的`$request`对象，这时候我们只要使用助手函数`request()`即可**;
 
-## الحصول على معلمات الطلب get
+## 获得请求参数get
 
-**الحصول على مصفوفة get بالكامل**
+**获取整个get数组**
 ```php
 $request->get();
 ```
-إذا لم تحتوي الطلبات على معلمات get، ستُرجَع مصفوفة فارغة.
+如果请求没有get参数则返回一个空的数组。
 
-**الحصول على قيمة get محددة في المصفوفة**
+**获取get数组的某一个值**
 ```php
 $request->get('name');
 ```
-إذا لم تحتوي مصفوفة get على هذا القيمة، سترجع قيمة فارغة.
+如果get数组中不包含这个值则返回null。
 
-يُمكِنك أيضاً تمرير قيمة افتراضية كمعامل ثانوي في الدالة get، حيث إذا لم تجد القيمة المقابلة في مصفوفة get، ستعيد القيمة الافتراضية. على سبيل المثال:
+你也可以给get方法第二个参数传递一个默认值，如果get数组中没找到对应值则返回默认值。例如：
 ```php
 $request->get('name', 'tom');
 ```
 
-## الحصول على معلمات الطلب post
-
-**الحصول على مصفوفة post بالكامل**
+## 获得请求参数post
+**获取整个post数组**
 ```php
 $request->post();
 ```
-إذا لم تحتوي الطلبات على معلمات post، ستُرجَع مصفوفة فارغة.
+如果请求没有post参数则返回一个空的数组。
 
-**الحصول على قيمة post محددة في المصفوفة**
+**获取post数组的某一个值**
 ```php
 $request->post('name');
 ```
-إذا لم تحتوي مصفوفة post على هذا القيمة، سترجع قيمة فارغة.
+如果post数组中不包含这个值则返回null。
 
-مثل دالة get، يُمكِنك أيضاً تمرير قيمة افتراضية كمعامل ثانوي في دالة post، حيث إذا لم تجد القيمة المقابلة في مصفوفة post، ستعيد القيمة الافتراضية. على سبيل المثال:
+与get方法一样，你也可以给post方法第二个参数传递一个默认值，如果post数组中没找到对应值则返回默认值。例如：
 ```php
 $request->post('name', 'tom');
 ```
 
-## الحصول على الجسم الأصلي للطلب post
+## 助手函数input()
+与$request->input()函数类似,可以获取到所有参数, input()助手函数一共有两个参数:
+1. name: 获取的参数名称 (如果为空,可以获取所有参数的数组)
+2. default: 默认值 (通过第一个参数获取失败后, 会使用该参数的值)
+
+**例如**
+```php
+//获取参数name
+$name = input('name');
+//获取参数name, 如果不存在则使用默认值
+$name = input('name','张三');
+//获取全部参数
+$all_params = input();
+```
+
+## 获得原始请求post包体
 ```php
 $post = $request->rawBody();
 ```
-هذه الوظيفة مشابهة لعملية `file_get_contents("php://input")` في `php-fpm`. يتم استخدامها للحصول على جسم الطلب الأصلي لـHTTP. يتم استخدام هذا عند الحصول على بيانات الطلبات post بتنسيق غير `application/x-www-form-urlencoded`.
+这个功能类似与 `php-fpm`里的 `file_get_contents("php://input");`操作。用于获得http原始请求包体。这在获取非`application/x-www-form-urlencoded`格式的post请求数据时很有用。 
 
-## الحصول على الرأس
-**الحصول على مصفوفة الرأس بالكامل**
+
+## 获取header
+**获取整个header数组**
 ```php
 $request->header();
 ```
-إذا لم تحتوي الطلبات على معلمات الرأس، ستُرجَع مصفوفة فارغة. يُرجى ملاحظة أن جميع المفاتيح تكون بحروف صغيرة.
+如果请求没有header参数则返回一个空的数组。注意所有key均为小写。
 
-**الحصول على قيمة محددة في مصفوفة الرأس**
+**获取header数组的某一个值**
 ```php
 $request->header('host');
 ```
-إذا لم تحتوي مصفوفة الرأس على هذ القيمة، سترجع قيمة فارغة. يُمكِنك أيضاً تمرير قيمة افتراضية كمعامل ثانوي في دالة الرأس، حيث إذا لم تجد القيمة المقابلة في مصفوفة الرأس، ستعيد القيمة الافتراضية. على سبيل المثال:
+如果header数组中不包含这个值则返回null。注意所有key均为小写。
+
+与get方法一样，你也可以给header方法第二个参数传递一个默认值，如果header数组中没找到对应值则返回默认值。例如：
 ```php
 $request->header('host', 'localhost');
 ```
 
-## الحصول على الكوكيز
-**الحصول على مصفوفة الكوكيز بالكامل**
+## 获取cookie
+**获取整个cookie数组**
 ```php
 $request->cookie();
 ```
-إذا لم تحتوي الطلبات على معلمات الكوكيز، ستُرجَع مصفوفة فارغة.
+如果请求没有cookie参数则返回一个空的数组。
 
-**الحصول على قيمة محددة في مصفوفة الكوكيز**
+**获取cookie数组的某一个值**
 ```php
 $request->cookie('name');
 ```
-إذا لم تحتوي مصفوفة الكوكيز على هذ القيمة، سترجع قيمة فارغة. يُمكِنك أيضاً تمرير قيمة افتراضية كمعامل ثانوي في دالة الكوكيز، حيث إذا لم تجد القيمة المقابلة في مصفوفة الكوكيز، ستعيد القيمة الافتراضية. على سبيل المثال:
+如果cookie数组中不包含这个值则返回null。
+
+与get方法一样，你也可以给cookie方法第二个参数传递一个默认值，如果cookie数组中没找到对应值则返回默认值。例如：
 ```php
 $request->cookie('name', 'tom');
 ```
 
-## الحصول على كل المُدخلات
-تشمل `post` و `get` مجتمع.
-
+## 获得所有输入
+包含了`post` `get` 的集合。
 ```php
 $request->all();
 ```
 
-## الحصول على قيمة مُحدد من المُدخل 
-الحصول على قيمة مُحدد من مجتمع `post` و `get`. 
+## 获取指定输入值
+从`post` `get` 的集合中获取某个值。
 ```php
 $request->input('name', $default_value);
 ```
 
-## الحصول على جزء من بيانات المُدخلات 
-الحصول على جزء من بيانات `post` و `get`.
+## 获取部分输入数据
+从`post` `get`的集合中获取部分数据。
 ```php
-// الحصول على مصفوفة تتكون من username و password، إذا لم تكن لديها قيم للمفتاح المُحدد فستتم تجاهلها
+// 获取 username 和 password 组成的数组，如果对应的key没有则忽略
 $only = $request->only(['username', 'password']);
-// الحصول على جميع البيانات باستثناء avatar و age
+// 获得除了avatar 和 age 以外的所有输入
 $except = $request->except(['avatar', 'age']);
 ```
-## الحصول على ملفات التحميل
-**الحصول على مصفوفة ملفات التحميل بالكامل**
+
+## 通过控制器参数获得输入
+
+```php
+<?php
+namespace app\controller;
+use support\Response;
+
+class UserController
+{
+    public function create(string $name, int $age = 18): Response
+    {
+        return json(['name' => $name, 'age' => $age]);
+    }
+}
+```
+代码逻辑类似于
+```php
+<?php
+namespace app\controller;
+use support\Request;
+use support\Response;
+
+class UserController
+{
+    public function create(Request $request): Response
+    {
+        $name = $request->input('name');
+        $age = (int)$request->input('age', 18);
+        return json(['name' => $name, 'age' => $age]);
+    }
+}
+```
+更多信息请参考[控制器参数绑定](controller.md#控制器参数绑定)
+
+## 获取上传文件
+
+> **提示**
+> 上传文件需要使用 `multipart/form-data` 格式的表单
+
+**获取整个上传文件数组**
 ```php
 $request->file();
 ```
 
-مثل النموذج:
+表单类似:
 ```html
 <form method="post" action="http://127.0.0.1:8787/upload/files" enctype="multipart/form-data" />
 <input name="file1" multiple="multiple" type="file">
@@ -140,14 +197,14 @@ $request->file();
 </form>
 ```
 
-سيُرجَع `$request->file()` بتنسيق مشابه للآتي:
+`$request->file()`返回的格式类似:
 ```php
 array (
     'file1' => object(webman\Http\UploadFile),
     'file2' => object(webman\Http\UploadFile)
 )
 ```
-هو مصفوفة من مثيلات `webman\Http\UploadFile`. يورث الفصل `webman\Http\UploadFile` من الفئة الأساسية لـ PHP [`SplFileInfo`](https://www.php.net/manual/zh/class.splfileinfo.php) ويوفر بعض الدوال العملية.
+他是一个`webman\Http\UploadFile`实例的数组。`webman\Http\UploadFile`类继承了 PHP 内置的 [`SplFileInfo`](https://www.php.net/manual/zh/class.splfileinfo.php) 类，并且提供了一些实用的方法。
 
 ```php
 <?php
@@ -160,35 +217,35 @@ class UploadController
     public function files(Request $request)
     {
         foreach ($request->file() as $key => $spl_file) {
-            var_export($spl_file->isValid()); // ما إذا كان الملف صالحًا، على سبيل المثال true|false
-            var_export($spl_file->getUploadExtension()); // احصل على امتداد الملف المحمل، على سبيل المثال 'jpg'
-            var_export($spl_file->getUploadMimeType()); // احصل على نوع MIME الذي تم تحميله الى الملف، على سبيل المثال'image/jpeg'
-            var_export($spl_file->getUploadErrorCode()); // احصل على رمز الخطأ المحمل، على سبيل المثال UPLOAD_ERR_NO_TMP_DIRUPLOAD_ERR_NO_FILE UPLOAD_ERR_CANT_WRITE
-            var_export($spl_file->getUploadName()); // احصل على اسم الملف المحمل، على سبيل المثال 'my-test.jpg'
-            var_export($spl_file->getSize()); // احصل على حجم الملف، على سبيل المثال 13364، بالبايت
-            var_export($spl_file->getPath()); // احصل على مجلد التحميل، على سبيل المثال '/tmp'
-            var_export($spl_file->getRealPath()); // احصل على مسار الملف المؤقت، على سبيل المثال `/tmp/workerman.upload.SRliMu`
+            var_export($spl_file->isValid()); // 文件是否有效，例如ture|false
+            var_export($spl_file->getUploadExtension()); // 上传文件后缀名，例如'jpg'
+            var_export($spl_file->getUploadMimeType()); // 上传文件mine类型，例如 'image/jpeg'
+            var_export($spl_file->getUploadErrorCode()); // 获取上传错误码，例如 UPLOAD_ERR_NO_TMP_DIR UPLOAD_ERR_NO_FILE UPLOAD_ERR_CANT_WRITE
+            var_export($spl_file->getUploadName()); // 上传文件名，例如 'my-test.jpg'
+            var_export($spl_file->getSize()); // 获得文件大小，例如 13364，单位字节
+            var_export($spl_file->getPath()); // 获得上传的目录，例如 '/tmp'
+            var_export($spl_file->getRealPath()); // 获得临时文件路径，例如 `/tmp/workerman.upload.SRliMu`
         }
         return response('ok');
     }
 }
 ```
 
-**ملاحظة:**
+**注意：**
 
-- يتم تسمية الملفات التي تم تحميلها كملفات مؤقتة، على سبيل المثال `/tmp/workerman.upload.SRliMu`
-- حجم الملفات المحملة مقيدة بـ[defaultMaxPackageSize](http://doc.workerman.net/tcp-connection/default-max-package-size.html) ، الذي يبلغ 10 ميجا بايت افتراضيًا، ويُمكِنك تغيير القيمة الافتراضية في ملف `config/server.php` باستخدام `max_package_size`.
-- سيتم حذف الملفات المؤقتة تلقائياً بعد انتهاء الطلبات
-- إذا لم تكن هناك ملفات محملة، فإن `$request->file()` ترجع مصفوفة فارغة
-- لا تدعم تحميل الملفات استخدام طريقة `move_uploaded_file()`، بدلًا من ذلك يرجى استخدام طريقة `$file->move()`، كما في المثال التالي
+- 文件被上传后会被命名为一个临时文件，类似 `/tmp/workerman.upload.SRliMu`
+- 上传文件大小受到[defaultMaxPackageSize](http://doc.workerman.net/tcp-connection/default-max-package-size.html)限制，默认10M，可在`config/server.php`文件中修改`max_package_size`更改默认值。
+- 请求结束后临时文件将被自动清除
+- 如果请求没有上传文件则`$request->file()`返回一个空的数组
+- 上传的文件不支持 `move_uploaded_file()` 方法，请使用 `$file->move()`方法代替，参见下面的例子
 
-### الحصول على ملف تحميل محدد
+### 获取特定上传文件
 ```php
 $request->file('avatar');
-``` 
-إذا كان الملف موجودًا، سيتم إرجاع مثيل `webman\Http\UploadFile` المقابل للملف، وإلا فستُرجَع قيمة فارغة.
+```
+如果文件存在的话则返回对应文件的`webman\Http\UploadFile`实例，否则返回null。
 
-**مثال**
+**例子**
 ```php
 <?php
 namespace app\controller;
@@ -209,135 +266,198 @@ class UploadController
 }
 ```
 
-## الحصول على المضيف
-الحصول على معلومات المضيف للطلب.
+## 获取host
+获取请求的host信息。
 ```php
 $request->host();
-``` 
-إذا كان عنوان الطلب غير القياسي 80 أو 443، فقد يحتوي معلومات المضيف على منفذ، على سبيل المثال `example.com:8080`. إذا كنت لا تحتاج إلى المنفذ، يُمكِنك التمرير في الهدف الأول كـ `true`.
+```
+如果请求的地址是非标准的80或者443端口，host信息可能会携带端口，例如`example.com:8080`。如果不需要端口第一个参数可以传入`true`。
 
 ```php
 $request->host(true);
-``` 
+```
 
-## الحصول على طريقة الطلب
+## 获取请求方法
 ```php
-$request->method();
-``` 
-يمكن أن تكون القيم إما `GET`، `POST`، `PUT`، `DELETE`، `OPTIONS`، `HEAD`.
+ $request->method();
+```
+返回值可能是`GET`、`POST`、`PUT`、`DELETE`、`OPTIONS`、`HEAD`中的一个。
 
-## الحصول على معرف الطلب
+## 获取请求uri
 ```php
 $request->uri();
-``` 
-ترجع معرف الطلب، بما في ذلك الجزء الرئيسي وجزء queryString.
+```
+返回请求的uri，包括path和queryString部分。
 
-## الحصول على مسار الطلب
+## 获取请求路径
+
 ```php
 $request->path();
-``` 
-ترجع جزء الطلب الرئيسي.
+```
+返回请求的path部分。
 
-## الحصول على جزء queryString من الطلب
+
+## 获取请求queryString
+
 ```php
 $request->queryString();
-``` 
-ترجع الجزء queryString من الطلب.
+```
+返回请求的queryString部分。
 
-## الحصول على رابط الطلب
-تُرْجَع الدالة `url()` برابط ليس له قيمة `Query`.
+## 获取请求url
+`url()`方法返回不带有`Query` 参数 的 URL。
 ```php
 $request->url();
-``` 
-يتم إرجاع نوعٍ مماثل لـ`//www.workerman.net/workerman-chat`
+```
+返回类似`//www.workerman.net/workerman-chat`
 
-الدالة `fullUrl()` ترجع رابط مع قيمة `Query`.
+`fullUrl()`方法返回带有`Query` 参数 的 URL。
 ```php
 $request->fullUrl();
-``` 
-يتم إرجاع نوعٍ مماثل لـ`//www.workerman.net/workerman-chat?type=download`
+```
+返回类似`//www.workerman.net/workerman-chat?type=download`
 
-> **ملاحظة**
-> `url()` و `fullUrl()` لا تُرجع جزء البروتوكول (لا تُرجع http أو https).
-> لأن إستخدام `//example.com` من هذا النوع سيتم التعرف بشكل تلقائي على بروتوكول موقعه الحالي، وسيُرسَل الطلب بنفس نقل البيانات http أو https.
-> إذا كنت تستخدم خادمًا proxy nginx، يُرجى إضافة `proxy_set_header X-Forwarded-Proto $scheme;` إلى تكوين nginx، [يُرجى الرجوع إلى خادم proxy nginx](others/nginx-proxy.md)، بهذه الطريقة يُمكِن استخدام `$request->header('x-forwarded-proto');` لتحديد ما إذا كان الطلب http أو https، على سبيل المثال:
+> **注意**
+> `url()` 和 `fullUrl()` 没有返回协议部分(没有返回http或者https)。
+> 因为浏览器里使用 `//example.com` 这样以`//`开头的地址会自动识别当前站点的协议，自动以http或https发起请求。
+
+如果你使用了nginx代理，请将 `proxy_set_header X-Forwarded-Proto $scheme;` 加入到nginx配置中，[参考nginx代理](others/nginx-proxy.md)，
+这样就可以用`$request->header('x-forwarded-proto');`来判断是http还是https，例如：
 ```php
-echo $request->header('x-forwarded-proto'); // الناتج هو http أو https
-``` 
+echo $request->header('x-forwarded-proto'); // 输出 http 或 https
+```
 
-## الحصول على نسخة الطلب
+## 获取请求HTTP版本
+
 ```php
 $request->protocolVersion();
-``` 
-تُرجع السلسلة `
-يمكنك الحصول على عنوان IP الحقيقي للعميل med-$safe_mode=true من طلب ،
-عند استخدام الاستبدالات (مثل nginx) في المشروع ، قد يكون العنوان IP الذي يتم الحصول عليه من خلال `$request->getRemoteIp()` هو عنوان خادم الوكيل (مثل `127.0.0.1` `192.168.x.x`) وليس عنوان IP الحقيقي للعميل. في هذه الحالة ، يمكنك محاولة استخدام `$request->getRealIp()` للحصول على عنوان IP الحقيقي للعميل.
+```
+返回字符串 `1.1` 或者`1.0`。
 
-`$request->getRealIp()` سيحاول الحصول على العنوان IP الحقيقي من رؤوس HTTP `x-real-ip` ، `x-forwarded-for` ، `client-ip` ، `x-client-ip` ، `via`.
 
-> نظرًا لأن رؤوس HTTP يمكن تزويرها بسهولة ، فإن العنوان IP الذي تم الحصول عليه باستخدام هذه الطريقة ليس 100٪ موثوقًا ، خاصةً إذا كان `$safe_mode` يساوي `false`. طريقة أكثر موثوقية للحصول على عنوان IP الحقيقي للعميل من خلال الوكيل هي معرفة عنوان خادم الوكيل الآمن ومعرفة بوضوح أي رأس HTTP يحمل العنوان IP الحقيقي. إذا كان العنوان IP الذي يرجعه `$request->getRemoteIp()` يتم تأكيده على أنه عنوان خادم وكيل آمن معروف ، فيمكن الحصول على العنوان IP الحقيقي باستخدام `$request->header('اسم رأس HTTP الذي يحمل العنوان IP الحقيقي')`.
+## 获取请求sessionId
 
-## الحصول على عنوان IP الخادم
+```php
+$request->sessionId();
+```
+返回字符串，由字母和数字组成
+
+
+## 获取请求客户端IP
+```php
+$request->getRemoteIp();
+```
+
+## 获取请求客户端端口
+```php
+$request->getRemotePort();
+```
+
+## 获取请求客户端真实IP
+```php
+$request->getRealIp($safe_mode=true);
+```
+
+当项目使用代理(例如nginx)时，使用`$request->getRemoteIp()`得到的往往是代理服务器IP(类似`127.0.0.1` `192.168.x.x`)并非客户端真实IP。这时候可以尝试使用`$request->getRealIp()`获得客户端真实IP。
+
+`$request->getRealIp()`会尝试从HTTP头的`x-forwarded-for`、`x-real-ip`、`client-ip`、`x-client-ip`、`via`字段中获取真实IP。
+
+> 由于HTTP头很容伪造，所以此方法获得的客户端IP并非100%可信，尤其是`$safe_mode`为false时。透过代理获得客户端真实IP的比较可靠的方法是，已知安全的代理服务器IP，并且明确知道携带真实IP是哪个HTTP头，如果`$request->getRemoteIp()`返回的IP确认为已知的安全的代理服务器，然后通过`$request->header('携带真实IP的HTTP头')`获取真实IP。
+
+
+## 获取服务端IP
 ```php
 $request->getLocalIp();
-``` 
+```
 
-## الحصول على ميناء الخادم
+## 获取服务端端口
 ```php
 $request->getLocalPort();
-``` 
+```
 
-## التحقق مما إذا كان الطلب هو طلب Ajax
+## 判断是否是ajax请求
 ```php
 $request->isAjax();
-``` 
+```
 
-## التحقق مما إذا كان الطلب هو طلب Pjax
+## 判断是否是pjax请求
 ```php
 $request->isPjax();
-``` 
+```
 
-## التحقق مما إذا كان الطلب يتوقع استلام استجابة JSON 
+## 判断是否是期待json返回
 ```php
 $request->expectsJson();
-``` 
+```
 
-## التحقق مما إذا كان العميل يقبل استلام استجابة JSON 
+## 判断客户端是否接受json返回
 ```php
 $request->acceptJson();
 ```
-## الحصول على اسم الإضافة المطلوبة
-عندما لا تكون هناك طلبات إضافة ، يُعاد سلسلة فارغة ''
+
+## 获得请求的插件名
+非插件请求返回空字符串`''`。
 ```php
 $request->plugin;
 ```
-> هذه الميزة تتطلب webman>=1.4.0
 
-## الحصول على اسم التطبيق المطلوب
-عندما يكون هناك تطبيق واحد ، يتم إعادة السلسلة فارغة دائمًا '' ؛ [عندما يكون هناك تطبيقات متعددة](multiapp.md) ، يتم إعادة اسم التطبيق 
+## 获得请求的应用名
+单应用的时候始终返回空字符串`''`，[多应用](multiapp.md)的时候返回应用名
 ```php
 $request->app;
 ```
 
-> بسبب أن الدوال الإغلاقية لا تنتمي إلى أي تطبيق ، يُعاد دائمًا السلسلة فارغة '' للطلبات القادمة من توجيهات الإغلاق.
-> انظر [التوجيهات](route.md) للحصول على مزيد من المعلومات حول توجيهات الإغلاق.
+> 因为闭包函数不属于任何应用，所以来自闭包路由的请求`$request->app`始终返回空字符串`''`
+> 闭包路由参见 [路由](route.md)
 
-## الحصول على اسم فئة التحكم المطلوبة
-الحصول على اسم الفئة المقابلة للتحكم
+## 获得请求的控制器类名
+获得控制器对应的类名
 ```php
 $request->controller;
 ```
-يرجع شيء مشابه لـ `app\controller\IndexController`
+返回类似 `app\controller\IndexController`
 
-> بسبب أن الدوال الإغلاقية لا تنتمي إلى أي تحكم ، يُعاد دائمًا السلسلة فارغة '' للطلبات القادمة من توجيهات الإغلاق.
-> انظر [التوجيهات](route.md) للحصول على مزيد من المعلومات حول توجيهات الإغلاق.
+> 因为闭包函数不属于任何控制器，所以来自闭包路由的请求`$request->controller`始终返回空字符串`''`
+> 闭包路由参见 [路由](route.md)
 
-## الحصول على اسم الطريقة المطلوبة
-الحصول على اسم طريقة التحكم المطلوبة
+## 获得请求的方法名
+获得请求对应的控制器方法名
 ```php
 $request->action;
 ```
-يرجع شيء مشابه لـ `index`
+返回类似 `index`
 
-> بسبب أن الدوال الإغلاقية لا تنتمي إلى أي تحكم ، يُعاد دائمًاً السلسلة فارغة '' للطلبات القادمة من توجيهات الإغلاق.
-> انظر [التوجيهات](route.md) للحصول على مزيد من المعلومات حول توجيهات الإغلاق.
+> 因为闭包函数不属于任何控制器，所以来自闭包路由的请求`$request->action`始终返回空字符串`''`
+> 闭包路由参见 [路由](route.md)
+
+## 重写参数
+有时候我们想重写请求的参数，例如将请求过滤，然后重新赋值给请求对象，这时候我们可以使用`setGet()` `setPost()` `setHeader()`方法。
+
+#### 重写GET参数
+```php
+$request->get(); // 假设得到 ['name' => 'tom', 'age' => 18]
+$request->setGet(['name' => 'tom']);
+$request->get(); // 最终得到 ['name' => 'tom']
+```
+
+> **注意**
+> 如例子所示，`setGet()`是重写所有GET参数，`setPost()` `setHeader()` 也是同样的行为。
+
+
+#### 重写POST参数
+```php
+$post = $request->post();
+foreach ($post as $key => $value) {
+    $post[$key] = htmlspecialchars($value);
+}
+$request->setPost($post);
+$request->post(); // 得到过滤后的post参数
+```
+
+#### 重写HEADER参数
+```php
+$request->setHeader(['host' => 'example.com']);
+$request->header('host'); // 输出 example.com
+```
+
+

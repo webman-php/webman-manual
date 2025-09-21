@@ -1,16 +1,16 @@
-## التوجيه
-## قواعد التوجيه الافتراضية
-قاعدة التوجيه الافتراضية في webman هي `http://127.0.0.1:8787/{المتحكم}/{الإجراء}`.
+# 路由
+## 默认路由规则
+webman默认路由规则是 `http://127.0.0.1:8787/{控制器}/{动作}`。
 
-المتحكم الافتراضي هو `app\controller\IndexController`، والإجراء الافتراضي هو `index`.
+默认控制器为`app\controller\IndexController`，默认动作为`index`。
 
-على سبيل المثال، عندما تقوم بزيارة:
-- `http://127.0.0.1:8787` ستزور طريق `app\controller\IndexController` وإجراء `index`
-- `http://127.0.0.1:8787/foo` سيؤدي إلى زيارة طريق `app\controller\FooController` وإجراء `index`
-- `http://127.0.0.1:8787/foo/test` سيؤدي إلى زيارة طريق `app\controller\FooController` وإجراء `test`
-- `http://127.0.0.1:8787/admin/foo/test` سيؤدي إلى زيارة طريق `app\admin\controller\FooController` وإجراء `test` (انظر [تطبيق متعدد](multiapp.md))
+例如访问：
+- `http://127.0.0.1:8787` 将默认访问`app\controller\IndexController`类的`index`方法
+- `http://127.0.0.1:8787/foo` 将默认访问`app\controller\FooController`类的`index`方法
+- `http://127.0.0.1:8787/foo/test` 将默认访问`app\controller\FooController`类的`test`方法
+- `http://127.0.0.1:8787/admin/foo/test` 将默认访问`app\admin\controller\FooController`类的`test`方法 (参考[多应用](multiapp.md))
 
-بالإضافة إلى ذلك، بدءاً من الإصدار 1.4، يدعم webman قواعد توجيه افتراضية أكثر تعقيدًا، على سبيل المثال
+另外webman从1.4开始支持更复杂的默认路由，例如
 ```php
 app
 ├── admin
@@ -27,122 +27,140 @@ app
             └── IndexController.php
 ```
 
-عندما ترغب في تغيير توجيه الطلبات، يرجى تعديل ملف التكوين `config/route.php`.
+当您想改变某个请求路由时请更改配置文件 `config/route.php`。
 
-إذا كنت ترغب في تعطيل توجيه الافتراضي، يمكنك إضافة الضبط التالي في نهاية ملف التكوين `config/route.php`:
+如果你想关闭默认路由，在配置文件 `config/route.php`里最后一行加上如下配置：
 ```php
 Route::disableDefaultRoute();
 ```
 
-## التوجيه الغير المتاحة
-يمكنك إضافة رمز الطريقة المصغرة في `config/route.php` كالآتي
+## 闭包路由
+`config/route.php`里添加如下路由代码
 ```php
-Route::any('/test', function ($request) {
+use support\Request;
+Route::any('/test', function (Request $request) {
     return response('test');
 });
 
 ```
-> **يرجى الملاحظة**
-> نظرًا لأن الوظيفة المصغرة ليست جزءًا من أي متحكم، فإن `$request->app` `$request->controller` `$request->action` ستكون جميعها سلاسل فارغة.
+> **注意**
+> 由于闭包函数不属于任何控制器，所以`$request->app` `$request->controller` `$request->action` 全部为空字符串。
 
-عندما يتم زيارة العنوان `http://127.0.0.1:8787/test`، ستُرجع سلسلة نصية `test`.
+当访问地址为 `http://127.0.0.1:8787/test` 时，将返回`test`字符串。
 
-> **يرجى الملاحظة**
-> يجب أن يبدأ مسار التوجيه بـ `/`، على سبيل المثال
+> **注意**
+> 路由路径必须以`/`开头，例如
 
 ```php
-// الاستخدام الخاطئ
-Route::any('test', function ($request) {
+use support\Request;
+// 错误的用法
+Route::any('test', function (Request $request) {
     return response('test');
 });
 
-// الاستخدام الصحيح
-Route::any('/test', function ($request) {
+// 正确的用法
+Route::any('/test', function (Request $request) {
     return response('test');
 });
 ```
 
 
-## التوجيه الصنفي
-يمكنك إضافة رمز التوجيه الصنفي في `config/route.php` كالآتي
+## 类路由
+`config/route.php`里添加如下路由代码
 ```php
 Route::any('/testclass', [app\controller\IndexController::class, 'test']);
 ```
-عندما يتم زيارة العنوان `http://127.0.0.1:8787/testclass`، ستُرجع قيمة الوظيفة `test` في فئة `app\controller\IndexController`.
+当访问地址为 `http://127.0.0.1:8787/testclass` 时，将返回`app\controller\IndexController`类的`test`方法的返回值。
 
-## معلمات التوجيه
-إذا كانت هناك معلمات في التوجيه، يمكن استخدام `{key}` للتطابق، وسيُمرر نتيجة التطابق إلى معلمات وظيفة المتحكم المقابلة (ابتداء من البارامتر الثاني على التوالي)، على سبيل المثال:
+
+## 路由参数
+如果路由中存在参数，通过`{key}`来匹配，匹配结果将传递到对应的控制器方法参数中(从第二个参数开始依次传递)，例如：
 ```php
-// تطابق /user/123 /user/abc
+// 匹配 /user/123 /user/abc
 Route::any('/user/{id}', [app\controller\UserController::class, 'get']);
 ```
 ```php
 namespace app\controller;
+use support\Request;
+
 class UserController
 {
-    public function get($request, $id)
+    public function get(Request $request, $id)
     {
-        return response('تم استقبال المعلمة'.$id);
+        return response('接收到参数'.$id);
     }
 }
 ```
 
-مزيد من الأمثلة:
+更多例子：
 ```php
-// تطابق /user/123، لا يتطابق /user/abc
-Route::any('/user/{id:\d+}', function ($request, $id) {
+use support\Request;
+// 匹配 /user/123, 不匹配 /user/abc
+Route::any('/user/{id:\d+}', function (Request $request, $id) {
     return response($id);
 });
 
-// تطابق /user/foobar، لا يتطابق /user/foo/bar
-Route::any('/user/{name}', function ($request, $name) {
+// 匹配 /user/foobar, 不匹配 /user/foo/bar
+Route::any('/user/{name}', function (Request $request, $name) {
    return response($name);
 });
 
-// تطابق /user /user/123 و /user/abc
-Route::any('/user[/{name}]', function ($request, $name = null) {
+// 匹配 /user /user/123 和 /user/abc   []表示可选
+Route::any('/user[/{name}]', function (Request $request, $name = null) {
    return response($name ?? 'tom');
 });
 
-// تطابق كل الطلبات المستندة إلى الخيارات
+// 匹配 任意以/user/为前缀的请求
+Route::any('/user/[{path:.+}]', function (Request $request) {
+    return $request->path();
+});
+
+// 匹配所有options请求   :后填写正则表达式，表示此命名参数的正则规则
 Route::options('[{path:.+}]', function () {
     return response('');
 });
 ```
+进阶用法总结
 
-## تجميع التوجيه
-أحيانًا يحتوي التوجيه على بادئة مشتركة كبيرة، فيمكننا استخدام تجميع التوجيه لتبسيط النطاق. على سبيل المثال:
+> `[]` 语法在 Webman 路由中主要用于处理可选路径部分或匹配动态路由，它让你能够为路由定义更复杂的路径结构和匹配规则
+> 
+> `:用于指定正则表达式`
+
+
+## 路由分组
+
+有时候路由包含了大量相同的前缀，这时候我们可以用路由分组来简化定义。例如：
 
 ```php
 Route::group('/blog', function () {
-   Route::any('/create', function ($request) {return response('إنشاء');});
-   Route::any('/edit', function ($request) {return response('تحرير');});
-   Route::any('/view/{id}', function ($request, $id) {return response("عرض $id");});
-}
+   Route::any('/create', function (Request $request) {return response('create');});
+   Route::any('/edit', function (Request $request) {return response('edit');});
+   Route::any('/view/{id}', function (Request $request, $id) {return response("view $id");});
+});
 ```
-تعادل
+等价与
 ```php
-Route::any('/blog/create', function ($request) {return response('إنشاء');});
-Route::any('/blog/edit', function ($request) {return response('تحرير');});
-Route::any('/blog/view/{id}', function ($request, $id) {return response("عرض $id");});
+Route::any('/blog/create', function (Request $request) {return response('create');});
+Route::any('/blog/edit', function (Request $request) {return response('edit');});
+Route::any('/blog/view/{id}', function (Request $request, $id) {return response("view $id");});
 ```
 
-استخدام التجميع المتداخل
+group嵌套使用
 
 ```php
 Route::group('/blog', function () {
    Route::group('/v1', function () {
-      Route::any('/create', function ($request) {return response('إنشاء');});
-      Route::any('/edit', function ($request) {return response('تحرير');});
-      Route::any('/view/{id}', function ($request, $id) {return response("عرض $id");});
+      Route::any('/create', function (Request $request) {return response('create');});
+      Route::any('/edit', function (Request $request) {return response('edit');});
+      Route::any('/view/{id}', function (Request $request, $id) {return response("view $id");});
    });  
-}
+});
 ```
 
-## الوساطة في التوجيه
-يمكننا تعيين وسيطًا لطريق واحد أو مجموعة من الطرق.
-على سبيل المثال:
+## 路由中间件
 
+我们可以给某个一个或某一组路由设置中间件。
+例如：
 ```php
 Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->middleware([
     app\middleware\MiddlewareA::class,
@@ -150,25 +168,22 @@ Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->mi
 ]);
 
 Route::group('/blog', function () {
-   Route::any('/create', function () {return response('إنشاء');});
-   Route::any('/edit', function () {return response('تحرير');});
-   Route::any('/view/{id}', function ($request, $id) {response("عرض $id");});
+   Route::any('/create', function () {return response('create');});
+   Route::any('/edit', function () {return response('edit');});
+   Route::any('/view/{id}', function ($request, $id) {response("view $id");});
 })->middleware([
     app\middleware\MiddlewareA::class,
     app\middleware\MiddlewareB::class,
 ]);
 ```
 
-> **يرجى الملاحظة**: 
-> في webman-framework <= 1.5.6 عندما يتم تطبيق `->middleware()` على تجميع group، يجب أن تكون الطريقة الحالية تقع تحت تلك الفئة.
-
 ```php
-# مثال على الاستخدام الخاطئ (عندما يكون webman-framework >= 1.5.7، يصبح هذا الاستخدام صالحًا)
+# 错误使用例子 (webman-framework >= 1.5.7 时此用法有效)
 Route::group('/blog', function () {
    Route::group('/v1', function () {
-      Route::any('/create', function ($request) {return response('إنشاء');});
-      Route::any('/edit', function ($request) {return response('تحرير');});
-      Route::any('/view/{id}', function ($request, $id) {return response("عرض $id");});
+      Route::any('/create', function (Request $request) {return response('create');});
+      Route::any('/edit', function (Request $request) {return response('edit');});
+      Route::any('/view/{id}', function (Request $request, $id) {return response("view $id");});
    });  
 })->middleware([
     app\middleware\MiddlewareA::class,
@@ -177,12 +192,12 @@ Route::group('/blog', function () {
 ```
 
 ```php
-# مثال على الاستخدام الصحيح
+# 正确使用例子
 Route::group('/blog', function () {
    Route::group('/v1', function () {
-      Route::any('/create', function ($request) {return response('إنشاء');});
-      Route::any('/edit', function ($request) {return response('تحرير');});
-      Route::any('/view/{id}', function ($request, $id) {return response("عرض $id");});
+      Route::any('/create', function (Request $request) {return response('create');});
+      Route::any('/edit', function (Request $request) {return response('edit');});
+      Route::any('/view/{id}', function (Request $request, $id) {return response("view $id");});
    })->middleware([
         app\middleware\MiddlewareA::class,
         app\middleware\MiddlewareB::class,
@@ -190,119 +205,190 @@ Route::group('/blog', function () {
 });
 ```
 
-## توجيه الموارد
+## 资源型路由
 ```php
 Route::resource('/test', app\controller\IndexController::class);
 
-// تحديد توجيه الموارد
+//指定资源路由
 Route::resource('/test', app\controller\IndexController::class, ['index','create']);
 
-// توجيه الموارد غير المعرف
-// مثل زيارة notify تصبح any-type route /test/notify أو /test/notify/{id} routeName is test.notify
+//非定义性资源路由
+// 如 notify 访问地址则为any型路由 /test/notify或/test/notify/{id} 都可 routeName为 test.notify
 Route::resource('/test', app\controller\IndexController::class, ['index','create','notify']);
 ```
-| الفعل   | الرابط                 | الإجراء   | اسم الطريق    |
+| Verb   | URI                 | Action   | Route Name    |
 |--------|---------------------|----------|---------------|
 | GET    | /test               | index    | test.index    |
 | GET    | /test/create        | create   | test.create   |
 | POST   | /test               | store    | test.store    |
 | GET    | /test/{id}          | show     | test.show     |
 | GET    | /test/{id}/edit     | edit     | test.edit     |
-| PUT   | /test/{id}           | update   | test.update   |
+| PUT    | /test/{id}          | update   | test.update   |
 | DELETE | /test/{id}          | destroy  | test.destroy  |
-| PUT    | /test/{id}/recovery| recovery | test.recovery |
+| PUT    | /test/{id}/recovery | recovery | test.recovery |
 
-## إنشاء عنوان
-> **يرجى الملاحظة** 
-> حالياً لا يدعم إنتاج عناوين للتوجيه المدمج
 
-على سبيل المثال عند استخدام التوجيه:
+
+
+## url生成
+> **注意** 
+> 暂时不支持group嵌套的路由生成url  
+
+例如路由：
 ```php
 Route::any('/blog/{id}', [app\controller\BlogController::class, 'view'])->name('blog.view');
 ```
-يمكننا استخدام الأسلوب التالي لإنشاء عنوان لهذا التوجيه:
+我们可以使用如下方法生成这个路由的url。
 ```php
-route('blog.view', ['id' => 100]); // النتيجة /blog/100
+route('blog.view', ['id' => 100]); // 结果为 /blog/100
 ```
 
-يمكن استخدام هذا الأسلوب عند استخدام عناوين التوجيه في العرض، وبهذه الطريقة سيتم إنتاج العنوان تلقائيًا بغض النظر عن تغييرات قواعد التوجيه، لتجنب الحاجة لتغيير كثير من ملفات العرض بسبب تغيير عناوين التوجيه.
+视图里使用路由的url时可以使用此方法，这样不管路由规则如何变化，url都会自动生成，避免因路由地址调整导致大量更改视图文件的情况。
 
-## الحصول على معلومات التوجيه
-> **يرجى الملاحظة**
-> يتطلب webman-framework >= 1.3.2
 
-يمكننا الحصول على معلومات التوجيه الحالي من خلال كائن `$request->route`، على سبيل المثال
+## 获取路由信息
+
+通过`$request->route`对象我们可以获取当前请求路由信息，例如
 
 ```php
-$route = $request->route; // يعادل $route = request()->route;
+$route = $request->route; // 等价与 $route = request()->route;
 if ($route) {
     var_export($route->getPath());
     var_export($route->getMethods());
     var_export($route->getName());
     var_export($route->getMiddleware());
     var_export($route->getCallback());
-    var_export($route->param()); // يتطلب هذه الميزة webman-framework >= 1.3.16
+    var_export($route->param());
 }
 ```
 
-> **يرجى الملاحظة**
-> إذا لم تتطابق الطلبات الحالية مع أي من توجيهات config/route.php، فإن `$request->route` سيكون القيمة `null`، وهذا يعني أن التوجيه الافتراضي سيكون null
+> **注意**
+> 如果当前请求没有匹配到config/route.php中配置的任何路由，则`$request->route`为null，也就是说走默认路由时`$request->route`为null
 
-## معالجة الأخطاء 404
-عندما لايتم العثور على التوجيه، يتم إرجاع حالة 404 افتراضية ونص `public/404.html` يتم عرضه.
 
-إذا كان المطور يرغب في التدخل عندما لايتم العثور على توجيه، يمكنه استخدام وظيفة التوجيه البديلة المقدمة من webman `Route::fallback($callback)`، كما في الشيفرة التالية وهي إعادة التوجيه إلى الصفحة الرئيسية عندما لايتم العثور على توجيه.
+## 处理404
+当路由找不到时默认返回404状态码并输出404相关内容。
+
+如果开发者想介入路由未找到时的业务流程，可以使用webman提供的回退路由`Route::fallback($callback)`方法。比如下面的代码逻辑是当路由未找到时重定向到首页。
 ```php
 Route::fallback(function(){
     return redirect('/');
 });
 ```
-على سبيل المثال، عندما لا يتم العثور على توجيه، يتم إرجاع بيانات json، وهذا يعد مناسبًا لاستخدام webman كواجهة برمجية.
+再比如当路由不存在时返回一个json数据，这在webman作为api接口时非常实用。
 ```php
 Route::fallback(function(){
-    return json(['code' => 404, 'msg' => '404 لم يتم العثور']);
+    return json(['code' => 404, 'msg' => '404 not found']);
 });
 ```
 
-الروابط ذات الصلة [صفحات الأخطاء المخصصة](others/custom-error-page.md)
-## واجهة التوجيه
-```php
-// تعيين مسار $uri لأي طلب لأي طريقة
-Route::any($uri, $callback);
-// تعيين مسار $uri للطلبات من نوع GET
-Route::get($uri, $callback);
-// تعيين مسار $uri للطلبات من نوع POST
-Route::post($uri, $callback);
-// تعيين مسار $uri للطلبات من نوع PUT
-Route::put($uri, $callback);
-// تعيين مسار $uri للطلبات من نوع PATCH
-Route::patch($uri, $callback);
-// تعيين مسار $uri للطلبات من نوع DELETE
-Route::delete($uri, $callback);
-// تعيين مسار $uri للطلبات من نوع HEAD
-Route::head($uri, $callback);
-// تعيين مسار $uri لعدة أنواع من الطلبات معًا
-Route::add(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'], $uri, $callback);
-// تجميع المسارات
-Route::group($path, $callback);
-// مسارات الموارد
-Route::resource($path, $callback, [$options]);
-// تعطيل المسارات
-Route::disableDefaultRoute($plugin = '');
-// المسار البديل، تعيين المسار الافتراضي للتعويض عن الطلبات
-Route::fallback($callback, $plugin = '');
-```
-إذا لم يكن هناك مسار مطابق لـ uri (بما في ذلك المسار الافتراضي) ولم يتم تعيين مسار بديل، سيتم إرجاع رمز الخطأ 404.
+## 给404添加中间件
 
-## ملفات تكوين المسارات المتعددة
-إذا كنت ترغب في استخدام ملفات تكوين مسارات متعددة لإدارة المسارات، مثل [تطبيقات متعددة](multiapp.md) حيث يوجد لكل تطبيق تكوين مسارات خاص به، يمكنك استخدام الـ `require` لتحميل ملفات تكوين المسارات الخارجية.
-على سبيل المثال في `config/route.php`
+默认404请求不会走任何中间件，如果需要给404请求添加中间件，请参考以下代码。
+```php
+Route::fallback(function(){
+    return json(['code' => 404, 'msg' => '404 not found']);
+})->middleware([
+    app\middleware\MiddlewareA::class,
+    app\middleware\MiddlewareB::class,
+]);
+````
+
+相关链接 [自定义404 500页面](others/custom-error-page.md)
+
+## 禁用默认路由
+
+```php
+// 禁用主项目默认路由，不影响应用插件
+Route::disableDefaultRoute();
+// 禁用主项目的admin应用的路由，不影响应用插件
+Route::disableDefaultRoute('', 'admin');
+// 禁用foo插件的默认路由，不影响主项目
+Route::disableDefaultRoute('foo');
+// 禁用foo插件的admin应用的默认路由，不影响主项目
+Route::disableDefaultRoute('foo', 'admin');
+// 禁用控制器 [\app\controller\IndexController::class, 'index'] 的默认路由
+Route::disableDefaultRoute([\app\controller\IndexController::class, 'index']);
+```
+
+## 注解禁用默认路由
+
+我们可以通过注解禁用某个控制器的默认路由，例如：
+
+```php
+namespace app\controller;
+use support\annotation\DisableDefaultRoute;
+
+#[DisableDefaultRoute]
+class IndexController
+{
+    public function index()
+    {
+        return 'index';
+    }
+}
+```
+
+同样的，我们也可以通过注解禁用某个控制器的默认路由，例如：
+
+```php
+namespace app\controller;
+use support\annotation\DisableDefaultRoute;
+
+class IndexController
+{
+    #[DisableDefaultRoute]
+    public function index()
+    {
+        return 'index';
+    }
+}
+```
+
+## 路由接口
+```php
+// 设置$uri的任意方法请求的路由
+Route::any($uri, $callback);
+// 设置$uri的get请求的路由
+Route::get($uri, $callback);
+// 设置$uri的post请求的路由
+Route::post($uri, $callback);
+// 设置$uri的put请求的路由
+Route::put($uri, $callback);
+// 设置$uri的patch请求的路由
+Route::patch($uri, $callback);
+// 设置$uri的delete请求的路由
+Route::delete($uri, $callback);
+// 设置$uri的head请求的路由
+Route::head($uri, $callback);
+// 设置$uri的options请求的路由
+Route::options($uri, $callback);
+// 同时设置多种请求类型的路由
+Route::add(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'], $uri, $callback);
+// 分组路由
+Route::group($path, $callback);
+// 资源路由
+Route::resource($path, $callback, [$options]);
+// 禁用路由
+Route::disableDefaultRoute($plugin = '');
+// 回退路由，设置默认的路由兜底
+Route::fallback($callback, $plugin = '');
+// 获取所有路由信息
+Route::getRoutes();
+```
+如果uri没有对应的路由(包括默认路由)，且回退路由也未设置，则会返回404。
+
+## 多个路由配置文件
+如果你想使用多个路由配置文件对路由进行管理，例如[多应用](multiapp.md)时每个应用下有自己的路由配置，这时可以通过`require`外部文件的方式加载外部路由配置文件。
+例如`config/route.php`中
 ```php
 <?php
 
-// تحميل تكوين مسارات التطبيق الإداري
+// 加载admin应用下的路由配置
 require_once app_path('admin/config/route.php');
-// تحميل تكوين مسارات التطبيق الـ API
+// 加载api应用下的路由配置
 require_once app_path('api/config/route.php');
 
 ```
+
+

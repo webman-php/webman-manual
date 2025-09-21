@@ -1,16 +1,15 @@
-# مكونات الرمز التحقق
+# 验证码组件
 
-## webman/captcha
-رابط المشروع: https://github.com/webman-php/captcha
+项目地址 https://github.com/webman-php/captcha
 
-### التثبيت
+## 安装
 ```
 composer require webman/captcha
 ```
 
-### الاستخدام
+## 使用
 
-**إنشاء ملف `app/controller/LoginController.php`**
+**建立文件 `app/controller/LoginController.php`**
 
 ```php
 <?php
@@ -22,7 +21,7 @@ use Webman\Captcha\CaptchaBuilder;
 class LoginController
 {
     /**
-     * صفحة الاختبار
+     * 测试页面
      */
     public function index(Request $request)
     {
@@ -30,85 +29,75 @@ class LoginController
     }
     
     /**
-     * إخراج صورة الرمز التحقق
+     * 输出验证码图像
      */
     public function captcha(Request $request)
     {
-        // تهيئة فئة الرمز التحقق
+        // 初始化验证码类
         $builder = new CaptchaBuilder;
-        // إنشاء الرمز التحقق
+        // 生成验证码
         $builder->build();
-        // تخزين قيمة الرمز التحقق في الجلسة
+        // 将验证码的值存储到session中
         $request->session()->set('captcha', strtolower($builder->getPhrase()));
-        // الحصول على بيانات الصورة الثنائية للرمز التحقق
+        // 获得验证码图片二进制数据
         $img_content = $builder->get();
-        // إخراج بيانات الصورة الثنائية للرمز التحقق
+        // 输出验证码二进制数据
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
     }
 
     /**
-     * فحص الرمز التحقق
+     * 检查验证码
      */
     public function check(Request $request)
     {
-        // الحصول على حقل الرمز التحقق من طلب الـpost
+        // 获取post请求中的captcha字段
         $captcha = $request->post('captcha');
-        // مقارنة قيمة الرمز التحقق في الجلسة
+        // 对比session中的captcha值
         if (strtolower($captcha) !== $request->session()->get('captcha')) {
-            return json(['code' => 400, 'msg' => 'الرمز التحقق الذي أدخلته غير صحيح']);
+            return json(['code' => 400, 'msg' => '输入的验证码不正确']);
         }
-        return json(['code' => 0, 'msg' => 'حسنًا']);
+        return json(['code' => 0, 'msg' => 'ok']);
     }
 
 }
 ```
 
-**إنشاء ملف القالب `app/view/login/index.html`**
+**建立模版文件`app/view/login/index.html`**
 
 ```html
 <!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
-    <title>اختبار الرمز التحقق</title>  
+    <title>验证码测试</title>  
 </head>
 <body>
     <form method="post" action="/login/check">
        <img src="/login/captcha" /><br>
         <input type="text" name="captcha" />
-        <input type="submit" value="إرسال" />
+        <input type="submit" value="提交" />
     </form>
 </body>
 </html>
 ```
 
-انتقل إلى الصفحة `http://127.0.0.1:8787/login` ستكون الواجهة مشابهة للصورة التالية:
+进入页面`http://127.0.0.1:8787/login` 界面类似如下：
   ![](../../assets/img/captcha.png)
 
-### إعدادات المعلمات الشائعة
+## 常见参数设置
 ```php
     /**
-     * إخراج صورة الرمز التحقق
+     * 输出验证码图像
      */
     public function captcha(Request $request)
     {
-        // تهيئة فئة الرمز التحقق
-        $builder = new CaptchaBuilder;
-        // طول الرمز التحقق
-        $length = 4;
-        // الأحرف المتضمنة
-        $chars = '0123456789abcefghijklmnopqrstuvwxyz';
-        $builder = new PhraseBuilder($length, $chars);
-        $captcha = new CaptchaBuilder(null, $builder);
-        // إنشاء الرمز التحقق
-        $builder->build();
-        // تخزين قيمة الرمز التحقق في الجلسة
-        $request->session()->set('captcha', strtolower($builder->getPhrase()));
-        // الحصول على بيانات الصورة الثنائية للرمز التحقق
-        $img_content = $builder->get();
-        // إخراج بيانات الصورة الثنائية للرمز التحقق
+        $builder = new PhraseBuilder(4, 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ');
+        $captcha = new Captcha(null, $builder);
+        $captcha->build();
+        $request->session()->set('join', strtolower($captcha->getPhrase()));
+        $img_content = $captcha->get();
         return response($img_content, 200, ['Content-Type' => 'image/jpeg']);
     }
 ```
 
-لمزيد من الواجهات البرمجية والمعلمات، راجع https://github.com/webman-php/captcha
+更多接口及参数参考 https://github.com/webman-php/captcha

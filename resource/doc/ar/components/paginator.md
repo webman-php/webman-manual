@@ -1,20 +1,18 @@
-# مكون الصفحة
+# 分页组件
 
-## jasongrimes/php-paginator
-
-### عنوان المشروع
+## 项目地址
 
 https://github.com/jasongrimes/php-paginator
-
-### التثبيت
+  
+## 安装
 
 ```php
 composer require "jasongrimes/paginator:^1.0.3"
 ```
+  
+## 使用
 
-### الاستخدام
-
-أنشئ `app/controller/UserController.php`
+新建 `app/controller/UserController.php`
 ```php
 <?php
 namespace app\controller;
@@ -25,7 +23,7 @@ use JasonGrimes\Paginator;
 class UserController
 {
     /**
-     * قائمة المستخدمين
+     * 用户列表
      */
     public function get(Request $request)
     {
@@ -36,14 +34,15 @@ class UserController
         $paginator = new Paginator($total_items, $items_perPage, $current_page, $url_pattern);
         return view('user/get', ['paginator' => $paginator]);
     }
+    
 }
 ```
-**القالب (نصي باللغة الإنجليزية)**
-أنشئ قالبًا بالمسار التالي app/view/user/get.html
+**模板(php原生)**
+新建模版 app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- يدعم النمط الافتراضي للتقسيم باستخدام Bootstrap -->
+  <!-- 内置支持 Bootstrap 分页样式 -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -53,12 +52,13 @@ class UserController
 </body>
 </html>
 ```
-**القالب (تويج)**
-أنشئ قالبًا بالمسار التالي app/view/user/get.html
+
+**模板(twig)**
+新建模版 app/view/user/get.html
 ```html
 <html>
 <head>
-  <!-- يدعم النمط الافتراضي للتقسيم باستخدام Bootstrap -->
+  <!-- 内置支持 Bootstrap 分页样式 -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -70,12 +70,13 @@ class UserController
 </body>
 </html>
 ```
-**القالب (شفرة)**
-أنشئ قالبًا بالمسار التالي app/view/user/get.blade.php
+
+**模板(blade)**
+新建模版 app/view/user/get.blade.php
 ```html
 <html>
 <head>
-  <!-- يدعم النمط الافتراضي للتقسيم باستخدام Bootstrap -->
+  <!-- 内置支持 Bootstrap 分页样式 -->
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -85,12 +86,13 @@ class UserController
 </body>
 </html>
 ```
-**القالب (التفكير)**
-أنشئ قالبًا بالمسار التالي app/view/user/get.blade.php
+
+**模板(thinkphp)**
+新建模版 app/view/user/get.blade.php
 ```html
 <html>
 <head>
-    <!-- يدعم النمط الافتراضي للتقسيم باستخدام Bootstrap -->
+    <!-- 内置支持 Bootstrap 分页样式 -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 </head>
 <body>
@@ -101,9 +103,11 @@ class UserController
 </html>
 ```
 
-النتيجة كما يلي:
+效果如下：
 ![](../../assets/img/paginator.png)
+  
+## 更多内容
 
-### المزيد من المحتوى
+访问 https://github.com/jasongrimes/php-paginator
+  
 
-زيارة https://github.com/jasongrimes/php-paginator

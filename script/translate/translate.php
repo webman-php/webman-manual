@@ -2,6 +2,8 @@
 use Webman\Openai\Chat;
 use Workerman\Worker;
 
+require_once __DIR__ . '/../../server/vendor/autoload.php';
+
 global $cache, $args, $zh_lang;
 
 // 多语言并行翻译：启动若干进程，每个进程翻译一个语言（排除 zh-cn）

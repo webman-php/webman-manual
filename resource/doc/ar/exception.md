@@ -1,30 +1,30 @@
-# معالجة الاستثناءات
+# 异常处理
 
-## الضبط
+## 配置
 `config/exception.php`
 ```php
 return [
-    // قم بتأكيد فئة معالجة الاستثناءات هنا
+    // 这里配置异常处理类
     '' => support\exception\Handler::class,
 ];
 ```
-في حالة وجود وضع التطبيقات المتعددة، يمكنك تكوين فئة معالجة الاستثناءات بشكل منفصل لكل تطبيق، راجع [وضع التطبيقات المتعددة](multiapp.md)
+多应用模式时，你可以为每个应用单独配置异常处理类，参见[多应用](multiapp.md)
 
 
-## فئة معالجة الاستثناءات الافتراضية
-يقوم webman افتراضيًا بمعالجة الاستثناءات باستخدام  فئة `support\exception\Handler`. يمكنك تغيير فئة معالجة الاستثناءات الافتراضية من خلال تعديل ملف الضبط `config/exception.php`. يجب على فئة معالجة الاستثناءات أن تنفذ واجهة `Webman\Exception\ExceptionHandlerInterface`.
+## 默认异常处理类
+webman中异常默认由 `support\exception\Handler` 类来处理。可修改配置文件`config/exception.php`来更改默认异常处理类。异常处理类必须实现`Webman\Exception\ExceptionHandlerInterface` 接口。
 ```php
 interface ExceptionHandlerInterface
 {
     /**
-     * سجل السجل
+     * 记录日志
      * @param Throwable $e
      * @return mixed
      */
     public function report(Throwable $e);
 
     /**
-     * اقرأ الاستجابة
+     * 渲染返回
      * @param Request $request
      * @param Throwable $e
      * @return Response
@@ -35,25 +35,25 @@ interface ExceptionHandlerInterface
 
 
 
-## جلب الاستجابة
-يُستخدم الطريقة `render` في فئة معالجة الاستثناءات لجلب الاستجابة.
+## 渲染响应
+异常处理类中的`render`方法是用来渲染响应的。
 
-إذا كانت قيمة `debug` في ملف الضبط `config/app.php` تساوي `true` (مختصرا باسم `app.debug=true`)، سيتم إرجاع معلومات الاستثناء التفصيلية، في حين سيتم إرجاع معلومات الاستثناء على نحو مختصر إذا كان ذلك غير متوقع.
+如果配置文件`config/app.php`中`debug`值为`true`(以下简称`app.debug=true`)，将返回详细的异常信息，否则将返回简略的异常信息。
 
-إذا كان من المتوقع أن يكون الاستجابة عبارة عن JSON، ستتم إرجاع معلومات الاستثناء بتنسيق JSON كما يلي
+如果请求期待是json返回，则返回的异常信息将以json格式返回，类似
 ```json
 {
     "code": "500",
-    "msg": "معلومات الاستثناء"
+    "msg": "异常信息"
 }
 ```
-إذا كان `app.debug=true`، سيتم إضافة حقل إضافي للبيانات الJSON يحمل اسم `trace` ويُظهر تفاصيل دقيقة حول الشريط الزمني للمكالمات.
+如果`app.debug=true`，json数据里会额外增加一个`trace`字段返回详细的调用栈。
 
-يمكنك كتابة فئة معالجة الاستثناء الخاصة بك لتغيير المنطق الافتراضي لمعالجة الاستثناءات.
+你可以编写自己的异常处理类来更改默认异常处理逻辑。
 
-# استثناء العمل BusinessException
-في بعض الأحيان نريد إيقاف الطلب في داخل دالة مدمجة وإرجاع رسالة خطأ إلى العميل، فيمكن القيام بذلك عن طريق رمي استثناء `BusinessException`.
-مثلاً:
+# 业务异常 BusinessException
+有时候我们想在某个嵌套函数里终止请求并返回一个错误信息给客户端，这时可以通过抛出`BusinessException`来做到这点。
+例如：
 
 ```php
 <?php
@@ -67,31 +67,31 @@ class FooController
     public function index(Request $request)
     {
         $this->chackInpout($request->post());
-        return response('مرحباً بكم في الفهرس');
+        return response('hello index');
     }
     
     protected function chackInpout($input)
     {
         if (!isset($input['token'])) {
-            throw new BusinessException('خطأ في المعلمات', 3000);
+            throw new BusinessException('参数错误', 3000);
         }
     }
 }
 ```
 
-سترد النموذج أعلاه
+以上示例会返回一个
 ```json
-{"code": 3000, "msg": "خطأ في المعلمات"}
+{"code": 3000, "msg": "参数错误"}
 ```
 
-> **ملاحظة**
-> لا يلزم التعامل مع استثناء BusinessException، سيقوم الإطار بالتقاطه تلقائيًا وسيُرجع الناتج المناسب وفقًا لنوع الطلب.
+> **注意**
+> 业务异常BusinessException不需要业务try捕获，框架会自动捕获并根据请求类型返回合适的输出。
 
-## استثناء العمل المخصص
+## 自定义业务异常
 
-إذا لم تتوافق الاستجابة المعروضة مع احتياجاتك وأردت تغيير `msg` إلى `message` على سبيل المثال، يمكنك تخصيص استثناء `MyBusinessException`.
+如果以上响应不符合你的需求，例如想把`msg`要改为`message`，可以自定义一个`MyBusinessException`
 
-قم بإنشاء `app/exception/MyBusinessException.php` مع المحتوى التالي
+新建 `app/exception/MyBusinessException.php` 内容如下
 ```php
 <?php
 
@@ -105,29 +105,29 @@ class MyBusinessException extends BusinessException
 {
     public function render(Request $request): ?Response
     {
-        // إذا كان الطلب عبارة عن JSON، سيتم إرجاع بيانات JSON
+        // json请求返回json数据
         if ($request->expectsJson()) {
             return json(['code' => $this->getCode() ?: 500, 'message' => $this->getMessage()]);
         }
-        // في حالة عدم الطلب الخاص JSON، سيتم إرجاع صفحة
+        // 非json请求则返回一个页面
         return new Response(200, [], $this->getMessage());
     }
 }
 ```
 
-بهذه الطريقة، عند استدعاء العمل الخاص
+这样当业务调用
 ```php
 use app\exception\MyBusinessException;
 
-throw new MyBusinessException('خطأ في المعلمات', 3000);
+throw new MyBusinessException('参数错误', 3000);
 ```
-سيتلقى الطلب الذي يقوم بالمطالبة بال JSON الخطأ الآتي على سبيل المثال
+json请求将收到一个类似如下的json返回
 ```json
-{"code": 3000, "message": "خطأ في المعلمات"}
+{"code": 3000, "message": "参数错误"}
 ```
 
-> **تلميح**
-> نظرًا لأن استثناء BusinessException يتعلق بالاستثناءات التجارية (مثل أخطاء مدخلات المستخدم) التي يمكن التنبؤ بها، فإن الإطار لن يعتبرها استثناءً قاتلاً وبالتالي فلن يقوم بتسجيلها في السجلات.
+> **提示**
+> 因为BusinessException异常属于业务异常(例如用户输入参数错误)，它是可预知的，所以框架并不会认为它是致命错误，并不会记录日志。
 
-## تلخيص
-في أي وقت ترغب في إيقاف الطلب الحالي وإرجاع معلومات للعميل يمكنك النظر في استخدام استثناء `BusinessException`.
+## 总结
+在任何想中断当前请求并返回信息给客户端的时候可以考虑使用`BusinessException`异常。

@@ -1,3 +1,3 @@
-# السوق الإضافي
+# 插件市场
 
-[انقر هنا للدخول إلى سوق التطبيقات](https://www.workerman.net/apps)
+[点击此处进入应用市场](https://www.workerman.net/apps)

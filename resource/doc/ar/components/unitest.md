@@ -1,13 +1,14 @@
-# اختبار الوحدة
+# 单元测试
 
-## التثبيت
-
+  
+## 安装
+ 
 ```php
 composer require --dev phpunit/phpunit
 ```
-
-## الاستخدام
-قم بإنشاء ملف `tests/TestConfig.php` لاختبار تكوين قاعدة البيانات
+  
+## 使用
+新建文件 `tests/TestConfig.php`，用于测试数据库配置
 ```php
 <?php
 use PHPUnit\Framework\TestCase;
@@ -25,12 +26,12 @@ class TestConfig extends TestCase
     }
 }
 ```
+  
+## 运行
 
-## التشغيل
+项目根目录里运行 `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php`
 
-قم بتشغيل الأمر التالي في الدليل الرئيسي للمشروع `./vendor/bin/phpunit --bootstrap support/bootstrap.php tests/TestConfig.php`
-
-النتيجة تكون مماثلة للتالي:
+结果类似如下：
 ```
 PHPUnit 9.5.10 by Sebastian Bergmann and contributors.
 

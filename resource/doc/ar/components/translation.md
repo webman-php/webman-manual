@@ -1,25 +1,25 @@
-# اللغات المتعددة
+# 多语言
 
-يستخدم اللغات المتعددة مكون [symfony/translation](https://github.com/symfony/translation) .
+多语言使用的是 [symfony/translation](https://github.com/symfony/translation) 组件。
 
-## التثبيت
+## 安装
 ```
 composer require symfony/translation
 ```
 
-## إنشاء حزمة اللغة
-يقوم webman بتخزين حزم اللغات افتراضيًا في الدليل `resource/translations` (إذا لم يكن موجودًا ، يرجى إنشاؤه بنفسك) ، وإذا كنت بحاجة إلى تغيير الدليل ، يرجى ضبطه في `config/translation.php`.
-يوجد مجلد فرعي لكل لغة ، وتعريف اللغة يتم وضعه افتراضيًا في `messages.php`. هناك مثال كما يلي:
+## 建立语言包
+webman默认将语言包放在`resource/translations`目录下(如果没有请自行创建)，如需更改目录，请在`config/translation.php`中设置。
+每种语言对应其中的一个子文件夹，语言定义默认放到`messages.php`里。示例如下：
 ```
 resource/
 └── translations
     ├── en
-    │   └── messages.php
+    │   └── messages.php
     └── zh_CN
         └── messages.php
 ```
 
-كل ملفات اللغة تعيد جملة إلى مصفوفة مثل:
+所有的语言文件都是返回一个数组例如：
 ```php
 // resource/translations/en/messages.php
 
@@ -27,33 +27,34 @@ return [
     'hello' => 'Hello webman',
 ];
 ```
-## التكوين
+
+## 配置
 
 `config/translation.php`
 
 ```php
 return [
-    // اللغة الافتراضية
+    // 默认语言
     'locale' => 'zh_CN',
-     // اللغة البديلة، إذا كان من غير الممكن العثور على ترجمة في اللغة الحالية ، يقوم بمحاولة استخدام الترجمة في اللغة البديلة.
+    // 回退语言，当前语言中无法找到翻译时则尝试使用回退语言中的翻译
     'fallback_locale' => ['zh_CN', 'en'],
-     // مجلد تخزين ملف اللغة
+    // 语言文件存放的文件夹
     'path' => base_path() . '/resource/translations',
 ];
 ```
 
-## الترجمة
+## 翻译
 
-تستخدم الترجمة الطريقة `trans()`.
+翻译使用`trans()`方法。
 
-إنشاء ملف لغة `resource/translations/zh_CN/messages.php` كما يلي:
+创建语言文件 `resource/translations/zh_CN/messages.php` 如下：
 ```php
 return [
-    'hello' => 'مرحباً بالعالم!',
+    'hello' => '你好 世界!',
 ];
 ```
 
-إنشاء ملف `app/controller/UserController.php`
+创建文件 `app/controller/UserController.php`
 ```php
 <?php
 namespace app\controller;
@@ -64,22 +65,22 @@ class UserController
 {
     public function get(Request $request)
     {
-        $hello = trans('hello'); // مرحباً بالعالم!
+        $hello = trans('hello'); // 你好 世界!
         return response($hello);
     }
 }
 ```
 
-عند زيارة `http://127.0.0.1:8787/user/get` ستعيد "مرحباً بالعالم!"
+访问 `http://127.0.0.1:8787/user/get` 将返回 "你好 世界!"
 
-## تغيير اللغة الافتراضية
+## 更改默认语言
 
-استخدام الطريقة `locale()` لتغيير اللغة.
+切换语言使用 `locale()` 方法。
 
-إنشاء ملف لغة جديد `resource/translations/en/messages.php` كما يلي:
+新增语言文件 `resource/translations/en/messages.php` 如下：
 ```php
 return [
-    'hello' => 'مرحبا العالم!',
+    'hello' => 'hello world!',
 ];
 ```
 
@@ -93,16 +94,16 @@ class UserController
 {
     public function get(Request $request)
     {
-        // تغيير اللغة
+        // 切换语言
         locale('en');
         $hello = trans('hello'); // hello world!
         return response($hello);
     }
 }
 ```
-زيارة `http://127.0.0.1:8787/user/get` ستعيد "hello world!"
+访问 `http://127.0.0.1:8787/user/get` 将返回 "hello world!"
 
-يمكنك أيضًا استخدام البرمجية التابعة `trans()` والتي تحتوي على المعامل الرابعة لتغيير اللغة مؤقتًا، على سبيل المثال:
+你也可以使用`trans()`函数的第4个参数来临时切换语言，例如上面的例子和下面这个是等价的：
 ```php
 <?php
 namespace app\controller;
@@ -113,17 +114,17 @@ class UserController
 {
     public function get(Request $request)
     {
-        // تغيير اللغة بالمعامل الرابع
+        // 第4个参数切换语言
         $hello = trans('hello', [], null, 'en'); // hello world!
         return response($hello);
     }
 }
 ```
 
-## تعيين اللغة بوضوح لكل طلب
-translation هي عنصر فردي، مما يعني أن جميع الطلبات تشترك في هذا الفردي، إذا قامت طلب ما باستخدام `locale()` لتحديد اللغة الافتراضية، فسيؤثر ذلك على جميع الطلبات اللاحقة في العملية. لذا يجب علينا تعيين اللغة بوضوح لكل طلب. على سبيل المثال باستخدام الوسيط التالي
+## 为每个请求明确的设置语言
+translation是一个单例，这意味着所有请求共享这个实例，如果某个请求使用`locale()`设置了默认语言，则它会影响这个进程的后续所有请求。所以我们应该为每个请求明确的设置语言。例如使用以下中间件
 
-إنشاء ملف `app/middleware/Lang.php` (إذا لم يكن موجودًا يرجى إنشاؤه) كما يلي:
+创建文件`app/middleware/Lang.php` (如目录不存在请自行创建) 如下：
 ```php
 <?php
 namespace app\middleware;
@@ -142,78 +143,80 @@ class Lang implements MiddlewareInterface
 }
 ```
 
-في `config/middleware.php`، يرجى إضافة الوسيط العالمي كما يلي:
+在 `config/middleware.php` 中添加全局中间件如下：
 ```php
 return [
-    // الوسيط العالمي
+    // 全局中间件
     '' => [
-        // ... هنا يتم حذف بقية الوسطاء
+        // ... 这里省略其它中间件
         app\middleware\Lang::class,
     ]
 ];
 ```
-## استخدام الحجة
-أحيانًا، تحتوي المعلومات على متغيرات يجب ترجمتها، مثل
+
+
+## 使用占位符
+有时，一条信息包含着需要被翻译的变量，例如
 ```php
 trans('hello ' . $name);
 ```
-عندما تواجه هذا السيناريو نستخدم حجة للتعامل معها.
+遇到这种情况时我们采用占位符来处理。
 
-تعديل `resource/translations/zh_CN/messages.php` كما يلي:
+更改 `resource/translations/zh_CN/messages.php` 如下：
 ```php
 return [
-    'hello' => 'مرحباً %name%!',
+    'hello' => '你好 %name%!',
 ];
 ```
-عند الترجمة سنمرر البيانات التي تتطابق مع الحجة من خلال الحجة الثانية
+翻译的时候将数据通过第二个参数将占位符对应的值传递进去
 ```php
-trans('hello', ['%name%' => 'webman']); // مرحباً بك، webman!
+trans('hello', ['%name%' => 'webman']); // 你好 webman!
 ```
 
-## التعامل مع الأعداد
-بعض اللغات تستخدم صيغ مختلفة بناءً على كمية الأشياء، على سبيل المثال `There is %count% apple`، عندما يكون `%count%` مساوٍ لواحد يجب أن تكون الصيغة صحيحة، عندما يكون أكثر من واحد فستكون خاطئة.
+## 处理复数
+有些语言由于事物数量不同呈现不同的句式，例如`There is %count% apple`，当`%count%`为1时句式正确，当大于1时则错误。
 
-عند مواجهة هذا السيناريو نستخدم **الخط الرأسي** (`|`) لتحديد صيغ الجمع.
+遇到这种情况时我们采用**管道**(`|`)来列出来复数形式。
 
-إضافة الفرع `apple_count` في ملف اللغة `resource/translations/en/messages.php` كما يلي:
-```php
-return [
-    // ...
-    'apple_count' => 'ثمة تفاحة واحدة|هناك %count% تفاحة',
-];
-```
-
-```php
-trans('apple_count', ['%count%' => 10]); // هناك 10 تفاحة
-```
-
-حتى يمكننا تحديد نطاق الأرقام، وإنشاء قواعد جمع أكثر تعقيداً.
+语言文件 `resource/translations/en/messages.php` 新增`apple_count`如下：
 ```php
 return [
     // ...
-    'apple_count' => '{0} ليس هناك تفاح|{1} هناك تفاحة واحدة|]1,19] هناك %count% تفاحة|]20,Inf[ هناك الكثير من التفاح'
+    'apple_count' => 'There is one apple|There are %count% apples',
 ];
 ```
 
 ```php
-trans('apple_count', ['%count%' => 20]); // هناك الكثير من التفاح
+trans('apple_count', ['%count%' => 10]); // There are 10 apples
 ```
 
-## تحديد ملف اللغة
-
-الملف الافتراضي للغة هو `messages.php`، ولكن في الواقع يمكنك إنشاء ملفات لغة بأسماء مختلفة.
-
-إنشاء ملف لغة `resource/translations/zh_CN/admin.php` كما يلي:
+我们甚至可以指定数字范围，创建更加复杂的复数规则：
 ```php
 return [
-    'hello_admin' => 'مرحباً بالمسؤول!',
+    // ...
+    'apple_count' => '{0} There are no apples|{1} There is one apple|]1,19] There are %count% apples|[20,Inf[ There are many apples'
 ];
 ```
 
-يمكنك تحديد ملف اللغة باستخدام الحجة الثالثة لـ `trans()` (بدون اللاحقة `.php`)، على سبيل المثال:
 ```php
-trans('hello', [], 'admin', 'zh_CN'); // مرحباً بالمسؤول!
+trans('apple_count', ['%count%' => 20]); // There are many apples
 ```
 
-## للمزيد من المعلومات
-يرجى الرجوع إلى [دليل symfony/translation](https://symfony.com/doc/current/translation.html)
+## 指定语言文件
+
+语言文件默认名字为`messages.php`，实际上你可以创建其它名称的语言文件。
+
+创建语言文件 `resource/translations/zh_CN/admin.php` 如下：
+```php
+return [
+    'hello_admin' => '你好 管理员!',
+];
+```
+
+通过`trans()`第三个参数来指定语言文件(省略`.php`后缀)。
+```php
+trans('hello', [], 'admin', 'zh_CN'); // 你好 管理员!
+```
+
+## 更多信息
+参考 [symfony/translation手册](https://symfony.com/doc/current/translation.html)

@@ -1,70 +1,74 @@
-# إضافة سطر الأوامر webman/console
+# webman/console 命令行插件
 
-`webman/console` معتمد على `symfony/console`
+`webman/console` 基于 `symfony/console`
 
-> تحتاج الإضافة webman>=1.2.2 و webman-framework>=1.2.1
-
-## التثبيت
+## 安装
  
 ```sh
 composer require webman/console
 ```
 
-## الأوامر المدعومة
-**طريقة الاستخدام**  
-`php webman الأمر` أو `php webman الأمر`.
-مثال `php webman version` أو `php webman version`
+## 支持的命令
+**使用方法**  
+`php webman 命令`
+例如 `php webman version`  
 
-## الأوامر المدعومة
+> ** 提示 **
+> linux系统下可简化为 `./webman 命令`
+
+## 支持的命令
 ### version
-**طباعة رقم إصدار webman**
+**打印webman版本号**
 
 ### route:list
-**طباعة تكوين الطريق الحالي**
+**打印当前路由配置**
 
 ### make:controller
-**إنشاء ملف تحكم**
-مثال `php webman make:controller admin` سينشئ `app/controller/AdminController.php`
-مثال `php webman make:controller api/user` سينشئ `app/api/controller/UserController.php`
+**创建一个控制器文件** 
+例如 `php webman make:controller admin` 将创建一个 `app/controller/AdminController.php`
+例如 `php webman make:controller api/user` 将创建一个 `app/api/controller/UserController.php`
 
 ### make:model
-**إنشاء ملف نموذج**
-مثال `php webman make:model admin` سينشئ `app/model/Admin.php`
-مثال `php webman make:model api/user` سينشئ `app/api/model/User.php`
+**创建一个model文件**
+例如 `php webman make:model admin` 将创建一个 `app/model/Admin.php`
+例如 `php webman make:model api/user` 将创建一个 `app/api/model/User.php`
 
 ### make:middleware
-**إنشاء ملف وسيط**
-مثال `php webman make:middleware Auth` سينشئ `app/middleware/Auth.php`
+**创建一个中间件文件**
+例如 `php webman make:middleware Auth` 将创建一个 `app/middleware/Auth.php`
 
 ### make:command
-**إنشاء ملف أمر مخصص**
-مثال `php webman make:command db:config` سينشئ `app\command\DbConfigCommand.php`
+**创建自定义命令文件**
+例如 `php webman make:command db:config` 将创建一个 `app\command\DbConfigCommand.php`
 
 ### plugin:create
-**إنشاء إضافة أساسية**
-مثال `php webman plugin:create --name=foo/admin` سينشئ دليكتورين `config/plugin/foo/admin` و `vendor/foo/admin`
-انظر[إنشاء إضافة أساسية](/doc/webman/plugin/create.html)
+**创建一个基础插件**
+例如 `php webman plugin:create --name=foo/admin` 将创建`config/plugin/foo/admin` 和 `vendor/foo/admin` 两个目录
+参见[创建基础插件](/doc/webman/plugin/create.html)
 
 ### plugin:export
-**تصدير إضافة أساسية**
-مثال `php webman plugin:export --name=foo/admin` 
-انظر[إنشاء إضافة أساسية](/doc/webman/plugin/create.html)
+**导出基础插件**
+例如 `php webman plugin:export --name=foo/admin` 
+参见[创建基础插件](/doc/webman/plugin/create.html)
 
 ### plugin:export
-**تصدير إضافة تطبيق**
-مثال `php webman plugin:export shop`
-انظر[إضافة تطبيق](/doc/webman/plugin/app.html)
+**导出应用插件**
+例如 `php webman plugin:export shop`
+参见[应用插件](/doc/webman/plugin/app.html)
 
-### phar:pack
-**تعبئة مشروع webman كملف phar**
-انظر[تعبئة phar](/doc/webman/others/phar.html)
-> هذه الميزة تحتاج webman>=1.2.4 و webman-framework>=1.2.4 و webman\console>=1.0.5
+### build:phar
+**将webman项目打包成phar文件**
+参见[phar打包](/doc/webman/others/phar.html)
 
-## الأوامر المخصصة
-يمكن للمستخدمين تحديد أوامر مخصصة، مثل الأمر التالي لطباعة تكوين قاعدة البيانات
+### build:bin
+**将webman项目打包成可直接执行的二进制文件**
+参见[phar打包](/doc/webman/others/bin.html)
 
-* تنفيذ `php webman make:command config:mysql`
-* فتح `app/command/ConfigMySQLCommand.php` وتعديله كما يلي
+## 自定义命令
+用户可以定义自己的命令，例如以下是打印数据库配置的命令
+
+* 执行 `php webman make:command config:mysql`
+* 打开 `app/command/ConfigMySQLCommand.php` 修改成如下
 
 ```php
 <?php
@@ -79,11 +83,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ConfigMySQLCommand extends Command
 {
     protected static $defaultName = 'config:mysql';
-    protected static $defaultDescription = 'عرض تكوين خادم MySQL الحالي';
+    protected static $defaultDescription = '显示当前MySQL服务器配置';
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('معلومات تكوين MySQL كالتالي:');
+        $output->writeln('MySQL配置信息如下：');
         $config = config('database');
         $headers = ['name', 'default', 'driver', 'host', 'port', 'database', 'username', 'password', 'unix_socket', 'charset', 'collation', 'prefix', 'strict', 'engine', 'schema', 'sslmode'];
         $rows = [];
@@ -116,11 +120,11 @@ class ConfigMySQLCommand extends Command
 }
 ```
   
-## الاختبار
+## 测试
 
-تشغيل الأمر التالي `php webman config:mysql`
+命令行运行 `php webman config:mysql`
 
-النتيجة تشبه ما يلي:
+结果类似如下：
 ```
 +-------+---------+--------+-----------+------+----------+----------+----------+-------------+---------+-----------------+--------+--------+--------+--------+---------+
 | name  | default | driver | host      | port | database | username | password | unix_socket | charset | collation       | prefix | strict | engine | schema | sslmode |
@@ -129,5 +133,5 @@ class ConfigMySQLCommand extends Command
 +-------+---------+--------+-----------+------+----------+----------+----------+-------------+---------+-----------------+--------+--------+--------+--------+---------+
 ```
 
-## للمزيد من المعلومات يرجى الرجوع إلى
+## 更多资料参考
 http://www.symfonychina.com/doc/current/components/console.html

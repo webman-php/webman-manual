@@ -1,11 +1,11 @@
-# استخدام قواعد بيانات أخرى
-بالإضافة إلى [illuminate/database](https://github.com/illuminate/database) ، يمكنك استخدام مكونات قواعد بيانات أخرى في webman.
+# 使用其它数据库
+除了[webman/database](https://github.com/webman-php/database)，在webman中你可以使用其它数据库组件。
 
 ## ThinkORM
-انظر [thinkorm](thinkorm.md)
+参考 [thinkorm](thinkorm.md)
 
 ## ThinkCache
-انظر [think-cache](thinkcache.md)
+参考 [think-cache](thinkcache.md)
 
-## مكون قاعدة بيانات Medoo
-انظر [مكون medoo](https://www.workerman.net/plugin/29)
+## Medoo数据库插件
+参考 [medoo插件](../db/medoo.md)

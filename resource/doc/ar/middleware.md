@@ -1,7 +1,7 @@
-# الوسيط
-يُستخدم الوسيط عادةً لاعتراض الطلبات أو الاستجابات. على سبيل المثال، تحقق هوية المستخدم بشكل موحد قبل تنفيذ التحكم، مثل توجيه المستخدم إلى صفحة تسجيل الدخول في حالة عدم تسجيل الدخول، أو إضافة رأس رسالة معينة في الاستجابة، أو حتى إحصاء نسبة طلب URI معينة وما إلى ذلك.
+# 中间件
+中间件一般用于拦截请求或者响应。例如执行控制器前统一验证用户身份，如用户未登录时跳转到登录页面，例如响应中增加某个header头。例如统计某个uri请求占比等等。
 
-## نموذج الوسيط "نموذج البصل"
+## 中间件洋葱模型
 
 ```
                               
@@ -13,7 +13,7 @@
             │     │     │         middleware3          │     │     │        
             │     │     │     ┌──────────────────┐     │     │     │
             │     │     │     │                  │     │     │     │
- 　── الطلب ───────────────────────> التحكم ─ الاستجابة ───────────────────────────> العميل
+   ── Reqeust ───────────────────> Controller ── Response ───────────────────────────> Client
             │     │     │     │                  │     │     │     │
             │     │     │     └──────────────────┘     │     │     │
             │     │     │                              │     │     │
@@ -23,36 +23,36 @@
             │                                                      │
             └──────────────────────────────────────────────────────┘
 ```
-الوسيط والتحكم يشكلان نموذج البصل الكلاسيكي، حيث يُشبه الوسيط طبقات من قشرة البصل والتحكم هو نواة البصل. كما هو موضح في الشكل، يمر الطلب مثل السهم من خلال الوسيط 1 و 2 و 3 للوصول إلى التحكم، يُرجع التحكم استجابة، ثم يعبر الاستجابة بترتيب 3 و 2 و 1 من الوسيط ليتم إرجاعها في النهاية للعميل. وهذا يعني أنه يمكننا في كل وسيط أن نحصل على الطلب والاستجابة أيضًا.
+中间件和控制器组成了一个经典的洋葱模型，中间件类似一层一层的洋葱表皮，控制器是洋葱芯。如图所示请求像箭一样穿越中间件1、2、3到达控制器，控制器返回了一个响应，然后响应又以3、2、1的顺序穿出中间件最终返回给客户端。也就是说在每个中间件里我们既可以拿到请求，也可以获得响应。
 
-## اعتراض الطلب
-في بعض الأحيان، لا نرغب في أن يصل طلب معين إلى طبقة التحكم، على سبيل المثال، عندما نجد أن المستخدم الحالي لم يقم بتسجيل الدخول في واجهة وسيط التحقق من الهوية، فيمكننا مباشرة اعتراض الطلب وإرجاع استجابة تسجيل الدخول. وبالتالي، يكون هذا السير التالي مشابهًا للشكل التالي.
+## 请求拦截
+有时候我们不想某个请求到达控制器层，例如我们在middleware2发现当前用户并没有登录，则我们可以直接拦截请求并返回一个登录响应。那么这个流程类似下面这样
 
 ```
                               
-            ┌───────────────────────────────────────────────────────────┐
-            │                     middleware1                           │ 
-            │     ┌───────────────────────────────────────────────┐     │
-            │     │               Authentication Middleware       │     │
-            │     │          ┌──────────────────────────────┐     │     │
-            │     │          │         middleware3          │     │     │
-            │     │          │     ┌──────────────────┐     │     │     │
-            │     │          │     │                  │     │     │     │
-   ── Request ───────────┐   │     │    Controller    │     │     │     │
-            │     │ Response │     │                  │     │     │     │
-   <─────────────────────┘   │     └──────────────────┘     │     │     │
-            │     │          │                              │     │     │
-            │     │          └──────────────────────────────┘     │     │
-            │     │                                               │     │
-            │     └───────────────────────────────────────────────┘     │
-            │                                                           │
-            └───────────────────────────────────────────────────────────┘
+            ┌────────────────────────────────────────────────────────────┐
+            │                         middleware1                        │ 
+            │     ┌────────────────────────────────────────────────┐     │
+            │     │                   middleware2                  │     │
+            │     │          ┌──────────────────────────────┐      │     │
+            │     │          │        middleware3           │      │     │       
+            │     │          │    ┌──────────────────┐      │      │     │
+            │     │          │    │                  │      │      │     │
+   ── Reqeust ─────────┐     │    │    Controller    │      │      │     │
+            │     │ Response │    │                  │      │      │     │
+   <───────────────────┘     │    └──────────────────┘      │      │     │
+            │     │          │                              │      │     │
+            │     │          └──────────────────────────────┘      │     │
+            │     │                                                │     │
+            │     └────────────────────────────────────────────────┘     │
+            │                                                            │
+            └────────────────────────────────────────────────────────────┘
 ```
 
-كما هو موضح في الشكل، يتم الوصول إلى وسيط التحقق من الهوية ويتم إنشاء استجابة تسجيل الدخول، ثم تعبر الاستجابة من وسيط التحقق من الهوية مرة أخرى ويتم إرجاعها إلى المتصفح.
+如图所示请求到达middleware2后生成了一个登录响应，响应从middleware2穿越回中间件1然后返回给客户端。
 
-## واجهة الوسيط
-يجب على الوساطة تنفيذ واجهة `Webman\MiddlewareInterface`.
+## 中间件接口
+中间件必须实现`Webman\MiddlewareInterface`接口。
 ```php
 interface MiddlewareInterface
 {
@@ -66,15 +66,15 @@ interface MiddlewareInterface
     public function process(Request $request, callable $handler): Response;
 }
 ```
-وبمعنى آخر، يجب تنفيذ الطريقة `process`، ويجب على الطريقة `process` إرجاع كائن `Webman\Http\Response`، حيث إن من المقرر أن يتم إنشاء هذا الكائن من قبل `$handler($request)` (سيستمر الطلب في عبور البصل)، ويمكن أيضًا أن يكون منشأ بواسطة وظائف المساعد مثل `response()`، `json()`، `xml()`، `redirect()` وما إلى ذلك (سيتوقف الطلب عن عبور البصل).
+也就是必须实现`process`方法，`process`方法必须返回一个`support\Response`对象，默认这个对象由`$handler($request)`生成(请求将继续向洋葱芯穿越)，也可以是`response()` `json()` `xml()` `redirect()`等助手函数生成的响应(请求停止继续向洋葱芯穿越)。
 
-## الحصول على الطلب والاستجابة في الوسيط
-يمكننا الحصول على الطلب وكذلك الاستجابة بداخل الوسيط، لذا يتم تقسيم الوسيط الداخلي إلى ثلاثة أقسام.
-1. مرحلة عبور الطلب، أي مرحلة معالجة الطلب قبل التحكم
-2. مرحلة معالجة الطلب من التحكم، أي مرحلة معالجة الطلب
-3. مرحلة خروج الاستجابة، أي مرحلة معالجة الاستجابة بعد معالجة الطلب
+## 中间件中获取请求及响应
+在中间件中我们可以获得请求，也可以获得执行控制器后的响应，所以中间件内部分为三个部分。
+1. 请求穿越阶段，也就是请求处理前的阶段  
+2. 控制器处理请求阶段，也就是请求处理阶段  
+3. 响应穿出阶段，也就是请求处理后的阶段  
 
-تجسد هذه المراحل الثلاث داخل الوسيط على النحو التالي:
+三个阶段在中间件里的体现如下
 ```php
 <?php
 namespace app\middleware;
@@ -87,19 +87,19 @@ class Test implements MiddlewareInterface
 {
     public function process(Request $request, callable $handler) : Response
     {
-        echo 'هذه مرحلة عبور الطلب، أي مرحلة معالجة الطلب قبل التحكم';
+        echo '这里是请求穿越阶段，也就是请求处理前';
         
-        $response = $handler($request); // الاستمرار في التوجه نحو نواة البصل، حتى الوصول إلى التحكم والحصول على الاستجابة
+        $response = $handler($request); // 继续向洋葱芯穿越，直至执行控制器得到响应
         
-        echo 'هذه مرحلة خروج الاستجابة، أي مرحلة معالجة الاستجابة بعد معالجة الطلب';
+        echo '这里是响应穿出阶段，也就是请求处理后';
         
         return $response;
     }
 }
 ```
-## مثال: وسيط المصادقة
-إنشاء ملف `app / middleware / AuthCheckTest.php` (إذا لم يكن الدليل موجودًا ، فيرجى إنشاؤه بنفسك) على النحو التالي:
-
+ 
+## 示例：身份验证中间件
+创建文件`app/middleware/AuthCheckTest.php` (如目录不存在请自行创建) 如下：
 ```php
 <?php
 namespace app\middleware;
@@ -114,27 +114,27 @@ class AuthCheckTest implements MiddlewareInterface
     public function process(Request $request, callable $handler) : Response
     {
         if (session('user')) {
-            // تم تسجيل الدخول بالفعل ، الطلب يستمر في عبور الطبقات
+            // 已经登录，请求继续向洋葱芯穿越
             return $handler($request);
         }
 
-        // الحصول على الأساليب التي لا تحتاج إلى تسجيل الدخول مستندة إلى الانعكاس
+        // 通过反射获取控制器哪些方法不需要登录
         $controller = new ReflectionClass($request->controller);
         $noNeedLogin = $controller->getDefaultProperties()['noNeedLogin'] ?? [];
 
-        // الوصول إلى الطرق يتطلب تسجيل الدخول
+        // 访问的方法需要登录
         if (!in_array($request->action, $noNeedLogin)) {
-            // اعتراض الطلب ، وإرجاع استجابة إعادة توجيه ، وتوقف الطلب عن مرور الطبقات
+            // 拦截请求，返回一个重定向响应，请求停止向洋葱芯穿越
             return redirect('/user/login');
         }
 
-        // لا حاجة لتسجيل الدخول ، الطلب يستمر في عبور الطبقات
+        // 不需要登录，请求继续向洋葱芯穿越
         return $handler($request);
     }
 }
 ```
 
-قم بإنشاء متحكم `app / controller / UserController.php` الجديد
+新建控制器 `app/controller/UserController.php`
 ```php
 <?php
 namespace app\controller;
@@ -143,41 +143,41 @@ use support\Request;
 class UserController
 {
     /**
-     * الأساليب التي لا تحتاج إلى تسجيل الدخول
+     * 不需要登录的方法
      */
     protected $noNeedLogin = ['login'];
 
     public function login(Request $request)
     {
         $request->session()->set('user', ['id' => 10, 'name' => 'webman']);
-        return json(['code' => 0, 'msg' => 'تم تسجيل الدخول بنجاح']);
+        return json(['code' => 0, 'msg' => 'login ok']);
     }
 
     public function info()
     {
-        return json(['code' => 0, 'msg' => 'نجاح', 'data' => session('user')]);
+        return json(['code' => 0, 'msg' => 'ok', 'data' => session('user')]);
     }
 }
 ```
-> **ملاحظة**
->`$noNeedLogin` يوجد بها الأساليب التي يمكن الوصول إليها بدون تسجيل الدخول في المتحكم الحالي
 
-أضف الوسيط العالمي في `config/middleware.php` على النحو التالي:
+> **注意**
+> `$noNeedLogin`里记录了当前控制器不需要登录就可以访问的方法
+
+在 `config/middleware.php` 中添加全局中间件如下：
 ```php
 return [
-    // الوسائط العالمية
+    // 全局中间件
     '' => [
-        // ... يُغفل في هذا المكان الوسائط الأخرى
+        // ... 这里省略其它中间件
         app\middleware\AuthCheckTest::class,
     ]
 ];
 ```
 
-باستخدام وسيط المصادقة ، يمكننا التركيز على كتابة رموز الأعمال في طبقة المتحكم دون القلق بشأن ما إذا كان المستخدم قد قام بتسجيل الدخول أم لا.
+有了身份验证中间件，我们就可以在控制器层专心的写业务代码，不用就用户是否登录而担心。
 
-## مثال: وسيط طلبات العبور
-أنشئ ملفًا `app / middleware / AccessControlTest.php` (إذا لم يكن الدليل موجودًا ، فيرجى إنشاؤه بنفسك) على النحو التالي:
-
+## 示例：跨域请求中间件
+创建文件`app/middleware/AccessControlTest.php` (如目录不存在请自行创建) 如下：
 ```php
 <?php
 namespace app\middleware;
@@ -190,10 +190,10 @@ class AccessControlTest implements MiddlewareInterface
 {
     public function process(Request $request, callable $handler) : Response
     {
-        // إذا كانت الطلبات options ، فإنه يعيد استجابة فارغة ، وإلا ينتقل عبر الطبقات ويحصل على استجابة
+        // 如果是options请求则返回一个空响应，否则继续向洋葱芯穿越，并得到一个响应
         $response = $request->method() == 'OPTIONS' ? response('') : $handler($request);
         
-        // إضافة رؤوس HTTP ذات الصلة بعبور النطاق
+        // 给响应添加跨域相关的http头
         $response->withHeaders([
             'Access-Control-Allow-Credentials' => 'true',
             'Access-Control-Allow-Origin' => $request->header('origin', '*'),
@@ -206,51 +206,76 @@ class AccessControlTest implements MiddlewareInterface
 }
 ```
 
-> **تلميح**
-> يمكن أن تولد عمليات العبور طلبات options ، لكننا لا نريد أن تصل طلبات options إلى المتحكم ، لذا قمنا بإعادة استجابة فارغة مباشرة (استجابة ('')) للتحقق المسبق من الطلبات.
-> إذا كانت واجهة البرمجة الشبكية الخاصة بك بحاجة إلى إعداد توجيهات ، يرجى استخدام `Route :: any(..)` أو `Route :: add (['POST'، 'OPTIONS'] ، ..)`.
+> **提示**
+> 跨域可能会产生OPTIONS请求，我们不想OPTIONS请求进入到控制器，所以我们为OPTIONS请求直接返回了一个空的响应(`response('')`)实现请求拦截。
+> 如果你的接口需要设置路由，请使用`Route::any(..)` 或者 `Route::add(['POST', 'OPTIONS'], ..)`设置。
 
-أضف وسيط السيطرة على الوصول في `config/middleware.php` على النحو التالي:
+在 `config/middleware.php` 中添加全局中间件如下：
 ```php
 return [
-    // الوسائط العالمية
+    // 全局中间件
     '' => [
-        // ... يُغفل في هذا المكان الوسائط الأخرى
+        // ... 这里省略其它中间件
         app\middleware\AccessControlTest::class,
     ]
 ];
 ```
 
-> **ملاحظة**
-> إذا كانت طلبات الواجهة البرمجية الشبكية تخصيص رؤوس الطلبات الخاصة بها ، يجب إضافة هذه الرؤوس الخاصة المخصصة في الوسيط باسم `Access-Control-Allow-Headers` ، وإلا ستظهر خطأ `Request header field XXXX is not allowed by Access-Control-Allow-Headers in preflight response.`
+> **注意**
+> 如果ajax请求自定义了header头，需要在中间件里 `Access-Control-Allow-Headers` 字段加入这个自定义header头，否则会报` Request header field XXXX is not allowed by Access-Control-Allow-Headers in preflight response.`
 
-## الشرح
 
- - الوسيط مقسم إلى وسائط عالمية ووسائط التطبيق (وسائط التطبيق تعمل فقط في وضع التطبيقات المتعددة ، انظر [التطبيقات المتعددة](multiapp.md)) ووسائط التوجيه
- - حاليًا لا يدعم الوسيط الفردي للتحكم (ولكن يمكن تحقيق وظيفة الوسيط الفردي من خلال فحص `$request->controller` في الوسيط)
- - موقع ملف تكوين الوسيط في `config/middleware.php`
- - تكوين الوسيط العالمي في المفتاح `''`
- - تكوين الوسيط التطبيق في اسم التطبيق الفعلي ، مثل
+## 说明
+  
+ - 中间件分为全局中间件、应用中间件(应用中间件仅在多应用模式下有效，参见[多应用](multiapp.md))、路由中间件
+ - 中间件配置文件位置在 `config/middleware.php`
+ - 全局中间件配置在key `''` 下
+ - 应用中间件配置在具体的应用名下，例如
 
 ```php
 return [
-    // الوسائط العالمية
+    // 全局中间件
     '' => [
         app\middleware\AuthCheckTest::class,
         app\middleware\AccessControlTest::class,
     ],
-    // وسائط التطبيق API (وسائط التطبيق تعمل فقط في وضع التطبيقات المتعددة)
+    // api应用中间件(应用中间件仅在多应用模式下有效)
     'api' => [
         app\middleware\ApiOnly::class,
     ]
 ];
 ```
 
-## وسائط التوجيه
+## 控制器中间件和方法中间件
 
-يمكننا تعيين وسيطًا واحدًا أو مجموعة من وسائط التوجيه لطريق واحد أو مجموعة معينة من الطرق.
-على سبيل المثال ، في `config/route.php` يمكنك إضافة التكوين التالي:
+利用注解，我们可以给某个控制器或者控制器的某个方法设置中间件。
 
+
+```php
+<?php
+namespace app\controller;
+use app\middleware\Controller1Middleware;
+use app\middleware\Controller2Middleware;
+use app\middleware\Method1Middleware;
+use app\middleware\Method2Middleware;
+use support\annotation\Middleware;
+use support\Request;
+
+#[Middleware(Controller1Middleware::class, Controller2Middleware::class)]
+class IndexController
+{
+    #[Middleware(Method1Middleware::class, Method2Middleware::class)]
+    public function index(Request $request): string
+    {
+        return 'hello';
+    }
+}
+```
+
+## 路由中间件
+
+我们可以给某个一个或某一组路由设置中间件。
+例如在`config/route.php`中添加如下配置：
 ```php
 <?php
 use support\Request;
@@ -271,9 +296,74 @@ Route::group('/blog', function () {
 ]);
 ```
 
-## تمرير معلمات إلى الوسائط من خلال دالة الإعداد(route->setParams)
+## 中间件构造函数传参
 
-**تكوين مسار `config/route.php`**
+
+配置文件支持直接实例化中间件或者匿名函数，这样可以方便的通过构造函数向中间件传参。
+例如`config/middleware.php`里也可以这样配置
+```
+return [
+    // 全局中间件
+    '' => [
+        new app\middleware\AuthCheckTest($param1, $param2, ...),
+        function(){
+            return new app\middleware\AccessControlTest($param1, $param2, ...);
+        },
+    ],
+    // api应用中间件(应用中间件仅在多应用模式下有效)
+    'api' => [
+        app\middleware\ApiOnly::class,
+    ]
+];
+```
+
+同理路由中间件也可以通过构造函数向中间件传递参数，例如`config/route.php`里
+```
+Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->middleware([
+    new app\middleware\MiddlewareA($param1, $param2, ...),
+    function(){
+        return new app\middleware\MiddlewareB($param1, $param2, ...);
+    },
+]);
+```
+
+中间件里使用参数示例
+```
+<?php
+namespace app\middleware;
+
+use Webman\MiddlewareInterface;
+use Webman\Http\Response;
+use Webman\Http\Request;
+
+class MiddlewareA implements MiddlewareInterface
+{
+    protected $param1;
+
+    protected $param2;
+
+    public function __construct($param1, $param2)
+    {
+        $this->param1 = $param1;
+        $this->param2 = $param2;
+    }
+
+    public function process(Request $request, callable $handler) : Response
+    {
+        var_dump($this->param1, $this->param2);
+        return $handler($request);
+    }
+}
+```
+
+## 中间件执行顺序
+ - 中间件执行顺序为`全局中间件`->`应用中间件`->`控制器中间件`->`路由中间件`->`方法中间件`。
+ - 当同一个层次有多个中间件时，按照同层次中间件实际配置顺序执行。
+ - 404请求默认不会触发任何中间件(不过仍然可以通过`Route::fallback(function(){})->middleware()`添加中间件)。
+
+## 路由向中间件传参(route->setParams)
+
+**路由配置 `config/route.php`**
 ```php
 <?php
 use support\Request;
@@ -282,7 +372,7 @@ use Webman\Route;
 Route::any('/test', [app\controller\IndexController::class, 'index'])->setParams(['some_key' =>'some value']);
 ```
 
-**الوسيط (نفترض أنه عالمي)**
+**中间件(假设为全局中间件)**
 ```php
 <?php
 namespace app\middleware;
@@ -295,7 +385,7 @@ class Hello implements MiddlewareInterface
 {
     public function process(Request $request, callable $handler) : Response
     {
-        // الطريق الافتراضي $request->route هو nul ، لذا يجب فحص $request->route إذا كان فارغًا
+        // 默认路由 $request->route 为null，所以需要判断 $request->route 是否为空
         if ($route = $request->route) {
             $value = $route->param('some_key');
             var_export($value);
@@ -305,11 +395,12 @@ class Hello implements MiddlewareInterface
 }
 ```
 
-## تمرير معلمات إلى المتحكم من الوسائط
+ 
+## 中间件向控制器传参
 
-في بعض الأحيان يحتاج المتحكم لاستخدام البيانات التي تم إنشاؤها في الوسيط ، وفي هذه الحالة يمكننا إضافة خاصية إلى كائن `$request` لتمرير المعلمات. على سبيل المثال:
+有时候控制器需要使用中间件里产生的数据，这时我们可以通过给`$request`对象添加属性的方式向控制器传参。例如：
 
-**وسيط**
+**中间件**
 ```php
 <?php
 namespace app\middleware;
@@ -328,7 +419,7 @@ class Hello implements MiddlewareInterface
 }
 ```
 
-**التحكم:**
+**控制器：**
 ```php
 <?php
 namespace app\controller;
@@ -343,14 +434,12 @@ class FooController
     }
 }
 ```
-## الحصول على معلومات طريق الوسيط
 
-> **ملاحظة**
-> يتطلب webman-framework >= 1.3.2
+## 中间件获取当前请求路由信息
 
-يمكننا استخدام `$request->route` للحصول على كائن الطريق، من خلال استدعاء الأساليب المقابلة للحصول على المعلومات الصحيحة.
+我们可以使用 `$request->route` 获取路由对象，通过调用对应的方法获取相应信息。
 
-**تكوين الطريق**
+**路由配置**
 ```php
 <?php
 use support\Request;
@@ -359,7 +448,7 @@ use Webman\Route;
 Route::any('/user/{uid}', [app\controller\UserController::class, 'view']);
 ```
 
-**الوسيط**
+**中间件**
 ```php
 <?php
 namespace app\middleware;
@@ -373,44 +462,40 @@ class Hello implements MiddlewareInterface
     public function process(Request $request, callable $handler) : Response
     {
         $route = $request->route;
-        // إذا لم يطابق الطلب أي طريق (باستثناء الطريق الافتراضي)، فإن $request->route سيكون null
-        // على سبيل المثال، إذا طلب المستخدم عنوان "/user/111"، سيتم طباعة المعلومات التالية
+        // 如果请求没有匹配任何路由(默认路由除外)，则 $request->route 为 null
+        // 假设浏览器访问地址 /user/111，则会打印如下信息
         if ($route) {
             var_export($route->getPath());       // /user/{uid}
-            var_export($route->getMethods());    // ['GET','POST','PUT','DELETE','PATCH','HEAD','OPTIONS']
+            var_export($route->getMethods());    // ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD','OPTIONS']
             var_export($route->getName());       // user_view
             var_export($route->getMiddleware()); // []
-            var_export($route->getCallback());   // ['app\\controller\\UserController','view']
+            var_export($route->getCallback());   // ['app\\controller\\UserController', 'view']
             var_export($route->param());         // ['uid'=>111]
-            var_export($route->param('uid'));    // 111
+            var_export($route->param('uid'));    // 111 
         }
         return $handler($request);
     }
 }
 ```
 
-> **ملاحظة**
-> يتطلب استخدام الأسلوب `$route->param()` webman-framework >= 1.3.16
+> **注意**
 
+## 中间件获取异常
 
-## الحصول على الإستثناء في الوسيط
-> **ملاحظة**
-> يتطلب webman-framework >= 1.3.15
+业务处理过程中可能会产生异常，在中间件里使用 `$response->exception()` 获取异常。
 
-قد يحدث إستثناء أثناء معالجة الأعمال، يمكن استخدام `$response->exception()` في الوسيط للحصول على الإستثناء.
-
-**تكوين الطريق**
+**路由配置**
 ```php
 <?php
 use support\Request;
 use Webman\Route;
 
 Route::any('/user/{uid}', function (Request $request, $uid) {
-    throw new \Exception('اختبار الإستثناء');
+    throw new \Exception('exception test');
 });
 ```
 
-**الوسيط:**
+**中间件：**
 ```php
 <?php
 namespace app\middleware;
@@ -433,39 +518,34 @@ class Hello implements MiddlewareInterface
 }
 ```
 
-## الوسيط العالمي
-> **ملاحظة**
-> تتطلب هذه الميزة webman-framework >= 1.5.16
+## 超全局中间件
 
-يؤثر الوسيط العالمي لمشروع الرئيسي فقط دون أي تأثير على [الإضافات التطبيقية](app/app.md). في بعض الأحيان نريد إضافة وسيط يؤثر عالمياً على جميع الإضافات بما في ذلك الرئيسية، يمكننا استخدام الوسيط العالمي.
+主项目的全局中间件只影响主项目，不会对[应用插件](app/app.md)产生影响。有时候我们想要加一个影响全局包括所有插件的中间件，则可以使用超全局中间件。
 
-يمكنك تكوين الوسيط العالمي في `config/middleware.php` كما يلي:
+在`config/middleware.php`中配置如下：
 ```php
 return [
-    '@' => [ // إضافة الوسيط العالمي للمشروع الرئيسي وجميع الإضافات
+    '@' => [ // 给主项目及所有插件增加全局中间件
         app\middleware\MiddlewareGlobl::class,
     ], 
-    '' => [], // إضافة الوسيط العالمي للمشروع الرئيسي فقط
+    '' => [], // 只给主项目增加全局中间件
 ];
 ```
 
-> **تلميح**
-> يمكن تكوين الوسيط العالمي `@` ليس فقط في مشروع رئيسي بل في إضافة معينة، على سبيل المثال، يمكن تكوين الوسيط العالمي `@` في ملف `plugin/ai/config/middleware.php`، بحيث يؤثر على المشروع الرئيسي وجميع الإضافات.
+> **提示**
+> `@`超全局中间件不仅可以在主项目配置，也可以在某个插件里配置，例如`plugin/ai/config/middleware.php`里配置`@`超全局中间件，则也会影响主项目及所有插件。
 
-## إضافة وسيط لإضافة معينة
+## 给某个插件增加中间件
 
-> **ملاحظة**
-> تتطلب هذه الميزة webman-framework >= 1.5.16
+有时候我们想给某个[应用插件](app/app.md)增加一个中间件，又不想改插件的代码(因为升级会被覆盖)，这时候我们可以在主项目中给它配置中间件。
 
-في بعض الأحيان نريد إضافة وسيط ل[الإضافات التطبيقية](app/app.md) دون الحاجة إلى تغيير كود الإضافة (لأن الترقيات ستؤدي إلى إغلاقها). في هذه الحالة، يمكننا تكوين الوسيط في المشروع الرئيسي ليؤثر على الإضافة.
-
-يمكنك تكوين الوسيط في `config/middleware.php` كما يلي:
+在`config/middleware.php`中配置如下：
 ```php
 return [
-    'plugin.ai' => [], // إضافة وسيط للإضافة AI
-    'plugin.ai.admin' => [], // إضافة وسيط لنموذج الإضافة AI
+    'plugin.ai' => [], // 给ai插件增加中间件
+    'plugin.ai.admin' => [], // 给ai插件的admin模块(plugin\ai\app\admin目录)增加中间件
 ];
 ```
 
-> **تلميح**
-> يمكن أيضاً تكوين نفس الإعداد في إضافة معينة للتأثير على الإضافات الأخرى، على سبيل المثال، يمكن تكوين إعدادات الوسيط المذكورة أعلاه في ملف `plugin/foo/config/middleware.php` للتأثير على الإضافة AI.
+> **提示**
+> 当然也可以在某个插件中加类似的配置去影响其它插件，例如`plugin/foo/config/middleware.php`里加入如上配置，则会影响ai插件。

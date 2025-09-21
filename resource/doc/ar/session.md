@@ -1,6 +1,6 @@
-# إدارة الجلسة
+# webman session管理
 
-## مثال
+## 例子
 ```php
 <?php
 namespace app\controller;
@@ -19,149 +19,146 @@ class UserController
 }
 ```
 
-احصل على `Workerman\Protocols\Http\Session` مثيل من خلال `$request->session();` وقم بزيادة أو تعديل أو حذف بيانات الجلسة باستخدام أساليب المثيل.
+通过`$request->session();` 获得`Workerman\Protocols\Http\Session`实例，通过实例的方法来增加、修改、删除session数据。
 
-> ملحوظة: عند تدمير كائن الجلسة، سيتم حفظ بيانات الجلسة تلقائياً، لذلك لا تقم بحفظ كائن `$request->session()` في مصفوفة عامة أو كعضو في الفئة مما يؤدي إلى عدم القدرة على حفظ الجلسة.
+> 注意：session对象销毁时会自动保存session数据，所以不要把`$request->session()`返回的对象保存在全局数组或者类成员中导致session无法保存。
 
-## الحصول على جميع بيانات الجلسة
+## 获取所有session数据
 ```php
 $session = $request->session();
 $all = $session->all();
 ```
-سيعيد مصفوفة. إذا لم تكن هناك أي بيانات جلسة، ستُعاد مصفوفة فارغة.
+返回的是一个数组。如果没有任何session数据，则返回一个空数组。
 
 
-## الحصول على قيمة محددة في الجلسة
+## 获取session中某个值
 ```php
 $session = $request->session();
 $name = $session->get('name');
 ```
-إذا لم تكن البيانات موجودة، سيُعاد القيمة null.
+如果数据不存在则返回null。
 
-يمكنك أيضاً تمرير قيمة افتراضية كمعامل ثانوي لطريقة get، إذا لم يتم العثور على قيمة مطابقة في مصفوفة الجلسة، سيتم إعادة القيمة الافتراضية. على سبيل المثال:
+你也可以给get方法第二个参数传递一个默认值，如果session数组中没找到对应值则返回默认值。例如：
 ```php
 $session = $request->session();
 $name = $session->get('name', 'tom');
 ```
 
 
-## حفظ الجلسة
-استخدم طريقة `set` لحفظ بيانات معينة.
+## 存储session
+存储某一项数据时用set方法。
 ```php
 $session = $request->session();
 $session->set('name', 'tom');
 ```
-لا تُعيد `set` أي قيمة، سيتم حفظ الجلسة تلقائياً عند تدمير كائن الجلسة.
+set没有返回值，session对象销毁时session会自动保存。
 
-عند حفظ عدة قيم، استخدم طريقة `put`.
+当存储多个值时使用put方法。
 ```php
 $session = $request->session();
 $session->put(['name' => 'tom', 'age' => 12]);
 ```
-بنفس الشكل، `put` لا تُعيد قيمة.
+同样的，put也没有返回值。
 
-
-## حذف بيانات الجلسة
-عند حذف بيانات جلسة معينة، استخدم طريقة `forget`.
+## 删除session数据
+删除某个或者某些session数据时用`forget`方法。
 ```php
 $session = $request->session();
-// حذف عنصر واحد
+// 删除一项
 $session->forget('name');
-// حذف عدة عناصر
+// 删除多项
 $session->forget(['name', 'age']);
 ```
 
-بالإضافة إلى ذلك، توفر النظام طريقة حذف أيضاً، والفرق بينهما هو أن طريقة `delete` تعمل فقط على حذف عنصر واحد.
+另外系统提供了delete方法，与forget方法区别是，delete只能删除一项。
 ```php
 $session = $request->session();
-// نفس $session->forget('name');
+// 等同于 $session->forget('name');
 $session->delete('name');
 ```
 
-## الحصول على قيمة الجلسة وحذفها
+## 获取并删除session某个值
 ```php
 $session = $request->session();
 $name = $session->pull('name');
 ```
-نفس الكود التالي
+效果与如下代码相同
 ```php
 $session = $request->session();
 $value = $session->get($name);
 $session->delete($name);
 ```
-إذا لم تكن الجلسة المطابقة موجودة، سيُعاد القيمة null.
+如果对应session不存在，则返回null。
 
 
-## حذف جميع بيانات الجلسة
+## 删除所有session数据
 ```php
 $request->session()->flush();
 ```
-ليس له قيمة الإرجاع، سيتم حذف بيانات الجلسة من التخزين تلقائياً عند تدمير كائن الجلسة.
+没有返回值，session对象销毁时session会自动从存储中删除。
 
 
-## التحقق مما إذا كانت بيانات الجلسة موجودة
+## 判断对应session数据是否存在
 ```php
 $session = $request->session();
 $has = $session->has('name');
 ```
-عندما لا تكون الجلسة المطابقة موجودة أو قيمة الجلسة المطابقة تساوي القيمة null، سيُعاد false.
-
+以上当对应的session不存在或者对应的session值为null时返回false，否则返回true。
 
 ```
 $session = $request->session();
 $has = $session->exists('name');
 ```
-الكود السابق هو أيضاً مستخدم للتحقق مما إذا كانت بيانات الجلسة موجودة، الفرق هو أنه عندما تساوي قيمة العنصر المطابقة القيمة null، ستُعاد القيمة true.
+以上代码也是用来判断session数据是否存在，区别是当对应的session项值为null时，也返回true。
 
+## 助手函数session()
 
-## دالة المساعدة session()
-> 09-12-2020 إضافة جديدة
-
-يوفر webman دالة المساعدة `session()` لإكمال نفس الوظيفة.
+webman提供了助手函数`session()`完成相同的功能。
 ```php
-// الحصول على مثيل الجلسة
+// 获取session实例
 $session = session();
-// مكافئ
+// 等价于
 $session = $request->session();
 
-// الحصول على قيمة معينة
+// 获取某个值
 $value = session('key', 'default');
-// مكافئ
+// 等价与
 $value = session()->get('key', 'default');
-// مكافئ
+// 等价于
 $value = $request->session()->get('key', 'default');
 
-// تعيين قيمة للجلسة
+// 给session赋值
 session(['key1'=>'value1', 'key2' => 'value2']);
-// مكافئ
+// 相当于
 session()->put(['key1'=>'value1', 'key2' => 'value2']);
-// مكافئ
+// 相当于
 $request->session()->put(['key1'=>'value1', 'key2' => 'value2']);
+
 ```
 
-## ملف الاعدادات
-ملف الاعدادات للجلسة في `config/session.php`، ومحتواه شبيه بالتالي:
+## 配置文件
+session配置文件在`config/session.php`，内容类似如下：
 ```php
 use Webman\Session\FileSessionHandler;
 use Webman\Session\RedisSessionHandler;
 use Webman\Session\RedisClusterSessionHandler;
 
 return [
-    // FileSessionHandler::class أو RedisSessionHandler::class أو RedisClusterSessionHandler::class 
+    // FileSessionHandler::class 或者 RedisSessionHandler::class 或者 RedisClusterSessionHandler::class 
     'handler' => FileSessionHandler::class,
     
-    // إذا كان شرط الشاشة `FileSessionHandler::class` فإن القيمة ملف
-    // إذا كان شرط الشاشة `RedisSessionHandler::class` فإن القيمة ريدس
-    // إذا كان شرط الشاشة `RedisClusterSessionHandler::class` فإن القيمة مجموعة ريدس، تُسمى كذلك مجموعة ريدس
+    // handler为FileSessionHandler::class时值为file，
+    // handler为RedisSessionHandler::class时值为redis
+    // handler为RedisClusterSessionHandler::class时值为redis_cluster 既redis集群
     'type'    => 'file',
 
-    // اعداد مختلفة لكل شرط عرض
+    // 不同的handler使用不同的配置
     'config' => [
-        // اعداد الشاشة `file`
+        // type为file时的配置
         'file' => [
             'save_path' => runtime_path() . '/sessions',
         ],
-        // اعداد الشاشة `redis`
+        // type为redis时的配置
         'redis' => [
             'host'      => '127.0.0.1',
             'port'      => 6379,
@@ -179,48 +176,21 @@ return [
         
     ],
 
-    'session_name' => 'PHPSID', // اسم ملف التسجيل
-
-    // === اعداد الشروط متوفرة في webman-framework>=1.3.14 workerman>=4.0.37 ===
-    'auto_update_timestamp' => false,  // هل يتم تجديد الجلسة تلقائياً. القيمة الافتراضية لها هي إيقاف التشغيل
-    'lifetime' => 7*24*60*60,          // مدة انتهاء الجلسة
-    'cookie_lifetime' => 365*24*60*60, // مدة انتهاء كوكي ملف التسجيل
-    'cookie_path' => '/',              // مسار كوكي ملف التسجيل
-    'domain' => '',                    // نطاق كوكي ملف التسجيل
-    'http_only' => true,               // هل تفعيل خاصية httpOnly. القيمة الافتراضية لها هي تفعيل
-    'secure' => false,                 // هل تفعيل جلسة https فقط. القيمة الافتراضية لها هي إيقاف التشغيل
-    'same_site' => '',                 // للحماية من الهجمات CSRF وتتبع المستخدم، يُمكن اختيار القيم: strict / lax / none
-    'gc_probability' => [1, 1000],     // احتمالية اتخاذ الإجراء للجلسة
+    'session_name' => 'PHPSID', // 存储session_id的cookie名
+    'auto_update_timestamp' => false,  // 是否自动刷新session，默认关闭
+    'lifetime' => 7*24*60*60,          // session过期时间
+    'cookie_lifetime' => 365*24*60*60, // 存储session_id的cookie过期时间
+    'cookie_path' => '/',              // 存储session_id的cookie路径
+    'domain' => '',                    // 存储session_id的cookie域名
+    'http_only' => true,               // 是否开启httpOnly，默认开启
+    'secure' => false,                 // 仅在https下开启session，默认关闭
+    'same_site' => '',                 // 用于防止CSRF攻击和用户追踪，可选值strict/lax/none
+    'gc_probability' => [1, 1000],     // 回收session的几率
 ];
 ```
 
-> **ملاحظة** 
-> بدأ webman اعتبارًا من الإصدار 1.4.0 في تغيير أسماء أساليب SessionHandler، حيث تغيرت من:
-> use Webman\FileSessionHandler;  
-> use Webman\RedisSessionHandler;  
-> use Webman\RedisClusterSessionHandler;  
-> إلى  
-> use Webman\Session\FileSessionHandler;  
-> use Webman\Session\RedisSessionHandler;  
-> use Webman\Session\RedisClusterSessionHandler;  
+## 安全相关
+在使用 session 时不建议直接存储类的实例对象，尤其是来源不可控的类实例，反序列化时可能造成潜在风险。
 
-## إعداد مدة الصلاحية
-عندما يكون ويب مان-فريم ورك أقل من 1.3.14، تحتاج مدة صلاحية الجلسة في ويب مان لتكون محددة في `php.ini`.
 
-```
-session.gc_maxlifetime = x
-session.cookie_lifetime = x
-session.gc_probability = 1
-session.gc_divisor = 1000
-```
 
-في حالة تحديد المدة الصالحية لتكون 1440 ثانية، يجب أن يكون التكوين كالتالي:
-```
-session.gc_maxlifetime = 1440
-session.cookie_lifetime = 1440
-session.gc_probability = 1
-session.gc_divisor = 1000
-```
-
-> **ملاحظة**
-> يمكنك استخدام الأمر `php --ini` للعثور على موقع `php.ini`

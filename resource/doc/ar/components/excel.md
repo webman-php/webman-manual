@@ -1,35 +1,45 @@
-# الويبمان
+# Excel表格
 
-## webman
+## 项目地址
 
-### عنوان المشروع
-
-https://github.com/walkor/webman
-
-### التثبيت
-
-```php
-composer require walkor/webman
-```
-
-### الاستخدام
+https://github.com/PHPOffice/PhpSpreadsheet
+  
+## 安装
+ 
+  ```php
+  composer require phpoffice/phpspreadsheet
+  ```
+  
+## 使用
 
 ```php
 <?php
 namespace app\controller;
 
-use Workerman\Worker;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class WebmanController
+class ExcelController
 {
     public function index($request)
     {
-        // اكتب الكود هنا
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'Hello World !');
+
+        $writer = new Xlsx($spreadsheet);
+        $file_path = public_path().'/hello_world.xlsx';
+        // 保存文件到 public 下
+        $writer->save($file_path);
+        // 下载文件
+        return response()->download($file_path, '文件名.xlsx');
     }
 
 }
 ```
 
-### المزيد من المواد
+## 更多内容
 
-زيارة موقع https://walkor.github.io/webman/
+访问 https://phpspreadsheet.readthedocs.io/en/latest/
+  
+

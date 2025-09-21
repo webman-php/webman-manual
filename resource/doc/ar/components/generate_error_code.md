@@ -1,31 +1,31 @@
-# مكون توليد رموز الخطأ تلقائيًا
+# 自动生成错误码组件
 
-## الوصف
+## 说明
 
-يمكنه توليد رموز الخطأ تلقائيًا وفقًا للقواعد المعطاة.
+能够根据给定的规则自动维护错误码的生成。
 
-> في البيانات المُرجَعَة يوجد معلمة code ، كل الرموز المخصصة ، الأرقام الموجبة تعني خدمة طبيعية، والأرقام السالبة تعني خدمة غير طبيعية.
+> 约定返回数据中 code 参数，所有自定义的 code ，正数代表服务正常，负数代表服务异常。
 
-## عنوان المشروع
+## 项目地址
 
 https://github.com/teamones-open/response-code-msg
 
-## التثبيت
+## 安装
 
 ```php
 composer require teamones/response-code-msg
 ```
 
-## الاستخدام
+## 使用
 
-### ملف فئة ErrorCode فارغ
+### 空 ErrorCode 类文件
 
-- مسار الملف ./support/ErrorCode.php
+- 文件路径 ./support/ErrorCode.php
 
 ```php
 <?php
 /**
- * الملف المولد، يرجى عدم التعديل يدوياً.
+ * 自动生成的文件 ,请不要手动修改.
  * @Author:$Id$
  */
 namespace support;
@@ -35,60 +35,60 @@ class ErrorCode
 }
 ```
 
-### ملف التكوين
+### 配置文件
 
-سيتم توليد رموز الخطأ تلقائيًا وفقًا للمعلمات المُحدّدة أدناه، على سبيل المثال عندما يكون system_number = 201، start_min_number = 10000، سيكون الرمز الأول الذي يتم إنشاؤه -20110001.
+错误码会自动按照下面配置的参数自增生成，例如当前 system_number = 201，start_min_number = 10000，那么生成的第一个错误码就是 -20110001。
 
-- مسار الملف ./config/error_code.php
+- 文件路径 ./config/error_code.php
 
 ```php
 <?php
 
 return [
-    "class" => new \support\ErrorCode(), // ملف فئة ErrorCode
-    "root_path" => app_path(), // المسار الجذري لكودك الحالي
-    "system_number" => 201, // الهوية النظام
-    "start_min_number" => 10000 // نطاق إنشاء رموز الخطأ مثل 10000-99999
+    "class" => new \support\ErrorCode(), // ErrorCode 类文件
+    "root_path" => app_path(), // 当前代码根目录
+    "system_number" => 201, // 系统标识
+    "start_min_number" => 10000 // 错误码生成范围 例如 10000-99999
 ];
 ```
 
-### إضافة رمز الخطأ التلقائي في start.php
+### 在start.php中增加启动自动生成错误码代码
 
-- مسار الملف ./start.php
+- 文件路径 ./start.php
 
 ```php
-// ضعه بعد Config::load(config_path(), ['route', 'container']);
+// 放在 Config::load(config_path(), ['route', 'container']); 后面
 
-// توليد رموز الخطأ، يتم توليدها فقط في وضع APP_DEBUG
+// 生成错误码，仅APP_DEBUG模式下生成
 if (config("app.debug")) {
     $errorCodeConfig = config('error_code');
     (new \teamones\responseCodeMsg\Generate($errorCodeConfig))->run();
 }
 ```
 
-### الاستخدام في الكود
+### 在代码中使用
 
-رمز الخطأ التالي **ErrorCode::ModelAddOptionsError** في الكود أدناه، حيث **ModelAddOptionsError** يجب على المستخدم كتابته بحسب احتياجاته الحالية بحيث يتم توحيدها بحرف كبير.
+下面代码中 **ErrorCode::ModelAddOptionsError** 为错误码, 其中 **ModelAddOptionsError** 需要用户自己根据当前需求语义化首字母大写去书写。
 
-> ستجد أنه غير قابل للاستخدام بعد كتابته، سيتم توليده تلقائياً عند إعادة التشغيل في المرة التالية. تنبيه: قد يحتاج في بعض الأحيان إلى إعادة التشغيل مرتين.
+> 书写完你会发现是无法使用的，再下次重启后会自动生成对应错误码。注意有时候需要重启两次。
 
 ```php
 <?php
 /**
- * فئة خدمة العمليات ذات الصلة بالتنقل
+ * 导航相关操作 service 类
  */
 
 namespace app\service;
 
 use app\model\Demo as DemoModel;
 
-// استيراد ملف فئة ErrorCode
+// 引入ErrorCode类文件
 use support\ErrorCode;
 
 class Demo
 {
     /**
-     * إضافة
+     * 添加
      * @param $data
      * @return array|mixed
      * @throws \exception
@@ -105,7 +105,7 @@ class Demo
 
             return $demo->getData();
         } catch (\Throwable $e) {
-            // إخراج رسالة الخطأ
+            // 输出错误信息
             throw_http_exception($e->getMessage(), ErrorCode::ModelAddOptionsError);
         }
         return [];
@@ -113,12 +113,12 @@ class Demo
 }
 ```
 
-### ملف ./support/ErrorCode.php بعد التوليد
+### 生成后的 ./support/ErrorCode.php 文件
 
 ```php
 <?php
 /**
- * الملف المولد، يرجى عدم التعديل يدوياً.
+ * 自动生成的文件 ,请不要手动修改.
  * @Author:$Id$
  */
 namespace support;
@@ -149,3 +149,6 @@ class ErrorCode
     const ModelUpdateOptionsError = -20110022;
 }
 ```
+
+
+

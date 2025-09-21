@@ -1,35 +1,34 @@
-# مكون معالجة الصور
+# 图像处理组件
 
-## intervention/image
-
-### عنوان المشروع
+## 项目地址
 
 https://github.com/Intervention/image
   
-### التثبيت
+## 安装
  
 ```php
 composer require intervention/image
 ```
   
-### الاستخدام
+## 使用
 
-**قطعة الصفحة لتحميل الصور**
+**上传页面片段**
 
 ```html
   <form method="post" action="/user/img" enctype="multipart/form-data">
       <input type="file" name="file">
-      <input type="submit" value="إرسال">
+      <input type="submit" value="提交">
   </form>
 ```
 
-**إنشاء ملف `app/controller/UserController.php`**
+**新建 `app/controller/UserController.php`**
 
 ```php
 <?php
 namespace app\controller;
 use support\Request;
-use Intervention\Image\ImageManagerStatic as Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class UserController
 {
@@ -37,15 +36,21 @@ class UserController
     {
         $file = $request->file('file');
         if ($file && $file->isValid()) {
-            $image = Image::make($file)->resize(100, 100);
-            return response($image->encode('png'), 200, ['Content-Type' => 'image/png']);
+            $manager = new ImageManager(new Driver());
+            $image = $manager->read($file)->scale(100, 100);
+            return response($image->encode(), 200, ['Content-Type' => 'image/png']);
         }
-        return response('الملف غير موجود');
+        return response('file not found');
     }
     
 }
 ```
-  
-### المزيد
 
-زيارة http://image.intervention.io/getting_started/introduction
+> **注意**
+> 以上是v3版本用法
+
+## 更多内容
+
+访问 https://image.intervention.io/v3
+  
+

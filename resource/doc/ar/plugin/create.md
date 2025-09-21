@@ -1,69 +1,71 @@
-# عملية إنشاء ونشر البرنامج الأساسي
+# 基础插件生成及发布流程
 
-## المبدأ
-1. كمثال على البرنامج العابر للنطاقات، يتكون البرنامج من ثلاثة أجزاء، أحدها ملف برنامج وسيط العابر للنطاقات، وآخر هو ملف تكوين وسيط middleware.php، وثالثهما هو ملف Install.php الذي يتم إنشاؤه تلقائيًا من خلال الأمر.
-2. نحن نستخدم الأمر لضغط الثلاثة ملفات ونشرها عبر المكون.
-3. عندما يقوم المستخدم بتثبيت برنامج العابر للنطاقات باستخدام المكون، سيقوم ملف Install.php في البرنامج بنسخ ملف برنامج وسيط العابر للنطاقات وملف التكوين إلى `{المشروع_الرئيسي}/config/plugin`، مما يتيح لـ webman تحميلها. وبالتالي تحقيق فعالية تكوين ملف برنامج وسيط العابر للنطاقات تلقائيًا.
-4. عندما يقوم المستخدم بحذف البرنامج باستخدام المكون، سيقوم ملف Install.php بحذف ملف برنامج وسيط العابر للنطاقات المقابل وملف التكوين، مما يحقق إزالة البرنامج تلقائيًا.
+## 原理
+1、以跨域插件为例，插件分为三部分，一个是跨域中间件程序文件，一个是中间件配置文件middleware.php，还有一个是通过命令自动生成的Install.php。
+2、我们使用命令将三个文件打包并发布到composer。
+3、当用户使用composer安装跨域插件时，插件中的Install.php会将跨域中间件程序文件以及配置文件拷贝到`{主项目}/config/plugin`下，让webman加载。实现了跨域中间件文件自动配置生效。
+4、当用户使用composer删除该插件时，Install.php会删除相应的跨域中间件程序文件和配置文件，实现插件自动卸载。
 
-## المعايير
-1. يتكون اسم البرنامج من جزأين، "الشركة المصنعة" و "اسم البرنامج"، على سبيل المثال `webman/push`، وهذا متطابق مع اسم حزمة المكون.
-2. توضع ملفات تكوين البرنامج بشكل موحد في `config/plugin/الشركة المصنعة/اسم البرنامج/`. إذا لم يكن البرنامج يحتاج إلى تكوين، يجب حذف دليل التكوين الذي يتم إنشاؤه تلقائيًا.
-3. يدعم دليل تكوين البرنامج فقط ملفات التكوين الرئيسية app.php، وتكوين بدء العمليات bootstrap.php، وتكوين المسار route.php، وتكوين وسيط middleware.php، وتكوين عمليات مخصصة process.php، وتكوين قاعدة بيانات database.php، وتكوين Redis redis.php، وتكوين thinkorm thinkorm.php. سيتم التعرف على هذه التكوينات تلقائيًا من قبل webman.
-4. يمكن للبرنامج الحصول على التكوين باستخدام الأسلوب التالي `config('plugin.الشركة المصنعة.اسم البرنامج.ملف التكوين.البند المحدد');`، على سبيل المثال `config('plugin.webman.push.app.app_key')`
-5. إذا كان لدى البرنامج تكوين قاعدة بيانات خاص به، فيجب الوصول إليه عبر الطريقة التالية. `illuminate/database` هو `Db::connection('plugin.الشركة المصنعة.اسم البرنامج.اتصال محدد')`، `thinkrom` هو `Db::connection('plugin.الشركة المصنعة.اسم البرنامج.اتصال محدد')`
-6. إذا كان البرنامج بحاجة إلى وضع ملفات تجارية في الدليل `app/` يجب التأكد من عدم تعارضها مع مشروع المستخدم أو مع برامج أخرى.
-7. يجب على البرنامج تجنب نسخ الملفات أو الدلائل إلى المشروع الرئيسي قدر الإمكان، على سبيل المثال، برنامج العابر للنطاقات بالإضافة إلى ملفات التكوين يجب وضعها في `vendor/webman/cros/src`، بدلاً من نسخها إلى المشروع الرئيسي.
-8. يُفضل استخدام مساحة الاسم الجغرافية للبرنامج بأحرف كبيرة، على سبيل المثال Webman/Console.
+## 规范
+1、插件名由两部分组成，`厂商`和`插件名`，例如 `webman/push`，这个与composer包名对应。
+2、插件配置文件统一放在 `config/plugin/厂商/插件名/` 下(console命令会自动创建配置目录)。如果插件不需要配置，则需要删除自动创建的配置目录。
+3、插件配置目录仅支持 app.php插件主配置，bootstrap.php 进程启动配置，route.php 路由配置，middleware.php 中间件配置，process.php 自定义进程配置，database.php数据库配置，redis.php redis配置，thinkorm.php thinkorm配置。这些配置会自动被webman识别。
+4、插件使用以下方法获取配置`config('plugin.厂商.插件名.配置文件.具体配置项');`，例如`config('plugin.webman.push.app.app_key')`
+5、插件如果有自己的数据库配置，则通过以下方式访问。`illuminate/database`为`Db::connection('plugin.厂商.插件名.具体的连接')`，`thinkrom`为`Db::connct('plugin.厂商.插件名.具体的连接')`
+6、如果插件需要在`app/`目录下放置业务文件，需要确保不与用户项目以及其它插件冲突。
+7、插件应该尽量避免向主项目拷贝文件或目录，例如跨域插件除了配置文件需要拷贝到主项目，中间件文件应该放在`vendor/webman/cros/src`下，不必拷贝到主项目。
+8、插件命名空间建议使用大写，例如 Webman/Console。
 
-## مثال
+## 示例
 
-**تثبيت أمر webman/console**
+**安装`webman/console`命令行**
 
 `composer require webman/console`
 
-#### إنشاء برنامج
+### 创建插件
 
-لنفترض أن البرنامج الذي تم إنشاؤه يسمى `foo/admin` (وهو أيضًا اسم المشروع الذي سيتم نشره في composer، يجب أن يكون الاسم بحروف صغيرة)
-تشغيل الأمر
+假设创建的插件名字叫 `foo/admin` (名称也就是后面composer要发布的项目名，名称需要小写)
+运行命令
 `php webman plugin:create --name=foo/admin`
 
-بعد إنشاء البرنامج، سيتم إنشاء الدليل `vendor/foo/admin` لتخزين الملفات ذات الصلة بالبرنامج والدليل `config/plugin/foo/admin` لتخزين تكوينات البرنامج ذات الصلة.
+创建插件后会生成目录 `vendor/foo/admin` 用于存放插件相关文件 和 `config/plugin/foo/admin` 用于存放插件相关配置。
 
-> تنبيه
-> يدعم `config/plugin/foo/admin` التكوينات التالية، app.php تكوين البرنامج الرئيسي، bootstrap.php تكوين بدء العمليات، route.php تكوين المسار، middleware.php تكوين وسيط البرنامج، process.php تكوين العمليات المخصصة، database.php تكوين قاعدة البيانات، redis.php تكوين Redis، thinkorm.php تكوين thinkorm. يتم التعرف على هذه التكوينات تلقائيًا من قبل webman، ويتم ضمها إلى التكوينات.
-يتم الوصول إليها باستخدام `plugin` كبادئة، على سبيل المثال `config('plugin.foo.admin.app');`.
+> 注意
+> `config/plugin/foo/admin` 支持以下配置，app.php插件主配置，bootstrap.php 进程启动配置，route.php 路由配置，middleware.php 中间件配置，process.php 自定义进程配置，database.php数据库配置，redis.php redis配置，thinkorm.php thinkorm配置。配置格式与webman相同，这些配置会自动被webman识别合并到配置当中。
+使用时以 `plugin` 为前缀访问，例如 config('plugin.foo.admin.app');
 
 
-#### تصدير البرنامج
+### 导出插件
 
-عندما ننهي تطوير البرنامج، نقوم بتشغيل الأمر التالي لتصدير البرنامج
+当我们开发完插件后，执行以下命令导出插件
 `php webman plugin:export --name=foo/admin`
+导出
 
-> شرح
-> بعد التصدير، سيتم نسخ دليل `config/plugin/foo/admin` إلى `vendor/foo/admin/src`، وسيتم إنشاء ملف Install.php تلقائيًا. يستخدم ملف Install.php لتنفيذ بعض العمليات عند تثبيت البرنامج تلقائيًا وعند حذفه.
-العملية الافتراضية للتثبيت هي نسخ تكوينات الملفات من `vendor/foo/admin/src` إلى تكوين البرنامج الحالي في المشروع.
-والعملية الافتراضية عند الحذف هي حذف ملفات التكوين من تكوين البرنامج الحالي في المشروع.
-بإمكانك تعديل Install.php لتنفيذ بعض العمليات المخصصة أثناء تثبيت وحذف البرنامج.
+> 说明
+> 导出后会将config/plugin/foo/admin目录拷贝到vendor/foo/admin/src下，同时自动生成一个Install.php，Install.php用于自动安装和自动卸载时执行一些操作。
+> 安装默认操作是将 vendor/foo/admin/src 下的配置拷贝到当前项目config/plugin下
+> 移除时默认操作是将 当前项目config/plugin 下的配置文件删除
+> 你可以修改Install.php以便在安装和卸载插件时做一些自定义操作。
 
-#### تقديم البرنامج
-* فلنفترض أن لديك بالفعل حساب على [github](https://github.com) و [packagist](https://packagist.org)
-* قم بإنشاء مشروع admin على [github](https://github.com) وقم بتحميل الكود، ولنفترض أن عنوان المشروع هو `https://github.com/اسم المستخدم/admin`
-* انتقل إلى العنوان `https://github.com/اسم المستخدم/admin/releases/new` وقم بنشر إصدار جديد مثل `v1.0.0`
-* انتقل إلى [packagist](https://packagist.org) واضغط على `Submit` في القائمة التنقلية، قم بتقديم عنوان مشروع github الخاص بك `https://github.com/اسم المستخدم/admin` وهكذا تم إتمام نشر برنامج.
+### 提交插件
+* 假设你已经有 [github](https://github.com) 和 [packagist](https://packagist.org) 账号
+* 在[github](https://github.com)上创建一个admin项目并将代码上传，项目地址假设是 `https://github.com/你的用户名/admin`
+* 进入地址`https://github.com/你的用户名/admin/releases/new`发布一个release如 `v1.0.0`
+* 进入[packagist](https://packagist.org)点击导航里`Submit`，将你的github项目地址`https://github.com/你的用户名/admin`提交上去这样就完成了一个插件的发布
 
-> **تلميح**
-> إذا كان تقديم البرنامج في `packagist` يظهر صراعاً في الكلمات، يمكنك اختيار اسم شركة جديد، على سبيل المثال `foo/admin` يمكن تغييره إلى `myfoo/admin`
+> **提示**
+> 如果在 `packagist` 里提交插件显示字冲突，可以重新取一个厂商的名字，比如`foo/admin`改成`myfoo/admin`
 
-بعد ذلك، عندما يكون لمشروع البرنامج تحديث، يجب مزامنة الكود مع github ومن ثم الذهاب إلى العنوان `https://github.com/اسم المستخدم/admin/releases/new` مرة أخرى لنشر إصدار جديد، ثم الانتقال إلى صفحة `https://packagist.org/packages/foo/admin` والنقر على زر `Update` لتحديث الإصدار.
+后续当你的插件项目代码有更新时，需要将代码同步到github，并再次进入地址`https://github.com/你的用户名/admin/releases/new`重新发布一个release，然后到 `https://packagist.org/packages/foo/admin` 页面点击 `Update` 按钮更新版本
 
-## إضافة أوامر للبرنامج
-أحيانًا نحتاج إلى بعض الأوامر المخصصة للبرنامج لتوفير بعض الوظائف المساعدة، على سبيل المثال، بعد تثبيت برنامج `webman/redis-queue`، سيتم إضافة أمر `redis-queue:consumer` إلى المشروع بشكل تلقائي، مما يسمح للمستخدم بتشغيل `php webman redis-queue:consumer send-mail` بحيث يتم إنشاء فئة مستهلك SendMail.php في المشروع، وهذا يساعد في التنمية السريعة.
+## 给插件添加命令
+有时候我们的插件需要一些自定义命令来提供一些辅助功能，例如安装 `webman/redis-queue`插件后，项目将会自动增加一个`redis-queue:consumer`命令，用户只要运行 `php webman redis-queue:consumer send-mail` 就会在项目里生成一个SendMail.php的消费者类，这样有助于快速开发。
 
-لنفترض أن برنامج `foo/admin` يحتاج إلى إضافة أمر `foo-admin:add`، يمكنك متابعة الخطوات التالية.
+假设`foo/admin`插件需要添加`foo-admin:add`命令，参考如下步骤。 
 
-#### إنشاء أمر جديد
-**إنشاء ملف الأمر `vendor/foo/admin/src/FooAdminAddCommand.php`**
+### 新建命令
+
+**新建命令文件 `vendor/foo/admin/src/FooAdminAddCommand.php`**
 
 ```php
 <?php
@@ -79,14 +81,14 @@ use Symfony\Component\Console\Input\InputArgument;
 class FooAdminAddCommand extends Command
 {
     protected static $defaultName = 'foo-admin:add';
-    protected static $defaultDescription = 'وصف السطر الأمر';
+    protected static $defaultDescription = '这里是命令行描述';
 
     /**
      * @return void
      */
     protected function configure()
     {
-        $this->addArgument('name', InputArgument::REQUIRED, 'إضافة اسم');
+        $this->addArgument('name', InputArgument::REQUIRED, 'Add name');
     }
 
     /**
@@ -97,18 +99,18 @@ class FooAdminAddCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $name = $input->getArgument('name');
-        $output->writeln("إضافة مسؤول $name");
+        $output->writeln("Admin add $name");
         return self::SUCCESS;
     }
 
 }
 ```
 
-> **ملحوظة**
-> من أجل تجنب تضارب الأوامر بين البرامج، يُفضل أن تكون صيغة الأمر هي `الشركة المصنعة-اسم البرنامج: الأمر الخاص`، على سبيل المثال، يجب أن تكون جميع أوامر برنامج `foo/admin` تحتوي على بادئة `foo-admin:`، مثل `foo-admin:add`.
+> **注意**
+> 为了避免插件间命令冲突，命令行格式建议为 `厂商-插件名:具体命令`，例如 `foo/admin` 插件的所有命令都应该以 `foo-admin:` 为前缀，例如 `foo-admin:add`。
 
-#### إضافة تكوين
-**إنشاء تكوين `config/plugin/foo/admin/command.php`**
+### 增加配置
+**新建配置 `config/plugin/foo/admin/command.php`**
 ```php
 <?php
 
@@ -116,12 +118,12 @@ use Foo\Admin\FooAdminAddCommand;
 
 return [
     FooAdminAddCommand::class,
-    // ....يمكنك إضافة التكوينات المتعددة...
+    // ....可以添加多个配置...
 ];
 ```
 
-> **تلميح**
-> `command.php` تُستخدم لتكوين الأوامر المخصصة للبرنامج، وتعنى كل عنصر في المصفوفة بملف فئة أمر، ويتطابق كل ملف فئة بأمر واحد. عند تشغيل المستخدم لسطر الأمر `webman/console`، سيتم تحميل الأوامر المخصصة التي تم تكوينها في ملف `command.php` لكل برنامج. لمزيد من المعلومات المتعلقة بسطر الأوامر، يُرجى الرجوع إلى [سطر الأوامر](console.md).
+> **提示**
+> `command.php` 用于给插件配置自定义命令，数组中每个元素对应一个命令行类文件，每个类文件对应一个命令。当用户运行命令行时`webman/console`会自动加载每个插件`command.php`里设置的自定义命令。 想了解更多命令行相关请参考[命令行](console.md)
 
-#### تنفيذ التصدير
-تنفيذ الأمر `php webman plugin:export --name=foo/admin` لتصدير البرنامج وتقديمه إلى `packagist`. وبهذه الطريقة، سيقوم المستخدم بتثبيت برنامج `foo/admin`، سيتم إضافة أمر `foo-admin:add`. وعند تشغيل `php webman foo-admin:add jerry`، سيتم طباعة `إضافة مسؤول jerry`.
+### 执行导出
+执行命令 `php webman plugin:export --name=foo/admin` 导出插件，并提交到`packagist`。这样用户安装 `foo/admin` 插件后，就会增加一个 `foo-admin:add` 命令。执行 `php webman foo-admin:add jerry` 将打印 `Admin add jerry`

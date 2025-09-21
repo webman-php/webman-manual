@@ -1,14 +1,14 @@
-# العمليات المخصصة
+# 自定义进程
 
-في webman ، يمكنك تخصيص الاستماع أو العمليات بنفس الطريقة التي يمكنك تخصيص workerman.
+在webman中你可以像workerman那样自定义监听或者进程。
 
-> **ملاحظة**
-> يجب على مستخدمي Windows استخدام `php windows.php` لتشغيل webman وإعداد العمليات المخصصة.
+> **注意**
+> windows用户需要使用 `php windows.php` 启动webman才能启动自定义进程。
 
-## تخصيص خدمة HTTP
-في بعض الأحيان قد يكون لديك متطلبات خاصة تتطلب تعديلًا على كود النواة لخدمة webman HTTP. يمكنك في هذه الحالة استخدام العمليات المخصصة.
+## 自定义http服务
+有时候你可能有某种特殊的需求，需要更改webman http服务的内核代码，这时可以采用自定义进程来实现。
 
-على سبيل المثال ، قم بإنشاء app\Server.php
+例如新建 app\Server.php
 
 ```php
 <?php
@@ -19,41 +19,41 @@ use Webman\App;
 
 class Server extends App
 {
-    // هنا يتم إعادة كتابة الأساليب في نوع App من Webman\App
+    // 这里重写 Webman\App 里的方法
 }
 ```
 
-أضف الإعدادات التالية في `config/process.php`
+在`config/process.php`中添加如下配置
 
 ```php
 use Workerman\Worker;
 
 return [
-    // ... نوع الإعدادات الأخرى...
+    // ... 这里省略了其它配置...
     
     'my-http' => [
         'handler' => app\Server::class,
         'listen' => 'http://0.0.0.0:8686',
-        'count' => 8, // عدد العمليات
+        'count' => 8, // 进程数
         'user' => '',
         'group' => '',
         'reusePort' => true,
         'constructor' => [
-            'request_class' => \support\Request::class, // تعيين فئة الطلب
-            'logger' => \support\Log::channel('default'), // مثيل السجل
-            'app_path' => app_path(), // موقع الدليل التطبيق
-            'public_path' => public_path() // موقع الدليل العام
+            'requestClass' => \support\Request::class, // request类设置
+            'logger' => \support\Log::channel('default'), // 日志实例
+            'appPath' => app_path(), // app目录位置
+            'publicPath' => public_path() // public目录位置
         ]
     ]
 ];
 ```
 
-> **نصيحة**
-> إذا كنت ترغب في إيقاف خدمة HTTP المدمجة في webman ، كل ما عليك فعله هو ضبط `listen=>''` في `config/server.php`
-## مثال تخصيص استماع WebSocket
+> **提示**
+> 如果想关闭webman自带的http进程，只需要在 config/server.php 里设置 `listen=>''`
 
-قم بإنشاء `app/Pusher.php`
+## 自定义websocket监听例子
 
+新建 `app/Pusher.php`
 ```php
 <?php
 namespace app;
@@ -83,17 +83,16 @@ class Pusher
     }
 }
 ```
-> ملاحظة: جميع الخصائص onXXX هي عامة
+> 注意：所有onXXX属性均为public
 
-أضف الإعدادات التالية في `config/process.php`
-
+在`config/process.php`中添加如下配置
 ```php
 return [
-    // ... تخطي إعدادات العمليات الأخرى...
+    // ... 其它进程配置省略 ...
     
-    // websocket_test اسم العملية
+    // websocket_test 为进程名称
     'websocket_test' => [
-        // هنا يتم تحديد فئة العملية، أي الفئة Pusher المعرفة أعلاه
+        // 这里指定进程类，就是上面定义的Pusher类
         'handler' => app\Pusher::class,
         'listen'  => 'websocket://0.0.0.0:8888',
         'count'   => 1,
@@ -101,10 +100,8 @@ return [
 ];
 ```
 
-## مثال عملية مخصصة غير الاستماع
-
-قم بإنشاء `app/TaskTest.php`
-
+## 自定义非监听进程例子
+新建 `app/TaskTest.php`
 ```php
 <?php
 namespace app;
@@ -117,7 +114,7 @@ class TaskTest
   
     public function onWorkerStart()
     {
-        // يتم فحص قاعدة البيانات كل 10 ثوانٍ للتحقق من وجود مستخدمين جدد قاموا بالتسجيل
+        // 每隔10秒检查一次数据库是否有新用户注册
         Timer::add(10, function(){
             Db::table('users')->where('regist_timestamp', '>', time()-10)->get();
         });
@@ -125,11 +122,10 @@ class TaskTest
     
 }
 ```
-أضف الإعدادات التالية في `config/process.php`
-
+在`config/process.php`中添加如下配置
 ```php
 return [
-    // ... تخطي إعدادات العمليات الأخرى
+    // ... 其它进程配置省略
     
     'task' => [
         'handler'  => app\TaskTest::class
@@ -137,40 +133,42 @@ return [
 ];
 ```
 
->ملاحظة: إذا تم تخطي الاستماع فإن العملية لا تقوم بالاستماع إلى أي منفذ، وإذا تم تخطي العدد فإن عدد العمليات يكون افتراضيًا 1.
+> 注意：listen省略则不监听任何端口，count省略则进程数默认为1。
 
-## شرح ملف الإعدادات
+## 配置文件说明
 
-يتم تعريف عملية كاملة بالتفصيل كما يلي:
+一个进程完整的配置定义如下：
 ```php
 return [
     // ... 
     
-    // websocket_test اسم العملية
+    // websocket_test 为进程名称
     'websocket_test' => [
-        // هنا تم تحديد فئة العملية
+        // 这里指定进程类
         'handler' => app\Pusher::class,
-        // بروتوكول الاستماع وعنوان IP والمنفذ (اختياري)
+        // 监听的协议 ip 及端口 （可选）
         'listen'  => 'websocket://0.0.0.0:8888',
-        // عدد العمليات (اختياري، الافتراضي 1)
+        // 进程数 （可选，默认1）
         'count'   => 2,
-        // المستخدم الذي يقوم بتشغيل العملية (اختياري، الافتراضي مستخدم الحالي)
+        // 进程运行用户 （可选，默认当前用户）
         'user'    => '',
-        // مجموعة المستخدمين الذين يقومون بتشغيل العملية (اختياري، الافتراضي مجموعة المستخدم الحالية)
+        // 进程运行用户组 （可选，默认当前用户组）
         'group'   => '',
-        // إذا كانت العملية قابلة لإعادة التحميل (اختياري، الافتراضي صواب)
+        // 当前进程是否支持reload （可选，默认true）
         'reloadable' => true,
-        // هل تم تمكين reusePort (اختياري، يتطلب PHP >= 7.0، يكون الافتراضي صواب)
+        // 是否开启reusePort
         'reusePort'  => true,
-        // النقل (اختياري، عند الحاجة لتمكين SSL، يتم تعيينها إلى ssl، الافتراضي tcp)
+        // transport (可选，当需要开启ssl时设置为ssl，默认为tcp)
         'transport'  => 'tcp',
-        // السياق (اختياري، عندما يكون النقل هو SSL، يجب تمرير مسار الشهادة)
+        // context （可选，当transport为是ssl时，需要传递证书路径）
         'context'    => [], 
-        // معلمات بناء جملة دالة البنائي هنا لفئة process\Pusher::class (اختياري)
+        // 进程类构造函数参数，这里为 process\Pusher::class 类的构造函数参数 （可选）
         'constructor' => [],
+        //当前进程是否启用
+        'enable' => true
     ],
 ];
 ```
 
-## توضيح
-عمليات تخصيص webman في الواقع هي تغليف بسيط للعمليات في workerman. إنها تفصل التكوين عن الأعمال وتقوم بتنفيذ دوال `onXXX` التي تقوم بها workerman من خلال طرق الفئة، وغير ذلك فإن الاستخدام الآخر هو بالكامل مشابه لـ workerman.
+## 总结
+webman的自定义进程实际上就是workerman的一个简单封装，它将配置与业务分离，并且将workerman的`onXXX`回调通过类的方法来实现，其它用法与workerman完全相同。

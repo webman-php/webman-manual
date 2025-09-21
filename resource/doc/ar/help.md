@@ -1,9 +1,9 @@
-# مساعدة المجتمع
+# 社区帮助
 
-## مجتمع الأسئلة والأجوبة
+## 问答社区
 
 https://www.workerman.net/questions
 
-## مجموعة التبادل التقني
+## 技术交流群
 
 ![](../assets/img/webman-qun-qr.jpg)

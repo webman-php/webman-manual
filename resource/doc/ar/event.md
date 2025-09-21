@@ -1,4 +1,4 @@
-# مكتبة الأحداث ل webman webman-event
+# webman 事件库 webman-event
 
 [![license](https://img.shields.io/github/license/Tinywan/webman-event)]()
 [![webman-event](https://img.shields.io/github/v/release/tinywan/webman-event?include_prereleases)]()
@@ -6,49 +6,49 @@
 [![webman-event](https://img.shields.io/github/last-commit/tinywan/webman-event/main)]()
 [![webman-event](https://img.shields.io/github/v/tag/tinywan/webman-event?color=ff69b4)]()
 
-مقارنة الأحداث بالوسيط تكمن في أن الأحداث أدق بشكل أكبر من الوسائط وأكثر تحديدًا (أو يمكن القول أن الحجم الحبيبي أكبر) ، وتناسب أيضًا توسيع بعض سيناريوهات الأعمال. على سبيل المثال، قد نحتاج عادة إلى القيام بسلسلة من العمليات بعد تسجيل المستخدم أو تسجيل الدخول، يمكن أن نتوسع عملية تسجيل الدخول دون أي تدخل في الشيفرة الأصلية، مما يقلل من تشابك النظام وفي الوقت نفسه يقلل من احتمالية وجود الأخطاء.
+事件相比较中间件的优势是事件比中间件更加精准定位（或者说粒度更细），并且更适合一些业务场景的扩展。例如，我们通常会遇到用户注册或者登录后需要做一系列操作，通过事件系统可以做到不侵入原有代码完成登录的操作扩展，降低系统的耦合性的同时，也降低了BUG的可能性。
 
-## رابط المشروع
+## 项目地址
 
 [https://github.com/Tinywan/webman-permission](https://github.com/Tinywan/webman-permission)
 
-## الاعتمادات
+## 依赖
 
 - [symfony/event-dispatcher](https://github.com/symfony/event-dispatcher)
 
-## التثبيت
+## 安装
 
 ```shell script
 composer require tinywan/webman-event
 ```
-## تكوين 
+## 配置 
 
-محتوى ملف تكوين الحدث `config/event.php` كما يلي
+事件配置文件 `config/event.php` 内容如下
 
 ```php
 return [
-    // مستمع الأحداث
+    // 事件监听
     'listener'    => [],
 
-    // مشترك الأحداث
+    // 事件订阅器
     'subscriber' => [],
 ];
 ```
-### تكوين بدء التشغيل
+### 进程启动配置
 
-افتح `config/bootstrap.php` وأضف التكوين التالي:
+打开 `config/bootstrap.php`，加入如下配置：
 
 ```php
 return [
-    // تم حذف باقي التكوينات هنا ...
+    // 这里省略了其它配置 ...
     webman\event\EventManager::class,
 ];
 ```
-## البدء السريع
+## 快速开始
 
-### تعريف حدث
+### 定义事件
 
-فئة الحدث `LogErrorWriteEvent.php`
+事件类 `LogErrorWriteEvent.php`
 
 ```php
 declare(strict_types=1);
@@ -59,7 +59,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class LogErrorWriteEvent extends Event
 {
-    const NAME = 'log.error.write';  // اسم الحدث، الهوية الوحيدة للحدث
+    const NAME = 'log.error.write';  // 事件名，事件的唯一标识
 
     /** @var array */
     public array $log;
@@ -76,19 +76,19 @@ class LogErrorWriteEvent extends Event
 }
 ```
 
-### استماع للحدث
+### 监听事件
 ```php
 return [
-    // مستمع الأحداث
+    // 事件监听
     'listener'    => [
         \extend\event\LogErrorWriteEvent::NAME  => \extend\event\LogErrorWriteEvent::class,
     ],
 ];
 ```
 
-### الاشتراك في الحدث
+### 订阅事件
 
-فئة الاشتراك `LoggerSubscriber.php`
+订阅类 `LoggerSubscriber.php`
 
 ```php
 namespace extend\event\subscriber;
@@ -99,7 +99,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class LoggerSubscriber implements EventSubscriberInterface
 {
     /**
-     * @desc: وصف الأسلوب
+     * @desc: 方法描述
      * @return array|string[]
      */
     public static function getSubscribedEvents()
@@ -110,42 +110,44 @@ class LoggerSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @desc: تفعيل الحدث
+     * @desc: 触发事件
      * @param LogErrorWriteEvent $event
      */
     public function onLogErrorWrite(LogErrorWriteEvent $event)
     {
-        // بعض العمليات التجارية المحددة
+        // 一些具体的业务逻辑
         var_dump($event->handle());
     }
 }
 ```
 
-الاشتراك في الحدث
+事件订阅
 ```php
 return [
-    // مشترك الأحداث
+    // 事件订阅
     'subscriber' => [
         \extend\event\subscriber\LoggerSubscriber::class,
     ],
 ];
 ```
 
-### مشغل الحدث
+### 事件触发器
 
-تشغيل حدث `LogErrorWriteEvent`.
+触发 `LogErrorWriteEvent` 事件。
 
 ```php
 $error = [
-    'errorMessage' => 'رسالة الخطأ',
+    'errorMessage' => '错误消息',
     'errorCode' => 500
 ];
 EventManager::trigger(new LogErrorWriteEvent($error),LogErrorWriteEvent::NAME);
 ```
 
-النتيجة
-![نتيجة الطباعة](./trigger.png)
+执行结果
 
-## الرخصة
+![打印结果](./trigger.png)
 
-يتم ترخيص هذا المشروع بموجب [رخصة Apache 2.0](LICENSE).
+## License
+
+This project is licensed under the [Apache 2.0 license](LICENSE).
+

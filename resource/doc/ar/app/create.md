@@ -1,18 +1,18 @@
-# إنشاء إضافة التطبيق
+# 创建应用插件
 
-## الهوية الفريدة
+## 唯一标识
 
-كل إضافة لديها هوية فريدة للتطبيق، يحتاج المطورون إلى تفكير في الهوية قبل بدء التطوير والتحقق من أن الهوية غير مستخدمة بالفعل.
-يمكنك التحقق من العنوان التالي [فحص الهوية](https://www.workerman.net/app/check)
+每个插件都有一个唯一的应用标识，开发者开发之前需要想好标识，并且检测标识没有被占用。
+检测地址[应用标识检测](https://www.workerman.net/app/check)
 
-## الإنشاء
+## 创建
 
-قم بتنفيذ `composer require webman/console` لتثبيت سطر أوامر webman
+执行`composer require webman/console` 安装webman命令行
 
-استخدم الأمر `php webman app-plugin:create {هوية الإضافة}` لإنشاء إضافة تطبيق محليًا
+使用命令`php webman app-plugin:create {插件标识}`可以在本地创建一个应用插件
 
-على سبيل المثال `php webman app-plugin:create foo`
+例如 `php webman app-plugin:create foo`
 
-أعد تشغيل webman
+重启webman
 
-استخدم العنوان التالي `http://127.0.0.1:8787/app/foo` إذا كان هناك محتوى معين يعني ذلك أن الإنشاء ناجح.
+访问 `http://127.0.0.1:8787/app/foo` 如果有返回内容说明创建成功。

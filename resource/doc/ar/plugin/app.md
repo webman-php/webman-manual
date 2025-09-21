@@ -1,9 +1,9 @@
-# تثبيت الإضافات التطبيقية
-كل إضافة تطبيق هي تطبيق كامل، ويطبق الشفرة المصدرية في مسار "{المشروع الرئيسي}/plugin"
+# 应用插件
+每个应用插件是一个完整的应用，源码放置于`{主项目}/plugin`目录下
 
-> **نصيحة**
-> باستخدام الأمر `php webman app-plugin:create {اسم الإضافة}` (يتطلب webman/console>=1.2.16) يمكنك إنشاء إضافة تطبيقية محلية،
-> على سبيل المثال `php webman app-plugin:create cms` سينشئ هيكل الدليل التالي.
+> **提示**
+> 使用命令`php webman app-plugin:create {插件名}` 可以在本地创建一个应用插件，
+> 例如 `php webman app-plugin:create cms` 将创建如下目录结构
 
 ```
 plugin/
@@ -37,83 +37,84 @@ plugin/
     └── public
 ```
 
-نرى أن لدى الإضافة التطبيقية هيكل دليل وملفات تكوين مشابهة لتلك في webman. في الواقع، تجربة تطوير إضافة تطبيقية مشابهة تقريبًا لتجربة تطوير مشروع webman العادي، مع الانتباه للنقاط التالية.
+我们看到一个应用插件有着与webman相同的目录结构及配置文件。实际上开发一个应用插件与开发一个webman项目体验基本一致，只需要注意以下几个方面。
 
-## مساحة الأسماء
-معيار PSR4 يتبع مساحة الأسماء وتسمية الدلائل في الإضافات التطبيقية، ونظرًا لأن الإضافات توضع جميعها في مجلد الإضافات، فإن مساحة الأسماء تبدأ بـ plugin، على سبيل المثال `plugin\cms\app\controller\UserController`، حيث يعتبر cms المجلد الرئيسي للشفرة المصدرية في الإضافة.
+## 命名空间
+插件目录及命名遵循PSR4规范，因为插件都放置于plugin目录下，所以命名空间都以plugin开头，例如`plugin\cms\app\controller\UserController`，这里cms是插件的源码主目录。
 
-## عنوان URL
-مسارات عناوين الإضافات التطبيقية تبدأ بـ `/app`، على سبيل المثال، عنوان URL لـ `plugin\cms\app\controller\UserController` هو `http://127.0.0.1:8787/app/cms/user`.
+## url访问
+应用插件url地址路径都以`/app`开头，例如`plugin\cms\app\controller\UserController`url地址是 `http://127.0.0.1:8787/app/cms/user`。
 
-## الملفات الثابتة
-يتم وضع الملفات الثابتة في `plugin/{الإضافة}/public`، على سبيل المثال، عند الوصول ل`http://127.0.0.1:8787/app/cms/avatar.png` فإنه في الواقع يتم الحصول على الملف `plugin/cms/public/avatar.png`.
+## 静态文件
+静态文件放置于`plugin/{插件}/public`下，例如访问`http://127.0.0.1:8787/app/cms/avatar.png`实际上是获取`plugin/cms/public/avatar.png`文件。
 
-## ملفات التكوين
-تكوين الإضافة التطبيقية مماثل لمشروع webman العادي، ومع ذلك، يكون تكوين الإضافة التطبيقية عادة ما يكون ساري المفعول فقط للإضافة الحالية دون تأثير على المشروع الرئيسي.
-على سبيل المثال، قيمة `plugin.cms.app.controller_suffix` تؤثر فقط على لاحقة المتحكم للإضافة، ولا تؤثر على المشروع الرئيسي.
-على سبيل المثال، قيمة `plugin.cms.app.controller_reuse` تؤثر فقط على ما إذا كان سيتم إعادة استخدام المتحكم في الإضافة، ولا تؤثر على المشروع الرئيسي.
-على سبيل المثال، قيمة `plugin.cms.middleware` تؤثر فقط على الوسيطة في الإضافة، ولا تؤثر على المشروع الرئيسي.
-على سبيل المثال، قيمة `plugin.cms.view` تؤثر فقط على العرض الذي تستخدمه الإضافة، ولا تؤثر على المشروع الرئيسي.
-على سبيل المثال، قيمة `plugin.cms.container` تؤثر فقط على الحاوية التي تستخدمها الإضافة، ولا تؤثر على المشروع الرئيسي.
-على سبيل المثال، قيمة `plugin.cms.exception` تؤثر فقط على فئة معالجة الاستثناء في الإضافة، ولا تؤثر على المشروع الرئيسي.
+## 配置文件
+插件的配置与普通webman项目一样，不过插件的配置一般只对当前插件有效，对主项目一般无影响。
+例如`plugin.cms.app.controller_suffix`的值只影响插件的控制器后缀，对主项目没有影响。
+例如`plugin.cms.app.controller_reuse`的值只影响插件是否复用控制器，对主项目没有影响。
+例如`plugin.cms.middleware`的值只影响插件的中间件，对主项目没有影响。
+例如`plugin.cms.view`的值只影响插件所使用的视图，对主项目没有影响。
+例如`plugin.cms.container`的值只影响插件所使用的容器，对主项目没有影响。
+例如`plugin.cms.exception`的值只影响插件的异常处理类，对主项目没有影响。
 
-ولكن نظرًا لأن المسار هو عام، فإن تكوين الإضافة يؤثر أيضًا على المستوى العالمي.
+但是因为路由是全局的，所以插件配置的路由也是影响全局的。
 
-## الحصول على التكوين
-طريقة الحصول على تكوين إضافة معينة هي `config('plugin.{الإضافة}.{التكوين المحدد}')`، على سبيل المثال، يمكن الحصول على كل التكوينات في `plugin/cms/config/app.php` عن طريق `config('plugin.cms.app')` بالإضافة إلى أنه بإمكان المشروع الرئيسي أو الإضافات الأخرى استخدام `config('plugin.cms.xxx')` للحصول على تكوينات الإضافة cms.
+## 获取配置
+获取某个插件配置方法为 `config('plugin.{插件}.{具体的配置}');`，例如获取`plugin/cms/config/app.php`的所有配置方法为`config('plugin.cms.app')`
+同样的，主项目或者其它插件都可以用`config('plugin.cms.xxx')`来获取cms插件的配置。
 
-## تكوينات غير مدعومة
-الإضافات التطبيقية لا تدعم تكوينات server.php، session.php، `app.request_class`، `app.public_path`، `app.runtime_path`.
+## 不支持的配置
+应用插件不支持server.php，session.php配置，不支持`app.request_class`，`app.public_path`，`app.runtime_path`配置。
 
-## قاعدة البيانات
-يمكن للإضافة تكوين قاعدة البيانات الخاصة بها، على سبيل المثال، محتوى `plugin/cms/config/database.php` كالتالي
+## 数据库
+插件可以配置自己的数据库，例如`plugin/cms/config/database.php`内容如下
 ```php
 return  [
     'default' => 'mysql',
     'connections' => [
-        'mysql' => [ // mysql اسم الاتصال
+        'mysql' => [ // mysql为连接名
             'driver'      => 'mysql',
             'host'        => '127.0.0.1',
             'port'        => 3306,
-            'database'    => 'قاعدة البيانات',
-            'username'    => 'اسم المستخدم',
-            'password'    => 'كلمة المرور',
+            'database'    => '数据库',
+            'username'    => '用户名',
+            'password'    => '密码',
             'charset'     => 'utf8mb4',
             'collation'   => 'utf8mb4_general_ci',
         ],
-        'admin' => [ // admin اسم الاتصال
+        'admin' => [ // admin为连接名
             'driver'      => 'mysql',
             'host'        => '127.0.0.1',
             'port'        => 3306,
-            'database'    => 'قاعدة البيانات',
-            'username'    => 'اسم المستخدم',
-            'password'    => 'كلمة المرور',
+            'database'    => '数据库',
+            'username'    => '用户名',
+            'password'    => '密码',
             'charset'     => 'utf8mb4',
             'collation'   => 'utf8mb4_general_ci',
         ],
     ],
 ];
 ```
-الطريقة المستخدمة للإشارة إليها هي `Db::connection('plugin.{الإضافة}.{اسم الاتصال}');`، على سبيل المثال
+引用方式为`Db::connection('plugin.{插件}.{连接名}');`，例如
 ```php
 use support\Db;
 Db::connection('plugin.cms.mysql')->table('user')->first();
 Db::connection('plugin.cms.admin')->table('admin')->first();
 ```
 
-إذا كنت ترغب في استخدام قاعدة بيانات المشروع الرئيسي، يمكنك استخدامها مباشرة، على سبيل المثال
+如果想使用主项目的数据库，则直接使用即可，例如
 ```php
 use support\Db;
 Db::table('user')->first();
-// يفترض أن المشروع الرئيسي لديه أيضًا اتصالًا بـ admin
+// 假设主项目还配置了一个admin连接
 Db::connection('admin')->table('admin')->first();
 ```
 
-> **نصيحة**
-> كذلك يمكنك استخدام تفكير orm بنفس الطريقة
+> **提示**
+> thinkorm也是类似的用法
 
-## الذاكرة المؤقتة (Redis)
-طريقة استخدام Redis مشابهة لاستخدام قاعدة البيانات، على سبيل المثال، `plugin/cms/config/redis.php`
+## Redis
+Redis用法与数据库类似，例如 `plugin/cms/config/redis.php`
 ```php
 return [
     'default' => [
@@ -130,36 +131,36 @@ return [
     ],
 ];
 ```
-عند الاستخدام
+使用时
 ```php
 use support\Redis;
 Redis::connection('plugin.cms.default')->get('key');
 Redis::connection('plugin.cms.cache')->get('key');
 ```
 
-بنفس الطريقة، إذا كنت ترغب في إعادة استخدام تكوين Redis في المشروع الرئيسي
+同样的，如果想复用主项目的Redis配置
 ```php
 use support\Redis;
 Redis::get('key');
-// يفترض أن المشروع الرئيسي لديه أيضًا اتصالًا cache
+// 假设主项目还配置了一个cache连接
 Redis::connection('cache')->get('key');
 ```
 
-## التسجيل (اللوق)
-طريقة استخدام فئة اللوق مشابهة لاستخدام قاعدة البيانات
+## 日志
+日志类用法也与数据库用法类似
 ```php
 use support\Log;
 Log::channel('plugin.admin.default')->info('test');
 ```
 
-إذا كنت ترغب في إعادة استخدام تكوين اللوق في المشروع الرئيسي، يمكنك استخدامها مباشرة
+如果想复用主项目的日志配置，直接使用
 ```php
 use support\Log;
-Log::info('محتوى السجل');
-// يفترض أن المشروع الرئيسي يحتوي على تكوين سجل اختبار
-Log::channel('test')->info('محتوى السجل');
+Log::info('日志内容');
+// 假设主项目有个test日志配置
+Log::channel('test')->info('日志内容');
 ```
 
-# تثبيت وإلغاء تثبيت الإضافات التطبيقية
-عند تثبيت الإضافات التطبيقية، يكفي نسخ مجلد الإضافة إلى مسار `{المشروع الرئيسي}/plugin`، ويجب إعادة تحميل أو إعادة تشغيل لجعلها نشطة.
-أما عند إلغاء التثبيت، يمكن حذف مجلد الإضافة المقابل في مسار `{المشروع الرئيسي}/plugin`.
+# 应用插件安装与卸载
+应用插件安装时只需要将插件目录拷贝到`{主项目}/plugin`目录下即可，需要reload或restart才能生效。
+卸载时直接删除`{主项目}/plugin`下对应的插件目录即可。

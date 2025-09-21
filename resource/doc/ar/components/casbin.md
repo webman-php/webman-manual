@@ -1,40 +1,40 @@
-# كاسبين
+# Casbin
 
-## الوصف
+## 说明
 
-كاسبين هو إطار عمل قوي وفعال للسيطرة على الوصول مفتوح المصدر، وآلية إدارة الأذونات فيه يدعم مجموعة متنوعة من نماذج السيطرة على الوصول.
-
-## عنوان المشروع
+Casbin是一个强大的、高效的开源访问控制框架，其权限管理机制支持多种访问控制模型。
+  
+## 项目地址
 
 https://github.com/teamones-open/casbin
 
-## التثبيت
+## 安装
+ 
+```php
+composer require teamones/casbin
+```
 
-  ```php
-  composer require teamones/casbin
-  ```
+## Casbin官网
 
-## موقع كاسبين
-
-يمكنك الحصول على مزيد من التفاصيل من الاطلاع على الوثائق الرسمية باللغة الصينية، وهنا سوف نتحدث فقط عن كيفية تكوين الاستخدام في webman.
+详细使用可以去看官方中文文档，这里只讲怎么在webman中配置使用
 
 https://casbin.org/docs/zh-CN/overview
 
-## هيكل الدليل
+## 目录结构
 
 ```
 .
-├── config                        الدليل لتكوينات
-│   ├── casbin-restful-model.conf ملف تكوين نموذج الأذونات المستخدم
-│   ├── casbin.php                تكوين كاسبين
+├── config                        配置目录
+│   ├── casbin-restful-model.conf 使用的权限模型配置文件
+│   ├── casbin.php                casbin配置
 ......
-├── database                      ملفات قاعدة البيانات
-│   ├── migrations                ملفات الترحيل
-│   │   └── 20210218074218_create_rule_table.php
+├── database                      数据库文件
+│   ├── migrations                迁移文件
+│   │   └── 20210218074218_create_rule_table.php
 ......
 ```
 
-## ملفات نقل قاعدة البيانات
+## 数据库迁移文件
 
 ```php
 <?php
@@ -44,15 +44,15 @@ use Phinx\Migration\AbstractMigration;
 class CreateRuleTable extends AbstractMigration
 {
     /**
-     * طريقة التغيير.
+     * Change Method.
      *
-     * اكتب الترحيلات القابلة للعكس باستخدام هذه الطريقة.
+     * Write your reversible migrations using this method.
      *
-     * ويمكن الحصول على مزيد من المعلومات حول كتابة الترحيلات من هنا:
+     * More information on writing migrations is available here:
      * http://docs.phinx.org/en/latest/migrations.html#the-abstractmigration-class
      *
-     * ويمكن استخدام الأوامر التالية في هذه الطريقة وسيقوم Phinx
-     * بإعادتها تلقائيًا عند التراجع:
+     * The following commands can be used in this method and Phinx will
+     * automatically reverse them when rolling back:
      *
      *    createTable
      *    renameTable
@@ -62,19 +62,19 @@ class CreateRuleTable extends AbstractMigration
      *    addIndex
      *    addForeignKey
      *
-     * سيؤدي أي تغييرات تدميرية أخرى إلى حدوث خطأ عند محاولة
-     * التراجع عن الترحيل.
+     * Any other destructive changes will result in an error when trying to
+     * rollback the migration.
      *
-     * تذكر أن تدعو إلى "create()" أو "update()" وليس "save()"
-     * عند التعامل مع فئة الجدول.
+     * Remember to call "create()" or "update()" and NOT "save()" when working
+     * with the Table class.
      */
     public function change()
     {
-        $table = $this->table('rule', ['id' => false, 'primary_key' => ['id'], 'engine' => 'InnoDB', 'collation' => 'utf8mb4_general_ci', 'comment' => 'جدول القواعد']);
+        $table = $this->table('rule', ['id' => false, 'primary_key' => ['id'], 'engine' => 'InnoDB', 'collation' => 'utf8mb4_general_ci', 'comment' => '规则表']);
 
-        // إضافة حقول البيانات
-        $table->addColumn('id', 'integer', ['identity' => true, 'signed' => false, 'limit' => 11, 'comment' => 'هوية رئيسية'])
-            ->addColumn('ptype', 'char', ['default' => '', 'limit' => 8, 'comment' => 'نوع القاعدة'])
+        //添加数据字段
+        $table->addColumn('id', 'integer', ['identity' => true, 'signed' => false, 'limit' => 11, 'comment' => '主键ID'])
+            ->addColumn('ptype', 'char', ['default' => '', 'limit' => 8, 'comment' => '规则类型'])
             ->addColumn('v0', 'string', ['default' => '', 'limit' => 128])
             ->addColumn('v1', 'string', ['default' => '', 'limit' => 128])
             ->addColumn('v2', 'string', ['default' => '', 'limit' => 128])
@@ -82,16 +82,16 @@ class CreateRuleTable extends AbstractMigration
             ->addColumn('v4', 'string', ['default' => '', 'limit' => 128])
             ->addColumn('v5', 'string', ['default' => '', 'limit' => 128]);
 
-        // تنفيذ الإنشاء
+        //执行创建
         $table->create();
     }
 }
 
 ```
 
-## تكوين كاسبين
+## casbin 配置
 
-يرجى الاطلاع على بناء النموذج الاذني لمزيد من المعلومات: https://casbin.org/docs/zh-CN/syntax-for-models
+权限规则模型配置语法请看：https://casbin.org/docs/zh-CN/syntax-for-models
 
 ```php
 
@@ -101,121 +101,138 @@ return [
     'default' => [
         'model' => [
             'config_type' => 'file',
-            'config_file_path' => config_path() . '/casbin-restful-model.conf', // ملف تكوين نموذج الأذونات
+            'config_file_path' => config_path() . '/casbin-restful-model.conf', // 权限规则模型配置文件
             'config_text' => '',
         ],
         'adapter' => [
-            'type' => 'model', // النموذج أو المحول
+            'type' => 'model', // model or adapter
             'class' => \app\model\Rule::class,
         ],
     ],
-    // يمكن تكوين العديد من نماذج الأذونات
+    // 可以配置多个权限model
     'rbac' => [
         'model' => [
             'config_type' => 'file',
-            'config_file_path' => config_path() . '/casbin-rbac-model.conf', // ملف تكوين نموذج الأذونات
+            'config_file_path' => config_path() . '/casbin-rbac-model.conf', // 权限规则模型配置文件
             'config_text' => '',
         ],
         'adapter' => [
-            'type' => 'model', // النموذج أو المحول
+            'type' => 'model', // model or adapter
             'class' => \app\model\RBACRule::class,
         ],
     ],
 ];
 ```
 
-### المحول
+### 适配器
 
-المحول المعبأ حاليا في الcomposer يستخدم طريقة نموذج think-orm، يرجى الرجوع إلى مسار vendor/teamones/src/adapters/DatabaseAdapter.php لاستخدام طرق orm أخرى.
+当前composer封装中适配的是 think-orm 的model方法，其他 orm 请参考 vendor/teamones/src/adapters/DatabaseAdapter.php
 
-ثم قم بتعديل التكوين
+然后修改配置
 
 ```php
 return [
     'default' => [
         'model' => [
             'config_type' => 'file',
-            'config_file_path' => config_path() . '/casbin-restful-model.conf', // ملف تكوين نموذج الأذونات
+            'config_file_path' => config_path() . '/casbin-restful-model.conf', // 权限规则模型配置文件
             'config_text' => '',
         ],
         'adapter' => [
-            'type' => 'adapter', // هنا يتم تكوين النوع كمحول
+            'type' => 'adapter', // 这里类型配置成适配器模式
             'class' => \app\adapter\DatabaseAdapter::class,
         ],
     ],
 ];
 ```
 
-## كيفية الاستخدام
+## 使用说明
 
-### الاستيراد
+### 引入
 
 ```php
-# الاستيراد
+# 引入
 use teamones\casbin\Enforcer;
 ```
 
-### طرق الاستخدام
+### 两种用法
 
 ```php
-# 1. الاستخدام الافتراضي default configuration
+# 1. 默认使用 default 配置
 Enforcer::addPermissionForUser('user1', '/user', 'read');
 
-# 1. استخدام تكوين الأذونات المخصص rbac
+# 1. 使用自定义的 rbac 配置
 Enforcer::instance('rbac')->addPermissionForUser('user1', '/user', 'read');
 ```
 
-### مقدمة لواجهة برمجة التطبيقات الشائعة
+### 常用API介绍
 
-يرجى الانتقال لمزيد من استخدامات واجهة برمجة تطبيقات الإدارة إلى الموقع الرسمي
+更多API用法请去官方查看
 
-- إدارة wAPI: https://casbin.org/docs/zh-CN/management-api
-- واجهة برمجة تطبيقات RBAC: https://casbin.org/docs/zh-CN/rbac-api
+- 管理API： https://casbin.org/docs/zh-CN/management-api
+- RBAC API： https://casbin.org/docs/zh-CN/rbac-api
 
 ```php
-# إضافة أذونات للمستخدم
+# 为用户添加权限
+
 Enforcer::addPermissionForUser('user1', '/user', 'read');
 
-# حذف أذونة مستخدم
+# 删除一个用户的权限
+
 Enforcer::deletePermissionForUser('user1', '/user', 'read');
 
-# الحصول على كافة أذونات المستخدم
+# 获取用户所有权限
+
 Enforcer::getPermissionsForUser('user1'); 
 
-# إضافة دور للمستخدم
+# 为用户添加角色
+
 Enforcer::addRoleForUser('user1', 'role1');
 
-# إضافة أذونات للدور
+# 为角色添加权限
+
 Enforcer::addPermissionForUser('role1', '/user', 'edit');
 
-# الحصول على كل الأدوار
+# 获取所有角色
+
 Enforcer::getAllRoles();
 
-# الحصول على كل الأدوار للمستخدم
+# 获取用户所有角色
+
 Enforcer::getRolesForUser('user1');
 
-# الحصول على المستخدمين بناء على الدور
+# 根据角色获取用户
+
 Enforcer::getUsersForRole('role1');
 
-# التحقق مما إذا كان المستخدم ينتمي إلى دور معين
+# 判断用户是否属于一个角色
+
 Enforcer::hasRoleForUser('use1', 'role1');
 
-# حذف دور المستخدم
+# 删除用户角色
+
 Enforcer::deleteRoleForUser('use1', 'role1');
 
-# حذف كل أدوار المستخدم
+# 删除用户所有角色
+
 Enforcer::deleteRolesForUser('use1');
 
-# حذف الدور
+# 删除角色
+
 Enforcer::deleteRole('role1');
 
-# حذف الأذونة
+# 删除权限
+
 Enforcer::deletePermission('/user', 'read');
 
-# حذف كل أذونات المستخدم أو الدور
+# 删除用户或者角色的所有权限
+
 Enforcer::deletePermissionsForUser('user1');
 Enforcer::deletePermissionsForUser('role1');
 
-# التحقق من الأذونة، إما صحيحة أو خاطئة
+# 检查权限，返回 true or false
+
 Enforcer::enforce("user1", "/user", "edit");
 ```
+
+

@@ -1,23 +1,23 @@
-# المدقق
-يمكنك استخدام العديد من المدققين المتاحة مباشرة من خلال composer، على سبيل المثال:
+# 验证器
+composer有很多验证器可以直接在使用，例如：
 #### <a href="#think-validate"> top-think/think-validate</a>
 #### <a href="#respect-validation"> respect/validation</a>
 
 <a name="think-validate"></a>
-## المدقق top-think/think-validate
+# 验证器 top-think/think-validate
 
-### الوصف
-مدقق رسمي لـ ThinkPHP
+## 说明
+ThinkPHP官方验证器
 
-### عنوان المشروع
+## 项目地址
 https://github.com/top-think/think-validate
 
-### التثبيت
+## 安装
 `composer require topthink/think-validate`
 
-### البدء السريع
+## 快速开始
 
-**أنشئ `app/index/validate/User.php`**
+**新建 `app/index/validate/User.php`**
 
 ```php
 <?php
@@ -34,17 +34,17 @@ class User extends Validate
     ];
 
     protected $message  =   [
-        'name.require' => 'الاسم مطلوب',
-        'name.max'     => 'يجب ألا يتجاوز الاسم 25 حرفًا',
-        'age.number'   => 'يجب أن يكون العمر رقمًا',
-        'age.between'  => 'يجب أن يكون العمر بين 1 و 120',
-        'email'        => 'صيغة البريد الإلكتروني غير صحيحة',    
+        'name.require' => '名称必须',
+        'name.max'     => '名称最多不能超过25个字符',
+        'age.number'   => '年龄必须是数字',
+        'age.between'  => '年龄只能在1-120之间',
+        'email'        => '邮箱格式错误',    
     ];
 
 }
 ```
   
-**الاستخدام**
+**使用**
 ```php
 $data = [
     'name'  => 'thinkphp',
@@ -58,25 +58,28 @@ if (!$validate->check($data)) {
 }
 ```
 
+> **注意**
+> webman里不支持think-validate的`Validate::rule()`方法
+
 <a name="respect-validation"></a>
-# المدقق workerman/validation
+# 验证器 workerman/validation
 
-### الوصف
+## 说明
 
-هذا المشروع هو نسخة مترجمة لـ https://github.com/Respect/Validation
+项目为 https://github.com/Respect/Validation 的汉化版本
 
-### عنوان المشروع
+## 项目地址
 
 https://github.com/walkor/validation
   
   
-### التثبيت
+## 安装
  
 ```php
 composer require workerman/validation
 ```
 
-### البدء السريع
+## 快速开始
 
 ```php
 <?php
@@ -91,36 +94,36 @@ class IndexController
     public function index(Request $request)
     {
         $data = v::input($request->post(), [
-            'nickname' => v::length(1, 64)->setName('اللقب'),
-            'username' => v::alnum()->length(5, 64)->setName('اسم المستخدم'),
-            'password' => v::length(5, 64)->setName('كلمة المرور')
+            'nickname' => v::length(1, 64)->setName('昵称'),
+            'username' => v::alnum()->length(5, 64)->setName('用户名'),
+            'password' => v::length(5, 64)->setName('密码')
         ]);
         Db::table('user')->insert($data);
-        return json(['code' => 0, 'msg' => 'جيد']);
+        return json(['code' => 0, 'msg' => 'ok']);
     }
 }  
 ```
   
-**من خلال jquery**
+**通过jquery访问**
   
   ```js
   $.ajax({
       url : 'http://127.0.0.1:8787',
       type : "post",
       dataType:'json',
-      data : {nickname:'توم', username:'توم كات', password: '123456'}
+      data : {nickname:'汤姆', username:'tom cat', password: '123456'}
   });
   ```
   
-النتيجة:
+得到结果：
 
-`{"code":500,"msg":"اسم المستخدم يجب أن يحتوي فقط على حروف (a-z) وأرقام (0-9)"}`
+`{"code":500,"msg":"用户名 只能包含字母（a-z）和数字（0-9）"}`
 
-الملاحظات:
+说明：
 
-`v::input(array $input, array $rules)` يُستخدم للتحقق وجمع البيانات، إذا فشل التحقق، سيثير استثناء `Respect\Validation\Exceptions\ValidationException`، في حال نجاح التحقق، سيتم إرجاع البيانات المحققة (كمصفوفة).
+`v::input(array $input, array $rules)` 用来验证并收集数据，如果数据验证失败，则抛出`Respect\Validation\Exceptions\ValidationException`异常，验证成功则将返回验证后的数据(数组)。
 
-إذا لم يتم التقاط استثناء التحقق بواسطة الكود التجاري، ستقوم الهيكل الأساسي لـ webman بالتقاطه تلقائيًا ويختار إما إرجاع بيانات json (مثل `{"code":500, "msg":"xxx"}`) أو صفحة استثناء عادية اعتمادًا على رأس الطلب HTTP. في حال عدم تطابق العملية مع متطلبات العمل، يمكن للمطورين التقاط استثناء `ValidationException` يدويًا وإرجاع البيانات المطلوبة، مثل الاستثناء التالي:
+如果业务代码未捕获验证异常，则webman框架将自动捕获并根据HTTP请求头选择返回json数据(类似`{"code":500, "msg":"xxx"}`)或者普通的异常页面。如返回格式不符合业务需求，开发者可自行捕获`ValidationException`异常并返回需要的数据，类似下面的例子：
 
 ```php
 <?php
@@ -136,72 +139,72 @@ class IndexController
     {
         try {
             $data = v::input($request->post(), [
-                'username' => v::alnum()->length(5, 64)->setName('اسم المستخدم'),
-                'password' => v::length(5, 64)->setName('كلمة المرور')
+                'username' => v::alnum()->length(5, 64)->setName('用户名'),
+                'password' => v::length(5, 64)->setName('密码')
             ]);
         } catch (ValidationException $e) {
             return json(['code' => 500, 'msg' => $e->getMessage()]);
         }
-        return json(['code' => 0, 'msg' => 'جيد', 'data' => $data]);
+        return json(['code' => 0, 'msg' => 'ok', 'data' => $data]);
     }
 }
 ```
 
-### دليل ميزات المدقق
+## Validator 功能指南
 
 ```php
 use Respect\Validation\Validator as v;
 
-// التحقق من قاعدة واحدة
+// 单个规则验证
 $number = 123;
 v::numericVal()->validate($number); // true
 
-// التحقق من سلسلة من القواعد
+// 多个规则链式验证
 $usernameValidator = v::alnum()->noWhitespace()->length(1, 15);
 $usernameValidator->validate('alganet'); // true
 
-// الحصول على سبب فشل التحقق الأول
+// 获得第一个验证失败原因
 try {
-    $usernameValidator->setName('اسم المستخدم')->check('alg  anet');
+    $usernameValidator->setName('用户名')->check('alg  anet');
 } catch (ValidationException $exception) {
-    echo $exception->getMessage(); // اسم المستخدم يجب أن يحتوي فقط على حروف (a-z) وأرقام (0-9)
+    echo $exception->getMessage(); // 用户名 只能包含字母（a-z）和数字（0-9）
 }
 
-// الحصول على جميع أسباب فشل التحقق
+// 获得所有验证失败的原因
 try {
-    $usernameValidator->setName('اسم المستخدم')->assert('alg  anet');
+    $usernameValidator->setName('用户名')->assert('alg  anet');
 } catch (ValidationException $exception) {
     echo $exception->getFullMessage();
-    // سيطبع
-    // -  اسم المستخدم يجب أن يتوافق مع القواعد التالية
-    //     - اسم المستخدم يجب أن يحتوي فقط على حروف (a-z) وأرقام (0-9)
-    //     - اسم المستخدم لا ينبغي أن يحتوي على مسافات
-
+    // 将会打印
+    // -  用户名 必须符合以下规则
+    //     - 用户名 只能包含字母（a-z）和数字（0-9）
+    //     - 用户名 不能包含空格
+  
     var_export($exception->getMessages());
-    // سيطبع
+    // 将会打印
     // array (
-    //   'alnum' => 'اسم المستخدم يجب أن يحتوي فقط على حروف (a-z) وأرقام (0-9)',
-    //   'noWhitespace' => 'اسم المستخدم لا ينبغي أن يحتوي على مسافات',
+    //   'alnum' => '用户名 只能包含字母（a-z）和数字（0-9）',
+    //   'noWhitespace' => '用户名 不能包含空格',
     // )
 }
 
-// تخصيص رسالة الخطأ
+// 自定义错误提示信息
 try {
-    $usernameValidator->setName('اسم المستخدم')->assert('alg  anet');
+    $usernameValidator->setName('用户名')->assert('alg  anet');
 } catch (ValidationException $exception) {
     var_export($exception->getMessages([
-        'alnum' => 'اسم المستخدم يجب أن يحتوي فقط على الحروف والأرقام',
-        'noWhitespace' => 'الاسم لا ينبغي أن يحتوي على مسافات',
-        'length' => 'حسنًا'
+        'alnum' => '用户名只能包含字母和数字',
+        'noWhitespace' => '用户名不能有空格',
+        'length' => 'length符合规则，所以这条将不会显示'
     ]);
-    // سيطبع 
+    // 将会打印 
     // array(
-    //     'alnum' => 'اسم المستخدم يجب أن يحتوي فقط على الحروف والأرقام',
-    //     'noWhitespace' => 'الاسم لا ينبغي أن يحتوي على مسافات'
+    //    'alnum' => '用户名只能包含字母和数字',
+    //    'noWhitespace' => '用户名不能有空格'
     // )
 }
 
-// التحقق من الكائن
+// 验证对象
 $user = new stdClass;
 $user->name = 'Alexandre';
 $user->birthdate = '1987-07-01';
@@ -209,7 +212,7 @@ $userValidator = v::attribute('name', v::stringType()->length(1, 32))
                 ->attribute('birthdate', v::date()->minAge(18));
 $userValidator->validate($user); // true
 
-// التحقق من المصفوفة
+// 验证数组
 $data = [
     'parentKey' => [
         'field1' => 'value1',
@@ -223,81 +226,83 @@ v::key(
         ->key('field2', v::stringType())
         ->key('field3', v::boolType())
     )
-    ->assert($data); // يمكن أيضا استخدام check() أو validate()
+    ->assert($data); // 也可以用 check() 或 validate()
   
-// التحقق الاختياري
+// 可选验证
 v::alpha()->validate(''); // false 
 v::alpha()->validate(null); // false 
 v::optional(v::alpha())->validate(''); // true
 v::optional(v::alpha())->validate(null); // true
 
-// قاعدة سلبية
+// 否定规则
 v::not(v::intVal())->validate(10); // false
 ```
   
-### الفرق بين الأساليب `validate()` `check()` `assert()` للمدقق
+## Validator 三个方法 `validate()` `check()` `assert()` 区别
 
-`validate()` تعيد قيمة بولية، ولا تثير استثناءات
+`validate()`返回布尔型，不会抛出异常
 
-`check()` تثير استثناء عند فشل التحقق، ويمكن الحصول على السبب الأول للفشل من خلال `$exception->getMessage()`
+`check()`验证失败时抛出异常，通过`$exception->getMessage()`第一条验证失败的原因
 
-`assert()` تثير استثناء عند فشل التحقق، ويمكن الحصول على جميع أسباب الفشل التحقق من خلال `$exception->getFullMessage()`
-
+`assert()`验证失败时抛出异常，通过`$exception->getFullMessage()`可以获得所有验证失败的原因
   
-### قائمة شائعة الاستخدام لقواعد التحقق
-
-`Alnum()` فقط حروف وأرقام
-
-`Alpha()` فقط حروف
-
-`ArrayType()` نوع المصفوفة
-
-`Between(mixed $minimum, mixed $maximum)` التحقق من أن الإدخال بين قيمتين معينتين.
-
-`BoolType()` التحقق من أنها من النوع البولي
-
-`Contains(mixed $expectedValue)` التحقق من أن الإدخال يحتوي على قيم معينة
-
-`ContainsAny(array $needles)` التحقق من أن الإدخال يحتوي على واحد على الأقل من القيم المحددة
-
-`Digit()` التحقق من أن الإدخال يحتوي على أرقام فقط
-
-`Domain()` التحقق من صحة اسم النطاق
-
-`Email()` التحقق من أنها بريد إلكتروني صحيح
-
-`Extension(string $extension)` التحقق من امتداد الملف
-
-`FloatType()` التحقق من أنها من النوع عشري
-
-`IntType()` التحقق من أنها عدد صحيح
-
-`Ip()` التحقق من أنها عنوان IP
-
-`Json()` التحقق من أنها بيانات json
-
-`Length(int $min, int $max)` التحقق من أن الطول في النطاق المحدد
-
-`LessThan(mixed $compareTo)` التحقق من أن الطول أقل من القيمة المحددة
-
-`Lowercase()` التحقق من أنها حروف صغيرة
-
-`MacAddress()` التحقق من أنها عنوان MAC
-
-`NotEmpty()` التحقق من أن الإدخال ليس فارغًا
-
-`NullType()` التحقق من أن الإدخال هو فارغ
-
-`Number()` التحقق من أن الإدخال عدد
-
-`ObjectType()` التحقق من أن الإدخال من نوع كائن
-
-`StringType()` التحقق من أن الإدخال من نوع سلسلة
-
-`Url()` التحقق من أن الإدخال عنوان URL
-
-لمزيد من قواعد التحقق يرجى زيارة https://respect-validation.readthedocs.io/en/2.0/list-of-rules/
   
-### المزيد
+## 常用验证规则列表
 
-لمزيد من المعلومات يُرجى زيارة https://respect-validation.readthedocs.io/en/2.0/
+`Alnum()` 只包含字母和数字
+
+`Alpha()` 只包含字母
+
+`ArrayType()` 数组类型
+
+`Between(mixed $minimum, mixed $maximum)` 验证输入是否在其他两个值之间。
+
+`BoolType()` 验证是否是布尔型
+
+`Contains(mixed $expectedValue)` 验证输入是否包含某些值
+
+`ContainsAny(array $needles)` 验证输入是否至少包含一个定义的值
+
+`Digit()` 验证输入是否只包含数字
+
+`Domain()` 验证是否是合法的域名
+
+`Email()` 验证是否是合法的邮件地址
+
+`Extension(string $extension)` 验证后缀名
+
+`FloatType()` 验证是否是浮点型
+
+`IntType()` 验证是否是整数
+
+`Ip()` 验证是否是ip地址
+
+`Json()` 验证是否是json数据
+
+`Length(int $min, int $max)` 验证长度是否在给定区间
+
+`LessThan(mixed $compareTo)` 验证长度是否小于给定值
+
+`Lowercase()` 验证是否是小写字母
+
+`MacAddress()` 验证是否是mac地址
+
+`NotEmpty()` 验证是否为空
+
+`NullType()` 验证是否为null
+
+`Number()` 验证是否为数字
+
+`ObjectType()` 验证是否为对象
+
+`StringType()` 验证是否为字符串类型
+
+`Url()` 验证是否为url
+  
+更多验证规则参见 https://respect-validation.readthedocs.io/en/2.0/list-of-rules/ 
+  
+## 更多内容
+
+访问 https://respect-validation.readthedocs.io/en/2.0/
+  
+

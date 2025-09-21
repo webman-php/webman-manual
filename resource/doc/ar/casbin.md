@@ -1,36 +1,32 @@
-# مكتبة التحكم في الوصول Casbin webman-permission
+# Casbin 访问控制库 webman-permission
 
-## الوصف
+## 说明
 
-تعتمد على [PHP-Casbin](https://github.com/php-casbin/php-casbin) ، وهو إطار تحكم وصول مفتوح المصدر قوي وفعال يدعم نماذج التحكم في الوصول مثل `ACL`, `RBAC`, `ABAC`.
-
-
-## عنوان المشروع
+它基于 [PHP-Casbin](https://github.com/php-casbin/php-casbin), 一个强大的、高效的开源访问控制框架，支持基于`ACL`, `RBAC`, `ABAC`等访问控制模型。
+  
+## 项目地址
 
 https://github.com/Tinywan/webman-permission
-
-
-## التثبيت
-
+  
+## 安装
+ 
 ```php
 composer require tinywan/webman-permission
 ```
+> 该扩展需要 PHP 7.1+ 和 [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998)，官方手册：https://www.workerman.net/doc/webman#/db/others
 
-> هذا الإضافة تتطلب PHP 7.1+ و [ThinkORM](https://www.kancloud.cn/manual/think-orm/1257998)، الدليل الرسمي: https://www.workerman.net/doc/webman#/db/others
+## 配置
 
-## الإعداد
-
-### تسجيل الخدمة
-قم بإنشاء ملف تكوين جديد `config/bootstrap.php` مع المحتوى المشابه للمثال التالي:
-
+### 注册服务
+新建配置文件 `config/bootstrap.php` 内容类似如下：
+  
 ```php
     // ...
     webman\permission\Permission::class,
 ```
+### Model 配置文件 
 
-### إعداد ملف النموذج
-
-قم بإنشاء ملف تكوين جديد `config/casbin-basic-model.conf` مع المحتوى المشابه للمثال التالي:
+新建配置文件 `config/casbin-basic-model.conf` 内容类似如下：
 ```conf
 [request_definition]
 r = sub, obj, act
@@ -47,16 +43,15 @@ e = some(where (p.eft == allow))
 [matchers]
 m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
 ```
+### Policy 配置文件
 
-### ملف تكوين السياسة
-
-قم بإنشاء ملف تكوين جديد `config/permission.php` مع المحتوى المشابه للمثال التالي:
+新建配置文件 `config/permission.php` 内容类似如下：
 ```php
 <?php
 
 return [
     /*
-     * صلاحية الافتراضي
+     *Default  Permission
      */
     'default' => 'basic',
 
@@ -68,7 +63,7 @@ return [
     'enforcers' => [
         'basic' => [
             /*
-            * النموذج المعدّل
+            * Model 设置
             */
             'model' => [
                 'config_type' => 'file',
@@ -76,58 +71,57 @@ return [
                 'config_text' => '',
             ],
 
-            // المحول .
+            // 适配器 .
             'adapter' => webman\permission\adapter\DatabaseAdapter::class,
 
             /*
-            * إعداد قاعدة البيانات.
+            * 数据库设置.
             */
             'database' => [
-                // اسم اتصال قاعدة البيانات ، فارغ للقيمة الافتراضية.
+                // 数据库连接名称，不填为默认配置.
                 'connection' => '',
-                // اسم جدول السياسة (بلا البادئة)
+                // 策略表名（不含表前缀）
                 'rules_name' => 'rule',
-                // اسم جدول السياسة الكامل.
+                // 策略表完整名称.
                 'rules_table' => 'train_rule',
             ],
         ],
     ],
 ];
 ```
-## البدء السريع
+## 快速开始
 
 ```php
 use webman\permission\Permission;
 
-// إضافة أذونات للمستخدم
+// adds permissions to a user
 Permission::addPermissionForUser('eve', 'articles', 'read');
-// إضافة دور للمستخدم.
+// adds a role for a user.
 Permission::addRoleForUser('eve', 'writer');
-// إضافة أذونات للقاعدة
+// adds permissions to a rule
 Permission::addPolicy('writer', 'articles','edit');
 ```
 
-يمكنك التحقق من ما إذا كان لدى المستخدم هذه الأذونات
+您可以检查用户是否具有这样的权限
 
 ```php
 if (Permission::enforce("eve", "articles", "edit")) {
-    // السماح لـ eve بتعديل المقالات
+    // permit eve to edit articles
 } else {
-    // رفض الطلب، وعرض الخطأ
+    // deny the request, show an error
 }
 ````
 
-## وسيط الاعتماد
+## 授权中间件
 
-إنشاء ملف `app/middleware/AuthorizationMiddleware.php` (إذا لم يكن المجلد موجودًا ، فيجب إنشاءه بنفسك) على النحو التالي:
-
+创建文件 `app/middleware/AuthorizationMiddleware.php` (如目录不存在请自行创建) 如下：
 ```php
 <?php
 
 /**
- * وسيط الاعتماد
- * by ShaoBo Wan (Tinywan)
- * datetime 2021/09/07 14:15
+ * 授权中间件
+ * @author ShaoBo Wan (Tinywan)
+ * @datetime 2021/09/07 14:15
  */
 
 declare(strict_types=1);
@@ -149,32 +143,32 @@ class AuthorizationMiddleware implements MiddlewareInterface
 			$userId = 10086;
 			$action = $request->method();
 			if (!Permission::enforce((string) $userId, $uri, strtoupper($action))) {
-				throw new \Exception('عذرًا، ليس لديك صلاحية الوصول إلى هذا الاستجابة');
+				throw new \Exception('对不起，您没有该接口访问权限');
 			}
 		} catch (CasbinException $exception) {
-			throw new \Exception('استثناء الاعتماد' . $exception->getMessage());
+			throw new \Exception('授权异常' . $exception->getMessage());
 		}
 		return $next($request);
 	}
 }
 ```
-   
-إضافة وسيط عام إلى `config/middleware.php` على النحو التالي:
+
+在 `config/middleware.php` 中添加全局中间件如下：
 
 ```php
 return [
-    // الوسطاء العامين
+    // 全局中间件
     '' => [
-        // ... يتم تجاهل وسطاء مختلفين هنا
+        // ... 这里省略其它中间件
         app\middleware\AuthorizationMiddleware::class,
     ]
 ];
 ```
 
-## شكر
+## 感谢
 
-[Casbin](https://github.com/php-casbin/php-casbin)، يمكنك الاطلاع على جميع الوثائق على [موقعه الرسمي](https://casbin.org/).
+[Casbin](https://github.com/php-casbin/php-casbin)，你可以查看全部文档在其 [官网](https://casbin.org/) 上。
 
-## الترخيص
+## License
 
-يتم ترخيص هذا المشروع بموجب [رخصة Apache 2.0](LICENSE).
+This project is licensed under the [Apache 2.0 license](LICENSE).

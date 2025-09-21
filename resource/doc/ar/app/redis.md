@@ -1,6 +1,5 @@
-# الـ Redis
-
-يتم استخدام الـ Redis بطريقة مشابهة لقاعدات البيانات، مثل: `plugin/foo/config/redis.php`
+# Redis
+Redis用法与数据库类似，例如 `plugin/foo/config/redis.php`
 ```php
 return [
     'default' => [
@@ -17,18 +16,17 @@ return [
     ],
 ];
 ```
-
-عند الاستخدام
+使用时
 ```php
 use support\Redis;
 Redis::connection('plugin.foo.default')->get('key');
 Redis::connection('plugin.foo.cache')->get('key');
 ```
 
-بنفس الطريقة، إذا كنت تريد إعادة استخدام إعدادات الـ Redis للمشروع الرئيسي
+同样的，如果想复用主项目的Redis配置
 ```php
 use support\Redis;
 Redis::get('key');
-// مفترض أن المشروع الرئيسي لديه أيضًا اتصال cache آخر
+// 假设主项目还配置了一个cache连接
 Redis::connection('cache')->get('key');
 ```

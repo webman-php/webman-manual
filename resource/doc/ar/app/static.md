@@ -1,3 +1,3 @@
-# الملفات الثابتة
-يتم وضع الملفات الثابتة في `plugin/{الإضافة}/public`.
-على سبيل المثال، عند الوصول إلى `http://127.0.0.1:8787/app/foo/avatar.png` يتم في الحقيقة الحصول على ملف `plugin/foo/public/avatar.png`.
+# 静态文件
+静态文件放置于`plugin/{插件}/public`下。
+例如访问`http://127.0.0.1:8787/app/foo/avatar.png`实际上是获取`plugin/foo/public/avatar.png`文件。

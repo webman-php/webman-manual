@@ -1,11 +1,10 @@
-## تخصيص الصفحة الخطأ 404
-في حالة حدوث خطأ 404 في webman، سيتم عرض محتوى الملف `public/404.html` تلقائيًا، لذا يمكن للمطورين تغيير الملف `public/404.html` مباشرة.
+# 自定义404
 
-إذا كنت ترغب في التحكم الديناميكي في محتوى الصفحة الخطأ 404، على سبيل المثال إرجاع بيانات JSON `{"code:"404", "msg":"404 not found"}` أثناء طلبات AJAX، أو إعادة استجابة قالب `app/view/404.html` أثناء طلبات الصفحة، يُرجى الرجوع إلى المثال التالي
+如果你想动态控制404的内容时，例如在ajax请求时返回json数据 `{"code:"404", "msg":"404 not found"}`，页面请求时返回`app/view/404.html`模版，请参考如下示例
 
-> يُستخدم القالب الأساسي PHP في المثال التالي، ولكن يتم استخدام المبادئ الأساسية المتشابهة في القوالب الأخرى مثل `twig` `blade` و `think-tmplate`
+> 以下以php原生模版为例，其它模版`twig` `blade` `think-tmplate` 原理类似
 
-**إنشاء ملف `app/view/404.html`**
+**创建文件`app/view/404.html`**
 ```html
 <!doctype html>
 <html>
@@ -19,23 +18,38 @@
 </html>
 ```
 
-**قم بإضافة الكود التالي إلى `config/route.php`**
+**在`config/route.php`中加入如下代码：**
 ```php
 use support\Request;
 use Webman\Route;
 
 Route::fallback(function(Request $request){
-    // إعادة استجابة JSON أثناء طلبات AJAX
+    // ajax请求时返回json
     if ($request->expectsJson()) {
         return json(['code' => 404, 'msg' => '404 not found']);
     }
-    // إعادة استجابة إلى قالب 404.html أثناء طلبات الصفحة
+    // 页面请求返回404.html模版
     return view('404', ['error' => 'some error'])->withStatus(404);
 });
 ```
 
-## تخصيص الصفحة الخطأ 500
-**إنشاء `app/view/500.html` جديد**
+# 自定义405
+从webman-framework 1.5.23开始，回调函数支持传递status参数，如果status是404则代表请求不存在，405代表不支持当前请求方法(例如Route::post()设置的路由通过GET方式访问)
+```php
+use support\Request;
+use Webman\Route;
+
+Route::fallback(function(Request $request, $status) {
+    $map = [
+        404 => '404 not found',
+        405 => '405 method not allowed',
+    ];
+    return response($map[$status], $status);
+});
+```
+
+# 自定义500
+**新建`app/view/500.html`**
 
 ```html
 <!doctype html>
@@ -45,13 +59,13 @@ Route::fallback(function(Request $request){
     <title>500 Internal Server Error</title>
 </head>
 <body>
-قالب الخطأ المخصص:
+自定义错误模版：
 <?=htmlspecialchars($exception)?>
 </body>
 </html>
 ```
 
-**إنشاء** `app/exception/Handler.php` **(إذا كان الدليل غير موجود، يُرجى إنشاؤه يدويًا)**
+**新建`app/exception/Handler.php`(如目录不存在请自行创建)**
 ```php
 <?php
 
@@ -64,7 +78,7 @@ use Webman\Http\Response;
 class Handler extends \support\exception\Handler
 {
     /**
-     * رسم الاستجابة
+     * 渲染返回
      * @param Request $request
      * @param Throwable $exception
      * @return Response
@@ -72,17 +86,17 @@ class Handler extends \support\exception\Handler
     public function render(Request $request, Throwable $exception) : Response
     {
         $code = $exception->getCode();
-        // إعادة استجابة بيانات JSON أثناء طلبات AJAX
+        // ajax请求返回json数据
         if ($request->expectsJson()) {
             return json(['code' => $code ? $code : 500, 'msg' => $exception->getMessage()]);
         }
-        // إعادة استجابة إلى قالب 500.html أثناء طلبات الصفحة
+        // 页面请求返回500.html模版
         return view('500', ['exception' => $exception], '')->withStatus(500);
     }
 }
 ```
 
-**تكوين `config/exception.php`**
+**配置`config/exception.php`**
 ```php
 return [
     '' => \app\exception\Handler::class,
