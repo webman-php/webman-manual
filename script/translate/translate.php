@@ -4,8 +4,8 @@ use Workerman\Worker;
 
 global $cache, $args, $zh_lang;
 
-if (empty($lang) || !is_dir($dir = __DIR__ . '/../../resource/doc/' . $lang)) {
-    exit("$dir not exists \n");
+if (empty($lang)) {
+    exit("missing lang\n");
 }
 
 $json = json_decode(file_get_contents(__DIR__ . "/../../resource/doc/$lang.json"), true);
@@ -17,18 +17,39 @@ $zh_lang = $json['zh-lang'];
 
 $worker = new Worker();
 $worker->onWorkerStart = function () {
-    global $lang, $need_translate;
-    $files = getAllFiles(realpath(__DIR__ . "/../../resource/doc/$lang/"));
-    foreach ($files as $key => $file) {
-        $text = file_get_contents($file);
-        if (!$need_translate($text)) {
-            unset($files[$key]);
-        }
+    global $lang;
+    $root = realpath(__DIR__ . '/../../resource/doc/');
+    $source = $root . '/zh-cn';
+    $target = $root . '/' . $lang;
+
+    // 校验语言参数，避免越权路径与误删
+    if (!preg_match('/^[a-z]{2}(?:-[a-z]{2})?$/i', $lang)) {
+        exit("invalid lang: $lang\n");
     }
+
+    if (!is_dir($source)) {
+        exit("$source not exists\n");
+    }
+
+    // 1) 删除目标目录
+    if ($target === $source) {
+        exit("target equals source, abort: $target\n");
+    }
+    if (is_dir($target)) {
+        echo "delete dir: $target\n";
+        deleteDirectory($target);
+    }
+
+    // 2) 从 zh-cn 整体拷贝为目标语言目录
+    echo "copy dir: $source => $target\n";
+    copyDirectory($source, $target);
+
+    // 3) 列出目标目录的 md 文件并串行翻译
+    $files = getAllFiles($target);
     $files = array_values(array_unique($files));
-    var_export($files);
     $file_count = count($files);
     echo "total files: $file_count\n";
+
     $processNext = null;
     $processNext = function ($i) use (&$processNext, $files, $file_count) {
         if ($i >= $file_count) {
@@ -37,12 +58,14 @@ $worker->onWorkerStart = function () {
         }
         $file = $files[$i];
         $fileContent = file_get_contents($file);
-        echo "$file start\n";
+        $inputSize = strlen($fileContent);
+        $startAt = microtime(true);
+        echo "$file start size_in=$inputSize\n";
         translateTraditionalChinese($fileContent, $file, function () use (&$processNext, $i, $file_count) {
             $next = $i + 1;
             echo "completed: $i/$file_count\n";
             $processNext($next);
-        });
+        }, 0, $startAt, $inputSize);
     };
     $processNext(0);
 };
@@ -66,7 +89,7 @@ function getAllFiles($dir) {
 }
 
 
-function translateTraditionalChinese($content, $file, $done = null)
+function translateTraditionalChinese($content, $file, $done = null, $attempt = 0, $startAt = null, $inputSize = null)
 {
     global $cache, $zh_lang, $echo_prompt, $last_key_index;
     $api = get_config('api');
@@ -99,29 +122,94 @@ function translateTraditionalChinese($content, $file, $done = null)
                 ['role' => 'user', 'content' => $content]
             ],
         ], [
-        'complete' => function($result, $response) use ($file, $content, $apikey, $done) {
-            if (isset($result['error'])) {
-                var_export($result);
-                echo "\napiley: $apikey\n";
+        'complete' => function($result, $response) use ($file, $content, $apikey, $done, $attempt, $startAt, $inputSize) {
+            $failAndMaybeRetry = function($reason) use ($file, $content, $done, $attempt, $startAt, $inputSize) {
+                if ($attempt < 1) {
+                    echo $file, " retry due to: ", $reason, "\n";
+                    translateTraditionalChinese($content, $file, $done, $attempt + 1, $startAt, $inputSize);
+                    return;
+                }
+                $elapsed = $startAt ? round(microtime(true) - $startAt, 3) : 0;
+                $in = $inputSize === null ? strlen($content) : $inputSize;
+                echo $file, " failed (kept original): ", $reason, " size_in=", $in, " size_out=", $in, " elapsed=", $elapsed, "s\n";
                 if (is_callable($done)) {
                     $done();
                 }
+            };
+
+            if (isset($result['error'])) {
+                var_export($result);
+                echo "\napiley: $apikey\n";
+                $failAndMaybeRetry('error');
                 return;
             }
-            $translate_content = $result['choices'][0]['message']['content'] . "\n";
-            $stop_reason = $result['choices'][0]['finish_reason'];
-            if ($stop_reason === 'length') {
-                $translate_content = $content;
+
+            $choice = $result['choices'][0] ?? null;
+            $stop_reason = $choice['finish_reason'] ?? null;
+            if ($stop_reason !== 'stop') {
+                $failAndMaybeRetry($stop_reason ?: 'unknown');
+                return;
             }
-            $content_length = strlen($content);
-            $stop_reason = $stop_reason === 'length' ? "[[[length $content_length]]]]" : 'stop';
-            echo $file, " ", $stop_reason, "\n\n";
+
+            $translate_content = ($choice['message']['content'] ?? '') . "\n";
+            if ($translate_content === "\n" || $translate_content === '') {
+                $failAndMaybeRetry('empty');
+                return;
+            }
+
+            $outSize = strlen($translate_content);
+            $elapsed = $startAt ? round(microtime(true) - $startAt, 3) : 0;
+            echo $file, " ", $stop_reason, " size_in=", ($inputSize === null ? strlen($content) : $inputSize), " size_out=", $outSize, " elapsed=", $elapsed, "s\n\n";
             file_put_contents($file, $translate_content);
             if (is_callable($done)) {
                 $done();
             }
         },
     ]);
+}
+
+function deleteDirectory($dir)
+{
+    if (!file_exists($dir)) {
+        return true;
+    }
+    if (!is_dir($dir)) {
+        return unlink($dir);
+    }
+    foreach (scandir($dir) as $item) {
+        if ($item === '.' || $item === '..') {
+            continue;
+        }
+        $path = $dir . DIRECTORY_SEPARATOR . $item;
+        if (is_dir($path)) {
+            deleteDirectory($path);
+        } else {
+            @chmod($path, 0777);
+            unlink($path);
+        }
+    }
+    return rmdir($dir);
+}
+
+function copyDirectory($src, $dst)
+{
+    $src = rtrim($src, DIRECTORY_SEPARATOR);
+    $dst = rtrim($dst, DIRECTORY_SEPARATOR);
+    if (!is_dir($dst)) {
+        mkdir($dst, 0777, true);
+    }
+    foreach (scandir($src) as $item) {
+        if ($item === '.' || $item === '..') {
+            continue;
+        }
+        $srcPath = $src . DIRECTORY_SEPARATOR . $item;
+        $dstPath = $dst . DIRECTORY_SEPARATOR . $item;
+        if (is_dir($srcPath)) {
+            copyDirectory($srcPath, $dstPath);
+        } else {
+            copy($srcPath, $dstPath);
+        }
+    }
 }
 
 function get_config($name = null)
