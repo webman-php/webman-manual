@@ -3,7 +3,7 @@
 
 ## 安装
 ```
-composer require psr/container ^1.1.1 php-di/php-di ^6.3 doctrine/annotations ^1.14
+composer require php-di/php-di ^7.0
 ```
 
 修改配置`config/container.php`，其最终内容如下：
@@ -15,7 +15,7 @@ $builder->useAnnotations(true);
 return $builder->build();
 ```
 
-> `config/container.php`里最终返回一个符合`PSR-11`规范的容器实例。如果你不想使用 `php-di` ，可以在这里创建并返回一个其它符合`PSR-11`规范的容器实例。
+> `config/container.php`里最终返回一个符合`PSR-11`规范的容器实例。如果你不想使用 `php-di` ，可以在这里创建并返回一个其它符合`PSR-11`规范的容器实例。默认配置仅提供webman基础的容器功能。
 
 ## 构造函数注入
 新建`app/service/Mailer.php`(如目录不存在请自行创建)内容如下：
@@ -43,11 +43,9 @@ use app\service\Mailer;
 
 class UserController
 {
-    private $mailer;
 
-    public function __construct(Mailer $mailer)
+    public function __construct(private Mailer $mailer)
     {
-        $this->mailer = $mailer;
     }
 
     public function register(Request $request)
@@ -91,15 +89,12 @@ namespace app\controller;
 
 use support\Request;
 use app\service\Mailer;
-use DI\Annotation\Inject;
+use DI\Attribute\Inject;
 
 class UserController
 {
-    /**
-     * @Inject
-     * @var Mailer
-     */
-    private $mailer;
+    #[Inject]
+    private Mailer $mailer;
 
     public function register(Request $request)
     {
@@ -108,7 +103,7 @@ class UserController
     }
 }
 ```
-这个例子通过 `@Inject` 注解注入，并且由 `@var` 注解声明对象类型。这个例子和构造函数注入效果一样，但是代码更精简。
+这个例子使用 `#[Inject]` 注解注入，并且通过对象类型自动将实例注入到成员变量中。效果与构造函数注入一样，但是代码更精简。
 
 > **注意**
 > webman在1.4.6版本之前不支持控制器参数注入，例如以下代码当webman<=1.4.6时是不支持的
@@ -133,7 +128,7 @@ class UserController
 
 ## 自定义构造函数注入
 
-有时候构造函数传入的参数可能不是类的实例，而是字符串、数字、数组等数据。例如Mailer构造函数需要传递smtp服务器ip和端口：
+有时候构造函数传入的参数可能不是类的实例，而是字符串、数字、数组等非object数据。例如Mailer构造函数需要传递smtp服务器ip和端口：
 ```php
 <?php
 namespace app\service;
@@ -217,15 +212,12 @@ namespace app\controller;
 
 use support\Request;
 use app\service\MailerInterface;
-use DI\Annotation\Inject;
+use DI\Attribute\Inject;
 
 class UserController
 {
-    /**
-     * @Inject
-     * @var MailerInterface
-     */
-    private $mailer;
+    #[Inject]
+    private MailerInterface $mailer;
     
     public function register(Request $request)
     {
@@ -260,23 +252,19 @@ return [
 ];
 ```
 
-这时候我们可以通过`@Inject`将`smtp_host` `smtp_port` 注入到类的属性中。
+这时候我们可以通过`#[Inject]`将`smtp_host` `smtp_port` 注入到类的属性中。
 ```php
 <?php
 namespace app\service;
 
-use DI\Annotation\Inject;
+use DI\Attribute\Inject;
 
 class Mailer
 {
-    /**
-     * @Inject("smtp_host")
-     */
+    #[Inject("smtp_host")]
     private $smtpHost;
 
-    /**
-     * @Inject("smtp_port")
-     */
+    #[Inject("smtp_port")]
     private $smtpPort;
 
     public function mail($email, $content)
@@ -287,7 +275,34 @@ class Mailer
 }
 ```
 
-> 注意：`@Inject("key")` 里面是双引号
+# 延迟加载
+> 延迟加载是一种设计模式，用于推迟对象的创建或初始化，直到实际需要使用时才进行加载。
+
+使用此功能需要额外安装依赖，以下依赖为`ocramius/proxy-manager`的一个分支，原仓库不支持PHP8。
+```
+composer require friendsofphp/proxy-manager-lts
+```
+使用方法:
+```php
+use DI\Attribute\Injectable;
+
+#[Injectable(lazy: true)]
+class MyClass
+{
+}
+```
+声明`#[Injectable]`注解的类调用其中任意方法时才会被创建，注入的对象为代理类。
+
+# 循环依赖
+循环依赖是指多个类中相互依赖，形成一个闭环依赖关系。
+- 直接循环依赖
+  - 模块A依赖模块B，模块B又依赖模块A
+  - 形成 A → B → A 的依赖闭环
+- 间接循环依赖
+  - 涉及多个模块形成的依赖环
+  - 如 A → B → C → A 的情况
+
+在`php-di`中出现循环依赖将直接报错，我们在使用中应该避免这种现象。
 
 
 ## 更多内容

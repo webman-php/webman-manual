@@ -75,17 +75,15 @@ composer require webman/console
 
 namespace app\command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand('config:mysql', '显示当前MySQL服务器配置')]
 class ConfigMySQLCommand extends Command
 {
-    protected static $defaultName = 'config:mysql';
-    protected static $defaultDescription = '显示当前MySQL服务器配置';
-
-    protected function execute(InputInterface $input, OutputInterface $output)
+    public function __invoke(OutputInterface $output)
     {
         $output->writeln('MySQL配置信息如下：');
         $config = config('database');
@@ -133,5 +131,54 @@ class ConfigMySQLCommand extends Command
 +-------+---------+--------+-----------+------+----------+----------+----------+-------------+---------+-----------------+--------+--------+--------+--------+---------+
 ```
 
+## 注解(Symfony/console>=7.3)
+### AsCommand
+此注解作用于类，用于声明命令行名称等。需要注意的是框架并未提供注解扫描，所以仍然需要将类名添加到配置文件中。
+```php
+#[AsCommand(
+    name: 'config:mysql', // 命令名称
+    description: '显示当前MySQL服务器配置', // 命令介绍
+    aliases: ['config:database'], //命令别名
+    hidden: false, // 是否隐藏
+    'help page content' // help内容
+)]
+class Command {}
+```
+### Argument
+此注解作用于属性，用于声明命令行参数，声明后将自动注入到属性中。
+```php
+    public function __invoke(OutputInterface $output, #[Argument('The username of the user.')] string $username): int
+    {
+        $output->writeln([
+            'User Creator',
+            '============',
+            '',
+        ]);
+
+        $output->writeln('Username: '.$username);
+
+        return Command::SUCCESS;
+    }
+```
+命令行运行：`php webman test:command zhangsan`
+### Option
+此注解作用于属性，用于声明命令行选项，声明后将自动注入到属性中。
+```php
+public function __invoke(OutputInterface $output, #[Option('The username of the user.')] string $username = 'zhangsan'): int
+{
+    $output->writeln([
+        'User Creator',
+        '============',
+        '',
+    ]);
+
+    $output->writeln('Username: '.$username);
+
+    return Command::SUCCESS;
+}
+```
+命令行运行：`php webman test:command --username=zhangsan`
+
+
 ## 更多资料参考
-http://www.symfonychina.com/doc/current/components/console.html
+https://symfony.com/doc/current/console.html
