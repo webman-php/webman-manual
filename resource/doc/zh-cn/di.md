@@ -337,7 +337,22 @@ name: Lazy Loaded Object
   - 涉及多个模块形成的依赖环
   - 如 A → B → C → A 的情况
 
-在`php-di`中出现循环依赖将直接报错，我们在使用中应该避免这种现象。
+在使用注解注入时`php-di`会自动检测到循环依赖并抛出异常，如有需要请使用以下代码代替
+```php
+class userController
+{
+
+    // 移除这行代码
+    // #[Inject]
+    // private UserService userService;
+
+    public function getUserName()
+    {
+        $userService = Container::get(UserService::class);
+        return $userService->getName();
+    }
+}
+```
 
 
 ## 更多内容
