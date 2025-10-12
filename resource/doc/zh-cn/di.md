@@ -3,7 +3,7 @@
 
 ## 安装
 ```
-composer require php-di/php-di ^7.0
+composer require php-di/php-di:^7.0
 ```
 
 修改配置`config/container.php`，其最终内容如下：
@@ -11,7 +11,7 @@ composer require php-di/php-di ^7.0
 $builder = new \DI\ContainerBuilder();
 $builder->addDefinitions(config('dependence', []));
 $builder->useAutowiring(true);
-$builder->useAnnotations(true);
+$builder->useAttributes(true);
 return $builder->build();
 ```
 
@@ -230,6 +230,7 @@ class UserController
 `config/dependence.php` 将 `MailerInterface` 接口定义如下实现。
 ```php
 use Psr\Container\ContainerInterface;
+
 return [
     app\service\MailerInterface::class => function(ContainerInterface $container) {
         return $container->make(app\service\Mailer::class, ['smtp_host' => '192.168.1.11', 'smtp_port' => 25]);
@@ -284,14 +285,48 @@ composer require friendsofphp/proxy-manager-lts
 ```
 使用方法:
 ```php
+<?php
+
 use DI\Attribute\Injectable;
+use DI\Attribute\Inject;
 
 #[Injectable(lazy: true)]
 class MyClass
 {
+    private string $name;
+
+    public function __construct()
+    {
+        echo "MyClass 实例化\n";
+        $this->name = "Lazy Loaded Object";
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+}
+
+class Controller
+{
+    #[Inject]
+    public MyClass $myClass;
+
+    public function getClass()
+    {
+        echo "代理对象类名: " . get_class($this->myClass) . "\n";
+        echo "name: " . $this->myClass->getName();
+
+    }
 }
 ```
-声明`#[Injectable]`注解的类调用其中任意方法时才会被创建，注入的对象为代理类。
+输出:
+```
+代理对象类名: ProxyManagerGeneratedProxy\__PM__\app\web\MyClass\Generated98d2817da63e3c088c808a0d4f6e9ae0
+MyClass 实例化
+name: Lazy Loaded Object
+```
+以上示例说明了声明`#[Injectable]`注解的类在被注入时首先会创建此类的代理类，只有任意方法被调用后才会实例化。
 
 # 循环依赖
 循环依赖是指多个类中相互依赖，形成一个闭环依赖关系。
