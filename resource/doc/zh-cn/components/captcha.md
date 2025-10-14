@@ -92,7 +92,7 @@ class LoginController
     public function captcha(Request $request)
     {
         $builder = new PhraseBuilder(4, 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ');
-        $captcha = new Captcha(null, $builder);
+        $captcha = new CaptchaBuilder(null, $builder);
         $captcha->build();
         $request->session()->set('join', strtolower($captcha->getPhrase()));
         $img_content = $captcha->get();
