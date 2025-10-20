@@ -52,7 +52,7 @@ php webman build:bin 8.1
 > 如需给静态php指定php.ini文件，请使用以下命令 `php -c /your/path/php.ini start.php start -d`
 
 ## 支持的扩展
-Core, date, libxml, openssl, pcre, sqlite3, zlib, amqp, apcu, bcmath, calendar, ctype, curl, dba, dom, sockets, event, hash, fileinfo, filter, gd, gettext, json, iconv, SPL, session, standard, mbstring, igbinary, imagick, exif, mongodb, msgpack, mysqlnd, mysqli, pcntl, PDO, pdo_mysql, pdo_pgsql, pdo_sqlite, pdo_sqlsrv, pgsql, Phar, posix, readline, redis, Reflection, shmop, SimpleXML, soap, sodium, sqlsrv, sysvmsg, sysvsem, sysvshm, tokenizer, xlswriter, xml, xmlreader, xmlwriter, xsl, zip, memcache, Zend OPcache
+apcu, bcmath, bz2, calendar, Core, ctype, curl, date, dba, dom, event, exif, fileinfo, filter, ftp, gd, gmp, hash, iconv, imagick, imap, intl, json, libxml, mbstring, mysqli, mysqlnd, openssl, pcntl, pcre, PDO, pdo_mysql, pgsql, Phar, posix, protobuf, readline, redis, Reflection, session, shmop, SimpleXML, soap, sockets, sodium, SPL, sqlite3, standard, swoole, sysvmsg, sysvsem, sysvshm, tokenizer, xml, xmlreader, xmlwriter, xsl, Zend OPcache, zip, zlib
 
 ## 项目出处
 
