@@ -14,7 +14,7 @@ composer require w7corp/easywechat
 
 **config/wechat.php**
 
-```
+```php
 <?php
 return [
     /**
