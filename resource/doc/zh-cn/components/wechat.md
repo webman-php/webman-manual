@@ -78,7 +78,6 @@ namespace app\controller;
 
 use EasyWeChat\OfficialAccount\Application;
 use support\Request;
-use support\Redis;
 use Symfony\Component\Cache\Psr16Cache;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
 use Symfony\Component\HttpFoundation\HeaderBag;
@@ -95,7 +94,6 @@ class OfficialAccount
         $symfony_request = new SymfonyRequest($request->get(), $request->post(), [], $request->cookie(), [], [], $request->rawBody());
         $symfony_request->headers = new HeaderBag($request->header());
         $app->setRequestFromSymfonyRequest($symfony_request);//必须替换服务端请求
-        //$app->setCache(new Psr16Cache(new RedisAdapter(Redis::connection()->client())));//根据需要替换缓存，access_token公众号的全局唯一接口调用凭据会使用该缓存存储
         $server = $app->getServer();
         $response = $server->serve();
 
