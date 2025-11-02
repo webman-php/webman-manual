@@ -78,8 +78,6 @@ namespace app\controller;
 
 use EasyWeChat\OfficialAccount\Application;
 use support\Request;
-use Symfony\Component\Cache\Psr16Cache;
-use Symfony\Component\Cache\Adapter\RedisAdapter;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
