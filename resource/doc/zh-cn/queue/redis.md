@@ -133,7 +133,7 @@ redis_queue_send($redis, $queue, $data);
 执行命令`php webman redis-queue:consumer my-send-mail`则会生成文件`{主项目}/app/queue/redis/MyMailSend.php`
 
 > **提示**
-> 如果命令不存在也可以手动生成
+> 以上命令需要安装[命令行](../plugin/console.md)，如果不想安装也可以手动生成类似如下
 
 ```php
 <?php
