@@ -21,7 +21,7 @@ class UserController
 
 通过`$request->session();` 获得`Workerman\Protocols\Http\Session`实例，通过实例的方法来增加、修改、删除session数据。
 
-> 注意：session对象销毁时会自动保存session数据，所以不要把`$request->session()`返回的对象保存在全局数组或者类成员中导致session无法保存。
+> 注意：session对象销毁时会自动保存session数据，所以不要把`$request->session()`返回的对象保存在全局数组或者类成员中否则可能会导致session无法自动保存。
 
 ## 获取所有session数据
 ```php
