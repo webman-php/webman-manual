@@ -23,7 +23,7 @@ class UserController
 
 > **注意**
 > session对象销毁时会自动保存session数据
-> 将session对象存储到全局变量会阻止session销毁导致无法自动保存session数据,此时需要手动调用`$session->save()`保存
+> 将session对象存储到全局变量会阻止session销毁导致无法自动保存session数据，此时需要手动调用`$session->save()`保存
 
 ## 获取所有session数据
 ```php
