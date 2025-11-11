@@ -178,7 +178,7 @@ apc.enable_cli=1
 * 依赖
   需要安装redis扩展，并安装Redis组件，安装命令
 ```
-composer require -W illuminate/redis illuminate/events
+composer require -W webman/redis illuminate/events
 ```
 
 * 介绍
