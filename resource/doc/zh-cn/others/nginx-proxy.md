@@ -21,16 +21,18 @@ server {
   # 注意，这里一定是webman下的public目录，不能是webman根目录
   root /your/webman/public;
 
-  location ^~ / {
-      proxy_set_header Host $http_host;
-      proxy_set_header X-Forwarded-For $remote_addr;
-      proxy_set_header X-Forwarded-Proto $scheme;
-      proxy_set_header X-Real-IP $remote_addr;
-      proxy_http_version 1.1;
-      proxy_set_header Connection "";
-      if (!-e $request_filename){
-          proxy_pass http://webman;
-      }
+  location / {
+    try_files $uri $uri/ @proxy;
+  }
+
+  location @proxy {
+    proxy_set_header Host $http_host;
+    proxy_set_header X-Forwarded-For $remote_addr;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+    proxy_pass http://webman;
   }
 
   # 拒绝访问所有以 .php 结尾的文件
