@@ -22,7 +22,7 @@ server {
   root /your/webman/public;
 
   location / {
-    try_files $uri $uri/ @proxy;
+    try_files $uri @proxy;
   }
 
   location @proxy {
