@@ -299,16 +299,14 @@ Route::group('/blog', function () {
 ## 中间件构造函数传参
 
 
-配置文件支持直接实例化中间件或者匿名函数，这样可以方便的通过构造函数向中间件传参。
+配置文件支持直接实例化中间件，这样可以方便的通过构造函数向中间件传参。
 例如`config/middleware.php`里也可以这样配置
 ```
 return [
     // 全局中间件
     '' => [
         new app\middleware\AuthCheckTest($param1, $param2, ...),
-        function(){
-            return new app\middleware\AccessControlTest($param1, $param2, ...);
-        },
+        new app\middleware\AccessControlTest($param1, $param2, ...)
     ],
     // api应用中间件(应用中间件仅在多应用模式下有效)
     'api' => [
@@ -321,9 +319,7 @@ return [
 ```
 Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->middleware([
     new app\middleware\MiddlewareA($param1, $param2, ...),
-    function(){
-        return new app\middleware\MiddlewareB($param1, $param2, ...);
-    },
+    new app\middleware\MiddlewareB($param1, $param2, ...),
 ]);
 ```
 
