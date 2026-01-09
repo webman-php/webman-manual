@@ -284,7 +284,7 @@ Route::group('/blog', function () {
 > **Note**
 > This feature requires webman-framework >= 1.4.8
 
-Starting from version 1.4.8, the configuration file supports instantiating middleware directly or using anonymous functions, making it easy to pass parameters to the middleware through the constructor.
+Starting from version 1.4.8, the configuration file supports instantiating middleware directly, making it easy to pass parameters to the middleware through the constructor.
 For example, you can also configure the `config/middleware.php` as follows:
 
 ```php
@@ -292,9 +292,7 @@ return [
     // Global middleware
     '' => [
         new app\middleware\AuthCheckTest($param1, $param2, ...),
-        function(){
-            return new app\middleware\AccessControlTest($param1, $param2, ...);
-        },
+        new app\middleware\AccessControlTest($param1, $param2, ...)
     ],
     // Application middleware (only effective in multi-application mode)
     'api' => [
