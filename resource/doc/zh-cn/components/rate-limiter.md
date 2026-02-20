@@ -3,11 +3,11 @@ webman限流器，支持注解限流。
 支持apcu、redis、memory驱动。
 
 ## 源码地址
-https://github.com/webman-php/rate-limiter
+https://github.com/webman-php/limiter
 
 ## 安装
 ```
-composer require webman/rate-limiter
+composer require webman/limiter
 ```
 
 ## 使用
@@ -16,34 +16,34 @@ composer require webman/rate-limiter
 namespace app\controller;
 
 use RuntimeException;
-use Webman\RateLimiter\Annotation\RateLimiter;
+use support\limiter\annotation\Limit;
 
 class UserController
 {
 
-    #[RateLimiter(limit: 10)]
+    #[Limit(limit: 10)]
     public function index(): string
     {
         // 默认为IP限流，默认单位时间为1秒
         return '每个ip每秒最多10个请求';
     }
 
-    #[RateLimiter(limit: 100, ttl: 60, key: RateLimiter::UID)]
+    #[Limit(limit: 100, ttl: 60, key: Limit::UID)]
     public function search(): string
     {
-        // key: RateLimiter::UID，以用户ID为维度进行限流，要求session('user.id')不为空
+        // key: Limit::UID，以用户ID为维度进行限流，要求session('user.id')不为空
         return '每个用户60秒最多100次搜索';
     }
 
-    #[RateLimiter(limit: 1, ttl: 60, key: RateLimiter::SID, message: '每人每分钟只能发1次邮件')]
+    #[Limit(limit: 1, ttl: 60, key: Limit::SID, message: '每人每分钟只能发1次邮件')]
     public function sendMail(): string
     {
-        // key: RateLimiter::SID，以session_id为维度进行限流
+        // key: Limit::SID，以session_id为维度进行限流
         return '邮件发送成功';
     }
 
-    #[RateLimiter(limit: 100, ttl: 24*60*60, key: 'coupon', message: '今天的优惠券已经发完，请明天再来')]
-    #[RateLimiter(limit: 1, ttl: 24*60*60, key: RateLimiter::UID, message: '每个用户每天只能领取一次优惠券')]
+    #[Limit(limit: 100, ttl: 24*60*60, key: 'coupon', message: '今天的优惠券已经发完，请明天再来')]
+    #[Limit(limit: 1, ttl: 24*60*60, key: Limit::UID, message: '每个用户每天只能领取一次优惠券')]
     public function coupon(): string
     {
         // key: 'coupon'， 这里coupon为自定义key，也就是全局以coupon为key进行限流，每天最多发100张优惠券
@@ -51,7 +51,7 @@ class UserController
         return '优惠券发送成功';
     }
 
-    #[RateLimiter(limit: 5, ttl: 24*60*60, key: [UserController::class, 'getMobile'], message: '每个手机号一天最多5条短信')]
+    #[Limit(limit: 5, ttl: 24*60*60, key: [UserController::class, 'getMobile'], message: '每个手机号一天最多5条短信')]
     public function sendSms2(): string
     {
         // 当key为变量时，可以使用[类, 静态方法]的方式获取key，例如[UserController::class, 'getMobile']会调用UserController的getMobile()方法的返回值为key
@@ -67,10 +67,10 @@ class UserController
         return request()->get('mobile');
     }
 
-    #[RateLimiter(limit: 1, ttl: 10, key: RateLimiter::IP, message: '频率受限', exception: RuntimeException::class)]
+    #[Limit(limit: 1, ttl: 10, key: Limit::IP, message: '频率受限', exception: RuntimeException::class)]
     public function testException(): string
     {
-        // 超限默认异常为Webman\RateLimiter\RateLimitException，可以通过exception参数更改
+        // 超限默认异常为 support\limiter\RateLimitException，可以通过exception参数更改
         return 'ok';
     }
 
@@ -79,12 +79,12 @@ class UserController
 
 **说明**
 * 算法为固定窗口算法
-* ttl默认单位时间间隔为1秒钟，最大不超过24小时
+* ttl默认单位时间间隔为1秒钟
 * 可以通过ttl设置单位时间间隔，例如 `ttl:60` 为60秒
 * 默认限流维度为IP限流(默认`127.0.0.1`不限流，参见下面配置部分)
 * 内置IP限流、UID限流(要求`session('user.id')`不为空)，SID限流(根据`session_id`限流)
 * 如果使用了nginx代理，IP限流时需要传递`X-Forwarded-For`头，参见[nginx代理](../others/nginx-proxy.md)
-* 当超限时会触发`Webman\RateLimiter\RateLimitException`异常，可通过`exception:xx`来自定义异常类
+* 当超限时会触发`support\limiter\RateLimitException`异常，可通过`exception:xx`来自定义异常类
 * 超限触发异常时，错误信息默认为`Too Many Requests`，可通过`message:xx`自定义错误信息
 * 默认错误信息也可通过[多语言](translation.md)来修改，Linux参考以下命令
 ```
@@ -105,7 +105,7 @@ php start.php restart
 namespace app\controller;
 
 use RuntimeException;
-use Webman\RateLimiter\Limiter;
+use support\limiter\Limiter;
 
 class UserController {
 
@@ -119,9 +119,12 @@ class UserController {
 ```
 
 ## 配置
-**config/plugin/webman/rate-limiter/app.php**
+**config/plugin/webman/limiter/app.php**
 ```
 <?php
+
+use support\limiter\RateLimitException;
+
 return [
     'enable' => true,
     'driver' => 'auto', // auto, apcu, memory, redis
@@ -130,16 +133,17 @@ return [
             'connection' => 'default',
         ]
     ],
-    // 这些ip的请求不做频率限制(只有在key为 RateLimiter::IP 时有效)
+    // 这些ip的请求不做频率限制(只有在key为 Limit::IP 时有效)
     'ip_whitelist' => [
         '127.0.0.1',
     ],
+    'exception' => RateLimitException::class
 ];
 ```
 * **enable**: 是否开启限流
-* **driver**: `auto` `apcu` `memory` `redis`中的一个值，使用`auto`时会自动在`apcu`和`memory`中选一个值
+* **driver**: `auto` `apcu` `memory` `redis`中的一个值，使用`auto`时会自动在`apcu`(优先)和`memory`中选一个值
 * **stores**: `redis`配置，`connection`对应`config/redis.php`中对应的`key`
-* **ip_whitelist**: 白名单的ip不会被限流(只在key为`RateLimiter::IP`时有效)
+* **ip_whitelist**: 白名单的ip不会被限流(只在key为`Limit::IP`时有效)
 
 ## driver选择
 
@@ -166,7 +170,7 @@ apc.enable_cli=1
 如果不知道php.ini位置，可以通过命令`php --ini`寻找php.ini的位置
 
 * 介绍
-  性能略低于memory，支持多进程共享限流数据。
+  性能非常好，支持多进程共享限流数据。
 
 * 使用限制
   不支持集群
