@@ -488,7 +488,6 @@ return [
 
 ## 命令行生成注解
 
-
 使用命令 `make:validator` 生成验证器类（默认生成到 `app/validation` 目录）。
 
 > **提示**
