@@ -162,9 +162,6 @@ php webman make:model AdminUser -p admin
 
 # 自定义路径
 php webman make:model User -P plugin/admin/app/model
-
-# 带子路径（生成 app/model/Admin/User.php）
-php webman make:model Admin/User --table=wa_admin_users --orm=laravel
 ```
 
 **交互模式：** 不传名称时进入交互流程：选表 → 输入模型名 → 输入路径。支持：回车查看更多、`0` 创建空模型、`/关键字` 过滤表。
@@ -393,9 +390,6 @@ php webman make:middleware Auth -p admin
 
 # 自定义路径
 php webman make:middleware Auth -P plugin/admin/app/middleware
-
-# 带子路径（生成 app/middleware/Api/Auth.php）
-php webman make:middleware Api/Auth -f
 ```
 
 **生成的文件结构：**
