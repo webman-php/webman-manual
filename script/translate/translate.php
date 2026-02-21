@@ -6,6 +6,22 @@ require_once __DIR__ . '/../../server/vendor/autoload.php';
 
 global $cache, $args, $zh_lang;
 
+// 解析命令行参数：--only=console 或 --file=plugin/console.md 进入单文件模式
+$singleFile = null;
+foreach ($argv ?? [] as $arg) {
+    if (strpos($arg, '--only=') === 0) {
+        $v = substr($arg, 7);
+        if ($v === 'console') {
+            $singleFile = 'plugin/console.md';
+        }
+        break;
+    }
+    if (strpos($arg, '--file=') === 0) {
+        $singleFile = substr($arg, 7);
+        break;
+    }
+}
+
 // 多语言并行翻译：启动若干进程，每个进程翻译一个语言（排除 zh-cn）
 $langs = getTargetLanguages();
 
@@ -15,16 +31,16 @@ $last_key_index = null;
 
 $worker = new Worker();
 $worker->count = max(1, count($langs));
-$worker->onWorkerStart = function ($worker) use ($langs) {
+$worker->onWorkerStart = function ($worker) use ($langs, $singleFile) {
     $index = $worker->id;
     $root = realpath(__DIR__ . '/../../resource/doc/');
-    $source = $root . '/zh-cn';
+    $source = $root . DIRECTORY_SEPARATOR . 'zh-cn';
     if ($index < 0 || $index >= count($langs)) {
         echo "[worker $index] no language assigned\n";
         return;
     }
     $lang = $langs[$index];
-    $target = $root . '/' . $lang;
+    $target = $root . DIRECTORY_SEPARATOR . $lang;
 
     // 校验语言参数，避免越权路径与误删
     if (!preg_match('/^[a-z]{2}(?:-[a-z]{2})?$/i', $lang)) {
@@ -48,15 +64,38 @@ $worker->onWorkerStart = function ($worker) use ($langs) {
     }
     $GLOBALS['zh_lang'] = $json['zh-lang'];
 
-    // 1) 删除目标目录
-    if ($target === $source) {
-        exit("[worker $index] target equals source, abort: $target\n");
-    }
-    if (is_dir($target)) {
-        echo "[worker $index][$lang] delete dir: $target\n";
-        deleteDirectory($target);
-    }
+    $files = [];
+    $sourceContent = null;
 
+    if ($singleFile) {
+        // 单文件模式：仅翻译指定文件，源内容来自 zh-cn
+        $sourcePath = $source . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $singleFile);
+        $targetPath = $target . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $singleFile);
+        if (!is_file($sourcePath)) {
+            echo "[worker $index][$lang] source file not found: $sourcePath\n";
+            return;
+        }
+        $sourceContent = file_get_contents($sourcePath);
+        $targetDir = dirname($targetPath);
+        if (!is_dir($targetDir)) {
+            mkdir($targetDir, 0777, true);
+        }
+        $files = [$targetPath];
+        echo "[worker $index][$lang] single-file mode: $singleFile\n";
+    } else {
+        // 整目录模式
+        $sourceContent = null;
+        if ($target === $source) {
+            exit("[worker $index] target equals source, abort: $target\n");
+        }
+        if (is_dir($target)) {
+            echo "[worker $index][$lang] delete dir: $target\n";
+            deleteDirectory($target);
+        }
+        echo "[worker $index][$lang] copy dir: $source => $target\n";
+        copyDirectory($source, $target);
+        $files = getAllFiles($target);
+    if (is_dir($target)) {
     // 2) 从 zh-cn 整体拷贝为目标语言目录
     echo "[worker $index][$lang] copy dir: $source => $target\n";
     copyDirectory($source, $target);
@@ -64,17 +103,23 @@ $worker->onWorkerStart = function ($worker) use ($langs) {
     // 3) 列出目标目录的 md 文件并串行翻译
     $files = getAllFiles($target);
     $files = array_values(array_unique($files));
+        echo "[worker $index][$lang] delete dir: $target\n";
+        deleteDirectory($target);
+    }
+        $files = array_values(array_unique($files));
+    }
+
     $file_count = count($files);
     echo "[worker $index][$lang] total files: $file_count\n";
 
     $processNext = null;
-    $processNext = function ($i) use (&$processNext, $files, $file_count, $index, $lang) {
+    $processNext = function ($i) use (&$processNext, $files, $file_count, $index, $lang, $singleFile, $sourceContent) {
         if ($i >= $file_count) {
             echo "[worker $index][$lang] all done\n";
             return;
         }
         $file = $files[$i];
-        $fileContent = file_get_contents($file);
+        $fileContent = $singleFile ? $sourceContent : file_get_contents($file);
         $inputSize = strlen($fileContent);
         $startAt = microtime(true);
         $current = $i + 1;

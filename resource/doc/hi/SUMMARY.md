@@ -47,6 +47,7 @@
  
 - आम घटक
   - [सत्यापक](components/validation.md)
+  - [दर सीमित्र](components/rate-limiter.md)
   - [पेजिनेटर घटक](components/paginator.md)
   - [बहुभाषी](components/translation.md)
   - [छवि प्रसंस्करण](components/image.md)

@@ -44,6 +44,7 @@
 
 - Yaygın Kullanılan Bileşenler
   - [Doğrulayıcı](components/validation.md)
+  - [Hız Sınırlayıcı](components/rate-limiter.md)
   - [Sayfalayıcı Bileşen](components/paginator.md)
   - [Çoklu Dil](components/translation.md)
   - [Görüntü İşleme](components/image.md)

@@ -47,6 +47,7 @@
  
 - Übliche Komponenten
   - [Validierer](components/validation.md)
+  - [Rate Limiter](components/rate-limiter.md)
   - [Pagination-Komponente](components/paginator.md)
   - [Mehrsprachigkeit](components/translation.md)
   - [Bildverarbeitung](components/image.md)

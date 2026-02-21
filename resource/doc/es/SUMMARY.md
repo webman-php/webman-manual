@@ -47,6 +47,7 @@
  
 - Componentes comunes
   - [Validador](components/validation.md)
+  - [Limitador de tasa](components/rate-limiter.md)
   - [Componente de paginación](components/paginator.md)
   - [Multi-idioma](components/translation.md)
   - [Procesamiento de imágenes](components/image.md)

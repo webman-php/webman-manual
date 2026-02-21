@@ -47,6 +47,7 @@
  
 - 일반적인 구성요소
   - [유효성 검사기](components/validation.md)
+  - [속도 제한기](components/rate-limiter.md)
   - [페이지네이션 컴포넌트](components/paginator.md)
   - [다국어](components/translation.md)
   - [이미지 처리](components/image.md)

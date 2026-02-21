@@ -47,6 +47,7 @@
  
 - Популярные компоненты
   - [Проверка данных](components/validation.md)
+  - [Ограничитель частоты запросов](components/rate-limiter.md)
   - [Компонент пагинации](components/paginator.md)
   - [Мультиязычность](components/translation.md)
   - [Обработка изображений](components/image.md)

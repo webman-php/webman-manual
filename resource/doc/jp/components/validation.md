@@ -1,23 +1,2181 @@
-# バリデーター
-Composerには直接使用できる多くのバリデーターがあります。たとえば以下のようなものがあります：
+# その他のバリデーター
+
+composer で直接利用できるバリデーターが多数あります。例：
+
+#### <a href="#webman-validation"> webman/validation（推奨）</a>
 #### <a href="#think-validate"> top-think/think-validate</a>
 #### <a href="#respect-validation"> respect/validation</a>
 
+<a name="webman-validation"></a>
+# バリデーター webman/validation
+
+`illuminate/validation` をベースに、手動バリデーション、アノテーションバリデーション、パラメータレベルのバリデーション、再利用可能なルールセットを提供します。
+
+## インストール
+
+```bash
+composer require webman/validation
+```
+
+## 基本概念
+
+- **ルールセットの再利用**: `support\validation\Validator` を継承して再利用可能な `rules`、`messages`、`attributes`、`scenes` を定義でき、手動バリデーションとアノテーションバリデーションの両方で再利用できます。
+- **メソッドレベルのアノテーション（属性）バリデーション**: PHP 8 属性 `#[Validate]` でコントローラーメソッドにバリデーションをバインドします。
+- **パラメータレベルのアノテーション（属性）バリデーション**: PHP 8 属性 `#[Param]` でコントローラーメソッドのパラメータにバリデーションをバインドします。
+- **例外処理**: バリデーション失敗時に `support\validation\ValidationException` をスローします。例外クラスは設定可能です。
+- **データベースバリデーション**: データベースバリデーションを行う場合は、`composer require webman/database` のインストールが必要です。
+
+## 手動バリデーション
+
+### 基本的な使い方
+
+```php
+use support\validation\Validator;
+
+$data = ['email' => 'user@example.com'];
+
+Validator::make($data, [
+    'email' => 'required|email',
+])->validate();
+```
+
+> **注意**
+> `validate()` はバリデーション失敗時に `support\validation\ValidationException` をスローします。例外をスローしたくない場合は、以下の `fails()` 方式でエラーメッセージを取得してください。
+
+### カスタムメッセージと属性
+
+```php
+use support\validation\Validator;
+
+$data = ['contact' => 'user@example.com'];
+
+Validator::make(
+    $data,
+    ['contact' => 'required|email'],
+    ['contact.email' => 'Invalid email format'],
+    ['contact' => 'Email']
+)->validate();
+```
+
+### 例外をスローしないバリデーション（エラーメッセージの取得）
+
+例外をスローしたくない場合は、`fails()` でチェックし、`errors()` 経由でエラーメッセージを取得します（`MessageBag` を返します）：
+
+```php
+use support\validation\Validator;
+
+$data = ['email' => 'bad-email'];
+
+$validator = Validator::make($data, [
+    'email' => 'required|email',
+]);
+
+if ($validator->fails()) {
+    $firstError = $validator->errors()->first();      // string
+    $allErrors = $validator->errors()->all();         // array
+    $errorsByField = $validator->errors()->toArray(); // array
+    // handle errors...
+}
+```
+
+## ルールセットの再利用（カスタムバリデーター）
+
+```php
+namespace app\validation;
+
+use support\validation\Validator;
+
+class UserValidator extends Validator
+{
+    protected array $rules = [
+        'id' => 'required|integer|min:1',
+        'name' => 'required|string|min:2|max:20',
+        'email' => 'required|email',
+    ];
+
+    protected array $messages = [
+        'name.required' => 'Name is required',
+        'email.required' => 'Email is required',
+        'email.email' => 'Invalid email format',
+    ];
+
+    protected array $attributes = [
+        'name' => 'Name',
+        'email' => 'Email',
+    ];
+}
+```
+
+### 手動バリデーションでの再利用
+
+```php
+use app\validation\UserValidator;
+
+UserValidator::make($data)->validate();
+```
+
+### シーンの使用（オプション）
+
+`scenes` はオプション機能です。`withScene(...)` を呼び出すと、フィールドのサブセットのみをバリデーションします。
+
+```php
+namespace app\validation;
+
+use support\validation\Validator;
+
+class UserValidator extends Validator
+{
+    protected array $rules = [
+        'id' => 'required|integer|min:1',
+        'name' => 'required|string|min:2|max:20',
+        'email' => 'required|email',
+    ];
+
+    protected array $scenes = [
+        'create' => ['name', 'email'],
+        'update' => ['id', 'name', 'email'],
+    ];
+}
+```
+
+```php
+use app\validation\UserValidator;
+
+// シーン未指定 -> 全ルールをバリデーション
+UserValidator::make($data)->validate();
+
+// シーン指定 -> そのシーンのフィールドのみバリデーション
+UserValidator::make($data)->withScene('create')->validate();
+```
+
+## アノテーションバリデーション（メソッドレベル）
+
+### 直接ルール指定
+
+```php
+use support\Request;
+use support\validation\annotation\Validate;
+
+class AuthController
+{
+    #[Validate(
+        rules: [
+            'email' => 'required|email',
+            'password' => 'required|string|min:6',
+        ],
+        messages: [
+            'email.required' => 'Email is required',
+            'password.required' => 'Password is required',
+        ],
+        attributes: [
+            'email' => 'Email',
+            'password' => 'Password',
+        ]
+    )]
+    public function login(Request $request)
+    {
+        return json(['code' => 0, 'msg' => 'ok']);
+    }
+}
+```
+
+### ルールセットの再利用
+
+```php
+use app\validation\UserValidator;
+use support\Request;
+use support\validation\annotation\Validate;
+
+class UserController
+{
+    #[Validate(validator: UserValidator::class, scene: 'create')]
+    public function create(Request $request)
+    {
+        return json(['code' => 0, 'msg' => 'ok']);
+    }
+}
+```
+
+### 複数バリデーションの重ね合わせ
+
+```php
+use support\validation\annotation\Validate;
+
+class UserController
+{
+    #[Validate(rules: ['email' => 'required|email'])]
+    #[Validate(rules: ['token' => 'required|string'])]
+    public function send()
+    {
+        return json(['code' => 0, 'msg' => 'ok']);
+    }
+}
+```
+
+### バリデーションデータソース
+
+```php
+use support\validation\annotation\Validate;
+
+class UserController
+{
+    #[Validate(
+        rules: ['email' => 'required|email'],
+        in: ['query', 'body', 'path']
+    )]
+    public function send()
+    {
+        return json(['code' => 0, 'msg' => 'ok']);
+    }
+}
+```
+
+`in` パラメータでデータソースを指定します：
+
+* **query** HTTP リクエストのクエリパラメータ（`$request->get()` から）
+* **body** HTTP リクエストボディ（`$request->post()` から）
+* **path** HTTP リクエストのパスパラメータ（`$request->route->param()` から）
+
+`in` は文字列または配列にできます。配列の場合は、後続の値が前の値を上書きする形でマージされます。`in` を渡さない場合、デフォルトは `['query', 'body', 'path']` です。
+
+
+## パラメータレベルのバリデーション（Param）
+
+### 基本的な使い方
+
+```php
+use support\validation\annotation\Param;
+
+class MailController
+{
+    public function send(
+        #[Param(rules: 'required|email')] string $from,
+        #[Param(rules: 'required|email')] string $to,
+        #[Param(rules: 'required|string|min:1|max:500')] string $content
+    ) {
+        return json(['code' => 0, 'msg' => 'ok']);
+    }
+}
+```
+
+### バリデーションデータソース
+
+同様に、パラメータレベルのバリデーションでも `in` パラメータでソースを指定できます：
+
+```php
+use support\validation\annotation\Param;
+
+class MailController
+{
+    public function send(
+        #[Param(rules: 'required|email', in: ['body'])] string $from
+    ) {
+        return json(['code' => 0, 'msg' => 'ok']);
+    }
+}
+```
+
+
+### rules は文字列または配列をサポート
+
+```php
+use support\validation\annotation\Param;
+
+class MailController
+{
+    public function send(
+        #[Param(rules: ['required', 'email'])] string $from
+    ) {
+        return json(['code' => 0, 'msg' => 'ok']);
+    }
+}
+```
+
+### カスタムメッセージ / 属性
+
+```php
+use support\validation\annotation\Param;
+
+class UserController
+{
+    public function updateEmail(
+        #[Param(
+            rules: 'required|email',
+            messages: ['email.email' => 'Invalid email format'],
+            attribute: 'Email'
+        )]
+        string $email
+    ) {
+        return json(['code' => 0, 'msg' => 'ok']);
+    }
+}
+```
+
+### ルール定数の再利用
+
+```php
+final class ParamRules
+{
+    public const EMAIL = ['required', 'email'];
+}
+
+class UserController
+{
+    public function send(
+        #[Param(rules: ParamRules::EMAIL)] string $email
+    ) {
+        return json(['code' => 0, 'msg' => 'ok']);
+    }
+}
+```
+
+## メソッドレベル + パラメータレベルの併用
+
+```php
+use support\Request;
+use support\validation\annotation\Param;
+use support\validation\annotation\Validate;
+
+class UserController
+{
+    #[Validate(rules: ['token' => 'required|string'])]
+    public function send(
+        Request $request,
+        #[Param(rules: 'required|email')] string $from,
+        #[Param(rules: 'required|integer')] int $id
+    ) {
+        return json(['code' => 0, 'msg' => 'ok']);
+    }
+}
+```
+
+## 自動ルール推論（パラメータシグネチャベース）
+
+メソッドに `#[Validate]` が使われている場合、またはそのメソッドのいずれかのパラメータが `#[Param]` を使っている場合、このコンポーネントは**メソッドのパラメータシグネチャから基本的なバリデーションルールを自動推論して補完**し、既存のルールとマージしてからバリデーションを行います。
+
+### 例：`#[Validate]` の等価な展開
+
+1) `#[Validate]` のみ有効で、ルールを手動で書かない場合：
+
+```php
+use support\validation\annotation\Validate;
+
+class DemoController
+{
+    #[Validate]
+    public function create(string $content, int $uid)
+    {
+    }
+}
+```
+
+以下と等価：
+
+```php
+use support\validation\annotation\Validate;
+
+class DemoController
+{
+    #[Validate(rules: [
+        'content' => 'required|string',
+        'uid' => 'required|integer',
+    ])]
+    public function create(string $content, int $uid)
+    {
+    }
+}
+```
+
+2) 一部のルールのみ記述し、残りはパラメータシグネチャで補完する場合：
+
+```php
+use support\validation\annotation\Validate;
+
+class DemoController
+{
+    #[Validate(rules: [
+        'content' => 'min:2',
+    ])]
+    public function create(string $content, int $uid)
+    {
+    }
+}
+```
+
+以下と等価：
+
+```php
+use support\validation\annotation\Validate;
+
+class DemoController
+{
+    #[Validate(rules: [
+        'content' => 'required|string|min:2',
+        'uid' => 'required|integer',
+    ])]
+    public function create(string $content, int $uid)
+    {
+    }
+}
+```
+
+3) デフォルト値 / ヌラブル型：
+
+```php
+use support\validation\annotation\Validate;
+
+class DemoController
+{
+    #[Validate]
+    public function create(string $content = 'default', ?int $uid = null)
+    {
+    }
+}
+```
+
+以下と等価：
+
+```php
+use support\validation\annotation\Validate;
+
+class DemoController
+{
+    #[Validate(rules: [
+        'content' => 'string',
+        'uid' => 'integer|nullable',
+    ])]
+    public function create(string $content = 'default', ?int $uid = null)
+    {
+    }
+}
+```
+
+## 例外処理
+
+### デフォルトの例外
+
+バリデーション失敗時は、デフォルトで `support\validation\ValidationException` がスローされます。この例外は `Webman\Exception\BusinessException` を継承しており、エラーはログされません。
+
+デフォルトのレスポンス動作は `BusinessException::render()` で処理されます：
+
+- 通常リクエスト：文字列メッセージを返す（例：`token is required.`）
+- JSON リクエスト：JSON レスポンスを返す（例：`{"code": 422, "msg": "token is required.", "data":....}`）
+
+### カスタム例外によるカスタマイズ
+
+- グローバル設定：`config/plugin/webman/validation/app.php` の `exception`
+
+## 多言語対応
+
+このコンポーネントには中国語と英語の言語パックが組み込まれており、プロジェクトでの上書きをサポートしています。読み込み順序：
+
+1. プロジェクトの言語パック `resource/translations/{locale}/validation.php`
+2. コンポーネント組み込み `vendor/webman/validation/resources/lang/{locale}/validation.php`
+3. Illuminate 組み込みの英語（フォールバック）
+
+> **注意**
+> Webman のデフォルト言語は `config/translation.php` で設定するか、`locale('en');` で変更できます。
+
+### ローカル上書きの例
+
+`resource/translations/zh_CN/validation.php`
+
+```php
+return [
+    'email' => ':attribute is not a valid email format.',
+];
+```
+
+## ミドルウェアの自動読み込み
+
+インストール後、コンポーネントは `config/plugin/webman/validation/middleware.php` 経由でバリデーションミドルウェアを自動読み込みします。手動登録は不要です。
+
+## コマンドライン生成
+
+`make:validator` コマンドでバリデータークラスを生成します（デフォルト出力先は `app/validation` ディレクトリ）。
+
+> **注意**
+> `composer require webman/console` が必要です
+
+### 基本的な使い方
+
+- **空のテンプレートを生成**
+
+```bash
+php webman make:validator UserValidator
+```
+
+- **既存ファイルを上書き**
+
+```bash
+php webman make:validator UserValidator --force
+php webman make:validator UserValidator -f
+```
+
+### テーブル構造からルールを生成
+
+- **テーブル名を指定して基本ルールを生成**（フィールド型 / nullable / 長さなどから `$rules` を推論；デフォルトで ORM 関連フィールドを除外：laravel は `created_at/updated_at/deleted_at`、thinkorm は `create_time/update_time/delete_time`）
+
+```bash
+php webman make:validator UserValidator --table=wa_users
+php webman make:validator UserValidator -t wa_users
+```
+
+- **データベース接続を指定**（マルチ接続時）
+
+```bash
+php webman make:validator UserValidator --table=wa_users --database=mysql
+php webman make:validator UserValidator -t wa_users -d mysql
+```
+
+### シーン
+
+- **CRUD シーンを生成**: `create/update/delete/detail`
+
+```bash
+php webman make:validator UserValidator --table=wa_users --scenes=crud
+php webman make:validator UserValidator -t wa_users -s crud
+```
+
+> `update` シーンには主キーフィールド（レコード特定用）とその他のフィールドが含まれます。`delete/detail` はデフォルトで主キーのみ含みます。
+
+### ORM 選択（laravel (illuminate/database) vs think-orm）
+
+- **自動選択（デフォルト）**: インストール・設定されているものを使用。両方ある場合は illuminate をデフォルトで使用
+- **強制指定**
+
+```bash
+php webman make:validator UserValidator --table=wa_users --orm=laravel
+php webman make:validator UserValidator --table=wa_users --orm=thinkorm
+php webman make:validator UserValidator -t wa_users -o thinkorm
+```
+
+### 完全な例
+
+```bash
+php webman make:validator UserValidator -t wa_users -d mysql -s crud -o laravel -f
+```
+
+## ユニットテスト
+
+`webman/validation` のルートディレクトリで実行：
+
+```bash
+composer install
+vendor\bin\phpunit -c phpunit.xml
+```
+
+## バリデーションルールリファレンス
+
+<a name="available-validation-rules"></a>
+## 利用可能なバリデーションルール
+
+> [!IMPORTANT]
+> - Webman Validation は `illuminate/validation` をベースとしており、ルール名は Laravel と一致し、Webman 固有のルールはありません。
+> - ミドルウェアはデフォルトで `$request->all()`（GET+POST）とルートパラメータをマージしたデータをバリデーションし、アップロードファイルは除外します。ファイルルールの場合は、`$request->file()` をデータにマージするか、`Validator::make` を手動で呼び出してください。
+> - `current_password` は認証ガードに依存し、`exists`/`unique` はデータベース接続とクエリビルダーに依存します。対応するコンポーネントが統合されていない場合、これらのルールは使用できません。
+
+以下に、利用可能なバリデーションルールとその用途を一覧します：
+
+<style>
+    .collection-method-list > p {
+        columns: 10.8em 3; -moz-columns: 10.8em 3; -webkit-columns: 10.8em 3;
+    }
+
+    .collection-method-list a {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+</style>
+
+#### Boolean（真偽値）
+
+<div class="collection-method-list" markdown="1">
+
+[Accepted](#rule-accepted)
+[Accepted If](#rule-accepted-if)
+[Boolean](#rule-boolean)
+[Declined](#rule-declined)
+[Declined If](#rule-declined-if)
+
+</div>
+
+#### String（文字列）
+
+<div class="collection-method-list" markdown="1">
+
+[Active URL](#rule-active-url)
+[Alpha](#rule-alpha)
+[Alpha Dash](#rule-alpha-dash)
+[Alpha Numeric](#rule-alpha-num)
+[Ascii](#rule-ascii)
+[Confirmed](#rule-confirmed)
+[Current Password](#rule-current-password)
+[Different](#rule-different)
+[Doesnt Start With](#rule-doesnt-start-with)
+[Doesnt End With](#rule-doesnt-end-with)
+[Email](#rule-email)
+[Ends With](#rule-ends-with)
+[Enum](#rule-enum)
+[Hex Color](#rule-hex-color)
+[In](#rule-in)
+[IP Address](#rule-ip)
+[IPv4](#rule-ipv4)
+[IPv6](#rule-ipv6)
+[JSON](#rule-json)
+[Lowercase](#rule-lowercase)
+[MAC Address](#rule-mac)
+[Max](#rule-max)
+[Min](#rule-min)
+[Not In](#rule-not-in)
+[Regular Expression](#rule-regex)
+[Not Regular Expression](#rule-not-regex)
+[Same](#rule-same)
+[Size](#rule-size)
+[Starts With](#rule-starts-with)
+[String](#rule-string)
+[Uppercase](#rule-uppercase)
+[URL](#rule-url)
+[ULID](#rule-ulid)
+[UUID](#rule-uuid)
+
+</div>
+
+#### Numeric（数値）
+
+<div class="collection-method-list" markdown="1">
+
+[Between](#rule-between)
+[Decimal](#rule-decimal)
+[Different](#rule-different)
+[Digits](#rule-digits)
+[Digits Between](#rule-digits-between)
+[Greater Than](#rule-gt)
+[Greater Than Or Equal](#rule-gte)
+[Integer](#rule-integer)
+[Less Than](#rule-lt)
+[Less Than Or Equal](#rule-lte)
+[Max](#rule-max)
+[Max Digits](#rule-max-digits)
+[Min](#rule-min)
+[Min Digits](#rule-min-digits)
+[Multiple Of](#rule-multiple-of)
+[Numeric](#rule-numeric)
+[Same](#rule-same)
+[Size](#rule-size)
+
+</div>
+
+#### Array（配列）
+
+<div class="collection-method-list" markdown="1">
+
+[Array](#rule-array)
+[Between](#rule-between)
+[Contains](#rule-contains)
+[Doesnt Contain](#rule-doesnt-contain)
+[Distinct](#rule-distinct)
+[In Array](#rule-in-array)
+[In Array Keys](#rule-in-array-keys)
+[List](#rule-list)
+[Max](#rule-max)
+[Min](#rule-min)
+[Size](#rule-size)
+
+</div>
+
+#### Date（日付）
+
+<div class="collection-method-list" markdown="1">
+
+[After](#rule-after)
+[After Or Equal](#rule-after-or-equal)
+[Before](#rule-before)
+[Before Or Equal](#rule-before-or-equal)
+[Date](#rule-date)
+[Date Equals](#rule-date-equals)
+[Date Format](#rule-date-format)
+[Different](#rule-different)
+[Timezone](#rule-timezone)
+
+</div>
+
+#### File（ファイル）
+
+<div class="collection-method-list" markdown="1">
+
+[Between](#rule-between)
+[Dimensions](#rule-dimensions)
+[Encoding](#rule-encoding)
+[Extensions](#rule-extensions)
+[File](#rule-file)
+[Image](#rule-image)
+[Max](#rule-max)
+[MIME Types](#rule-mimetypes)
+[MIME Type By File Extension](#rule-mimes)
+[Size](#rule-size)
+
+</div>
+
+#### Database（データベース）
+
+<div class="collection-method-list" markdown="1">
+
+[Exists](#rule-exists)
+[Unique](#rule-unique)
+
+</div>
+
+#### Utility（ユーティリティ）
+
+<div class="collection-method-list" markdown="1">
+
+[Any Of](#rule-anyof)
+[Bail](#rule-bail)
+[Exclude](#rule-exclude)
+[Exclude If](#rule-exclude-if)
+[Exclude Unless](#rule-exclude-unless)
+[Exclude With](#rule-exclude-with)
+[Exclude Without](#rule-exclude-without)
+[Filled](#rule-filled)
+[Missing](#rule-missing)
+[Missing If](#rule-missing-if)
+[Missing Unless](#rule-missing-unless)
+[Missing With](#rule-missing-with)
+[Missing With All](#rule-missing-with-all)
+[Nullable](#rule-nullable)
+[Present](#rule-present)
+[Present If](#rule-present-if)
+[Present Unless](#rule-present-unless)
+[Present With](#rule-present-with)
+[Present With All](#rule-present-with-all)
+[Prohibited](#rule-prohibited)
+[Prohibited If](#rule-prohibited-if)
+[Prohibited If Accepted](#rule-prohibited-if-accepted)
+[Prohibited If Declined](#rule-prohibited-if-declined)
+[Prohibited Unless](#rule-prohibited-unless)
+[Prohibits](#rule-prohibits)
+[Required](#rule-required)
+[Required If](#rule-required-if)
+[Required If Accepted](#rule-required-if-accepted)
+[Required If Declined](#rule-required-if-declined)
+[Required Unless](#rule-required-unless)
+[Required With](#rule-required-with)
+[Required With All](#rule-required-with-all)
+[Required Without](#rule-required-without)
+[Required Without All](#rule-required-without-all)
+[Required Array Keys](#rule-required-array-keys)
+[Sometimes](#validating-when-present)
+
+</div>
+
+<a name="rule-accepted"></a>
+#### accepted
+
+フィールドは `"yes"`、`"on"`、`1`、`"1"`、`true`、または `"true"` である必要があります。利用規約への同意確認などのシナリオでよく使われます。
+
+<a name="rule-accepted-if"></a>
+#### accepted_if:anotherfield,value,...
+
+別のフィールドが指定値と等しい場合、このフィールドは `"yes"`、`"on"`、`1`、`"1"`、`true`、または `"true"` である必要があります。条件付き同意のシナリオでよく使われます。
+
+<a name="rule-active-url"></a>
+#### active_url
+
+フィールドは有効な A または AAAA レコードを持つ必要があります。このルールはまず `parse_url` で URL のホスト名を抽出し、`dns_get_record` でバリデーションします。
+
+<a name="rule-after"></a>
+#### after:_date_
+
+フィールドは指定日付より後の値である必要があります。日付は `strtotime` に渡して有効な `DateTime` に変換されます：
+
+```php
+use support\validation\Validator;
+
+Validator::make($data, [
+    'start_date' => 'required|date|after:tomorrow',
+])->validate();
+```
+
+比較用に別のフィールド名を渡すこともできます：
+
+```php
+Validator::make($data, [
+    'finish_date' => 'required|date|after:start_date',
+])->validate();
+```
+
+fluent な `date` ルールビルダーを使用できます：
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'start_date' => [
+        'required',
+        Rule::date()->after(\Carbon\Carbon::today()->addDays(7)),
+    ],
+])->validate();
+```
+
+`afterToday` と `todayOrAfter` で「今日より後である必要がある」「今日以降である必要がある」を簡潔に表現できます：
+
+```php
+Validator::make($data, [
+    'start_date' => [
+        'required',
+        Rule::date()->afterToday(),
+    ],
+])->validate();
+```
+
+<a name="rule-after-or-equal"></a>
+#### after_or_equal:_date_
+
+フィールドは指定日付当日またはそれ以降である必要があります。詳細は [after](#rule-after) を参照してください。
+
+fluent な `date` ルールビルダーを使用できます：
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'start_date' => [
+        'required',
+        Rule::date()->afterOrEqual(\Carbon\Carbon::today()->addDays(7)),
+    ],
+])->validate();
+```
+
+<a name="rule-anyof"></a>
+#### anyOf
+
+`Rule::anyOf` で「いずれか一つのルールセットを満たす」を指定できます。例えば、以下のルールは `username` がメールアドレスであるか、6 文字以上の英数字・アンダースコア・ハイフンの文字列である必要があることを意味します：
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'username' => [
+        'required',
+        Rule::anyOf([
+            ['string', 'email'],
+            ['string', 'alpha_dash', 'min:6'],
+        ]),
+    ],
+])->validate();
+```
+
+<a name="rule-alpha"></a>
+#### alpha
+
+フィールドは Unicode 文字（[\p{L}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AL%3A%5D&g=&i=) と [\p{M}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AM%3A%5D&g=&i=)）である必要があります。
+
+ASCII（`a-z`、`A-Z`）のみ許可するには、`ascii` オプションを追加します：
+
+```php
+Validator::make($data, [
+    'username' => 'alpha:ascii',
+])->validate();
+```
+
+<a name="rule-alpha-dash"></a>
+#### alpha_dash
+
+フィールドは Unicode の文字と数字（[\p{L}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AL%3A%5D&g=&i=)、[\p{M}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AM%3A%5D&g=&i=)、[\p{N}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AN%3A%5D&g=&i=)）と ASCII のハイフン（`-`）およびアンダースコア（`_`）のみを含むことができます。
+
+ASCII（`a-z`、`A-Z`、`0-9`）のみ許可するには、`ascii` オプションを追加します：
+
+```php
+Validator::make($data, [
+    'username' => 'alpha_dash:ascii',
+])->validate();
+```
+
+<a name="rule-alpha-num"></a>
+#### alpha_num
+
+フィールドは Unicode の文字と数字（[\p{L}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AL%3A%5D&g=&i=)、[\p{M}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AM%3A%5D&g=&i=)、[\p{N}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AN%3A%5D&g=&i=)）のみを含むことができます。
+
+ASCII（`a-z`、`A-Z`、`0-9`）のみ許可するには、`ascii` オプションを追加します：
+
+```php
+Validator::make($data, [
+    'username' => 'alpha_num:ascii',
+])->validate();
+```
+
+<a name="rule-array"></a>
+#### array
+
+フィールドは PHP の `array` である必要があります。
+
+`array` ルールに追加パラメータがある場合、入力配列のキーはパラメータリストに含まれる必要があります。例では `admin` キーが許可リストにないため無効です：
+
+```php
+use support\validation\Validator;
+
+$input = [
+    'user' => [
+        'name' => 'Taylor Otwell',
+        'username' => 'taylorotwell',
+        'admin' => true,
+    ],
+];
+
+Validator::make($input, [
+    'user' => 'array:name,username',
+])->validate();
+```
+
+実際のプロジェクトでは、許可する配列キーを明示的に定義することを推奨します。
+
+<a name="rule-ascii"></a>
+#### ascii
+
+フィールドは 7 ビット ASCII 文字のみを含むことができます。
+
+<a name="rule-bail"></a>
+#### bail
+
+フィールドの最初のルールが失敗した時点で、それ以降のルールのバリデーションを停止します。
+
+このルールは現在のフィールドにのみ影響します。「最初の失敗でグローバルに停止」するには、Illuminate のバリデーターを直接使用して `stopOnFirstFailure()` を呼び出してください。
+
+<a name="rule-before"></a>
+#### before:_date_
+
+フィールドは指定日付より前である必要があります。日付は `strtotime` に渡して有効な `DateTime` に変換されます。[after](#rule-after) と同様に、比較用に別のフィールド名を渡せます。
+
+fluent な `date` ルールビルダーを使用できます：
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'start_date' => [
+        'required',
+        Rule::date()->before(\Carbon\Carbon::today()->subDays(7)),
+    ],
+])->validate();
+```
+
+`beforeToday` と `todayOrBefore` で「今日より前である必要がある」「今日以前である必要がある」を簡潔に表現できます：
+
+```php
+Validator::make($data, [
+    'start_date' => [
+        'required',
+        Rule::date()->beforeToday(),
+    ],
+])->validate();
+```
+
+<a name="rule-before-or-equal"></a>
+#### before_or_equal:_date_
+
+フィールドは指定日付当日またはそれ以前である必要があります。日付は `strtotime` に渡して有効な `DateTime` に変換されます。[after](#rule-after) と同様に、比較用に別のフィールド名を渡せます。
+
+fluent な `date` ルールビルダーを使用できます：
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'start_date' => [
+        'required',
+        Rule::date()->beforeOrEqual(\Carbon\Carbon::today()->subDays(7)),
+    ],
+])->validate();
+```
+
+<a name="rule-between"></a>
+#### between:_min_,_max_
+
+フィールドのサイズは _min_ 以上 _max_ 以下である必要があります。文字列、数値、配列、ファイルの評価は [size](#rule-size) と同じです。
+
+<a name="rule-boolean"></a>
+#### boolean
+
+フィールドは真偽値に変換可能である必要があります。許容される入力には `true`、`false`、`1`、`0`、`"1"`、`"0"` が含まれます。
+
+`strict` パラメータで `true` または `false` のみ許可できます：
+
+```php
+Validator::make($data, [
+    'foo' => 'boolean:strict',
+])->validate();
+```
+
+<a name="rule-confirmed"></a>
+#### confirmed
+
+フィールドには一致する `{field}_confirmation` フィールドが必要です。例えば、フィールドが `password` の場合、`password_confirmation` が必要です。
+
+カスタム確認フィールド名も指定できます。例：`confirmed:repeat_username` は `repeat_username` が現在のフィールドと一致する必要があります。
+
+<a name="rule-contains"></a>
+#### contains:_foo_,_bar_,...
+
+フィールドは配列であり、指定されたパラメータ値をすべて含む必要があります。このルールは配列バリデーションでよく使われます。`Rule::contains` で構築できます：
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'roles' => [
+        'required',
+        'array',
+        Rule::contains(['admin', 'editor']),
+    ],
+])->validate();
+```
+
+<a name="rule-doesnt-contain"></a>
+#### doesnt_contain:_foo_,_bar_,...
+
+フィールドは配列であり、指定されたパラメータ値のいずれも含んではいけません。`Rule::doesntContain` で構築できます：
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'roles' => [
+        'required',
+        'array',
+        Rule::doesntContain(['admin', 'editor']),
+    ],
+])->validate();
+```
+
+<a name="rule-current-password"></a>
+#### current_password
+
+フィールドは現在認証されているユーザーのパスワードと一致する必要があります。最初のパラメータで認証ガードを指定できます：
+
+```php
+Validator::make($data, [
+    'password' => 'current_password:api',
+])->validate();
+```
+
+> [!WARNING]
+> このルールは認証コンポーネントとガード設定に依存します。認証が統合されていない場合は使用しないでください。
+
+<a name="rule-date"></a>
+#### date
+
+フィールドは `strtotime` で認識可能な有効な（相対的でない）日付である必要があります。
+
+<a name="rule-date-equals"></a>
+#### date_equals:_date_
+
+フィールドは指定日付と等しい必要があります。日付は `strtotime` に渡して有効な `DateTime` に変換されます。
+
+<a name="rule-date-format"></a>
+#### date_format:_format_,...
+
+フィールドは指定されたフォーマットのいずれかに一致する必要があります。`date` または `date_format` のいずれかを使用してください。このルールは PHP の [DateTime](https://www.php.net/manual/en/class.datetime.php) の全フォーマットをサポートします。
+
+fluent な `date` ルールビルダーを使用できます：
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'start_date' => [
+        'required',
+        Rule::date()->format('Y-m-d'),
+    ],
+])->validate();
+```
+
+<a name="rule-decimal"></a>
+#### decimal:_min_,_max_
+
+フィールドは必要な小数桁を持つ数値である必要があります：
+
+```php
+Validator::make($data, [
+    'price' => 'decimal:2',
+])->validate();
+
+Validator::make($data, [
+    'price' => 'decimal:2,4',
+])->validate();
+```
+
+<a name="rule-declined"></a>
+#### declined
+
+フィールドは `"no"`、`"off"`、`0`、`"0"`、`false`、または `"false"` である必要があります。
+
+<a name="rule-declined-if"></a>
+#### declined_if:anotherfield,value,...
+
+別のフィールドが指定値と等しい場合、このフィールドは `"no"`、`"off"`、`0`、`"0"`、`false`、または `"false"` である必要があります。
+
+<a name="rule-different"></a>
+#### different:_field_
+
+フィールドは _field_ と異なる必要があります。
+
+<a name="rule-digits"></a>
+#### digits:_value_
+
+フィールドは長さ _value_ の整数である必要があります。
+
+<a name="rule-digits-between"></a>
+#### digits_between:_min_,_max_
+
+フィールドは長さが _min_ 以上 _max_ 以下の整数である必要があります。
+
+<a name="rule-dimensions"></a>
+#### dimensions
+
+フィールドは画像であり、寸法制約を満たす必要があります：
+
+```php
+Validator::make($data, [
+    'avatar' => 'dimensions:min_width=100,min_height=200',
+])->validate();
+```
+
+利用可能な制約：_min\_width_、_max\_width_、_min\_height_、_max\_height_、_width_、_height_、_ratio_。
+
+_ratio_ はアスペクト比です。分数または浮動小数で表現できます：
+
+```php
+Validator::make($data, [
+    'avatar' => 'dimensions:ratio=3/2',
+])->validate();
+```
+
+このルールには多くのパラメータがあるため、`Rule::dimensions` で構築することを推奨します：
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'avatar' => [
+        'required',
+        Rule::dimensions()
+            ->maxWidth(1000)
+            ->maxHeight(500)
+            ->ratio(3 / 2),
+    ],
+])->validate();
+```
+
+<a name="rule-distinct"></a>
+#### distinct
+
+配列をバリデーションする際、フィールド値が重複してはいけません：
+
+```php
+Validator::make($data, [
+    'foo.*.id' => 'distinct',
+])->validate();
+```
+
+デフォルトでは緩い比較を使用します。厳密比較には `strict` を追加します：
+
+```php
+Validator::make($data, [
+    'foo.*.id' => 'distinct:strict',
+])->validate();
+```
+
+大文字小文字の違いを無視するには `ignore_case` を追加します：
+
+```php
+Validator::make($data, [
+    'foo.*.id' => 'distinct:ignore_case',
+])->validate();
+```
+
+<a name="rule-doesnt-start-with"></a>
+#### doesnt_start_with:_foo_,_bar_,...
+
+フィールドは指定された値のいずれでも始まってはいけません。
+
+<a name="rule-doesnt-end-with"></a>
+#### doesnt_end_with:_foo_,_bar_,...
+
+フィールドは指定された値のいずれでも終わってはいけません。
+
+<a name="rule-email"></a>
+#### email
+
+フィールドは有効なメールアドレスである必要があります。このルールは [egulias/email-validator](https://github.com/egulias/EmailValidator) に依存し、デフォルトで `RFCValidation` を使用し、他のバリデーション方式も使用できます：
+
+```php
+Validator::make($data, [
+    'email' => 'email:rfc,dns',
+])->validate();
+```
+
+利用可能なバリデーション方式：
+
+<div class="content-list" markdown="1">
+
+- `rfc`: `RFCValidation` - RFC 仕様に従ってメールをバリデーション（[対応 RFC](https://github.com/egulias/EmailValidator?tab=readme-ov-file#supported-rfcs)）
+- `strict`: `NoRFCWarningsValidation` - RFC の警告で失敗（例：末尾のドットや連続ドット）
+- `dns`: `DNSCheckValidation` - ドメインに有効な MX レコードがあるかチェック
+- `spoof`: `SpoofCheckValidation` - 同形文字やスプーフィング用 Unicode 文字を防止
+- `filter`: `FilterEmailValidation` - PHP の `filter_var` でバリデーション
+- `filter_unicode`: `FilterEmailValidation::unicode()` - Unicode を許可する `filter_var` バリデーション
+
+</div>
+
+fluent ルールビルダーを使用できます：
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'email' => [
+        'required',
+        Rule::email()
+            ->rfcCompliant(strict: false)
+            ->validateMxRecord()
+            ->preventSpoofing(),
+    ],
+])->validate();
+```
+
+> [!WARNING]
+> `dns` と `spoof` には PHP の `intl` 拡張が必要です。
+
+<a name="rule-encoding"></a>
+#### encoding:*encoding_type*
+
+フィールドは指定された文字エンコーディングに一致する必要があります。このルールは `mb_check_encoding` でファイルまたは文字列のエンコーディングを検出します。ファイルルールビルダーと併用できます：
+
+```php
+use Illuminate\Validation\Rules\File;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'attachment' => [
+        'required',
+        File::types(['csv'])->encoding('utf-8'),
+    ],
+])->validate();
+```
+
+<a name="rule-ends-with"></a>
+#### ends_with:_foo_,_bar_,...
+
+フィールドは指定された値のいずれかで終わる必要があります。
+
+<a name="rule-enum"></a>
+#### enum
+
+`Enum` は、フィールド値が有効な enum 値であることをバリデーションするクラスベースのルールです。構築時に enum クラス名を渡します。プリミティブ値の場合は Backed Enum を使用します：
+
+```php
+use app\enums\ServerStatus;
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'status' => [Rule::enum(ServerStatus::class)],
+])->validate();
+```
+
+`only`/`except` で enum 値を制限できます：
+
+```php
+use app\enums\ServerStatus;
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'status' => [
+        Rule::enum(ServerStatus::class)
+            ->only([ServerStatus::Pending, ServerStatus::Active]),
+    ],
+])->validate();
+
+Validator::make($data, [
+    'status' => [
+        Rule::enum(ServerStatus::class)
+            ->except([ServerStatus::Pending, ServerStatus::Active]),
+    ],
+])->validate();
+```
+
+条件付き制限には `when` を使用します：
+
+```php
+use app\Enums\ServerStatus;
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'status' => [
+        Rule::enum(ServerStatus::class)->when(
+            $isAdmin,
+            fn ($rule) => $rule->only(ServerStatus::Active),
+            fn ($rule) => $rule->only(ServerStatus::Pending),
+        ),
+    ],
+])->validate();
+```
+
+<a name="rule-exclude"></a>
+#### exclude
+
+フィールドは `validate`/`validated` が返すデータから除外されます。
+
+<a name="rule-exclude-if"></a>
+#### exclude_if:_anotherfield_,_value_
+
+_anotherfield_ が _value_ と等しい場合、フィールドは `validate`/`validated` が返すデータから除外されます。
+
+複雑な条件には `Rule::excludeIf` を使用します：
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'role_id' => Rule::excludeIf($isAdmin),
+])->validate();
+
+Validator::make($data, [
+    'role_id' => Rule::excludeIf(fn () => $isAdmin),
+])->validate();
+```
+
+<a name="rule-exclude-unless"></a>
+#### exclude_unless:_anotherfield_,_value_
+
+_anotherfield_ が _value_ と等しくない限り、フィールドは `validate`/`validated` が返すデータから除外されます。_value_ が `null`（例：`exclude_unless:name,null`）の場合、比較フィールドが `null` または存在しない場合のみフィールドが保持されます。
+
+<a name="rule-exclude-with"></a>
+#### exclude_with:_anotherfield_
+
+_anotherfield_ が存在する場合、フィールドは `validate`/`validated` が返すデータから除外されます。
+
+<a name="rule-exclude-without"></a>
+#### exclude_without:_anotherfield_
+
+_anotherfield_ が存在しない場合、フィールドは `validate`/`validated` が返すデータから除外されます。
+
+<a name="rule-exists"></a>
+#### exists:_table_,_column_
+
+フィールドは指定されたデータベーステーブルに存在する必要があります。
+
+<a name="basic-usage-of-exists-rule"></a>
+#### Exists ルールの基本的な使い方
+
+```php
+Validator::make($data, [
+    'state' => 'exists:states',
+])->validate();
+```
+
+`column` を指定しない場合、デフォルトでフィールド名が使われます。この例では `states` テーブルの `state` カラムが存在するかバリデーションします。
+
+<a name="specifying-a-custom-column-name"></a>
+#### カスタムカラム名の指定
+
+テーブル名の後にカラム名を付けます：
+
+```php
+Validator::make($data, [
+    'state' => 'exists:states,abbreviation',
+])->validate();
+```
+
+データベース接続を指定するには、テーブル名の前に接続名を付けます：
+
+```php
+Validator::make($data, [
+    'email' => 'exists:connection.staff,email',
+])->validate();
+```
+
+モデルクラス名を渡すこともできます。フレームワークがテーブル名を解決します：
+
+```php
+Validator::make($data, [
+    'user_id' => 'exists:app\model\User,id',
+])->validate();
+```
+
+カスタムクエリ条件には `Rule` ビルダーを使用します：
+
+```php
+use Illuminate\Database\Query\Builder;
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'email' => [
+        'required',
+        Rule::exists('staff')->where(function (Builder $query) {
+            $query->where('account_id', 1);
+        }),
+    ],
+])->validate();
+```
+
+`Rule::exists` で直接カラム名を指定することもできます：
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'state' => [Rule::exists('states', 'abbreviation')],
+])->validate();
+```
+
+複数の値の存在をバリデーションするには、`array` ルールと組み合わせます：
+
+```php
+Validator::make($data, [
+    'states' => ['array', Rule::exists('states', 'abbreviation')],
+])->validate();
+```
+
+`array` と `exists` の両方がある場合、1 回のクエリで全値をバリデーションします。
+
+<a name="rule-extensions"></a>
+#### extensions:_foo_,_bar_,...
+
+アップロードされたファイルの拡張子が許可リストに含まれることをバリデーションします：
+
+```php
+Validator::make($data, [
+    'photo' => ['required', 'extensions:jpg,png'],
+])->validate();
+```
+
+> [!WARNING]
+> ファイルタイプのバリデーションに拡張子のみに頼らないでください。[mimes](#rule-mimes) または [mimetypes](#rule-mimetypes) と併用してください。
+
+<a name="rule-file"></a>
+#### file
+
+フィールドは正常にアップロードされたファイルである必要があります。
+
+<a name="rule-filled"></a>
+#### filled
+
+フィールドが存在する場合、その値は空であってはいけません。
+
+<a name="rule-gt"></a>
+#### gt:_field_
+
+フィールドは指定された _field_ または _value_ より大きい必要があります。両方のフィールドは同じ型である必要があります。文字列、数値、配列、ファイルの評価は [size](#rule-size) と同じです。
+
+<a name="rule-gte"></a>
+#### gte:_field_
+
+フィールドは指定された _field_ または _value_ 以上である必要があります。両方のフィールドは同じ型である必要があります。文字列、数値、配列、ファイルの評価は [size](#rule-size) と同じです。
+
+<a name="rule-hex-color"></a>
+#### hex_color
+
+フィールドは有効な [hex color value](https://developer.mozilla.org/en-US/docs/Web/CSS/hex-color) である必要があります。
+
+<a name="rule-image"></a>
+#### image
+
+フィールドは画像（jpg、jpeg、png、bmp、gif、webp）である必要があります。
+
+> [!WARNING]
+> XSS リスクのため、SVG はデフォルトで許可されていません。許可するには `allow_svg` を追加します：`image:allow_svg`。
+
+<a name="rule-in"></a>
+#### in:_foo_,_bar_,...
+
+フィールドは指定された値リストに含まれる必要があります。`Rule::in` で構築できます：
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'zones' => [
+        'required',
+        Rule::in(['first-zone', 'second-zone']),
+    ],
+])->validate();
+```
+
+`array` ルールと組み合わせると、入力配列の各値が `in` リストに含まれる必要があります：
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+$input = [
+    'airports' => ['NYC', 'LAS'],
+];
+
+Validator::make($input, [
+    'airports' => [
+        'required',
+        'array',
+    ],
+    'airports.*' => Rule::in(['NYC', 'LIT']),
+])->validate();
+```
+
+<a name="rule-in-array"></a>
+#### in_array:_anotherfield_.*
+
+フィールドは _anotherfield_ の値リストに存在する必要があります。
+
+<a name="rule-in-array-keys"></a>
+#### in_array_keys:_value_.*
+
+フィールドは配列であり、指定された値のいずれかをキーとして含む必要があります：
+
+```php
+Validator::make($data, [
+    'config' => 'array|in_array_keys:timezone',
+])->validate();
+```
+
+<a name="rule-integer"></a>
+#### integer
+
+フィールドは整数である必要があります。
+
+`strict` パラメータでフィールド型が integer であることを要求できます。文字列の整数は無効になります：
+
+```php
+Validator::make($data, [
+    'age' => 'integer:strict',
+])->validate();
+```
+
+> [!WARNING]
+> このルールは PHP の `FILTER_VALIDATE_INT` を通過するかどうかのみをバリデーションします。厳密な数値型には [numeric](#rule-numeric) と併用してください。
+
+<a name="rule-ip"></a>
+#### ip
+
+フィールドは有効な IP アドレスである必要があります。
+
+<a name="rule-ipv4"></a>
+#### ipv4
+
+フィールドは有効な IPv4 アドレスである必要があります。
+
+<a name="rule-ipv6"></a>
+#### ipv6
+
+フィールドは有効な IPv6 アドレスである必要があります。
+
+<a name="rule-json"></a>
+#### json
+
+フィールドは有効な JSON 文字列である必要があります。
+
+<a name="rule-lt"></a>
+#### lt:_field_
+
+フィールドは指定された _field_ より小さい必要があります。両方のフィールドは同じ型である必要があります。文字列、数値、配列、ファイルの評価は [size](#rule-size) と同じです。
+
+<a name="rule-lte"></a>
+#### lte:_field_
+
+フィールドは指定された _field_ 以下である必要があります。両方のフィールドは同じ型である必要があります。文字列、数値、配列、ファイルの評価は [size](#rule-size) と同じです。
+
+<a name="rule-lowercase"></a>
+#### lowercase
+
+フィールドは小文字である必要があります。
+
+<a name="rule-list"></a>
+#### list
+
+フィールドはリスト配列である必要があります。リスト配列のキーは 0 から `count($array) - 1` までの連続した数値である必要があります。
+
+<a name="rule-mac"></a>
+#### mac_address
+
+フィールドは有効な MAC アドレスである必要があります。
+
+<a name="rule-max"></a>
+#### max:_value_
+
+フィールドは _value_ 以下である必要があります。文字列、数値、配列、ファイルの評価は [size](#rule-size) と同じです。
+
+<a name="rule-max-digits"></a>
+#### max_digits:_value_
+
+フィールドは長さが _value_ を超えない整数である必要があります。
+
+<a name="rule-mimetypes"></a>
+#### mimetypes:_text/plain_,...
+
+ファイルの MIME タイプがリストに含まれることをバリデーションします：
+
+```php
+Validator::make($data, [
+    'video' => 'mimetypes:video/avi,video/mpeg,video/quicktime',
+])->validate();
+```
+
+MIME タイプはファイル内容を読み取って推測され、クライアント提供の MIME と異なる場合があります。
+
+<a name="rule-mimes"></a>
+#### mimes:_foo_,_bar_,...
+
+ファイルの MIME タイプが指定された拡張子に対応することをバリデーションします：
+
+```php
+Validator::make($data, [
+    'photo' => 'mimes:jpg,bmp,png',
+])->validate();
+```
+
+パラメータは拡張子ですが、このルールはファイル内容を読み取って MIME を判定します。拡張子と MIME のマッピング：
+
+[https://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types](https://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types)
+
+<a name="mime-types-and-extensions"></a>
+#### MIME タイプと拡張子
+
+このルールは「ファイル拡張子」が「実際の MIME」と一致することをバリデーションしません。例えば、`mimes:png` は PNG 内容の `photo.txt` を有効とします。拡張子をバリデーションするには [extensions](#rule-extensions) を使用してください。
+
+<a name="rule-min"></a>
+#### min:_value_
+
+フィールドは _value_ 以上である必要があります。文字列、数値、配列、ファイルの評価は [size](#rule-size) と同じです。
+
+<a name="rule-min-digits"></a>
+#### min_digits:_value_
+
+フィールドは長さが _value_ 未満でない整数である必要があります。
+
+<a name="rule-multiple-of"></a>
+#### multiple_of:_value_
+
+フィールドは _value_ の倍数である必要があります。
+
+<a name="rule-missing"></a>
+#### missing
+
+フィールドは入力データに存在してはいけません。
+
+<a name="rule-missing-if"></a>
+#### missing_if:_anotherfield_,_value_,...
+
+_anotherfield_ が任意の _value_ と等しい場合、フィールドは存在してはいけません。
+
+<a name="rule-missing-unless"></a>
+#### missing_unless:_anotherfield_,_value_
+
+_anotherfield_ が任意の _value_ と等しくない限り、フィールドは存在してはいけません。
+
+<a name="rule-missing-with"></a>
+#### missing_with:_foo_,_bar_,...
+
+指定されたいずれかのフィールドが存在する場合、フィールドは存在してはいけません。
+
+<a name="rule-missing-with-all"></a>
+#### missing_with_all:_foo_,_bar_,...
+
+指定されたすべてのフィールドが存在する場合、フィールドは存在してはいけません。
+
+<a name="rule-not-in"></a>
+#### not_in:_foo_,_bar_,...
+
+フィールドは指定された値リストに含まれてはいけません。`Rule::notIn` で構築できます：
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'toppings' => [
+        'required',
+        Rule::notIn(['sprinkles', 'cherries']),
+    ],
+])->validate();
+```
+
+<a name="rule-not-regex"></a>
+#### not_regex:_pattern_
+
+フィールドは指定された正規表現に一致してはいけません。
+
+このルールは PHP の `preg_match` を使用します。正規表現には区切り文字が必要です。例：`'email' => 'not_regex:/^.+$/i'`。
+
+> [!WARNING]
+> `regex`/`not_regex` を使用する際、正規表現に `|` が含まれる場合は、`|` 区切り文字との衝突を避けるため配列形式を使用してください。
+
+<a name="rule-nullable"></a>
+#### nullable
+
+フィールドは `null` でも構いません。
+
+<a name="rule-numeric"></a>
+#### numeric
+
+フィールドは [numeric](https://www.php.net/manual/en/function.is-numeric.php) である必要があります。
+
+`strict` パラメータで integer または float 型のみ許可できます。数値文字列は無効になります：
+
+```php
+Validator::make($data, [
+    'amount' => 'numeric:strict',
+])->validate();
+```
+
+<a name="rule-present"></a>
+#### present
+
+フィールドは入力データに存在する必要があります。
+
+<a name="rule-present-if"></a>
+#### present_if:_anotherfield_,_value_,...
+
+_anotherfield_ が任意の _value_ と等しい場合、フィールドは存在する必要があります。
+
+<a name="rule-present-unless"></a>
+#### present_unless:_anotherfield_,_value_
+
+_anotherfield_ が任意の _value_ と等しくない限り、フィールドは存在する必要があります。
+
+<a name="rule-present-with"></a>
+#### present_with:_foo_,_bar_,...
+
+指定されたいずれかのフィールドが存在する場合、フィールドは存在する必要があります。
+
+<a name="rule-present-with-all"></a>
+#### present_with_all:_foo_,_bar_,...
+
+指定されたすべてのフィールドが存在する場合、フィールドは存在する必要があります。
+
+<a name="rule-prohibited"></a>
+#### prohibited
+
+フィールドは存在しないか、空である必要があります。「空」とは：
+
+<div class="content-list" markdown="1">
+
+- 値が `null` の場合
+- 値が空文字列の場合
+- 値が空配列または空の `Countable` オブジェクトの場合
+- 空のパスを持つアップロードファイルの場合
+
+</div>
+
+<a name="rule-prohibited-if"></a>
+#### prohibited_if:_anotherfield_,_value_,...
+
+_anotherfield_ が任意の _value_ と等しい場合、フィールドは存在しないか空である必要があります。「空」とは：
+
+<div class="content-list" markdown="1">
+
+- 値が `null` の場合
+- 値が空文字列の場合
+- 値が空配列または空の `Countable` オブジェクトの場合
+- 空のパスを持つアップロードファイルの場合
+
+</div>
+
+複雑な条件には `Rule::prohibitedIf` を使用します：
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'role_id' => Rule::prohibitedIf($isAdmin),
+])->validate();
+
+Validator::make($data, [
+    'role_id' => Rule::prohibitedIf(fn () => $isAdmin),
+])->validate();
+```
+
+<a name="rule-prohibited-if-accepted"></a>
+#### prohibited_if_accepted:_anotherfield_,...
+
+_anotherfield_ が `"yes"`、`"on"`、`1`、`"1"`、`true`、または `"true"` の場合、フィールドは存在しないか空である必要があります。
+
+<a name="rule-prohibited-if-declined"></a>
+#### prohibited_if_declined:_anotherfield_,...
+
+_anotherfield_ が `"no"`、`"off"`、`0`、`"0"`、`false`、または `"false"` の場合、フィールドは存在しないか空である必要があります。
+
+<a name="rule-prohibited-unless"></a>
+#### prohibited_unless:_anotherfield_,_value_,...
+
+_anotherfield_ が任意の _value_ と等しくない限り、フィールドは存在しないか空である必要があります。「空」とは：
+
+<div class="content-list" markdown="1">
+
+- 値が `null` の場合
+- 値が空文字列の場合
+- 値が空配列または空の `Countable` オブジェクトの場合
+- 空のパスを持つアップロードファイルの場合
+
+</div>
+
+<a name="rule-prohibits"></a>
+#### prohibits:_anotherfield_,...
+
+フィールドが存在し空でない場合、_anotherfield_ のすべてのフィールドは存在しないか空である必要があります。「空」とは：
+
+<div class="content-list" markdown="1">
+
+- 値が `null` の場合
+- 値が空文字列の場合
+- 値が空配列または空の `Countable` オブジェクトの場合
+- 空のパスを持つアップロードファイルの場合
+
+</div>
+
+<a name="rule-regex"></a>
+#### regex:_pattern_
+
+フィールドは指定された正規表現に一致する必要があります。
+
+このルールは PHP の `preg_match` を使用します。正規表現には区切り文字が必要です。例：`'email' => 'regex:/^.+@.+$/i'`。
+
+> [!WARNING]
+> `regex`/`not_regex` を使用する際、正規表現に `|` が含まれる場合は、`|` 区切り文字との衝突を避けるため配列形式を使用してください。
+
+<a name="rule-required"></a>
+#### required
+
+フィールドは存在し、空であってはいけません。「空」とは：
+
+<div class="content-list" markdown="1">
+
+- 値が `null` の場合
+- 値が空文字列の場合
+- 値が空配列または空の `Countable` オブジェクトの場合
+- 空のパスを持つアップロードファイルの場合
+
+</div>
+
+<a name="rule-required-if"></a>
+#### required_if:_anotherfield_,_value_,...
+
+_anotherfield_ が任意の _value_ と等しい場合、フィールドは存在し空であってはいけません。
+
+複雑な条件には `Rule::requiredIf` を使用します：
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'role_id' => Rule::requiredIf($isAdmin),
+])->validate();
+
+Validator::make($data, [
+    'role_id' => Rule::requiredIf(fn () => $isAdmin),
+])->validate();
+```
+
+<a name="rule-required-if-accepted"></a>
+#### required_if_accepted:_anotherfield_,...
+
+_anotherfield_ が `"yes"`、`"on"`、`1`、`"1"`、`true`、または `"true"` の場合、フィールドは存在し空であってはいけません。
+
+<a name="rule-required-if-declined"></a>
+#### required_if_declined:_anotherfield_,...
+
+_anotherfield_ が `"no"`、`"off"`、`0`、`"0"`、`false`、または `"false"` の場合、フィールドは存在し空であってはいけません。
+
+<a name="rule-required-unless"></a>
+#### required_unless:_anotherfield_,_value_,...
+
+_anotherfield_ が任意の _value_ と等しくない限り、フィールドは存在し空であってはいけません。_value_ が `null`（例：`required_unless:name,null`）の場合、比較フィールドが `null` または存在しない場合のみフィールドを空にできます。
+
+<a name="rule-required-with"></a>
+#### required_with:_foo_,_bar_,...
+
+指定されたいずれかのフィールドが存在し空でない場合、フィールドは存在し空であってはいけません。
+
+<a name="rule-required-with-all"></a>
+#### required_with_all:_foo_,_bar_,...
+
+指定されたすべてのフィールドが存在し空でない場合、フィールドは存在し空であってはいけません。
+
+<a name="rule-required-without"></a>
+#### required_without:_foo_,_bar_,...
+
+指定されたいずれかのフィールドが空または存在しない場合、フィールドは存在し空であってはいけません。
+
+<a name="rule-required-without-all"></a>
+#### required_without_all:_foo_,_bar_,...
+
+指定されたすべてのフィールドが空または存在しない場合、フィールドは存在し空であってはいけません。
+
+<a name="rule-required-array-keys"></a>
+#### required_array_keys:_foo_,_bar_,...
+
+フィールドは配列であり、指定されたキーを少なくとも含む必要があります。
+
+<a name="validating-when-present"></a>
+#### sometimes
+
+フィールドが存在する場合のみ、後続のバリデーションルールを適用します。「オプションだが存在する場合は有効である必要がある」フィールドでよく使われます：
+
+```php
+Validator::make($data, [
+    'nickname' => 'sometimes|string|max:20',
+])->validate();
+```
+
+<a name="rule-same"></a>
+#### same:_field_
+
+フィールドは _field_ と同じである必要があります。
+
+<a name="rule-size"></a>
+#### size:_value_
+
+フィールドのサイズは指定された _value_ と等しい必要があります。文字列：文字数；数値：指定された整数（`numeric` または `integer` と併用）；配列：要素数；ファイル：KB 単位のサイズ。例：
+
+```php
+Validator::make($data, [
+    'title' => 'size:12',
+    'seats' => 'integer|size:10',
+    'tags' => 'array|size:5',
+    'image' => 'file|size:512',
+])->validate();
+```
+
+<a name="rule-starts-with"></a>
+#### starts_with:_foo_,_bar_,...
+
+フィールドは指定された値のいずれかで始まる必要があります。
+
+<a name="rule-string"></a>
+#### string
+
+フィールドは文字列である必要があります。`null` を許可するには `nullable` と併用してください。
+
+<a name="rule-timezone"></a>
+#### timezone
+
+フィールドは有効なタイムゾーン識別子（`DateTimeZone::listIdentifiers` から）である必要があります。そのメソッドでサポートされるパラメータを渡せます：
+
+```php
+Validator::make($data, [
+    'timezone' => 'required|timezone:all',
+])->validate();
+
+Validator::make($data, [
+    'timezone' => 'required|timezone:Africa',
+])->validate();
+
+Validator::make($data, [
+    'timezone' => 'required|timezone:per_country,US',
+])->validate();
+```
+
+<a name="rule-unique"></a>
+#### unique:_table_,_column_
+
+フィールドは指定されたテーブルで一意である必要があります。
+
+**カスタムテーブル/カラム名の指定：**
+
+モデルクラス名を直接指定できます：
+
+```php
+Validator::make($data, [
+    'email' => 'unique:app\model\User,email_address',
+])->validate();
+```
+
+カラム名を指定できます（指定しない場合はデフォルトでフィールド名が使われます）：
+
+```php
+Validator::make($data, [
+    'email' => 'unique:users,email_address',
+])->validate();
+```
+
+**データベース接続の指定：**
+
+```php
+Validator::make($data, [
+    'email' => 'unique:connection.users,email_address',
+])->validate();
+```
+
+**指定 ID の除外：**
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'email' => [
+        'required',
+        Rule::unique('users')->ignore($user->id),
+    ],
+])->validate();
+```
+
+> [!WARNING]
+> `ignore` はユーザー入力を受け取るべきではありません。システム生成の一意 ID（自動増分 ID またはモデル UUID）のみを使用してください。そうでないと SQL インジェクションのリスクが存在する可能性があります。
+
+モデルインスタンスを渡すこともできます：
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'email' => [
+        Rule::unique('users')->ignore($user),
+    ],
+])->validate();
+```
+
+主キーが `id` でない場合は、主キー名を指定します：
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'email' => [
+        Rule::unique('users')->ignore($user->id, 'user_id'),
+    ],
+])->validate();
+```
+
+デフォルトではフィールド名が一意カラムとして使われます。カラム名も指定できます：
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'email' => [
+        Rule::unique('users', 'email_address')->ignore($user->id),
+    ],
+])->validate();
+```
+
+**追加条件の指定：**
+
+```php
+use Illuminate\Database\Query\Builder;
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'email' => [
+        Rule::unique('users')->where(
+            fn (Builder $query) => $query->where('account_id', 1)
+        ),
+    ],
+])->validate();
+```
+
+**ソフトデリートレコードの除外：**
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'email' => [Rule::unique('users')->withoutTrashed()],
+])->validate();
+```
+
+ソフトデリートカラムが `deleted_at` でない場合：
+
+```php
+use support\validation\Rule;
+use support\validation\Validator;
+
+Validator::make($data, [
+    'email' => [Rule::unique('users')->withoutTrashed('was_deleted_at')],
+])->validate();
+```
+
+<a name="rule-uppercase"></a>
+#### uppercase
+
+フィールドは大文字である必要があります。
+
+<a name="rule-url"></a>
+#### url
+
+フィールドは有効な URL である必要があります。
+
+許可するプロトコルを指定できます：
+
+```php
+Validator::make($data, [
+    'url' => 'url:http,https',
+    'game' => 'url:minecraft,steam',
+])->validate();
+```
+
+<a name="rule-ulid"></a>
+#### ulid
+
+フィールドは有効な [ULID](https://github.com/ulid/spec) である必要があります。
+
+<a name="rule-uuid"></a>
+#### uuid
+
+フィールドは有効な RFC 9562 UUID（バージョン 1、3、4、5、6、7、または 8）である必要があります。
+
+バージョンを指定できます：
+
+```php
+Validator::make($data, [
+    'uuid' => 'uuid:4',
+])->validate();
+```
+
+
+
 <a name="think-validate"></a>
-## バリデータ top-think/think-validate
+# バリデーター top-think/think-validate
 
-### 説明
-ThinkPHP公式のバリデータ
+## 説明
 
-### プロジェクトURL
+ThinkPHP 公式バリデーター
+
+## プロジェクト URL
+
 https://github.com/top-think/think-validate
 
-### インストール
+## インストール
+
 `composer require topthink/think-validate`
 
-### はじめに
+## クイックスタート
 
-**`app/index/validate/User.php` を新規作成**
+**`app/index/validate/User.php` を作成**
 
 ```php
 <?php
@@ -34,16 +2192,17 @@ class User extends Validate
     ];
 
     protected $message  =   [
-        'name.require' => '名称必須',
-        'name.max'     => '名称は25文字を超えることはできません',
-        'age.number'   => '年齢は数字でなければなりません',
-        'age.between'  => '年齢は1から120の間でなければなりません',
-        'email'        => 'メール形式が正しくありません',    
+        'name.require' => 'Name is required',
+        'name.max'     => 'Name cannot exceed 25 characters',
+        'age.number'   => 'Age must be a number',
+        'age.between'  => 'Age must be between 1 and 120',
+        'email'        => 'Invalid email format',    
     ];
 
 }
-``` 
-**使用方法**
+```
+  
+**Usage**
 
 ```php
 $data = [
@@ -58,22 +2217,28 @@ if (!$validate->check($data)) {
 }
 ```
 
+> **注意**
+> webman は think-validate の `Validate::rule()` メソッドをサポートしていません
+
 <a name="respect-validation"></a>
-# バリデータ workerman/validation
+# バリデーター workerman/validation
 
-### 説明
-https://github.com/Respect/Validation の中国語版プロジェクト
+## 説明
 
-### プロジェクトURL
+このプロジェクトは https://github.com/Respect/Validation のローカライズ版です
+
+## プロジェクト URL
+
 https://github.com/walkor/validation
-
-### インストール
+  
+  
+## インストール
  
 ```php
 composer require workerman/validation
 ```
 
-### はじめに
+## クイックスタート
 
 ```php
 <?php
@@ -88,36 +2253,36 @@ class IndexController
     public function index(Request $request)
     {
         $data = v::input($request->post(), [
-            'nickname' => v::length(1, 64)->setName('ニックネーム'),
-            'username' => v::alnum()->length(5, 64)->setName('ユーザ名'),
-            'password' => v::length(5, 64)->setName('パスワード')
+            'nickname' => v::length(1, 64)->setName('Nickname'),
+            'username' => v::alnum()->length(5, 64)->setName('Username'),
+            'password' => v::length(5, 64)->setName('Password')
         ]);
         Db::table('user')->insert($data);
         return json(['code' => 0, 'msg' => 'ok']);
     }
 }  
 ```
+  
+**Access via jQuery**
+  
+  ```js
+  $.ajax({
+      url : 'http://127.0.0.1:8787',
+      type : "post",
+      dataType:'json',
+      data : {nickname:'Tom', username:'tom cat', password: '123456'}
+  });
+  ```
+  
+Result:
 
-**jqueryを使用してアクセス**
+`{"code":500,"msg":"Username may only contain letters (a-z) and numbers (0-9)"}`
 
-```js
-$.ajax({
-    url : 'http://127.0.0.1:8787',
-    type : "post",
-    dataType:'json',
-    data : {nickname:'汤姆', username:'tom cat', password: '123456'}
-});
-```
+Explanation:
 
-結果：
+`v::input(array $input, array $rules)` はデータをバリデーションして収集します。バリデーション失敗時は `Respect\Validation\Exceptions\ValidationException` をスローし、成功時はバリデーション済みデータ（配列）を返します。
 
-`{"code":500,"msg":"ユーザ名 は英字（a-z）と数字（0-9）のみを含むことができます"}`
-
-説明：
-
-`v::input(array $input, array $rules)` はデータを検証・収集するために使用され、データの検証に失敗すると`Respect\Validation\Exceptions\ValidationException`例外がスローされ、検証に成功すると検証後のデータ（配列）が返されます。
-
-ビジネスコードが検証例外をキャッチしない場合、webmanフレームワークは自動的に検証例外をキャッチし、HTTPリクエストヘッダに基づいてjsonデータ（`{"code":500,"msg":"xxx"}`のような）または通常の例外ページを返します。返される形式がビジネス要件に準拠しない場合、開発者は`ValidationException`例外をキャッチし、必要なデータを返すことができます。以下の例のように：
+ビジネスコードがバリデーション例外をキャッチしない場合、webman フレームワークがキャッチして JSON（`{"code":500, "msg":"xxx"}` のような形式）または通常の例外ページを HTTP ヘッダーに応じて返します。レスポンス形式が要件に合わない場合は、以下の例のように `ValidationException` をキャッチしてカスタムデータを返すことができます：
 
 ```php
 <?php
@@ -133,8 +2298,8 @@ class IndexController
     {
         try {
             $data = v::input($request->post(), [
-                'username' => v::alnum()->length(5, 64)->setName('ユーザ名'),
-                'password' => v::length(5, 64)->setName('パスワード')
+                'username' => v::alnum()->length(5, 64)->setName('Username'),
+                'password' => v::length(5, 64)->setName('Password')
             ]);
         } catch (ValidationException $e) {
             return json(['code' => 500, 'msg' => $e->getMessage()]);
@@ -144,61 +2309,61 @@ class IndexController
 }
 ```
 
-### バリデータ機能ガイド
+## バリデーターガイド
 
 ```php
 use Respect\Validation\Validator as v;
 
-// 個々の規則の検証
+// Single rule validation
 $number = 123;
 v::numericVal()->validate($number); // true
 
-// 複数の規則の連鎖検証
+// Chained validation
 $usernameValidator = v::alnum()->noWhitespace()->length(1, 15);
 $usernameValidator->validate('alganet'); // true
 
-// 最初の検証失敗理由を取得する
+// Get first validation failure reason
 try {
-    $usernameValidator->setName('ユーザ名')->check('alg  anet');
+    $usernameValidator->setName('Username')->check('alg  anet');
 } catch (ValidationException $exception) {
-    echo $exception->getMessage(); // ユーザ名 は英字（a-z）と数字（0-9）のみを含むことができます
+    echo $exception->getMessage(); // Username may only contain letters (a-z) and numbers (0-9)
 }
 
-// すべての検証失敗理由を取得する
+// Get all validation failure reasons
 try {
-    $usernameValidator->setName('ユーザ名')->assert('alg  anet');
+    $usernameValidator->setName('Username')->assert('alg  anet');
 } catch (ValidationException $exception) {
     echo $exception->getFullMessage();
-    // 結果
-    // -  ユーザ名 は次の条件を満たさなければなりません
-    //     - ユーザ名 は英字（a-z）と数字（0-9）のみを含むことができます
-    //     - ユーザ名 は空白を含めることはできません
+    // Will print
+    // -  Username must satisfy the following rules
+    //     - Username may only contain letters (a-z) and numbers (0-9)
+    //     - Username must not contain whitespace
   
     var_export($exception->getMessages());
-    // 結果
+    // Will print
     // array (
-    //   'alnum' => 'ユーザ名 は英字（a-z）と数字（0-9）のみを含むことができます',
-    //   'noWhitespace' => 'ユーザ名 は空白を含めることはできません',
+    //   'alnum' => 'Username may only contain letters (a-z) and numbers (0-9)',
+    //   'noWhitespace' => 'Username must not contain whitespace',
     // )
 }
 
-// カスタマイズされたエラーメッセージ
+// Custom error messages
 try {
-    $usernameValidator->setName('ユーザ名')->assert('alg  anet');
+    $usernameValidator->setName('Username')->assert('alg  anet');
 } catch (ValidationException $exception) {
     var_export($exception->getMessages([
-        'alnum' => 'ユーザ名は英字と数字のみを含むことができます',
-        'noWhitespace' => 'ユーザ名に空白を含めることはできません',
-        'length' => 'lengthは規則に従いますので、この項目は表示されません'
-    ]);
-    // 結果
+        'alnum' => 'Username may only contain letters and numbers',
+        'noWhitespace' => 'Username must not contain spaces',
+        'length' => 'length satisfies the rule, so this will not be shown'
+    ]));
+    // Will print 
     // array(
-    //    'alnum' => 'ユーザ名は英字と数字のみを含むことができます',
-    //    'noWhitespace' => 'ユーザ名に空白を含めることはできません'
+    //    'alnum' => 'Username may only contain letters and numbers',
+    //    'noWhitespace' => 'Username must not contain spaces'
     // )
 }
 
-// オブジェクトの検証
+// Validate object
 $user = new stdClass;
 $user->name = 'Alexandre';
 $user->birthdate = '1987-07-01';
@@ -206,7 +2371,7 @@ $userValidator = v::attribute('name', v::stringType()->length(1, 32))
                 ->attribute('birthdate', v::date()->minAge(18));
 $userValidator->validate($user); // true
 
-// 配列の検証
+// Validate array
 $data = [
     'parentKey' => [
         'field1' => 'value1',
@@ -220,81 +2385,82 @@ v::key(
         ->key('field2', v::stringType())
         ->key('field3', v::boolType())
     )
-    ->assert($data); // validate() や check() も使用できる
+    ->assert($data); // Can also use check() or validate()
   
-// オプショナル検証
+// Optional validation
 v::alpha()->validate(''); // false 
 v::alpha()->validate(null); // false 
 v::optional(v::alpha())->validate(''); // true
 v::optional(v::alpha())->validate(null); // true
 
-// 否定規則
+// Negation rule
 v::not(v::intVal())->validate(10); // false
-``` 
-
-### Validatorの3つの方法 `validate()` `check()` `assert()` の違い
-
-`validate()`はbooleanを返し、例外をスローしません
-
-`check()`は検証に失敗すると例外をスローし、`$exception->getMessage()`を使用して最初の検証失敗理由を取得します
-
-`assert()`は検証に失敗すると例外をスローし、`$exception->getFullMessage()`を使用してすべての検証失敗理由を取得できます
+```
   
-### よく使用される検証規則のリスト
+## バリデーターメソッド validate() check() assert() の違い
 
-`Alnum()` 英数字のみを含むかどうかを検証
+`validate()` は真偽値を返し、例外をスローしません
 
-`Alpha()` 文字のみを含むかどうかを検証
+`check()` はバリデーション失敗時に例外をスローし、`$exception->getMessage()` で最初の失敗理由を取得します
 
-`ArrayType()` 配列型かどうかを検証
-
-`Between(mixed $minimum, mixed $maximum)` 2つの値の間にあるかどうかを検証。
-
-`BoolType()` ブール型かどうかを検証
-
-`Contains(mixed $expectedValue)` 特定の値を含むかどうかを検証
-
-`ContainsAny(array $needles)` 定義された値を少なくとも1つ含むかどうかを検証
-
-`Digit()` 数字のみを含むかどうかを検証
-
-`Domain()` 有効なドメイン名かどうかを検証
-
-`Email()` 有効なメールアドレスかどうかを検証
-
-`Extension(string $extension)` 拡張子を検証
-
-`FloatType()` 浮動小数点数型かどうかを検証
-
-`IntType()` 整数型かどうかを検証
-
-`Ip()` IPアドレスかどうかを検証
-
-`Json()` JSONデータかどうかを検証
-
-`Length(int $min, int $max)` 長さが指定範囲内かどうかを検証
-
-`LessThan(mixed $compareTo)` 指定値より小さいかどうかを検証
-
-`Lowercase()` 小文字文字のみを含むかどうかを検証
-
-`MacAddress()` MACアドレスかどうかを検証
-
-`NotEmpty()` 空でないかどうかを検証
-
-`NullType()` nullかどうかを検証
-
-`Number()` 数値かどうかを検証
-
-`ObjectType()` オブジェクトかどうかを検証
-
-`StringType()` 文字列型かどうかを検証
-
-`Url()` URLかどうかを検証
-
-追加の検証規則については、https://respect-validation.readthedocs.io/en/2.0/list-of-rules/ を参照してください
+`assert()` はバリデーション失敗時に例外をスローし、`$exception->getFullMessage()` で全ての失敗理由を取得します
   
+  
+## よく使うバリデーションルール
 
-### 追加情報
+`Alnum()` 英数字のみ
 
-https://respect-validation.readthedocs.io/en/2.0/ を訪問してください
+`Alpha()` 英字のみ
+
+`ArrayType()` 配列型
+
+`Between(mixed $minimum, mixed $maximum)` 入力が2つの値の間であることをバリデーション
+
+`BoolType()` 真偽型のバリデーション
+
+`Contains(mixed $expectedValue)` 入力が特定の値を含むことをバリデーション
+
+`ContainsAny(array $needles)` 入力が定義された値の少なくとも1つを含むことをバリデーション
+
+`Digit()` 入力が数字のみを含むことをバリデーション
+
+`Domain()` 有効なドメイン名のバリデーション
+
+`Email()` 有効なメールアドレスのバリデーション
+
+`Extension(string $extension)` ファイル拡張子のバリデーション
+
+`FloatType()` 浮動小数点型のバリデーション
+
+`IntType()` 整数型のバリデーション
+
+`Ip()` IP アドレスのバリデーション
+
+`Json()` JSON データのバリデーション
+
+`Length(int $min, int $max)` 長さが範囲内であることをバリデーション
+
+`LessThan(mixed $compareTo)` 長さが指定値より小さいことをバリデーション
+
+`Lowercase()` 小文字のバリデーション
+
+`MacAddress()` MAC アドレスのバリデーション
+
+`NotEmpty()` 空でないことのバリデーション
+
+`NullType()` null のバリデーション
+
+`Number()` 数値のバリデーション
+
+`ObjectType()` オブジェクト型のバリデーション
+
+`StringType()` 文字列型のバリデーション
+
+`Url()` URL のバリデーション
+  
+その他のバリデーションルールは https://respect-validation.readthedocs.io/en/2.0/list-of-rules/ を参照してください。
+  
+## その他
+
+https://respect-validation.readthedocs.io/en/2.0/ をご覧ください。
+  

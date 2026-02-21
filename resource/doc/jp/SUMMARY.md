@@ -47,6 +47,7 @@
  
 - 一般的なコンポーネント
   - [バリデータ](components/validation.md)
+  - [レート制限](components/rate-limiter.md)
   - [ページネーションコンポーネント](components/paginator.md)
   - [多言語対応](components/translation.md)
   - [画像処理](components/image.md)

@@ -1,14 +1,15 @@
-# Validators
+# Other Validators
 
-There are many validators available in the composer that can be used directly, such as:
+There are many validators available in composer that can be used directly, such as:
 
-
-#### <a href="#webman-validation"> webman/validation</a>
+#### <a href="#webman-validation"> webman/validation (Recommended)</a>
 #### <a href="#think-validate"> top-think/think-validate</a>
 #### <a href="#respect-validation"> respect/validation</a>
 
 <a name="webman-validation"></a>
-Webman's validation component, based on `illuminate/validation`, provides manual validation, annotation-based validation, parameter-level validation, and reusable rule sets.
+# Validator webman/validation
+
+Based on `illuminate/validation`, it provides manual validation, annotation validation, parameter-level validation, and reusable rule sets.
 
 ## Installation
 
@@ -18,10 +19,10 @@ composer require webman/validation
 
 ## Basic Concepts
 
-- **Rule Set Reuse**: Define reusable `rules`, `messages`, `attributes`, and `scenes` by extending `support\validation\Validator`, which can be reused in manual and annotation validation.
-- **Annotation (Attribute) Validation - Method-Level**: Use the PHP 8 attribute `#[Validate]` to bind validation to controller methods.
-- **Annotation (Attribute) Validation - Parameter-Level**: Use the PHP 8 attribute `#[Param]` to bind validation to controller method parameters.
-- **Exception Handling**: Throws `support\validation\ValidationException` on validation failure; the exception class is configurable via config.
+- **Rule Set Reuse**: Define reusable `rules`, `messages`, `attributes`, and `scenes` by extending `support\validation\Validator`, which can be reused in both manual and annotation validation.
+- **Method-Level Annotation (Attribute) Validation**: Use PHP 8 attribute `#[Validate]` to bind validation to controller methods.
+- **Parameter-Level Annotation (Attribute) Validation**: Use PHP 8 attribute `#[Param]` to bind validation to controller method parameters.
+- **Exception Handling**: Throws `support\validation\ValidationException` on validation failure; the exception class is configurable.
 - **Database Validation**: If database validation is involved, you need to install `composer require webman/database`.
 
 ## Manual Validation
@@ -38,10 +39,10 @@ Validator::make($data, [
 ])->validate();
 ```
 
-> **Note**  
-> `validate()` will throw `support\validation\ValidationException` if validation fails. If you prefer not to throw exceptions, use `fails()` as shown below.
+> **Note**
+> `validate()` throws `support\validation\ValidationException` when validation fails. If you prefer not to throw exceptions, use the `fails()` approach below to get error messages.
 
-### Custom Messages and Attributes
+### Custom messages and attributes
 
 ```php
 use support\validation\Validator;
@@ -58,7 +59,7 @@ Validator::make(
 
 ### Validate Without Exception (Get Error Messages)
 
-If you don't want exceptions, use `fails()` and read errors from the `MessageBag`:
+If you prefer not to throw exceptions, use `fails()` to check and get error messages via `errors()` (returns `MessageBag`):
 
 ```php
 use support\validation\Validator;
@@ -70,8 +71,8 @@ $validator = Validator::make($data, [
 ]);
 
 if ($validator->fails()) {
-    $firstError = $validator->errors()->first();   // string
-    $allErrors = $validator->errors()->all();      // array
+    $firstError = $validator->errors()->first();      // string
+    $allErrors = $validator->errors()->all();         // array
     $errorsByField = $validator->errors()->toArray(); // array
     // handle errors...
 }
@@ -113,9 +114,9 @@ use app\validation\UserValidator;
 UserValidator::make($data)->validate();
 ```
 
-### Use Scenes (Optional)
+### Use scenes (Optional)
 
-Scenes are optional. They are only used when you call `withScene(...)` to validate a subset of fields.
+`scenes` is an optional feature; it only validates a subset of fields when you call `withScene(...)`.
 
 ```php
 namespace app\validation;
@@ -178,7 +179,7 @@ class AuthController
 }
 ```
 
-### Reusing Rule Sets
+### Reuse Rule Sets
 
 ```php
 use app\validation\UserValidator;
@@ -229,13 +230,14 @@ class UserController
 }
 ```
 
-Use `in` to specify where validation data comes from:
+Use the `in` parameter to specify the data source:
 
-* **query** – HTTP query parameters from `$request->get()`
-* **body** – HTTP body from `$request->post()`
-* **path** – Path/route parameters from `$request->route->param()`
+* **query** HTTP request query parameters, from `$request->get()`
+* **body** HTTP request body, from `$request->post()`
+* **path** HTTP request path parameters, from `$request->route->param()`
 
-`in` can be a string or array; when it's an array, values are merged in order and later sources override earlier ones. When `in` is omitted, it defaults to the equivalent of `['query', 'body', 'path']`.
+`in` can be a string or array; when it is an array, values are merged in order with later values overriding earlier ones. When `in` is not passed, it defaults to `['query', 'body', 'path']`.
+
 
 ## Parameter-Level Validation (Param)
 
@@ -258,7 +260,7 @@ class MailController
 
 ### Validation Data Source
 
-Parameter-level validation also supports the `in` parameter to specify data source:
+Similarly, parameter-level validation also supports the `in` parameter to specify the source:
 
 ```php
 use support\validation\annotation\Param;
@@ -273,7 +275,8 @@ class MailController
 }
 ```
 
-### Rules Support String or Array
+
+### rules supports string or array
 
 ```php
 use support\validation\annotation\Param;
@@ -288,7 +291,7 @@ class MailController
 }
 ```
 
-### Custom Messages / Attribute
+### Custom messages / attribute
 
 ```php
 use support\validation\annotation\Param;
@@ -308,7 +311,7 @@ class UserController
 }
 ```
 
-### Reusing Rule Constants
+### Rule Constant Reuse
 
 ```php
 final class ParamRules
@@ -326,7 +329,7 @@ class UserController
 }
 ```
 
-## Method-Level + Parameter-Level Mixing
+## Method-Level + Parameter-Level Combined
 
 ```php
 use support\Request;
@@ -346,13 +349,13 @@ class UserController
 }
 ```
 
-## Automatic Rule Inference (Signature-Based)
+## Automatic Rule Inference (Based on Parameter Signature)
 
-When a method uses `#[Validate]`, or any parameter on that method uses `#[Param]`, this package will **infer and auto-complete basic validation rules from the PHP method signature**, then merge them with your existing rules and run validation.
+When `#[Validate]` is used on a method, or any parameter of that method uses `#[Param]`, this component **automatically infers and completes basic validation rules from the method parameter signature**, then merges them with existing rules before validation.
 
-### Examples: `#[Validate]` Equivalent Expansion
+### Example: `#[Validate]` equivalent expansion
 
-1) Enable `#[Validate]` without writing rules:
+1) Only enable `#[Validate]` without writing rules manually:
 
 ```php
 use support\validation\annotation\Validate;
@@ -383,7 +386,7 @@ class DemoController
 }
 ```
 
-2) Only partial rules provided, the rest is inferred:
+2) Only partial rules written, rest completed by parameter signature:
 
 ```php
 use support\validation\annotation\Validate;
@@ -416,7 +419,7 @@ class DemoController
 }
 ```
 
-3) Default values / nullable types:
+3) Default value / nullable type:
 
 ```php
 use support\validation\annotation\Validate;
@@ -451,74 +454,74 @@ class DemoController
 
 ### Default Exception
 
-Validation failure throws `support\validation\ValidationException`, which inherits from `Webman\Exception\BusinessException` and does not log errors.
+Validation failure throws `support\validation\ValidationException` by default, which extends `Webman\Exception\BusinessException` and does not log errors.
 
 Default response behavior is handled by `BusinessException::render()`:
 
-- Non-JSON requests: return a plain string message, e.g. `token is required.`
-- JSON requests: return JSON response, e.g. `{"code": 422, "msg": "token is required.", "data":....}`
+- Regular requests: returns string message, e.g. `token is required.`
+- JSON requests: returns JSON response, e.g. `{"code": 422, "msg": "token is required.", "data":....}`
 
-### Customize with a custom exception
+### Customize handling via custom exception
 
 - Global config: `exception` in `config/plugin/webman/validation/app.php`
 
-## Multi-Language Support
+## Multilingual Support
 
-The component includes built-in Chinese and English language packs and supports project overrides. Loading order:
+The component includes built-in Chinese and English language packs and supports project overrides. Load order:
 
 1. Project language pack `resource/translations/{locale}/validation.php`
 2. Component built-in `vendor/webman/validation/resources/lang/{locale}/validation.php`
 3. Illuminate built-in English (fallback)
 
-> **Note**  
-> The default language of webman is configured in `config/translation.php`, and it can also be changed using the function `locale('en');`.
+> **Note**
+> Webman default language is configured in `config/translation.php`, or can be changed via `locale('en');`.
 
 ### Local Override Example
 
-`resource/translations/en/validation.php`
+`resource/translations/zh_CN/validation.php`
 
 ```php
 return [
-    'email' => 'The :attribute is not a valid email format.',
+    'email' => ':attribute is not a valid email format.',
 ];
 ```
 
 ## Middleware Auto-Loading
 
-After installation, the component automatically loads the validation middleware via `config/plugin/webman/validation/middleware.php`, no manual registration required.
+After installation, the component auto-loads the validation middleware via `config/plugin/webman/validation/middleware.php`; no manual registration is needed.
 
-## CLI Generator
+## Command-Line Generation
 
-Use `make:validator` to generate a validator class (generated under `app/validation` by default).
+Use the `make:validator` command to generate validator classes (default output to `app/validation` directory).
 
-> **Tip**  
-> You need to install `composer require webman/console`
+> **Note**
+> Requires `composer require webman/console`
 
-### Basic
+### Basic Usage
 
-- **Generate an empty template**
+- **Generate empty template**
 
 ```bash
 php webman make:validator UserValidator
 ```
 
-- **Overwrite if the file already exists**
+- **Overwrite existing file**
 
 ```bash
 php webman make:validator UserValidator --force
 php webman make:validator UserValidator -f
 ```
 
-### Generate rules from a table
+### Generate rules from table structure
 
-- **Generate rules from a table schema** (infers `$rules` from column type/nullability/length; default excluded columns depend on ORM: laravel uses `created_at/updated_at/deleted_at`, thinkorm uses `create_time/update_time/delete_time`)
+- **Specify table name to generate base rules** (infers `$rules` from field type/nullable/length etc.; excludes ORM-related fields by default: laravel uses `created_at/updated_at/deleted_at`, thinkorm uses `create_time/update_time/delete_time`)
 
 ```bash
 php webman make:validator UserValidator --table=wa_users
 php webman make:validator UserValidator -t wa_users
 ```
 
-- **Select a database connection** (multi-connection)
+- **Specify database connection** (multi-connection scenarios)
 
 ```bash
 php webman make:validator UserValidator --table=wa_users --database=mysql
@@ -534,12 +537,12 @@ php webman make:validator UserValidator --table=wa_users --scenes=crud
 php webman make:validator UserValidator -t wa_users -s crud
 ```
 
-> The `update` scene includes the primary key (to locate the record) plus the other fields; `delete/detail` include only primary key fields by default.
+> The `update` scene includes the primary key field (for locating records) plus other fields; `delete/detail` include only the primary key by default.
 
-### ORM selection (laravel(illuminate/database) vs think-orm)
+### ORM selection (laravel (illuminate/database) vs think-orm)
 
-- **Auto (default)**: uses the available ORM; if both exist, defaults to illuminate
-- **Force**
+- **Auto-select (default)**: Uses whichever is installed/configured; when both exist, uses illuminate by default
+- **Force specify**
 
 ```bash
 php webman make:validator UserValidator --table=wa_users --orm=laravel
@@ -547,32 +550,32 @@ php webman make:validator UserValidator --table=wa_users --orm=thinkorm
 php webman make:validator UserValidator -t wa_users -o thinkorm
 ```
 
-### Example
+### Complete example
 
 ```bash
 php webman make:validator UserValidator -t wa_users -d mysql -s crud -o laravel -f
 ```
 
+## Unit Tests
 
-## Unit Testing
-
-Enter the `webman/validation` root directory and execute:
+From the `webman/validation` root directory, run:
 
 ```bash
 composer install
 vendor\bin\phpunit -c phpunit.xml
 ```
 
-## All Validation Rules Reference
+## Validation Rules Reference
+
 <a name="available-validation-rules"></a>
 ## Available Validation Rules
 
 > [!IMPORTANT]
-> - Webman Validation is based on `illuminate/validation`, with rule names consistent with Laravel, and the rules themselves have no Webman-specific modifications.
-> - The middleware validates data from `$request->all()` (GET+POST) by default and merges route parameters, excluding uploaded files; for file-related rules, manually merge `$request->file()` into the data or call `Validator::make` manually.
-> - `current_password` depends on authentication guards, `exists`/`unique` depend on database connections and query builders, and these rules are unavailable without integrating the corresponding components.
+> - Webman Validation is based on `illuminate/validation`; rule names match Laravel and there are no Webman-specific rules.
+> - Middleware validates data from `$request->all()` (GET+POST) merged with route parameters by default, excluding uploaded files; for file rules, merge `$request->file()` into the data yourself, or call `Validator::make` manually.
+> - `current_password` depends on auth guard; `exists`/`unique` depend on database connection and query builder; these rules are unavailable when the corresponding components are not integrated.
 
-The following lists all available validation rules and their functions:
+The following lists all available validation rules and their purposes:
 
 <style>
     .collection-method-list > p {
@@ -587,7 +590,7 @@ The following lists all available validation rules and their functions:
     }
 </style>
 
-#### Boolean Values
+#### Boolean
 
 <div class="collection-method-list" markdown="1">
 
@@ -599,7 +602,7 @@ The following lists all available validation rules and their functions:
 
 </div>
 
-#### Strings
+#### String
 
 <div class="collection-method-list" markdown="1">
 
@@ -640,7 +643,7 @@ The following lists all available validation rules and their functions:
 
 </div>
 
-#### Numbers
+#### Numeric
 
 <div class="collection-method-list" markdown="1">
 
@@ -665,7 +668,7 @@ The following lists all available validation rules and their functions:
 
 </div>
 
-#### Arrays
+#### Array
 
 <div class="collection-method-list" markdown="1">
 
@@ -683,7 +686,7 @@ The following lists all available validation rules and their functions:
 
 </div>
 
-#### Dates
+#### Date
 
 <div class="collection-method-list" markdown="1">
 
@@ -699,7 +702,7 @@ The following lists all available validation rules and their functions:
 
 </div>
 
-#### Files
+#### File
 
 <div class="collection-method-list" markdown="1">
 
@@ -725,7 +728,7 @@ The following lists all available validation rules and their functions:
 
 </div>
 
-#### Utilities
+#### Utility
 
 <div class="collection-method-list" markdown="1">
 
@@ -771,22 +774,22 @@ The following lists all available validation rules and their functions:
 <a name="rule-accepted"></a>
 #### accepted
 
-The field under validation must be `"yes"`, `"on"`, `1`, `"1"`, `true`, or `"true"`. This is commonly used for scenarios like confirming agreement to terms of service.
+The field must be `"yes"`, `"on"`, `1`, `"1"`, `true`, or `"true"`. Commonly used for scenarios like verifying user agreement to terms of service.
 
 <a name="rule-accepted-if"></a>
 #### accepted_if:anotherfield,value,...
 
-The field under validation must be `"yes"`, `"on"`, `1`, `"1"`, `true`, or `"true"` when another field equals the specified value. This is useful for conditional agreement scenarios.
+When another field equals the specified value, the field must be `"yes"`, `"on"`, `1`, `"1"`, `true`, or `"true"`. Commonly used for conditional agreement scenarios.
 
 <a name="rule-active-url"></a>
 #### active_url
 
-The field under validation must have a valid A or AAAA record. The rule first extracts the hostname using `parse_url` and then validates it with `dns_get_record`.
+The field must have a valid A or AAAA record. This rule first uses `parse_url` to extract the URL hostname, then validates with `dns_get_record`.
 
 <a name="rule-after"></a>
 #### after:_date_
 
-The field under validation must be a value after the given date. The date is converted to a valid `DateTime` using `strtotime`:
+The field must be a value after the given date. The date is passed to `strtotime` to convert to a valid `DateTime`:
 
 ```php
 use support\validation\Validator;
@@ -818,7 +821,7 @@ Validator::make($data, [
 ])->validate();
 ```
 
-`afterToday` and `todayOrAfter` can conveniently express "must be after today" or "must be today or later":
+`afterToday` and `todayOrAfter` conveniently express "must be after today" or "must be today or later":
 
 ```php
 Validator::make($data, [
@@ -832,7 +835,7 @@ Validator::make($data, [
 <a name="rule-after-or-equal"></a>
 #### after_or_equal:_date_
 
-The field under validation must be after or equal to the given date. For more details, see the [after](#rule-after) rule.
+The field must be on or after the given date. See [after](#rule-after) for more details.
 
 You can use the fluent `date` rule builder:
 
@@ -851,7 +854,7 @@ Validator::make($data, [
 <a name="rule-anyof"></a>
 #### anyOf
 
-`Rule::anyOf` allows specifying "pass if any one of the rule sets is satisfied". For example, the following rule means `username` is either an email address or an alphanumeric string with underscores/dashes of at least 6 characters:
+`Rule::anyOf` allows specifying "satisfy any one rule set". For example, the following rule means `username` must be either an email address or an alphanumeric/underscore/dash string of at least 6 characters:
 
 ```php
 use support\validation\Rule;
@@ -871,7 +874,7 @@ Validator::make($data, [
 <a name="rule-alpha"></a>
 #### alpha
 
-The field under validation must consist of Unicode letters ([\p{L}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AL%3A%5D&g=&i=) and [\p{M}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AM%3A%5D&g=&i=)).
+The field must be Unicode letters ([\p{L}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AL%3A%5D&g=&i=) and [\p{M}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AM%3A%5D&g=&i=)).
 
 To allow only ASCII (`a-z`, `A-Z`), add the `ascii` option:
 
@@ -884,7 +887,7 @@ Validator::make($data, [
 <a name="rule-alpha-dash"></a>
 #### alpha_dash
 
-The field under validation can only contain Unicode alphanumeric characters ([\p{L}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AL%3A%5D&g=&i=), [\p{M}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AM%3A%5D&g=&i=), [\p{N}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AN%3A%5D&g=&i=)), as well as ASCII dashes (`-`) and underscores (`_`).
+The field may only contain Unicode letters and numbers ([\p{L}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AL%3A%5D&g=&i=), [\p{M}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AM%3A%5D&g=&i=), [\p{N}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AN%3A%5D&g=&i=)), plus ASCII hyphen (`-`) and underscore (`_`).
 
 To allow only ASCII (`a-z`, `A-Z`, `0-9`), add the `ascii` option:
 
@@ -897,7 +900,7 @@ Validator::make($data, [
 <a name="rule-alpha-num"></a>
 #### alpha_num
 
-The field under validation can only contain Unicode alphanumeric characters ([\p{L}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AL%3A%5D&g=&i=), [\p{M}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AM%3A%5D&g=&i=), [\p{N}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AN%3A%5D&g=&i=)).
+The field may only contain Unicode letters and numbers ([\p{L}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AL%3A%5D&g=&i=), [\p{M}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AM%3A%5D&g=&i=), [\p{N}](https://util.unicode.org/UnicodeJsps/list-unicodeset.jsp?a=%5B%3AN%3A%5D&g=&i=)).
 
 To allow only ASCII (`a-z`, `A-Z`, `0-9`), add the `ascii` option:
 
@@ -910,9 +913,9 @@ Validator::make($data, [
 <a name="rule-array"></a>
 #### array
 
-The field under validation must be a PHP `array`.
+The field must be a PHP `array`.
 
-When the `array` rule includes additional parameters, the keys in the input array must be in the parameter list. In the example, the `admin` key is not in the allowed list, so it is invalid:
+When the `array` rule has extra parameters, the input array keys must be in the parameter list. In the example, the `admin` key is not in the allowed list, so it is invalid:
 
 ```php
 use support\validation\Validator;
@@ -930,24 +933,24 @@ Validator::make($input, [
 ])->validate();
 ```
 
-It is recommended to explicitly specify the allowed keys for arrays in actual projects.
+It is recommended to explicitly define allowed array keys in real projects.
 
 <a name="rule-ascii"></a>
 #### ascii
 
-The field under validation can only contain 7-bit ASCII characters.
+The field may only contain 7-bit ASCII characters.
 
 <a name="rule-bail"></a>
 #### bail
 
-When the first validation rule for a field fails, stop validating the other rules for that field.
+Stop validating further rules for the field when the first rule fails.
 
 This rule only affects the current field. For "stop on first failure globally", use Illuminate's validator directly and call `stopOnFirstFailure()`.
 
 <a name="rule-before"></a>
 #### before:_date_
 
-The field under validation must be before the given date. The date is converted to a valid `DateTime` using `strtotime`. Similar to the [after](#rule-after) rule, you can pass another field name for comparison.
+The field must be before the given date. The date is passed to `strtotime` to convert to a valid `DateTime`. Like [after](#rule-after), you can pass another field name for comparison.
 
 You can use the fluent `date` rule builder:
 
@@ -963,7 +966,7 @@ Validator::make($data, [
 ])->validate();
 ```
 
-`beforeToday` and `todayOrBefore` can conveniently express "must be before today" or "must be today or earlier":
+`beforeToday` and `todayOrBefore` conveniently express "must be before today" or "must be today or earlier":
 
 ```php
 Validator::make($data, [
@@ -977,7 +980,7 @@ Validator::make($data, [
 <a name="rule-before-or-equal"></a>
 #### before_or_equal:_date_
 
-The field under validation must be before or equal to the given date. The date is converted to a valid `DateTime` using `strtotime`. Similar to the [after](#rule-after) rule, you can pass another field name for comparison.
+The field must be on or before the given date. The date is passed to `strtotime` to convert to a valid `DateTime`. Like [after](#rule-after), you can pass another field name for comparison.
 
 You can use the fluent `date` rule builder:
 
@@ -996,14 +999,14 @@ Validator::make($data, [
 <a name="rule-between"></a>
 #### between:_min_,_max_
 
-The field under validation must have a size between the given _min_ and _max_ (inclusive). Strings, numbers, arrays, and files are evaluated using the same rules as [size](#rule-size).
+The field size must be between _min_ and _max_ (inclusive). Evaluation for strings, numbers, arrays, and files is the same as [size](#rule-size).
 
 <a name="rule-boolean"></a>
 #### boolean
 
-The field under validation must be convertible to a boolean value. Acceptable inputs include `true`, `false`, `1`, `0`, `"1"`, `"0"`.
+The field must be convertible to boolean. Acceptable inputs include `true`, `false`, `1`, `0`, `"1"`, `"0"`.
 
-You can use the `strict` parameter to allow only `true` or `false`:
+Use the `strict` parameter to allow only `true` or `false`:
 
 ```php
 Validator::make($data, [
@@ -1014,14 +1017,14 @@ Validator::make($data, [
 <a name="rule-confirmed"></a>
 #### confirmed
 
-The field under validation must have a matching field `{field}_confirmation`. For example, if the field is `password`, `password_confirmation` is required.
+The field must have a matching `{field}_confirmation` field. For example, when the field is `password`, `password_confirmation` is required.
 
-You can also specify a custom confirmation field name, such as `confirmed:repeat_username`, which requires `repeat_username` to match the current field.
+You can also specify a custom confirmation field name, e.g. `confirmed:repeat_username` requires `repeat_username` to match the current field.
 
 <a name="rule-contains"></a>
 #### contains:_foo_,_bar_,...
 
-The field under validation must be an array and must contain all the given parameter values. This rule is often used for array validation and can be constructed using `Rule::contains`:
+The field must be an array and must contain all given parameter values. This rule is commonly used for array validation; you can use `Rule::contains` to construct it:
 
 ```php
 use support\validation\Rule;
@@ -1039,7 +1042,7 @@ Validator::make($data, [
 <a name="rule-doesnt-contain"></a>
 #### doesnt_contain:_foo_,_bar_,...
 
-The field under validation must be an array and must not contain any of the given parameter values. You can use `Rule::doesntContain` to construct:
+The field must be an array and must not contain any of the given parameter values. You can use `Rule::doesntContain` to construct it:
 
 ```php
 use support\validation\Rule;
@@ -1057,7 +1060,7 @@ Validator::make($data, [
 <a name="rule-current-password"></a>
 #### current_password
 
-The field under validation must match the current authenticated user's password. You can specify the authentication guard via the first parameter:
+The field must match the current authenticated user's password. You can specify the auth guard as the first parameter:
 
 ```php
 Validator::make($data, [
@@ -1066,22 +1069,22 @@ Validator::make($data, [
 ```
 
 > [!WARNING]
-> This rule depends on the authentication component and guard configuration; do not use it without integrating authentication.
+> This rule depends on the auth component and guard configuration; do not use when auth is not integrated.
 
 <a name="rule-date"></a>
 #### date
 
-The field under validation must be a valid (non-relative) date recognized by `strtotime`.
+The field must be a valid (non-relative) date recognizable by `strtotime`.
 
 <a name="rule-date-equals"></a>
 #### date_equals:_date_
 
-The field under validation must equal the given date. The date is converted to a valid `DateTime` using `strtotime`.
+The field must equal the given date. The date is passed to `strtotime` to convert to a valid `DateTime`.
 
 <a name="rule-date-format"></a>
 #### date_format:_format_,...
 
-The field under validation must match one of the given formats. Use either `date` or `date_format`. This rule supports all formats of PHP [DateTime](https://www.php.net/manual/en/class.datetime.php).
+The field must match one of the given formats. Use either `date` or `date_format`. This rule supports all PHP [DateTime](https://www.php.net/manual/en/class.datetime.php) formats.
 
 You can use the fluent `date` rule builder:
 
@@ -1100,7 +1103,7 @@ Validator::make($data, [
 <a name="rule-decimal"></a>
 #### decimal:_min_,_max_
 
-The field under validation must be a number with the specified number of decimal places:
+The field must be numeric with the required decimal places:
 
 ```php
 Validator::make($data, [
@@ -1115,32 +1118,32 @@ Validator::make($data, [
 <a name="rule-declined"></a>
 #### declined
 
-The field under validation must be `"no"`, `"off"`, `0`, `"0"`, `false`, or `"false"`.
+The field must be `"no"`, `"off"`, `0`, `"0"`, `false`, or `"false"`.
 
 <a name="rule-declined-if"></a>
 #### declined_if:anotherfield,value,...
 
-The field under validation must be `"no"`, `"off"`, `0`, `"0"`, `false`, or `"false"` when another field equals the specified value.
+When another field equals the specified value, the field must be `"no"`, `"off"`, `0`, `"0"`, `false`, or `"false"`.
 
 <a name="rule-different"></a>
 #### different:_field_
 
-The field under validation must be different from _field_.
+The field must be different from _field_.
 
 <a name="rule-digits"></a>
 #### digits:_value_
 
-The field under validation must be an integer with a length of _value_.
+The field must be an integer with length _value_.
 
 <a name="rule-digits-between"></a>
 #### digits_between:_min_,_max_
 
-The field under validation must be an integer with a length between _min_ and _max_.
+The field must be an integer with length between _min_ and _max_.
 
 <a name="rule-dimensions"></a>
 #### dimensions
 
-The field under validation must be an image and satisfy the dimension constraints:
+The field must be an image and satisfy dimension constraints:
 
 ```php
 Validator::make($data, [
@@ -1148,9 +1151,9 @@ Validator::make($data, [
 ])->validate();
 ```
 
-Available constraints: _min_width_, _max_width_, _min_height_, _max_height_, _width_, _height_, _ratio_.
+Available constraints: _min\_width_, _max\_width_, _min\_height_, _max\_height_, _width_, _height_, _ratio_.
 
-_ratio_ is the aspect ratio, which can be expressed as a fraction or float:
+_ratio_ is the aspect ratio; it can be expressed as a fraction or float:
 
 ```php
 Validator::make($data, [
@@ -1158,7 +1161,7 @@ Validator::make($data, [
 ])->validate();
 ```
 
-Due to the many parameters in this rule, it is recommended to use `Rule::dimensions` to construct:
+This rule has many parameters; it is recommended to use `Rule::dimensions` to construct it:
 
 ```php
 use support\validation\Rule;
@@ -1178,7 +1181,7 @@ Validator::make($data, [
 <a name="rule-distinct"></a>
 #### distinct
 
-When validating an array, the field values must not be duplicated:
+When validating arrays, field values must not be duplicated:
 
 ```php
 Validator::make($data, [
@@ -1186,7 +1189,7 @@ Validator::make($data, [
 ])->validate();
 ```
 
-By default, loose comparison is used. For strict comparison, add `strict`:
+Uses loose comparison by default. Add `strict` for strict comparison:
 
 ```php
 Validator::make($data, [
@@ -1194,7 +1197,7 @@ Validator::make($data, [
 ])->validate();
 ```
 
-You can add `ignore_case` to ignore case differences:
+Add `ignore_case` to ignore case differences:
 
 ```php
 Validator::make($data, [
@@ -1205,17 +1208,17 @@ Validator::make($data, [
 <a name="rule-doesnt-start-with"></a>
 #### doesnt_start_with:_foo_,_bar_,...
 
-The field under validation must not start with the specified values.
+The field must not start with any of the specified values.
 
 <a name="rule-doesnt-end-with"></a>
 #### doesnt_end_with:_foo_,_bar_,...
 
-The field under validation must not end with the specified values.
+The field must not end with any of the specified values.
 
 <a name="rule-email"></a>
 #### email
 
-The field under validation must be a valid email address. This rule relies on [egulias/email-validator](https://github.com/egulias/EmailValidator), defaulting to `RFCValidation`, but other validation methods can be specified:
+The field must be a valid email address. This rule depends on [egulias/email-validator](https://github.com/egulias/EmailValidator), uses `RFCValidation` by default, and can use other validation methods:
 
 ```php
 Validator::make($data, [
@@ -1227,12 +1230,12 @@ Available validation methods:
 
 <div class="content-list" markdown="1">
 
-- `rfc`: `RFCValidation` - Validates email according to RFC standards ([supported RFCs](https://github.com/egulias/EmailValidator?tab=readme-ov-file#supported-rfcs)).
-- `strict`: `NoRFCWarningsValidation` - Fails on warnings during RFC validation (e.g., trailing dots or consecutive dots).
-- `dns`: `DNSCheckValidation` - Checks if the domain has a valid MX record.
-- `spoof`: `SpoofCheckValidation` - Prevents homoglyph or deceptive Unicode characters.
-- `filter`: `FilterEmailValidation` - Validates using PHP `filter_var`.
-- `filter_unicode`: `FilterEmailValidation::unicode()` - Unicode-allowed `filter_var` validation.
+- `rfc`: `RFCValidation` - Validate email per RFC spec ([supported RFCs](https://github.com/egulias/EmailValidator?tab=readme-ov-file#supported-rfcs)).
+- `strict`: `NoRFCWarningsValidation` - Fail on RFC warnings (e.g. trailing dot or consecutive dots).
+- `dns`: `DNSCheckValidation` - Check if domain has valid MX records.
+- `spoof`: `SpoofCheckValidation` - Prevent homograph or spoofing Unicode characters.
+- `filter`: `FilterEmailValidation` - Validate using PHP `filter_var`.
+- `filter_unicode`: `FilterEmailValidation::unicode()` - `filter_var` validation allowing Unicode.
 
 </div>
 
@@ -1259,7 +1262,7 @@ Validator::make($data, [
 <a name="rule-encoding"></a>
 #### encoding:*encoding_type*
 
-The field under validation must match the specified character encoding. This rule uses `mb_check_encoding` to detect the encoding of files or strings. It can be used with the file rule builder:
+The field must match the specified character encoding. This rule uses `mb_check_encoding` to detect file or string encoding. Can be used with the file rule builder:
 
 ```php
 use Illuminate\Validation\Rules\File;
@@ -1276,12 +1279,12 @@ Validator::make($data, [
 <a name="rule-ends-with"></a>
 #### ends_with:_foo_,_bar_,...
 
-The field under validation must end with one of the specified values.
+The field must end with one of the specified values.
 
 <a name="rule-enum"></a>
 #### enum
 
-`Enum` is a class-based rule used to validate if the field value is a valid enum value. Pass the enum class name during construction. For validating basic type values, use Backed Enum:
+`Enum` is a class-based rule for validating that the field value is a valid enum value. Pass the enum class name when constructing. For primitive values, use Backed Enum:
 
 ```php
 use app\enums\ServerStatus;
@@ -1293,7 +1296,7 @@ Validator::make($data, [
 ])->validate();
 ```
 
-You can use `only`/`except` to restrict enum values:
+Use `only`/`except` to restrict enum values:
 
 ```php
 use app\enums\ServerStatus;
@@ -1315,7 +1318,7 @@ Validator::make($data, [
 ])->validate();
 ```
 
-You can use `when` for conditional restrictions:
+Use `when` for conditional restrictions:
 
 ```php
 use app\Enums\ServerStatus;
@@ -1336,12 +1339,12 @@ Validator::make($data, [
 <a name="rule-exclude"></a>
 #### exclude
 
-The field under validation will be excluded from the data returned by `validate`/`validated`.
+The field will be excluded from data returned by `validate`/`validated`.
 
 <a name="rule-exclude-if"></a>
 #### exclude_if:_anotherfield_,_value_
 
-The field under validation will be excluded from the data returned by `validate`/`validated` when _anotherfield_ equals _value_.
+When _anotherfield_ equals _value_, the field will be excluded from data returned by `validate`/`validated`.
 
 For complex conditions, use `Rule::excludeIf`:
 
@@ -1361,25 +1364,25 @@ Validator::make($data, [
 <a name="rule-exclude-unless"></a>
 #### exclude_unless:_anotherfield_,_value_
 
-The field under validation will be excluded from the data returned by `validate`/`validated` unless _anotherfield_ equals _value_. If _value_ is `null` (e.g., `exclude_unless:name,null`), the field is retained only if the comparison field is `null` or does not exist.
+Unless _anotherfield_ equals _value_, the field will be excluded from data returned by `validate`/`validated`. If _value_ is `null` (e.g. `exclude_unless:name,null`), the field is only kept when the comparison field is `null` or absent.
 
 <a name="rule-exclude-with"></a>
 #### exclude_with:_anotherfield_
 
-The field under validation will be excluded from the data returned by `validate`/`validated` when _anotherfield_ exists.
+When _anotherfield_ exists, the field will be excluded from data returned by `validate`/`validated`.
 
 <a name="rule-exclude-without"></a>
 #### exclude_without:_anotherfield_
 
-The field under validation will be excluded from the data returned by `validate`/`validated` when _anotherfield_ does not exist.
+When _anotherfield_ does not exist, the field will be excluded from data returned by `validate`/`validated`.
 
 <a name="rule-exists"></a>
 #### exists:_table_,_column_
 
-The field under validation must exist in the specified database table.
+The field must exist in the specified database table.
 
 <a name="basic-usage-of-exists-rule"></a>
-#### Basic Usage of Exists Rule
+#### Basic usage of Exists rule
 
 ```php
 Validator::make($data, [
@@ -1387,12 +1390,12 @@ Validator::make($data, [
 ])->validate();
 ```
 
-If `column` is not specified, the field name is used by default. Thus, this example validates if the `state` column exists in the `states` table.
+When `column` is not specified, the field name is used by default. So this example validates whether the `state` column exists in the `states` table.
 
 <a name="specifying-a-custom-column-name"></a>
-#### Specifying a Custom Column Name
+#### Specifying a custom column name
 
-You can append the column name after the table name:
+Append the column name after the table name:
 
 ```php
 Validator::make($data, [
@@ -1400,7 +1403,7 @@ Validator::make($data, [
 ])->validate();
 ```
 
-To specify a database connection, prepend the connection name to the table:
+To specify a database connection, prefix the table name with the connection name:
 
 ```php
 Validator::make($data, [
@@ -1408,7 +1411,7 @@ Validator::make($data, [
 ])->validate();
 ```
 
-You can also pass a model class name, and the framework will resolve the table name:
+You can also pass a model class name; the framework will resolve the table name:
 
 ```php
 Validator::make($data, [
@@ -1416,7 +1419,7 @@ Validator::make($data, [
 ])->validate();
 ```
 
-To customize query conditions, use the `Rule` rule builder:
+For custom query conditions, use the `Rule` builder:
 
 ```php
 use Illuminate\Database\Query\Builder;
@@ -1444,7 +1447,7 @@ Validator::make($data, [
 ])->validate();
 ```
 
-When validating if a group of values exists, combine with the `array` rule:
+To validate a set of values exist, combine with the `array` rule:
 
 ```php
 Validator::make($data, [
@@ -1452,12 +1455,12 @@ Validator::make($data, [
 ])->validate();
 ```
 
-When `array` and `exists` coexist, a single query is generated to validate all values.
+When both `array` and `exists` are present, a single query validates all values.
 
 <a name="rule-extensions"></a>
 #### extensions:_foo_,_bar_,...
 
-The uploaded file's extension must be in the allowed list:
+Validates that the uploaded file extension is in the allowed list:
 
 ```php
 Validator::make($data, [
@@ -1466,12 +1469,12 @@ Validator::make($data, [
 ```
 
 > [!WARNING]
-> Do not rely solely on extension validation for file types; it is recommended to use it with [mimes](#rule-mimes) or [mimetypes](#rule-mimetypes).
+> Do not rely on extension alone for file type validation; use with [mimes](#rule-mimes) or [mimetypes](#rule-mimetypes).
 
 <a name="rule-file"></a>
 #### file
 
-The field under validation must be a successfully uploaded file.
+The field must be a successfully uploaded file.
 
 <a name="rule-filled"></a>
 #### filled
@@ -1481,30 +1484,30 @@ When the field exists, its value must not be empty.
 <a name="rule-gt"></a>
 #### gt:_field_
 
-The field under validation must be greater than the given _field_ or _value_. The two fields must be of the same type. Strings, numbers, arrays, and files are evaluated using the same rules as [size](#rule-size).
+The field must be greater than the given _field_ or _value_. Both fields must have the same type. Evaluation for strings, numbers, arrays, and files is the same as [size](#rule-size).
 
 <a name="rule-gte"></a>
 #### gte:_field_
 
-The field under validation must be greater than or equal to the given _field_ or _value_. The two fields must be of the same type. Strings, numbers, arrays, and files are evaluated using the same rules as [size](#rule-size).
+The field must be greater than or equal to the given _field_ or _value_. Both fields must have the same type. Evaluation for strings, numbers, arrays, and files is the same as [size](#rule-size).
 
 <a name="rule-hex-color"></a>
 #### hex_color
 
-The field under validation must be a valid [hexadecimal color value](https://developer.mozilla.org/en-US/docs/Web/CSS/hex-color).
+The field must be a valid [hex color value](https://developer.mozilla.org/en-US/docs/Web/CSS/hex-color).
 
 <a name="rule-image"></a>
 #### image
 
-The field under validation must be an image (jpg, jpeg, png, bmp, gif, or webp).
+The field must be an image (jpg, jpeg, png, bmp, gif, or webp).
 
 > [!WARNING]
-> SVG is not allowed by default due to XSS risks. To allow it, add `allow_svg`: `image:allow_svg`.
+> SVG is not allowed by default due to XSS risk. To allow it, add `allow_svg`: `image:allow_svg`.
 
 <a name="rule-in"></a>
 #### in:_foo_,_bar_,...
 
-The field under validation must be in the given list of values. You can use `Rule::in` to construct:
+The field must be in the given value list. You can use `Rule::in` to construct:
 
 ```php
 use support\validation\Rule;
@@ -1518,7 +1521,7 @@ Validator::make($data, [
 ])->validate();
 ```
 
-When combined with the `array` rule, every value in the input array must be in the `in` list:
+When combined with the `array` rule, each value in the input array must be in the `in` list:
 
 ```php
 use support\validation\Rule;
@@ -1540,12 +1543,12 @@ Validator::make($input, [
 <a name="rule-in-array"></a>
 #### in_array:_anotherfield_.*
 
-The field under validation must exist in the value list of _anotherfield_.
+The field must exist in the value list of _anotherfield_.
 
 <a name="rule-in-array-keys"></a>
 #### in_array_keys:_value_.*
 
-The field under validation must be an array and must contain at least one of the given values as a key:
+The field must be an array and must contain at least one of the given values as a key:
 
 ```php
 Validator::make($data, [
@@ -1556,9 +1559,9 @@ Validator::make($data, [
 <a name="rule-integer"></a>
 #### integer
 
-The field under validation must be an integer.
+The field must be an integer.
 
-You can use the `strict` parameter to require the field type to be integer; string representations of integers will be considered invalid:
+Use the `strict` parameter to require the field type to be integer; string integers will be invalid:
 
 ```php
 Validator::make($data, [
@@ -1567,67 +1570,67 @@ Validator::make($data, [
 ```
 
 > [!WARNING]
-> This rule only checks if it passes PHP's `FILTER_VALIDATE_INT`; to enforce numeric types, use it with [numeric](#rule-numeric).
+> This rule only validates whether it passes PHP's `FILTER_VALIDATE_INT`; for strict numeric types, use with [numeric](#rule-numeric).
 
 <a name="rule-ip"></a>
 #### ip
 
-The field under validation must be a valid IP address.
+The field must be a valid IP address.
 
 <a name="rule-ipv4"></a>
 #### ipv4
 
-The field under validation must be a valid IPv4 address.
+The field must be a valid IPv4 address.
 
 <a name="rule-ipv6"></a>
 #### ipv6
 
-The field under validation must be a valid IPv6 address.
+The field must be a valid IPv6 address.
 
 <a name="rule-json"></a>
 #### json
 
-The field under validation must be a valid JSON string.
+The field must be a valid JSON string.
 
 <a name="rule-lt"></a>
 #### lt:_field_
 
-The field under validation must be less than the given _field_. The two fields must be of the same type. Strings, numbers, arrays, and files are evaluated using the same rules as [size](#rule-size).
+The field must be less than the given _field_. Both fields must have the same type. Evaluation for strings, numbers, arrays, and files is the same as [size](#rule-size).
 
 <a name="rule-lte"></a>
 #### lte:_field_
 
-The field under validation must be less than or equal to the given _field_. The two fields must be of the same type. Strings, numbers, arrays, and files are evaluated using the same rules as [size](#rule-size).
+The field must be less than or equal to the given _field_. Both fields must have the same type. Evaluation for strings, numbers, arrays, and files is the same as [size](#rule-size).
 
 <a name="rule-lowercase"></a>
 #### lowercase
 
-The field under validation must be lowercase.
+The field must be lowercase.
 
 <a name="rule-list"></a>
 #### list
 
-The field under validation must be a list array. The keys in a list array must be consecutive numbers from 0 to `count($array) - 1`.
+The field must be a list array. List array keys must be consecutive numbers from 0 to `count($array) - 1`.
 
 <a name="rule-mac"></a>
 #### mac_address
 
-The field under validation must be a valid MAC address.
+The field must be a valid MAC address.
 
 <a name="rule-max"></a>
 #### max:_value_
 
-The field under validation must be less than or equal to _value_. Strings, numbers, arrays, and files are evaluated using the same rules as [size](#rule-size).
+The field must be less than or equal to _value_. Evaluation for strings, numbers, arrays, and files is the same as [size](#rule-size).
 
 <a name="rule-max-digits"></a>
 #### max_digits:_value_
 
-The field under validation must be an integer with a length not exceeding _value_.
+The field must be an integer with length not exceeding _value_.
 
 <a name="rule-mimetypes"></a>
 #### mimetypes:_text/plain_,...
 
-The file's MIME type must be in the list:
+Validates that the file's MIME type is in the list:
 
 ```php
 Validator::make($data, [
@@ -1635,12 +1638,12 @@ Validator::make($data, [
 ])->validate();
 ```
 
-The MIME type is guessed by reading the file content, which may differ from the client-provided MIME.
+MIME type is guessed by reading file content and may differ from the client-provided MIME.
 
 <a name="rule-mimes"></a>
 #### mimes:_foo_,_bar_,...
 
-The file's MIME type must correspond to the given extension:
+Validates that the file's MIME type corresponds to the given extension:
 
 ```php
 Validator::make($data, [
@@ -1648,59 +1651,59 @@ Validator::make($data, [
 ])->validate();
 ```
 
-Although the parameters are extensions, this rule reads the file content to determine the MIME. The extension-to-MIME mapping is from:
+Although the parameters are extensions, this rule reads file content to determine MIME. Extension-to-MIME mapping:
 
 [https://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types](https://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types)
 
 <a name="mime-types-and-extensions"></a>
-#### MIME Types and Extensions
+#### MIME types and extensions
 
-This rule does not validate if the "filename extension" matches the "actual MIME". For example, `mimes:png` will consider `photo.txt` with PNG content as valid. To validate extensions, use [extensions](#rule-extensions).
+This rule does not validate that "file extension" matches "actual MIME". For example, `mimes:png` treats `photo.txt` with PNG content as valid. To validate extension, use [extensions](#rule-extensions).
 
 <a name="rule-min"></a>
 #### min:_value_
 
-The field under validation must be greater than or equal to _value_. Strings, numbers, arrays, and files are evaluated using the same rules as [size](#rule-size).
+The field must be greater than or equal to _value_. Evaluation for strings, numbers, arrays, and files is the same as [size](#rule-size).
 
 <a name="rule-min-digits"></a>
 #### min_digits:_value_
 
-The field under validation must be an integer with a length of at least _value_.
+The field must be an integer with length not less than _value_.
 
 <a name="rule-multiple-of"></a>
 #### multiple_of:_value_
 
-The field under validation must be a multiple of _value_.
+The field must be a multiple of _value_.
 
 <a name="rule-missing"></a>
 #### missing
 
-The field under validation must not exist in the input data.
+The field must not exist in the input data.
 
 <a name="rule-missing-if"></a>
 #### missing_if:_anotherfield_,_value_,...
 
-The field under validation must not exist when _anotherfield_ equals any _value_.
+When _anotherfield_ equals any _value_, the field must not exist.
 
 <a name="rule-missing-unless"></a>
 #### missing_unless:_anotherfield_,_value_
 
-The field under validation must not exist unless _anotherfield_ equals any _value_.
+Unless _anotherfield_ equals any _value_, the field must not exist.
 
 <a name="rule-missing-with"></a>
 #### missing_with:_foo_,_bar_,...
 
-The field under validation must not exist when any of the specified fields exist.
+When any specified field exists, the field must not exist.
 
 <a name="rule-missing-with-all"></a>
 #### missing_with_all:_foo_,_bar_,...
 
-The field under validation must not exist when all specified fields exist.
+When all specified fields exist, the field must not exist.
 
 <a name="rule-not-in"></a>
 #### not_in:_foo_,_bar_,...
 
-The field under validation must not be in the given list of values. You can use `Rule::notIn` to construct:
+The field must not be in the given value list. You can use `Rule::notIn` to construct:
 
 ```php
 use support\validation\Rule;
@@ -1717,24 +1720,24 @@ Validator::make($data, [
 <a name="rule-not-regex"></a>
 #### not_regex:_pattern_
 
-The field under validation must not match the given regular expression.
+The field must not match the given regular expression.
 
-This rule uses PHP `preg_match`. The regex must include delimiters, e.g., `'email' => 'not_regex:/^.+$/i'`.
+This rule uses PHP `preg_match`. The regex must have delimiters, e.g. `'email' => 'not_regex:/^.+$/i'`.
 
 > [!WARNING]
-> When using `regex` / `not_regex`, if the regex contains `|`, it is recommended to declare rules in array form to avoid conflicts with the `|` separator.
+> When using `regex`/`not_regex`, if the regex contains `|`, use array form to avoid conflict with the `|` separator.
 
 <a name="rule-nullable"></a>
 #### nullable
 
-The field under validation may be `null`.
+The field may be `null`.
 
 <a name="rule-numeric"></a>
 #### numeric
 
-The field under validation must be [numeric](https://www.php.net/manual/en/function.is-numeric.php).
+The field must be [numeric](https://www.php.net/manual/en/function.is-numeric.php).
 
-You can use the `strict` parameter to allow only integer or float types; numeric strings will be considered invalid:
+Use the `strict` parameter to allow only integer or float types; numeric strings will be invalid:
 
 ```php
 Validator::make($data, [
@@ -1745,53 +1748,53 @@ Validator::make($data, [
 <a name="rule-present"></a>
 #### present
 
-The field under validation must exist in the input data.
+The field must exist in the input data.
 
 <a name="rule-present-if"></a>
 #### present_if:_anotherfield_,_value_,...
 
-The field under validation must exist when _anotherfield_ equals any _value_.
+When _anotherfield_ equals any _value_, the field must exist.
 
 <a name="rule-present-unless"></a>
 #### present_unless:_anotherfield_,_value_
 
-The field under validation must exist unless _anotherfield_ equals any _value_.
+Unless _anotherfield_ equals any _value_, the field must exist.
 
 <a name="rule-present-with"></a>
 #### present_with:_foo_,_bar_,...
 
-The field under validation must exist when any of the specified fields exist.
+When any specified field exists, the field must exist.
 
 <a name="rule-present-with-all"></a>
 #### present_with_all:_foo_,_bar_,...
 
-The field under validation must exist when all specified fields exist.
+When all specified fields exist, the field must exist.
 
 <a name="rule-prohibited"></a>
 #### prohibited
 
-The field under validation must be missing or empty. A field is "empty" if:
+The field must be missing or empty. "Empty" means:
 
 <div class="content-list" markdown="1">
 
-- The value is `null`.
-- The value is an empty string.
-- The value is an empty array or empty `Countable` object.
-- It is an uploaded file with an empty path.
+- Value is `null`.
+- Value is empty string.
+- Value is empty array or empty `Countable` object.
+- Uploaded file with empty path.
 
 </div>
 
 <a name="rule-prohibited-if"></a>
 #### prohibited_if:_anotherfield_,_value_,...
 
-The field under validation must be missing or empty when _anotherfield_ equals any _value_. A field is "empty" if:
+When _anotherfield_ equals any _value_, the field must be missing or empty. "Empty" means:
 
 <div class="content-list" markdown="1">
 
-- The value is `null`.
-- The value is an empty string.
-- The value is an empty array or empty `Countable` object.
-- It is an uploaded file with an empty path.
+- Value is `null`.
+- Value is empty string.
+- Value is empty array or empty `Countable` object.
+- Uploaded file with empty path.
 
 </div>
 
@@ -1813,69 +1816,69 @@ Validator::make($data, [
 <a name="rule-prohibited-if-accepted"></a>
 #### prohibited_if_accepted:_anotherfield_,...
 
-The field under validation must be missing or empty when _anotherfield_ is `"yes"`, `"on"`, `1`, `"1"`, `true`, or `"true"`.
+When _anotherfield_ is `"yes"`, `"on"`, `1`, `"1"`, `true`, or `"true"`, the field must be missing or empty.
 
 <a name="rule-prohibited-if-declined"></a>
 #### prohibited_if_declined:_anotherfield_,...
 
-The field under validation must be missing or empty when _anotherfield_ is `"no"`, `"off"`, `0`, `"0"`, `false`, or `"false"`.
+When _anotherfield_ is `"no"`, `"off"`, `0`, `"0"`, `false`, or `"false"`, the field must be missing or empty.
 
 <a name="rule-prohibited-unless"></a>
 #### prohibited_unless:_anotherfield_,_value_,...
 
-The field under validation must be missing or empty unless _anotherfield_ equals any _value_. A field is "empty" if:
+Unless _anotherfield_ equals any _value_, the field must be missing or empty. "Empty" means:
 
 <div class="content-list" markdown="1">
 
-- The value is `null`.
-- The value is an empty string.
-- The value is an empty array or empty `Countable` object.
-- It is an uploaded file with an empty path.
+- Value is `null`.
+- Value is empty string.
+- Value is empty array or empty `Countable` object.
+- Uploaded file with empty path.
 
 </div>
 
 <a name="rule-prohibits"></a>
 #### prohibits:_anotherfield_,...
 
-When the field under validation exists and is not empty, all fields in _anotherfield_ must be missing or empty. A field is "empty" if:
+When the field exists and is not empty, all fields in _anotherfield_ must be missing or empty. "Empty" means:
 
 <div class="content-list" markdown="1">
 
-- The value is `null`.
-- The value is an empty string.
-- The value is an empty array or empty `Countable` object.
-- It is an uploaded file with an empty path.
+- Value is `null`.
+- Value is empty string.
+- Value is empty array or empty `Countable` object.
+- Uploaded file with empty path.
 
 </div>
 
 <a name="rule-regex"></a>
 #### regex:_pattern_
 
-The field under validation must match the given regular expression.
+The field must match the given regular expression.
 
-This rule uses PHP `preg_match`. The regex must include delimiters, e.g., `'email' => 'regex:/^.+@.+$/i'`.
+This rule uses PHP `preg_match`. The regex must have delimiters, e.g. `'email' => 'regex:/^.+@.+$/i'`.
 
 > [!WARNING]
-> When using `regex` / `not_regex`, if the regex contains `|`, it is recommended to declare rules in array form to avoid conflicts with the `|` separator.
+> When using `regex`/`not_regex`, if the regex contains `|`, use array form to avoid conflict with the `|` separator.
 
 <a name="rule-required"></a>
 #### required
 
-The field under validation must exist and not be empty. A field is "empty" if:
+The field must exist and not be empty. "Empty" means:
 
 <div class="content-list" markdown="1">
 
-- The value is `null`.
-- The value is an empty string.
-- The value is an empty array or empty `Countable` object.
-- It is an uploaded file with an empty path.
+- Value is `null`.
+- Value is empty string.
+- Value is empty array or empty `Countable` object.
+- Uploaded file with empty path.
 
 </div>
 
 <a name="rule-required-if"></a>
 #### required_if:_anotherfield_,_value_,...
 
-The field under validation must exist and not be empty when _anotherfield_ equals any _value_.
+When _anotherfield_ equals any _value_, the field must exist and not be empty.
 
 For complex conditions, use `Rule::requiredIf`:
 
@@ -1895,47 +1898,47 @@ Validator::make($data, [
 <a name="rule-required-if-accepted"></a>
 #### required_if_accepted:_anotherfield_,...
 
-The field under validation must exist and not be empty when _anotherfield_ is `"yes"`, `"on"`, `1`, `"1"`, `true`, or `"true"`.
+When _anotherfield_ is `"yes"`, `"on"`, `1`, `"1"`, `true`, or `"true"`, the field must exist and not be empty.
 
 <a name="rule-required-if-declined"></a>
 #### required_if_declined:_anotherfield_,...
 
-The field under validation must exist and not be empty when _anotherfield_ is `"no"`, `"off"`, `0`, `"0"`, `false`, or `"false"`.
+When _anotherfield_ is `"no"`, `"off"`, `0`, `"0"`, `false`, or `"false"`, the field must exist and not be empty.
 
 <a name="rule-required-unless"></a>
 #### required_unless:_anotherfield_,_value_,...
 
-The field under validation must exist and not be empty unless _anotherfield_ equals any _value_. If _value_ is `null` (e.g., `required_unless:name,null`), the field is allowed to be empty only if the comparison field is `null` or does not exist.
+Unless _anotherfield_ equals any _value_, the field must exist and not be empty. If _value_ is `null` (e.g. `required_unless:name,null`), the field may be empty only when the comparison field is `null` or absent.
 
 <a name="rule-required-with"></a>
 #### required_with:_foo_,_bar_,...
 
-The field under validation must exist and not be empty when any specified field exists and is not empty.
+When any specified field exists and is not empty, the field must exist and not be empty.
 
 <a name="rule-required-with-all"></a>
 #### required_with_all:_foo_,_bar_,...
 
-The field under validation must exist and not be empty when all specified fields exist and are not empty.
+When all specified fields exist and are not empty, the field must exist and not be empty.
 
 <a name="rule-required-without"></a>
 #### required_without:_foo_,_bar_,...
 
-The field under validation must exist and not be empty when any specified field is empty or does not exist.
+When any specified field is empty or absent, the field must exist and not be empty.
 
 <a name="rule-required-without-all"></a>
 #### required_without_all:_foo_,_bar_,...
 
-The field under validation must exist and not be empty when all specified fields are empty or do not exist.
+When all specified fields are empty or absent, the field must exist and not be empty.
 
 <a name="rule-required-array-keys"></a>
 #### required_array_keys:_foo_,_bar_,...
 
-The field under validation must be an array and must contain at least the specified keys.
+The field must be an array and must contain at least the specified keys.
 
 <a name="validating-when-present"></a>
 #### sometimes
 
-Apply subsequent validation rules only when the field exists. Commonly used for fields that are "optional but must be valid if present":
+Apply subsequent validation rules only when the field exists. Commonly used for "optional but must be valid when present" fields:
 
 ```php
 Validator::make($data, [
@@ -1946,12 +1949,12 @@ Validator::make($data, [
 <a name="rule-same"></a>
 #### same:_field_
 
-The field under validation must be the same as _field_.
+The field must be the same as _field_.
 
 <a name="rule-size"></a>
 #### size:_value_
 
-The field under validation must have a size equal to the given _value_. For strings, it is the character count; for numbers, it is the specified integer (use with `numeric` or `integer`); for arrays, it is the element count; for files, it is the size in KB. Example:
+The field size must equal the given _value_. For strings: character count; for numbers: specified integer (use with `numeric` or `integer`); for arrays: element count; for files: size in KB. Example:
 
 ```php
 Validator::make($data, [
@@ -1965,17 +1968,17 @@ Validator::make($data, [
 <a name="rule-starts-with"></a>
 #### starts_with:_foo_,_bar_,...
 
-The field under validation must start with one of the specified values.
+The field must start with one of the specified values.
 
 <a name="rule-string"></a>
 #### string
 
-The field under validation must be a string. To allow `null`, use with `nullable`.
+The field must be a string. To allow `null`, use with `nullable`.
 
 <a name="rule-timezone"></a>
 #### timezone
 
-The field under validation must be a valid timezone identifier (from `DateTimeZone::listIdentifiers`). Parameters supported by this method can be passed:
+The field must be a valid timezone identifier (from `DateTimeZone::listIdentifiers`). You can pass parameters supported by that method:
 
 ```php
 Validator::make($data, [
@@ -1994,11 +1997,11 @@ Validator::make($data, [
 <a name="rule-unique"></a>
 #### unique:_table_,_column_
 
-The field under validation must be unique in the specified table.
+The field must be unique in the specified table.
 
-**Specifying Custom Table/Column Names:**
+**Specify custom table/column name:**
 
-You can directly specify the model class name:
+You can specify the model class name directly:
 
 ```php
 Validator::make($data, [
@@ -2006,7 +2009,7 @@ Validator::make($data, [
 ])->validate();
 ```
 
-You can specify the column name (defaults to the field name if not specified):
+You can specify the column name (defaults to field name when not specified):
 
 ```php
 Validator::make($data, [
@@ -2014,7 +2017,7 @@ Validator::make($data, [
 ])->validate();
 ```
 
-**Specifying Database Connection:**
+**Specify database connection:**
 
 ```php
 Validator::make($data, [
@@ -2022,7 +2025,7 @@ Validator::make($data, [
 ])->validate();
 ```
 
-**Ignoring a Specific ID:**
+**Ignore specified ID:**
 
 ```php
 use support\validation\Rule;
@@ -2037,7 +2040,7 @@ Validator::make($data, [
 ```
 
 > [!WARNING]
-> `ignore` should not receive user input; only use system-generated unique IDs (auto-increment IDs or model UUIDs), otherwise there may be SQL injection risks.
+> `ignore` should not receive user input; only use system-generated unique IDs (auto-increment ID or model UUID), otherwise SQL injection risk may exist.
 
 You can also pass a model instance:
 
@@ -2065,7 +2068,7 @@ Validator::make($data, [
 ])->validate();
 ```
 
-By default, the field name is used as the unique column, but you can specify the column name:
+By default uses the field name as the unique column; you can also specify the column name:
 
 ```php
 use support\validation\Rule;
@@ -2078,7 +2081,7 @@ Validator::make($data, [
 ])->validate();
 ```
 
-**Adding Extra Conditions:**
+**Add extra conditions:**
 
 ```php
 use Illuminate\Database\Query\Builder;
@@ -2094,7 +2097,7 @@ Validator::make($data, [
 ])->validate();
 ```
 
-**Ignoring Soft-Deleted Records:**
+**Ignore soft-deleted records:**
 
 ```php
 use support\validation\Rule;
@@ -2105,7 +2108,7 @@ Validator::make($data, [
 ])->validate();
 ```
 
-If the soft-delete column name is not `deleted_at`:
+If the soft delete column is not `deleted_at`:
 
 ```php
 use support\validation\Rule;
@@ -2119,12 +2122,12 @@ Validator::make($data, [
 <a name="rule-uppercase"></a>
 #### uppercase
 
-The field under validation must be uppercase.
+The field must be uppercase.
 
 <a name="rule-url"></a>
 #### url
 
-The field under validation must be a valid URL.
+The field must be a valid URL.
 
 You can specify allowed protocols:
 
@@ -2138,12 +2141,12 @@ Validator::make($data, [
 <a name="rule-ulid"></a>
 #### ulid
 
-The field under validation must be a valid [ULID](https://github.com/ulid/spec).
+The field must be a valid [ULID](https://github.com/ulid/spec).
 
 <a name="rule-uuid"></a>
 #### uuid
 
-The field under validation must be a valid RFC 9562 UUID (versions 1, 3, 4, 5, 6, 7, or 8).
+The field must be a valid RFC 9562 UUID (version 1, 3, 4, 5, 6, 7, or 8).
 
 You can specify the version:
 
@@ -2155,22 +2158,22 @@ Validator::make($data, [
 
 
 
-
-
-
 <a name="think-validate"></a>
-## Validator top-think/think-validate
+# Validator top-think/think-validate
 
-### Description
-Official validator for ThinkPHP
+## Description
 
-### Project URL
+Official ThinkPHP validator
+
+## Project URL
+
 https://github.com/top-think/think-validate
 
-### Installation
+## Installation
+
 `composer require topthink/think-validate`
 
-### Quick Start
+## Quick Start
 
 **Create `app/index/validate/User.php`**
 
@@ -2182,27 +2185,28 @@ use think\Validate;
 
 class User extends Validate
 {
-    protected $rule = [
-        'name' => 'require|max:25',
-        'age' => 'number|between:1,120',
-        'email' => 'email',
+    protected $rule =   [
+        'name'  => 'require|max:25',
+        'age'   => 'number|between:1,120',
+        'email' => 'email',    
     ];
 
-    protected $message = [
+    protected $message  =   [
         'name.require' => 'Name is required',
-        'name.max' => 'Name cannot exceed 25 characters',
-        'age.number' => 'Age must be a number',
-        'age.between' => 'Age must be between 1 and 120',
-        'email' => 'Invalid email',
+        'name.max'     => 'Name cannot exceed 25 characters',
+        'age.number'   => 'Age must be a number',
+        'age.between'  => 'Age must be between 1 and 120',
+        'email'        => 'Invalid email format',    
     ];
 
 }
 ```
   
 **Usage**
+
 ```php
 $data = [
-    'name' => 'thinkphp',
+    'name'  => 'thinkphp',
     'email' => 'thinkphp@qq.com',
 ];
 
@@ -2213,25 +2217,28 @@ if (!$validate->check($data)) {
 }
 ```
 
+> **Note**
+> webman does not support think-validate's `Validate::rule()` method
+
 <a name="respect-validation"></a>
 # Validator workerman/validation
 
-### Description
+## Description
 
-This project is a Chinese version of https://github.com/Respect/Validation
+This project is a localized version of https://github.com/Respect/Validation
 
-### Project URL
+## Project URL
 
 https://github.com/walkor/validation
   
   
-### Installation
+## Installation
  
 ```php
 composer require workerman/validation
 ```
 
-### Quick Start
+## Quick Start
 
 ```php
 <?php
@@ -2256,26 +2263,26 @@ class IndexController
 }  
 ```
   
-**Access via jquery**
+**Access via jQuery**
   
   ```js
   $.ajax({
       url : 'http://127.0.0.1:8787',
       type : "post",
       dataType:'json',
-      data : {nickname:'Tom', username:'tomcat', password: '123456'}
+      data : {nickname:'Tom', username:'tom cat', password: '123456'}
   });
   ```
   
 Result:
 
-`{"code":500,"msg":"Username can only contain letters (a-z) and numbers (0-9)"}`
+`{"code":500,"msg":"Username may only contain letters (a-z) and numbers (0-9)"}`
 
 Explanation:
 
-`v::input(array $input, array $rules)` is used to validate and collect data. If the data validation fails, it throws a `Respect\Validation\Exceptions\ValidationException` exception; if successful, it returns the validated data (array).
+`v::input(array $input, array $rules)` validates and collects data. If validation fails, it throws `Respect\Validation\Exceptions\ValidationException`; on success it returns the validated data (array).
 
-If the validation exception is not caught by the business code, the webman framework will automatically catch it and return json data (similar to `{"code":500, "msg":"xxx"}`) or a normal exception page based on the HTTP request header. If the returned format does not meet the business requirements, developers can catch the `ValidationException` exception themselves and return the required data, similar to the example below:
+If the business code does not catch the validation exception, the webman framework will catch it and return JSON (like `{"code":500, "msg":"xxx"}`) or a normal exception page based on HTTP headers. If the response format does not meet your needs, you can catch `ValidationException` and return custom data, as in the example below:
 
 ```php
 <?php
@@ -2302,7 +2309,7 @@ class IndexController
 }
 ```
 
-### Validator Function Guide
+## Validator Guide
 
 ```php
 use Respect\Validation\Validator as v;
@@ -2311,15 +2318,15 @@ use Respect\Validation\Validator as v;
 $number = 123;
 v::numericVal()->validate($number); // true
 
-// Multiple rules chained validation
+// Chained validation
 $usernameValidator = v::alnum()->noWhitespace()->length(1, 15);
 $usernameValidator->validate('alganet'); // true
 
-// Get the first validation failure reason
+// Get first validation failure reason
 try {
     $usernameValidator->setName('Username')->check('alg  anet');
 } catch (ValidationException $exception) {
-    echo $exception->getMessage(); // Username can only contain letters (a-z) and numbers (0-9)
+    echo $exception->getMessage(); // Username may only contain letters (a-z) and numbers (0-9)
 }
 
 // Get all validation failure reasons
@@ -2328,15 +2335,15 @@ try {
 } catch (ValidationException $exception) {
     echo $exception->getFullMessage();
     // Will print
-    // -  Username must follow these rules
-    //    - Username can only contain letters (a-z) and numbers (0-9)
-    //    - Username cannot contain spaces
+    // -  Username must satisfy the following rules
+    //     - Username may only contain letters (a-z) and numbers (0-9)
+    //     - Username must not contain whitespace
   
     var_export($exception->getMessages());
     // Will print
     // array (
-    //   'alnum' => 'Username can only contain letters (a-z) and numbers (0-9)',
-    //   'noWhitespace' => 'Username cannot contain spaces',
+    //   'alnum' => 'Username may only contain letters (a-z) and numbers (0-9)',
+    //   'noWhitespace' => 'Username must not contain whitespace',
     // )
 }
 
@@ -2345,18 +2352,18 @@ try {
     $usernameValidator->setName('Username')->assert('alg  anet');
 } catch (ValidationException $exception) {
     var_export($exception->getMessages([
-        'alnum' => 'Username can only contain letters and numbers',
-        'noWhitespace' => 'Username cannot have spaces',
-        'length' => 'This message won't show, as it satisfies the length rule'
+        'alnum' => 'Username may only contain letters and numbers',
+        'noWhitespace' => 'Username must not contain spaces',
+        'length' => 'length satisfies the rule, so this will not be shown'
     ]);
     // Will print 
     // array(
-    //    'alnum' => 'Username can only contain letters and numbers',
-    //    'noWhitespace' => 'Username cannot have spaces'
+    //    'alnum' => 'Username may only contain letters and numbers',
+    //    'noWhitespace' => 'Username must not contain spaces'
     // )
 }
 
-// Object validation
+// Validate object
 $user = new stdClass;
 $user->name = 'Alexandre';
 $user->birthdate = '1987-07-01';
@@ -2364,7 +2371,7 @@ $userValidator = v::attribute('name', v::stringType()->length(1, 32))
                 ->attribute('birthdate', v::date()->minAge(18));
 $userValidator->validate($user); // true
 
-// Array validation
+// Validate array
 $data = [
     'parentKey' => [
         'field1' => 'value1',
@@ -2378,7 +2385,7 @@ v::key(
         ->key('field2', v::stringType())
         ->key('field3', v::boolType())
     )
-    ->assert($data); // Also can use check() or validate()
+    ->assert($data); // Can also use check() or validate()
   
 // Optional validation
 v::alpha()->validate(''); // false 
@@ -2386,73 +2393,74 @@ v::alpha()->validate(null); // false
 v::optional(v::alpha())->validate(''); // true
 v::optional(v::alpha())->validate(null); // true
 
-// Negated rule
+// Negation rule
 v::not(v::intVal())->validate(10); // false
 ```
   
-### Differences between the `validate()`, `check()`, and `assert()` methods
+## Difference between Validator methods `validate()` `check()` `assert()`
 
-`validate()` returns a boolean and does not throw an exception
+`validate()` returns boolean, does not throw exception
 
-`check()` throws an exception when the validation fails, with the first validation failure reason accessible via `$exception->getMessage()`
+`check()` throws exception on validation failure; get first failure reason via `$exception->getMessage()`
 
-`assert()` throws an exception when the validation fails, with all validation failure reasons accessible via `$exception->getFullMessage()`
+`assert()` throws exception on validation failure; get all failure reasons via `$exception->getFullMessage()`
   
   
-### List of Common Validation Rules
+## Common Validation Rules
 
-`Alnum()` - Only contains letters and numbers
+`Alnum()` Only letters and numbers
 
-`Alpha()` - Only contains letters
+`Alpha()` Only letters
 
-`ArrayType()` - Array type
+`ArrayType()` Array type
 
-`Between(mixed $minimum, mixed $maximum)` - Validates whether the input is between two other values.
+`Between(mixed $minimum, mixed $maximum)` Validates that input is between two values.
 
-`BoolType()` - Validates whether it is a Boolean
+`BoolType()` Validates boolean type
 
-`Contains(mixed $expectedValue)` - Validates whether the input contains certain values
+`Contains(mixed $expectedValue)` Validates that input contains certain value
 
-`ContainsAny(array $needles)` - Validates whether the input contains at least one of the defined values
+`ContainsAny(array $needles)` Validates that input contains at least one defined value
 
-`Digit()` - Validates whether the input only contains numbers
+`Digit()` Validates that input contains only digits
 
-`Domain()` - Validates whether it is a valid domain name
+`Domain()` Validates valid domain name
 
-`Email()` - Validates whether it is a valid email address
+`Email()` Validates valid email address
 
-`Extension(string $extension)` - Validates the file extension
+`Extension(string $extension)` Validates file extension
 
-`FloatType()` - Validates whether it is a floating point number
+`FloatType()` Validates float type
 
-`IntType()` - Validates whether it is an integer
+`IntType()` Validates integer type
 
-`Ip()` - Validates whether it is an IP address
+`Ip()` Validates IP address
 
-`Json()` - Validates whether it is JSON data
+`Json()` Validates JSON data
 
-`Length(int $min, int $max)` - Validates whether the length is within a given range
+`Length(int $min, int $max)` Validates length is within range
 
-`LessThan(mixed $compareTo)` - Validates whether the length is less than a given value
+`LessThan(mixed $compareTo)` Validates length is less than given value
 
-`Lowercase()` - Validates whether it is in lowercase
+`Lowercase()` Validates lowercase
 
-`MacAddress()` - Validates whether it is a MAC address
+`MacAddress()` Validates MAC address
 
-`NotEmpty()` - Validates whether it is not empty
+`NotEmpty()` Validates not empty
 
-`NullType()` - Validates whether it is null
+`NullType()` Validates null
 
-`Number()` - Validates whether it is a number
+`Number()` Validates number
 
-`ObjectType()` - Validates whether it is an object
+`ObjectType()` Validates object type
 
-`StringType()` - Validates whether it is a string
+`StringType()` Validates string type
 
-`Url()` - Validates whether it is a URL
+`Url()` Validates URL
   
-For more validation rules, please refer to https://respect-validation.readthedocs.io/en/2.0/list-of-rules/
+See https://respect-validation.readthedocs.io/en/2.0/list-of-rules/ for more validation rules.
   
-### More Information
+## More
 
-Please visit https://respect-validation.readthedocs.io/en/2.0/
+Visit https://respect-validation.readthedocs.io/en/2.0/
+  

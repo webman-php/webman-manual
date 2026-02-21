@@ -44,6 +44,7 @@
  
 - คอมโพเนนท์ที่นิยม
   - [ตัวตรวจสอบ](components/validation.md)
+  - [ตัวจำกัดอัตรา](components/rate-limiter.md)
   - [คอมโพเนนท์การแบ่งหน้า](components/paginator.md)
   - [หลายภาษา](components/translation.md)
   - [การประมวลผลภาพ](components/image.md)

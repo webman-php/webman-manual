@@ -49,6 +49,7 @@
 - প্রচলিত কম্পোনেন্ট
 
   - [ব্যাচাপক](components/validation.md)
+  - [রেট সীমাবদ্ধতা](components/rate-limiter.md)
   - [পেজিনেটর কম্পোনেন্ট](components/paginator.md)
   - [বহুভাষা](components/translation.md)
   - [ইমেজ প্রসেসিং](components/image.md)

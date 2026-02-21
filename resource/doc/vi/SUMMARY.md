@@ -49,6 +49,7 @@
 - Các thành phần phổ biến
 
   - [Trình xác thực](components/validation.md)
+  - [Bộ giới hạn tốc độ](components/rate-limiter.md)
   - [Trình phân trang](components/paginator.md)
   - [Đa ngôn ngữ](components/translation.md)
   - [Xử lý hình ảnh](components/image.md)

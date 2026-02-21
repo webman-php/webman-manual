@@ -48,6 +48,7 @@
  
 - Composants courants
   - [Validateur](components/validation.md)
+  - [Limiteur de débit](components/rate-limiter.md)
   - [Composant de pagination](components/paginator.md)
   - [Multilingue](components/translation.md)
   - [Traitement d'image](components/image.md)

@@ -47,6 +47,7 @@
  
 - Common Components
   - [Validator](components/validation.md)
+  - [Rate Limiter](components/rate-limiter.md)
   - [Pagination Component](components/paginator.md)
   - [Multilingual Support](components/translation.md)
   - [Image Processing](components/image.md)

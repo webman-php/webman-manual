@@ -47,6 +47,7 @@
  
 - Componenti comuni
   - [Validatore](components/validation.md)
+  - [Limitatore di frequenza](components/rate-limiter.md)
   - [Componente di paginazione](components/paginator.md)
   - [Multilingua](components/translation.md)
   - [Gestione immagini](components/image.md)
