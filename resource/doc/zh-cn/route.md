@@ -378,7 +378,7 @@ Route::fallback(function(){
     app\middleware\MiddlewareA::class,
     app\middleware\MiddlewareB::class,
 ]);
-````
+```
 
 相关链接 [自定义404 500页面](others/custom-error-page.md)
 
@@ -415,7 +415,7 @@ class IndexController
 }
 ```
 
-同样的，我们也可以通过注解禁用某个控制器的默认路由，例如：
+同样的，我们也可以通过注解禁用某个控制器方法的默认路由，例如：
 
 ```php
 namespace app\controller;

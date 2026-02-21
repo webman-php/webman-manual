@@ -37,34 +37,126 @@ Route::disableDefaultRoute();
 ## ক্লোজার রুট
 `config/route.php` ফাইলে নিম্নলিখিত রুটিং কোড যোগ করুন
 ```php
-Route::any('/টেস্ট', function ($request) {
-    return response('টেস্ট');
+use support\Request;
+Route::any('/test', function (Request $request) {
+    return response('test');
 });
+
 ```
 > **লক্ষ্য**
 > যেহেতু ক্লোজার ফাংশন কোনো কন্ট্রোলারের অংশ নয়, তাই `$request->app` `$request->controller` `$request->action` সব খালি স্ট্রিং হবে।
 
-যখন ঠিকানা `http://127.0.0.1:8787/টেস্ট` অ্যাক্সেস করা হবে, তখন `টেস্ট` স্ট্রিং পাঠানো হবে।
+যখন ঠিকানা `http://127.0.0.1:8787/test` অ্যাক্সেস করা হবে, তখন `test` স্ট্রিং পাঠানো হবে।
 > **লক্ষ্য**
 > রুট পাথ একটি `/` দ্বারা শুরু করা আবশ্যক, উদাহরণস্বরূপ
 
 ```php
+use support\Request;
 // ভুল ব্যবহার
-Route::any('টেস্ট', function ($request) {
-    return response('টেস্ট');
+Route::any('test', function (Request $request) {
+    return response('test');
 });
 
 // সঠিক ব্যবহার
-Route::any('/টেস্ট', function ($request) {
-    return response('টেস্ট');
+Route::any('/test', function (Request $request) {
+    return response('test');
+});
 ```
+
 
 ## ক্লাস রুট
 `config/route.php` ফাইলে নিম্নলিখিত রুটিং কোড যোগ করুন
 ```php
-Route::any('/ক্লাসের-টেস্ট', [app\controller\IndexController::class, 'test']);
+Route::any('/testclass', [app\controller\IndexController::class, 'test']);
 ```
-যখন ঠিকানা `http://127.0.0.1:8787/ক্লাসের-টেস্ট` অ্যাক্সেস করা হবে, তখন `app\controller\IndexController` ক্লাসের `test` মেথডের ফলাফল পাঠানো হবে।
+যখন ঠিকানা `http://127.0.0.1:8787/testclass` অ্যাক্সেস করা হবে, তখন `app\controller\IndexController` ক্লাসের `test` মেথডের ফলাফল পাঠানো হবে।
+
+
+## অ্যানোটেশন রুটিং
+
+কন্ট্রোলার মেথডে অ্যানোটেশন ব্যবহার করে রুট সংজ্ঞায়িত করুন, `config/route.php` এ কনফিগার করার প্রয়োজন নেই।
+
+> **লক্ষ্য**
+> এই বৈশিষ্ট্যটির জন্য webman-framework >= v2.2.0 প্রয়োজন
+
+### মৌলিক ব্যবহার
+
+```php
+namespace app\controller;
+use support\annotation\route\Get;
+use support\annotation\route\Post;
+
+class UserController
+{
+    #[Get('/user/{id}')]
+    public function show($id)
+    {
+        return "user $id";
+    }
+
+    #[Post('/user')]
+    public function store()
+    {
+        return 'created';
+    }
+}
+```
+
+উপলব্ধ অ্যানোটেশন: `#[Get]` `#[Post]` `#[Put]` `#[Delete]` `#[Patch]` `#[Head]` `#[Options]` `#[Any]` (যেকোনো পদ্ধতি)। পাথগুলি `/` দিয়ে শুরু করতে হবে। দ্বিতীয় প্যারামিটার `route()` URL জেনারেশনের জন্য রুট নাম নির্দিষ্ট করতে পারে।
+
+### প্যারামিটারবিহীন অ্যানোটেশন: ডিফল্ট রুটের HTTP মেথড সীমাবদ্ধতা
+
+পাথ নির্দিষ্ট না করলে, শুধুমাত্র সেই অ্যাকশনের জন্য অনুমোদিত HTTP মেথড সীমাবদ্ধ করা হয়; ডিফল্ট রুট পাথ ব্যবহার করা হয়:
+
+```php
+#[Post]
+public function create() { ... }  // শুধুমাত্র POST, পাথ এখনও /user/create
+
+#[Get]
+public function index() { ... }   // শুধুমাত্র GET
+```
+
+বেশ কয়েকটি অ্যানোটেশন একত্রিত করে একাধিক মেথড অনুমোদন করা যায়:
+
+```php
+#[Get]
+#[Post]
+public function form() { ... }  // GET এবং POST অনুমোদন করে
+```
+
+অঘোষিত HTTP মেথড 405 ফেরত দেবে।
+
+বহু পাথ অ্যানোটেশন পৃথক রুট হিসাবে নিবন্ধিত হয়: `#[Get('/a')] #[Post('/b')]` GET /a এবং POST /b উভয় রুট তৈরি করে।
+
+### রুট গ্রুপ প্রিফিক্স
+
+ক্লাসে `#[RouteGroup]` ব্যবহার করে সমস্ত মেথড রুটে প্রিফিক্স যোগ করুন:
+
+```php
+use support\annotation\route\RouteGroup;
+use support\annotation\route\Get;
+
+#[RouteGroup('/api/v1')]
+class UserController
+{
+    #[Get('/user/{id}')]  // প্রকৃত পাথ: /api/v1/user/{id}
+    public function show($id) { ... }
+}
+```
+
+### কাস্টম HTTP মেথড এবং রুট নাম
+
+```php
+use support\annotation\route\Route;
+
+#[Route('/user', ['GET', 'POST'], 'user.form')]
+public function form() { ... }
+```
+
+### মিডলওয়্যার
+
+কন্ট্রোলার বা মেথডে `#[Middleware]` অ্যানোটেশন রুটে প্রযোজ্য, `support\annotation\Middleware` এর মতোই ব্যবহার করুন।
+
 
 ## রুট প্যারামিটার
 যদি রুটে প্যারামিটার থাকে, তবে `{key}` দিয়ে ম্যাচ করা হবে, ম্যাচিং ফলাফলটি সেরায় পরিমানুশে কন্ট্রোলারের মেথডের প্যারামিটারে পাঠানো হবে (দ্বিতীয় প্যারামিটার থেকে শুরুতেতে পাঠানো হবে), উদাহরণ:
@@ -74,9 +166,11 @@ Route::any('/user/{id}', [app\controller\UserController::class, 'get']);
 ```
 ```php
 namespace app\controller;
+use support\Request;
+
 class UserController
 {
-    public function get($request, $id)
+    public function get(Request $request, $id)
     {
         return response('প্যারামিটার' .$id. ' পেয়েছেন');
     }
@@ -85,26 +179,38 @@ class UserController
 
 অনেক অন্যান্য উদাহরণ:
 ```php
+use support\Request;
 // ম্যাচ /user/123, ম্যাচ না /user/abc
-Route::any('/user/{id:\d+}', function ($request, $id) {
+Route::any('/user/{id:\d+}', function (Request $request, $id) {
     return response($id);
 });
 
 // ম্যাচ /user/foobar, ম্যাচ না /user/foo/bar
-Route::any('/user/{name}', function ($request, $name) {
+Route::any('/user/{name}', function (Request $request, $name) {
    return response($name);
 });
 
-// ম্যাচ /user /user/123 এবং /user/abc
-Route::any('/user[/{name}]', function ($request, $name = null) {
-   return response($name ?? 'টম');
+// ম্যাচ /user /user/123 এবং /user/abc   [] ঐচ্ছিক নির্দেশ করে
+Route::any('/user[/{name}]', function (Request $request, $name = null) {
+   return response($name ?? 'tom');
 });
 
-// সমস্ত অপশনের জন্য ম্যাচ করুন
+// /user/ প্রিফিক্স সহ সমস্ত রিকোয়েস্ট ম্যাচ করুন
+Route::any('/user/[{path:.+}]', function (Request $request) {
+    return $request->path();
+});
+
+// সমস্ত options রিকোয়েস্ট ম্যাচ করুন   : এর পরে রেগেক্স নামযুক্ত প্যারামিটারের প্যাটার্ন নির্দিষ্ট করে
 Route::options('[{path:.+}]', function () {
     return response('');
 });
 ```
+উন্নত ব্যবহার সারাংশ
+
+> Webman রাউটিংয়ে `[]` সিনট্যাক্স প্রধানত ঐচ্ছিক পাথ অংশ বা ডায়নামিক রুট ম্যাচিং পরিচালনা করতে ব্যবহৃত হয়, আপনাকে আরও জটিল পাথ স্ট্রাকচার এবং ম্যাচিং নিয়ম সংজ্ঞায়িত করতে সক্ষম করে
+>
+> `:` রেগুলার এক্সপ্রেশন নির্দিষ্ট করতে ব্যবহৃত হয়
+
 
 ## রুট গ্রুপ
 সময়ের সাথে গুরুত্বপূর্ণ জটিল প্রিফিক্স সম্পূর্ণ করা রুটের পরিবর্তে, রুট গ্রুপ ব্যবহারে আমরা রুটিং সাজাতে পারি। উদাহরণ:
@@ -145,15 +251,12 @@ Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->mi
 Route::group('/blog', function () {
    Route::any('/create', function () {return response('create');});
    Route::any('/edit', function () {return response('edit');});
-   Route::any('/view/{id}', function ($request, $id) {response("view $id");});
+   Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
 })->middleware([
     app\middleware\MiddlewareA::class,
     app\middleware\MiddlewareB::class,
 ]);
 ```
-
-> **দ্য নোট**: 
-> একের বেশি ১.5.6 পর্যন্ত webman-framework <= এ `->middleware()` রুট মিডলওয়্যার গ্রুপের পরে ব্যবহার করতে, বর্তমান রুট অবশ্যই বর্তমান গ্রুপের অধীনে থাকা আবশ্যক।
 
 ```php
 # ভুল ব্যবহার উদাহরণ (webman-framework >= 1.5.7 এই ব্যবহার প্রয়োজনীয়)
@@ -224,21 +327,19 @@ route('blog.view', ['id' => 100]); // ফলাফল /blog/100
 রুটের URL ব্যবহারের সময় ভিউ ফাইল ইতিমধ্যে পরিমাণ পরিবর্তনের মূল্যায়নের পূর্ণাঙ্গ করতে, এই পদক্ষেপটি ব্যবহার করা উচিত।
 
 
-## রুট তথ্য পূর্ণ করা
-> **দ্য নোট**
-> webman-framework >= ১.৩.২ প্রয়োজন 
+## রুট তথ্য প্রাপ্তি
 
-`$request->route` অবজেক্ট ব্যবহার করে আমরা বর্তমান অনুরোধ রুটের তথ্য অনুবাদ করতে পারি, উদাহরণস্বরূপ
+`$request->route` অবজেক্ট ব্যবহার করে আমরা বর্তমান অনুরোধ রুটের তথ্য পেতে পারি, উদাহরণস্বরূপ:
 
 ```php
-$route = $request->route; // বাংগা সমান $route = request()->route;
+$route = $request->route; // সমান $route = request()->route;
 if ($route) {
     var_export($route->getPath());
     var_export($route->getMethods());
     var_export($route->getName());
     var_export($route->getMiddleware());
     var_export($route->getCallback());
-    var_export($route->param()); //এই বৈশিষ্ট্য webman-framework >= 1.3.16 প্রয়োজন
+    var_export($route->param());
 }
 ```
 
@@ -246,8 +347,8 @@ if ($route) {
 > যদি বর্তমান অনুরোধটি config / route.php-তে প্রস্তুত কোনও রুটের সাথে মেলে না, তাহলে `$request->route` null হবে, অর্থাত্ বৈশিষ্ট্য অব্যাহত রাউটিং সময় ক্রোতা null
 
 
-## ৪০৪ নয়
-রুট পাওয়া না গেলে ডিফল্ট 404 স্ট্যাটাস কোড দেওয়া হবে এবং `public/404.html` ফাইলের মধ্যে প্রদর্শিত হবে।
+## ৪০৪ হ্যান্ডলিং
+রুট পাওয়া না গেলে ডিফল্ট 404 স্ট্যাটাস কোড দেওয়া হবে এবং 404 বিষয়বস্তু প্রদর্শিত হবে।
 
 ডেভেলপাররা যদি রুট পাওয়া না গেলের ব্যবসায়িক প্রসঙ্গে আসাতে চান, তাহলে webman সরবরাহ করা ফলব্যাপ্ত রুট ফল্ব্যাক রুট `Route::fallback($callback)` মেথড ব্যবহার করতে পারে। উদাহরণ হচ্ছে নিম্নের কোডটি যখন রুট পাওয়া যায়নি তাহলে হোমপেজে পুনর্নির্দেশ করা হবে ।
 ```php
@@ -262,7 +363,69 @@ Route::fallback(function(){
 });
 ```
 
+## 404 এ মিডলওয়্যার যোগ করুন
+
+ডিফল্টভাবে 404 রিকোয়েস্ট কোন মিডলওয়্যার দিয়ে যায় না। 404 রিকোয়েস্টে মিডলওয়্যার যোগ করতে নিম্নলিখিত কোড দেখুন:
+```php
+Route::fallback(function(){
+    return json(['code' => 404, 'msg' => '404 not found']);
+})->middleware([
+    app\middleware\MiddlewareA::class,
+    app\middleware\MiddlewareB::class,
+]);
+```
+
 সংশ্লিষ্ট লিংক [কাস্টম 404 500 পেজ](others/custom-error-page.md)
+
+## ডিফল্ট রুট নিষ্ক্রিয় করুন
+
+```php
+// মেইন প্রজেক্ট ডিফল্ট রুট নিষ্ক্রিয় করুন, অ্যাপ্লিকেশন প্লাগিনকে প্রভাবিত করে না
+Route::disableDefaultRoute();
+// মেইন প্রজেক্টের admin অ্যাপের রুট নিষ্ক্রিয় করুন, অ্যাপ্লিকেশন প্লাগিনকে প্রভাবিত করে না
+Route::disableDefaultRoute('', 'admin');
+// foo প্লাগিনের ডিফল্ট রুট নিষ্ক্রিয় করুন, মেইন প্রজেক্টকে প্রভাবিত করে না
+Route::disableDefaultRoute('foo');
+// foo প্লাগিনের admin অ্যাপের ডিফল্ট রুট নিষ্ক্রিয় করুন, মেইন প্রজেক্টকে প্রভাবিত করে না
+Route::disableDefaultRoute('foo', 'admin');
+// কন্ট্রোলার [\app\controller\IndexController::class, 'index'] এর ডিফল্ট রুট নিষ্ক্রিয় করুন
+Route::disableDefaultRoute([\app\controller\IndexController::class, 'index']);
+```
+
+## অ্যানোটেশন দিয়ে ডিফল্ট রুট নিষ্ক্রিয় করুন
+
+অ্যানোটেশন দিয়ে একটি কন্ট্রোলারের ডিফল্ট রুট নিষ্ক্রিয় করতে পারবেন, উদাহরণ:
+
+```php
+namespace app\controller;
+use support\annotation\DisableDefaultRoute;
+
+#[DisableDefaultRoute]
+class IndexController
+{
+    public function index()
+    {
+        return 'index';
+    }
+}
+```
+
+একইভাবে, অ্যানোটেশন দিয়ে একটি কন্ট্রোলার মেথডের ডিফল্ট রুট নিষ্ক্রিয় করতে পারবেন, উদাহরণ:
+
+```php
+namespace app\controller;
+use support\annotation\DisableDefaultRoute;
+
+class IndexController
+{
+    #[DisableDefaultRoute]
+    public function index()
+    {
+        return 'index';
+    }
+}
+```
+
 ## রাউটিং ইন্টারফেস
 ```php
 // যেকোনো মেথডের অনুরোধের রাউট সেট করুন
@@ -279,6 +442,8 @@ Route::patch($uri, $callback);
 Route::delete($uri, $callback);
 // HEAD অনুরোধের রাউট সেট করুন
 Route::head($uri, $callback);
+// OPTIONS অনুরোধের রাউট সেট করুন
+Route::options($uri, $callback);
 // একই সাথে একাধিক অনুরোধের রাউট সেট করুন
 Route::add(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'], $uri, $callback);
 // গ্রুপ রাউট
@@ -289,6 +454,8 @@ Route::resource($path, $callback, [$options]);
 Route::disableDefaultRoute($plugin = '');
 // ফলব্যাক রাউট, ডিফল্ট রাউট সেট করুন
 Route::fallback($callback, $plugin = '');
+// সমস্ত রাউট তথ্য পান
+Route::getRoutes();
 ```
 যদি কোনও URI-র জন্য কোনও রাউট না থাকে (ডিফল্ট রাউট সহ), এবং ফলব্যাক রাউটও সেট না করা হয়ে থাকে, তবে 404 রিটার্ন হবে।
 

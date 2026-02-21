@@ -37,7 +37,8 @@ Route::disableDefaultRoute();
 ## Định tuyến đóng
 Thêm mã định tuyến sau vào tệp `config/route.php`:
 ```php
-Route::any('/test', function ($request) {
+use support\Request;
+Route::any('/test', function (Request $request) {
     return response('test');
 });
 
@@ -51,13 +52,14 @@ Khi truy cập địa chỉ `http://127.0.0.1:8787/test`, nó sẽ trả về ch
 > Đường dẫn định tuyến phải bắt đầu bằng `/`, ví dụ:
 
 ```php
+use support\Request;
 // Sử dụng sai
-Route::any('test', function ($request) {
+Route::any('test', function (Request $request) {
     return response('test');
 });
 
 // Sử dụng đúng
-Route::any('/test', function ($request) {
+Route::any('/test', function (Request $request) {
     return response('test');
 });
 ```
@@ -71,6 +73,91 @@ Route::any('/testclass', [app\controller\IndexController::class, 'test']);
 Khi truy cập địa chỉ `http://127.0.0.1:8787/testclass`, nó sẽ trả về giá trị của phương thức `test` của lớp `app\controller\IndexController`.
 
 
+## Định tuyến bằng chú thích
+
+Định nghĩa route qua chú thích trên phương thức điều khiển, không cần cấu hình trong `config/route.php`.
+
+> **Lưu ý**
+> Tính năng này yêu cầu webman-framework >= v2.2.0
+
+### Cách dùng cơ bản
+
+```php
+namespace app\controller;
+use support\annotation\route\Get;
+use support\annotation\route\Post;
+
+class UserController
+{
+    #[Get('/user/{id}')]
+    public function show($id)
+    {
+        return "user $id";
+    }
+
+    #[Post('/user')]
+    public function store()
+    {
+        return 'created';
+    }
+}
+```
+
+Chú thích khả dụng: `#[Get]` `#[Post]` `#[Put]` `#[Delete]` `#[Patch]` `#[Head]` `#[Options]` `#[Any]` (bất kỳ phương thức nào). Đường dẫn phải bắt đầu bằng `/`. Tham số thứ hai có thể chỉ định tên route, dùng cho `route()` khi tạo URL.
+
+### Chú thích không tham số: giới hạn phương thức HTTP của route mặc định
+
+Không có đường dẫn thì chỉ giới hạn phương thức HTTP được phép cho hành động đó, vẫn dùng đường dẫn route mặc định:
+
+```php
+#[Post]
+public function create() { ... }  // Chỉ cho phép POST, đường dẫn vẫn là /user/create
+
+#[Get]
+public function index() { ... }   // Chỉ cho phép GET
+```
+
+Có thể kết hợp nhiều chú thích để cho phép nhiều phương thức:
+
+```php
+#[Get]
+#[Post]
+public function form() { ... }  // Cho phép GET và POST
+```
+
+Phương thức không khai báo trong chú thích sẽ trả về 405.
+
+Nhiều chú thích có đường dẫn sẽ đăng ký thành các route độc lập: `#[Get('/a')] #[Post('/b')]` tạo route GET /a và POST /b.
+
+### Tiền tố nhóm route
+
+Dùng `#[RouteGroup]` trên class để thêm tiền tố cho tất cả route của phương thức:
+
+```php
+use support\annotation\route\RouteGroup;
+use support\annotation\route\Get;
+
+#[RouteGroup('/api/v1')]
+class UserController
+{
+    #[Get('/user/{id}')]  // Đường dẫn thực tế /api/v1/user/{id}
+    public function show($id) { ... }
+}
+```
+
+### Phương thức HTTP tùy chỉnh và tên route
+
+```php
+use support\annotation\route\Route;
+
+#[Route('/user', ['GET', 'POST'], 'user.form')]
+public function form() { ... }
+```
+
+### Middleware
+
+`#[Middleware]` trên controller hoặc method áp dụng cho route chú thích, cách dùng giống `support\annotation\Middleware`.
+
 ## Tham số của định tuyến
 Nếu có tham số trong định tuyến, sử dụng `{key}` để khớp, kết quả khớp sẽ được chuyển đến các tham số của phương thức điều khiển tương ứng (bắt đầu từ tham số thứ hai), ví dụ:
 ```php
@@ -79,9 +166,11 @@ Route::any('/user/{id}', [app\controller\UserController::class, 'get']);
 ```
 ```php
 namespace app\controller;
+use support\Request;
+
 class UserController
 {
-    public function get($request, $id)
+    public function get(Request $request, $id)
     {
         return response('Nhận được tham số'.$id);
     }
@@ -90,43 +179,56 @@ class UserController
 
 Nhiều ví dụ khác:
 ```php
+use support\Request;
 // Khớp với /user/123, không khớp với /user/abc
-Route::any('/user/{id:\d+}', function ($request, $id) {
+Route::any('/user/{id:\d+}', function (Request $request, $id) {
     return response($id);
 });
 
 // Khớp với /user/foobar, không khớp với /user/foo/bar
-Route::any('/user/{name}', function ($request, $name) {
+Route::any('/user/{name}', function (Request $request, $name) {
    return response($name);
 });
 
-// Khớp với /user /user/123 và /user/abc
-Route::any('/user[/{name}]', function ($request, $name = null) {
+// Khớp với /user /user/123 và /user/abc   [] biểu thị tùy chọn
+Route::any('/user[/{name}]', function (Request $request, $name = null) {
    return response($name ?? 'tom');
 });
 
-// Khớp với tất cả các yêu cầu options
+// Khớp mọi yêu cầu có tiền tố /user/
+Route::any('/user/[{path:.+}]', function (Request $request) {
+    return $request->path();
+});
+
+// Khớp với tất cả các yêu cầu options   : dùng để chỉ định regex
 Route::options('[{path:.+}]', function () {
     return response('');
 });
 ```
+
+Tóm tắt sử dụng nâng cao
+
+> Cú pháp `[]` trong route Webman chủ yếu dùng cho phần đường dẫn tùy chọn hoặc khớp route động; cho phép định nghĩa cấu trúc đường dẫn và quy tắc khớp phức tạp hơn
+>
+> `:` dùng để chỉ định biểu thức chính quy
 
 ## Nhóm định tuyến
 
 Đôi khi định tuyến bao gồm một số tiền tố giống nhau, trong trường hợp này, chúng ta có thể sử dụng nhóm định tuyến để đơn giản hóa định nghĩa. Ví dụ:
 
 ```php
+use support\Request;
 Route::group('/blog', function () {
-   Route::any('/create', function ($request) {return response('create');});
-   Route::any('/edit', function ($request) {return response('edit');});
-   Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
+   Route::any('/create', function (Request $request) {return response('create');});
+   Route::any('/edit', function (Request $request) {return response('edit');});
+   Route::any('/view/{id}', function (Request $request, $id) {return response("view $id");});
 });
 ```
 Tương đương với
 ```php
-Route::any('/blog/create', function ($request) {return response('create');});
-Route::any('/blog/edit', function ($request) {return response('edit');});
-Route::any('/blog/view/{id}', function ($request, $id) {return response("view $id");});
+Route::any('/blog/create', function (Request $request) {return response('create');});
+Route::any('/blog/edit', function (Request $request) {return response('edit');});
+Route::any('/blog/view/{id}', function (Request $request, $id) {return response("view $id");});
 ```
 
 Sử dụng nhóm lồng
@@ -134,9 +236,9 @@ Sử dụng nhóm lồng
 ```php
 Route::group('/blog', function () {
    Route::group('/v1', function () {
-      Route::any('/create', function ($request) {return response('create');});
-      Route::any('/edit', function ($request) {return response('edit');});
-      Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
+      Route::any('/create', function (Request $request) {return response('create');});
+      Route::any('/edit', function (Request $request) {return response('edit');});
+      Route::any('/view/{id}', function (Request $request, $id) {return response("view $id");});
    });  
 });
 ```
@@ -153,22 +255,19 @@ Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->mi
 Route::group('/blog', function () {
    Route::any('/create', function () {return response('create');});
    Route::any('/edit', function () {return response('edit');});
-   Route::any('/view/{id}', function ($request, $id) {response("view $id");});
+   Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
 })->middleware([
     app\middleware\MiddlewareA::class,
     app\middleware\MiddlewareB::class,
 ]);
 ```
-> **Lưu ý**: 
-> Trong webman-framework <= 1.5.6 khi sử dụng `->middleware()` với group middleware, route hiện tại phải nằm dưới group hiện tại.
-
 Ví dụ sử dụng sai (đúng khi webman-framework >= 1.5.7)
 ```php
 Route::group('/blog', function () {
    Route::group('/v1', function () {
-      Route::any('/create', function ($request) {return response('create');});
-      Route::any('/edit', function ($request) {return response('edit');});
-      Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
+      Route::any('/create', function (Request $request) {return response('create');});
+      Route::any('/edit', function (Request $request) {return response('edit');});
+      Route::any('/view/{id}', function (Request $request, $id) {return response("view $id");});
    });  
 })->middleware([
     app\middleware\MiddlewareA::class,
@@ -180,9 +279,9 @@ Ví dụ sử dụng đúng
 ```php
 Route::group('/blog', function () {
    Route::group('/v1', function () {
-      Route::any('/create', function ($request) {return response('create');});
-      Route::any('/edit', function ($request) {return response('edit');});
-      Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
+      Route::any('/create', function (Request $request) {return response('create');});
+      Route::any('/edit', function (Request $request) {return response('edit');});
+      Route::any('/view/{id}', function (Request $request, $id) {return response("view $id");});
    })->middleware([
         app\middleware\MiddlewareA::class,
         app\middleware\MiddlewareB::class,
@@ -232,9 +331,6 @@ Khi sử dụng URL của route trong view, phương pháp này có thể giúp 
 
 ## Lấy thông tin về route
 
-> **Lưu ý**
-> Yêu cầu webman-framework >= 1.3.2
-
 Chúng ta có thể lấy thông tin của route hiện tại thông qua đối tượng `$request->route`, ví dụ:
 
 ```php
@@ -245,7 +341,7 @@ if ($route) {
     var_export($route->getName());
     var_export($route->getMiddleware());
     var_export($route->getCallback());
-    var_export($route->param()); // Tính năng này yêu cầu webman-framework >= 1.3.16
+    var_export($route->param());
 }
 ```
 > **Lưu ý**
@@ -253,7 +349,7 @@ if ($route) {
 
 ## Xử lý lỗi 404
 
-Khi không tìm thấy route, webman mặc định sẽ trả về mã trạng thái 404 và đồng thời xuất nội dung của tệp `public/404.html`.
+Khi không tìm thấy route, webman mặc định sẽ trả về mã trạng thái 404 và xuất nội dung 404 tương ứng.
  
 Nếu nhà phát triển muốn can thiệp vào quy trình kinh doanh khi không tìm thấy route, có thể sử dụng phương thức fallback của webman `Route::fallback($callback)`. Ví dụ: logic dưới đây sẽ chuyển hướng về trang chủ khi không tìm thấy route.
 ```php
@@ -269,7 +365,68 @@ Route::fallback(function(){
 });
 ```
 
+## Thêm middleware cho 404
+
+Mặc định các yêu cầu 404 không đi qua bất kỳ middleware nào. Nếu cần thêm middleware cho yêu cầu 404, tham khảo mã sau:
+```php
+Route::fallback(function(){
+    return json(['code' => 404, 'msg' => '404 not found']);
+})->middleware([
+    app\middleware\MiddlewareA::class,
+    app\middleware\MiddlewareB::class,
+]);
+```
+
 Xem thêm: [Trang Lỗi Tùy Chỉnh](others/custom-error-page.md)
+
+## Vô hiệu hóa route mặc định
+
+```php
+// Vô hiệu hóa route mặc định của dự án chính, không ảnh hưởng plugin
+Route::disableDefaultRoute();
+// Vô hiệu hóa route admin của dự án chính, không ảnh hưởng plugin
+Route::disableDefaultRoute('', 'admin');
+// Vô hiệu hóa route mặc định của plugin foo, không ảnh hưởng dự án chính
+Route::disableDefaultRoute('foo');
+// Vô hiệu hóa route admin của plugin foo, không ảnh hưởng dự án chính
+Route::disableDefaultRoute('foo', 'admin');
+// Vô hiệu hóa route mặc định của controller [\app\controller\IndexController::class, 'index']
+Route::disableDefaultRoute([\app\controller\IndexController::class, 'index']);
+```
+
+## Chú thích vô hiệu hóa route mặc định
+
+Chúng ta có thể dùng chú thích để vô hiệu hóa route mặc định của một controller:
+
+```php
+namespace app\controller;
+use support\annotation\DisableDefaultRoute;
+
+#[DisableDefaultRoute]
+class IndexController
+{
+    public function index()
+    {
+        return 'index';
+    }
+}
+```
+
+Tương tự, cũng có thể dùng chú thích để vô hiệu hóa route mặc định của phương thức controller:
+
+```php
+namespace app\controller;
+use support\annotation\DisableDefaultRoute;
+
+class IndexController
+{
+    #[DisableDefaultRoute]
+    public function index()
+    {
+        return 'index';
+    }
+}
+```
 
 ## Giao Diện Người Dùng Route
 
@@ -288,6 +445,8 @@ Route::patch($uri, $callback);
 Route::delete($uri, $callback);
 // Thiết lập route HEAD cho $uri
 Route::head($uri, $callback);
+// Thiết lập route OPTIONS cho $uri
+Route::options($uri, $callback);
 // Thiết lập nhiều loại route cùng một lúc
 Route::add(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'], $uri, $callback);
 // Route nhóm
@@ -298,6 +457,8 @@ Route::resource($path, $callback, [$options]);
 Route::disableDefaultRoute($plugin = '');
 // Fallback route, thiết lập route mặc định
 Route::fallback($callback, $plugin = '');
+// Lấy tất cả thông tin route
+Route::getRoutes();
 ```
 Nếu không tìm thấy route cho $uri (bao gồm route mặc định), và fallback route cũng không được thiết lập, webman sẽ trả về 404.
 ## Tập tin cấu hình đa tuyến

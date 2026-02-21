@@ -37,7 +37,8 @@ Route::disableDefaultRoute();
 ## Enrutamiento de cierre
 Agregue el siguiente código de enrutamiento al archivo `config/route.php`:
 ```php
-Route::any('/test', function ($request) {
+use support\Request;
+Route::any('/test', function (Request $request) {
     return response('test');
 });
 ```
@@ -50,13 +51,14 @@ Cuando la dirección de acceso es `http://127.0.0.1:8787/test`, devolverá la ca
 > La ruta de enrutamiento debe comenzar con `/`, por ejemplo:
 
 ```php
+use support\Request;
 // Uso incorrecto
-Route::any('test', function ($request) {
+Route::any('test', function (Request $request) {
     return response('test');
 });
 
 // Uso correcto
-Route::any('/test', function ($request) {
+Route::any('/test', function (Request $request) {
     return response('test');
 });
 ```
@@ -68,6 +70,91 @@ Route::any('/testclass', [app\controller\IndexController::class, 'test']);
 ```
 Cuando la dirección de acceso es `http://127.0.0.1:8787/testclass`, devolverá el valor devuelto del método `test` de la clase `app\controller\IndexController`.
 
+## Enrutamiento por anotaciones
+
+Defina rutas mediante anotaciones en métodos del controlador, sin necesidad de configurar en `config/route.php`.
+
+> **Nota**
+> Esta funcionalidad requiere webman-framework >= v2.2.0
+
+### Uso básico
+
+```php
+namespace app\controller;
+use support\annotation\route\Get;
+use support\annotation\route\Post;
+
+class UserController
+{
+    #[Get('/user/{id}')]
+    public function show($id)
+    {
+        return "user $id";
+    }
+
+    #[Post('/user')]
+    public function store()
+    {
+        return 'created';
+    }
+}
+```
+
+Anotaciones disponibles: `#[Get]` `#[Post]` `#[Put]` `#[Delete]` `#[Patch]` `#[Head]` `#[Options]` `#[Any]` (cualquier método). La ruta debe comenzar con `/`. El segundo parámetro puede especificar el nombre de la ruta, usado por `route()` para generar URL.
+
+### Anotaciones sin parámetros: restringir método HTTP en ruta predeterminada
+
+Sin ruta, solo restringe los métodos HTTP permitidos para esa acción, siguiendo usando la ruta predeterminada:
+
+```php
+#[Post]
+public function create() { ... }  // Solo permite POST, la ruta sigue siendo /user/create
+
+#[Get]
+public function index() { ... }   // Solo permite GET
+```
+
+Se pueden combinar múltiples anotaciones para permitir varios métodos de solicitud:
+
+```php
+#[Get]
+#[Post]
+public function form() { ... }  // Permite GET y POST
+```
+
+Los métodos no declarados en anotaciones devolverán 405.
+
+Varias anotaciones con ruta registrarán rutas independientes: `#[Get('/a')] #[Post('/b')]` generará las rutas GET /a y POST /b.
+
+### Prefijo de grupo de rutas
+
+Use `#[RouteGroup]` en la clase para añadir prefijo a todas las rutas de métodos:
+
+```php
+use support\annotation\route\RouteGroup;
+use support\annotation\route\Get;
+
+#[RouteGroup('/api/v1')]
+class UserController
+{
+    #[Get('/user/{id}')]  // Ruta real /api/v1/user/{id}
+    public function show($id) { ... }
+}
+```
+
+### Métodos HTTP personalizados y nombre de ruta
+
+```php
+use support\annotation\route\Route;
+
+#[Route('/user', ['GET', 'POST'], 'user.form')]
+public function form() { ... }
+```
+
+### Middleware
+
+`#[Middleware]` en controlador o método afecta las rutas por anotaciones, uso igual que `support\annotation\Middleware`.
+
 ## Parámetros de enrutamiento
 Si hay parámetros en la ruta, se pueden emparejar con `{clave}` y el resultado del emparejamiento se pasará como argumento al método del controlador correspondiente (a partir del segundo argumento), por ejemplo:
 ```php
@@ -76,9 +163,11 @@ Route::any('/user/{id}', [app\controller\UserController::class, 'get']);
 ```
 ```php
 namespace app\controller;
+use support\Request;
+
 class UserController
 {
-    public function get($request, $id)
+    public function get(Request $request, $id)
     {
         return response('Recibido el parámetro'.$id);
     }
@@ -87,51 +176,64 @@ class UserController
 
 Más ejemplos:
 ```php
+use support\Request;
 // Emparejar /user/123, no emparejar /user/abc
-Route::any('/user/{id:\d+}', function ($request, $id) {
+Route::any('/user/{id:\d+}', function (Request $request, $id) {
     return response($id);
 });
 
 // Emparejar /user/foobar, no emparejar /user/foo/bar
-Route::any('/user/{name}', function ($request, $name) {
+Route::any('/user/{name}', function (Request $request, $name) {
    return response($name);
 });
 
-// Emparejar /user /user/123 y /user/abc
-Route::any('/user[/{name}]', function ($request, $name = null) {
+// Emparejar /user /user/123 y /user/abc   [] indica opcional
+Route::any('/user[/{name}]', function (Request $request, $name = null) {
    return response($name ?? 'tom');
 });
 
-// Emparejar todas las solicitudes de opciones
+// Emparejar cualquier solicitud con prefijo /user/
+Route::any('/user/[{path:.+}]', function (Request $request) {
+    return $request->path();
+});
+
+// Emparejar todas las solicitudes de opciones   : indica regex para el parámetro nombrado
 Route::options('[{path:.+}]', function () {
     return response('');
 });
 ```
 
+Resumen de uso avanzado
+
+> La sintaxis `[]` en rutas de Webman se usa principalmente para partes opcionales o coincidencias dinámicas; permite definir estructuras de ruta más complejas
+>
+> `:` se usa para especificar expresión regular
+
 ## Grupos de enrutamiento
 A veces, las rutas contienen un gran número de prefijos similares, en estos casos, podemos usar grupos de enrutamiento para simplificar la definición. Por ejemplo:
 
 ```php
+use support\Request;
 Route::group('/blog', function () {
-   Route::any('/create', function ($request) {return response('create');});
-   Route::any('/edit', function ($request) {return response('edit');});
-   Route::any('/view/{id}', function ($request, $id) {return response("ver $id");});
+   Route::any('/create', function (Request $request) {return response('create');});
+   Route::any('/edit', function (Request $request) {return response('edit');});
+   Route::any('/view/{id}', function (Request $request, $id) {return response("view $id");});
 });
 ```
 Es equivalente a
 ```php
-Route::any('/blog/create', function ($request) {return response('create');});
-Route::any('/blog/edit', function ($request) {return response('edit');});
-Route::any('/blog/view/{id}', function ($request, $id) {return response("ver $id");});
+Route::any('/blog/create', function (Request $request) {return response('create');});
+Route::any('/blog/edit', function (Request $request) {return response('edit');});
+Route::any('/blog/view/{id}', function (Request $request, $id) {return response("view $id");});
 ```
 
 Uso anidado de grupos
 ```php
 Route::group('/blog', function () {
    Route::group('/v1', function () {
-      Route::any('/create', function ($request) {return response('create');});
-      Route::any('/edit', function ($request) {return response('edit');});
-      Route::any('/view/{id}', function ($request, $id) {return response("ver $id");});
+      Route::any('/create', function (Request $request) {return response('create');});
+      Route::any('/edit', function (Request $request) {return response('edit');});
+      Route::any('/view/{id}', function (Request $request, $id) {return response("view $id");});
    });  
 });
 ```
@@ -148,23 +250,20 @@ Route::any('/admin', [app\admin\controller\IndexController::class, 'índice'])->
 Route::group('/blog', function () {
    Route::any('/create', function () {return response('crear');});
    Route::any('/edit', function () {return response('editar');});
-   Route::any('/view/{id}', function ($request, $id) {response("ver $id");});
+   Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
 })->middleware([
     app\middleware\MiddlewareA::class,
     app\middleware\MiddlewareB::class,
 ]);
 ```
 
-> **Nota**:
-> En webman-framework <= 1.5.6, cuando el middleware de enrutamiento `->middleware()` se aplica después del grupo, la ruta actual debe estar dentro de ese grupo específico.
-
 ```php
 # Ejemplo de uso incorrecto (este uso es válido en webman-framework >= 1.5.7)
 Route::group('/blog', function () {
    Route::group('/v1', function () {
-      Route::any('/create', function ($request) {return response('crear');});
-      Route::any('/edit', function ($request) {return response('editar');});
-      Route::any('/view/{id}', function ($request, $id) {return response("ver $id");});
+      Route::any('/create', function (Request $request) {return response('crear');});
+      Route::any('/edit', function (Request $request) {return response('editar');});
+      Route::any('/view/{id}', function (Request $request, $id) {return response("view $id");});
    });  
 })->middleware([
     app\middleware\MiddlewareA::class,
@@ -176,9 +275,9 @@ Route::group('/blog', function () {
 # Ejemplo de uso correcto
 Route::group('/blog', function () {
    Route::group('/v1', function () {
-      Route::any('/create', function ($request) {return response('crear');});
-      Route::any('/edit', function ($request) {return response('editar');});
-      Route::any('/view/{id}', function ($request, $id) {return response("ver $id");});
+      Route::any('/create', function (Request $request) {return response('crear');});
+      Route::any('/edit', function (Request $request) {return response('editar');});
+      Route::any('/view/{id}', function (Request $request, $id) {return response("view $id");});
    })->middleware([
         app\middleware\MiddlewareA::class,
         app\middleware\MiddlewareB::class,
@@ -223,8 +322,6 @@ route('blog.view', ['id' => 100]); // Resulta en /blog/100
 
 Cuando se utiliza este método para generar la URL de una ruta en una vista, independientemente de cómo cambie la regla de enrutamiento, la URL se generará automáticamente, evitando así la necesidad de realizar cambios masivos en los archivos de vista debido a cambios en las direcciones de enrutamiento.
 ## Obtener información de la ruta
-> **Nota**
-> Se requiere webman-framework >= 1.3.2
 
 A través del objeto `$request->route`, podemos obtener información sobre la ruta actual. Por ejemplo:
 
@@ -236,7 +333,7 @@ if ($route) {
     var_export($route->getName());
     var_export($route->getMiddleware());
     var_export($route->getCallback());
-    var_export($route->param()); // Esta característica requiere webman-framework >= 1.3.16
+    var_export($route->param());
 }
 ```
 
@@ -245,7 +342,7 @@ if ($route) {
 
 
 ## Manejo de error 404
-Cuando no se encuentra la ruta, por defecto se devuelve el código de estado 404 y se muestra el contenido del archivo `public/404.html`.
+Cuando no se encuentra la ruta, por defecto se devuelve el código de estado 404 y se muestra el contenido 404 correspondiente.
 
 Si un desarrollador desea intervenir en el flujo de negocio cuando no se encuentra la ruta, puede utilizar el método de ruta de recuperación proporcionado por webman `Route::fallback($callback)`. Por ejemplo, la lógica de código a continuación redirige a la página de inicio cuando no se encuentra la ruta.
 ```php
@@ -260,7 +357,68 @@ Route::fallback(function(){
 });
 ```
 
+## Añadir middleware a 404
+
+Por defecto las solicitudes 404 no pasan por ningún middleware. Si necesita añadir middleware a las solicitudes 404, consulte el siguiente código:
+```php
+Route::fallback(function(){
+    return json(['code' => 404, 'msg' => '404 not found']);
+})->middleware([
+    app\middleware\MiddlewareA::class,
+    app\middleware\MiddlewareB::class,
+]);
+```
+
 Enlaces relacionados [Página de error personalizada 404 500](others/custom-error-page.md)
+
+## Deshabilitar ruta predeterminada
+
+```php
+// Deshabilitar la ruta predeterminada del proyecto principal, no afecta a los plugins
+Route::disableDefaultRoute();
+// Deshabilitar la ruta del admin del proyecto principal, no afecta a los plugins
+Route::disableDefaultRoute('', 'admin');
+// Deshabilitar la ruta predeterminada del plugin foo, no afecta al proyecto principal
+Route::disableDefaultRoute('foo');
+// Deshabilitar la ruta del admin del plugin foo, no afecta al proyecto principal
+Route::disableDefaultRoute('foo', 'admin');
+// Deshabilitar la ruta predeterminada del controlador [\app\controller\IndexController::class, 'index']
+Route::disableDefaultRoute([\app\controller\IndexController::class, 'index']);
+```
+
+## Anotación para deshabilitar ruta predeterminada
+
+Podemos usar anotaciones para deshabilitar la ruta predeterminada de un controlador, por ejemplo:
+
+```php
+namespace app\controller;
+use support\annotation\DisableDefaultRoute;
+
+#[DisableDefaultRoute]
+class IndexController
+{
+    public function index()
+    {
+        return 'index';
+    }
+}
+```
+
+Del mismo modo, también podemos usar anotaciones para deshabilitar la ruta predeterminada de un método del controlador, por ejemplo:
+
+```php
+namespace app\controller;
+use support\annotation\DisableDefaultRoute;
+
+class IndexController
+{
+    #[DisableDefaultRoute]
+    public function index()
+    {
+        return 'index';
+    }
+}
+```
 
 ## Interfaz de ruta
 ```php
@@ -278,6 +436,8 @@ Route::patch($uri, $callback);
 Route::delete($uri, $callback);
 // Establecer la ruta HEAD en $uri
 Route::head($uri, $callback);
+// Establecer la ruta OPTIONS en $uri
+Route::options($uri, $callback);
 // Establecer múltiples tipos de solicitud para la ruta simultáneamente
 Route::add(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'], $uri, $callback);
 // Rutas de grupo
@@ -288,6 +448,8 @@ Route::resource($path, $callback, [$options]);
 Route::disableDefaultRoute($plugin = '');
 // Ruta de recuperación, establece la ruta predeterminada de respaldo
 Route::fallback($callback, $plugin = '');
+// Obtener toda la información de rutas
+Route::getRoutes();
 ```
 Si no hay una ruta correspondiente para la uri (incluida la ruta predeterminada) y no se ha establecido una ruta de recuperación, se devolverá un error 404.
 

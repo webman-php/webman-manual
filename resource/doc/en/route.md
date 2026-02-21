@@ -37,11 +37,12 @@ Route::disableDefaultRoute();
 ## Closure Routes
 Add the following route code to `config/route.php`:
 ```php
-Route::any('/test', function ($request) {
+use support\Request;
+Route::any('/test', function (Request $request) {
     return response('test');
 });
-```
 
+```
 > **Note**
 > Because closure functions do not belong to any controller, `$request->app`, `$request->controller`, and `$request->action` are all empty strings.
 
@@ -51,16 +52,18 @@ When accessing the address `http://127.0.0.1:8787/test`, it will return the stri
 > The route path must start with `/`, for example:
 
 ```php
+use support\Request;
 // Incorrect usage
-Route::any('test', function ($request) {
+Route::any('test', function (Request $request) {
     return response('test');
 });
 
 // Correct usage
-Route::any('/test', function ($request) {
+Route::any('/test', function (Request $request) {
     return response('test');
 });
 ```
+
 
 ## Class Routes
 Add the following route code to `config/route.php`:
@@ -70,6 +73,93 @@ Route::any('/testclass', [app\controller\IndexController::class, 'test']);
 
 When accessing the address `http://127.0.0.1:8787/testclass`, it will return the result of the `test` method of the `app\controller\IndexController` class.
 
+
+## Annotation Routing
+
+Define routes using annotations on controller methods without configuring in `config/route.php`.
+
+> **Note**
+> This feature requires webman-framework >= v2.2.0
+
+### Basic Usage
+
+```php
+namespace app\controller;
+use support\annotation\route\Get;
+use support\annotation\route\Post;
+
+class UserController
+{
+    #[Get('/user/{id}')]
+    public function show($id)
+    {
+        return "user $id";
+    }
+
+    #[Post('/user')]
+    public function store()
+    {
+        return 'created';
+    }
+}
+```
+
+Available annotations: `#[Get]` `#[Post]` `#[Put]` `#[Delete]` `#[Patch]` `#[Head]` `#[Options]` `#[Any]` (any method). Paths must start with `/`. The second parameter can specify a route name for `route()` URL generation.
+
+### Parameterless Annotations: Restrict HTTP Methods for Default Routes
+
+When no path is specified, only the allowed HTTP methods for that action are restricted; the default route path is still used:
+
+```php
+#[Post]
+public function create() { ... }  // POST only, path still /user/create
+
+#[Get]
+public function index() { ... }   // GET only
+```
+
+Multiple annotations can be combined to allow several methods:
+
+```php
+#[Get]
+#[Post]
+public function form() { ... }  // Allows GET and POST
+```
+
+Undeclared HTTP methods will return 405.
+
+Multiple path annotations register as separate routes: `#[Get('/a')] #[Post('/b')]` creates both GET /a and POST /b.
+
+### Route Group Prefix
+
+Use `#[RouteGroup]` on a class to add a prefix to all method routes:
+
+```php
+use support\annotation\route\RouteGroup;
+use support\annotation\route\Get;
+
+#[RouteGroup('/api/v1')]
+class UserController
+{
+    #[Get('/user/{id}')]  // Actual path: /api/v1/user/{id}
+    public function show($id) { ... }
+}
+```
+
+### Custom HTTP Methods and Route Name
+
+```php
+use support\annotation\route\Route;
+
+#[Route('/user', ['GET', 'POST'], 'user.form')]
+public function form() { ... }
+```
+
+### Middleware
+
+`#[Middleware]` on a controller or method applies to annotation routes, same usage as `support\annotation\Middleware`.
+
+
 ## Route Parameters
 If there are parameters in the route, they can be matched using `{key}` and the matched result will be passed to the corresponding controller method parameter (starting from the second parameter), for example:
 ```php
@@ -78,9 +168,11 @@ Route::any('/user/{id}', [app\controller\UserController::class, 'get']);
 ```
 ```php
 namespace app\controller;
+use support\Request;
+
 class UserController
 {
-    public function get($request, $id)
+    public function get(Request $request, $id)
     {
         return response('Received parameter'.$id);
     }
@@ -89,26 +181,38 @@ class UserController
 
 More examples:
 ```php
+use support\Request;
 // Matching /user/123, not matching /user/abc
-Route::any('/user/{id:\d+}', function ($request, $id) {
+Route::any('/user/{id:\d+}', function (Request $request, $id) {
     return response($id);
 });
 
 // Matching /user/foobar, not matching /user/foo/bar
-Route::any('/user/{name}', function ($request, $name) {
+Route::any('/user/{name}', function (Request $request, $name) {
    return response($name);
 });
 
-// Matching /user, /user/123, and /user/abc
-Route::any('/user[/{name}]', function ($request, $name = null) {
+// Matching /user, /user/123, and /user/abc   [] indicates optional
+Route::any('/user[/{name}]', function (Request $request, $name = null) {
    return response($name ?? 'tom');
 });
 
-// Matching all options requests
+// Matching all requests with /user/ prefix
+Route::any('/user/[{path:.+}]', function (Request $request) {
+    return $request->path();
+});
+
+// Matching all options requests   : followed by regex specifies the pattern for the named parameter
 Route::options('[{path:.+}]', function () {
     return response('');
 });
 ```
+Advanced usage summary
+
+> The `[]` syntax in Webman routing mainly handles optional path segments or dynamic route matching, allowing you to define more complex path structures and matching rules
+>
+> `:` is used to specify regular expressions
+
 
 ## Route Groups
 Sometimes, routes contain a lot of the same prefixes. In this case, we can use route groups to simplify the definition. For example:
@@ -120,14 +224,14 @@ Route::group('/blog', function () {
    Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
 });
 ```
-Equivalent to:
+Equivalent to
 ```php
 Route::any('/blog/create', function ($request) {return response('create');});
 Route::any('/blog/edit', function ($request) {return response('edit');});
 Route::any('/blog/view/{id}', function ($request, $id) {return response("view $id");});
 ```
 
-Nested `group` usage:
+Nested group usage
 ```php
 Route::group('/blog', function () {
    Route::group('/v1', function () {
@@ -141,7 +245,7 @@ Route::group('/blog', function () {
 ## Route Middleware
 We can set a middleware for a specific route or a group of routes. For example:
 ```php
-Route::any('/admin', [app\admin\controller\IndexController::classe, 'index'])->middleware([
+Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->middleware([
     app\middleware\MiddlewareA::class,
     app\middleware\MiddlewareB::class,
 ]);
@@ -149,18 +253,15 @@ Route::any('/admin', [app\admin\controller\IndexController::classe, 'index'])->m
 Route::group('/blog', function () {
    Route::any('/create', function () {return response('create');});
    Route::any('/edit', function () {return response('edit');});
-   Route::any('/view/{id}', function ($request, $id) {response("view $id");});
+   Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
 })->middleware([
     app\middleware\MiddlewareA::class,
     app\middleware\MiddlewareB::class,
 ]);
 ```
 
-> **Note**: 
-> In webman-framework <= 1.5.6, when the `->middleware()` route middleware applies to a group after that, the current route must be within that group.
-
 ```php
-# Incorrect usage example (this usage is valid in webman-framework >= 1.5.7)
+# Incorrect usage example (valid in webman-framework >= 1.5.7)
 Route::group('/blog', function () {
    Route::group('/v1', function () {
       Route::any('/create', function ($request) {return response('create');});
@@ -210,8 +311,8 @@ Route::resource('/test', app\controller\IndexController::class, ['index','create
 | PUT    | /test/{id}/recovery | recovery | test.recovery |
 
 ## URL Generation
-> **Note**: 
-> Currently, route generation of nested route groups is not supported  
+> **Note**
+> Route URL generation for nested groups is not supported yet
 
 For example, with the route:
 ```php
@@ -224,8 +325,6 @@ route('blog.view', ['id' => 100]); // Result is /blog/100
 
 When using route URLs in a view, this method can be used so that regardless of changes to the routing rules, the URL will be generated automatically, avoiding the need to modify a large number of view files due to changes in route addresses.
 ## Obtain Route Information
-> **Note**
-> Requires webman-framework >= 1.3.2
 
 We can obtain the current request route information through the `$request->route` object, for example:
 
@@ -237,7 +336,7 @@ if ($route) {
     var_export($route->getName());
     var_export($route->getMiddleware());
     var_export($route->getCallback());
-    var_export($route->param()); // This feature requires webman-framework >= 1.3.16
+    var_export($route->param());
 }
 ```
 
@@ -245,7 +344,7 @@ if ($route) {
 > If the current request does not match any routes configured in `config/route.php`, `$request->route` will be null, meaning that the default route will result in `$request->route` being null.
 
 ## Handling 404 Errors
-When the route is not found, the default behavior is to return a 404 status code and output the content of `public/404.html`.
+When the route is not found, the default behavior is to return a 404 status code and output 404 content.
 
 If developers want to intervene in the business process when a route is not found, they can use the fallback route provided by webman using the `Route::fallback($callback)` method. For example, the following code logic redirects to the homepage when the route is not found.
 ```php
@@ -260,7 +359,68 @@ Route::fallback(function(){
 });
 ```
 
+## Add Middleware to 404
+
+By default, 404 requests do not go through any middleware. If you need to add middleware to 404 requests, refer to the following code.
+```php
+Route::fallback(function(){
+    return json(['code' => 404, 'msg' => '404 not found']);
+})->middleware([
+    app\middleware\MiddlewareA::class,
+    app\middleware\MiddlewareB::class,
+]);
+```
+
 Related link: [Custom 404 and 500 Pages](others/custom-error-page.md)
+
+## Disable Default Route
+
+```php
+// Disable main project default route, does not affect application plugins
+Route::disableDefaultRoute();
+// Disable admin application route of main project, does not affect application plugins
+Route::disableDefaultRoute('', 'admin');
+// Disable foo plugin default route, does not affect main project
+Route::disableDefaultRoute('foo');
+// Disable foo plugin admin application default route, does not affect main project
+Route::disableDefaultRoute('foo', 'admin');
+// Disable default route for controller [\app\controller\IndexController::class, 'index']
+Route::disableDefaultRoute([\app\controller\IndexController::class, 'index']);
+```
+
+## Annotation Disable Default Route
+
+You can disable the default route for a controller using annotations, for example:
+
+```php
+namespace app\controller;
+use support\annotation\DisableDefaultRoute;
+
+#[DisableDefaultRoute]
+class IndexController
+{
+    public function index()
+    {
+        return 'index';
+    }
+}
+```
+
+Likewise, you can also disable the default route for a specific method of a controller using annotations, for example:
+
+```php
+namespace app\controller;
+use support\annotation\DisableDefaultRoute;
+
+class IndexController
+{
+    #[DisableDefaultRoute]
+    public function index()
+    {
+        return 'index';
+    }
+}
+```
 
 ## Route Interface
 ```php
@@ -278,6 +438,8 @@ Route::patch($uri, $callback);
 Route::delete($uri, $callback);
 // Set a route for a head request for $uri
 Route::head($uri, $callback);
+// Set a route for an options request for $uri
+Route::options($uri, $callback);
 // Set routes for multiple request types simultaneously
 Route::add(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'], $uri, $callback);
 // Group routes
@@ -288,6 +450,8 @@ Route::resource($path, $callback, [$options]);
 Route::disableDefaultRoute($plugin = '');
 // Fallback route, set the default route fallback
 Route::fallback($callback, $plugin = '');
+// Get all route information
+Route::getRoutes();
 ```
 If there is no corresponding route for the URI (including the default route), and no fallback route is set, a 404 response will be returned.
 

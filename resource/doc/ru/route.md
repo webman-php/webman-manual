@@ -37,7 +37,8 @@ Route::disableDefaultRoute();
 ## Замыкание маршрута
 Добавьте следующий код маршрута в файл `config/route.php`:
 ```php
-Route::any('/test', function ($request) {
+use support\Request;
+Route::any('/test', function (Request $request) {
     return response('test');
 });
 ```
@@ -50,13 +51,14 @@ Route::any('/test', function ($request) {
 > Путь маршрута должен начинаться с `/`, например:
 
 ```php
+use support\Request;
 // Неправильное использование
-Route::any('test', function ($request) {
+Route::any('test', function (Request $request) {
     return response('test');
 });
 
 // Правильное использование
-Route::any('/test', function ($request) {
+Route::any('/test', function (Request $request) {
     return response('test');
 });
 ```
@@ -68,6 +70,91 @@ Route::any('/testclass', [app\controller\IndexController::class, 'test']);
 ```
 При доступе по адресу `http://127.0.0.1:8787/testclass` будет возвращено значение метода `test` класса `app\controller\IndexController`.
 
+## Маршрутизация по аннотациям
+
+Определяйте маршруты с помощью аннотаций на методах контроллера, без настройки в `config/route.php`.
+
+> **Примечание**
+> Для этой функции требуется webman-framework >= v2.2.0
+
+### Базовое использование
+
+```php
+namespace app\controller;
+use support\annotation\route\Get;
+use support\annotation\route\Post;
+
+class UserController
+{
+    #[Get('/user/{id}')]
+    public function show($id)
+    {
+        return "user $id";
+    }
+
+    #[Post('/user')]
+    public function store()
+    {
+        return 'created';
+    }
+}
+```
+
+Доступные аннотации: `#[Get]` `#[Post]` `#[Put]` `#[Delete]` `#[Patch]` `#[Head]` `#[Options]` `#[Any]` (любой метод). Путь должен начинаться с `/`. Второй параметр может указывать имя маршрута, используемое в `route()` для генерации URL.
+
+### Аннотации без параметров: ограничение HTTP-метода маршрута по умолчанию
+
+Без пути ограничивает только разрешённые HTTP-методы для данного действия, при этом используется путь маршрута по умолчанию:
+
+```php
+#[Post]
+public function create() { ... }  // Только POST разрешён, путь остаётся /user/create
+
+#[Get]
+public function index() { ... }   // Только GET разрешён
+```
+
+Можно комбинировать несколько аннотаций для разрешения нескольких методов запроса:
+
+```php
+#[Get]
+#[Post]
+public function form() { ... }  // Разрешены GET и POST
+```
+
+Методы, не объявленные в аннотациях, вернут 405.
+
+Несколько аннотаций с путём регистрируют независимые маршруты: `#[Get('/a')] #[Post('/b')]` создаёт маршруты GET /a и POST /b.
+
+### Префикс группы маршрутов
+
+Используйте `#[RouteGroup]` в классе для добавления префикса ко всем маршрутам методов:
+
+```php
+use support\annotation\route\RouteGroup;
+use support\annotation\route\Get;
+
+#[RouteGroup('/api/v1')]
+class UserController
+{
+    #[Get('/user/{id}')]  // Фактический путь /api/v1/user/{id}
+    public function show($id) { ... }
+}
+```
+
+### Пользовательские HTTP-методы и имя маршрута
+
+```php
+use support\annotation\route\Route;
+
+#[Route('/user', ['GET', 'POST'], 'user.form')]
+public function form() { ... }
+```
+
+### Промежуточное ПО
+
+`#[Middleware]` в контроллере или методе применяется к маршрутам с аннотациями, используется как `support\annotation\Middleware`.
+
 ## Параметры маршрута
 Если в маршруте присутствуют параметры, они могут быть сопоставлены с помощью `{ключ}` и переданы в соответствующие аргументы метода контроллера (начиная со второго аргумента), например:
 ```php
@@ -76,9 +163,11 @@ Route::any('/user/{id}', [app\controller\UserController::class, 'get']);
 ```
 ```php
 namespace app\controller;
+use support\Request;
+
 class UserController
 {
-    public function get($request, $id)
+    public function get(Request $request, $id)
     {
         return response('Received parameter' . $id);
     }
@@ -87,52 +176,66 @@ class UserController
 
 Дополнительные примеры:
 ```php
+use support\Request;
 // Сопоставление /user/123, но не /user/abc
-Route::any('/user/{id:\d+}', function ($request, $id) {
+Route::any('/user/{id:\d+}', function (Request $request, $id) {
     return response($id);
 });
 
 // Сопоставление /user/foobar, но не /user/foo/bar
-Route::any('/user/{name}', function ($request, $name) {
+Route::any('/user/{name}', function (Request $request, $name) {
    return response($name);
 });
 
-// Сопоставление /user, /user/123 и /user/abc
-Route::any('/user[/{name}]', function ($request, $name = null) {
+// Сопоставление /user /user/123 и /user/abc   [] означает опционально
+Route::any('/user[/{name}]', function (Request $request, $name = null) {
    return response($name ?? 'tom');
 });
 
-// Сопоставление всех запросов options
+// Сопоставление любого запроса с префиксом /user/
+Route::any('/user/[{path:.+}]', function (Request $request) {
+    return $request->path();
+});
+
+// Сопоставление всех запросов options   : указывает regex для именованного параметра
 Route::options('[{path:.+}]', function () {
     return response('');
 });
 ```
 
+Резюме расширенного использования
+
+> Синтаксис `[]` в маршрутах Webman в основном используется для опциональных частей пути или динамического сопоставления; позволяет определять более сложные структуры путей и правила сопоставления
+>
+> `:` используется для указания регулярного выражения
+
+
 ## Группировка маршрутов
 Иногда маршруты содержат много общих префиксов, в таком случае можно использовать группировку маршрутов для упрощения определения. Например:
 ```php
+use support\Request;
 Route::group('/blog', function () {
-   Route::any('/create', function ($request) {return response('create');});
-   Route::any('/edit', function ($request) {return response('edit');});
-   Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
-}
+   Route::any('/create', function (Request $request) {return response('create');});
+   Route::any('/edit', function (Request $request) {return response('edit');});
+   Route::any('/view/{id}', function (Request $request, $id) {return response("view $id");});
+});
 ```
 Эквивалентно:
 ```php
-Route::any('/blog/create', function ($request) {return response('create');});
-Route::any('/blog/edit', function ($request) {return response('edit');});
-Route::any('/blog/view/{id}', function ($request, $id) {return response("view $id");});
+Route::any('/blog/create', function (Request $request) {return response('create');});
+Route::any('/blog/edit', function (Request $request) {return response('edit');});
+Route::any('/blog/view/{id}', function (Request $request, $id) {return response("view $id");});
 ```
 
 Вложенное использование групп
 ```php
 Route::group('/blog', function () {
    Route::group('/v1', function () {
-      Route::any('/create', function ($request) {return response('create');});
-      Route::any('/edit', function ($request) {return response('edit');});
-      Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
+      Route::any('/create', function (Request $request) {return response('create');});
+      Route::any('/edit', function (Request $request) {return response('edit');});
+      Route::any('/view/{id}', function (Request $request, $id) {return response("view $id");});
    });  
-}
+});
 ```
 
 ## Промежуточные обработчики маршрутов
@@ -147,23 +250,20 @@ Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->mi
 Route::group('/blog', function () {
    Route::any('/create', function () {return response('create');});
    Route::any('/edit', function () {return response('edit');});
-   Route::any('/view/{id}', function ($request, $id) {response("view $id");});
+   Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
 })->middleware([
     app\middleware\MiddlewareA::class,
     app\middleware\MiddlewareB::class,
 ]);
 ```
 
-> **Примечание**:
-> В webman-framework <= 1.5.6 при использовании `->middleware()` промежуточные обработчики маршрутов применяются только после группировки, и текущий маршрут должен находиться в этой группе.
-
 ```php
 # Пример неправильного использования (данная практика действительна для webman-framework >= 1.5.7)
 Route::group('/blog', function () {
    Route::group('/v1', function () {
-      Route::any('/create', function ($request) {return response('create');});
-      Route::any('/edit', function ($request) {return response('edit');});
-      Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
+      Route::any('/create', function (Request $request) {return response('create');});
+      Route::any('/edit', function (Request $request) {return response('edit');});
+      Route::any('/view/{id}', function (Request $request, $id) {return response("view $id");});
    });  
 })->middleware([
     app\middleware\MiddlewareA::class,
@@ -175,9 +275,9 @@ Route::group('/blog', function () {
 # Пример правильного использования
 Route::group('/blog', function () {
    Route::group('/v1', function () {
-      Route::any('/create', function ($request) {return response('create');});
-      Route::any('/edit', function ($request) {return response('edit');});
-      Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
+      Route::any('/create', function (Request $request) {return response('create');});
+      Route::any('/edit', function (Request $request) {return response('edit');});
+      Route::any('/view/{id}', function (Request $request, $id) {return response("view $id");});
    })->middleware([
         app\middleware\MiddlewareA::class,
         app\middleware\MiddlewareB::class,
@@ -222,8 +322,6 @@ route('blog.view', ['id' => 100]); // Результат /blog/100
 Когда используется URL маршрута в представлении, такой подход позволяет автоматически генерировать URL, избегая необходимости внесения изменений в файлы представлений при изменении правил маршрута.
 
 ## Получение информации о маршруте
-> **Примечание**
-> Требуется webman-framework >= 1.3.2
 
 С помощью объекта `$request->route` можно получить информацию о текущем маршруте запроса, например
 
@@ -235,7 +333,7 @@ if ($route) {
     var_export($route->getName());
     var_export($route->getMiddleware());
     var_export($route->getCallback());
-    var_export($route->param()); // Эта функция требует webman-framework >= 1.3.16
+    var_export($route->param());
 }
 ```
 
@@ -243,7 +341,7 @@ if ($route) {
 > Если текущий запрос не соответствует ни одному из маршрутов, указанных в файле config/route.php, то `$request->route` будет равен null, то есть по умолчанию, когда маршрут не найден, `$request->route` равен null.
 
 ## Обработка ошибки 404
-Когда маршрут не найден, по умолчанию возвращается код состояния 404 и выводится содержимое файла `public/404.html`.
+Когда маршрут не найден, по умолчанию возвращается код состояния 404 и выводится соответствующее содержимое 404.
 
 Если разработчику нужно вмешаться в обработку ненайденного маршрута, он может использовать метод отката маршрута `Route::fallback($callback)`. Например, ниже приведен пример кода логики, когда маршрут не найден, перенаправляется на домашнюю страницу.
 ```php
@@ -258,7 +356,68 @@ Route::fallback(function(){
 });
 ```
 
+## Добавление middleware к 404
+
+По умолчанию запросы 404 не проходят через какой-либо middleware. Если нужно добавить middleware к запросам 404, см. следующий код:
+```php
+Route::fallback(function(){
+    return json(['code' => 404, 'msg' => '404 not found']);
+})->middleware([
+    app\middleware\MiddlewareA::class,
+    app\middleware\MiddlewareB::class,
+]);
+```
+
 Соответствующая ссылка [Настройка страниц ошибок 404 и 500](others/custom-error-page.md)
+
+## Отключение маршрута по умолчанию
+
+```php
+// Отключить маршрут по умолчанию основного проекта, не влияет на плагины
+Route::disableDefaultRoute();
+// Отключить маршрут admin основного проекта, не влияет на плагины
+Route::disableDefaultRoute('', 'admin');
+// Отключить маршрут по умолчанию плагина foo, не влияет на основной проект
+Route::disableDefaultRoute('foo');
+// Отключить маршрут admin плагина foo, не влияет на основной проект
+Route::disableDefaultRoute('foo', 'admin');
+// Отключить маршрут по умолчанию контроллера [\app\controller\IndexController::class, 'index']
+Route::disableDefaultRoute([\app\controller\IndexController::class, 'index']);
+```
+
+## Аннотация отключения маршрута по умолчанию
+
+Можно использовать аннотации для отключения маршрута по умолчанию контроллера:
+
+```php
+namespace app\controller;
+use support\annotation\DisableDefaultRoute;
+
+#[DisableDefaultRoute]
+class IndexController
+{
+    public function index()
+    {
+        return 'index';
+    }
+}
+```
+
+Точно так же можно использовать аннотации для отключения маршрута по умолчанию метода контроллера:
+
+```php
+namespace app\controller;
+use support\annotation\DisableDefaultRoute;
+
+class IndexController
+{
+    #[DisableDefaultRoute]
+    public function index()
+    {
+        return 'index';
+    }
+}
+```
 
 ## Маршрутный интерфейс
 ```php
@@ -276,6 +435,8 @@ Route::patch($uri, $callback);
 Route::delete($uri, $callback);
 // Установить маршрут с методом HEAD для $uri
 Route::head($uri, $callback);
+// Установить маршрут с методом OPTIONS для $uri
+Route::options($uri, $callback);
 // Установить маршрут с несколькими типами запросов
 Route::add(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'], $uri, $callback);
 // Групповой маршрут
@@ -286,6 +447,8 @@ Route::resource($path, $callback, [$options]);
 Route::disableDefaultRoute($plugin = '');
 // Маршрут отката, установить маршрут по умолчанию
 Route::fallback($callback, $plugin = '');
+// Получить всю информацию о маршрутах
+Route::getRoutes();
 ```
 Если нет соответствующего маршрута для uri (включая маршрут по умолчанию), и маршрут отката не установлен, будет возвращен статус 404.
 

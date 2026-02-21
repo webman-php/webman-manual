@@ -1,4 +1,4 @@
-## ルーティング
+# ルーティング
 ## デフォルトのルーティングルール
 webmanのデフォルトのルーティングルールは `http://127.0.0.1:8787/{controller}/{action}`です。
 
@@ -37,11 +37,12 @@ Route::disableDefaultRoute();
 ## クロージャルーティング
 `config/route.php` に以下のようなルーティングコードを追加してください。
 ```php
-Route::any('/test', function ($request) {
+use support\Request;
+Route::any('/test', function (Request $request) {
     return response('test');
 });
-```
 
+```
 > **注意**
 > クロージャ関数はどのコントローラにも属さないため、`$request->app` `$request->controller` `$request->action` はすべて空の文字列です。
 
@@ -49,17 +50,20 @@ Route::any('/test', function ($request) {
 
 > **注意**
 > ルーティングパスは `/` で始まる必要があります。例：
+
 ```php
+use support\Request;
 // 間違った使用法
-Route::any('test', function ($request) {
+Route::any('test', function (Request $request) {
     return response('test');
 });
 
 // 正しい使用法
-Route::any('/test', function ($request) {
+Route::any('/test', function (Request $request) {
     return response('test');
 });
 ```
+
 
 ## クラスルーティング
 `config/route.php` に以下のようなルーティングコードを追加してください。
@@ -69,6 +73,93 @@ Route::any('/testclass', [app\controller\IndexController::class, 'test']);
 
 `http://127.0.0.1:8787/testclass` にアクセスすると、`app\controller\IndexController` クラスの `test` メソッドの返り値が返されます。
 
+
+## アノテーションルーティング
+
+コントローラメソッドにアノテーションでルートを定義し、`config/route.php` での設定は不要です。
+
+> **注意**
+> この機能には webman-framework >= v2.2.0 が必要です
+
+### 基本用法
+
+```php
+namespace app\controller;
+use support\annotation\route\Get;
+use support\annotation\route\Post;
+
+class UserController
+{
+    #[Get('/user/{id}')]
+    public function show($id)
+    {
+        return "user $id";
+    }
+
+    #[Post('/user')]
+    public function store()
+    {
+        return 'created';
+    }
+}
+```
+
+使用可能なアノテーション：`#[Get]` `#[Post]` `#[Put]` `#[Delete]` `#[Patch]` `#[Head]` `#[Options]` `#[Any]`（任意のメソッド）。パスは `/` で始める必要があります。第2パラメータでルート名を指定でき、`route()` でURL生成に使用します。
+
+### パスなしアノテーション：デフォルトルートのHTTPメソッド制限
+
+パスを指定しない場合、そのアクションで許可するHTTPメソッドのみを制限し、デフォルトルートパスはそのまま使用されます：
+
+```php
+#[Post]
+public function create() { ... }  // POSTのみ、パスは引き続き /user/create
+
+#[Get]
+public function index() { ... }   // GETのみ
+```
+
+複数のアノテーションを組み合わせて、複数のメソッドを許可できます：
+
+```php
+#[Get]
+#[Post]
+public function form() { ... }  // GET と POST を許可
+```
+
+宣言されていないHTTPメソッドは405を返します。
+
+複数のパスアノテーションは別々のルートとして登録されます：`#[Get('/a')] #[Post('/b')]` は GET /a と POST /b の両方を作成します。
+
+### ルートグループプレフィックス
+
+クラスに `#[RouteGroup]` を使用して、全てのメソッドルートにプレフィックスを追加します：
+
+```php
+use support\annotation\route\RouteGroup;
+use support\annotation\route\Get;
+
+#[RouteGroup('/api/v1')]
+class UserController
+{
+    #[Get('/user/{id}')]  // 実際のパス: /api/v1/user/{id}
+    public function show($id) { ... }
+}
+```
+
+### カスタムHTTPメソッドとルート名
+
+```php
+use support\annotation\route\Route;
+
+#[Route('/user', ['GET', 'POST'], 'user.form')]
+public function form() { ... }
+```
+
+### ミドルウェア
+
+コントローラやメソッドの `#[Middleware]` はアノテーションルートに適用され、`support\annotation\Middleware` と同じ用法です。
+
+
 ## ルーティングパラメータ
 ルーティングにパラメータが含まれている場合、 `{key}` を使用してマッチングし、マッチング結果は対応するコントローラーメソッドパラメータに渡されます（2番目のパラメータから順に渡されます）。例：
 ```php
@@ -77,9 +168,11 @@ Route::any('/user/{id}', [app\controller\UserController::class, 'get']);
 ```
 ```php
 namespace app\controller;
+use support\Request;
+
 class UserController
 {
-    public function get($request, $id)
+    public function get(Request $request, $id)
     {
         return response('パラメータを受け取りました'.$id);
     }
@@ -88,26 +181,38 @@ class UserController
 
 さらに例：
 ```php
+use support\Request;
 // /user/123 にマッチ、/user/abc にはマッチしない
-Route::any('/user/{id:\d+}', function ($request, $id) {
+Route::any('/user/{id:\d+}', function (Request $request, $id) {
     return response($id);
 });
 
 // /user/foobar にマッチ、/user/foo/bar にはマッチしない
-Route::any('/user/{name}', function ($request, $name) {
+Route::any('/user/{name}', function (Request $request, $name) {
    return response($name);
 });
 
-// /user、/user/123 、および /user/abc にマッチ
-Route::any('/user[/{name}]', function ($request, $name = null) {
+// /user、/user/123、/user/abc にマッチ   [] はオプションを表す
+Route::any('/user[/{name}]', function (Request $request, $name = null) {
    return response($name ?? 'tom');
 });
 
-// すべてのオプションリクエストにマッチ
+// /user/ をプレフィックスとするすべてのリクエストにマッチ
+Route::any('/user/[{path:.+}]', function (Request $request) {
+    return $request->path();
+});
+
+// すべての options リクエストにマッチ   : の後に正規表現を指定し、名前付きパラメータのパターンを表す
 Route::options('[{path:.+}]', function () {
     return response('');
 });
 ```
+応用まとめ
+
+> Webman ルーティングの `[]` 構文は、主にオプションのパス部分や動的ルートのマッチングを処理し、より複雑なパス構造とマッチングルールの定義を可能にします
+>
+> `:` は正規表現の指定に使用する
+
 
 ## ルーティンググループ
 時にはルーティングには多くの共通の接頭辞が含まれていることがあります。このような場合は、ルーティンググループを使用して定義を簡素化できます。例：
@@ -148,18 +253,15 @@ Route::any('/admin', [app\admin\controller\IndexController::class, 'index'])->mi
 Route::group('/blog', function () {
    Route::any('/create', function () {return response('create');});
    Route::any('/edit', function () {return response('edit');});
-   Route::any('/view/{id}', function ($request, $id) {response("view $id");});
+   Route::any('/view/{id}', function ($request, $id) {return response("view $id");});
 })->middleware([
     app\middleware\MiddlewareA::class,
     app\middleware\MiddlewareB::class,
 ]);
 ```
 
-> **注意**：
-> webman-framework <= 1.5.6 では `->middleware()` ルーティングのミドルウェアは、グループの後にルートがある場合にのみ有効です。
-
 ```php
-# 間違った使用例 (webman-framework >= 1.5.7 からこの方法が有効になりました)
+# 間違った使用例 (webman-framework >= 1.5.7 からこの方法が有効)
 Route::group('/blog', function () {
    Route::group('/v1', function () {
       Route::any('/create', function ($request) {return response('create');});
@@ -223,8 +325,6 @@ route('blog.view', ['id' => 100]); // 結果は /blog/100 となります
 ビューでルートのURLを使用する場合、この方法を使用すると、ルート規則が変わってもURLが自動的に生成されるため、多くのビューファイルを変更する必要がありません。
 
 ## ルート情報の取得
-> **注意**
-> webman-framework >= 1.3.2が必要です。
 
 `$request->route`オブジェクトを使用すると、現在のリクエストのルート情報を取得できます。たとえば、
 
@@ -236,7 +336,7 @@ if ($route) {
     var_export($route->getName());
     var_export($route->getMiddleware());
     var_export($route->getCallback());
-    var_export($route->param()); // この機能には、webman-framework >= 1.3.16が必要です。
+    var_export($route->param());
 }
 ```
 > **注意**
@@ -244,7 +344,7 @@ if ($route) {
 
 
 ## 404エラーの処理
-ルートが見つからない場合、デフォルトでは404のステータスコードが返され、`public/404.html`ファイルの内容が出力されます。
+ルートが見つからない場合、デフォルトでは404のステータスコードが返され、404のコンテンツが出力されます。
 
 開発者がルートが見つからない場合のビジネスプロセスに介入したい場合は、webmanが提供するフォールバックルート`Route::fallback($callback)`メソッドを使用できます。たとえば、以下のコードのロジックは、ルートが見つからない場合にホームページにリダイレクトします。
 ```php
@@ -259,7 +359,68 @@ Route::fallback(function(){
 });
 ```
 
+## 404にミドルウェアを追加
+
+デフォルトでは404リクエストはミドルウェアを通過しません。404リクエストにミドルウェアを追加する必要がある場合は、以下のコードを参照してください。
+```php
+Route::fallback(function(){
+    return json(['code' => 404, 'msg' => '404 not found']);
+})->middleware([
+    app\middleware\MiddlewareA::class,
+    app\middleware\MiddlewareB::class,
+]);
+```
+
 関連リンク [カスタム404 500ページ](others/custom-error-page.md)
+
+## デフォルトルートの無効化
+
+```php
+// メインプロジェクトのデフォルトルートを無効化、アプリケーションプラグインには影響しない
+Route::disableDefaultRoute();
+// メインプロジェクトのadminアプリのルートを無効化、アプリケーションプラグインには影響しない
+Route::disableDefaultRoute('', 'admin');
+// fooプラグインのデフォルトルートを無効化、メインプロジェクトには影響しない
+Route::disableDefaultRoute('foo');
+// fooプラグインのadminアプリのデフォルトルートを無効化、メインプロジェクトには影響しない
+Route::disableDefaultRoute('foo', 'admin');
+// コントローラ [\app\controller\IndexController::class, 'index'] のデフォルトルートを無効化
+Route::disableDefaultRoute([\app\controller\IndexController::class, 'index']);
+```
+
+## アノテーションでデフォルトルートを無効化
+
+アノテーションでコントローラのデフォルトルートを無効化できます。例：
+
+```php
+namespace app\controller;
+use support\annotation\DisableDefaultRoute;
+
+#[DisableDefaultRoute]
+class IndexController
+{
+    public function index()
+    {
+        return 'index';
+    }
+}
+```
+
+同様に、アノテーションでコントローラの特定メソッドのデフォルトルートを無効化できます。例：
+
+```php
+namespace app\controller;
+use support\annotation\DisableDefaultRoute;
+
+class IndexController
+{
+    #[DisableDefaultRoute]
+    public function index()
+    {
+        return 'index';
+    }
+}
+```
 
 ## ルートインターフェイス
 ```php
@@ -277,6 +438,8 @@ Route::patch($uri, $callback);
 Route::delete($uri, $callback);
 // $uriのheadリクエストのルートを設定します。
 Route::head($uri, $callback);
+// $uriのoptionsリクエストのルートを設定します。
+Route::options($uri, $callback);
 // 複数のリクエスト種別のルートを同時に設定します。
 Route::add(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'], $uri, $callback);
 // グループルート
@@ -287,6 +450,8 @@ Route::resource($path, $callback, [$options]);
 Route::disableDefaultRoute($plugin = '');
 // フォールバックルート、デフォルトのルートを設定
 Route::fallback($callback, $plugin = '');
+// すべてのルート情報を取得
+Route::getRoutes();
 ```
 もしuriに対応するルート（デフォルトのルートを含む）がなく、フォールバックルートも設定されていない場合、404が返されます。
 
