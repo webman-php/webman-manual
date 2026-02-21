@@ -73,6 +73,92 @@ Route::any('/testclass', [app\controller\IndexController::class, 'test']);
 当访问地址为 `http://127.0.0.1:8787/testclass` 时，将返回`app\controller\IndexController`类的`test`方法的返回值。
 
 
+## 注解路由
+
+在控制器方法上使用注解定义路由，无需在 `config/route.php` 中配置。
+
+> **注意**
+> 此功能需要 webman-framework >= v2.2.0
+
+### 基本用法
+
+```php
+namespace app\controller;
+use support\annotation\route\Get;
+use support\annotation\route\Post;
+
+class UserController
+{
+    #[Get('/user/{id}')]
+    public function show($id)
+    {
+        return "user $id";
+    }
+
+    #[Post('/user')]
+    public function store()
+    {
+        return 'created';
+    }
+}
+```
+
+可用注解：`#[Get]` `#[Post]` `#[Put]` `#[Delete]` `#[Patch]` `#[Head]` `#[Options]` `#[Any]`（任意方法）。路径必须以 `/` 开头。第二参数可指定路由名，用于 `route()` 生成 URL。
+
+### 无参数注解：限制默认路由的请求方法
+
+不带路径时，仅限制该动作可通过的 HTTP 方法，仍使用默认路由路径：
+
+```php
+#[Post]
+public function create() { ... }  // 仅允许 POST，路径仍为 /user/create
+
+#[Get]
+public function index() { ... }   // 仅允许 GET
+```
+
+可组合多个注解，允许多种请求方法：
+
+```php
+#[Get]
+#[Post]
+public function form() { ... }  // 允许 GET 和 POST
+```
+
+未在注解中声明的请求方法将返回 405。
+
+多个带路径的注解会注册为多条独立路由：`#[Get('/a')] #[Post('/b')]` 会生成 GET /a 与 POST /b 两条路由。
+
+### 路由组前缀
+
+在类上使用 `#[RouteGroup]` 为所有方法路由添加前缀：
+
+```php
+use support\annotation\route\RouteGroup;
+use support\annotation\route\Get;
+
+#[RouteGroup('/api/v1')]
+class UserController
+{
+    #[Get('/user/{id}')]  // 实际路径 /api/v1/user/{id}
+    public function show($id) { ... }
+}
+```
+
+### 自定义请求方法与路由名
+
+```php
+use support\annotation\route\Route;
+
+#[Route('/user', ['GET', 'POST'], 'user.form')]
+public function form() { ... }
+```
+
+### 中间件
+
+控制器或方法上的 `#[Middleware]` 会作用于注解路由，用法同 `support\annotation\Middleware`。
+
+
 ## 路由参数
 如果路由中存在参数，通过`{key}`来匹配，匹配结果将传递到对应的控制器方法参数中(从第二个参数开始依次传递)，例如：
 ```php
@@ -123,7 +209,7 @@ Route::options('[{path:.+}]', function () {
 进阶用法总结
 
 > `[]` 语法在 Webman 路由中主要用于处理可选路径部分或匹配动态路由，它让你能够为路由定义更复杂的路径结构和匹配规则
-> 
+>
 > `:用于指定正则表达式`
 
 
@@ -231,8 +317,8 @@ Route::resource('/test', app\controller\IndexController::class, ['index','create
 
 
 ## url生成
-> **注意** 
-> 暂时不支持group嵌套的路由生成url  
+> **注意**
+> 暂时不支持group嵌套的路由生成url
 
 例如路由：
 ```php
