@@ -7,6 +7,9 @@ Webman命令行组件
 composer require webman/console
 ```
 
+> **注意**
+> 以下命令是`webman/console` `v2.2`及以上版本的说明，如果你的console缺少某些功能，请及时更新。
+
 ## 目录
 
 ### 代码生成
