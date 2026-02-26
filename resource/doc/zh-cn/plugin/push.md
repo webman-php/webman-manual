@@ -91,6 +91,106 @@ var user_channel = connection.subscribe('private-user-' + uid);
 当客户端订阅私有频道时(`private-`开头的频道)，浏览器会发起一个ajax鉴权请求(ajax地址为new Push时auth参数配置的地址)，开发者可以在这里判断，当前用户是否有权限监听这个频道。这样就保证了订阅的安全性。
 
 > 关于鉴权参见 `config/plugin/webman/push/route.php` 中的代码
+## 在线频道
+在线频道 是以 presence-xxx 为 频道订阅标识，与 上述私有频道 同样需要 鉴权接口。
+相比私有频道 功能更多，可以 订阅后可以获得 频道用户列表，频道用户 在 加入 和 离开时，
+服务端 都会 进行广播。
+
+前端调用示例：
+```js
+var connection = new Push({
+    url: 'ws://127.0.0.1:3131', // websocket地址
+    app_key: 'f7d099f6dea1f1c2216d6502fd1f44af',
+    auth: '/plugin/webman/push/auth' // 订阅鉴权(仅限于私有频道 和 在线频道)
+});
+
+var uid = parseInt(Math.random()*9999);
+
+
+var channel = connection.subscribe('presence-test');
+//订阅成功后
+channel.on('pusher:subscription_succeeded',function(d){
+	console.log(d.presence);
+	/**
+	{
+        "count": 1,//频道用户数量
+        "ids": [   //频道用户id列表
+            2977   
+        ],
+        "hash": {  //频道用户信息
+            "2977": {
+                "name": "張15",
+                "avatar":'',
+                ...
+            }
+        }
+    }
+	*/	
+});
+//新用户
+channel.on('pusher:member_added',function(data){
+	console.log(data);//
+});
+//离开用户
+channel.on('pusher:member_removed',function(data){
+	console.log(data);//
+});
+```
+完善 push.js
+```js
+//大概70多行
+if (event === 'pusher:pong') {
+    _this.checkoutPing();
+    return;
+}
+if (event === 'pusher:error') {
+    throw Error(params.data.message);
+}
+var data = JSON.parse(params.data), channel;
+if (event === 'pusher_internal:subscription_succeeded') {
+    channel = _this.channels[channel_name];
+    channel.subscribed = true;
+    channel.processQueue();
+    channel.emit('pusher:subscription_succeeded',data);
+    return; 
+}
+//新加代码开始！！！！
+if (event.indexOf('pusher_internal:') === 0) {
+    channel = _this.channels[channel_name];
+    if (channel) {
+        channel.emit(event.replace('pusher_internal:', 'pusher:'), data);
+    }
+    return;
+}
+//新加代码结束！！！！
+if (event === 'pusher:connection_established') {
+    _this.connection.socket_id = data.socket_id;
+    _this.connection.updateNetworkState('connected');
+    _this.subscribeAll();
+}
+```
+如需 添加webhook 监听 用户加入与离开 在线频道
+需要 config/plugin/webman/push/app.php 添加 "user_hook"=>"回调地址" ,并在 config/plugin/webman/push/process.php 设置里 注入 配置。
+
+当客户端订阅在线频道时(`presence-`开头的频道)，同上。
+## config/plugin/webman/push/route.php 部分代码示例
+```php
+Route::post(config('plugin.webman.push.app.auth'), function (Request $request) {
+    $pusher = new Api(str_replace('0.0.0.0', '127.0.0.1', config('plugin.webman.push.app.api')), config('plugin.webman.push.app.app_key'), config('plugin.webman.push.app.app_secret'));
+    $channel_name = $request->post('channel_name');
+    $session = $request->session();
+    $has_authority = true;
+    if ($has_authority) {
+        
+        return response($pusher->socketAuth($channel_name, $request->post('socket_id'),json_encode([
+            "user_id"=>'',//session('user.id')
+            "user_info"=>[],//session('user')
+        ])));
+    } else {
+        return response('Forbidden', 403);
+    }
+});
+```
 
 ## 客户端推送
 以上例子都是客户端订阅某个频道，服务端调用API接口推送。webman/push 也支持客户端直接推送消息。
