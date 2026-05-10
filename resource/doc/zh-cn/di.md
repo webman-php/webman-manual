@@ -158,8 +158,17 @@ class Mailer
 ```php
 return [
     // ... 这里忽略了其它配置
-    
-    app\service\Mailer::class =>  new app\service\Mailer('192.168.1.11', 25);
+    app\service\Mailer::class =>  function () {
+        return new app\service\Mailer('192.168.1.11', 25);
+    }
+];
+
+or
+
+return [
+    app\service\Mailer::class => DI\autowire()
+        ->constructorParameter('smtp_host', '192.168.1.11')
+        ->constructorParameter('smtp_port', 25),
 ];
 ```
 这样当依赖注入需要获取`app\service\Mailer`实例时将自动使用这个配置中创建的`app\service\Mailer`实例。
