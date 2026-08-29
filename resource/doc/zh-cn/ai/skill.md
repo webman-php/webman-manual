@@ -4,6 +4,8 @@ Webman 开发 Skill 为 Codex、Claude Code 和其它支持 Agent Skills 的 AI 
 
 完整 Skill 位于本仓库的 [skills/webman-development](https://github.com/webman-php/webman-manual/tree/master/skills/webman-development) 目录。安装时必须保留整个目录及其中的 `references/`，不要只复制 `SKILL.md`。
 
+为避免安装器下载体积较大的手册仓库，实际安装统一使用轻量的 [webman-php/skills](https://github.com/webman-php/skills) 发布仓库；其中的 `webman-development` 与本页面随手册维护的副本保持一致。
+
 ## 推荐安装：项目范围
 
 先进入**实际要开发的 Webman 项目根目录**。安装器会把 Skill 放到对应编辑器的项目目录中，团队成员可按需要将这些目录提交到项目仓库。
@@ -11,19 +13,19 @@ Webman 开发 Skill 为 Codex、Claude Code 和其它支持 Agent Skills 的 AI 
 同时安装到 Codex 与 Claude Code：
 
 ```bash
-npx skills add webman-php/webman-manual --skill webman-development -a codex -a claude-code
+npx skills add webman-php/skills --skill webman-development -a codex -a claude-code
 ```
 
 只使用 Codex：
 
 ```bash
-npx skills add webman-php/webman-manual --skill webman-development -a codex
+npx skills add webman-php/skills --skill webman-development -a codex
 ```
 
 只使用 Claude Code：
 
 ```bash
-npx skills add webman-php/webman-manual --skill webman-development -a claude-code
+npx skills add webman-php/skills --skill webman-development -a claude-code
 ```
 
 首次运行时按安装器提示选择复制或链接。链接便于更新同一来源；使用 `--copy` 会创建独立副本，适合不支持链接或希望固定版本的项目。
@@ -65,9 +67,9 @@ Claude Code 也会根据任务自动使用该 Skill。需要显式调用时输�
 没有 Node.js 或希望完全控制目录时，克隆本仓库后复制完整目录。以下 PowerShell 示例会在目标已存在时停止，避免覆盖来源不明的内容：
 
 ```powershell
-git clone --depth 1 https://github.com/webman-php/webman-manual.git D:\tools\webman-manual
+git clone --depth 1 https://github.com/webman-php/skills.git D:\tools\webman-skills
 
-$source = 'D:\tools\webman-manual\skills\webman-development'
+$source = 'D:\tools\webman-skills\skills\webman-development'
 $projectRoot = 'D:\project\my-webman'
 $parent = Join-Path $projectRoot '.agents\skills' # Codex；Claude Code 改为 '.claude\skills'
 $target = Join-Path $parent 'webman-development'

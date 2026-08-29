@@ -4,19 +4,21 @@ The Webman Development Skill gives Codex, Claude Code, and other Agent Skills-co
 
 The complete package is in [skills/webman-development](https://github.com/webman-php/webman-manual/tree/master/skills/webman-development). Keep the whole directory, including `references/`; copying `SKILL.md` alone is not sufficient.
 
+For fast installation, use the lightweight [webman-php/skills](https://github.com/webman-php/skills) distribution repository instead of cloning the full manual. Its `webman-development` package is maintained in sync with the copy shipped in this manual.
+
 ## Recommended: project installation
 
 Run the following in the root of the Webman project you are developing:
 
 ```bash
-npx skills add webman-php/webman-manual --skill webman-development -a codex -a claude-code
+npx skills add webman-php/skills --skill webman-development -a codex -a claude-code
 ```
 
 For only one editor, use one matching option:
 
 ```bash
-npx skills add webman-php/webman-manual --skill webman-development -a codex
-npx skills add webman-php/webman-manual --skill webman-development -a claude-code
+npx skills add webman-php/skills --skill webman-development -a codex
+npx skills add webman-php/skills --skill webman-development -a claude-code
 ```
 
 Choose a linked installation when you want easy source updates, or add `--copy` to create an independent project copy.
@@ -58,9 +60,9 @@ If you create the top-level `.claude/skills` directory after a session starts, r
 If Node.js is unavailable, clone this repository and copy the complete directory. This PowerShell example stops if the target already exists:
 
 ```powershell
-git clone --depth 1 https://github.com/webman-php/webman-manual.git D:\tools\webman-manual
+git clone --depth 1 https://github.com/webman-php/skills.git D:\tools\webman-skills
 
-$source = 'D:\tools\webman-manual\skills\webman-development'
+$source = 'D:\tools\webman-skills\skills\webman-development'
 $projectRoot = 'D:\project\my-webman'
 $parent = Join-Path $projectRoot '.agents\skills' # Use '.claude\skills' for Claude Code.
 $target = Join-Path $parent 'webman-development'
