@@ -94,6 +94,9 @@
   - [依赖注入](di.md)
   - [二进制打包](others/bin.md)
   - [AOP](aop.md)
+
+- AI 开发
+  - [Webman 开发 Skill](ai/skill.md)
   
 - 其它
   - [安全](others/security.md)

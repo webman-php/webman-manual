@@ -94,6 +94,9 @@
   - [Dependency Injection](di.md)
   - [Binary Packaging](others/bin.md)
   - [Aspect-Oriented Programming (AOP)](aop.md)
+
+- AI Development
+  - [Webman Development Skill](ai/skill.md)
   
 - Other
   - [Security](others/security.md)
@@ -122,4 +125,3 @@
   - [2.1](upgrade/2-1.md)
   - [2.2](upgrade/2-2.md)
   - [Acknowledgments](thanks.md)
-

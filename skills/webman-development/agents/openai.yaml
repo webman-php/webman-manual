@@ -1,0 +1,4 @@
+interface:
+  display_name: "Webman Development"
+  short_description: "Build and review Webman applications correctly"
+  default_prompt: "Use $webman-development to implement this Webman task with project-version-aware best practices."
