@@ -21,10 +21,10 @@ public function show(Request $request)
 | 任务 | 推荐入口 | 注意事项 |
 |---|---|---|
 | 读取全部或单个查询参数 | `$request->get()`、`$request->get('key', $default)` | 未提供参数时，单值返回 `null` 或默认值。 |
-| 读取全部或单个表单参数 | `$request->post()`、`$request->post('key', $default)` | 不要把未校验的输入直接写入查询或响应 HTML。 |
+| 读取全部或单个 POST 参数（含 JSON） | `$request->post()`、`$request->post('key', $default)` | `Content-Type` 含 `json`（通常为 `application/json`）时，Workerman 会自动解码为 post 数组；输入仍须校验。 |
 | 合并读取 GET 与 POST | `$request->input('key', $default)`、`$request->all()` | 需要明确来源时使用 `get()` 或 `post()`，不要让同名参数隐式覆盖业务判断。 |
 | 获取白名单或排除字段 | `$request->only([...])`、`$request->except([...])` | 这不是验证；写入模型前仍要列出允许字段。 |
-| 读取非表单原始包体 | `$request->rawBody()` | 对 JSON、XML 或签名回调先验证格式、签名及大小，再解析。 |
+| 读取原始请求包体 | `$request->rawBody()` | 用于验签、保留原始字节或非标准格式；普通 JSON 请求优先使用 `post()`，不要再解码同一包体。 |
 | 读取 Header | `$request->header('header-name', $default)` | Header 名在 Webman 中使用小写；外部 Header 均不可信。 |
 | 读取 Cookie | `$request->cookie('name', $default)` | Cookie 值是客户端输入，不能视为认证或授权结论。 |
 
