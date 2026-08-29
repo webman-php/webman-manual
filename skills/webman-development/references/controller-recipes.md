@@ -30,7 +30,6 @@ use support\annotation\route\Post;
 use support\annotation\route\RouteGroup;
 use support\Request;
 use support\Response;
-use support\validation\annotation\Param;
 use support\validation\annotation\Validate;
 
 #[DisableDefaultRoute]
@@ -38,12 +37,17 @@ use support\validation\annotation\Validate;
 #[Middleware(AuthMiddleware::class)]
 class UserController
 {
-    // 路由参数优先于 query；校验来源也显式采用 query → path。
+    // 验证顺序与参数绑定一致：body → query → path，后者优先。
     #[Get('/users/{id:\d+}', 'api.users.show')]
+    #[Validate(
+        rules: [
+            'id' => 'min:1',
+            'page' => 'min:1|max:100',
+        ],
+        in: ['body', 'query', 'path']
+    )]
     public function show(
-        #[Param(rules: 'min:1', in: ['query', 'path'])]
         int $id,
-        #[Param(rules: 'min:1|max:100', in: ['query'])]
         int $page = 1,
     ): Response {
         return json(['code' => 0, 'data' => compact('id', 'page')]);
@@ -68,7 +72,7 @@ class UserController
 ```
 
 - `#[DisableDefaultRoute]` 防止默认路径 `/user/show`、`/user/store` 形成第二个入口；`#[RouteGroup('/api/v1')]` 统一添加 API 前缀；类中间件负责共同认证。
-- `show()` 展示参数绑定的最佳场景：路由 ID 与可选 query 分页。`Param` 会从签名补齐 `required|integer` 或 `integer`，而 `in: ['query', 'path']` 的后者优先顺序与控制器的“路由 > GET”取值一致。
+- `show()` 用一个方法级 `Validate` 集中描述路由 ID 与可选分页。它会从签名补齐 `required|integer` 或 `integer`，而 `in: ['body', 'query', 'path']` 的后者优先顺序与控制器的“路由 > GET > POST”取值一致；分页通常由 query 提供。若接口契约必须严格 query-only，改用 `$request->get()` 读取。
 - `store()` 展示严格 body-only 写接口：`Validate(in: 'body')` 验证的字段，必须也用 `$request->post()` 读取。不要把 `#[Param(in: ['body'])] string $name` 与直接参数绑定并用；后者仍会让同名 GET 参数优先，造成“校验值”和“实际值”不一致。
 - 普通项目若采用 `config/route.php`，保留同一参数/验证/响应形状，把 `#[Get(...)]`、`#[Post(...)]`、`#[RouteGroup]`、`#[DisableDefaultRoute]` 换成对应的显式路由即可。
 
@@ -91,10 +95,11 @@ public function show(int $id, int $page = 1): Response
 - 参数名不应用于接收当前用户、租户、权限范围或可信资源归属；这些由认证/授权上下文决定。
 - 类/模型实例也可被参数绑定，但公共写接口不要因此把未经白名单过滤的输入直接持久化。复杂模型写入读 [data-recipes.md](data-recipes.md)。
 
-## `#[Param]` 与 `#[Validate]`：补足规则，不替代绑定
+## `#[Validate]` 与 `#[Param]`：补足规则，不替代绑定
 
 仅在 `webman/validation` 已安装时使用 `support\validation\annotation\Param`、`Validate`。控制器参数绑定负责取得值与 PHP 类型转换；验证器负责接受/拒绝输入。它们配合使用，而不是二选一。
 
+- 多字段的普通动作优先在方法上写一个 `#[Validate]`，使规则、数据来源与消息集中可见；只有单个参数确实需要不同的来源、消息或属性名时再用 `#[Param]`。
 - 方法带 `#[Validate]`，或任一参数带 `#[Param]` 时，组件会依据参数签名推导基础规则：非可选 `string $name` 推导 `required|string`，`int $id` 推导 `required|integer`；默认值与 nullable 类型会推导为非必填/nullable 的相应规则。
 - 推导不覆盖业务要求。邮箱、长度、枚举、金额范围、跨字段关系、文件、唯一性和场景仍须通过 `#[Param(rules: ...)]`、`#[Validate(...)]` 或复用 Validator 明确描述。
 - 多字段或场景复用时，例如 `#[Validate(validator: UserValidator::class, scene: 'create')]`；它的规则来源、白名单和失败响应读 [validation-recipes.md](validation-recipes.md)。不要在未安装组件的项目中写这些 Attribute。
