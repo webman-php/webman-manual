@@ -106,7 +106,7 @@ class Doc
         if ($path) {
             $content = preg_replace('/\[(.*?)\]\((.*?\.md)\)/', "[$1]($path$2)", $content);
         }
-        return markdown(str_replace('.md', '.html', $content), false);
+        return markdown($content, false);
     }
 
     public function file(Request $request)
