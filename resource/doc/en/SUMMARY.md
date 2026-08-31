@@ -2,6 +2,7 @@
 
   - [What is webman](README.md)
   - [Programming Notes](attention.md)
+  - [Skills](ai/skill.md)
   - [Q&A Community](help.md)
   
 - Quick Start
@@ -95,9 +96,6 @@
   - [Binary Packaging](others/bin.md)
   - [Aspect-Oriented Programming (AOP)](aop.md)
 
-- AI Development
-  - [Webman Development Skill](ai/skill.md)
-  
 - Other
   - [Security](others/security.md)
   - [Database Transactions](others/transaction.md)

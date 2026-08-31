@@ -25,11 +25,12 @@ AI 应优先使用自身的 Skill 安装能力；不支持时，可以选择下�
 此方式只需要 PHP 和 Composer，不依赖 Node.js、PowerShell 或 `webman/console`：
 
 ```bash
-composer require --dev "webman/skills:^1.0"
+composer config repositories.webman-skills vcs https://github.com/webman-php/skills
+composer require --dev "webman/skills:~1.0"
 php vendor/bin/webman-skills install --agents=codex,claude-code
 ```
 
-只安装 Codex 或 Claude Code 时，第二条命令分别改为：
+第一条命令用于在 Packagist 尚未收录或镜像尚未同步时直接读取 GitHub 上的稳定版本；如果项目已经能从 Packagist 找到 `webman/skills`，可以省略。只安装 Codex 或 Claude Code 时，最后一条命令分别改为：
 
 ```bash
 php vendor/bin/webman-skills install --agents=codex
@@ -64,6 +65,10 @@ git clone --depth 1 https://github.com/webman-php/skills.git webman-skills
 | 当前用户 | `~/.agents/skills/webman-development/` | `~/.claude/skills/webman-development/` |
 
 不要只复制 `SKILL.md`，`references/` 和其它随附文件也是 Skill 的一部分。
+
+## 检查安装结果
+
+项目级安装后，确认所用 Agent 的目标目录中同时存在 `SKILL.md` 和 `references/`。只使用一个 Agent 时无需同时创建两份；团队项目也应避免在项目级与用户级安装不同版本，以免加载来源不清楚。
 
 ## 使用
 

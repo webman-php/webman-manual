@@ -1,85 +1,107 @@
 # Use the Webman Development Skill
 
-The Webman Development Skill gives Codex, Claude Code, and other Agent Skills-compatible editors on-demand Webman guidance. It covers the resident-process model, controllers, routing, validation, data access, asynchronous processes, coroutines, plugins, and production deployment so the agent can choose behavior based on the project's installed version and configuration.
+The Webman Development Skill gives Codex, Claude Code, and other Agent Skills-compatible coding agents on-demand Webman guidance. It covers the resident-process model, controllers, routing, validation, data access, asynchronous processes, coroutines, plugins, and production deployment, while adapting its recommendations to the project's installed versions and configuration.
 
-The complete package is in [skills/webman-development](https://github.com/webman-php/webman-manual/tree/master/skills/webman-development). Keep the whole directory, including `references/`; copying `SKILL.md` alone is not sufficient.
+The complete Skill is available in this repository at [skills/webman-development](https://github.com/webman-php/webman-manual/tree/master/skills/webman-development). For installation, use the lightweight [webman-php/skills](https://github.com/webman-php/skills) distribution repository instead of cloning the full manual. Its `webman-development` directory is maintained in sync with the copy shipped here.
 
-For fast installation, use the lightweight [webman-php/skills](https://github.com/webman-php/skills) distribution repository instead of cloning the full manual. Its `webman-development` package is maintained in sync with the copy shipped in this manual.
+## Install
 
-## Recommended: project installation
+Choose **one** method. Run project-scoped commands from the root of the Webman project that should use the Skill.
 
-Run the following in the root of the Webman project you are developing:
+### Option 1: ask the coding agent to install it (recommended)
+
+Send this prompt to Codex, Claude Code, or another Skill-aware coding agent:
+
+```text
+Install the webman-development Skill from https://github.com/webman-php/skills
+for this project. Prefer your native Skill installation capability, keep the complete
+directory, and verify that SKILL.md is discoverable. Explain before changing project dependencies.
+```
+
+The agent should prefer its native Skill installer. If that is unavailable, it can use any one of the explicit methods below.
+
+### Option 2: Composer
+
+This method needs only PHP and Composer; it does not require Node.js, PowerShell, or `webman/console`:
+
+```bash
+composer config repositories.webman-skills vcs https://github.com/webman-php/skills
+composer require --dev "webman/skills:~1.0"
+php vendor/bin/webman-skills install --agents=codex,claude-code
+```
+
+The first command allows Composer to read the stable release directly from GitHub when Packagist has not listed or synchronized the package yet. Omit it when Composer can already find `webman/skills` through Packagist. To target only one agent, change the last command to one of these:
+
+```bash
+php vendor/bin/webman-skills install --agents=codex
+php vendor/bin/webman-skills install --agents=claude-code
+```
+
+Add `--global` to install in the current user's Skill directories instead of the current project. The installer refuses to overwrite an unmanaged same-name directory. Inspect that directory first; when replacement is intentional, `--force` preserves the old directory as a backup before installation.
+
+### Option 3: npx
+
+If Node.js is available:
 
 ```bash
 npx skills add webman-php/skills --skill webman-development -a codex -a claude-code
 ```
 
-For only one editor, use one matching option:
+Keep only the matching `-a` option when using one agent. Add `--copy` when an independent copy is preferable to a linked installation.
+
+### Option 4: manual installation
+
+Download and extract the ZIP from GitHub, or clone the repository:
 
 ```bash
-npx skills add webman-php/skills --skill webman-development -a codex
-npx skills add webman-php/skills --skill webman-development -a claude-code
+git clone --depth 1 https://github.com/webman-php/skills.git webman-skills
 ```
 
-Choose a linked installation when you want easy source updates, or add `--copy` to create an independent project copy.
+Copy the complete `webman-skills/skills/webman-development/` directory to one of these locations:
 
-## Codex
+| Scope | Codex | Claude Code |
+|---|---|---|
+| Current project | `.agents/skills/webman-development/` | `.claude/skills/webman-development/` |
+| Current user | `~/.agents/skills/webman-development/` | `~/.claude/skills/webman-development/` |
 
-The project location is:
+Do not copy only `SKILL.md`; `references/` and the other bundled files are part of the Skill.
 
-```text
-<project-root>/.agents/skills/webman-development/
-```
+## Verify the installation
 
-Codex can select the skill automatically for matching Webman work. Invoke it explicitly with, for example:
+For a project-scoped installation, confirm that both `SKILL.md` and `references/` exist under the target directory for the agent you use. There is no need to create both Codex and Claude Code copies when only one is used. In a team project, avoid installing different versions at both project and user scope because that makes the loaded source ambiguous.
+
+## Use
+
+Codex can load the Skill automatically for a matching Webman task. You can also invoke it explicitly:
 
 ```text
 $webman-development add a POST endpoint with typed parameter binding and validation
 ```
 
-Use `/skills` to confirm discovery. If the top-level `.agents/skills` directory was created after Codex started, restart Codex and check again.
+Use `/skills` to check discovery. If a newly created top-level `.agents/skills` directory does not appear, restart Codex and check again.
 
-## Claude Code
-
-The project location is:
-
-```text
-<project-root>/.claude/skills/webman-development/
-```
-
-Claude Code can also choose the skill automatically. Invoke it explicitly with:
+Claude Code can also select the Skill automatically. To invoke it explicitly, enter:
 
 ```text
 /webman-development
 ```
 
-If you create the top-level `.claude/skills` directory after a session starts, restart the session and confirm it with `/skills`.
+If the top-level `.claude/skills` directory was created after the Claude Code session started, restart the session and check again.
 
-## Manual installation
+## Update
 
-If Node.js is unavailable, clone this repository and copy the complete directory. This PowerShell example stops if the target already exists:
-
-```powershell
-git clone --depth 1 https://github.com/webman-php/skills.git D:\tools\webman-skills
-
-$source = 'D:\tools\webman-skills\skills\webman-development'
-$projectRoot = 'D:\project\my-webman'
-$parent = Join-Path $projectRoot '.agents\skills' # Use '.claude\skills' for Claude Code.
-$target = Join-Path $parent 'webman-development'
-
-if (-not (Test-Path -LiteralPath $source -PathType Container)) { throw "Skill source is missing: $source" }
-if (Test-Path -LiteralPath $target) { throw "Skill target already exists: $target" }
-New-Item -ItemType Directory -Path $parent -Force | Out-Null
-Copy-Item -LiteralPath $source -Destination $parent -Recurse
-```
-
-## Update and troubleshoot
-
-For installer-managed project skills:
+Use the update path that matches the installation method:
 
 ```bash
+# Composer
+composer update webman/skills
+php vendor/bin/webman-skills update --agents=codex,claude-code
+
+# npx
 npx skills update webman-development
-npx skills list
+
+# Git clone / manual copy
+git -C webman-skills pull --ff-only
 ```
 
-For manual copies, verify the target is this skill before replacing it; never remove the whole `.agents` or `.claude` directory. Refer to the official [Codex Skills documentation](https://developers.openai.com/codex/skills/) and [Claude Code Skills documentation](https://docs.anthropic.com/en/docs/claude-code/skills) for current discovery and personal-scope rules.
+After updating a manually cloned source, replace only the verified `webman-development` directory; never delete the project's entire `.agents` or `.claude` directory. Refer to the official [Codex Skills documentation](https://developers.openai.com/codex/skills/) and [Claude Code Skills documentation](https://code.claude.com/docs/en/skills) for current discovery and user-scope rules.

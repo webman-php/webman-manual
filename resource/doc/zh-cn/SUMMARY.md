@@ -2,6 +2,7 @@
 
   - [webman是什么](README.md)
   - [编程须知](attention.md)
+  - [Skills](ai/skill.md)
   - [问答社区](help.md)
   
 - 快速开始
@@ -95,9 +96,6 @@
   - [二进制打包](others/bin.md)
   - [AOP](aop.md)
 
-- AI 开发
-  - [Webman 开发 Skill](ai/skill.md)
-  
 - 其它
   - [安全](others/security.md)
   - [数据库事务](others/transaction.md)
