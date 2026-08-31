@@ -2,6 +2,7 @@
 
   - [webman Nedir](README.md)
   - [Programlama İpuçları](attention.md)
+  - [Skills](ai/skill.md)
   - [Soru Cevap Topluluğu](help.md)
   
 - Hızlı Başlangıç

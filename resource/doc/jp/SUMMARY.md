@@ -2,6 +2,7 @@
 
   - [webmanとは](README.md)
   - [プログラミングに関する注意事項](attention.md)
+  - [Skills](ai/skill.md)
   - [Q&Aコミュニティ](help.md)
 
 - スタートガイド

@@ -2,6 +2,7 @@
 
   - [Qu'est-ce que webman](README.md)
   - [Points à retenir en programmation](attention.md)
+  - [Skills](ai/skill.md)
   - [Forum de questions-réponses](help.md)
   
 - Démarrage rapide

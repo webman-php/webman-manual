@@ -2,6 +2,7 @@
 
   - [Cos'è webman](README.md)
   - [Informazioni di programmazione](attention.md)
+  - [Skills](ai/skill.md)
   - [Comunità Q&A](help.md)
   
 - Inizio rapido

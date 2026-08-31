@@ -2,6 +2,7 @@
 
   - [webman কি](README.md)
   - [প্রোগ্রামিং বিষয়ক দেখা দিন](attention.md)
+  - [Skills](ai/skill.md)
   - [প্রশ্ন উত্তর সম্প্রদায়](help.md)
   
 - দ্রুত শুরু

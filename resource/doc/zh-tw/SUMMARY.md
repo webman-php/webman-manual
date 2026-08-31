@@ -2,6 +2,7 @@
 
   - [webman是什麼](README.md)
   - [編程須知](attention.md)
+  - [Skills](ai/skill.md)
   - [問答社區](help.md)
   
 - 快速開始

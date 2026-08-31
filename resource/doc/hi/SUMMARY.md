@@ -2,6 +2,7 @@
 
   - [webman क्या है](README.md)
   - [प्रोग्रामिंग ध्यान दें](attention.md)
+  - [Skills](ai/skill.md)
   - [प्रश्न उत्तर समुदाय](help.md)
   
 - तेज़ शुरू हो जाओ

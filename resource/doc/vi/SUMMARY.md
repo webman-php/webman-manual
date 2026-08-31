@@ -2,6 +2,7 @@
 
   - [webman là gì](README.md)
   - [Lưu ý lập trình](attention.md)
+  - [Skills](ai/skill.md)
   - [Cộng đồng hỏi đáp](help.md)
 
 - Bắt đầu nhanh chóng

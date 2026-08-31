@@ -2,6 +2,7 @@
 
   - [webman是什么](README.md)
   - [编程须知](attention.md)
+  - [Skills](ai/skill.md)
   - [问答社区](help.md)
   
 - 快速开始
