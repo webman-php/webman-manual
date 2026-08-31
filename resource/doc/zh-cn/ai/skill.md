@@ -15,7 +15,7 @@ Webman 开发 Skill 为 Codex、Claude Code 和其它支持 Agent Skills 的 AI 
 ```text
 请从 https://github.com/webman-php/skills 为当前项目安装
 webman-development Skill。优先使用你内置的 Skill 安装能力，保留完整目录，
-并在安装后确认 SKILL.md 已被发现；如需修改项目依赖，请先说明。
+并在安装后确认 SKILL.md 已被发现。
 ```
 
 AI 应优先使用自身的 Skill 安装能力；不支持时，可以选择下面任一明确的安装方式。

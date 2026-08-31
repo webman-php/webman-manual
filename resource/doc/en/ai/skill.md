@@ -15,7 +15,7 @@ Send this prompt to Codex, Claude Code, or another Skill-aware coding agent:
 ```text
 Install the webman-development Skill from https://github.com/webman-php/skills
 for this project. Prefer your native Skill installation capability, keep the complete
-directory, and verify that SKILL.md is discoverable. Explain before changing project dependencies.
+directory, and verify that SKILL.md is discoverable.
 ```
 
 The agent should prefer its native Skill installer. If that is unavailable, it can use any one of the explicit methods below.
