@@ -35,11 +35,17 @@ class Markdown extends \Parsedown
      */
     protected function rewriteMarkdownLink($href)
     {
-        if ($href === '' || parse_url($href, PHP_URL_SCHEME) !== null || parse_url($href, PHP_URL_HOST) !== null) {
+        $parts = parse_url($href);
+        if ($parts === false || isset($parts['scheme']) || isset($parts['host'])) {
             return $href;
         }
 
-        return preg_replace('/\.md(?=([?#]|$))/', '.html', $href, 1);
+        $path = $parts['path'] ?? '';
+        if ($path === '' || substr($path, -3) !== '.md') {
+            return $href;
+        }
+
+        return substr($path, 0, -3) . '.html' . substr($href, strlen($path));
     }
 
 }

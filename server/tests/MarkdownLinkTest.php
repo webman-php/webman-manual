@@ -18,7 +18,10 @@ SKILL.md
 [带锚点](guide.md#section)
 [带查询参数](guide.md?mode=full#section)
 [站内绝对路径](/doc/zh-cn/guide.md)
+[查询参数中的文件名](search?file=README.md)
+[页内锚点中的文件名](#README.md)
 [外部 Markdown](https://github.com/webman-php/skills/blob/main/README.md)
+[协议相对外链](//github.com/webman-php/skills/blob/main/README.md)
 MARKDOWN;
 
 $method = new ReflectionMethod(Doc::class, 'formatContent');
@@ -35,7 +38,10 @@ $expectations = [
     'anchor is preserved' => strpos($html, 'href="guide.html#section"') !== false,
     'query and anchor are preserved' => strpos($html, 'href="guide.html?mode=full#section"') !== false,
     'root-relative Markdown link is rewritten' => strpos($html, 'href="/doc/zh-cn/guide.html"') !== false,
+    'query value is not rewritten' => strpos($html, 'href="search?file=README.md"') !== false,
+    'fragment is not rewritten' => strpos($html, 'href="#README.md"') !== false,
     'external Markdown URL is preserved' => strpos($html, 'href="https://github.com/webman-php/skills/blob/main/README.md"') !== false,
+    'protocol-relative Markdown URL is preserved' => strpos($html, 'href="//github.com/webman-php/skills/blob/main/README.md"') !== false,
     'sidebar path prefix is preserved' => strpos($nestedHtml, 'href="../guide.html"') !== false,
 ];
 
