@@ -13,7 +13,7 @@ Codex veya Claude Code'dan mevcut proje için `https://github.com/webman-php/ski
 ### 2. Composer
 
 ```bash
-composer require --dev "webman/skills:~1.0"
+composer require --dev webman/skills
 php vendor/bin/webman-skills install --agents=codex,claude-code
 ```
 

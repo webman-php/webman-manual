@@ -25,17 +25,11 @@ The agent should prefer its native Skill installer. If that is unavailable, it c
 This method needs only PHP and Composer; it does not require Node.js, PowerShell, or `webman/console`:
 
 ```bash
-composer config repositories.webman-skills vcs https://github.com/webman-php/skills
-composer require --dev "webman/skills:~1.0"
+composer require --dev webman/skills
 php vendor/bin/webman-skills install --agents=codex,claude-code
 ```
 
-The first command allows Composer to read the stable release directly from GitHub when Packagist has not listed or synchronized the package yet. Omit it when Composer can already find `webman/skills` through Packagist. To target only one agent, change the last command to one of these:
-
-```bash
-php vendor/bin/webman-skills install --agents=codex
-php vendor/bin/webman-skills install --agents=claude-code
-```
+To target only one agent, use `--agents=codex` or `--agents=claude-code`.
 
 Add `--global` to install in the current user's Skill directories instead of the current project. The installer refuses to overwrite an unmanaged same-name directory. Inspect that directory first; when replacement is intentional, `--force` preserves the old directory as a backup before installation.
 

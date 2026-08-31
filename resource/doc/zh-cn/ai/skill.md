@@ -25,17 +25,11 @@ AI 应优先使用自身的 Skill 安装能力；不支持时，可以选择下�
 此方式只需要 PHP 和 Composer，不依赖 Node.js、PowerShell 或 `webman/console`：
 
 ```bash
-composer config repositories.webman-skills vcs https://github.com/webman-php/skills
-composer require --dev "webman/skills:~1.0"
+composer require --dev webman/skills
 php vendor/bin/webman-skills install --agents=codex,claude-code
 ```
 
-第一条命令用于在 Packagist 尚未收录或镜像尚未同步时直接读取 GitHub 上的稳定版本；如果项目已经能从 Packagist 找到 `webman/skills`，可以省略。只安装 Codex 或 Claude Code 时，最后一条命令分别改为：
-
-```bash
-php vendor/bin/webman-skills install --agents=codex
-php vendor/bin/webman-skills install --agents=claude-code
-```
+只安装一个 Agent 时，使用 `--agents=codex` 或 `--agents=claude-code`。
 
 增加 `--global` 会安装到当前用户目录，而非当前项目。安装器不会覆盖来源不明的同名目录；应先检查该目录，确需替换时使用 `--force`，原目录会先保留为备份。
 
