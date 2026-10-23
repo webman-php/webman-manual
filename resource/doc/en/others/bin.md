@@ -23,7 +23,7 @@ After packaging, a `webman.bin` file will be generated in the build directory.
 
 ## Updating the packaging runtime
 
-PHP 8.2–8.5 security releases are available. The runtime excludes `intl/ICU` to reduce the actual executable size and does not use UPX packing.
+PHP 8.2–8.5 security releases are available. The runtime excludes `intl/ICU`, and Linux runtimes use UPX packing. UPX reduces disk size; runtime memory does not decrease proportionally, and startup includes decompression overhead.
 
 The packaging command reuses cached `micro.sfx` or ZIP files in `build`. Remove the matching cache before rebuilding with an updated runtime, for example PHP 8.3:
 
