@@ -16,7 +16,7 @@ php webman build:bin
 ```
 নির্দিষ্ট PHP ভার্সন দিয়ে প্যাকেজ করা যায়, উদাহরণস্বরূপ
 ```
-php webman build:bin 8.1
+php webman build:bin 8.3
 ```
 
 প্যাকেজ করার পর build ফোল্ডারে `webman.bin` ফাইল তৈরি হবে।
@@ -30,7 +30,7 @@ webman.bin Linux সার্ভারে আপলোড করুন এবং
 * php8.x.micro.sfx ও phar ফাইল একত্রে একটি বাইনারি ফাইলে যুক্ত হয়
 
 ## দ্রষ্টব্য
-* সামঞ্জস্যতা এড়াতে লোকাল ও প্যাকেজিং উভয়তে একই PHP ভার্সন ব্যবহার (যেমন উভয়ে PHP 8.1) অত্যন্ত পরামর্শযোগ্য
+* সামঞ্জস্যতা এড়াতে লোকাল ও প্যাকেজিং উভয়তে একই PHP ভার্সন ব্যবহার (যেমন উভয়ে PHP 8.3) অত্যন্ত পরামর্শযোগ্য
 * প্যাকেজিং PHP 8 সোর্স কোড ডাউনলোড করবে কিন্তু লোকালে ইন্সটল করবে না, লোকাল PHP পরিবেশ প্রভাবিত হবে না
 * webman.bin বর্তমানে শুধুমাত্র x86_64 Linux-এ চলে, macOS সমর্থিত নয়
 * প্যাকেজ করা প্রজেক্ট reload সমর্থন করে না; কোড আপডেটের জন্য রিস্টার্ট প্রয়োজন
@@ -52,9 +52,9 @@ webman.bin Linux সার্ভারে আপলোড করুন এবং
 > স্ট্যাটিক PHP-এর জন্য php.ini নির্দিষ্ট করতে: `php -c /your/path/php.ini start.php start -d`
 
 ## সমর্থিত এক্সটেনশন
-apcu, bcmath, bz2, calendar, Core, ctype, curl, date, dba, dom, event, exif, fileinfo, filter, ftp, gd, gmp, hash, iconv, imagick, imap, intl, json, libxml, mbstring, mysqli, mysqlnd, openssl, pcntl, pcre, PDO, pdo_mysql, pgsql, Phar, posix, protobuf, readline, redis, Reflection, session, shmop, SimpleXML, soap, sockets, sodium, SPL, sqlite3, standard, swoole, sysvmsg, sysvsem, sysvshm, tokenizer, xml, xmlreader, xmlwriter, xsl, Zend OPcache, zip, zlib
+apcu, bcmath, bz2, calendar, Core, ctype, curl, date, dba, dom, event, exif, fileinfo, filter, ftp, gd, gmp, hash, iconv, imagick, imap, json, libxml, mbstring, mysqli, mysqlnd, openssl, pcntl, pcre, PDO, pdo_mysql, pgsql, Phar, posix, protobuf, readline, redis, Reflection, session, shmop, SimpleXML, soap, sockets, sodium, SPL, sqlite3, standard, swoole, sysvmsg, sysvsem, sysvshm, tokenizer, xml, xmlreader, xmlwriter, xsl, Zend OPcache, zip, zlib
 
 ## প্রজেক্ট উৎস
 
 https://github.com/crazywhalecc/static-php-cli
-https://github.com/walkor/static-php-cli
+https://github.com/webman-php/static-php-cli-hosted

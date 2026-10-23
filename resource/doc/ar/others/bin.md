@@ -16,7 +16,7 @@ php webman build:bin
 ```
 يمكنك أيضًا تحديد إصدار PHP المستخدم في التغليف، مثلاً
 ```
-php webman build:bin 8.1
+php webman build:bin 8.3
 ```
 
 بعد التغليف، سيتم إنشاء ملف `webman.bin` في مجلد build.
@@ -30,7 +30,7 @@ php webman build:bin 8.1
 * يُمزج php8.x.micro.sfx وملف phar في ملف ثنائي واحد
 
 ## ملاحظات
-* يُفضّل بشدة استخدام نفس إصدار PHP محلياً وعند التغليف (مثلاً PHP 8.1 في كلتا الحالتين) لتجنب مشكلات التوافق
+* يُفضّل بشدة استخدام نفس إصدار PHP محلياً وعند التغليف (مثلاً PHP 8.3 في كلتا الحالتين) لتجنب مشكلات التوافق
 * التغليف سينزّل كود مصدر PHP 8 لكن دون تثبيته محلياً، ولن يؤثر على بيئة PHP المحلية
 * webman.bin يدعم حاليًا التشغيل على Linux x86_64 فقط ولا يدعم macOS
 * المشاريع المعبأة لا تدعم reload؛ تحديث الكود يتطلب إعادة التشغيل
@@ -52,9 +52,9 @@ php webman build:bin 8.1
 > لتحديد ملف php.ini لـ PHP الساكن: `php -c /your/path/php.ini start.php start -d`
 
 ## الامتدادات المدعومة
-apcu, bcmath, bz2, calendar, Core, ctype, curl, date, dba, dom, event, exif, fileinfo, filter, ftp, gd, gmp, hash, iconv, imagick, imap, intl, json, libxml, mbstring, mysqli, mysqlnd, openssl, pcntl, pcre, PDO, pdo_mysql, pgsql, Phar, posix, protobuf, readline, redis, Reflection, session, shmop, SimpleXML, soap, sockets, sodium, SPL, sqlite3, standard, swoole, sysvmsg, sysvsem, sysvshm, tokenizer, xml, xmlreader, xmlwriter, xsl, Zend OPcache, zip, zlib
+apcu, bcmath, bz2, calendar, Core, ctype, curl, date, dba, dom, event, exif, fileinfo, filter, ftp, gd, gmp, hash, iconv, imagick, imap, json, libxml, mbstring, mysqli, mysqlnd, openssl, pcntl, pcre, PDO, pdo_mysql, pgsql, Phar, posix, protobuf, readline, redis, Reflection, session, shmop, SimpleXML, soap, sockets, sodium, SPL, sqlite3, standard, swoole, sysvmsg, sysvsem, sysvshm, tokenizer, xml, xmlreader, xmlwriter, xsl, Zend OPcache, zip, zlib
 
 ## مصدر المشروع
 
 https://github.com/crazywhalecc/static-php-cli
-https://github.com/walkor/static-php-cli
+https://github.com/webman-php/static-php-cli-hosted

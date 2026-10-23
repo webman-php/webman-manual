@@ -16,7 +16,7 @@ php webman build:bin
 ```
 Có thể chỉ định phiên bản PHP để đóng gói, ví dụ
 ```
-php webman build:bin 8.1
+php webman build:bin 8.3
 ```
 
 Sau khi đóng gói sẽ tạo ra tệp `webman.bin` trong thư mục build.
@@ -30,7 +30,7 @@ Tải webman.bin lên máy chủ Linux, chạy `./webman.bin start` hoặc `./we
 * Ghép php8.x.micro.sfx và tệp phar thành một tệp nhị phân duy nhất
 
 ## Lưu ý
-* Nên dùng cùng phiên bản PHP cho môi trường cục bộ và khi đóng gói (ví dụ đều dùng PHP 8.1) để tránh xung đột tương thích
+* Nên dùng cùng phiên bản PHP cho môi trường cục bộ và khi đóng gói (ví dụ đều dùng PHP 8.3) để tránh xung đột tương thích
 * Khi đóng gói sẽ tải mã nguồn PHP 8 nhưng không cài đặt cục bộ, không ảnh hưởng môi trường PHP cục bộ
 * webman.bin hiện chỉ chạy trên Linux x86_64 và không hỗ trợ macOS
 * Dự án đã đóng gói không hỗ trợ reload; mỗi lần cập nhật mã cần restart
@@ -52,9 +52,9 @@ Tải webman.bin lên máy chủ Linux, chạy `./webman.bin start` hoặc `./we
 > Để chỉ định tệp php.ini cho PHP tĩnh: `php -c /your/path/php.ini start.php start -d`
 
 ## Tiện ích mở rộng hỗ trợ
-apcu, bcmath, bz2, calendar, Core, ctype, curl, date, dba, dom, event, exif, fileinfo, filter, ftp, gd, gmp, hash, iconv, imagick, imap, intl, json, libxml, mbstring, mysqli, mysqlnd, openssl, pcntl, pcre, PDO, pdo_mysql, pgsql, Phar, posix, protobuf, readline, redis, Reflection, session, shmop, SimpleXML, soap, sockets, sodium, SPL, sqlite3, standard, swoole, sysvmsg, sysvsem, sysvshm, tokenizer, xml, xmlreader, xmlwriter, xsl, Zend OPcache, zip, zlib
+apcu, bcmath, bz2, calendar, Core, ctype, curl, date, dba, dom, event, exif, fileinfo, filter, ftp, gd, gmp, hash, iconv, imagick, imap, json, libxml, mbstring, mysqli, mysqlnd, openssl, pcntl, pcre, PDO, pdo_mysql, pgsql, Phar, posix, protobuf, readline, redis, Reflection, session, shmop, SimpleXML, soap, sockets, sodium, SPL, sqlite3, standard, swoole, sysvmsg, sysvsem, sysvshm, tokenizer, xml, xmlreader, xmlwriter, xsl, Zend OPcache, zip, zlib
 
 ## Nguồn dự án
 
 https://github.com/crazywhalecc/static-php-cli
-https://github.com/walkor/static-php-cli
+https://github.com/webman-php/static-php-cli-hosted

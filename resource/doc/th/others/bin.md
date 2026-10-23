@@ -16,7 +16,7 @@ php webman build:bin
 ```
 สามารถระบุเวอร์ชัน PHP ที่ใช้แพ็คได้ เช่น
 ```
-php webman build:bin 8.1
+php webman build:bin 8.3
 ```
 
 หลังแพ็ค จะได้ไฟล์ `webman.bin` ในโฟลเดอร์ build
@@ -30,7 +30,7 @@ php webman build:bin 8.1
 * เชื่อม php8.x.micro.sfx เข้ากับไฟล์ phar เป็นไฟล์ไบนารีเดียว
 
 ## ข้อควรระวัง
-* แนะนำให้ใช้เวอร์ชัน PHP เดียวกันทั้งในเครื่องและตอนแพ็ค (เช่น PHP 8.1 ทั้งคู่) เพื่อหลีกเลี่ยงปัญหาไม่เข้ากัน
+* แนะนำให้ใช้เวอร์ชัน PHP เดียวกันทั้งในเครื่องและตอนแพ็ค (เช่น PHP 8.3 ทั้งคู่) เพื่อหลีกเลี่ยงปัญหาไม่เข้ากัน
 * การแพ็คจะดาวน์โหลดซอร์ส PHP 8 แต่ไม่ได้ติดตั้งในเครื่อง จึงไม่กระทบสภาพแวดล้อม PHP
 * webman.bin ปัจจุบันรองรับเฉพาะ Linux x86_64 และไม่รองรับ macOS
 * โปรเจกต์ที่แพ็คแล้วไม่รองรับ reload การอัปเดตโค้ดต้อง restart
@@ -52,9 +52,9 @@ php webman build:bin 8.1
 > หากต้องระบุไฟล์ php.ini สำหรับ PHP สแตติก: `php -c /your/path/php.ini start.php start -d`
 
 ## ส่วนขยายที่รองรับ
-apcu, bcmath, bz2, calendar, Core, ctype, curl, date, dba, dom, event, exif, fileinfo, filter, ftp, gd, gmp, hash, iconv, imagick, imap, intl, json, libxml, mbstring, mysqli, mysqlnd, openssl, pcntl, pcre, PDO, pdo_mysql, pgsql, Phar, posix, protobuf, readline, redis, Reflection, session, shmop, SimpleXML, soap, sockets, sodium, SPL, sqlite3, standard, swoole, sysvmsg, sysvsem, sysvshm, tokenizer, xml, xmlreader, xmlwriter, xsl, Zend OPcache, zip, zlib
+apcu, bcmath, bz2, calendar, Core, ctype, curl, date, dba, dom, event, exif, fileinfo, filter, ftp, gd, gmp, hash, iconv, imagick, imap, json, libxml, mbstring, mysqli, mysqlnd, openssl, pcntl, pcre, PDO, pdo_mysql, pgsql, Phar, posix, protobuf, readline, redis, Reflection, session, shmop, SimpleXML, soap, sockets, sodium, SPL, sqlite3, standard, swoole, sysvmsg, sysvsem, sysvshm, tokenizer, xml, xmlreader, xmlwriter, xsl, Zend OPcache, zip, zlib
 
 ## แหล่งโปรเจกต์
 
 https://github.com/crazywhalecc/static-php-cli
-https://github.com/walkor/static-php-cli
+https://github.com/webman-php/static-php-cli-hosted

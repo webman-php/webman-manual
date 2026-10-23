@@ -16,7 +16,7 @@ php webman build:bin
 ```
 可指定打包所用的 PHP 版本，例如
 ```
-php webman build:bin 8.1
+php webman build:bin 8.3
 ```
 
 打包完成後會在 build 目錄生成 `webman.bin` 檔案。
@@ -30,7 +30,7 @@ php webman build:bin 8.1
 * 將 php8.x.micro.sfx 與 phar 拼接成單一二進制檔案
 
 ## 注意事項
-* 強烈建議本地 PHP 版本與打包版本一致（如皆為 PHP 8.1），以避免相容性問題
+* 強烈建議本地 PHP 版本與打包版本一致（如皆為 PHP 8.3），以避免相容性問題
 * 打包會下載 PHP 8 原始碼，但不會在本地安裝，不影響本地 PHP 環境
 * webman.bin 僅支援於 x86_64 Linux 執行，不支援 Mac
 * 打包後的專案不支援 reload，更新程式碼需 restart 重啟
@@ -52,9 +52,9 @@ php webman build:bin 8.1
 > 若需為靜態 PHP 指定 php.ini，請使用：`php -c /your/path/php.ini start.php start -d`
 
 ## 支援的擴展
-apcu, bcmath, bz2, calendar, Core, ctype, curl, date, dba, dom, event, exif, fileinfo, filter, ftp, gd, gmp, hash, iconv, imagick, imap, intl, json, libxml, mbstring, mysqli, mysqlnd, openssl, pcntl, pcre, PDO, pdo_mysql, pgsql, Phar, posix, protobuf, readline, redis, Reflection, session, shmop, SimpleXML, soap, sockets, sodium, SPL, sqlite3, standard, swoole, sysvmsg, sysvsem, sysvshm, tokenizer, xml, xmlreader, xmlwriter, xsl, Zend OPcache, zip, zlib
+apcu, bcmath, bz2, calendar, Core, ctype, curl, date, dba, dom, event, exif, fileinfo, filter, ftp, gd, gmp, hash, iconv, imagick, imap, json, libxml, mbstring, mysqli, mysqlnd, openssl, pcntl, pcre, PDO, pdo_mysql, pgsql, Phar, posix, protobuf, readline, redis, Reflection, session, shmop, SimpleXML, soap, sockets, sodium, SPL, sqlite3, standard, swoole, sysvmsg, sysvsem, sysvshm, tokenizer, xml, xmlreader, xmlwriter, xsl, Zend OPcache, zip, zlib
 
 ## 專案出處
 
 https://github.com/crazywhalecc/static-php-cli
-https://github.com/walkor/static-php-cli
+https://github.com/webman-php/static-php-cli-hosted

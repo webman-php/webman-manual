@@ -16,7 +16,7 @@ php webman build:bin
 ```
 También puede indicar la versión de PHP con la que empaquetar, por ejemplo
 ```
-php webman build:bin 8.1
+php webman build:bin 8.3
 ```
 
 Tras empaquetar, se generará un archivo `webman.bin` en el directorio build.
@@ -30,7 +30,7 @@ Suba webman.bin al servidor Linux y ejecute `./webman.bin start` o `./webman.bin
 * Se concatenan php8.x.micro.sfx y el archivo phar en un único binario
 
 ## Consideraciones
-* Se recomienda usar la misma versión de PHP local y para empaquetar (p. ej. PHP 8.1 en ambos) para evitar problemas de compatibilidad
+* Se recomienda usar la misma versión de PHP local y para empaquetar (p. ej. PHP 8.3 en ambos) para evitar problemas de compatibilidad
 * El empaquetado descargará el código fuente de PHP 8 pero no lo instalará localmente, por lo que no afecta al entorno PHP local
 * webman.bin solo soporta ejecución en Linux x86_64 y no soporta macOS
 * Los proyectos empaquetados no soportan reload; las actualizaciones de código requieren reinicio
@@ -52,9 +52,9 @@ Si solo necesita un ejecutable PHP sin desplegar un entorno PHP completo, [desca
 > Para especificar un archivo php.ini para PHP estático: `php -c /your/path/php.ini start.php start -d`
 
 ## Extensiones soportadas
-apcu, bcmath, bz2, calendar, Core, ctype, curl, date, dba, dom, event, exif, fileinfo, filter, ftp, gd, gmp, hash, iconv, imagick, imap, intl, json, libxml, mbstring, mysqli, mysqlnd, openssl, pcntl, pcre, PDO, pdo_mysql, pgsql, Phar, posix, protobuf, readline, redis, Reflection, session, shmop, SimpleXML, soap, sockets, sodium, SPL, sqlite3, standard, swoole, sysvmsg, sysvsem, sysvshm, tokenizer, xml, xmlreader, xmlwriter, xsl, Zend OPcache, zip, zlib
+apcu, bcmath, bz2, calendar, Core, ctype, curl, date, dba, dom, event, exif, fileinfo, filter, ftp, gd, gmp, hash, iconv, imagick, imap, json, libxml, mbstring, mysqli, mysqlnd, openssl, pcntl, pcre, PDO, pdo_mysql, pgsql, Phar, posix, protobuf, readline, redis, Reflection, session, shmop, SimpleXML, soap, sockets, sodium, SPL, sqlite3, standard, swoole, sysvmsg, sysvsem, sysvshm, tokenizer, xml, xmlreader, xmlwriter, xsl, Zend OPcache, zip, zlib
 
 ## Origen del proyecto
 
 https://github.com/crazywhalecc/static-php-cli
-https://github.com/walkor/static-php-cli
+https://github.com/webman-php/static-php-cli-hosted

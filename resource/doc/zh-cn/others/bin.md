@@ -16,10 +16,23 @@ php webman build:bin
 ```
 同时可以指定以哪个php版本打包，例如
 ```
-php webman build:bin 8.1
+php webman build:bin 8.3
 ```
 
-打包后会在bulid目录生成一个`webman.bin`文件
+打包后会在 `build` 目录生成一个 `webman.bin` 文件
+
+## 更新打包运行时
+
+当前提供 PHP 8.2–8.5 的安全修复版本。为减少实际可执行文件体积，运行时不包含 `intl/ICU`，不使用 UPX 加壳。
+
+打包命令会复用 `build` 目录中的 `micro.sfx` 或 ZIP 缓存。更新 PHP 运行时后，请先删除对应版本的缓存，再重新打包，例如 PHP 8.3：
+
+```bash
+rm -f build/php8.3.micro.sfx build/php8.3.micro.sfx.zip
+php webman build:bin 8.3
+```
+
+如果修改过 `config/plugin/webman/console/app.php` 的 `build_dir`，请清理该目录中的对应文件。已生成的 `webman.bin` 需要重新打包并部署才会更新。
 
 ## 启动
 将webman.bin上传至linux服务器，执行 `./webman.bin start` 或 `./webman.bin start -d` 即可启动。
@@ -30,7 +43,7 @@ php webman build:bin 8.1
 * 将php8.x.micro.sfx和phar文件拼接为一个二进制文件
 
 ## 注意事项
-* 强烈建议本地php版本和打包版本一致，例如本地是php8.1，打包也用php8.1，避免出现兼容问题
+* 强烈建议本地php版本和打包版本一致，例如本地是php8.3，打包也用php8.3，避免出现兼容问题
 * 打包会下载php8的源码，但是并不会本地安装，不会影响本地php环境
 * webman.bin目前只支持在x86_64架构的linux系统运行，不支持在mac系统运行
 * 打包后的项目不支持reload，更新代码需要restart重启
@@ -52,9 +65,9 @@ php webman build:bin 8.1
 > 如需给静态php指定php.ini文件，请使用以下命令 `php -c /your/path/php.ini start.php start -d`
 
 ## 支持的扩展
-apcu, bcmath, bz2, calendar, Core, ctype, curl, date, dba, dom, event, exif, fileinfo, filter, ftp, gd, gmp, hash, iconv, imagick, imap, intl, json, libxml, mbstring, mysqli, mysqlnd, openssl, pcntl, pcre, PDO, pdo_mysql, pgsql, Phar, posix, protobuf, readline, redis, Reflection, session, shmop, SimpleXML, soap, sockets, sodium, SPL, sqlite3, standard, swoole, sysvmsg, sysvsem, sysvshm, tokenizer, xml, xmlreader, xmlwriter, xsl, Zend OPcache, zip, zlib
+apcu, bcmath, bz2, calendar, Core, ctype, curl, date, dba, dom, event, exif, fileinfo, filter, ftp, gd, gmp, hash, iconv, imagick, imap, json, libxml, mbstring, mysqli, mysqlnd, openssl, pcntl, pcre, PDO, pdo_mysql, pgsql, Phar, posix, protobuf, readline, redis, Reflection, session, shmop, SimpleXML, soap, sockets, sodium, SPL, sqlite3, standard, swoole, sysvmsg, sysvsem, sysvshm, tokenizer, xml, xmlreader, xmlwriter, xsl, Zend OPcache, zip, zlib
 
 ## 项目出处
 
 https://github.com/crazywhalecc/static-php-cli
-https://github.com/walkor/static-php-cli
+https://github.com/webman-php/static-php-cli-hosted

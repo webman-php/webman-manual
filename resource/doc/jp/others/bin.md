@@ -16,7 +16,7 @@ php webman build:bin
 ```
 使用するPHPバージョンを指定することもできます。例：
 ```
-php webman build:bin 8.1
+php webman build:bin 8.3
 ```
 
 パッケージ化後、buildディレクトリに`webman.bin`ファイルが生成されます。
@@ -30,7 +30,7 @@ webman.binをLinuxサーバーにアップロードし、`./webman.bin start` �
 * php8.x.micro.sfxとpharファイルを結合して1つのバイナリファイルを作成します
 
 ## 注意事項
-* 互換性の問題を避けるため、ローカルとパッケージ化で同じPHPバージョン（例：両方PHP 8.1）を使用することを強く推奨します
+* 互換性の問題を避けるため、ローカルとパッケージ化で同じPHPバージョン（例：両方PHP 8.3）を使用することを強く推奨します
 * パッケージ化時にPHP 8のソースがダウンロードされますが、ローカルにはインストールされず、ローカルPHP環境には影響しません
 * webman.binは現在x86_64 Linuxでのみ動作し、macOSはサポートされていません
 * パッケージ化されたプロジェクトはreload非対応で、コード更新時は再起動が必要です
@@ -52,9 +52,9 @@ PHP環境を導入せず、PHP実行ファイルだけが必要な場合は、[�
 > 静的PHPにphp.iniを指定する場合：`php -c /your/path/php.ini start.php start -d`
 
 ## サポート拡張モジュール
-apcu, bcmath, bz2, calendar, Core, ctype, curl, date, dba, dom, event, exif, fileinfo, filter, ftp, gd, gmp, hash, iconv, imagick, imap, intl, json, libxml, mbstring, mysqli, mysqlnd, openssl, pcntl, pcre, PDO, pdo_mysql, pgsql, Phar, posix, protobuf, readline, redis, Reflection, session, shmop, SimpleXML, soap, sockets, sodium, SPL, sqlite3, standard, swoole, sysvmsg, sysvsem, sysvshm, tokenizer, xml, xmlreader, xmlwriter, xsl, Zend OPcache, zip, zlib
+apcu, bcmath, bz2, calendar, Core, ctype, curl, date, dba, dom, event, exif, fileinfo, filter, ftp, gd, gmp, hash, iconv, imagick, imap, json, libxml, mbstring, mysqli, mysqlnd, openssl, pcntl, pcre, PDO, pdo_mysql, pgsql, Phar, posix, protobuf, readline, redis, Reflection, session, shmop, SimpleXML, soap, sockets, sodium, SPL, sqlite3, standard, swoole, sysvmsg, sysvsem, sysvshm, tokenizer, xml, xmlreader, xmlwriter, xsl, Zend OPcache, zip, zlib
 
 ## プロジェクト出典
 
 https://github.com/crazywhalecc/static-php-cli
-https://github.com/walkor/static-php-cli
+https://github.com/webman-php/static-php-cli-hosted

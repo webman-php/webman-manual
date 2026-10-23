@@ -16,10 +16,23 @@ php webman build:bin
 ```
 You can also specify which PHP version to package with, for example
 ```
-php webman build:bin 8.1
+php webman build:bin 8.3
 ```
 
 After packaging, a `webman.bin` file will be generated in the build directory.
+
+## Updating the packaging runtime
+
+PHP 8.2–8.5 security releases are available. The runtime excludes `intl/ICU` to reduce the actual executable size and does not use UPX packing.
+
+The packaging command reuses cached `micro.sfx` or ZIP files in `build`. Remove the matching cache before rebuilding with an updated runtime, for example PHP 8.3:
+
+```bash
+rm -f build/php8.3.micro.sfx build/php8.3.micro.sfx.zip
+php webman build:bin 8.3
+```
+
+If `build_dir` was customized in `config/plugin/webman/console/app.php`, remove the corresponding files there. Existing `webman.bin` files must be rebuilt and deployed to receive the update.
 
 ## Startup
 Upload webman.bin to your Linux server and run `./webman.bin start` or `./webman.bin start -d` to start.
@@ -30,7 +43,7 @@ Upload webman.bin to your Linux server and run `./webman.bin start` or `./webman
 * php8.x.micro.sfx and the phar file are concatenated into a single binary file
 
 ## Notes
-* It is strongly recommended to use the same PHP version locally and for packaging (e.g. PHP 8.1 for both) to avoid compatibility issues
+* It is strongly recommended to use the same PHP version locally and for packaging (e.g. PHP 8.3 for both) to avoid compatibility issues
 * Packaging will download PHP 8 source code but will not install it locally, so it will not affect your local PHP environment
 * webman.bin currently only supports running on x86_64 architecture Linux systems and does not support macOS
 * Packaged projects do not support reload; code updates require a restart
@@ -52,9 +65,9 @@ Sometimes you only want a PHP executable without deploying a full PHP environmen
 > To specify a php.ini file for static PHP, use: `php -c /your/path/php.ini start.php start -d`
 
 ## Supported Extensions
-apcu, bcmath, bz2, calendar, Core, ctype, curl, date, dba, dom, event, exif, fileinfo, filter, ftp, gd, gmp, hash, iconv, imagick, imap, intl, json, libxml, mbstring, mysqli, mysqlnd, openssl, pcntl, pcre, PDO, pdo_mysql, pgsql, Phar, posix, protobuf, readline, redis, Reflection, session, shmop, SimpleXML, soap, sockets, sodium, SPL, sqlite3, standard, swoole, sysvmsg, sysvsem, sysvshm, tokenizer, xml, xmlreader, xmlwriter, xsl, Zend OPcache, zip, zlib
+apcu, bcmath, bz2, calendar, Core, ctype, curl, date, dba, dom, event, exif, fileinfo, filter, ftp, gd, gmp, hash, iconv, imagick, imap, json, libxml, mbstring, mysqli, mysqlnd, openssl, pcntl, pcre, PDO, pdo_mysql, pgsql, Phar, posix, protobuf, readline, redis, Reflection, session, shmop, SimpleXML, soap, sockets, sodium, SPL, sqlite3, standard, swoole, sysvmsg, sysvsem, sysvshm, tokenizer, xml, xmlreader, xmlwriter, xsl, Zend OPcache, zip, zlib
 
 ## Project Source
 
 https://github.com/crazywhalecc/static-php-cli
-https://github.com/walkor/static-php-cli
+https://github.com/webman-php/static-php-cli-hosted

@@ -16,7 +16,7 @@ php webman build:bin
 ```
 Belirli bir PHP sürümüyle paketleme de yapılabilir, örneğin
 ```
-php webman build:bin 8.1
+php webman build:bin 8.3
 ```
 
 Paketlemeden sonra build dizininde `webman.bin` dosyası oluşturulur.
@@ -30,7 +30,7 @@ webman.bin dosyasını Linux sunucusuna yükleyin, ardından `./webman.bin start
 * php8.x.micro.sfx ile phar dosyası tek bir ikili dosya halinde birleştirilir
 
 ## Önemli notlar
-* Uyumluluk sorunlarını önlemek için yerel ve paketlemede aynı PHP sürümünü (örn. ikisinde de PHP 8.1) kullanmanız önerilir
+* Uyumluluk sorunlarını önlemek için yerel ve paketlemede aynı PHP sürümünü (örn. ikisinde de PHP 8.3) kullanmanız önerilir
 * Paketleme sırasında PHP 8 kaynak kodu indirilir ancak yerelde kurulmaz, yerel PHP ortamını etkilemez
 * webman.bin şu anda yalnızca x86_64 Linux’ta çalışır, macOS desteklenmez
 * Paketlenen projeler reload desteklemez; kod güncellemelerinde yeniden başlatma gerekir
@@ -52,9 +52,9 @@ Bazen yalnızca PHP çalıştırılabilir dosyası gerekiyorsa, tüm PHP ortamı
 > Statik PHP için php.ini belirtmek için: `php -c /your/path/php.ini start.php start -d`
 
 ## Desteklenen eklentiler
-apcu, bcmath, bz2, calendar, Core, ctype, curl, date, dba, dom, event, exif, fileinfo, filter, ftp, gd, gmp, hash, iconv, imagick, imap, intl, json, libxml, mbstring, mysqli, mysqlnd, openssl, pcntl, pcre, PDO, pdo_mysql, pgsql, Phar, posix, protobuf, readline, redis, Reflection, session, shmop, SimpleXML, soap, sockets, sodium, SPL, sqlite3, standard, swoole, sysvmsg, sysvsem, sysvshm, tokenizer, xml, xmlreader, xmlwriter, xsl, Zend OPcache, zip, zlib
+apcu, bcmath, bz2, calendar, Core, ctype, curl, date, dba, dom, event, exif, fileinfo, filter, ftp, gd, gmp, hash, iconv, imagick, imap, json, libxml, mbstring, mysqli, mysqlnd, openssl, pcntl, pcre, PDO, pdo_mysql, pgsql, Phar, posix, protobuf, readline, redis, Reflection, session, shmop, SimpleXML, soap, sockets, sodium, SPL, sqlite3, standard, swoole, sysvmsg, sysvsem, sysvshm, tokenizer, xml, xmlreader, xmlwriter, xsl, Zend OPcache, zip, zlib
 
 ## Proje kaynağı
 
 https://github.com/crazywhalecc/static-php-cli
-https://github.com/walkor/static-php-cli
+https://github.com/webman-php/static-php-cli-hosted
